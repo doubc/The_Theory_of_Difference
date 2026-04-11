@@ -1,330 +1,86 @@
-# The Theory of Difference（差异论）
+# WorldBase: Physics from Discrete Axioms
 
-## 🎯 三秒钟理解这个项目
+> Ten axioms constraining a discrete hypercube {0,1}^N
+> yield gravity, gauge theory, quantum mechanics, and turbulence.
+> Zero free parameters.
 
-这是一个完整的理论体系，用**差异**作为解释世界的基本单位。
+## What This Is
 
-在"实体"或"关系"被辨识之前，首先是差异的存在，差异论提出：
-- **世界由差异生成**，而非由既成对象组成
-- **九个生成机制**（聚簇、层级、守恒等）解释了从差异到结构的整个过程
-- **同一套框架**可以应用于物理学、化学、社会学、投资学、国际政治、历史学等多个领域
+A constraint-derivation framework: start from all logically
+possible discrete structures, eliminate those incompatible
+with ten formal axioms, and read off what survives. The
+surviving structure is physical law.
 
----
+The axioms are not physical assumptions. They are structural
+constraints on how a discrete system can differ and evolve.
 
-## 📍 我应该从哪里开始？
+## Core Results
 
-### 场景1：我想快速了解差异论是什么（15分钟）
+| Result | Status |
+|--------|--------|
+| Gravitational potential Φ ∝ −1/r | ✅ Proven |
+| su(2) gauge algebra + V–A coupling | ✅ Proven |
+| 2D enstrophy cascade E(k) ∝ k^{-10/3} | 🔶 Falsifiable prediction |
 
-**推荐阅读**：
-1. 本README的"核心概念"部分（5分钟）
-2. 【差异论导论.md】（10分钟）
+For the full proof status table (including SU(3), electroweak
+unification, Higgs mechanism, quantum mechanics, and turbulence),
+see [framework/proof-status.md](framework/proof-status.md).
 
-**收获**：理解差异论的基本框架和9个核心机制
+## The Ten Axioms
 
----
+| ID | Name | Constraint |
+|----|------|------------|
+| A1 | Primordial Difference | Difference exists |
+| A1' | Transverse Emergence | Lateral structure with U(1) phase |
+| A2 | Binary Concreteness | Bits are concrete |
+| A3 | Finite Discrete | State space is bounded |
+| A4 | Minimal Variation | One bit per step (d_H = 1) |
+| A5 | Difference Conservation | Conserved quantities exist |
+| A6 | Irreversibility | Evolution is directed (DAG) |
+| A7 | Cycle Closure | Paths can return to start |
+| A8 | Symmetry Preference | Middle layers have max weight |
+| A9 | Endogenous Completeness | No external parameters |
 
-### 场景2：我想通过具体例子理解这个理论（1-2小时）
+## Papers
 
-**推荐阅读顺序**：
-1. 【差异论导论.md】- 理解基本框架（20分钟）
-2. 【历史的公理分析_全书V1.md、V1.4.md】- 看框架在历史中的应用（1小时）
-   - 这是最好的"具体化"材料
-   - 用周代、秦汉、唐宋、明清等历史案例展示差异论如何工作
+| Paper | Topic | File |
+|-------|-------|------|
+| Gravity | Φ ∝ −1/r from axioms | [papers/01-gravity.md](papers/01-gravity.md) |
+| Weak Force | su(2) algebra from DAG | [papers/02-weak-force.md](papers/02-weak-force.md) |
+| Turbulence | E(k) ∝ k^{-10/3} prediction | [papers/03-turbulence-2d.md](papers/03-turbulence-2d.md) |
 
-**收获**：从抽象到具体，看到理论的解释力
+## How to Read
 
----
+**For physicists**: Start with the turbulence paper
+[papers/03-turbulence-2d.md](papers/03-turbulence-2d.md) — it
+contains the most concrete, falsifiable prediction.
 
-### 场景3：我想深入学习整个理论体系（3-7天）
+**For the framework**: Start with
+[framework/axioms.md](framework/axioms.md).
 
-**推荐阅读顺序**：
+**For the math**: Go to [derivations/](derivations/).
 
-**第一天**：建立基础
-- 【差异论导论.md】（30分钟）
-- 【差异论V1.6.md】第一部分（1小时）
+## Comparison with Other Approaches
 
-**第二天**：理解生成机制
-- 【差异论V1.6.md】完整阅读（2-3小时）
-  - 这是理论最完整的表述
-  - 包含了所有9个机制的详细论证
+The turbulence prediction E(k) ∝ k^{-10/3} differs from the
+k^{-3} scaling derived by Nian, Yu, and Ye (2022) from
+non-unitary conformal field theory
+([arXiv:2210.06762](https://arxiv.org/abs/2210.06762)).
+Both predictions are parameter-free and derived from first
+principles, but from different first principles:
 
-**第三天**：看具体应用
-- 【历史的公理分析_全书V1.md】（2小时）
-- 【中国政治的公理解读.md】（1小时）
+- **CFT approach**: emergent conformal symmetry
+- **This framework**: locality + conservation + irreversibility
 
-**第四天**：进一步延展
-- 【象界.md】（2小时）
-  - 理解理论在显现层维度的含义
+The disagreement is a genuine, resolvable empirical question.
 
-**第五-七天**：最深层的基础
-- 【worldbaseV2.0.md】（3小时）
-  - 理论的最底层本体论
-  - 可选，用于最深度的理解
+## Keywords
 
----
+axiomatic physics, discrete foundations, constraint derivation,
+zero-parameter theory, turbulence spectrum, gauge theory emergence,
+gravity from first principles, enstrophy cascade, Kolmogorov
+spectrum, WorldBase, E(k) proportional to k^{-10/3}
 
-### 场景4：我想看这个理论怎样应用到具体领域
+## Contact
 
-**历史领域**：
-- 【历史的公理分析_全书V1.md】
-
-**政治领域**：
-- 【中国政治的公理解读.md】
-- 【中美公理诊断.md】
-- 【公理张力与意识形态极限.md】
-
-**社会领域**：
-- 【公理社会论文.md】
-- 【社会缺少公理的可能性讨论.md】
-
-**物理/自然科学领域**：
-- 【worldbase数学框架及全物理对应.md】
-- 【引力的论文.md】
-- 【引力约束条件的枚举.md】
-
----
-
-## 🧠 核心概念快速导览
-
-### 什么是差异？
-
-**定义**：任何能被区分出来的东西都是差异。
-
-简单例子：
-- 光和暗的对比是差异
-- 冷和热的对比是差异  
-- 有序和无序的对比是差异
-- 个人和社会的对比是差异
-
-关键点：**差异不是后来才有的，而是先行的**。正因为有差异，才有了被区分的对象。
-
-### 为什么从差异开始？
-
-传统理论从**对象**开始：
-- 世界 = 一堆既成的对象（人、物、观念等）
-- 对象之间产生关系
-- 问题：**对象从哪来？为什么是这样而不是那样？**
-
-差异论从**差异**开始：
-- 世界 = 差异的持续生成和筛选
-- 差异逐步凝聚成对象、结构
-- 解答：对象不是"既成的"，而是在约束中不断生成的
-
-### 9个核心机制（生成语法）
-
-这9个机制说明了差异如何一步步变成世界：
-
-| 机制 | 含义 | 例子 |
-|-----|------|------|
-| **聚簇** | 差异向某处集中 | 物质向星体集中，权力向中央集中 |
-| **层级** | 聚簇形成的结构有高低 | 从原子→分子→细胞→生物，从个人→家族→社会 |
-| **守恒** | 差异不能消失，只能转移 | 消灭一个矛盾，新的矛盾会出现 |
-| **先天完备性** | 所有可能性都已经在"可能性场"中 | 世界不能凭空产生新的东西，只能从已有的可能中选择 |
-| **最小变易** | 变化沿阻力最小的方向 | 改革总是从最容易的地方开始 |
-| **破缺** | 在众多可能中选择一个 | 高温水冷却时，必然结晶成某种特定形态 |
-| **循环** | 被选中的路径会重复自身 | 一旦某个制度被确立，它会不断自我维持 |
-| **锁定** | 循环压缩其他可能的空间 | 一旦形成惯性，改变就很困难 |
-| **自指** | 系统能把自身作为对象操作自身 | 人能思考自己的思考；社会能制定关于自身的法律 |
-
-### 这些机制为什么重要？
-
-它们解释了一个基本问题：**为什么世界是这样而不是那样？**
-
-答案：**因为在约束条件下，这是最先到达的稳态。**
-
----
-
-## 📁 完整文件导览
-
-### 核心理论文档
-
-#### 【入门必读】
-- **差异论导论.md** 
-  - 长度：简短
-  - 难度：⭐
-  - 作用：快速理解差异论的基本框架
-
-#### 【完整理论】
-- **差异论V1.6.md**
-  - 长度：很长（20万字+）
-  - 难度：⭐⭐⭐⭐⭐
-  - 作用：差异论的完整、严格的表述
-  - 包含：所有9个机制的详细论证、与其他理论的对话、以命题、断言的方式重写社会科学的理论和视角。
-  
-- **差异论V1.5.md**
-  - 前一个版本，已被V1.6取代
-  - 保留作参考
-
-- **差异论V1.6EN.md**
-  - 英文版本
-
-#### 【进一步展开】
-- **象界.md**
-  - 长度：很长（4万字+）
-  - 难度：⭐⭐⭐⭐
-  - 作用：理论在现象学维度的含义
-  - 内容：描述性语言，解释结构、主体如何在约束中被筛选和显现
-
-- **差异即世界V1.1.md**
-  - 长度：很长（5万字+）
-  - 难度：⭐⭐⭐⭐
-  - 作用："一切都是差异"的完整展开
-  - 内容：语法层，用语法表述将差异论在低语义世界和高语义世界进行链接。
-
----
-
-### WorldBase物理框架
-
-#### 【正式版本 v1.0+】
-WorldBase从v1.0开始转为正式版本，采用严格的公理化体系：
-
-- **worldbase数学框架及全物理对应.md** ⭐重点推荐
-  - 长度：超长（50万字+）
-  - 难度：⭐⭐⭐⭐⭐
-  - 作用：**WorldBase物理框架的核心文档**
-  - 内容：完整的十公理体系、离散状态空间、连续极限定理、引力/电磁/弱力的统一推导
-  - 特点：从差异本体论出发，用约束推导方法重建物理学基础
-
-- **worldbase物理版全版V1.2.md**
-  - 物理领域的完整表述
-  - 包含详细的数学推导和物理论证
-
-- **worldbaseV2.0.md** ⭐最新精修
-  - **昨天刚完成精修的版本**
-  - 对v1.x系列的进一步完善和优化
-  - 推荐使用此版本作为物理框架的标准参考
-
-#### 【历史版本 v3.0-v5.0】
-这些是WorldBase早期探索阶段的版本，记录了思想演进过程：
-
-- **06-工作进度记录/** 目录中的v4.x-v5.0系列
-  - worldbase V4.1快照.md → V4.7完整版.md：渐进式更新记录
-  - worldbase V5.0.md / V5.0全新修正版.md：中期重要版本
-  - 作用：展示理论从摸索到成熟的过程
-
-- **05-历史版本归档/** 目录中的早期版本
-  - worldbaseV1.3.md, V1.4.md, V1.5.md：v1.0之前的探索
-  - worldbase本地完整化版本系列：向正式版本的过渡
-  - worlbase V4.0快照及大修.md：重要的转折点
-
-> **版本说明**：v3.0-v5.0属于历史版本，记录了WorldBase从概念探索到公理化体系的演进历程。v1.0+是确立最终想法后的正式版本，其中v2.0是最新的精修版本。
-
----
-
-### 具体应用文档
-
-#### 【历史领域】
-- **历史的公理分析_全书V1.md、历史的公理分析V.4.md**（重点推荐）
-  - 长度：很长（10万字+）
-  - 难度：⭐⭐⭐
-  - 作用：**最好的"理论应用示范"**
-  - 内容：用差异论重新解读周代、秦汉、唐宋、明清、欧洲、现代国家
-  - 为什么推荐：这本书展示了差异论的解释力最直观,V1可读性强，V1.4分析全面工具箱更足。
-
-- 历史的公理解读.md
-- 历史的公理分析的书写法跟定位的讨论.md
-
-#### 【政治领域】
-- **中国政治的公理解读.md**
-- **中美公理诊断.md**
-- **公理张力与意识形态极限.md**
-
-#### 【社会领域】
-- **公理社会论文.md**（最长的应用论文）
-- **社会缺少公理的可能性讨论.md**
-- **差异论未说出的可能社会结构_重写版.md**
-
-#### 【物理/自然领域】
-- **worldbase数学框架及全物理对应.md** ⭐核心文档
-  - WorldBase物理框架的完整表述
-- **引力的论文.md**
-  - 引力作为差异涌现的详细推导
-- **引力约束条件的枚举.md**
-  - 引力约束的系统性分析
-- **弱力英文版V1.3.md / V1.4.md**
-  - 弱相互作用的形式化表述
-
----
-
-### 思考与反思文档
-
-这些文档记录了理论演进过程中的思考和修正：
-
-- **关于worldbase推进过快的反思.md**
-  - 作者对理论发展速度的自我批评
-
-- **关于历史的公理分析的书写法跟定位的讨论.md**
-  - 关于如何表达这个理论的深度思考
-
-- **千问组合推论总表.md**
-  - 理论的各种推论汇总
-
-这些文档**展示了理论是如何演进的**，对理解理论深度很有帮助。
-
----
-
-## 🔄 版本说明
-
-### WorldBase版本演进
-
-**历史版本阶段 (v3.0 - v5.0)**：
-- 这是WorldBase的探索和成型期
-- 记录了从概念到公理化体系的完整演进过程
-- 文件位置：`06-工作进度记录/` 和 `05-历史版本归档/`
-- 主要文档：V4.1快照 → V4.7完整版 → V5.0系列
-
-**正式版本阶段 (v1.0+)**：
-- 从v1.0开始，WorldBase确立了最终的公理化框架
-- 采用严格的十公理体系和约束推导方法
-- **v2.0是昨天刚完成精修的最新版本**，推荐使用
-- 文件位置：`05-历史版本归档/worldbaseV2.0.md`
-- 核心文档：`02-worldbase物理框架/worldbase数学框架及全物理对应.md`
-
-### 为什么保留历史版本？
-
-虽然v2.0是最新最完善的版本，但保留v3.0-v5.0历史版本的原因：
-1. **展示思想演进** - 可以看到WorldBase如何从模糊的概念发展为严格的公理体系
-2. **学习批判精神** - 看到作者如何不断修正、完善和改进
-3. **研究价值** - 某些早期版本可能包含被后来简化掉的有趣思路
-4. **完整性** - 作为理论发展的完整档案
-
----
-
-## ❓ 常见问题
-
-### Q1: 这个理论和某某理论的区别是什么？
-
-详见各理论文档中的"与X理论的对话"部分。一般来说：
-- vs 系统论：系统论处理的是关系，差异论处理的是关系的源头
-- vs 结构主义：结构主义把结构看作��成的，差异论看作生成的
-- vs 复杂性理论：差异论提供了更基础的解释框架
-
-### Q2: 这个理论可以用来做什么？
-
-- 分析历史制度的演变
-- 诊断当代社会的矛盾
-- 理解物理现象的本质
-- 预测变化的方向（不是具体预测，而是指出约束和方向）
-- 等等
-
-### Q3: 为什么文件这么多？
-
-因为这是一个**完整的理论体系的完整记录**。包括：
-- 核心理论
-- 不同领域的应用
-- 思想演进的过程
-- 数学物理的严格表述
-
-你可以只读你感兴趣的部分。
-
-### Q4: 应该用什么顺序阅读？
-
-见本文档上方的"我应该从哪里开始？"部分。
-
-### Q5: 这个理论完成了吗？
-
-没有。理论永远在演进。���目前的版本已经足够自洽和完整了。
-
----
-
-## 🌳 整个体系的逻辑结构
+David Du — 276857401@qq.com
