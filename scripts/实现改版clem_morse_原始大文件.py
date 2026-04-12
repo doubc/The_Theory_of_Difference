@@ -3016,6 +3016,1321 @@ def run_clem_final(N=4):
               f"H_2={h2_rank}, H_3={h3_rank}")
 
 
+def run_johnson_graph_homology(N_list=[4, 6, 8]):
+    """
+    计算不同 N 下，中截面 Johnson 图 J(N,N/2) 的同调群。
+
+    只用顶点和边（不加面），看 H_0 和 H_1 的变化。
+    然后加入 A1' 三角面，看 H_2 的变化。
+
+    目标：找到 J(N,N/2) 同调群随 N 的变化规律。
+    """
+    import numpy as np
+
+    for N in N_list:
+        if N % 2 != 0:
+            continue
+
+        print(f"\n{'=' * 50}")
+        print(f"N={N}, 中截面 J({N},{N // 2})")
+        print(f"{'=' * 50}")
+
+        vertices = all_vertices(N)
+
+        # 中截面顶点
+        mid_verts = [v for v in vertices if sum(v) == N // 2]
+        mid_verts_sorted = sorted(mid_verts)
+        v_idx = {v: i for i, v in enumerate(mid_verts_sorted)}
+        n0 = len(mid_verts_sorted)
+
+        # A1' 边（d_H=2，同层）
+        a1p_edges = []
+        for i in range(n0):
+            for j in range(i + 1, n0):
+                vi, vj = mid_verts_sorted[i], mid_verts_sorted[j]
+                if sum(a != b for a, b in zip(vi, vj)) == 2:
+                    a1p_edges.append(frozenset([vi, vj]))
+        a1p_directed = apply_A6_dag(a1p_edges, mid_verts_sorted)
+        n1 = len(a1p_directed)
+        e_idx = {e: i for i, e in enumerate(a1p_directed)}
+
+        print(f"顶点数：{n0}，边数：{n1}")
+        print(f"理论边数：{n0 * (N // 2) ** 2 // 2}")
+
+        # ∂_1（只有边，无面）
+        d1 = np.zeros((n0, n1), dtype=int)
+        for j, e in enumerate(a1p_directed):
+            src, tgt = e
+            d1[v_idx[tgt], j] += 1
+            d1[v_idx[src], j] -= 1
+
+        # 无面时的同调
+        d2_empty = np.zeros((n1, 0), dtype=int)
+        h_no_face = compute_homology(d1, d2_empty)
+        print(f"无面同调：{h_no_face}")
+
+        # 加入三角面
+        all_tris = apply_triangular_faces(a1p_directed, mid_verts_sorted)
+        n2 = len(all_tris)
+        print(f"三角面数：{n2}")
+
+        d2 = np.zeros((n1, n2), dtype=int)
+        for k, tri in enumerate(all_tris):
+            coeff = triangle_boundary(tri, e_idx)
+            for ei, c in coeff.items():
+                d2[ei, k] += c
+
+        ok = np.all(d1 @ d2 == 0)
+        print(f"∂²=0: {ok}")
+
+        h = compute_homology(d1, d2)
+        chi = n0 - n1 + n2
+        print(f"加入三角面后：C_0={n0},C_1={n1},C_2={n2},χ={chi}")
+        print(f"同调群：{h}")
+
+        # Euler 特征数的理论值
+        # J(N,N/2) 的 χ 没有简单公式，但可以从同调群读出
+        r = int(np.linalg.matrix_rank(d1))
+        h1_rank = n1 - r - int(np.linalg.matrix_rank(d2))
+        print(f"H_1 自由秩（秩公式）：{h1_rank}")
+
+
+def find_long_cycles(directed_edges, vertices, min_length):
+    """
+    找出所有长度 >= min_length 的有向循环，
+    返回参与这些循环的顶点集合和边集合。
+
+    用 DFS 找有向图中的所有简单环。
+    对大图（N=6，20顶点）可能很慢，需要剪枝。
+    """
+    from collections import defaultdict
+
+    adj = defaultdict(list)
+    for src, tgt in directed_edges:
+        adj[src].append(tgt)
+
+    participating_vertices = set()
+    participating_edges = set()
+
+    def dfs(start, current, path, path_set):
+        for nxt in adj[current]:
+            if nxt == start and len(path) >= min_length:
+                # 找到一个有效循环
+                for v in path:
+                    participating_vertices.add(v)
+                for i in range(len(path)):
+                    participating_edges.add(
+                        (path[i], path[(i + 1) % len(path)]))
+                return
+            if nxt not in path_set and len(path) < min_length * 2:
+                path.append(nxt)
+                path_set.add(nxt)
+                dfs(start, nxt, path, path_set)
+                path.pop()
+                path_set.remove(nxt)
+
+    for v in vertices:
+        dfs(v, v, [v], {v})
+
+    return participating_vertices, participating_edges
+
+
+def run_A7_filtered_homology(N=6):
+    """
+    在中截面上，用 A7 筛选后的顶点和边计算同调群。
+    """
+    print(f"{'=' * 50}")
+    print(f"【A7 筛选实验】N={N}，循环长度 >= {N}")
+    print(f"{'=' * 50}")
+
+    vertices = all_vertices(N)
+    mid_verts = sorted([v for v in vertices if sum(v) == N // 2])
+
+    # A1' 边
+    a1p_edges = [frozenset([mid_verts[i], mid_verts[j]])
+                 for i in range(len(mid_verts))
+                 for j in range(i + 1, len(mid_verts))
+                 if sum(a != b for a, b in zip(mid_verts[i], mid_verts[j])) == 2]
+    a1p_directed = apply_A6_dag(a1p_edges, mid_verts)
+
+    print(f"原始：{len(mid_verts)} 顶点，{len(a1p_directed)} 边")
+
+    # A7 筛选
+    part_v, part_e = find_long_cycles(a1p_directed, mid_verts, N)
+    print(f"A7 筛选后：{len(part_v)} 顶点，{len(part_e)} 边")
+
+    if not part_v:
+        print("无满足 A7 的循环。")
+        return
+
+    part_v_sorted = sorted(part_v)
+    part_e_list = [(s, t) for s, t in part_e
+                   if s in part_v and t in part_v]
+
+    v_idx = {v: i for i, v in enumerate(part_v_sorted)}
+    e_idx = {e: i for i, e in enumerate(part_e_list)}
+    n0, n1 = len(part_v_sorted), len(part_e_list)
+
+    # 三角面（只在筛选后的顶点和边上）
+    tris = apply_triangular_faces(part_e_list, part_v_sorted)
+    n2 = len(tris)
+    print(f"三角面：{n2}")
+
+    chi = n0 - n1 + n2
+    print(f"C_0={n0}, C_1={n1}, C_2={n2}, χ={chi}")
+
+    d1 = np.zeros((n0, n1), dtype=int)
+    for j, (src, tgt) in enumerate(part_e_list):
+        d1[v_idx[tgt], j] += 1
+        d1[v_idx[src], j] -= 1
+
+    d2 = np.zeros((n1, n2), dtype=int)
+    for k, tri in enumerate(tris):
+        coeff = triangle_boundary(tri, e_idx)
+        for ei, c in coeff.items():
+            d2[ei, k] += c
+
+    ok = np.all(d1 @ d2 == 0)
+    print(f"∂²=0: {ok}")
+
+    h = compute_homology(d1, d2)
+    print(f"同调群：{h}")
+
+    if h['H_0'] == 'Z' and h['H_1'] == '0' and h['H_2'] == 'Z':
+        print(f"*** A7 筛选后 H*(X) ≅ H*(S²) ***")
+        print(f"A7 是产生 S² 结构的关键约束。")
+    elif h['H_1'] == '0':
+        print(f"H_1=0，单连通，但 H_2={h['H_2']}")
+    else:
+        print(f"H_1={h['H_1']}，仍有非平凡 1-圈。")
+
+
+def find_sphere_triangulation(directed_edges, vertices):
+    """
+    在图的三角面中，找一个满足流形条件的子集：
+    每条无向边恰好属于 2 个三角面。
+
+    这等价于找图的一个球面三角剖分（如果存在）。
+
+    策略：
+    1. 找出所有三角面
+    2. 用贪心算法选取三角面子集，
+       使得每条边最多被 2 个面使用
+    3. 检验结果的同调群
+    """
+    all_tris = apply_triangular_faces(directed_edges, sorted(vertices))
+
+    # 统计每条无向边被多少个三角面包含
+    from collections import defaultdict
+    edge_to_tris = defaultdict(list)
+    for k, tri in enumerate(all_tris):
+        v0, v1, v2 = tri
+        for ei, ej in [(v0, v1), (v1, v2), (v0, v2)]:
+            edge_to_tris[frozenset([ei, ej])].append(k)
+
+    # 贪心选取：每条边最多被 2 个面选中
+    selected = set()
+    edge_count = defaultdict(int)
+
+    # 按"边的竞争度"排序：竞争越少的三角面优先选
+    def face_score(k):
+        tri = all_tris[k]
+        v0, v1, v2 = tri
+        total = 0
+        for ei, ej in [(v0, v1), (v1, v2), (v0, v2)]:
+            total += len(edge_to_tris[frozenset([ei, ej])])
+        return total
+
+    sorted_tris = sorted(range(len(all_tris)), key=face_score)
+
+    for k in sorted_tris:
+        tri = all_tris[k]
+        v0, v1, v2 = tri
+        # 检查这个面的三条边是否都还有空位
+        ok = True
+        for ei, ej in [(v0, v1), (v1, v2), (v0, v2)]:
+            if edge_count[frozenset([ei, ej])] >= 2:
+                ok = False
+                break
+        if ok:
+            selected.add(k)
+            for ei, ej in [(v0, v1), (v1, v2), (v0, v2)]:
+                edge_count[frozenset([ei, ej])] += 1
+
+    selected_tris = [all_tris[k] for k in sorted(selected)]
+
+    # 检验流形条件
+    edge_counts = list(edge_count.values())
+    from collections import Counter
+    count_dist = Counter(edge_counts)
+
+    return selected_tris, count_dist
+
+
+def run_sphere_triangulation(N=6):
+    print(f"{'=' * 50}")
+    print(f"【球面三角剖分实验】N={N}")
+    print(f"{'=' * 50}")
+
+    vertices = all_vertices(N)
+    mid_verts = sorted([v for v in vertices if sum(v) == N // 2])
+    v_idx = {v: i for i, v in enumerate(mid_verts)}
+    n0 = len(mid_verts)
+
+    a1p_edges = [frozenset([mid_verts[i], mid_verts[j]])
+                 for i in range(n0)
+                 for j in range(i + 1, n0)
+                 if sum(a != b for a, b in zip(mid_verts[i], mid_verts[j])) == 2]
+    a1p_directed = apply_A6_dag(a1p_edges, mid_verts)
+    e_idx = {e: i for i, e in enumerate(a1p_directed)}
+    n1 = len(a1p_directed)
+
+    # 球面三角剖分
+    sel_tris, count_dist = find_sphere_triangulation(
+        a1p_directed, mid_verts)
+    n2 = len(sel_tris)
+
+    print(f"顶点：{n0}，边：{n1}，选取三角面：{n2}")
+    print(f"边的面数分布：{dict(count_dist)}")
+    print(f"（理想：全部为 2）")
+
+    chi = n0 - n1 + n2
+    print(f"χ = {chi}")
+
+    d1 = np.zeros((n0, n1), dtype=int)
+    for j, (src, tgt) in enumerate(a1p_directed):
+        d1[v_idx[tgt], j] += 1
+        d1[v_idx[src], j] -= 1
+
+    d2 = np.zeros((n1, n2), dtype=int)
+    for k, tri in enumerate(sel_tris):
+        coeff = triangle_boundary(tri, e_idx)
+        for ei, c in coeff.items():
+            d2[ei, k] += c
+
+    ok = np.all(d1 @ d2 == 0)
+    print(f"∂²=0: {ok}")
+
+    h = compute_homology(d1, d2)
+    print(f"同调群：{h}")
+
+    if h['H_0'] == 'Z' and h['H_1'] == '0' and h['H_2'] == 'Z':
+        print(f"*** H*(X) ≅ H*(S²) — 球面三角剖分成功 ***")
+        print(f"流形条件（每边恰好 2 个面）产生 S²。")
+        print(f"这说明 A1' 的几何含义（球面对称性）")
+        print(f"在 N={N} 下仍然成立，但需要流形约束来实现。")
+    else:
+        print(f"H={h}，需进一步调整选取策略。")
+
+
+def find_global_cycles_undirected(vertices, N, min_length):
+    """
+    在无向超立方体图上，找长度 >= min_length 的简单环。
+
+    A6 的 DAG 定向是局部的（单步有向），但 A7 的循环是全局的。
+    在全局尺度上，循环通过 A1' 的横向跃迁来"回头"，
+    不受 A6 单步方向的约束。
+
+    策略：
+    - 用 A4 边（无向）构造图
+    - 找所有经过中截面顶点的长度 >= min_length 的简单环
+    - 返回参与这些环的中截面顶点和边
+    """
+    from collections import defaultdict
+
+    # 无向 A4 边
+    adj = defaultdict(set)
+    for v in vertices:
+        for i in range(N):
+            u = list(v)
+            u[i] = 1 - u[i]
+            u = tuple(u)
+            adj[v].add(u)
+
+    mid_verts = set(v for v in vertices if sum(v) == N // 2)
+    participating = set()
+
+    # 从每个中截面顶点出发，DFS 找长环
+    # 限制搜索深度为 min_length * 1.5 防止爆炸
+    max_depth = min(min_length + 4, 2 * N)
+
+    def dfs(start, current, depth, visited):
+        if depth >= min_length:
+            if start in adj[current]:
+                participating.add(start)
+                return True
+        if depth >= max_depth:
+            return False
+        found = False
+        for nxt in adj[current]:
+            if nxt not in visited:
+                visited.add(nxt)
+                if dfs(start, nxt, depth + 1, visited):
+                    participating.add(current)
+                    found = True
+                visited.remove(nxt)
+        return found
+
+    for v in sorted(mid_verts)[:10]:  # 先测前10个，避免超时
+        dfs(v, v, 0, {v})
+
+    return participating
+
+
+def run_A7_global_experiment(N=6):
+    """
+    A7-global 实验：用无向全局循环筛选中截面顶点，
+    然后在筛选后的子图上计算同调群。
+    """
+    print(f"{'=' * 50}")
+    print(f"【A7-global 实验】N={N}，无向循环长度 >= {N}")
+    print(f"{'=' * 50}")
+
+    vertices = all_vertices(N)
+    mid_verts = sorted([v for v in vertices if sum(v) == N // 2])
+
+    # 找参与全局循环的中截面顶点
+    part_v = find_global_cycles_undirected(vertices, N, N)
+    print(f"参与全局循环的中截面顶点：{len(part_v)}/{len(mid_verts)}")
+
+    if not part_v:
+        print("无参与全局循环的中截面顶点。")
+        return
+
+    # 在参与顶点上构造 A1' 子图
+    part_v_sorted = sorted(part_v)
+    v_idx = {v: i for i, v in enumerate(part_v_sorted)}
+    n0 = len(part_v_sorted)
+
+    a1p_edges = [frozenset([part_v_sorted[i], part_v_sorted[j]])
+                 for i in range(n0)
+                 for j in range(i + 1, n0)
+                 if sum(a != b for a, b in zip(
+            part_v_sorted[i], part_v_sorted[j])) == 2]
+    a1p_directed = apply_A6_dag(a1p_edges, part_v_sorted)
+    e_idx = {e: i for i, e in enumerate(a1p_directed)}
+    n1 = len(a1p_directed)
+
+    # 三角面
+    tris = apply_triangular_faces(a1p_directed, part_v_sorted)
+    n2 = len(tris)
+
+    chi = n0 - n1 + n2
+    print(f"C_0={n0}, C_1={n1}, C_2={n2}, χ={chi}")
+
+    if n1 == 0:
+        print("无边，无法计算同调。")
+        return
+
+    d1 = np.zeros((n0, n1), dtype=int)
+    for j, (src, tgt) in enumerate(a1p_directed):
+        d1[v_idx[tgt], j] += 1
+        d1[v_idx[src], j] -= 1
+
+    d2 = np.zeros((n1, n2), dtype=int)
+    for k, tri in enumerate(tris):
+        coeff = triangle_boundary(tri, e_idx)
+        for ei, c in coeff.items():
+            d2[ei, k] += c
+
+    ok = np.all(d1 @ d2 == 0)
+    print(f"∂²=0: {ok}")
+
+    h = compute_homology(d1, d2)
+    print(f"同调群：{h}")
+
+    if h['H_0'] == 'Z' and h['H_1'] == '0' and h['H_2'] == 'Z':
+        print(f"*** H*(X) ≅ H*(S²) ***")
+        print(f"A7-global 筛选恢复了 S² 结构！")
+        print(f"A7 是 CLEM 中 S² 涌现的关键约束。")
+    elif h.get('H_1', '') == '0':
+        print(f"H_1=0（单连通），H_2={h.get('H_2', '?')}")
+    else:
+        print(f"结果：{h}")
+        print(f"提示：max_depth 可能不够，或需要完整搜索所有顶点。")
+
+
+def find_global_cycles_undirected_v2(vertices, N, min_length):
+    """
+    修复版：只收集中截面顶点中，
+    确实参与长度 >= min_length 的简单环的那些顶点。
+
+    关键修复：
+    1. DFS 找到有效循环后，只把循环路径上的
+       【中截面顶点】加入 participating
+    2. 不把路径上的非中截面顶点加入
+    3. 对所有中截面顶点（不只是前10个）做搜索
+    """
+    from collections import defaultdict
+
+    # 无向 A4 边
+    adj = defaultdict(set)
+    for v in vertices:
+        for i in range(N):
+            u = list(v)
+            u[i] = 1 - u[i]
+            u = tuple(u)
+            adj[v].add(u)
+
+    mid_verts = set(v for v in vertices if sum(v) == N // 2)
+    participating = set()
+    max_depth = min(min_length + 4, 2 * N)
+
+    def dfs(start, current, path, visited):
+        """
+        返回 True 表示找到了从 start 出发的有效循环。
+        path 是当前路径（包含 start）。
+        """
+        if len(path) >= min_length:
+            if start in adj[current]:
+                # 找到有效循环，只收集路径上的中截面顶点
+                for v in path:
+                    if v in mid_verts:
+                        participating.add(v)
+                return True
+        if len(path) >= max_depth:
+            return False
+
+        found = False
+        for nxt in sorted(adj[current]):  # 排序保证确定性
+            if nxt not in visited:
+                visited.add(nxt)
+                path.append(nxt)
+                if dfs(start, nxt, path, visited):
+                    found = True
+                    # 不提前退出，继续找更多循环
+                path.pop()
+                visited.remove(nxt)
+        return found
+
+    # 对所有中截面顶点做搜索
+    for v in sorted(mid_verts):
+        dfs(v, v, [v], {v})
+
+    return participating
+
+
+def run_A7_global_v2(N=6):
+    """
+    A7-global 实验修复版
+    """
+    print(f"{'=' * 50}")
+    print(f"【A7-global 修复版】N={N}，循环长度 >= {N}")
+    print(f"{'=' * 50}")
+
+    vertices = all_vertices(N)
+    mid_verts_all = sorted([v for v in vertices if sum(v) == N // 2])
+    print(f"中截面总顶点数：{len(mid_verts_all)}")
+
+    # A7-global 筛选
+    part_v = find_global_cycles_undirected_v2(vertices, N, N)
+    print(f"参与全局循环的中截面顶点：{len(part_v)}/{len(mid_verts_all)}")
+
+    if not part_v:
+        print("无参与全局循环的中截面顶点。")
+        return
+
+    # 打印参与和未参与的顶点
+    not_part = set(mid_verts_all) - part_v
+    print(f"未参与的顶点数：{len(not_part)}")
+    if not_part:
+        print(f"未参与顶点（前5个）：{sorted(not_part)[:5]}")
+
+    part_v_sorted = sorted(part_v)
+    v_idx = {v: i for i, v in enumerate(part_v_sorted)}
+    n0 = len(part_v_sorted)
+
+    # A1' 边（只在参与顶点之间）
+    a1p_edges = [frozenset([part_v_sorted[i], part_v_sorted[j]])
+                 for i in range(n0)
+                 for j in range(i + 1, n0)
+                 if sum(a != b for a, b in zip(
+            part_v_sorted[i], part_v_sorted[j])) == 2]
+    a1p_directed = apply_A6_dag(a1p_edges, part_v_sorted)
+    e_idx = {e: i for i, e in enumerate(a1p_directed)}
+    n1 = len(a1p_directed)
+
+    # 三角面
+    tris = apply_triangular_faces(a1p_directed, part_v_sorted)
+    n2 = len(tris)
+
+    chi = n0 - n1 + n2
+    print(f"C_0={n0}, C_1={n1}, C_2={n2}, χ={chi}")
+
+    if n1 == 0:
+        print("无边，无法计算同调。")
+        return
+
+    d1 = np.zeros((n0, n1), dtype=int)
+    for j, (src, tgt) in enumerate(a1p_directed):
+        d1[v_idx[tgt], j] += 1
+        d1[v_idx[src], j] -= 1
+
+    d2 = np.zeros((n1, n2), dtype=int)
+    for k, tri in enumerate(tris):
+        coeff = triangle_boundary(tri, e_idx)
+        for ei, c in coeff.items():
+            d2[ei, k] += c
+
+    ok = np.all(d1 @ d2 == 0)
+    print(f"∂²=0: {ok}")
+
+    h = compute_homology(d1, d2)
+    print(f"同调群：{h}")
+
+    # 判断
+    h0, h1, h2 = h['H_0'], h['H_1'], h['H_2']
+    print(f"CLEM 判断：")
+    if h0 == 'Z' and h1 == '0' and h2 == 'Z':
+        print(f"  *** H*(X) ≅ H*(S²) ***")
+        print(f"  A7-global 筛选恢复了 S² 结构。")
+        print(f"  A7 是 S² 涌现的关键约束——")
+        print(f"  只有参与全局循环的顶点才构成物理空间。")
+    elif h0 == 'Z' and h1 == '0':
+        print(f"  单连通，H_2={h2}。")
+        print(f"  三角面仍然过多，需要进一步筛选。")
+        print(f"  下一步：在参与顶点上做球面三角剖分。")
+    elif len(part_v) == len(mid_verts_all):
+        print(f"  所有中截面顶点都参与全局循环——")
+        print(f"  A7-global 筛选无效（超立方体高度对称）。")
+        print(f"  需要更强的筛选条件：")
+        print(f"  最短循环长度 = N，或相位约束（复系数同调）。")
+    else:
+        print(f"  H_0={h0}, H_1={h1}, H_2={h2}")
+
+    return h
+
+
+def build_axiom_space_sequential(N):
+    """
+    按公理顺序逐步构造允许的状态空间。
+
+    A1：只保留 w 单调不减的有向边（层间向上）
+    A1'：添加同层横向边（d_H=2，w相同）
+    A4：每步 d_H=1（已在 A1 中隐含）
+    A6：DAG（已在 A1 中隐含）
+    A7：在已有有向图上，只保留参与长度>=N循环的顶点
+    A8：Morse 权重（偏好中截面）
+    """
+    vertices = all_vertices(N)
+
+    # A1 + A4 + A6：层间有向边，w 严格递增
+    edges_A1 = []
+    for v in vertices:
+        for i in range(N):
+            if v[i] == 0:  # 只允许 0→1，即 w 增加
+                u = list(v)
+                u[i] = 1
+                u = tuple(u)
+                edges_A1.append((v, u))
+
+    print(f"A1+A4+A6 有向边：{len(edges_A1)}")
+
+    # A1'：同层横向边（d_H=2，w相同）
+    edges_A1p = []
+    for i, v in enumerate(vertices):
+        for j, u in enumerate(vertices):
+            if i < j and sum(v) == sum(u):
+                if sum(a != b for a, b in zip(v, u)) == 2:
+                    # A1' 边无方向偏好，用 A6 定向
+                    edges_A1p.append(frozenset([v, u]))
+    edges_A1p_directed = apply_A6_dag(edges_A1p, vertices)
+    print(f"A1' 有向边：{len(edges_A1p_directed)}")
+
+    # 合并 A1 和 A1' 边
+    all_directed = list(set(edges_A1 + edges_A1p_directed))
+
+    # A7：在合并图上，找参与长度>=N循环的顶点
+    # 注意：A1 边是单向的（只能向上），A1' 边可以横向
+    # 循环必须通过 A1' 横向边来"绕回"
+    from collections import defaultdict
+    adj = defaultdict(list)
+    for src, tgt in all_directed:
+        adj[src].append(tgt)
+
+    participating = set()
+    max_depth = N * 3  # 允许更长的搜索
+
+    def dfs_directed(start, current, depth, visited):
+        if depth >= N:
+            if start in adj[current]:
+                return True
+        if depth >= max_depth:
+            return False
+        for nxt in adj[current]:
+            if nxt not in visited or (nxt == start and depth >= N):
+                if nxt == start and depth >= N:
+                    return True
+                if nxt not in visited:
+                    visited.add(nxt)
+                    if dfs_directed(start, nxt, depth + 1, visited):
+                        visited.remove(nxt)
+                        return True
+                    visited.remove(nxt)
+        return False
+
+    mid_verts = [v for v in vertices if sum(v) == N // 2]
+    for v in sorted(mid_verts):
+        if dfs_directed(v, v, 0, {v}):
+            participating.add(v)
+
+    print(f"A7 筛选后中截面顶点：{len(participating)}/{len(mid_verts)}")
+
+    return all_directed, participating, mid_verts
+
+
+def build_sequential_with_quotient(N):
+    """
+    按公理顺序逐步构造，正确处理 A6 vs A7 张力。
+
+    关键修正：
+    A7 的循环在商空间中实现。
+    A1' 定义等价关系：同层内通过横向对称性相关的顶点等价。
+    在商空间中，A1' 横向跃迁变成"自环"（从等价类到自身），
+    这允许 A7 的循环条件被满足。
+
+    具体实现：
+    1. A1+A4+A6 建立层间有向边（同之前）
+    2. A1' 定义同层等价关系（把 d_H=2 的同层顶点对识别）
+    3. 在商空间中，A7 循环 = 从某个等价类出发，
+       经过层间跃迁，回到同一等价类
+    4. A8 Morse 简化选出中截面等价类
+    """
+    vertices = all_vertices(N)
+    mid_verts = sorted([v for v in vertices if sum(v) == N // 2])
+
+    # A1 层间有向边（w 严格递增）
+    edges_up = []
+    for v in vertices:
+        for i in range(N):
+            if v[i] == 0:
+                u = list(v);
+                u[i] = 1;
+                u = tuple(u)
+                edges_up.append((v, u))
+
+    # A1' 等价关系：同层内 d_H=2 的顶点对
+    # 用 Union-Find 构造等价类
+    parent = {v: v for v in vertices}
+
+    def find(x):
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+
+    def union(x, y):
+        px, py = find(x), find(y)
+        if px != py:
+            parent[px] = py
+
+    # 只合并同层的 d_H=2 顶点对（A1' 横向等价）
+    for i, v in enumerate(vertices):
+        for j, u in enumerate(vertices):
+            if i < j and sum(v) == sum(u):
+                if sum(a != b for a, b in zip(v, u)) == 2:
+                    union(v, u)
+
+    # 商空间等价类
+    classes = {}
+    for v in vertices:
+        rep = find(v)
+        if rep not in classes:
+            classes[rep] = []
+        classes[rep].append(v)
+
+    print(f"商空间等价类数：{len(classes)}")
+    print(f"各层等价类分布：")
+    from collections import Counter
+    layer_classes = Counter()
+    for rep, members in classes.items():
+        w = sum(members[0])
+        layer_classes[w] += 1
+    for w in sorted(layer_classes):
+        print(f"  w={w}: {layer_classes[w]} 个等价类")
+
+    # 在商空间上构造有向边
+    def get_rep(v):
+        return find(v)
+
+    # 层间边（A1）在商空间上的像
+    quotient_edges = set()
+    for src, tgt in edges_up:
+        r_src = get_rep(src)
+        r_tgt = get_rep(tgt)
+        if r_src != r_tgt:
+            quotient_edges.add((r_src, r_tgt))
+        else:
+            # src 和 tgt 在同一等价类——这是 A7 循环的来源！
+            # 层间跃迁落在同一等价类 = 循环闭合
+            pass
+
+    # 检查：有多少层间边在商空间中变成"自环"（循环）
+    self_loops = [(src, tgt) for src, tgt in edges_up
+                  if get_rep(src) == get_rep(tgt)]
+    print(f"    商空间中的自环（A7    循环候选）：{len(self_loops)}    ")
+    if self_loops:
+        print(f"  示例：{self_loops[:3]}")
+    # 这些自环对应的等价类就是 A7 允许的稳定态
+    stable_classes = set(get_rep(src) for src, tgt in self_loops)
+    print(f"  对应的等价类数：{len(stable_classes)}")
+    # 其中有多少是中截面等价类？
+    mid_stable = [c for c in stable_classes
+                  if sum(list(classes[c])[0]) == N // 2]
+    print(f"  中截面稳定等价类：{len(mid_stable)}")
+
+    # A8 Morse 简化：中截面等价类
+    mid_classes = [rep for rep, members in classes.items()
+                   if sum(members[0]) == N // 2]
+    print(f"    中截面等价类总数：{len(mid_classes)}    ")
+
+    return classes, quotient_edges, self_loops
+
+
+def build_directed_A1prime(N):
+    """
+    给 A1' 边赋予方向：
+    v → u 当且仅当存在 i < j 使得 v[i]=1, v[j]=0, u[i]=0, u[j]=1
+    （把高位的1换到低位——这是一个具体的规范选择，可以讨论）
+
+    然后枚举有向三角形（A7 循环的最小实现），
+    用有向三角形作为面，计算同调群。
+    """
+    from itertools import combinations, product
+
+    verts = [v for v in product([0, 1], repeat=N) if sum(v) == N // 2]
+    idx = {v: i for i, v in enumerate(verts)}
+    n = len(verts)
+
+    # 有向 A1' 边
+    directed_edges = set()
+    for v in verts:
+        for i in range(N):
+            for j in range(N):
+                if i != j and v[i] == 1 and v[j] == 0:
+                    u = list(v)
+                    u[i] = 0;
+                    u[j] = 1
+                    u = tuple(u)
+                    # 规范方向：i < j 时 v→u，i > j 时 u→v
+                    if i < j:
+                        directed_edges.add((idx[v], idx[u]))
+
+    # 枚举有向三角形
+    triangles = []
+    for a, b, c in combinations(range(n), 3):
+        # 检查六种有向三角形，找循环方向
+        if (a, b) in directed_edges and (b, c) in directed_edges and (c, a) in directed_edges:
+            triangles.append((a, b, c))
+        elif (a, c) in directed_edges and (c, b) in directed_edges and (b, a) in directed_edges:
+            triangles.append((a, c, b))
+
+    print(f"N={N}: {n} 顶点, {len(directed_edges)} 有向边, {len(triangles)} 有向三角形")
+    return verts, directed_edges, triangles
+
+
+def build_circular_directed_A1prime(N):
+    """
+    把 N 个坐标位置排成一个圆（0,1,...,N-1,0,...）
+    σ_ij 的方向：在圆上从 i 到 j 是顺时针则 v→u，逆时针则 u→v
+    顺时针定义：(j - i) mod N <= N//2
+    """
+    from itertools import combinations, product
+
+    verts = [v for v in product([0, 1], repeat=N) if sum(v) == N // 2]
+    idx = {v: i for i, v in enumerate(verts)}
+    n = len(verts)
+
+    directed_edges = set()
+    for v in verts:
+        for i in range(N):
+            for j in range(N):
+                if i != j and v[i] == 1 and v[j] == 0:
+                    u = list(v)
+                    u[i] = 0;
+                    u[j] = 1
+                    u = tuple(u)
+                    # 循环方向：(j-i) mod N <= N//2 为顺时针（正向）
+                    if (j - i) % N <= N // 2:
+                        directed_edges.add((idx[v], idx[u]))
+                    # 反向由对称性自动处理（不重复添加）
+
+    # 枚举有向三角形
+    triangles = []
+    for a, b, c in combinations(range(n), 3):
+        if ((a, b) in directed_edges and (b, c) in directed_edges
+                and (c, a) in directed_edges):
+            triangles.append((a, b, c))
+        elif ((a, c) in directed_edges and (c, b) in directed_edges
+              and (b, a) in directed_edges):
+            triangles.append((a, c, b))
+
+    print(f"N={N}: {n} 顶点, {len(directed_edges)} 有向边, {len(triangles)} 有向三角形")
+
+    # 验证：有向三角形是否覆盖所有顶点
+    covered = set()
+    for t in triangles:
+        covered.update(t)
+    print(f"  被三角形覆盖的顶点数：{len(covered)}/{n}")
+
+    return verts, directed_edges, triangles
+
+
+def compute_homology_from_directed(N, verts, directed_edges, triangles):
+    import numpy as np
+
+    def rank_m(M):
+        if M.size == 0: return 0
+        s = np.linalg.svd(M.astype(float), compute_uv=False)
+        return int(np.sum(s > 1e-6))
+
+    n = len(verts)
+
+    # 无向边
+    undirected_edges = set()
+    for (a, b) in directed_edges:
+        undirected_edges.add((min(a, b), max(a, b)))
+    edges_list = sorted(undirected_edges)
+    edge_idx = {e: i for i, e in enumerate(edges_list)}
+
+    # 无向三角面
+    faces_set = set()
+    for (a, b, c) in triangles:
+        faces_set.add(tuple(sorted([a, b, c])))
+    faces_list = sorted(faces_set)
+
+    V = n
+    E = len(edges_list)
+    F = len(faces_list)
+    chi = V - E + F
+    print(f"\nN={N}: V={V}, E={E}, F={F}, χ={chi}")
+
+    # ∂1: E → V
+    d1 = np.zeros((V, E), dtype=int)
+    for j, (a, b) in enumerate(edges_list):
+        d1[a][j] = -1
+        d1[b][j] = 1
+
+    # ∂2: F → E，标准单纯同调符号
+    d2 = np.zeros((E, F), dtype=int)
+    for k, (a, b, c) in enumerate(faces_list):
+        # a < b < c 已保证（sorted）
+        # ∂[a,b,c] = [b,c] - [a,c] + [a,b]
+        e_ab = edge_idx[(a, b)]
+        e_bc = edge_idx[(b, c)]
+        e_ac = edge_idx[(a, c)]
+        d2[e_ab][k] = 1
+        d2[e_bc][k] = 1
+        d2[e_ac][k] = -1
+
+    # 验证链复形条件
+    check = d1 @ d2
+    print(f"  ∂1∂2 = 0: {np.all(check == 0)}")
+    if not np.all(check == 0):
+        print(f"  ∂1∂2 非零项数: {np.count_nonzero(check)}")
+
+    r1 = rank_m(d1)
+    r2 = rank_m(d2)
+
+    b0 = V - r1
+    b1 = E - r1 - r2
+    b2 = F - r2
+
+    print(f"  β0={b0}, β1={b1}, β2={b2}")
+    print(f"  χ check: {b0 - b1 + b2} (should be {chi})")
+
+    if b0 == 1 and b1 == 0 and b2 == 1:
+        print(f"  → H_*(S²) ✓")
+    else:
+        print(f"  → 非 S²")
+
+    return b0, b1, b2
+
+
+def analyze_edge_degrees(N, verts, directed_edges, triangles):
+    # 无向边和无向面（复用之前的逻辑）
+    undirected_edges = set()
+    for (a, b) in directed_edges:
+        undirected_edges.add((min(a, b), max(a, b)))
+    edges_list = sorted(undirected_edges)
+    edge_idx = {e: i for i, e in enumerate(edges_list)}
+
+    faces_set = set()
+    for (a, b, c) in triangles:
+        faces_set.add(tuple(sorted([a, b, c])))
+    faces_list = sorted(faces_set)
+
+    # 每条边被多少个面共享
+    edge_face_count = {e: 0 for e in edges_list}
+    for (a, b, c) in faces_list:
+        for (u, v) in [(a, b), (b, c), (a, c)]:
+            edge_face_count[(min(u, v), max(u, v))] += 1
+
+    from collections import Counter
+    degree_dist = Counter(edge_face_count.values())
+    print(f"N={N} 边-面度数分布：")
+    for deg, cnt in sorted(degree_dist.items()):
+        print(f"  度数={deg} 的边：{cnt} 条")
+
+    # 每个顶点被多少个面共享
+    vert_face_count = [0] * len(verts)
+    for (a, b, c) in faces_list:
+        vert_face_count[a] += 1
+        vert_face_count[b] += 1
+        vert_face_count[c] += 1
+    vc_dist = Counter(vert_face_count)
+    print(f"N={N} 顶点-面度数分布：")
+    for deg, cnt in sorted(vc_dist.items()):
+        print(f"  度数={deg} 的顶点：{cnt} 个")
+
+    # 边度数=1 的边（边界边）
+    boundary_edges = [e for e, c in edge_face_count.items() if c == 1]
+    print(f"  边界边数量（度数=1）：{len(boundary_edges)}")
+    # 边度数>2 的边（非流形边）
+    nonmanifold_edges = [e for e, c in edge_face_count.items() if c > 2]
+    print(f"  非流形边数量（度数>2）：{len(nonmanifold_edges)}")
+
+
+def extract_manifold_subcomplex(N, verts, directed_edges, triangles):
+    import numpy as np
+
+    def rank_m(M):
+        if M.size == 0: return 0
+        s = np.linalg.svd(M.astype(float), compute_uv=False)
+        return int(np.sum(s > 1e-6))
+
+    # 无向边和无向面
+    undirected_edges = set()
+    for (a, b) in directed_edges:
+        undirected_edges.add((min(a, b), max(a, b)))
+    edges_list = sorted(undirected_edges)
+
+    faces_set = set()
+    for (a, b, c) in triangles:
+        faces_set.add(tuple(sorted([a, b, c])))
+    faces_list = sorted(faces_set)
+
+    # 计算每条边的面度数
+    edge_face_count = {e: 0 for e in edges_list}
+    for (a, b, c) in faces_list:
+        for (u, v) in [(a, b), (b, c), (a, c)]:
+            edge_face_count[(min(u, v), max(u, v))] += 1
+
+    # 流形边：度数恰好=2
+    manifold_edges = {e for e, c in edge_face_count.items() if c == 2}
+
+    # 流形面：三条边全部是流形边
+    manifold_faces = []
+    for (a, b, c) in faces_list:
+        edges_of_face = {
+            (min(a, b), max(a, b)),
+            (min(b, c), max(b, c)),
+            (min(a, c), max(a, c))
+        }
+        if edges_of_face.issubset(manifold_edges):
+            manifold_faces.append((a, b, c))
+
+    # 流形顶点：出现在流形面中的顶点
+    manifold_verts = sorted(set(v for f in manifold_faces for v in f))
+    vert_remap = {v: i for i, v in enumerate(manifold_verts)}
+
+    manifold_edges_list = sorted(manifold_edges)
+    edge_idx = {e: i for i, e in enumerate(manifold_edges_list)}
+
+    V = len(manifold_verts)
+    E = len(manifold_edges_list)
+    F = len(manifold_faces)
+    chi = V - E + F
+    print(f"\nN={N} 流形子复形: V={V}, E={E}, F={F}, χ={chi}")
+
+    if V == 0 or E == 0 or F == 0:
+        print("  流形子复形为空")
+        return
+
+    # ∂1
+    d1 = np.zeros((V, E), dtype=int)
+    for j, (a, b) in enumerate(manifold_edges_list):
+        d1[vert_remap[a]][j] = -1
+        d1[vert_remap[b]][j] = 1
+
+    # ∂2
+    d2 = np.zeros((E, F), dtype=int)
+    for k, (a, b, c) in enumerate(manifold_faces):
+        e_ab = edge_idx[(min(a, b), max(a, b))]
+        e_bc = edge_idx[(min(b, c), max(b, c))]
+        e_ac = edge_idx[(min(a, c), max(a, c))]
+        d2[e_ab][k] = 1
+        d2[e_bc][k] = 1
+        d2[e_ac][k] = -1
+
+    check = d1 @ d2
+    print(f"  ∂1∂2 = 0: {np.all(check == 0)}")
+
+    r1 = rank_m(d1)
+    r2 = rank_m(d2)
+    b0 = V - r1
+    b1 = E - r1 - r2
+    b2 = F - r2
+
+    print(f"  β0={b0}, β1={b1}, β2={b2}")
+    print(f"  χ check: {b0 - b1 + b2} (should be {chi})")
+
+    if b0 == 1 and b1 == 0 and b2 == 1:
+        print(f"  → H_*(S²) ✓")
+    elif b1 == 0 and b2 == 1:
+        print(f"  → 多连通分量，各分量同调为 S²")
+    else:
+        g = (2 - chi) // 2
+        print(f"  → 若为封闭定向曲面，亏格 g={g}")
+
+
+def analyze_face_edge_degrees(N, verts, directed_edges, triangles):
+    from collections import Counter
+
+    undirected_edges = set()
+    for (a, b) in directed_edges:
+        undirected_edges.add((min(a, b), max(a, b)))
+    edges_list = sorted(undirected_edges)
+
+    faces_set = set()
+    for (a, b, c) in triangles:
+        faces_set.add(tuple(sorted([a, b, c])))
+    faces_list = sorted(faces_set)
+
+    edge_face_count = {e: 0 for e in edges_list}
+    for (a, b, c) in faces_list:
+        for (u, v) in [(a, b), (b, c), (a, c)]:
+            edge_face_count[(min(u, v), max(u, v))] += 1
+
+    # 每个面的边度数组合（排序后）
+    face_degree_patterns = []
+    for (a, b, c) in faces_list:
+        degs = tuple(sorted([
+            edge_face_count[(min(a, b), max(a, b))],
+            edge_face_count[(min(b, c), max(b, c))],
+            edge_face_count[(min(a, c), max(a, c))]
+        ]))
+        face_degree_patterns.append(degs)
+
+    pattern_dist = Counter(face_degree_patterns)
+    print(f"N={N} 面的边度数组合分布：")
+    for pattern, cnt in sorted(pattern_dist.items()):
+        print(f"  边度数={pattern} 的面：{cnt} 个")
+
+
+def barycentric_subdivision_octahedron():
+    """
+    对 N=4 正八面体做重心细分，
+    验证细分后仍然是 S²，且给出更高分辨率的三角剖分。
+    """
+    import numpy as np
+    from itertools import combinations
+
+    # 原始正八面体（N=4 中截面 + 循环方向三角面）
+    from itertools import product
+    N = 4
+    verts = [v for v in product([0, 1], repeat=N) if sum(v) == 2]
+    idx = {v: i for i, v in enumerate(verts)}
+
+    directed = set()
+    for v in verts:
+        for i in range(N):
+            for j in range(N):
+                if i != j and v[i] == 1 and v[j] == 0:
+                    u = list(v);
+                    u[i] = 0;
+                    u[j] = 1;
+                    u = tuple(u)
+                    if (j - i) % N <= N // 2:
+                        directed.add((idx[v], idx[u]))
+
+    undirected = set()
+    for (a, b) in directed:
+        undirected.add((min(a, b), max(a, b)))
+    edges = sorted(undirected)
+
+    tris_dir = []
+    n = len(verts)
+    for a, b, c in combinations(range(n), 3):
+        if (a, b) in directed and (b, c) in directed and (c, a) in directed:
+            tris_dir.append((a, b, c))
+        elif (a, c) in directed and (c, b) in directed and (b, a) in directed:
+            tris_dir.append((a, c, b))
+    faces = sorted(set(tuple(sorted(t)) for t in tris_dir))
+
+    # 重心细分
+    # 新顶点：每条边的中点
+    new_verts = list(range(len(verts)))  # 原始顶点保留
+    edge_midpoint = {}
+    for e in edges:
+        mid_id = len(new_verts)
+        edge_midpoint[e] = mid_id
+        new_verts.append(e)  # 用边的端点对表示中点
+
+    # 新三角面：每个原始三角面 (a,b,c) 分成 4 个小三角形
+    # 中点：m_ab, m_bc, m_ac
+    new_faces = []
+    for (a, b, c) in faces:
+        m_ab = edge_midpoint[(min(a, b), max(a, b))]
+        m_bc = edge_midpoint[(min(b, c), max(b, c))]
+        m_ac = edge_midpoint[(min(a, c), max(a, c))]
+        new_faces.append(tuple(sorted([a, m_ab, m_ac])))
+        new_faces.append(tuple(sorted([b, m_ab, m_bc])))
+        new_faces.append(tuple(sorted([c, m_bc, m_ac])))
+        new_faces.append(tuple(sorted([m_ab, m_bc, m_ac])))
+
+    # 新边：从新三角面提取
+    new_edges_set = set()
+    for (a, b, c) in new_faces:
+        new_edges_set.add((a, b));
+        new_edges_set.add((b, c));
+        new_edges_set.add((a, c))
+    new_edges = sorted(new_edges_set)
+    edge_idx2 = {e: i for i, e in enumerate(new_edges)}
+
+    V = len(new_verts)
+    E = len(new_edges)
+    F = len(new_faces)
+    chi = V - E + F
+    print(f"重心细分后: V={V}, E={E}, F={F}, χ={chi}")
+
+    # 同调群
+    def rank_m(M):
+        if M.size == 0: return 0
+        s = np.linalg.svd(M.astype(float), compute_uv=False)
+        return int(np.sum(s > 1e-6))
+
+    d1 = np.zeros((V, E), dtype=int)
+    for j, (a, b) in enumerate(new_edges):
+        d1[a][j] = -1;
+        d1[b][j] = 1
+
+    d2 = np.zeros((E, F), dtype=int)
+    for k, (a, b, c) in enumerate(new_faces):
+        d2[edge_idx2[(a, b)]][k] = 1
+        d2[edge_idx2[(b, c)]][k] = 1
+        d2[edge_idx2[(a, c)]][k] = -1
+
+    print(f"  ∂1∂2 = 0: {np.all(d1 @ d2 == 0)}")
+    r1, r2 = rank_m(d1), rank_m(d2)
+    b0, b1, b2 = V - r1, E - r1 - r2, F - r2
+    print(f"  β0={b0}, β1={b1}, β2={b2}, χ={b0 - b1 + b2}")
+    if b0 == 1 and b1 == 0 and b2 == 1:
+        print("  → H_*(S²) ✓ 重心细分保持拓扑")
+
+
+def iterated_subdivision(n_iterations):
+    """
+    对 N=4 正八面体做 n 次重心细分，
+    每次验证：∂²=0, H_*(S²), 流形条件（每边恰好2个面）
+    """
+    import numpy as np
+    from itertools import product, combinations
+
+    def rank_m(M):
+        if M.size == 0: return 0
+        s = np.linalg.svd(M.astype(float), compute_uv=False)
+        return int(np.sum(s > 1e-6))
+
+    # 初始正八面体
+    N = 4
+    base_verts = [v for v in product([0, 1], repeat=N) if sum(v) == 2]
+    n_v = len(base_verts)
+
+    directed = set()
+    for v in base_verts:
+        for i in range(N):
+            for j in range(N):
+                if i != j and v[i] == 1 and v[j] == 0:
+                    u = list(v);
+                    u[i] = 0;
+                    u[j] = 1;
+                    u = tuple(u)
+                    if (j - i) % N <= N // 2:
+                        vi = base_verts.index(v)
+                        ui = base_verts.index(u)
+                        directed.add((vi, ui))
+
+    undirected = set((min(a, b), max(a, b)) for (a, b) in directed)
+    edges = sorted(undirected)
+
+    tris_dir = []
+    for a, b, c in combinations(range(n_v), 3):
+        if (a, b) in directed and (b, c) in directed and (c, a) in directed:
+            tris_dir.append((a, b, c))
+        elif (a, c) in directed and (c, b) in directed and (b, a) in directed:
+            tris_dir.append((a, c, b))
+    faces = sorted(set(tuple(sorted(t)) for t in tris_dir))
+
+    # 用整数 ID 表示顶点（不依赖原始坐标）
+    # 顶点 0..n_v-1 是原始顶点，后续新增中点
+    next_id = [n_v]
+    edge_to_mid = {}
+
+    def get_mid(a, b):
+        e = (min(a, b), max(a, b))
+        if e not in edge_to_mid:
+            edge_to_mid[e] = next_id[0]
+            next_id[0] += 1
+        return edge_to_mid[e]
+
+    current_faces = faces
+    current_edges = edges
+
+    for iteration in range(n_iterations):
+        new_faces = []
+        new_edges_set = set()
+
+        for (a, b, c) in current_faces:
+            m_ab = get_mid(a, b)
+            m_bc = get_mid(b, c)
+            m_ac = get_mid(a, c)
+            for tri in [
+                tuple(sorted([a, m_ab, m_ac])),
+                tuple(sorted([b, m_ab, m_bc])),
+                tuple(sorted([c, m_bc, m_ac])),
+                tuple(sorted([m_ab, m_bc, m_ac]))
+            ]:
+                new_faces.append(tri)
+                for u, v in [(tri[0], tri[1]), (tri[1], tri[2]), (tri[0], tri[2])]:
+                    new_edges_set.add((min(u, v), max(u, v)))
+
+        current_faces = sorted(set(new_faces))
+        current_edges = sorted(new_edges_set)
+
+    V = next_id[0]
+    E = len(current_edges)
+    F = len(current_faces)
+    chi = V - E + F
+
+    # 流形条件
+    from collections import Counter
+    edge_face_count = Counter()
+    for (a, b, c) in current_faces:
+        for u, v in [(a, b), (b, c), (a, c)]:
+            edge_face_count[(min(u, v), max(u, v))] += 1
+    manifold = all(c == 2 for c in edge_face_count.values())
+
+    # 同调群
+    edge_idx = {e: i for i, e in enumerate(current_edges)}
+    d1 = np.zeros((V, E), dtype=int)
+    for j, (a, b) in enumerate(current_edges):
+        d1[a][j] = -1;
+        d1[b][j] = 1
+    d2 = np.zeros((E, F), dtype=int)
+    for k, (a, b, c) in enumerate(current_faces):
+        d2[edge_idx[(a, b)]][k] = 1
+        d2[edge_idx[(b, c)]][k] = 1
+        d2[edge_idx[(a, c)]][k] = -1
+
+    r1, r2 = rank_m(d1), rank_m(d2)
+    b0, b1, b2 = V - r1, E - r1 - r2, F - r2
+
+    print(f"细分{n_iterations}次: V={V}, E={E}, F={F}, χ={chi}, "
+          f"流形={manifold}, β=({b0},{b1},{b2}), "
+          f"{'H_*(S²) ✓' if b0 == 1 and b1 == 0 and b2 == 1 else '非S²'}")
+
+
 if __name__ == "__main__":
     # # 实验一：完整 {0,1}^4，全部公理
     # print("\n【实验一】完整 {0,1}^4（A4 + A6 + A7）")
@@ -3062,4 +4377,32 @@ if __name__ == "__main__":
 
     # h_clem = run_clem_full_v2(N=4)
     # h_clem = run_clem_full_v3(N=4)
-    h_clem = run_clem_final(N=4)
+    # h_clem = run_clem_final(N=4)
+    # run_johnson_graph_homology(N_list=[4, 6, 8])
+    # run_A7_filtered_homology(N=6)
+    # run_sphere_triangulation(N=6)
+    # run_sphere_triangulation(N=4)
+    # run_A7_global_experiment(N=6)
+    # run_A7_global_v2(N=6)
+    # run_A7_global_v2(N=4)
+    # build_axiom_space_sequential(N=6)
+    # build_sequential_with_quotient(N=4)
+    # build_sequential_with_quotient(N=6)
+    # build_directed_A1prime(N=4)
+    # build_directed_A1prime(N=6)
+    # build_circular_directed_A1prime(N=4)
+    # build_circular_directed_A1prime(N=6)
+    #
+    # for N in [4, 6]:
+    #     verts, dedges, tris = build_circular_directed_A1prime(N)
+    #     compute_homology_from_directed(N, verts, dedges, tris)
+    # for N in [4, 6]:
+    #     verts, dedges, tris = build_circular_directed_A1prime(N)
+    #     analyze_edge_degrees(N, verts, dedges, tris)
+
+    # for N in [4, 6]:
+    #     verts, dedges, tris = build_circular_directed_A1prime(N)
+    #     analyze_face_edge_degrees(N, verts, dedges, tris)
+    # barycentric_subdivision_octahedron()
+    for n in range(4):
+        iterated_subdivision(n)
