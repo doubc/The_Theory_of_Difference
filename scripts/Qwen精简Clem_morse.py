@@ -172,6 +172,41 @@ def run_clem_midsection_experiment(N=4):
 
     # 4. Compute Homology
     d1, d2 = build_boundary_matrices(mid_verts, directed_edges, triangles)
+
+    # --- [新增代码开始：用于论文附录的显式输出] ---
+    print(f"\n--- Appendix Data for Paper ---")
+
+    # 1. 显式列出顶点 (V)
+    print(f"Vertices V (Johnson Graph J(4,2) nodes):")
+    for i, v in enumerate(mid_verts):
+        print(f"  v_{i}: {v}")
+
+    # 2. 显式列出有向边 (E) - 对应 A1' + A6 约束
+    print(f"\nDirected Edges E (d_H=2, oriented by A6):")
+    for j, e in enumerate(directed_edges):
+        print(f"  e_{j}: {e[0]} -> {e[1]}")
+
+    # 3. 显式列出三角面 (F) - 对应 A7 约束
+    print(f"\nTriangular Faces F (A7 Cycle Closure):")
+    for k, f in enumerate(triangles):
+        print(f"  f_{k}: {f}")
+
+    # 4. 打印边界矩阵 (关键审阅材料)
+    print(f"\nBoundary Matrix d1 (Size {d1.shape[0]}x{d1.shape[1]}):")
+    print(d1)
+
+    print(f"\nBoundary Matrix d2 (Size {d2.shape[0]}x{d2.shape[1]}):")
+    print(d2)
+
+    # 5. 验证 d1 * d2 = 0 (同调群定义的核心)
+    check_matrix = np.dot(d1, d2)
+    print(f"\nVerification: d1 . d2 = \n{check_matrix}")
+    if np.all(check_matrix == 0):
+        print("Result: d1.d2 = 0 confirmed. The complex is valid.")
+    else:
+        print("WARNING: d1.d2 != 0. Check orientation logic.")
+    # --- [新增代码结束] ---
+
     results = compute_homology_ranks(d1, d2)
 
     b0, b1, b2 = results['betti']
