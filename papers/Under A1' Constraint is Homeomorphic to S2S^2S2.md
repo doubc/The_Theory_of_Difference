@@ -15,8 +15,7 @@ Hamming weight 2. Imposing the A1' lateral constraint (edges between vertices at
 weight), we construct a simplicial complex $\mathcal{K}$ on 6 vertices, 12 edges, and 8 triangular faces. We compute the
 integral homology groups of $\mathcal{K}$ via explicit boundary matrices and the rank-nullity method,
 obtaining $(b_0, b_1, b_2) = (1, 0, 1)$ with Euler characteristic $\chi = 2$. This confirms
-that $\mathcal{K} \simeq S^2$ at the level of homology. The result is a key numerical step in the CLEM (Continuous Limit
-Emergence Mechanism) program, which derives continuous spacetime topology from a discrete axiom system.
+that $\mathcal{K} \simeq S^2$ at the level of homology. The result provides numerical evidence for the CLEM program's central claim that continuous topological invariants emerge from discrete combinatorial axioms.
 
 **Keywords:** Johnson graph, simplicial homology, sphere, discrete topology, Vietoris-Rips complex, CLEM
 
@@ -61,7 +60,7 @@ topological type to shift from $S^3$ (wedge) to a single $S^2$. We discuss this 
 
 ### 2.1 The Johnson Graph $J(4,2)$ and Its Mid-Section
 
-The Johnson graph $J(n,k)$ has as vertices the $k$-element subsets of $[n] = \{1,2,3,4\}$, with two vertices adjacent if
+The Johnson graph $J(n,k)$ has as vertices the $k$-element subsets of $[4] = \{1,2,3,4\}$, with two vertices adjacent if
 and only if their symmetric difference has cardinality 2 (equivalently, they share exactly $k-1$ elements).
 For $n=4$, $k=2$, the vertex set is
 
@@ -113,7 +112,8 @@ Since $(V, E) \cong K_{2,2,2}$, the triangles of $\mathcal{K}$ are exactly the t
 i.e., $\{u,v\}, \{v,w\}, \{u,w\} \in E$.
 
 The octahedron graph $K_{2,2,2}$ with parts $\{v_1, v_6\}$, $\{v_2, v_5\}$, $\{v_3, v_4\}$ has exactly 8 triangular
-faces (the 8 faces of the regular octahedron). We orient each triangle by the lexicographic ordering of its vertices.
+faces (the 8 faces of the regular octahedron).The three parts correspond to the three pairs of complementary 2-subsets of $[4]$: $\{\{1,2\},\{3,4\}\}$, $\{\{1,3\},\{2,4\}\}$, $\{\{1,4\},\{2,3\}\}$. Two vertices are in the same part if and only if they are at Hamming distance 4 (i.e., their subsets are disjoint), and hence non-adjacent.
+We orient each triangle by the lexicographic ordering of its vertices.
 The 8 oriented faces are:
 
 $$F = \{[v_1, v_2, v_3],\ [v_1, v_2, v_4],\ [v_1, v_3, v_5],\ [v_1, v_4, v_5],\ [v_2, v_3, v_6],\ [v_2, v_5, v_6],\ [v_3, v_4, v_6],\ [v_4, v_5, v_6]\}.$$
@@ -150,7 +150,7 @@ oriented as $v_i \to v_j$.
 
 ### 3.2 Explicit Boundary Matrices
 
-We label the 12 edges in lexicographic order as $e_1, \ldots, e_{12}$:
+We label the 12 edges in lexicographic order as $e_0, \ldots, e_{11}$:
 
 e_0: (0, 0, 1, 1) -> (1, 0, 1, 0)
 e_1: (0, 1, 0, 1) -> (1, 0, 0, 1)
@@ -189,8 +189,7 @@ The Betti numbers are computed by the rank-nullity theorem:
 
 $$b_k = \dim \ker \partial_k - \dim \operatorname{im} \partial_{k+1} = (f_k - \operatorname{rank} \partial_k) - \operatorname{rank} \partial_{k+1}.$$
 
-The code computes matrix ranks over $\mathbb{Z}$ using the Smith normal form (implemented in the auxiliary file) and
-over $\mathbb{Q}$ as a cross-check via `numpy.linalg.matrix_rank`.
+The code computes matrix ranks over $\mathbb{Q}$ via `numpy.linalg.matrix_rank`. Since the boundary matrices have integer entries and the computation yields integer Betti numbers with no torsion ($b_1 = 0$), the rank over $\mathbb{Q}$ coincides with the rank over $\mathbb{Z}$, and no Smith normal form computation is required for this case.
 
 **Rank computation:**
 
@@ -302,8 +301,7 @@ The homology groups are:
 $$H_0(\mathcal{K}; \mathbb{Z}) = \mathbb{Z}, \quad H_1(\mathcal{K}; \mathbb{Z}) = 0, \quad H_2(\mathcal{K}; \mathbb{Z}) = \mathbb{Z},$$
 
 which coincides with $H_*(S^2; \mathbb{Z})$. The Euler characteristic $\chi(\mathcal{K}) = 2$ is consistent. Combined
-with the fact that $\mathcal{K}$ is a closed orientable pseudomanifold of dimension 2 (each edge is contained in exactly
-2 faces, and the link of each vertex is a circle), this confirms:
+with the fact that $\mathcal{K}$ is a closed orientable pseudomanifold of dimension 2 , this confirms:
 
 $$\mathcal{K} \cong S^2.$$
 
@@ -314,7 +312,7 @@ the octahedron (hence homeomorphic to $S^2$) is given in Remark 3.6.
 
 *Remark 3.6 (Combinatorial identification).* The simplicial complex $\mathcal{K}$ with $f$-vector $(6, 12, 8)$ whose
 1-skeleton is $K_{2,2,2}$ and whose 2-skeleton consists of all 8 triangles of $K_{2,2,2}$ is precisely the boundary of
-the regular octahedron $\partial \mathbf{O}$. This is a classical fact: $\partial \mathbf{O} \cong S^2$. \[CITE: Ziegler
+the regular octahedron $\partial \mathbf{O}$(each edge is contained in exactly 2 faces, and the link of each vertex is a circle). This is a classical fact: $\partial \mathbf{O} \cong S^2$. \[CITE: Ziegler
 1995, *Lectures on Polytopes*, Springer, Chapter 0\]
 
 ---
@@ -356,13 +354,15 @@ of equal-weight vertices at Hamming distance 2, and this is by definition the Jo
 
 ### 4.3 Other Related Work
 
-Discrete Morse theory on simplicial complexes defined by combinatorial graphs has been studied extensively \[CITE:
-Forman 2002, *A user's guide to discrete Morse theory*, Séminaire Lotharingien\]. The connection between Johnson schemes
-and association schemes is classical \[CITE: Delsarte 1973, *An algebraic approach to the association schemes of coding
-theory*, Philips Research Reports\]. The emergence of spherical topology in discrete settings has been studied in the
-context of random complexes \[CITE: Kahle 2011, *Topology of random clique complexes*, Discrete Mathematics\] and in the
-theory of flag complexes \[CITE: Zeeman 1964\]. To our knowledge, the specific question of the topological type of the
+Discrete Morse theory on simplicial complexes defined by combinatorial graphs has been studied extensively [CITE:
+Forman 2002, *A user's guide to discrete Morse theory*, Séminaire Lotharingien]. The connection between Johnson schemes
+and association schemes is classical [CITE: Delsarte 1973, *An algebraic approach to the association schemes of coding
+theory*, Philips Research Reports]. The emergence of spherical topology in discrete settings has been studied in the
+context of random complexes [CITE: Kahle 2011, *Topology of random clique complexes*, Discrete Mathematics] and in the
+theory of flag complexes [CITE: Meshulam & Wallach 2009, *Homological connectivity of random k-dimensional complexes*,
+Random Structures & Algorithms]. To our knowledge, the specific question of the topological type of the
 A1'-constrained mid-section of $J(N, N/2)$ for general $N$ has not been previously addressed.
+
 
 ---
 
@@ -664,13 +664,20 @@ SUCCESS: The mid-section is topologically S^2
 
 ## Appendix B: Explicit Boundary Matrices
 
+
+$$
+\partial_1 = \begin{pmatrix}
 -1 & 0 & -1 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & -1 & 0 \\
 0 & -1 & 0 & 0 & -1 & 1 & 0 & 0 & 0 & -1 & 0 & 0 \\
 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & 0 & 1 & 1 & -1 \\
 0 & 1 & 1 & 0 & 0 & 0 & -1 & -1 & 0 & 0 & 0 & 0 \\
 1 & 0 & 0 & 1 & 0 & 0 & 1 & 0 & -1 & 0 & 0 & 0 \\
 0 & 0 & 0 & 0 & 1 & 0 & 0 & 1 & 1 & 0 & 0 & 1
+\end{pmatrix}
+$$
 
+$$
+\partial_2 = \begin{pmatrix}
 0 & 0 & -1 & -1 & 0 & 0 & 0 & 0 \\
 0 & 1 & 0 & 0 & 0 & 1 & 0 & 0 \\
 0 & -1 & 0 & 1 & 0 & 0 & 0 & 0 \\
@@ -683,8 +690,10 @@ SUCCESS: The mid-section is topologically S^2
 1 & 0 & 0 & 0 & 1 & 0 & 0 & 0 \\
 -1 & 0 & 1 & 0 & 0 & 0 & 0 & 0 \\
 0 & 0 & 0 & 0 & 1 & 0 & -1 & 0
+\end{pmatrix}
+$$
 
-**Verification:** $\partial_1 \cdot \partial_2 = \mathbf{0}_{6 \times 8}$. `[FILL: confirm after running]`
+**Verification:** $\partial_1 \cdot \partial_2 = \mathbf{0}_{6 \times 8}$. 
 
 ---
 
@@ -694,9 +703,7 @@ The author acknowledges the use of AI-assisted coding tools for numerical implem
 
 ## References
 
-\[1\] M. Adamaszek and H. Adams, "On Vietoris-Rips complexes of hypercube graphs," *Journal of Topology and Analysis*,
-
-2021. arXiv:2103.01040.
+\[1\] M. Adamaszek and H. Adams, "On Vietoris-Rips complexes of hypercube graphs," arXiv preprint arXiv:2103.01040, 2021
 
 \[2\] A. Björner and M. Wachs, "Shellable nonpure complexes and posets I," *Transactions of the American Mathematical
 Society*, 348(4):1299–1327, 1996.

@@ -226,6 +226,6 @@ def run_clem_midsection_experiment(N=4):
 
 
 if __name__ == "__main__":
-    run_clem_midsection_experiment(N=4)
+    run_clem_midsection_experiment(N=6)
     # You can also try N=6 for a more complex mid-section
     # run_clem_midsection_experiment(N=6)
