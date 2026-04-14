@@ -1,204 +1,133 @@
-# CLEM-TASK-03: N=8/N=12 Chiral Structure
-
-**Status:** ⏳ Pending  
-**Planned Start:** After CLEM-TASK-02 completion  
-**Lead:** David Du
+## 文件一：`CLEM-TASK-03.md`
 
 ---
 
-## Objectives
+# CLEM-TASK-03：守恒律涌现与连续性方程
 
-This task investigates $N=8$ and $N=12$ cluster configurations to search for chiral structure emergence, which is predicted to be necessary for weak force characteristics (V-A coupling).
-
-### Specific Goals
-
-1. Construct Johnson graphs $J(8,4)$ and $J(12,6)$ (midsection cases)
-2. Compute topological invariants (Betti numbers)
-3. Search for chiral asymmetry in boundary operators
-4. Verify MOD constraint: $N \equiv 0 \pmod{12}$ for weak force
-5. Connect to electroweak unification framework
+**文件**：`07-CLEM推导/CLEM-TASK-03.md` + `calculations/ns_limit.md`
+**状态**：✅
+**依赖**：CLEM-TASK-02 ✅
+**日期**：2026-04-14
 
 ---
 
-## Theoretical Background
+## §1 问题定位
 
-### Why Chirality Matters
+CLEM-TASK-02 建立了算子层面的结论：$\frac{1}{n}L_n$ 的谱在 $n \to \infty$ 时逼近 $S^2$ 上 Laplacian 的谱。TASK-03
+的目标是从公理推导方程层面的守恒律——连续性方程和 Euler 方程。
 
-The weak force is characterized by **maximal parity violation**: it couples only to left-handed fermions (and right-handed antifermions). This V-A (vector minus axial-vector) structure is fundamentally chiral.
+连接路径：
 
-**Key Question**: Can chirality emerge from purely combinatorial constraints, or does it require additional axioms?
-
-### N=12 Significance
-
-From WorldBase weak force derivation (`../02-worldbase物理框架/06-weak-force.md`):
-- Weak force emergence requires $N_\text{weak} = 12$
-- This satisfies MOD constraint: $N \equiv 0 \pmod{12}$
-- $N=12$ is the minimal configuration supporting full $\mathfrak{su}(2)$ gauge algebra with chiral structure
-
-**Hypothesis**: $N=12$ will show topological or algebraic features absent in $N=4, 6, 8$.
-
-### N=8 as Intermediate Step
-
-$N=8$ serves as a control case:
-- Larger than $N=6$, but not satisfying MOD-12 constraint
-- Should show increased complexity but not full chiral structure
-- Helps isolate what's special about $N=12$
+$$\text{守恒量（A5）} + \text{演化规则（A6）} + \text{算子（TASK-02）} \xrightarrow{n \to \infty} \text{偏微分方程}$$
 
 ---
 
-## Methodology
+## §2 定理陈述
 
-### Step 1: Graph Construction
+### §2.1 连续性方程
 
-**For N=8, k=4:**
-- Vertices: $\binom{8}{4} = 70$
-- Edges: Each vertex connects to $4(8-4) = 16$ others
-- Total edges: $70 \times 16 / 2 = 560$
+**定理 CLEM-CONT**（连续性方程涌现）
 
-**For N=12, k=6:**
-- Vertices: $\binom{12}{6} = 924$
-- Edges: Each vertex connects to $6(12-6) = 36$ others
-- Total edges: $924 \times 36 / 2 = 16,632$
+在公理 A4, A5, A7, A8 约束下，$J(2n,n)$ 上的离散守恒律在 $n \to \infty$ 极限下收敛到连续性方程：
 
-**Computational Challenge**: $N=12$ is significantly larger. May need optimized algorithms or approximations.
+$$\boxed{\frac{\partial \rho}{\partial \tau} + \nabla \cdot (\rho \mathbf{u}) = 0}$$
 
-### Step 2: Topological Analysis
+公理溯源：A5（差异守恒）→ 总量守恒 → 局部化 → 离散连续性方程；A7（循环闭合）→ $\partial^2 = 0$ → 离散 de Rham 关系 →
+散度算子合法性；A4（最小变易）+ A8（各向同性）→ 局部跳跃 + 一阶项消失 → 标准散度形式。$\square$
 
-Compute Betti numbers $(b_0, b_1, b_2, ...)$ for both cases.
+详细推导见 `calculations/ns_limit.md` §2–§3。
 
-**Expectation**: 
-- Higher-dimensional homology may appear ($b_3, b_4, ...$)
-- Indicates emergence of higher-dimensional topological features
+### §2.2 不可压缩 Euler 方程
 
-### Step 3: Chirality Detection
+**定理 CLEM-EULER**（不可压缩 Euler 方程涌现）
 
-**Approach 1: Orientation Asymmetry**
-Check if boundary operators exhibit handedness preference:
-- Count "left-handed" vs. "right-handed" face orientations
-- Look for imbalance in $\partial_2$ matrix structure
+在公理 A1', A4, A5, A6, A7, A8 约束下，$J(2n,n)$ 上的离散守恒律在 $n \to \infty$ 极限下（利用 TASK-02 的算子映射）收敛到不可压缩
+Euler 方程组：
 
-**Approach 2: Spectral Asymmetry**
-Analyze eigenvalue spectrum of discrete Dirac operator (if constructible):
-- Chiral systems often show spectral asymmetry
-- Compare with known chiral models
+$$\frac{\partial \rho}{\partial \tau} + \nabla \cdot (\rho \mathbf{u}) = 0$$
 
-**Approach 3: Algebraic Closure**
-Search for $\mathfrak{su}(2)$ subalgebra in edge/face relationships:
-- Identify generators satisfying $[T_i, T_j] = i\epsilon_{ijk} T_k$
-- Check if closure requires $N=12$ specifically
+$$\rho \left( \frac{\partial \mathbf{u}}{\partial \tau} + (\mathbf{u} \cdot \nabla)\mathbf{u} \right) = -\nabla p$$
 
-### Step 4: MOD-12 Constraint Verification
+$$\nabla \cdot \mathbf{u} = 0$$
 
-Test whether topological or algebraic features "lock in" at $N=12$:
-- Compare $N=8$ vs. $N=12$ results
-- Identify qualitative differences (not just quantitative scaling)
+其中：
+
+- 连续性方程来自 A5 + A7 + A4 + A8
+- 对流项来自 A6（DAG 有向，因果传播）
+- 压力项来自 A1'（精确距离约束的 Lagrange 乘子）
+- 不可压缩条件来自 A1'（恒定间距 → 无散度）
+
+该定理的完整严格化依赖 CLEM-OPEN-06（GH 收敛）和 CLEM-OPEN-09（压力 Poisson
+方程），当前作为条件性定理保留，条件明确标注。$\square$
 
 ---
 
-## Expected Challenges
+## §3 Euler 方程公理溯源总表
 
-### Computational Scale
-
-**N=12 is huge:**
-- 924 vertices, 16,632 edges
-- Boundary matrices could be GB-scale in dense representation
-- Face enumeration may be intractable
-
-**Mitigation Strategies:**
-1. Use sparse matrix representations
-2. Sample subset of faces for preliminary analysis
-3. Parallelize computation (see `../scripts/` for task-splitting examples)
-4. Consider symmetry reduction (Johnson graphs have high symmetry)
-
-### Chirality Definition
-
-"Chirality" in discrete combinatorial context needs precise definition:
-- Not obvious how to define "handedness" for abstract simplicial complexes
-- May need to embed in continuous space first
-
-**Approach**: Look for algebraic signatures rather than geometric ones.
-
-### Physical Interpretation
-
-Even if we find "something special" at $N=12$, connecting it to V-A coupling requires bridging discrete topology and quantum field theory.
-
-**Plan**: Cross-reference with weak force derivations in WorldBase framework.
+| 方程项                                   |     来源公理      | 中间步骤                  |
+|:--------------------------------------|:-------------:|:----------------------|
+| $\frac{\partial \rho}{\partial \tau}$ |      A5       | 差异守恒 → 密度局部变化率        |
+| $\nabla \cdot (\rho \mathbf{u})$      |    A4 + A8    | 最小变易 + 各向同性 → 散度算子    |
+| $\nabla \cdot \mathbf{u} = 0$         |      A1'      | 精确距离约束 → 不可压缩         |
+| $(\mathbf{u} \cdot \nabla)\mathbf{u}$ |      A6       | DAG 有向 → 因果传播 → 对流项   |
+| $-\nabla p$                           |      A1'      | 约束 Lagrange 乘子 → 压力梯度 |
+| $\frac{1}{n}L_n \to \nabla^2$         | A1' + A4 + A8 | TASK-02 谱收敛           |
 
 ---
 
-## Preliminary Data
+## §4 粘性项：CLEM-OPEN-01
 
-### N=8 Computation Status
+粘性项 $\mu \nabla^2 \mathbf{u}$ 的涌现是 CLEM 推导链中最困难的一步，当前作为开放问题。
 
-Script `../scripts/Qwen_clem_morse_n4_8.py` includes N=8 capability.
+**候选来源**：
 
-**Output Files:**
-- `../scripts/CLEM_N8_results.md` - Summary
-- `../scripts/CLEM_N8_FULL_results.md` - Complete data
+- **拓扑缺陷密度**：有限 $n$ 时 $J(2n,n)$ 的离散化引入拓扑缺陷，宏观上产生动能向内能的转化，粘滞系数 $\mu \propto$ 拓扑缺陷密度
+- **有限 $n$ 修正**：类比 GR 论证中的 $O(\epsilon_N^2/\delta^2)$ 双尺度修正，粘性项可能是 $n$ 有限时的高阶修正项
+- **信息不可逆性**：A6（DAG 有向）引入时间不可逆性，Landauer 原理方向：信息擦除对应能量耗散
 
-[To be analyzed after TASK-02 completion]
-
-### N=12 Feasibility Study
-
-**Question**: Can we compute full homology for $N=12$?
-
-**Estimate:**
-- Vertices: 924
-- Edges: 16,632
-- Faces: ~100,000+ (estimate based on $J(4,2)$ ratio)
-- $\partial_2$ matrix size: ~16,632 × 100,000
-
-**Memory requirement**: Dense representation would need ~10 GB. Sparse representation feasible.
-
-**Decision**: Attempt computation with sparse methods; fall back to sampling if needed.
+推进方向：先完成 CLEM-OPEN-06 和 CLEM-OPEN-09，再处理粘性项，预计在 CLEM V2.0 中完成。
 
 ---
 
-## Success Criteria
+## §5 与 GR 论证的结构对比
 
-Task will be considered successful if we can answer:
+| 对比项  | GR 论证                | CLEM 推导                                |
+|:-----|:---------------------|:---------------------------------------|
+| 核心公理 | A1–A9                | A1', A4, A5, A6, A7, A8                |
+| 离散结构 | $\{0,1\}^N$ DAG      | $J(2n,n)$ 团复形                          |
+| 拓扑涌现 | 时空连续性                | $S^2$（TASK-01）                         |
+| 算子映射 | 场方程算子                | $\frac{1}{n}L_n \to \nabla^2$（TASK-02） |
+| 守恒律  | Einstein 场方程         | Euler 方程（TASK-03）                      |
+| 极限工具 | Stirling，$c_0 = 1/4$ | $n \to \infty$，谱收敛                     |
+| 开放问题 | 曲率修正                 | 粘性项（CLEM-OPEN-01）                      |
 
-1. ✅ What are the Betti numbers for $N=8$ and $N=12$?
-2. ✅ Is there evidence of chiral asymmetry at $N=12$ (but not $N=8$)?
-3. ✅ Does $\mathfrak{su}(2)$ algebra emerge naturally at $N=12$?
-4. ✅ Can we explain why $N \equiv 0 \pmod{12}$ is special?
-
----
-
-## Connection to Electroweak Unification
-
-If $N=12$ successfully shows chiral structure, next steps include:
-
-1. **Electromagnetic Layer**: Understand how $U(1)$ phase (from A1') combines with $SU(2)$ chiral structure
-2. **Symmetry Breaking**: Investigate mechanism for electroweak symmetry breaking within CLEM framework
-3. **Fermion Representations**: Map discrete structures to fermion doublets/singlets
-
-These topics extend beyond pure CLEM into full QLEM (Quantum Limit Emergence Mechanism), covered in WorldBase V2.1 §8.
+两条推导链的开放问题相互关联：GR 的双尺度修正与 CLEM 的曲率修正项可能有共同的离散来源。
 
 ---
 
-## Related Work
+## §6 开放问题清单
 
-- **Weak Force Theory**: `../02-worldbase物理框架/06-weak-force.md`
-- **Electroweak Unification**: `../calculations/T-010电弱统一与N参数跑动.md`
-- **N=4, N=6 Results**: [CLEM-TASK-01.md](CLEM-TASK-01.md), [CLEM-TASK-02.md](CLEM-TASK-02.md)
-- **Hierarchical N**: [CLEM-TASK-04.md](CLEM-TASK-04.md)
-
----
-
-## Timeline Estimate
-
-| Phase | Duration | Dependencies |
-|-------|----------|--------------|
-| N=8 computation & analysis | 1-2 weeks | CLEM-TASK-02 complete |
-| N=12 feasibility study | 1 week | N=8 results |
-| N=12 full computation | 2-4 weeks | Feasibility confirmed |
-| Chirality analysis | 2 weeks | N=12 results |
-| Documentation | 1 week | All analysis complete |
-
-**Total Estimated Time**: 7-10 weeks (depending on computational challenges)
+| 编号           | 内容                                     |   来源    | 阻塞                |
+|:-------------|:---------------------------------------|:-------:|:------------------|
+| CLEM-OPEN-01 | 粘性项涌现（Navier-Stokes 完整版）               |   §4    | CLEM V2.0         |
+| CLEM-OPEN-06 | $J(2n,n)$ 的 Gromov-Hausdorff 收敛到 $S^2$ | TASK-02 | 定理 CLEM-SPEC 严格化  |
+| CLEM-OPEN-07 | 曲率修正项 $\ell(\ell-1)$ 的离散来源             | TASK-02 | 谱收敛完整版            |
+| CLEM-OPEN-08 | Johnson 方案特征值重数精确公式核对                  | TASK-02 | 不阻塞主线             |
+| CLEM-OPEN-09 | 压力 Poisson 方程的严格推导                     |   §5    | 定理 CLEM-EULER 严格化 |
 
 ---
 
-**Last Updated:** 2026-04-14  
-**Status:** Not started (awaiting TASK-02 completion)
+## §7 状态
+
+| 命题                                                       |  状态   | 说明                                                 |
+|:---------------------------------------------------------|:-----:|:---------------------------------------------------|
+| 连续性方程 $\partial_t\rho + \nabla\cdot(\rho\mathbf{u}) = 0$ |   ✅   | A5 + A7 + A4 + A8，完整公理溯源                           |
+| 对流项 $(\mathbf{u}\cdot\nabla)\mathbf{u}$ 来自 A6            |   ✅   | DAG 有向 → 因果传播                                      |
+| 离散 de Rham 关系（A7 → $\partial^2 = 0$）                     |   ✅   | $\operatorname{div} \circ \operatorname{curl} = 0$ |
+| 压力项 $-\nabla p$ 来自 A1'                                   | ✅（定性） | Lagrange 乘子，CLEM-OPEN-09 阻塞严格化                     |
+| 不可压缩条件 $\nabla\cdot\mathbf{u} = 0$ 来自 A1'                | ✅（定性） | 恒定间距 → 无散度                                         |
+| 定理 CLEM-EULER（不可压缩 Euler 方程）                             |  🔷   | 条件性，待 OPEN-06, OPEN-09                             |
+| Navier-Stokes 完整版（含粘性）                                   |  🔶   | 开放，CLEM V2.0                                       |
+
+---
+

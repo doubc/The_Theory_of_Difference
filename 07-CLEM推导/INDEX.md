@@ -1,234 +1,117 @@
-# CLEM Directory Index
+## 文件二：`07-CLEM推导/INDEX.md`
 
-This file provides a detailed index of all documents and calculations in the CLEM (Continuous Limit Emergence Mechanism) directory.
+# 07-CLEM推导 文件索引
 
----
-
-## Main Documentation
-
-### [MAIN.md](MAIN.md)
-**Purpose:** Master document for CLEM project  
-**Content:** 
-- Version tracking and status overview
-- Derivation chain summary table
-- Theoretical foundation (axioms, key concepts)
-- Current research focus
-- Notes on the hierarchical nature of N
-
-**Last Updated:** 2026-04-14
+**版本**：V1.0
+**日期**：2026-04-14
 
 ---
 
-## Task Documents
+## 目录结构
 
-### [CLEM-TASK-01.md](CLEM-TASK-01.md)
-**Stage:** First Stage - N=4 Midsection Topology Verification  
-**Status:** ✅ Complete  
-
-**Objectives:**
-- Construct Johnson graph $J(4,2)$ under A1' constraint
-- Build simplicial complex from midsection structure
-- Compute boundary operators $\partial_1$ (6×12) and $\partial_2$ (12×8)
-- Verify $\partial_1 \cdot \partial_2 = 0$
-- Calculate Betti numbers: $(b_0, b_1, b_2)$
-
-**Key Results:**
-- Topology confirmed as $S^2$ (2-sphere)
-- Betti numbers: $(1, 0, 1)$
-- Euler characteristic: $\chi = 2$
-- Homology groups: $H_0 \cong \mathbb{Z}$, $H_1 = 0$, $H_2 \cong \mathbb{Z}$
-
-**Related Files:**
-- `../papers/Under A1' Constraint is Homeomorphic to S2S^2S2.md`
-- `../scripts/Qwen精简Clem_morse.py`
-- `../scripts/CLEM_N4_results.md`
+```
+07-CLEM推导/
+├── MAIN.md                      # 总纲（本索引的上级文档）
+├── INDEX.md                     # 本文件
+├── CLEM-TASK-01.md              # Morse 函数与 b₁=0 代数证明
+├── CLEM-TASK-02.md              # Johnson 谱收敛与算子映射
+├── CLEM-TASK-03.md              # 守恒律涌现与连续性方程
+├── CLEM-TASK-04.md              # V1.0 封存记录
+└── calculations/
+    ├── morse_function.md        # Morse 函数显式构造计算
+    ├── johnson_spectrum.md      # Johnson 谱特征值与极限计算
+    └── ns_limit.md              # 守恒律离散-连续极限推导
+```
 
 ---
 
-### [CLEM-TASK-02.md](CLEM-TASK-02.md)
-**Stage:** Second Stage - N=6 Nonlinear Self-Coupling  
-**Status:** 🔄 In Progress  
+## 文件说明
 
-**Objectives:**
-- Extend CLEM to $N=6$ cluster size
-- Test emergence of nonlinear self-coupling structure
-- Verify su(2) algebra closure
-- Connect to gravitational theorem chain (NP/FE)
+### 主文档
 
-**Hypothesis:**
-Different physical emergences correspond to different minimal cluster sizes. $N=6$ should reveal the onset of nonlinear gravitational self-interaction.
+| 文件         | 内容                     | 状态 |
+|:-----------|:-----------------------|:--:|
+| `MAIN.md`  | 总纲：核心主张、定理汇总、开放问题、版本历史 | ✅  |
+| `INDEX.md` | 本文件：目录与导读              | ✅  |
 
-**Expected Outputs:**
-- Boundary matrices for $N=6$ case
-- Rank analysis of $\partial_1$ and $\partial_2$
-- Comparison with $N=4$ topological structure
-- Identification of emerging algebraic structures
+### 任务文档
 
-**Related Files:**
-- `../scripts/CLEM_N6_results.md`
-- `../calculations/非线性Einstein自耦合连续极限.md`
+| 文件                | 核心定理          | 关键结论                                                   | 状态 |
+|:------------------|:--------------|:-------------------------------------------------------|:--:|
+| `CLEM-TASK-01.md` | 定理 CLEM-MORSE | $\mathcal{K}_2 \cong S^2$，$b_1=0$，12 对 Morse 配对，无环验证   | ✅  |
+| `CLEM-TASK-02.md` | 定理 CLEM-SPEC  | $\lambda_k(L_n)=k(2n-k+1)$，$\ell=1$ 精确对应 $\Lambda_1=2$ | ✅  |
+| `CLEM-TASK-03.md` | 定理 CLEM-EULER | 连续性方程 ✅，Euler 方程 🔷（条件性）                               | ✅  |
+| `CLEM-TASK-04.md` | —             | V1.0 封存记录，任务链状态汇总                                      | ✅  |
 
----
+### 计算文件
 
-### [CLEM-TASK-03.md](CLEM-TASK-03.md)
-**Stage:** Third Stage - N=8/N=12 Chiral Structure  
-**Status:** ⏳ Pending  
-
-**Objectives:**
-- Investigate $N=8$ and $N=12$ cluster configurations
-- Search for chiral structure emergence
-- Verify weak force characteristics (V-A coupling)
-- Confirm MOD constraint: $N \equiv 0 \pmod{12}$
-
-**Theoretical Background:**
-Weak force emergence requires specific chirality constraints. The $N=12$ case is predicted to be the minimal configuration supporting full $\mathfrak{su}(2)$ gauge algebra with V-A coupling structure.
-
-**Expected Results:**
-- Topological characterization of $N=8$ and $N=12$ complexes
-- Identification of chiral asymmetry in boundary operators
-- Connection to electroweak unification framework
-
-**Related Files:**
-- `../scripts/CLEM_N8_results.md`
-- `../02-worldbase物理框架/06-weak-force.md`
+| 文件                                 | 内容                                                                                               |  对应任务   |
+|:-----------------------------------|:-------------------------------------------------------------------------------------------------|:-------:|
+| `calculations/morse_function.md`   | 6 顶点 $f$ 值、12 条边配对表、8 个三角配对表、无环性逐步验证、临界点列表                                                       | TASK-01 |
+| `calculations/johnson_spectrum.md` | 特征值公式 $\lambda_k=(n-k)^2-k$、归一化算子 $\tilde{\Delta}_{A1'}$、$n=2,3,4$ 数值表、$n\to\infty$ 极限计算、曲率修正项分析 | TASK-02 |
+| `calculations/ns_limit.md`         | 离散连续性方程推导、Taylor 展开、散度形式、de Rham 关系、压力 Lagrange 乘子、Euler 方程组装                                    | TASK-03 |
 
 ---
 
-### [CLEM-TASK-04.md](CLEM-TASK-04.md)
-**Stage:** Fourth Stage - Hierarchical Screening & N-RG Flow  
-**Status:** ⏳ Pending  
+## 推导链快速导航
 
-**Objectives:**
-- Formalize the hierarchical nature of $N$
-- Derive $N(\mu)$ scaling law (theorem N-RG)
-- Understand screening pressure at different emergence scales
-- Connect to 《差异论》and《象界》mechanisms
+**如果你想了解 $S^2$ 为什么是必然的**
+→ `CLEM-TASK-01.md` §2–§7，`calculations/morse_function.md`
 
-**Key Questions:**
-1. What determines the packing rules between hierarchy levels?
-2. How does A9 (Endogenous Completeness) create层级 structure?
-3. Why do different forces have different minimal $N_k$ values?
+**如果你想了解离散算子如何收敛到连续 Laplacian**
+→ `CLEM-TASK-02.md` §3–§5，`calculations/johnson_spectrum.md`
 
-**Theoretical Framework:**
-- **A3** guarantees finiteness at each level
-- **A9** determines截断 position (minimal sufficient bits)
-- **A4** (Minimal Variation) may determine packing rules
-- Screening mechanism from 《象界》Chapter 6
+**如果你想了解 Euler 方程如何从公理涌现**
+→ `CLEM-TASK-03.md` §3–§6，`calculations/ns_limit.md`
 
-**Expected Deliverables:**
-- Formal definition of hierarchical $N_k$
-- Derivation of $N(\mu) \sim \mu^3$ scaling
-- Connection to "最近稳态" (nearest stable state) principle
-- Integration with WorldBase V2.1 axiom definitions
+**如果你想了解与 GR 论证的关系**
+→ `MAIN.md` §与 GR 论证的关系，`CLEM-TASK-03.md` §8
 
-**Related Files:**
-- `../logs/关于N是什么的讨论.md`
-- `../05-历史版本归档/worldbaseV2.1.md`
+**如果你想了解下一步（V2.0 方向）**
+→ `MAIN.md` §开放问题清单，特别是 CLEM-OPEN-01 和 CLEM-OPEN-06
 
 ---
 
-## Calculations
+## 与其他模块的关系
 
-### [calculations/morse_function.md](calculations/morse_function.md)
-**Topic:** Morse Function Construction on Johnson Graphs  
-
-**Content:**
-- Definition of Morse function on discrete simplicial complexes
-- Critical point analysis for Johnson graphs $J(N,k)$
-- Connection between critical points and Betti numbers
-- Morse inequalities verification
-
-**Mathematical Tools:**
-- Discrete Morse theory
-- Gradient vector fields
-- Critical cell classification
-
-**Applications:**
-- Simplifying homology computations
-- Understanding topological transitions as $N$ varies
-- Identifying essential vs. redundant structure
+| 模块                                                     | 关系                                              |
+|:-------------------------------------------------------|:------------------------------------------------|
+| `06-广义相对论的论证/`                                         | 平行推导链，共同公理地基，GR V1.0（2026-04-10）先于 CLEM V1.0 完成 |
+| `02-worldbase物理框架/`                                    | 公理 A1–A9 的完整定义，CLEM 推导的公理来源                     |
+| `papers/Under A1' Constraint is Homeomorphic to S2.md` | TASK-01 的数值验证基础（论文一）                            |
+| `papers/paper_exact_distance_complex.md`               | TASK-01/02 的数学地基（论文二），$f$-向量闭合公式，定理 B（$H_1=0$）  |
 
 ---
 
-### [calculations/johnson_spectrum.md](calculations/johnson_spectrum.md)
-**Topic:** Johnson Graph Spectral Convergence  
+*索引最后更新：2026-04-14，CLEM V1.0 封存时*
 
-**Content:**
-- Eigenvalue spectrum of Johnson graph Laplacian
-- Spectral gap analysis as function of $N$
-- Convergence to continuous Laplace-Beltrami operator
-- Relationship between spectral properties and emergent geometry
-
-**Key Results:**
-- Spectrum of $J(4,2)$: Explicit eigenvalues
-- Asymptotic behavior for large $N$
-- Connection to spherical harmonics for $S^2$ emergence
-
-**Physical Interpretation:**
-- Spectral gap → mass gap in quantum field theory
-- Eigenvalue distribution → density of states
-- Low-lying modes → effective field degrees of freedom
+```
 
 ---
 
-### [calculations/ns_limit.md](calculations/ns_limit.md)
-**Topic:** Navier-Stokes Equation Limit Derivation  
-
-**Content:**
-- Derivation of fluid dynamics from discrete axioms
-- Continuous limit of discrete conservation laws (A5)
-- Emergence of viscosity from irreversibility (A6)
-- Connection to turbulence prediction $E(k) \propto k^{-10/3}$
-
-**Derivation Steps:**
-1. Discrete continuity equation from A5
-2. Momentum conservation on Johnson graph
-3. Irreversibility-induced dissipation (A6)
-4. Continuum limit via CLEM mechanism
-5. Recovery of Navier-Stokes form
-
-**Verification:**
-- Dimensional analysis
-- Conservation law preservation
-- Comparison with standard NS equation
-- Turbulence spectrum prediction
-
-**Related Papers:**
-- `../papers/03-turbulence-2d.md`
-- `../papers/05-gravitational-wave-turbulence.md`
+**CLEM-TASK-04 状态**：✅
+**CLEM 推导 V1.0 封存完成**：2026-04-14
 
 ---
 
-## External References
+**mimo 收尾动作**：
 
-### Scripts
-- **[../scripts/Qwen精简Clem_morse.py](../scripts/Qwen%E7%B2%BE%E7%AE%80Clem_morse.py)** - Main computation script with explicit matrix output
-- **[../scripts/CLEM_N4_results.md](../scripts/CLEM_N4_results.md)** - N=4 numerical results
-- **[../scripts/CLEM_N6_results.md](../scripts/CLEM_N6_results.md)** - N=6 numerical results
-- **[../scripts/CLEM_N8_results.md](../scripts/CLEM_N8_results.md)** - N=8 numerical results
+将以上两个文件分别填入 `07-CLEM推导/MAIN.md` 和 `07-CLEM推导/INDEX.md`，然后将 `CLEM-TASK-04.md` 的状态标记为 ✅，整个 `07-CLEM推导/` 目录的状态更新如下：
 
-### Papers
-- **[../papers/Under A1' Constraint is Homeomorphic to S2S^2S2.md](../papers/Under%20A1'%20Constraint%20is%20Homeomorphic%20to%20S2S%5E2S%5E2S2.md)** - N=4 verification paper
+```
 
-### Logs
-- **[../logs/关于N是什么的讨论.md](../logs/关于N是什么的讨论.md)** - Discussion on hierarchical nature of N
-- **[../logs/clem实验的部分结论.md](../logs/clem实验的部分结论.md)** - Partial conclusions from CLEM experiments
+07-CLEM推导/
+├── CLEM-TASK-01.md ✅
+├── CLEM-TASK-02.md ✅
+├── CLEM-TASK-03.md ✅
+├── CLEM-TASK-04.md ✅
+├── MAIN.md ✅ ← 新建
+├── INDEX.md ✅ ← 新建
+└── calculations/
+├── morse_function.md ✅
+├── johnson_spectrum.md ✅
+└── ns_limit.md ✅
 
-### Framework
-- **[../02-worldbase物理框架/04-continuous-limit.md](../02-worldbase物理框架/04-continuous-limit.md)** - General CLEM theory
-- **[../02-worldbase物理框架/02-axioms.md](../02-worldbase物理框架/02-axioms.md)** - Axiom definitions
+```
 
----
-
-## File Organization Principles
-
-1. **Task-driven structure**: Each major derivation stage has its own TASK document
-2. **Separation of concerns**: Calculations are isolated in `calculations/` subdirectory
-3. **Cross-referencing**: All files link to related materials for easy navigation
-4. **Status tracking**: MAIN.md provides real-time overview of progress
-5. **Version control**: All changes tracked via Git for reproducibility
-
----
-
-**Maintained by:** David Du  
-**Contact:** 276857401@qq.com
+CLEM 推导 V1.0 全部闭环。

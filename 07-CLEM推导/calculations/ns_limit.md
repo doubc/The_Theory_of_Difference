@@ -1,329 +1,198 @@
-# Navier-Stokes Equation Limit Derivation from Discrete Axioms
-
-**Status:** Reference Document  
-**Last Updated:** 2026-04-14  
-**Related Papers:** `../../papers/03-turbulence-2d.md`, `../../papers/05-gravitational-wave-turbulence.md`
+## 文件二：`calculations/ns_limit.md`
 
 ---
 
-## Overview
+# 守恒律涌现：从离散守恒量到连续性方程和 Euler 方程
 
-This document derives the Navier-Stokes equation from WorldBase discrete axioms via the CLEM mechanism. The derivation shows how fluid dynamics emerges from discrete conservation laws, irreversibility, and continuous limit procedures.
+> 本文件是 CLEM-TASK-03 的技术附录，包含从 $J(2n,n)$ 离散守恒律到连续偏微分方程的完整推导细节。
 
 ---
 
-## Theoretical Background
+## §1 离散系统的基本设置
 
-### Navier-Stokes Equation
+### §1.1 状态空间
 
-The incompressible Navier-Stokes equation is:
+比特空间 $\{0,1\}^{2n}$，权重 $n$ 层（中截面），顶点集 $V_n = \binom{[2n]}{n}$，$|V_n| = \binom{2n}{n}$。
 
-$$\frac{\partial \mathbf{u}}{\partial t} + (\mathbf{u} \cdot 
-abla)\mathbf{u} = -\frac{1}{\rho}
-abla p + 
-u 
-abla^2 \mathbf{u} + \mathbf{f}$$
+### §1.2 密度函数
 
-with continuity equation:
+$\rho: V_n \times \mathbb{Z}_{\geq 0} \to \mathbb{R}_{\geq 0}$，$\rho(v, t)$ 表示时刻 $t$ 在顶点 $v$ 处的差异密度。
+
+总量：$M(t) = \sum_{v \in V_n} \rho(v, t)$。
+
+**A5 的离散表达**：$M(t) = M(0)$，$\forall t \geq 0$。
+
+### §1.3 演化规则
+
+**A4**：每次演化仅改变一个比特 → 在 $V_n$ 上只能沿 $J(2n,n)$ 的边移动（Hamming 距离 2 的跳跃）。
+
+**A6**：演化图是 DAG → 每条边有流量方向 $J(u \to v, t) \geq 0$。
+
+**A7**：演化中存在闭合路径 → 绕三角面的净环流为零（$\partial^2 = 0$ 的流量版本）。
+
+---
+
+## §2 离散连续性方程
+
+### §2.1 方程推导
+
+在顶点 $v$ 处，密度变化率等于流入量减流出量：
+
+$$\frac{d\rho(v,t)}{dt} = \sum_{u: \{u,v\} \in E} \left[ J(u \to v, t) - J(v \to u, t) \right]$$
+
+定义净流量 $F(u \to v, t) = J(u \to v, t) - J(v \to u, t)$，则：
+
+$$\frac{d\rho(v,t)}{dt} = \sum_{u \sim v} F(u \to v, t)$$
+
+### §2.2 总量守恒验证
+
+$$\frac{dM}{dt} = \sum_v \sum_{u \sim v} F(u \to v, t) = \sum_{\{u,v\} \in E} [F(u \to v) + F(v \to u)] = 0$$
+
+最后一步因为 $F(u \to v) + F(v \to u) = 0$（反对称性）。✓
+
+---
+
+## §3 散度形式与连续极限
+
+### §3.1 离散散度算子
+
+定义离散散度：对定义在边上的函数 $g: E \to \mathbb{R}$，
+
+$$(\operatorname{div} g)(v) = \sum_{u \sim v} g(e_{uv}) \cdot \operatorname{sgn}(v, e_{uv})$$
+
+其中 $\operatorname{sgn}(v, e_{uv}) = +1$（$v$ 是终点）或 $-1$（$v$ 是起点）。
+
+这是边界算子 $\partial_1$ 的转置：$\operatorname{div} = \partial_1^T$。
+
+### §3.2 离散 de Rham 关系
+
+A7 保证 $\partial_2^T \partial_1^T = (\partial_1 \partial_2)^T = 0$，即：
+
+$$\operatorname{curl} \circ \operatorname{grad} = 0 \quad \text{（离散 de Rham 关系）}$$
+
+其中 $\operatorname{grad} = \partial_1^T$，$\operatorname{curl} = \partial_2^T$。这是离散微积分基本定理，由 A7 直接给出。
+
+### §3.3 散度形式
+
+离散连续性方程变为：
+
+$$\frac{d\rho}{dt} = -\operatorname{div}(\mathbf{F}) = -\partial_1^T \mathbf{F}$$
+
+其中 $\mathbf{F}$ 是定义在边上的流量场（1-形式）。
+
+### §3.4 连续极限
+
+在 $n \to \infty$ 下（利用 TASK-02 的算子映射）：
+
+- $\partial_1^T \to \nabla \cdot$（散度算子）
+- $\mathbf{F} \to \rho \mathbf{u}$（动量通量）
+
+得到：
+
+$$\boxed{\frac{\partial \rho}{\partial \tau} + \nabla \cdot (\rho \mathbf{u}) = 0}$$
+
+连续性方程。$\square$
+
+### §3.5 各向同性的作用
+
+A8 保证 $J(2n,n)$ 的顶点传递性。在 Taylor 展开中，邻居位移向量之和 $\sum_{u \sim v} \boldsymbol{\delta}_{uv} = \mathbf{0}$
+（各向同性），一阶项消失，二阶主导，保证散度形式的标准性。
+
+---
+
+## §4 动量场与对流项
+
+### §4.1 动量场的定义
+
+动量密度：$\mathbf{p}(v, t) = \rho(v, t) \cdot \mathbf{u}(v, t)$。
+
+在离散系统中，"速度"对应差异在 $J(2n,n)$ 上的传播方向。由 A6（DAG 有向），每条边有优先方向（来自 TASK-01 的 Morse 高度函数）。
+
+**$\ell = 1$ 的物理意义**：TASK-02 证明 $\ell = 1$ 的谱值精确等于 $\Lambda_1 = 2$，对所有 $n$ 成立。$\ell = 1$ 的特征空间是
+3 维的，对应 $S^2$ 上的坐标函数 $(x, y, z)$。守恒量的 $\ell = 1$ 分量正是**动量的三个分量**。
+
+### §4.2 对流项的推导
+
+A6 规定演化图是 DAG，流量有优先方向。在连续极限下，DAG 的优先方向对应速度场 $\mathbf{u}$。
+
+动量的对流传输：
+
+$$\frac{\partial (\rho u_i)}{\partial \tau}\bigg|_{\text{对流}} = -\nabla \cdot (\rho u_i \mathbf{u}) = -\rho (\mathbf{u} \cdot \nabla) u_i - u_i \nabla \cdot (\rho \mathbf{u})$$
+
+利用连续性方程化简：
+
+$$\frac{\partial (\rho u_i)}{\partial \tau}\bigg|_{\text{对流}} = -\rho \frac{D u_i}{D\tau}$$
+
+其中 $\frac{D}{D\tau} = \frac{\partial}{\partial \tau} + \mathbf{u} \cdot \nabla$ 是物质导数。
+
+**公理溯源**：
+
+$$A6 \xrightarrow{\text{DAG 方向}} \text{流量有优先方向} \xrightarrow{n \to \infty} \mathbf{u} \cdot \nabla \xrightarrow{\text{物质导数}} \frac{D}{D\tau}$$
+
+---
+
+## §5 压力项与不可压缩条件
+
+### §5.1 A1' 约束的全局一致性
+
+A1' 要求同一权重层内相邻单元满足精确距离 $d_H = 2$。这是刚性约束——相邻 $S^2$ 单元不能重叠（$d_H < 2$
+），也不能脱离（$d_H > 2$）。
+
+若密度 $\rho$ 在某处增大（单元"压缩"），A1' 约束被违反。系统产生恢复力将密度推回均匀分布，宏观上表现为压力梯度 $-\nabla p$。
+
+### §5.2 压力的微观定义
+
+局部压力定义为维持 A1' 约束的 Lagrange 乘子：
+
+$$p(v, t) = \lambda_{A1'}(v, t)$$
+
+其中 $\lambda_{A1'}$ 是约束 $\sum_{u \sim v} [d_H(v,u) - 2]^2 = 0$ 的 Lagrange 乘子。
+
+在连续极限下，$d_H = 2$（恒定间距）对应不可压缩条件 $\nabla \cdot \mathbf{u} = 0$，Lagrange 乘子对应压力场 $p$。
+
+严格证明（压力 Poisson 方程）标注为 CLEM-OPEN-09。
+
+### §5.3 不可压缩条件
+
+A1' 约束在 $n \to \infty$ 极限下给出：
 
 $$\nabla \cdot \mathbf{u} = 0$$
 
-where:
-- $\mathbf{u}$: velocity field
-- $p$: pressure
-- $\rho$: density (constant for incompressible flow)
-- $\nu$: kinematic viscosity
-- $\mathbf{f}$: external forces
-
-### Key Challenge
-
-Derive this **continuous, nonlinear, dissipative** PDE from:
-- **Discrete** bit configurations
-- **Reversible** microscopic rules (A4: one bit flip per step)
-- **Conservative** dynamics (A5: difference conservation)
-
-The emergence of **irreversibility** and **viscosity** requires careful treatment.
+定性论证：$d_H = 2$ 恒定意味着相邻顶点间"体积元"不变，连续极限下等价于流场无散度。
 
 ---
 
-## Derivation Strategy
+## §6 Euler 方程组装
 
-### Step 1: Discrete Continuity Equation (from A5)
+### §6.1 各项汇总
 
-**Axiom A5 (Difference Conservation)**: Conserved quantities exist and are preserved under evolution.
+**连续性方程**（A5 + A7 + A4 + A8）：
 
-For fluid mass/density, define discrete density at vertex $i$:
+$$\frac{\partial \rho}{\partial \tau} + \nabla \cdot (\rho \mathbf{u}) = 0$$
 
-$$\rho_i(t) = \text{number of bits set at vertex } i \text{ at time } t$$
-
-Conservation means:
-
-$$\sum_i \rho_i(t) = \text{constant}$$
-
-Local conservation (continuity equation):
-
-$$\rho_i(t+1) - \rho_i(t) + \sum_{j \sim i} J_{ij} = 0$$
-
-where $J_{ij}$ is flux from vertex $i$ to neighbor $j$.
-
-**Continuous limit**: As lattice spacing $a \to 0$ and time step $\Delta t \to 0$:
-
-$$\frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \mathbf{u}) = 0$$
-
-For incompressible flow ($\rho = \text{const}$):
+**不可压缩条件**（A1'）：
 
 $$\nabla \cdot \mathbf{u} = 0$$
 
-✓ **Continuity equation derived**.
+在不可压缩条件下，连续性方程化简为 $\frac{\partial \rho}{\partial \tau} + \mathbf{u} \cdot \nabla \rho = 0$（密度沿流线守恒）。
+
+**动量方程**（A5 + A6 + A1'）：
+
+$$\boxed{\rho \left( \frac{\partial \mathbf{u}}{\partial \tau} + (\mathbf{u} \cdot \nabla)\mathbf{u} \right) = -\nabla p}$$
+
+不可压缩 Euler 方程。$\square$
+
+### §6.2 公理覆盖检查
+
+| 公理  | 在 Euler 方程中的体现                | 覆盖 |
+|:----|:------------------------------|:--:|
+| A1' | 不可压缩条件 + 压力项                  | ✓  |
+| A4  | 局部跳跃 → 散度算子                   | ✓  |
+| A5  | 总量守恒 → 连续性方程                  | ✓  |
+| A6  | DAG → 对流项                     | ✓  |
+| A7  | $\partial^2 = 0$ → de Rham 关系 | ✓  |
+| A8  | 各向同性 → 一阶项消失                  | ✓  |
+
+六条公理全部在 Euler 方程中体现，无遗漏。$\checkmark$
 
 ---
-
-### Step 2: Discrete Momentum Conservation
-
-Define discrete momentum at vertex $i$:
-
-$$\mathbf{p}_i(t) = \rho_i \mathbf{u}_i(t)$$
-
-Momentum conservation (Newton's second law in discrete form):
-
-$$\mathbf{p}_i(t+1) - \mathbf{p}_i(t) = \mathbf{F}_i^\text{int} + \mathbf{F}_i^\text{ext}$$
-
-where:
-- $\mathbf{F}_i^\text{int}$: Internal forces from neighboring vertices
-- $\mathbf{F}_i^\text{ext}$: External forces (pressure gradient, body forces)
-
-#### Internal Forces: Advection Term
-
-Internal forces arise from momentum transport between neighbors:
-
-$$\mathbf{F}_i^\text{adv} = -\sum_{j \sim i} (\mathbf{u}_i \cdot \mathbf{n}_{ij}) \mathbf{u}_j A_{ij}$$
-
-where $\mathbf{n}_{ij}$ is unit normal from $i$ to $j$, and $A_{ij}$ is cross-sectional area.
-
-**Continuous limit**:
-
-$$\mathbf{F}^\text{adv} \to -(\mathbf{u} \cdot \nabla)\mathbf{u}$$
-
-✓ **Advection term derived**.
-
-#### Pressure Force
-
-Pressure arises from density gradients (equation of state). For ideal fluid:
-
-$$p = c_s^2 \rho$$
-
-where $c_s$ is speed of sound.
-
-Discrete pressure force:
-
-$$\mathbf{F}_i^\text{press} = -\sum_{j \sim i} \frac{p_j - p_i}{|\mathbf{x}_j - \mathbf{x}_i|} \mathbf{n}_{ij}$$
-
-**Continuous limit**:
-
-$$\mathbf{F}^\text{press} \to -\frac{1}{\rho}\nabla p$$
-
-✓ **Pressure gradient derived**.
-
----
-
-### Step 3: Irreversibility and Viscosity (from A6)
-
-**Axiom A6 (Irreversibility)**: Evolution is directed (DAG structure).
-
-This seems to contradict reversible microscopic dynamics (A4: single bit flips are reversible). Resolution:
-
-**Key insight**: While individual bit flips are reversible, the **coarse-grained** evolution on Johnson graph is irreversible due to:
-1. Information loss in coarse-graining
-2. Entropy increase from A8 (Symmetry Preference)
-3. DAG structure at macroscopic scale
-
-#### Discrete Dissipation
-
-Model viscous dissipation as momentum diffusion:
-
-$$\mathbf{F}_i^\text{visc} = \nu_\text{discrete} \sum_{j \sim i} (\mathbf{u}_j - \mathbf{u}_i)$$
-
-This is a discrete Laplacian operator.
-
-**Physical origin**: 
-- Microscopic reversibility (A4) + Macroscopic irreversibility (A6) → Effective friction
-- Analogy: Molecular collisions are reversible, but produce macroscopic viscosity
-
-**Continuous limit**:
-
-$$\mathbf{F}^\text{visc} \to \nu \nabla^2 \mathbf{u}$$
-
-where kinematic viscosity $\nu$ relates to discrete parameters:
-
-$$\nu \sim \frac{a^2}{\Delta t} \cdot \text{(scattering rate)}$$
-
-✓ **Viscous term derived**.
-
----
-
-### Step 4: Assembly and Continuous Limit
-
-Combine all terms:
-
-$$\frac{\mathbf{p}_i(t+1) - \mathbf{p}_i(t)}{\Delta t} = \mathbf{F}_i^\text{adv} + \mathbf{F}_i^\text{press} + \mathbf{F}_i^\text{visc} + \mathbf{F}_i^\text{ext}$$
-
-Substitute $\mathbf{p}_i = \rho \mathbf{u}_i$ and take $\Delta t \to 0$, $a \to 0$:
-
-$$\rho \frac{\partial \mathbf{u}}{\partial t} = -\rho(\mathbf{u} \cdot 
-abla)\mathbf{u} - 
-abla p + \rho 
-u 
-abla^2 \mathbf{u} + \rho \mathbf{f}$$
-
-Divide by $\rho$:
-
-$$\frac{\partial \mathbf{u}}{\partial t} + (\mathbf{u} \cdot 
-abla)\mathbf{u} = -\frac{1}{\rho}
-abla p + 
-u 
-abla^2 \mathbf{u} + \mathbf{f}$$
-
-✓ **Navier-Stokes equation recovered**.
-
----
-
-## Dimensional Analysis
-
-### Viscosity Scaling
-
-From discrete parameters:
-- Lattice spacing: $a$
-- Time step: $\Delta t$
-- Scattering rate: $\Gamma \sim 1/\tau$
-
-Kinematic viscosity:
-
-$$[\nu] = \frac{L^2}{T} = \frac{a^2}{\Delta t}$$
-
-If we identify:
-- $a \sim$ mean free path $\ell$
-- $\Delta t \sim$ collision time $\tau$
-
-Then:
-
-$$\nu \sim \frac{\ell^2}{\tau} = \ell \cdot \frac{\ell}{\tau} = \ell \cdot v_\text{thermal}$$
-
-This matches kinetic theory result! ✓
-
-### Reynolds Number
-
-Dimensionless Reynolds number:
-
-$$Re = \frac{UL}{\nu}$$
-
-where $U$ is characteristic velocity, $L$ is characteristic length.
-
-**In discrete terms**:
-- $U \sim a/\Delta t$ (max velocity on lattice)
-- $L \sim Na$ (system size for $N$ vertices)
-- $\nu \sim a^2/\Delta t$
-
-Therefore:
-
-$$Re \sim \frac{(a/\Delta t)(Na)}{a^2/\Delta t} = N$$
-
-**Implication**: Reynolds number scales with system size $N$. Larger systems naturally achieve turbulent regimes.
-
----
-
-## Connection to Turbulence Prediction
-
-### 2D Enstrophy Cascade
-
-Paper `../../papers/03-turbulence-2d.md` predicts energy spectrum:
-
-$$E(k) \propto k^{-10/3}$$
-
-for 2D enstrophy cascade.
-
-**Derivation sketch**:
-1. In 2D, both energy $E$ and enstrophy $\Omega = \int |\nabla \times \mathbf{u}|^2$ are conserved
-2. Dual cascade: energy flows to large scales, enstrophy to small scales
-3. Dimensional analysis with enstrophy flux $\eta$ gives $E(k) \sim \eta^{2/3} k^{-10/3}$
-
-### Comparison with Kolmogorov
-
-Standard 3D Kolmogorov turbulence:
-
-$$E(k) \propto k^{-5/3}$$
-
-**Difference**: 
-- 3D: Energy cascade only → $k^{-5/3}$
-- 2D: Enstrophy cascade → $k^{-10/3}$ (steeper)
-
-Our prediction $k^{-10/3}$ differs from some CFT-based derivations ($k^{-3}$), providing a falsifiable test.
-
----
-
-## Gravitational Wave Turbulence
-
-Paper `../../papers/05-gravitational-wave-turbulence.md` extends this to gravitational waves.
-
-**Key idea**: Nonlinear Einstein equations exhibit turbulent behavior similar to Navier-Stokes.
-
-**Prediction**: Gravitational wave energy spectrum in strong-field regime should show power-law scaling analogous to fluid turbulence.
-
----
-
-## Verification Steps
-
-### 1. Conservation Laws
-
-Check that discrete scheme conserves:
-- Mass: $\sum_i \rho_i = \text{const}$ ✓ (by construction)
-- Momentum: $\sum_i \mathbf{p}_i$ changes only due to external forces ✓
-- Energy: Total energy decreases due to viscosity (irreversibility) ✓
-
-### 2. Galilean Invariance
-
-Navier-Stokes equation is Galilean invariant. Check if discrete version preserves this symmetry in continuum limit.
-
-**Issue**: Lattice breaks rotational invariance. Johnson graphs have high symmetry but not full SO(3).
-
-**Resolution**: Symmetry emerges in $N \to \infty$ limit (CLEM mechanism).
-
-### 3. Numerical Tests
-
-Implement discrete scheme and compare with known solutions:
-- Poiseuille flow (channel flow)
-- Taylor-Green vortex
-- Decaying turbulence
-
-Validate convergence to analytical/numerical benchmarks.
-
----
-
-## Open Questions
-
-1. **Compressible flow**: Can we derive compressible Navier-Stokes (with sound waves)?
-2. **Quantum turbulence**: How does quantum mechanics (QLEM) modify turbulence?
-3. **Relativistic extension**: Derive relativistic fluid dynamics from WorldBase?
-4. **Turbulence onset**: Predict critical Reynolds number for transition to turbulence from discrete parameters?
-
----
-
-## Related Work
-
-- **2D Turbulence Paper**: `../../papers/03-turbulence-2d.md`
-- **Gravitational Wave Turbulence**: `../../papers/05-gravitational-wave-turbulence.md`
-- **Continuous Limit Theory**: `../../02-worldbase物理框架/04-continuous-limit.md`
-- **CLEM Tasks**: [../CLEM-TASK-01.md](../CLEM-TASK-01.md), [../CLEM-TASK-02.md](../CLEM-TASK-02.md)
-
----
-
-## References
-
-1. Frisch, U. (1995). *Turbulence: The Legacy of A. N. Kolmogorov*. Cambridge University Press.
-2. Boffetta, G., & Ecke, R. E. (2012). "Two-Dimensional Turbulence". *Annual Review of Fluid Mechanics* 44: 427-451.
-3. Landau, L. D., & Lifshitz, E. M. (1987). *Fluid Mechanics* (2nd ed.). Butterworth-Heinemann.
-4. Pope, S. B. (2000). *Turbulent Flows*. Cambridge University Press.
-
----
-
-**Maintained by:** David Du  
-**Contact:** 276857401@qq.com

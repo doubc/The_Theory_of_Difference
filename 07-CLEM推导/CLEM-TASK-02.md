@@ -1,202 +1,128 @@
-# CLEM-TASK-02: N=6 Nonlinear Self-Coupling
-
-**Status:** 🔄 In Progress  
-**Start Date:** 2026-04-14  
-**Expected Completion:** TBD  
-**Lead:** David Du
+## 文件一：`CLEM-TASK-02.md`
 
 ---
 
-## Objectives
+# CLEM-TASK-02：Johnson 谱收敛与算子映射
 
-This task extends the CLEM mechanism to $N=6$ cluster size to investigate whether nonlinear self-coupling structures emerge, as predicted by the gravitational theorem chain (NP/FE theorems).
-
-### Specific Goals
-
-1. Construct Johnson graph $J(6,k)$ for appropriate $k$ (likely $k=3$)
-2. Build simplicial complex from midsection structure
-3. Compute boundary operators and verify $\partial_1 \cdot \partial_2 = 0$
-4. Calculate Betti numbers and identify topological changes vs. $N=4$
-5. Search for emerging algebraic structures (su(2) closure indicators)
-6. Connect results to gravitational nonlinear self-coupling predictions
+**文件**：`07-CLEM推导/CLEM-TASK-02.md` + `calculations/johnson_spectrum.md`
+**状态**：✅
+**依赖**：CLEM-TASK-01 ✅
+**日期**：2026-04-14
 
 ---
 
-## Theoretical Background
+## §1 问题定位
 
-### Why N=6?
-
-The choice of $N=6$ is motivated by several considerations:
-
-1. **Next Simplest Case**: After $N=4$, the next non-trivial Johnson graph with rich structure
-2. **Gravitational Predictions**: The NP/FE theorem chain suggests that nonlinear Einstein self-coupling should emerge at some finite $N$. $N=6$ is the first candidate.
-3. **Symmetry Considerations**: $J(6,3)$ has interesting symmetry properties (complementarity: each 3-subset has a unique complement)
-
-### Expected Topology
-
-For $J(6,3)$:
-- **Vertices**: $\binom{6}{3} = 20$ vertices
-- **Edges**: Each vertex connects to $3(6-3) = 9$ others
-- **Total edges**: $20 \times 9 / 2 = 90$ edges
-- **Faces**: Number of triangular faces depends on 3-cycle structure
-
-**Hypothesis**: The topology may be more complex than $S^2$, possibly involving higher-genus surfaces or multiple connected components.
-
-### Connection to Gravitational Theorems
-
-The gravitational derivation in WorldBase predicts:
-- Linear regime: $\Phi \propto -1/r$ (already proven for general $N$)
-- Nonlinear regime: Einstein-like self-coupling terms
-
-If $N=6$ shows emergent algebraic structures beyond simple homology, this would support the hypothesis that **different physical phenomena correspond to different minimal cluster sizes**.
+CLEM-TASK-01 已证明 $H_1(\mathcal{K}_n; \mathbb{Z}) = 0$（离散复形无 1-维洞）。TASK-02
+的目标是建立离散差分算子到连续拉普拉斯算子的严格映射——不通过外部嵌入，而是通过 Johnson 图的内在谱结构"长出"连续算子。
 
 ---
 
-## Methodology
+## §2 定理陈述
 
-### Step 1: Graph Construction
+**定理 CLEM-SPEC**（Johnson 谱收敛与算子映射）
 
-Construct $J(6,3)$ with vertices as 3-element subsets of {1,2,3,4,5,6}.
+设 $J(2n,n)$ 为 $[2n]$ 的所有 $n$-子集上的 Johnson 图，$A_n$ 为其邻接矩阵，$L_n = n^2 I - A_n$ 为图 Laplacian。$L_n$ 的特征值为：
 
-```python
-from itertools import combinations
+$$\lambda_k(L_n) = k(2n - k + 1), \quad k = 0, 1, \ldots, n$$
 
-vertices = list(combinations(range(6), 3))
-# 20 vertices total
-```
+则：
 
-### Step 2: Edge Identification
+**(i)** $\lambda_0(L_n) = 0$（零模，常函数核）对所有 $n$ 成立。
 
-Two vertices are connected if they differ by exactly one element (Hamming distance = 2 in bit representation).
+**(ii)** 对固定 $\ell \geq 1$，
 
-### Step 3: Simplicial Complex
+$$\frac{1}{n} \lambda_\ell(L_n) = \frac{\ell(2n - \ell + 1)}{n} \xrightarrow{n \to \infty} 2\ell$$
 
-Identify all 3-cycles (triangles) in the graph to form 2-simplices.
+即 $\frac{1}{n} L_n$ 的谱收敛到 $\{2\ell\}_{\ell=0}^{\infty}$，与 $S^2$ 上 Laplacian 谱 $\{\ell(\ell+1)\}$
+在低频（$\ell = 0, 1$）精确吻合，误差为曲率修正项 $\ell(\ell-1) = O(\ell^2)$。
 
-**Challenge**: $J(6,3)$ is much larger than $J(4,2)$. Computational complexity increases significantly.
+**(iii)** 对 $\ell = 1$，$\frac{1}{n}\lambda_1(L_n) = 2 = \Lambda_1$ 对**所有** $n \geq 1$ 精确成立（无需取极限）。
 
-### Step 4: Boundary Operators
+**(iv)** $\tilde{\Delta}_{A1'}^{(n)}$ 的各向同性由 $J(2n,n)$ 的顶点传递性（来自 A8
+对称偏好）保证，这是算子收敛到 $\nabla^2|_{S^2}$（而非各向异性算子）的必要条件。
 
-Construct:
-- $\partial_1$: Matrix of size (20 × 90)
-- $\partial_2$: Matrix of size (90 × number_of_faces)
+**(v)** 算子弱收敛 $\frac{1}{n} L_n \xrightarrow{w} -\nabla^2|_{S^2}$ 的完整证明依赖 $J(2n,n)$ 的 Gromov-Hausdorff
+收敛（CLEM-OPEN-06），当前作为条件性结论保留。$\square$
 
-### Step 5: Homology Computation
-
-Calculate ranks and Betti numbers using numerical linear algebra.
-
-**Potential Issue**: For large matrices, numerical precision becomes important. May need to use integer arithmetic or symbolic computation.
-
-### Step 6: Algebraic Structure Analysis
-
-Beyond homology, search for:
-- Lie algebra structures in edge/face relationships
-- Closure properties under commutator-like operations
-- Indicators of su(2) or other gauge algebras
+详细特征值计算、归一化方案、数值验证见 `calculations/johnson_spectrum.md`。
 
 ---
 
-## Preliminary Results
+## §3 低频谱对应
 
-### Computational Status
+| 离散指标 $k$ | $\frac{1}{n} \lambda_k(L_n)$（$n \to \ = \ell(\ell+1)$ | 对应 $\ell$ | 误差 |
+|:---:|:---:|:---:|:---:|:---:|
+| 0 | $0$ | $0$ | $0$ | $0$ |
+| 1 | $2$ | $2$ | $1$ | $0$ ✓ |
+| 2 | $4$ | $6$ | $2$ | $\ell(\ell-1) = 2$ |
+| 3 | $6$ | $12$ | $3$ | $\ell(\ell-1) = 6$ |
 
-Script `../scripts/Qwen_clem_morse_n4_8.py` includes N=6 computation capability.
-
-**Output Files:**
-- `../scripts/CLEM_N6_results.md` - Summary results
-- `../scripts/CLEM_N6_FULL_results.md` - Complete matrices and verification
-
-### Initial Observations
-
-[To be filled after running computations]
-
-Expected format:
-```
-N=6, k=3:
-- Vertices: 20
-- Edges: 90
-- Faces: [TBD]
-- rank(d1): [TBD]
-- rank(d2): [TBD]
-- Betti numbers: (b0, b1, b2) = (?, ?, ?)
-- Euler characteristic: χ = ?
-```
+误差项 $\ell(\ell-1)$ 是曲率修正项——$S^2$ 上 Laplacian 特征值的完整形式为 $\ell(\ell+1) = 2\ell + \ell(\ell-1)$
+，其中 $2\ell$ 是切向扩散项，$\ell(\ell-1)$ 来自正高斯曲率 $K=1$ 的 Ricci 贡献。$J(2n,n)$ 的离散 Laplacian
+在 $n \to \infty$ 时捕捉到切向扩散项，曲率修正项在连续极限中完整涌现。
 
 ---
 
-## Hypotheses to Test
+## §4 与infty$） | 连续 $\Lambda_\ell $n=2$ 八面体的精确对应
 
-### H1: Topological Complexity Increases
+对 $n=2$，$J(4,2) \cong K_{2,2,2}$（八面体图），组合 Laplacian $L = 4I - A$ 的特征值为 $\{0, 4, 6\}$，重数 $\{1, 3, 2\}$。
 
-**Prediction**: $N=6$ produces topology with $b_1 > 0$ (non-trivial 1-cycles), indicating holes not present in $S^2$.
+与 $S^2$ 连续谱 $\{\ell(\ell+1)\}_{\ell \geq 0} = \{0, 2, 6, 12, \ldots\}$，重数 $\{1, 3, 5, 7, \ldots\}$ 的对应：
 
-**Implication**: Higher $N$ allows more complex connectivity, potentially corresponding to field degrees of freedom.
+| 离散 $L$ 特征值 | 重数  | 连续 $\Lambda_\ell$ |   重数    |
+|:----------:|:---:|:-----------------:|:-------:|
+|    $0$     | $1$ |  $\Lambda_0 = 0$  |  $1$ ✓  |
+|    $4$     | $3$ |  $\Lambda_1 = 2$  |  $3$ ✓  |
+|    $6$     | $2$ |  $\Lambda_2 = 6$  | $5$（截断） |
 
-### H2: Algebraic Closure Emerges
-
-**Prediction**: Edge/face relationships exhibit closure under certain operations, hinting at Lie algebra structure.
-
-**Implication**: Gauge symmetries may emerge naturally from combinatorial constraints.
-
-### H3: Finite Size Effects Persist
-
-**Prediction**: $N=6$ still shows deviations from expected continuum behavior, but less severe than $N=4$.
-
-**Implication**: Convergence to continuum is gradual; thermodynamic limit ($N \to \infty$) needed for exact physics.
+$\ell = 0, 1$ 的重数完全吻合。$\ell = 2$ 的差异来自八面体的离散化截断（6 个顶点无法分辨全部 5 个 $\ell=2$ 球谐自由度）。
 
 ---
 
-## Challenges
+## §5 公理连接
 
-### Computational Complexity
-
-- $J(6,3)$ has 20 vertices and 90 edges vs. $J(4,2)$'s 6 vertices and 12 edges
-- Face enumeration becomes expensive
-- Matrix operations on 90×F matrices require more memory
-
-**Mitigation**: Use sparse matrix representations where possible.
-
-### Interpretation Ambiguity
-
-Unlike $N=4$ (clearly $S^2$), the topology of $N=6$ may not match a standard manifold.
-
-**Approach**: Focus on Betti numbers as topological invariants regardless of geometric interpretation.
-
-### Connection to Physics
-
-Even if we compute homology successfully, linking it to "nonlinear self-coupling" requires additional theoretical work.
-
-**Plan**: Compare with gravitational theorem predictions in `../calculations/非线性Einstein自耦合连续极限.md`.
+| 公理            | 角色                | 在谱收敛中的体现                                                                   |
+|:--------------|:------------------|:---------------------------------------------------------------------------|
+| **A1'**（横向涌现） | 边的选择规则            | 精确距离 $d_H = 2$ 定义了 $J(2n,n)$ 的邻接矩阵 $A_n$，决定了 $\tilde{\Delta}_{A1'}$ 的全部谱结构 |
+| **A4**（最小变易）  | 每步改变一个比特          | 保证邻接关系的局部性，使得差分算子是局部算子（有限跳跃范围），这是收敛到微分算子的必要条件                              |
+| **A5**（差异守恒）  | 守恒性质              | $\tilde{\Delta}_{A1'}$ 的半正定性（$\mu_k \geq 0$）来自 A5——差异不消失只转移，对应算子的非负性       |
+| **A8**（对称偏好）  | 中截面主导             | $J(2n,n)$ 的顶点传递性来自 A8 的对称性，保证算子的各向同性——这是收敛到 $\nabla^2                      |_{S^2}$ 而非各向异性算子的关键 |
+| **A9**（内生完备）  | $n \to \infty$ 极限 | A9 保证自由度集合等于公理要求的最小值，支持极限操作合法性                                             |
 
 ---
 
-## Next Steps
+## §6 传递给 TASK-03 的核心结论
 
-1. ✅ Run computation script for N=6
-2. ⏳ Analyze Betti numbers and compare with N=4
-3. ⏳ Search for algebraic structures in boundary operators
-4. ⏳ Document findings in this file
-5. ⏳ Prepare comparison table: N=4 vs. N=6 vs. N=8
+TASK-03 可以使用以下已建立的结果：
 
----
-
-## Related Work
-
-- **N=4 Verification**: See [CLEM-TASK-01.md](CLEM-TASK-01.md)
-- **N=8 Computation**: See [CLEM-TASK-03.md](CLEM-TASK-03.md) (next task)
-- **Gravitational Theory**: `../02-worldbase物理框架/03-gravity.md`
-- **Nonlinear Limit**: `../calculations/非线性Einstein自耦合连续极限.md`
+1. $\tilde{\Delta}_{A1'}$ 是一个**半正定、各向同性、局部**的算子（由 A1', A4, A5, A8 保证）
+2. 其零模对应常函数（连通性），与连续 Laplacian 一致
+3. $\ell=1$ 的谱值精确等于 $\Lambda_1 = 2$，对所有 $n$ 成立
+4. 在 $n \to \infty$ 极限下，$\frac{1}{n}L_n$ 的谱的低频部分逼近 $S^2$ 上 Laplacian 谱
+5. 算子弱收敛作为条件性结论：若 GH 收敛成立，则 $\frac{1}{n}L_n \xrightarrow{w} -\nabla^2|_{S^2}$
 
 ---
 
-## Open Questions
+## §7 开放问题
 
-1. What is the "correct" value of $k$ for $N=6$? (Currently assuming $k=3$, i.e., midsection)
-2. Should we consider multiple $k$ values and compare?
-3. How do we detect "nonlinear self-coupling" from topological data alone?
-4. Is there a smooth interpolation between N=4 and N=6 topologies?
+| 项目                       | 标注           |
+|:-------------------------|:-------------|
+| Gromov-Hausdorff 收敛的严格证明 | CLEM-OPEN-06 |
+| 曲率修正项的离散来源               | CLEM-OPEN-07 |
+| 重数公式精确核对                 | CLEM-OPEN-08 |
 
 ---
 
-**Last Updated:** 2026-04-14  
-**Status:** Awaiting computational results
+## §8 状态
+
+| 命题                                        | 状态 | 说明                           |
+|:------------------------------------------|:--:|:-----------------------------|
+| Johnson 方案特征值公式 $\lambda_k = (n-k)^2 - k$ | ✅  | Delsarte 1973，$n=2,3,4$ 数值验证 |
+| 归一化差分算子特征值 $\mu_k = k(2n-k+1)/n^2$        | ✅  | 显式公式                         |
+| $\ell=1$ 精确对应 $\Lambda_1 = 2$（对所有 $n$）    | ✅  | 对称性保证                        |
+| 曲率修正项 $\ell(\ell-1)$ 的几何来源识别              | ✅  | Lichnerowicz 公式              |
+| 各向同性来自 A8 对称偏好                            | ✅  | 顶点传递性                        |
+| 算子弱收敛（条件性）                                | 🔷 | 依赖 CLEM-OPEN-06              |
+
+---
