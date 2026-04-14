@@ -1,5 +1,5 @@
 # WorldBase × 广义相对论：文件索引与映射表
-
+探索日志已归入 archive/ 目录，主文档为 MAIN.md + INDEX.md + calculations/
 > 原始探索日志与论证文件的完整索引。主线推导链见 `MAIN.md`。
 
 ---
