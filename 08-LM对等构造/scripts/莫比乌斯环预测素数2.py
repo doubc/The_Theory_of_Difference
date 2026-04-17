@@ -499,7 +499,7 @@ class OptimizedPrimePredictor:
 
     def save_comprehensive_results(self, formula_stats, prediction_stats, param_opt=None):
         """保存综合验证结果"""
-        output_dir = os.path.join(os.path.dirname(__file__), 'output_data')
+        output_dir = os.path.join(os.path.dirname(__file__), '../output_data')
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
 

@@ -20,7 +20,7 @@ class PrimeCache:
 
     def __init__(self, cache_dir=None):
         if cache_dir is None:
-            cache_dir = os.path.join(os.path.dirname(__file__), 'output_data')
+            cache_dir = os.path.join(os.path.dirname(__file__), '../output_data')
 
         self.cache_dir = cache_dir
         if not os.path.exists(cache_dir):
@@ -148,7 +148,7 @@ def test_large_zero_count():
         })
 
     # 保存结果
-    output_dir = os.path.join(os.path.dirname(__file__), 'output_data')
+    output_dir = os.path.join(os.path.dirname(__file__), '../output_data')
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 

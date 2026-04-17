@@ -253,7 +253,7 @@ class OptimizationExperiment:
         import json
         from datetime import datetime
         
-        output_dir = os.path.join(os.path.dirname(__file__), 'output_data')
+        output_dir = os.path.join(os.path.dirname(__file__), '../output_data')
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
         
