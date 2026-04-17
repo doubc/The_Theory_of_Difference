@@ -1,0 +1,126 @@
+{
+  "experiments": [
+    {
+      "experiment": "spectral_resolution",
+      "config": {
+        "m_max": 100,
+        "n_max": 100,
+        "num_zeros": 50,
+        "label": "低分辨率"
+      },
+      "mean_error": 0.3143290264677388,
+      "median_error": 0.3112055029333126,
+      "max_error": 0.4570618443700717
+    },
+    {
+      "experiment": "spectral_resolution",
+      "config": {
+        "m_max": 200,
+        "n_max": 200,
+        "num_zeros": 100,
+        "label": "中分辨率（当前）"
+      },
+      "mean_error": 0.3143289834142137,
+      "median_error": 0.3112051127501342,
+      "max_error": 0.45706189608923137
+    },
+    {
+      "experiment": "spectral_resolution",
+      "config": {
+        "m_max": 300,
+        "n_max": 300,
+        "num_zeros": 200,
+        "label": "高分辨率"
+      },
+      "mean_error": 0.31432893476056345,
+      "median_error": 0.3112050379412651,
+      "max_error": 0.4570617516783006
+    },
+    {
+      "experiment": "spectral_resolution",
+      "config": {
+        "m_max": 500,
+        "n_max": 500,
+        "num_zeros": 300,
+        "label": "超高分辨率"
+      },
+      "mean_error": 0.3143289230794648,
+      "median_error": 0.31120504921336517,
+      "max_error": 0.4570619630116927
+    },
+    {
+      "experiment": "geometry_scaling",
+      "scale_factor": 1.0,
+      "R": 1.0,
+      "w": 0.8,
+      "mean_error": 0.3143290264677388,
+      "median_error": 0.3112055029333126
+    },
+    {
+      "experiment": "geometry_scaling",
+      "scale_factor": 1.5,
+      "R": 1.5,
+      "w": 1.2000000000000002,
+      "mean_error": 0.3143302856576909,
+      "median_error": 0.31115396483816243
+    },
+    {
+      "experiment": "geometry_scaling",
+      "scale_factor": 2.0,
+      "R": 2.0,
+      "w": 1.6,
+      "mean_error": 0.3143270425090019,
+      "median_error": 0.31120499241685357
+    },
+    {
+      "experiment": "geometry_scaling",
+      "scale_factor": 3.0,
+      "R": 3.0,
+      "w": 2.4000000000000004,
+      "mean_error": 0.31432474903367974,
+      "median_error": 0.3112575204759889
+    },
+    {
+      "experiment": "geometry_scaling",
+      "scale_factor": 5.0,
+      "R": 5.0,
+      "w": 4.0,
+      "mean_error": 0.3143271096619343,
+      "median_error": 0.31120671757690255
+    },
+    {
+      "experiment": "amplitude_decay",
+      "decay_type": "linear",
+      "mean_error": 0.31009398988881565,
+      "median_error": 0.30707380700727505
+    },
+    {
+      "experiment": "amplitude_decay",
+      "decay_type": "inverse_gamma",
+      "mean_error": 0.3100999847792581,
+      "median_error": 0.30708038394552306
+    },
+    {
+      "experiment": "amplitude_decay",
+      "decay_type": "mixed",
+      "mean_error": 0.3100978636536373,
+      "median_error": 0.3070782303795334
+    },
+    {
+      "experiment": "amplitude_decay",
+      "decay_type": "exponential",
+      "mean_error": 0.31008521975857106,
+      "median_error": 0.3070587963802285
+    }
+  ],
+  "summary": {
+    "total_experiments": 13,
+    "best_config": {
+      "experiment": "amplitude_decay",
+      "decay_type": "exponential",
+      "mean_error": 0.31008521975857106,
+      "median_error": 0.3070587963802285
+    }
+  },
+  "timestamp": "2026-04-17T10:00:48.777451"
+}

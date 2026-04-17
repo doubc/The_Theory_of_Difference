@@ -1,0 +1,14 @@
+{
+  "experiment": "Prime Contribution Analysis and Prediction",
+  "timestamp": "20260417_113447",
+  "num_primes_analyzed": 9592,
+  "pattern_summary": {
+    "mean_contribution_ratio": 0.3307775131325655,
+    "median_omega": 3.0
+  },
+  "batch_test_results": {
+    "num_predictions": 100,
+    "mean_error": 2.42,
+    "median_error": 0.0
+  }
+}

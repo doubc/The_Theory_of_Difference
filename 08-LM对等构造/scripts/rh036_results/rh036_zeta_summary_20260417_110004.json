@@ -1,0 +1,27 @@
+{
+  "timestamp": "20260417_110004",
+  "N": 50000,
+  "stats": {
+    "raw（原始截断）": {
+      "num_minima": 120,
+      "mean_deviation": 1.0086200960656835,
+      "median_deviation": 0.8143154538634674,
+      "within_0.5": 32.5,
+      "within_1.0": 57.49999999999999
+    },
+    "tail_corrected（尾部修正）": {
+      "num_minima": 21,
+      "mean_deviation": 0.10803430262327574,
+      "median_deviation": 0.003487471867970271,
+      "within_0.5": 95.23809523809523,
+      "within_1.0": 95.23809523809523
+    },
+    "euler_maclaurin（EM修正）": {
+      "num_minima": 22,
+      "mean_deviation": 0.2839036804655718,
+      "median_deviation": 0.003577356839211454,
+      "within_0.5": 90.9090909090909,
+      "within_1.0": 90.9090909090909
+    }
+  }
+}

@@ -1,0 +1,145 @@
+{
+  "test_type": "large_zero_count",
+  "results": [
+    {
+      "config": {
+        "num_zeros": 100,
+        "m_max": 500,
+        "n_max": 500,
+        "label": "100个零点"
+      },
+      "mean_error": 0.2194987517951978,
+      "median_error": 0.20493319785509356,
+      "max_error": 0.45706189608923137,
+      "min_error": 0.10416257502523622,
+      "std_error": 0.07636105233752612,
+      "num_zeros_used": 100,
+      "total_eigenmodes": 250000
+    },
+    {
+      "config": {
+        "num_zeros": 200,
+        "m_max": 500,
+        "n_max": 500,
+        "label": "200个零点"
+      },
+      "mean_error": 0.21949874413028195,
+      "median_error": 0.2049331940042539,
+      "max_error": 0.4570617516783006,
+      "min_error": 0.10416259431944046,
+      "std_error": 0.07636106449641895,
+      "num_zeros_used": 200,
+      "total_eigenmodes": 250000
+    },
+    {
+      "config": {
+        "num_zeros": 300,
+        "m_max": 500,
+        "n_max": 500,
+        "label": "300个零点"
+      },
+      "mean_error": 0.21949874231615019,
+      "median_error": 0.20493318813081052,
+      "max_error": 0.4570619630116927,
+      "min_error": 0.10416259554951132,
+      "std_error": 0.07636107776046978,
+      "num_zeros_used": 300,
+      "total_eigenmodes": 250000
+    },
+    {
+      "config": {
+        "num_zeros": 500,
+        "m_max": 1000,
+        "n_max": 1000,
+        "label": "500个零点"
+      },
+      "mean_error": 0.21949874253517684,
+      "median_error": 0.2049331743240097,
+      "max_error": 0.45706177044557317,
+      "min_error": 0.10416259493273058,
+      "std_error": 0.07636108889279082,
+      "num_zeros_used": 500,
+      "total_eigenmodes": 1000000
+    },
+    {
+      "config": {
+        "num_zeros": 800,
+        "m_max": 1500,
+        "n_max": 1500,
+        "label": "800个零点"
+      },
+      "mean_error": 0.21949874154887516,
+      "median_error": 0.20493317731887611,
+      "max_error": 0.45706184071409334,
+      "min_error": 0.10416259401818599,
+      "std_error": 0.07636109575962786,
+      "num_zeros_used": 800,
+      "total_eigenmodes": 2250000
+    },
+    {
+      "config": {
+        "num_zeros": 1000,
+        "m_max": 2000,
+        "n_max": 2000,
+        "label": "1000个零点"
+      },
+      "mean_error": 0.21949874160705313,
+      "median_error": 0.20493316823658003,
+      "max_error": 0.45706185408859584,
+      "min_error": 0.1041625902583155,
+      "std_error": 0.07636109919118277,
+      "num_zeros_used": 1000,
+      "total_eigenmodes": 4000000
+    },
+    {
+      "config": {
+        "num_zeros": 1500,
+        "m_max": 2500,
+        "n_max": 2500,
+        "label": "1500个零点"
+      },
+      "mean_error": 0.21949874126079155,
+      "median_error": 0.2049331743988939,
+      "max_error": 0.45706182784146493,
+      "min_error": 0.1041625931495719,
+      "std_error": 0.07636110022186149,
+      "num_zeros_used": 1500,
+      "total_eigenmodes": 6250000
+    },
+    {
+      "config": {
+        "num_zeros": 2000,
+        "m_max": 3000,
+        "n_max": 3000,
+        "label": "2000个零点"
+      },
+      "mean_error": 0.219498741340478,
+      "median_error": 0.204933172436011,
+      "max_error": 0.4570618010854851,
+      "min_error": 0.10416259169903914,
+      "std_error": 0.07636110266497353,
+      "num_zeros_used": 2000,
+      "total_eigenmodes": 9000000
+    }
+  ],
+  "summary": {
+    "best_config": {
+      "config": {
+        "num_zeros": 1500,
+        "m_max": 2500,
+        "n_max": 2500,
+        "label": "1500个零点"
+      },
+      "mean_error": 0.21949874126079155,
+      "median_error": 0.2049331743988939,
+      "max_error": 0.45706182784146493,
+      "min_error": 0.1041625931495719,
+      "std_error": 0.07636110022186149,
+      "num_zeros_used": 1500,
+      "total_eigenmodes": 6250000
+    },
+    "error_reduction": "0.219499% → 0.219499%",
+    "improvement_percent": 4.7629973741677786e-06
+  },
+  "timestamp": "2026-04-17T10:17:01.078922"
+}

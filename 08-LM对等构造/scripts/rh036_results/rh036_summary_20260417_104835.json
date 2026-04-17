@@ -1,0 +1,28 @@
+{
+  "timestamp": "20260417_104835",
+  "exp1_Mertens": {
+    "M_final": -720,
+    "max_ratio": 2.433195063008759,
+    "current_ratio": 2.276839915321233
+  },
+  "exp2_resonance": {
+    "mean_min_sigma": 0.8,
+    "global_min_sigma": 0.64,
+    "global_min_t": 28.561872909698998
+  },
+  "exp3_alignment": {
+    "mean_at_zeros": 6.630340110560978,
+    "mean_off_zeros": 2.1769252368555407,
+    "ratio": 3.0457362514379094
+  },
+  "exp4_sigma_scan": {
+    "mean_min_sigma": 0.8,
+    "std_min_sigma": 0.0
+  },
+  "interpretation": {
+    "prop1": "μ(n)=扭转符号，精确成立",
+    "prop2": "共振轴 σ=0.8000",
+    "prop3": "零点处/偏离比=3.0457",
+    "prop4": "σ扫描均值=0.8000±0.0000"
+  }
+}
