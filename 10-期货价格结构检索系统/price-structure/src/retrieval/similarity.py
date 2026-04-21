@@ -27,20 +27,33 @@ class SimilarityScore:
 
 
 # ─── 不变量向量配置 ─────────────────────────────────────────
+# 与 relations.structure_invariants() 输出的 dict key 对齐
 
 INVARIANT_KEYS = [
     "cycle_count",
     "avg_speed_ratio",
+    "avg_log_speed_ratio",
     "avg_time_ratio",
-    "high_cluster_stddev",
+    "high_dispersion",
+    "low_dispersion",
+    "high_trend",
+    "low_trend",
+    "zone_rel_bw",
+    "zone_strength",
 ]
 
 # 每个不变量的典型量级，用于归一化
 INVARIANT_SCALES = {
     "cycle_count": 10.0,
     "avg_speed_ratio": 2.0,
+    "avg_log_speed_ratio": 2.0,
     "avg_time_ratio": 2.0,
-    "high_cluster_stddev": 500.0,
+    "high_dispersion": 1.0,
+    "low_dispersion": 1.0,
+    "high_trend": 1.0,
+    "low_trend": 1.0,
+    "zone_rel_bw": 1.0,
+    "zone_strength": 10.0,
 }
 
 

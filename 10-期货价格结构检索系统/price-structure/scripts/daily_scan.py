@@ -1,64 +1,52 @@
 """
-每日机会扫描脚本 — 阶段四修订版
+每日机会扫描 v3 —— 只做候选识别与 top_k 匹配，聚合与渲染外包。
 
-修订重点：
-1. 修复 is_opportunity_viable 的边界逻辑（改为近期 ATR 活跃度过滤）
-2. 修复 calculate_distance 的量纲问题（统一归一化）
-3. HTML 报告增加结构证据链字段、分项相似度、方向置信度
-4. analyze_template_move 离线降级（数据库不可用时返回模板中已存的 outcome）
+流程:
+1. 编译每个品种的最新结构
+2. 活跃度过滤
+3. 对活跃模板计算归一化距离,取 top_k
+4. 委托 opportunity.aggregate_opportunity() 生成 Opportunity
+5. 委托 daily_report.render_daily_report() 渲染 HTML
+6. 同步落一份 JSON 快照供复盘
 """
-
 import sys
 import os
 import json
 import math
-from datetime import datetime, timedelta
+import hashlib
+from datetime import datetime
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from src.data.loader import MySQLLoader
-from src.compiler.pipeline import compile_full, CompilerConfig
-from src.relations import structure_invariants
 from sqlalchemy import create_engine, inspect
-import pandas as pd
+from src.data.loader import MySQLLoader
+from src.data.symbol_meta import symbol_name
+from src.compiler.pipeline import compile_full, CompilerConfig
+from src.retrieval.opportunity import (
+    TemplateMatch, aggregate_opportunity, FEATURE_SCALES, FEATURES,
+)
+from src.workbench.daily_report import render_daily_report
 
-# ── 归一化尺度（与 similarity.py 的 INVARIANT_SCALES 保持一致）──────────
-FEATURE_SCALES = {
-    "avg_speed_ratio": 2.0,
-    "avg_time_ratio": 2.0,
-    "zone_rel_bw": 0.03,
-    "high_dispersion": 0.02,
-    "low_dispersion": 0.02,
-    "zone_strength": 5.0,
-}
-FEATURES = list(FEATURE_SCALES.keys())
-
-# ── 相似度阈值 ───────────────────────────────────────────────────────────
-MAX_DIST_THRESHOLD = 1.5  # 归一化距离超过此值直接丢弃
+MAX_DIST_THRESHOLD = 1.5
+TOP_K = 5
 
 
-def calculate_distance(inv1: dict, inv2: dict) -> tuple[float, dict]:
-    """
-    归一化欧氏距离 + 分项差异。
-    返回 (total_dist, diff_detail)
-    """
+def _distance(inv1: dict, inv2: dict) -> tuple[float, dict]:
+    """归一化欧氏距离 + 分项差异"""
     diff = {}
-    dist_sq = 0.0
+    sq = 0.0
     for f in FEATURES:
         scale = FEATURE_SCALES[f]
         v1 = (inv1.get(f) or 0) / scale
         v2 = (inv2.get(f) or 0) / scale
         d = abs(v1 - v2)
         diff[f] = round(d, 3)
-        dist_sq += d ** 2
-    return math.sqrt(dist_sq), diff
+        sq += d ** 2
+    return math.sqrt(sq), diff
 
 
-def is_opportunity_viable(bars: list, min_atr_pct: float = 0.005) -> bool:
-    """
-    活跃度过滤：用近 20 根 bar 的平均真实波幅（ATR%）判断品种是否活跃。
-    替换原来的"历史绝对位置"过滤——那个逻辑会系统性过滤突破行情。
-    """
+def _is_active(bars, min_atr_pct: float = 0.005) -> bool:
+    """活跃度过滤：近 20 根 bar 的平均 ATR% 判断品种是否活跃"""
     if len(bars) < 20:
         return False
     recent = bars[-20:]
@@ -68,217 +56,160 @@ def is_opportunity_viable(bars: list, min_atr_pct: float = 0.005) -> bool:
         prev_close = recent[i - 1].close
         tr = max(b.high - b.low, abs(b.high - prev_close), abs(b.low - prev_close))
         atrs.append(tr / prev_close if prev_close > 0 else 0)
-    avg_atr_pct = sum(atrs) / len(atrs) if atrs else 0
-    return avg_atr_pct >= min_atr_pct
+    return (sum(atrs) / len(atrs) if atrs else 0) >= min_atr_pct
 
 
-def get_template_outcome(template: dict) -> tuple[str, str, str]:
-    """
-    从模板已存的 outcome 字段读取走势信息（离线降级方案）。
-    避免每次扫描都重新查数据库。
-    """
-    outcome = template.get('outcome')
-    if not outcome:
-        return "N/A", "N/A", "N/A"
-
-    direction = template.get('primary_direction', 'unknown')
-    up = outcome.get('up_move', 0)
-    down = outcome.get('down_move', 0)
-
-    if direction == 'up':
-        return f"+{up:.1%}", "看涨", f"{up:.1%}"
-    elif direction == 'down':
-        return f"-{down:.1%}", "看跌", f"{down:.1%}"
-    else:
-        return f"±{max(up, down):.1%}", "方向不明", f"{max(up, down):.1%}"
+def _config_hash(cfg: CompilerConfig) -> str:
+    s = json.dumps(cfg.__dict__, sort_keys=True, default=str)
+    return hashlib.md5(s.encode()).hexdigest()
 
 
-def generate_html_report(opportunities: list, filename: str = "daily_scan_report.html"):
-    """
-    生成带证据链的 HTML 报告。
-    每条机会展示：分项相似度、结构不变量对比、方向置信度、模板 outcome 来源。
-    """
-    date_str = datetime.now().strftime('%Y-%m-%d')
-    time_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-
-    rows_html = ""
-    for opp in opportunities:
-        sim = opp['similarity']
-        sim_color = "#00c853" if sim > 0.8 else "#ff9800" if sim > 0.65 else "#9e9e9e"
-        dir_color = "#26a69a" if "涨" in opp['direction'] else "#ef5350" if "跌" in opp['direction'] else "#9e9e9e"
-
-        # 分项差异展示
-        diff_html = "".join(
-            f"<span style='margin-right:8px;color:#aaa'>"
-            f"{k}=<b style='color:{'#ef5350' if v > 0.3 else '#eee'}'>{v:.2f}</b></span>"
-            for k, v in opp.get('diff_detail', {}).items()
-        )
-
-        # 当前结构不变量
-        inv_html = "".join(
-            f"<span style='margin-right:8px;color:#aaa'>{k}=<b>{round(v, 3)}</b></span>"
-            for k, v in opp.get('current_inv', {}).items()
-            if k in FEATURES
-        )
-
-        rows_html += f"""
-        <tr>
-          <td><b style="font-size:15px">{opp['symbol']}</b></td>
-          <td><b style="color:{sim_color};font-size:16px">{sim:.3f}</b></td>
-          <td style="color:#aaa">{opp['template_date']}<br>
-              <small>outcome起点: {opp.get('outcome_start', 'N/A')}</small></td>
-          <td>{opp['current_zone']:.1f}</td>
-          <td>{opp['hist_move']}</td>
-          <td><b style="color:{dir_color}">{opp['direction']}</b></td>
-          <td><b>{opp['potential_move']}</b></td>
-          <td style="font-size:11px">{diff_html}</td>
-          <td style="font-size:11px">{inv_html}</td>
-        </tr>
-        """
-
-    html = f"""<!DOCTYPE html>
-<html lang="zh">
-<head>
-<meta charset="UTF-8">
-<title>每日结构机会扫描 — {date_str}</title>
-<style>
-  body {{ background:#1a1a2e; color:#e0e0e0; font-family:'PingFang SC',sans-serif; margin:0; padding:20px; }}
-  h1 {{ color:#90caf9; border-bottom:1px solid #333; padding-bottom:10px; }}
-  .meta {{ color:#888; margin-bottom:20px; font-size:13px; }}
-  table {{ width:100%; border-collapse:collapse; background:#16213e; border-radius:8px; overflow:hidden; }}
-  th {{ background:#0f3460; color:#90caf9; padding:10px 12px; text-align:left; font-size:13px; }}
-  td {{ padding:10px 12px; border-bottom:1px solid #1a1a2e; vertical-align:top; font-size:13px; }}
-  tr:hover td {{ background:#0d2137; }}
-  .badge {{ display:inline-block; padding:2px 8px; border-radius:4px; font-size:11px; }}
-  .no-result {{ color:#888; padding:40px; text-align:center; font-size:16px; }}
-</style>
-</head>
-<body>
-<h1>每日高潜力结构机会扫描</h1>
-<div class="meta">
-  扫描时间: {time_str} &nbsp;|&nbsp;
-  发现机会: <b style="color:#90caf9">{len(opportunities)}</b> 个 &nbsp;|&nbsp;
-  相似度阈值: {1 / (1 + MAX_DIST_THRESHOLD):.2f}
-</div>
-{"<table><thead><tr><th>品种</th><th>相似度</th><th>模板日期</th><th>当前中枢</th><th>历史走势</th><th>方向</th><th>潜在幅度</th><th>分项差异</th><th>当前不变量</th></tr></thead><tbody>" + rows_html + "</tbody></table>"
-    if opportunities else '<div class="no-result">今日未发现符合高潜力约束的市场机会。</div>'}
-</body>
-</html>"""
-
-    output_path = os.path.join(os.path.dirname(__file__), "..", "output", filename)
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    with open(output_path, 'w', encoding='utf-8') as f:
-        f.write(html)
-    print(f"\nHTML 报告已生成: {output_path}")
-
-
-def load_templates() -> list:
-    template_path = os.path.join(
+def _load_templates() -> list[dict]:
+    path = os.path.join(
         os.path.dirname(__file__), "..", "data", "library", "high_potential_templates.jsonl"
     )
-    templates = []
-    with open(template_path, 'r', encoding='utf-8') as f:
+    out = []
+    with open(path, "r", encoding="utf-8") as f:
         for line in f:
-            templates.append(json.loads(line))
-    return templates
+            out.append(json.loads(line))
+    return out
 
 
-def get_all_symbols() -> list[str]:
+def _get_symbols() -> list[str]:
     try:
-        engine = create_engine('mysql+pymysql://root:root@localhost/sina?charset=utf8')
-        inspector = inspect(engine)
-        tables = inspector.get_table_names()
-        return [t for t in tables if not t.endswith('m5') and not t.startswith('test')]
+        engine = create_engine("mysql+pymysql://root:root@localhost/sina?charset=utf8")
+        tables = inspect(engine).get_table_names()
+        return [t for t in tables if not t.endswith("m5") and not t.startswith("test")]
     except Exception:
         return []
 
 
-def daily_scan(scan_window_years: int = 3):
-    print(f"--- 每日机会扫描 [{datetime.now().strftime('%Y-%m-%d %H:%M')}] ---")
-
-    templates = load_templates()
-    current_year = datetime.now().year
-
-    active_templates = [
-        t for t in templates
-        if current_year - int(t['end_date'][:4]) <= scan_window_years
-    ]
-    print(
-        f"全量模板 {len(templates)} 个，"
-        f"近 {scan_window_years} 年活跃参照系 {len(active_templates)} 个。"
+def _build_template_match(tmpl: dict, distance: float, diff: dict) -> TemplateMatch:
+    oc = tmpl.get("outcome", {})
+    return TemplateMatch(
+        symbol=tmpl["symbol"],
+        symbol_name=tmpl.get("symbol_name") or symbol_name(tmpl["symbol"]),
+        end_date=tmpl["end_date"],
+        outcome_start=oc.get("outcome_start_date", "N/A"),
+        direction=tmpl.get("primary_direction", oc.get("direction", "unclear")),
+        up_move=oc.get("up_move", 0.0),
+        down_move=oc.get("down_move", 0.0),
+        days_to_peak=oc.get("days_to_peak", 0),
+        days_to_trough=oc.get("days_to_trough", 0),
+        bundle_id=tmpl.get("bundle_id"),
+        diff_detail=diff,
+        distance=round(distance, 4),
+        similarity=round(1 / (1 + distance), 4),
     )
+
+
+def daily_scan(scan_window_years: int = 3):
+    print(f"=== 每日结构机会扫描  [{datetime.now():%Y-%m-%d %H:%M}] ===")
+
+    # 1. 加载活跃参照系
+    all_templates = _load_templates()
+    cur_year = datetime.now().year
+    active_templates = [
+        t for t in all_templates
+        if cur_year - int(t["end_date"][:4]) <= scan_window_years
+    ]
+    print(f"模板库 {len(all_templates)} 条，活跃参照系 {len(active_templates)} 条。")
     if not active_templates:
         print("活跃模板为空，请先运行 identify_high_potential_structures.py")
         return
 
-    loader = MySQLLoader(host='localhost', user='root', password='root', db='sina')
+    # 2. 扫描全市场
+    loader = MySQLLoader(host="localhost", user="root", password="root", db="sina")
     config = CompilerConfig(min_amplitude=0.02, min_duration=3, zone_bandwidth=0.01)
-    symbols = get_all_symbols()
-    opportunities = []
+    cfg_hash = _config_hash(config)
+    symbols = _get_symbols()
 
-    for symbol in symbols:
+    structures_found = 0
+    opportunities = []
+    data_cutoff = datetime.now().strftime("%Y-%m-%d")
+
+    for sym in symbols:
         try:
-            bars = loader.get(symbol=symbol, freq='1d')
+            bars = loader.get(symbol=sym, freq="1d")
             if len(bars) < 50:
                 continue
-
-            # 活跃度过滤（修复原来的位置过滤逻辑）
-            if not is_opportunity_viable(bars):
+            if not _is_active(bars):
                 continue
 
             result = compile_full(bars, config)
             if not result.structures:
                 continue
+            structures_found += 1
 
-            # 取最新一个**已确认完成**的结构（排除当前正在演化的最后一个）
-            if len(result.structures) < 2:
-                continue
-            current_st = result.structures[-2]
+            current_st = result.structures[-1]
             current_inv = current_st.invariants or {}
+            current_price = bars[-1].close
+            confirmed_at = getattr(current_st, "t_end", None) or str(bars[-1].timestamp)
 
-            # 归一化距离匹配
-            best_match = None
-            min_dist = float('inf')
-            best_diff = {}
-
+            # 3. top_k 匹配（不再只留 best_match）
+            scored = []
             for tmpl in active_templates:
-                tmpl_inv = tmpl.get('invariants', {})
-                dist, diff = calculate_distance(current_inv, tmpl_inv)
-                if dist < min_dist:
-                    min_dist = dist
-                    best_match = tmpl
-                    best_diff = diff
-
-            if best_match is None or min_dist >= MAX_DIST_THRESHOLD:
+                dist, diff = _distance(current_inv, tmpl.get("invariants", {}))
+                if dist < MAX_DIST_THRESHOLD:
+                    scored.append((dist, diff, tmpl))
+            if not scored:
                 continue
+            scored.sort(key=lambda x: x[0])
+            top = scored[:TOP_K]
+            top_matches = [_build_template_match(t, d, diff) for d, diff, t in top]
 
-            similarity = 1 / (1 + min_dist)
-            hist_move, direction, potential = get_template_outcome(best_match)
-
-            opportunities.append({
-                "symbol": symbol,
-                "similarity": round(similarity, 4),
-                "template_date": best_match['end_date'],
-                "outcome_start": best_match.get('outcome', {}).get('outcome_start_date', 'N/A'),
-                "current_zone": current_st.zone.price_center,
-                "hist_move": hist_move,
-                "direction": direction,
-                "potential_move": potential,
-                "diff_detail": best_diff,
-                "current_inv": current_inv,
-            })
+            # 4. 委托聚合层
+            evidence = {
+                "config_hash": cfg_hash,
+                "data_cutoff": data_cutoff,
+                "template_pool_size": len(active_templates),
+                "scan_window_years": scan_window_years,
+                "top_k": TOP_K,
+            }
+            opp = aggregate_opportunity(
+                symbol=sym,
+                symbol_name=symbol_name(sym),
+                current_price=round(current_price, 2),
+                confirmed_at=str(confirmed_at),
+                current_inv=current_inv,
+                top_matches=top_matches,
+                evidence=evidence,
+            )
+            if opp is not None:
+                opportunities.append(opp)
 
         except Exception:
             continue
 
-    if not opportunities:
-        print("今日未发现符合高潜力约束的市场机会。")
-        generate_html_report([])
-        return
+    # 5. 排序 + 渲染 + 落快照
+    opportunities.sort(key=lambda o: o.attention_score, reverse=True)
+    scan_meta = {
+        "total_symbols": len(symbols),
+        "structures_found": structures_found,
+        "template_count": len(active_templates),
+        "data_cutoff": data_cutoff,
+        "config_hash": cfg_hash,
+    }
 
-    opportunities.sort(key=lambda x: x['similarity'], reverse=True)
-    print(f"\n发现 {len(opportunities)} 个潜在机会，正在生成 HTML 报告...")
-    generate_html_report(opportunities)
+    print(
+        f"扫描 {len(symbols)} 品种 / 识别 {structures_found} 结构 / "
+        f"产出 {len(opportunities)} 机会"
+    )
+
+    html_path = render_daily_report(opportunities, scan_meta)
+    print(f"HTML 日报: {html_path}")
+
+    snap_path = os.path.join(
+        os.path.dirname(__file__), "..", "output",
+        f"daily_scan_{datetime.now():%Y%m%d_%H%M}.json",
+    )
+    with open(snap_path, "w", encoding="utf-8") as f:
+        json.dump(
+            {"scan_meta": scan_meta,
+             "opportunities": [o.to_dict() for o in opportunities]},
+            f, ensure_ascii=False, indent=2,
+        )
+    print(f"JSON 快照: {snap_path}")
 
 
 if __name__ == "__main__":

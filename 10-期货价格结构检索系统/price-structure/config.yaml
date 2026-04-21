@@ -16,29 +16,30 @@ data:
       format: "csv"       # csv | mysql | parquet
 
 # ─── 编译器参数 ────────────────────────────────────────────
+# 字段名与 CompilerConfig dataclass 一一对应
 
 compiler:
-  # 极值提取
-  pivot:
-    min_amplitude: 0.03       # 最小摆动幅度（相对价格比例）
-    min_duration: 3           # 最小持续天数
-    noise_filter: 0.008       # 噪声过滤阈值
+  # 极值提取（→ pivots.py）
+  min_amplitude: 0.03         # 最小摆动幅度（对数差 or 相对比例）
+  min_duration: 3             # swing 窗口半宽（天数）
+  noise_filter: 0.008         # 噪声过滤阈值（低于此幅度直接丢弃）
+  use_log_price: true         # 幅度计算是否用对数差
 
-  # Zone 识别
-  zone:
-    bandwidth: 0.015          # Zone 带宽（相对价格比例）
-    cluster_eps: 0.02         # 聚类距离阈值
-    cluster_min_points: 2     # 最小聚类点数
+  # 段合并（→ segments.py）
+  min_segment_delta_pct: 0.005  # 微段合并阈值（相对价格比例）
 
-  # 结构组装
-  structure:
-    min_cycles: 2             # 最小 Cycle 数
-    tolerance: 0.03           # 容差
+  # Zone 识别（→ zones.py）
+  zone_bandwidth: 0.015       # Zone 带宽（相对价格比例）
+  cluster_eps: 0.02           # 聚类距离阈值
+  cluster_min_points: 2       # 最小聚类点数
 
-  # 丛识别
-  bundle:
-    speed_tol: 0.4            # 速度比相似容差
-    time_tol: 0.5             # 时间比相似容差
+  # 结构组装（→ cycles.py）
+  min_cycles: 2               # 最小 Cycle 数
+  tolerance: 0.03             # Zone 容差
+
+  # 丛识别（→ bundles.py）
+  bundle_speed_tol: 0.4       # 速度比相似容差
+  bundle_time_tol: 0.5        # 时间比相似容差
 
 # ─── 规则引擎（阶段4）──────────────────────────────────────
 

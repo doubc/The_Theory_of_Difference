@@ -84,10 +84,17 @@ def extract_pivots(
             continue
         else:
             # 中间灰区：保留更极端的一端
-            if last[1] == "high" and c[2] > last[2]:
-                filtered[-1] = c
-            elif last[1] == "low" and c[2] < last[2]:
-                filtered[-1] = c
+            if len(filtered) >= 2:
+                prev = filtered[-2]  # 与 last 异类
+                # 若 c 比 last 更极端（延续方向），用 c 替换 last
+                if last[1] == "high" and c[2] > last[2]:
+                    filtered[-1] = c
+                elif last[1] == "low" and c[2] < last[2]:
+                    filtered[-1] = c
+                # 否则丢弃 c（last 是真正的反转极值）
+            else:
+                # filtered 只有一个元素，无法做方向判断，保守保留
+                filtered.append(c)
 
     return [
         Point(t=bars[idx].timestamp, x=price, idx=idx)
