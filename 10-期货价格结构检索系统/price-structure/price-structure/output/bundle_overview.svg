@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400">
+<rect width="1200" height="400" fill="#1a1a2e"/>
+<text x="600.0" y="22" fill="#fff" font-size="14" text-anchor="middle" font-weight="bold">丛 (Bundle) 分类总览</text>
+<rect x="200" y="38" width="440" height="20" fill="#ef5350" rx="3" opacity="0.7"/>
+<text x="10" y="54" fill="#fff" font-size="11">slow_up_fast_down</text>
+<text x="195" y="54" fill="#ccc" font-size="10" text-anchor="end">11个结构</text>
+<text x="645" y="54" fill="#888" font-size="10">speed=2.32 time=2.63</text>
+<rect x="200" y="73" width="280" height="20" fill="#ff9800" rx="3" opacity="0.7"/>
+<text x="10" y="89" fill="#fff" font-size="11">balanced</text>
+<text x="195" y="89" fill="#ccc" font-size="10" text-anchor="end">7个结构</text>
+<text x="485" y="89" fill="#888" font-size="10">speed=0.99 time=1.04</text>
+<rect x="200" y="108" width="200" height="20" fill="#9e9e9e" rx="3" opacity="0.7"/>
+<text x="10" y="124" fill="#fff" font-size="11">mixed</text>
+<text x="195" y="124" fill="#ccc" font-size="10" text-anchor="end">5个结构</text>
+<text x="405" y="124" fill="#888" font-size="10">speed=1.32 time=2.00</text>
+<rect x="200" y="143" width="200" height="20" fill="#9e9e9e" rx="3" opacity="0.7"/>
+<text x="10" y="159" fill="#fff" font-size="11">mixed</text>
+<text x="195" y="159" fill="#ccc" font-size="10" text-anchor="end">5个结构</text>
+<text x="405" y="159" fill="#888" font-size="10">speed=1.47 time=1.87</text>
+<rect x="200" y="178" width="120" height="20" fill="#ef5350" rx="3" opacity="0.7"/>
+<text x="10" y="194" fill="#fff" font-size="11">slow_up_fast_down</text>
+<text x="195" y="194" fill="#ccc" font-size="10" text-anchor="end">3个结构</text>
+<text x="325" y="194" fill="#888" font-size="10">speed=1.56 time=1.91</text>
+<rect x="200" y="213" width="80" height="20" fill="#9e9e9e" rx="3" opacity="0.7"/>
+<text x="10" y="229" fill="#fff" font-size="11">mixed</text>
+<text x="195" y="229" fill="#ccc" font-size="10" text-anchor="end">2个结构</text>
+<text x="285" y="229" fill="#888" font-size="10">speed=0.62 time=0.85</text>
+<rect x="200" y="248" width="80" height="20" fill="#9e9e9e" rx="3" opacity="0.7"/>
+<text x="10" y="264" fill="#fff" font-size="11">mixed</text>
+<text x="195" y="264" fill="#ccc" font-size="10" text-anchor="end">2个结构</text>
+<text x="285" y="264" fill="#888" font-size="10">speed=1.82 time=0.95</text>
+<rect x="200" y="283" width="80" height="20" fill="#ef5350" rx="3" opacity="0.7"/>
+<text x="10" y="299" fill="#fff" font-size="11">slow_up_fast_down</text>
+<text x="195" y="299" fill="#ccc" font-size="10" text-anchor="end">2个结构</text>
+<text x="285" y="299" fill="#888" font-size="10">speed=1.70 time=3.02</text>
+<rect x="200" y="318" width="80" height="20" fill="#ef5350" rx="3" opacity="0.7"/>
+<text x="10" y="334" fill="#fff" font-size="11">slow_up_fast_down</text>
+<text x="195" y="334" fill="#ccc" font-size="10" text-anchor="end">2个结构</text>
+<text x="285" y="334" fill="#888" font-size="10">speed=1.86 time=1.85</text>
+<rect x="200" y="353" width="80" height="20" fill="#ef5350" rx="3" opacity="0.7"/>
+<text x="10" y="369" fill="#fff" font-size="11">slow_up_fast_down</text>
+<text x="195" y="369" fill="#ccc" font-size="10" text-anchor="end">2个结构</text>
+<text x="285" y="369" fill="#888" font-size="10">speed=3.85 time=6.35</text>
+<rect x="200" y="388" width="80" height="20" fill="#ef5350" rx="3" opacity="0.7"/>
+<text x="10" y="404" fill="#fff" font-size="11">slow_up_fast_down</text>
+<text x="195" y="404" fill="#ccc" font-size="10" text-anchor="end">2个结构</text>
+<text x="285" y="404" fill="#888" font-size="10">speed=4.82 time=2.93</text>
+<rect x="200" y="423" width="40" height="20" fill="#9e9e9e" rx="3" opacity="0.7"/>
+<text x="10" y="439" fill="#fff" font-size="11">mixed</text>
+<text x="195" y="439" fill="#ccc" font-size="10" text-anchor="end">1个结构</text>
+<text x="245" y="439" fill="#888" font-size="10">speed=0.43 time=0.70</text>
+<rect x="200" y="458" width="40" height="20" fill="#9e9e9e" rx="3" opacity="0.7"/>
+<text x="10" y="474" fill="#fff" font-size="11">mixed</text>
+<text x="195" y="474" fill="#ccc" font-size="10" text-anchor="end">1个结构</text>
+<text x="245" y="474" fill="#888" font-size="10">speed=1.13 time=1.57</text>
+<rect x="200" y="493" width="40" height="20" fill="#9e9e9e" rx="3" opacity="0.7"/>
+<text x="10" y="509" fill="#fff" font-size="11">mixed</text>
+<text x="195" y="509" fill="#ccc" font-size="10" text-anchor="end">1个结构</text>
+<text x="245" y="509" fill="#888" font-size="10">speed=1.42 time=1.08</text>
+<rect x="200" y="528" width="40" height="20" fill="#ff9800" rx="3" opacity="0.7"/>
+<text x="10" y="544" fill="#fff" font-size="11">balanced</text>
+<text x="195" y="544" fill="#ccc" font-size="10" text-anchor="end">1个结构</text>
+<text x="245" y="544" fill="#888" font-size="10">speed=0.79 time=0.76</text>
+<rect x="200" y="563" width="40" height="20" fill="#ff9800" rx="3" opacity="0.7"/>
+<text x="10" y="579" fill="#fff" font-size="11">balanced</text>
+<text x="195" y="579" fill="#ccc" font-size="10" text-anchor="end">1个结构</text>
+<text x="245" y="579" fill="#888" font-size="10">speed=1.30 time=0.77</text>
+<rect x="200" y="598" width="40" height="20" fill="#ef5350" rx="3" opacity="0.7"/>
+<text x="10" y="614" fill="#fff" font-size="11">slow_up_fast_down</text>
+<text x="195" y="614" fill="#ccc" font-size="10" text-anchor="end">1个结构</text>
+<text x="245" y="614" fill="#888" font-size="10">speed=2.85 time=5.50</text>
+<rect x="200" y="633" width="40" height="20" fill="#ef5350" rx="3" opacity="0.7"/>
+<text x="10" y="649" fill="#fff" font-size="11">slow_up_fast_down</text>
+<text x="195" y="649" fill="#ccc" font-size="10" text-anchor="end">1个结构</text>
+<text x="245" y="649" fill="#888" font-size="10">speed=3.54 time=2.13</text>
+<rect x="200" y="668" width="40" height="20" fill="#26a69a" rx="3" opacity="0.7"/>
+<text x="10" y="684" fill="#fff" font-size="11">fast_up_slow_down</text>
+<text x="195" y="684" fill="#ccc" font-size="10" text-anchor="end">1个结构</text>
+<text x="245" y="684" fill="#888" font-size="10">speed=0.28 time=0.67</text>
+</svg>
