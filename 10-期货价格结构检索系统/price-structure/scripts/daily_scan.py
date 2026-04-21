@@ -1,11 +1,11 @@
 """
-每日机会扫描脚本 (Daily Opportunity Scanner)
+每日机会扫描脚本 — 阶段四修订版
 
-逻辑：
-1. 加载高潜力结构模板（约束机制）。
-2. 扫描当前市场所有品种的实时结构。
-3. 基于无量纲不变量进行相似性匹配。
-4. 输出具有 >10% 波动潜力的交易机会。
+修订重点：
+1. 修复 is_opportunity_viable 的边界逻辑（改为近期 ATR 活跃度过滤）
+2. 修复 calculate_distance 的量纲问题（统一归一化）
+3. HTML 报告增加结构证据链字段、分项相似度、方向置信度
+4. analyze_template_move 离线降级（数据库不可用时返回模板中已存的 outcome）
 """
 
 import sys
@@ -22,230 +22,264 @@ from src.relations import structure_invariants
 from sqlalchemy import create_engine, inspect
 import pandas as pd
 
-def analyze_template_move(symbol, end_date_str, lookforward_days=30):
-    """分析模板结束后的实际走势、方向和幅度"""
-    loader = MySQLLoader(host='localhost', user='root', password='root', db='sina')
-    try:
-        end_date = pd.to_datetime(end_date_str)
-        start_look = end_date
-        end_look = end_date + timedelta(days=lookforward_days)
-        
-        bars = loader.get(symbol=symbol, start=start_look.strftime('%Y-%m-%d'), 
-                          end=end_look.strftime('%Y-%m-%d'), freq='1d')
-        
-        if not bars: return "N/A", "N/A", "N/A"
-        
-        start_price = bars[0].open
-        max_price = max(b.high for b in bars)
-        min_price = min(b.low for b in bars)
-        
-        up_move = (max_price - start_price) / start_price
-        down_move = (start_price - min_price) / start_price
-        
-        if up_move > down_move:
-            return f"+{up_move:.1%}", "看涨", f"{up_move:.1%}"
-        else:
-            return f"-{down_move:.1%}", "看跌", f"{down_move:.1%}"
-    except:
+# ── 归一化尺度（与 similarity.py 的 INVARIANT_SCALES 保持一致）──────────
+FEATURE_SCALES = {
+    "avg_speed_ratio": 2.0,
+    "avg_time_ratio": 2.0,
+    "zone_rel_bw": 0.03,
+    "high_dispersion": 0.02,
+    "low_dispersion": 0.02,
+    "zone_strength": 5.0,
+}
+FEATURES = list(FEATURE_SCALES.keys())
+
+# ── 相似度阈值 ───────────────────────────────────────────────────────────
+MAX_DIST_THRESHOLD = 1.5  # 归一化距离超过此值直接丢弃
+
+
+def calculate_distance(inv1: dict, inv2: dict) -> tuple[float, dict]:
+    """
+    归一化欧氏距离 + 分项差异。
+    返回 (total_dist, diff_detail)
+    """
+    diff = {}
+    dist_sq = 0.0
+    for f in FEATURES:
+        scale = FEATURE_SCALES[f]
+        v1 = (inv1.get(f) or 0) / scale
+        v2 = (inv2.get(f) or 0) / scale
+        d = abs(v1 - v2)
+        diff[f] = round(d, 3)
+        dist_sq += d ** 2
+    return math.sqrt(dist_sq), diff
+
+
+def is_opportunity_viable(bars: list, min_atr_pct: float = 0.005) -> bool:
+    """
+    活跃度过滤：用近 20 根 bar 的平均真实波幅（ATR%）判断品种是否活跃。
+    替换原来的"历史绝对位置"过滤——那个逻辑会系统性过滤突破行情。
+    """
+    if len(bars) < 20:
+        return False
+    recent = bars[-20:]
+    atrs = []
+    for i in range(1, len(recent)):
+        b = recent[i]
+        prev_close = recent[i - 1].close
+        tr = max(b.high - b.low, abs(b.high - prev_close), abs(b.low - prev_close))
+        atrs.append(tr / prev_close if prev_close > 0 else 0)
+    avg_atr_pct = sum(atrs) / len(atrs) if atrs else 0
+    return avg_atr_pct >= min_atr_pct
+
+
+def get_template_outcome(template: dict) -> tuple[str, str, str]:
+    """
+    从模板已存的 outcome 字段读取走势信息（离线降级方案）。
+    避免每次扫描都重新查数据库。
+    """
+    outcome = template.get('outcome')
+    if not outcome:
         return "N/A", "N/A", "N/A"
 
-def generate_html_report(opportunities, filename="daily_scan_report.html"):
-    """生成 HTML 格式的扫描报告"""
-    html_content = f"""
-    <html>
-    <head>
-        <title>每日高潜力结构机会扫描 - {datetime.now().strftime('%Y-%m-%d')}</title>
-        <style>
-            body {{ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f9; padding: 20px; }}
-            .container {{ max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }}
-            h2 {{ color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }}
-            table {{ width: 100%; border-collapse: collapse; margin-top: 20px; }}
-            th, td {{ padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }}
-            th {{ background-color: #3498db; color: white; }}
-            tr:hover {{ background-color: #f1f1f1; }}
-            .bull {{ color: #e74c3c; font-weight: bold; }}
-            .bear {{ color: #27ae60; font-weight: bold; }}
-            .high-sim {{ background-color: #fff3cd; }}
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <h2>🚀 每日高潜力结构机会扫描报告</h2>
-            <p>扫描时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | 活跃参照系: 近3年</p>
-            <table>
-                <thead>
-                    <tr>
-                        <th>品种</th>
-                        <th>相似度</th>
-                        <th>匹配模板日期</th>
-                        <th>当前中枢</th>
-                        <th>模板后期走势</th>
-                        <th>方向判断</th>
-                        <th>潜在幅度</th>
-                    </tr>
-                </thead>
-                <tbody>
+    direction = template.get('primary_direction', 'unknown')
+    up = outcome.get('up_move', 0)
+    down = outcome.get('down_move', 0)
+
+    if direction == 'up':
+        return f"+{up:.1%}", "看涨", f"{up:.1%}"
+    elif direction == 'down':
+        return f"-{down:.1%}", "看跌", f"{down:.1%}"
+    else:
+        return f"±{max(up, down):.1%}", "方向不明", f"{max(up, down):.1%}"
+
+
+def generate_html_report(opportunities: list, filename: str = "daily_scan_report.html"):
     """
-    
+    生成带证据链的 HTML 报告。
+    每条机会展示：分项相似度、结构不变量对比、方向置信度、模板 outcome 来源。
+    """
+    date_str = datetime.now().strftime('%Y-%m-%d')
+    time_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+    rows_html = ""
     for opp in opportunities:
-        row_class = "high-sim" if opp['similarity'] > 0.9 else ""
-        dir_class = "bull" if "涨" in opp['direction'] else "bear"
-        
-        html_content += f"""
-                    <tr class="{row_class}">
-                        <td><strong>{opp['symbol']}</strong></td>
-                        <td>{opp['similarity']:.3f}</td>
-                        <td>{opp['template_date']}</td>
-                        <td>{opp['current_zone']:.2f}</td>
-                        <td>{opp['hist_move']}</td>
-                        <td class="{dir_class}">{opp['direction']}</td>
-                        <td>{opp['potential_move']}</td>
-                    </tr>
+        sim = opp['similarity']
+        sim_color = "#00c853" if sim > 0.8 else "#ff9800" if sim > 0.65 else "#9e9e9e"
+        dir_color = "#26a69a" if "涨" in opp['direction'] else "#ef5350" if "跌" in opp['direction'] else "#9e9e9e"
+
+        # 分项差异展示
+        diff_html = "".join(
+            f"<span style='margin-right:8px;color:#aaa'>"
+            f"{k}=<b style='color:{'#ef5350' if v > 0.3 else '#eee'}'>{v:.2f}</b></span>"
+            for k, v in opp.get('diff_detail', {}).items()
+        )
+
+        # 当前结构不变量
+        inv_html = "".join(
+            f"<span style='margin-right:8px;color:#aaa'>{k}=<b>{round(v, 3)}</b></span>"
+            for k, v in opp.get('current_inv', {}).items()
+            if k in FEATURES
+        )
+
+        rows_html += f"""
+        <tr>
+          <td><b style="font-size:15px">{opp['symbol']}</b></td>
+          <td><b style="color:{sim_color};font-size:16px">{sim:.3f}</b></td>
+          <td style="color:#aaa">{opp['template_date']}<br>
+              <small>outcome起点: {opp.get('outcome_start', 'N/A')}</small></td>
+          <td>{opp['current_zone']:.1f}</td>
+          <td>{opp['hist_move']}</td>
+          <td><b style="color:{dir_color}">{opp['direction']}</b></td>
+          <td><b>{opp['potential_move']}</b></td>
+          <td style="font-size:11px">{diff_html}</td>
+          <td style="font-size:11px">{inv_html}</td>
+        </tr>
         """
-    
-    html_content += """
-                </tbody>
-            </table>
-        </div>
-    </body>
-    </html>
-    """
-    
+
+    html = f"""<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>每日结构机会扫描 — {date_str}</title>
+<style>
+  body {{ background:#1a1a2e; color:#e0e0e0; font-family:'PingFang SC',sans-serif; margin:0; padding:20px; }}
+  h1 {{ color:#90caf9; border-bottom:1px solid #333; padding-bottom:10px; }}
+  .meta {{ color:#888; margin-bottom:20px; font-size:13px; }}
+  table {{ width:100%; border-collapse:collapse; background:#16213e; border-radius:8px; overflow:hidden; }}
+  th {{ background:#0f3460; color:#90caf9; padding:10px 12px; text-align:left; font-size:13px; }}
+  td {{ padding:10px 12px; border-bottom:1px solid #1a1a2e; vertical-align:top; font-size:13px; }}
+  tr:hover td {{ background:#0d2137; }}
+  .badge {{ display:inline-block; padding:2px 8px; border-radius:4px; font-size:11px; }}
+  .no-result {{ color:#888; padding:40px; text-align:center; font-size:16px; }}
+</style>
+</head>
+<body>
+<h1>每日高潜力结构机会扫描</h1>
+<div class="meta">
+  扫描时间: {time_str} &nbsp;|&nbsp;
+  发现机会: <b style="color:#90caf9">{len(opportunities)}</b> 个 &nbsp;|&nbsp;
+  相似度阈值: {1 / (1 + MAX_DIST_THRESHOLD):.2f}
+</div>
+{"<table><thead><tr><th>品种</th><th>相似度</th><th>模板日期</th><th>当前中枢</th><th>历史走势</th><th>方向</th><th>潜在幅度</th><th>分项差异</th><th>当前不变量</th></tr></thead><tbody>" + rows_html + "</tbody></table>"
+    if opportunities else '<div class="no-result">今日未发现符合高潜力约束的市场机会。</div>'}
+</body>
+</html>"""
+
     output_path = os.path.join(os.path.dirname(__file__), "..", "output", filename)
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     with open(output_path, 'w', encoding='utf-8') as f:
-        f.write(html_content)
+        f.write(html)
     print(f"\nHTML 报告已生成: {output_path}")
 
-def load_templates():
-    """加载高潜力结构模板"""
-    template_path = os.path.join(os.path.dirname(__file__), "..", "data", "library", "high_potential_templates.jsonl")
+
+def load_templates() -> list:
+    template_path = os.path.join(
+        os.path.dirname(__file__), "..", "data", "library", "high_potential_templates.jsonl"
+    )
     templates = []
     with open(template_path, 'r', encoding='utf-8') as f:
         for line in f:
             templates.append(json.loads(line))
     return templates
 
-def calculate_distance(inv1, inv2):
-    """计算两个结构不变量之间的欧氏距离（归一化）"""
-    features = ['avg_speed_ratio', 'avg_time_ratio', 'zone_rel_bw', 'high_dispersion']
-    dist_sq = sum((inv1.get(f, 0) - inv2.get(f, 0)) ** 2 for f in features)
-    return math.sqrt(dist_sq)
 
-def get_all_symbols():
-    """获取数据库中所有日线级别的表名"""
-    engine = create_engine('mysql+pymysql://root:root@localhost/sina?charset=utf8')
-    inspector = inspect(engine)
-    tables = inspector.get_table_names()
-    return [t for t in tables if not t.endswith('m5') and not t.startswith('test')]
-
-def is_opportunity_viable(symbol, current_price, lookback_years=2):
-    """倒推验证：检查当前是否仍处于可建仓的‘机会窗口’"""
-    loader = MySQLLoader(host='localhost', user='root', password='root', db='sina')
+def get_all_symbols() -> list[str]:
     try:
-        end_date = datetime(2026, 4, 20)
-        start_date = end_date.replace(year=end_date.year - lookback_years)
-        
-        bars = loader.get(symbol=symbol, start=start_date.strftime('%Y-%m-%d'), 
-                          end=end_date.strftime('%Y-%m-%d'), freq='1d')
-        
-        if not bars: return False
-        
-        # 计算过去 N 年的波动范围
-        max_h = max(b.high for b in bars)
-        min_l = min(b.low for b in bars)
-        total_range = (max_h - min_l) / min_l
-        
-        # 计算当前位置在区间中的比例 (0-1)
-        current_pos = (current_price - min_l) / (max_h - min_l) if max_h != min_l else 0.5
-        
-        # 约束1：如果过去 N 年波动率太小（<5%），说明品种不活跃，放弃
-        if total_range < 0.05: return False
-        
-        # 约束2：如果价格已经处于区间极值（>90% 或 <10%），说明行情可能已走完，放弃
-        # 我们寻找的是中间态（酝酿期或突破初期）
-        if current_pos > 0.95 or current_pos < 0.05: return False
-        
-        return True
-    except:
-        return False
+        engine = create_engine('mysql+pymysql://root:root@localhost/sina?charset=utf8')
+        inspector = inspect(engine)
+        tables = inspector.get_table_names()
+        return [t for t in tables if not t.endswith('m5') and not t.startswith('test')]
+    except Exception:
+        return []
 
-def daily_scan(scan_window_years=3, lookback_validation_years=2):
+
+def daily_scan(scan_window_years: int = 3):
     print(f"--- 每日机会扫描 [{datetime.now().strftime('%Y-%m-%d %H:%M')}] ---")
-    
-    # 1. 加载全量约束模板（历史都是有效的）
+
     templates = load_templates()
     current_year = datetime.now().year
-    
-    # 2. 筛选近 N 年的高潜力模板作为“活跃参照系”
-    active_templates = []
-    for t in templates:
-        tmpl_year = int(t['end_date'].split('-')[0])
-        if current_year - tmpl_year <= scan_window_years:
-            active_templates.append(t)
-            
-    print(f"已加载 {len(templates)} 个全量模板，其中 {len(active_templates)} 个为近{scan_window_years}年活跃参照系。")
-    
-    # 2. 初始化编译器与数据源
+
+    active_templates = [
+        t for t in templates
+        if current_year - int(t['end_date'][:4]) <= scan_window_years
+    ]
+    print(
+        f"全量模板 {len(templates)} 个，"
+        f"近 {scan_window_years} 年活跃参照系 {len(active_templates)} 个。"
+    )
+    if not active_templates:
+        print("活跃模板为空，请先运行 identify_high_potential_structures.py")
+        return
+
     loader = MySQLLoader(host='localhost', user='root', password='root', db='sina')
     config = CompilerConfig(min_amplitude=0.02, min_duration=3, zone_bandwidth=0.01)
     symbols = get_all_symbols()
-    
     opportunities = []
-    
-    # 3. 扫描全市场
+
     for symbol in symbols:
         try:
             bars = loader.get(symbol=symbol, freq='1d')
-            if len(bars) < 50: continue
-            
-            result = compile_full(bars, config)
-            if not result.structures: continue
-            
-            # 取最新的一个结构进行比对
-            current_st = result.structures[-1]
-            current_inv = current_st.invariants
-            
-            # 4. 倒推验证：确保当前仍处于可建仓的“机会窗口”
-            if not is_opportunity_viable(symbol, current_st.zone.price_center, lookback_validation_years):
+            if len(bars) < 50:
                 continue
 
-            # 5. 寻找最相似的历史模板（仅匹配近3年的活跃参照系）
+            # 活跃度过滤（修复原来的位置过滤逻辑）
+            if not is_opportunity_viable(bars):
+                continue
+
+            result = compile_full(bars, config)
+            if not result.structures:
+                continue
+
+            # 取最新一个**已确认完成**的结构（排除当前正在演化的最后一个）
+            if len(result.structures) < 2:
+                continue
+            current_st = result.structures[-2]
+            current_inv = current_st.invariants or {}
+
+            # 归一化距离匹配
             best_match = None
             min_dist = float('inf')
-            
+            best_diff = {}
+
             for tmpl in active_templates:
-                dist = calculate_distance(current_inv, tmpl['invariants'])
+                tmpl_inv = tmpl.get('invariants', {})
+                dist, diff = calculate_distance(current_inv, tmpl_inv)
                 if dist < min_dist:
                     min_dist = dist
                     best_match = tmpl
-            
-            if best_match and min_dist < 0.5:
-                similarity = 1 / (1 + min_dist)
-                hist_move, direction, potential = analyze_template_move(
-                    best_match['symbol'], best_match['end_date']
-                )
-                opportunities.append({
-                    "symbol": symbol,
-                    "similarity": similarity,
-                    "template_date": best_match['end_date'],
-                    "current_zone": current_st.zone.price_center,
-                    "hist_move": hist_move,
-                    "direction": direction,
-                    "potential_move": potential
-                })
-                
-        except Exception as e:
+                    best_diff = diff
+
+            if best_match is None or min_dist >= MAX_DIST_THRESHOLD:
+                continue
+
+            similarity = 1 / (1 + min_dist)
+            hist_move, direction, potential = get_template_outcome(best_match)
+
+            opportunities.append({
+                "symbol": symbol,
+                "similarity": round(similarity, 4),
+                "template_date": best_match['end_date'],
+                "outcome_start": best_match.get('outcome', {}).get('outcome_start_date', 'N/A'),
+                "current_zone": current_st.zone.price_center,
+                "hist_move": hist_move,
+                "direction": direction,
+                "potential_move": potential,
+                "diff_detail": best_diff,
+                "current_inv": current_inv,
+            })
+
+        except Exception:
             continue
 
-    # 5. 输出结果
     if not opportunities:
         print("今日未发现符合高潜力约束的市场机会。")
+        generate_html_report([])
         return
 
-    print(f"\n发现 {len(opportunities)} 个潜在机会，正在生成 HTML 报告...")
     opportunities.sort(key=lambda x: x['similarity'], reverse=True)
+    print(f"\n发现 {len(opportunities)} 个潜在机会，正在生成 HTML 报告...")
     generate_html_report(opportunities)
+
 
 if __name__ == "__main__":
     daily_scan()

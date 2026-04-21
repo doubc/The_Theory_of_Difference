@@ -76,9 +76,21 @@ def price_chart_svg(bars, result, width=1200, height=500):
     for z in result.zones:
         y1 = ty(z.upper)
         y2 = ty(z.lower)
-        color = "#ff980088" if z.source == ZoneSource.HIGH_CLUSTER else "#2196f388"
-        lines.append(f'<rect x="{margin["l"]}" y="{y1}" width="{pw}" height="{y2-y1}" fill="{color}" rx="2"/>')
-        lines.append(f'<text x="{width-margin["r"]-5}" y="{(y1+y2)/2+4}" fill="#fff" font-size="9" text-anchor="end">{z.price_center:.0f}</text>')
+        color = "#ff980055" if z.source.value == "high_cluster" else "#2196f355"
+        border = "#ff9800" if z.source.value == "high_cluster" else "#2196f3"
+        label_type = "高点区" if z.source.value == "high_cluster" else "低点区"
+        lines.append(
+            f'<rect x="{margin["l"]}" y="{y1}" '
+            f'width="{pw}" height="{max(y2 - y1, 2)}" '
+            f'fill="{color}" stroke="{border}" stroke-width="0.5"/>'
+        )
+        # 标注：类型 + 价格 + strength + touches
+        lines.append(
+            f'<text x="{margin["l"] + 4}" y="{(y1 + y2) / 2 + 4}" '
+            f'font-size="10" fill="{border}">'
+            f'{label_type} {z.price_center:.0f} '
+            f'(强度{z.strength:.1f} / {len(z.touches)}次触及)</text>'
+        )
 
     # Pivots
     for p in result.pivots:
@@ -135,49 +147,112 @@ def bundle_chart_svg(result, width=1200, height=400):
     return f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}">\n' + '\n'.join(lines) + '\n</svg>'
 
 
-def structure_detail_svg(structure, idx, width=800, height=300):
-    """单个结构的 Cycle 详情图"""
+def _cycle_bar_height(segment, max_log_rate: float, max_h: float = 60, min_h: float = 8) -> float:
+    """用对数幅度（log_rate）归一化 Cycle 柱高，避免硬编码除数"""
+    if max_log_rate <= 0:
+        return min_h
+    ratio = abs(getattr(segment, 'log_rate', 0) or 0) / max_log_rate
+    return min_h + ratio * (max_h - min_h)
+
+
+def structure_detail_svg(structure, idx, width=800, height=320):
+    """单个结构的 Cycle 详情图（修订版）"""
     lines = []
-    lines.append(f'<rect width="{width}" height="{height}" fill="#1a1a2e"/>')
-    lines.append(f'<text x="{width/2}" y="20" fill="#fff" font-size="12" text-anchor="middle" font-weight="bold">Structure #{idx+1} — Zone {structure.zone.price_center:.0f}</text>')
+    lines.append(f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
+                 f'style="background:#1a1a2e;font-family:monospace">')
+    lines.append(
+        f'<text x="10" y="22" font-size="13" fill="#90caf9">'
+        f'Structure #{idx + 1} — Zone {structure.zone.price_center:.0f} '
+        f'(±{structure.zone.bandwidth:.0f}) | '
+        f'强度{structure.zone.strength:.1f} | {len(structure.zone.touches)}次触及</text>'
+    )
 
-    # Info box
-    info = f"cycles={structure.cycle_count}  speed_r={structure.avg_speed_ratio:.2f}  time_r={structure.avg_time_ratio:.2f}"
-    lines.append(f'<text x="{width/2}" y="38" fill="#888" font-size="10" text-anchor="middle">{info}</text>')
+    info = (
+        f"cycles={structure.cycle_count}  "
+        f"speed_r={structure.avg_speed_ratio:.2f}  "
+        f"time_r={structure.avg_time_ratio:.2f}  "
+        f"label={getattr(structure, 'primary_label', None) or '未标注'}"
+    )
+    lines.append(f'<text x="10" y="42" font-size="11" fill="#888">{info}</text>')
 
-    # Draw cycles as paired arrows
-    y_base = 150
+    y_base = 180
     x_start = 50
     usable_w = width - 100
-    n = min(len(structure.cycles), 10)
-    step = usable_w / max(n, 1)
+    cycles = structure.cycles[:12]
+    n = max(len(cycles), 1)
+    step = usable_w / n
 
-    for i, cycle in enumerate(structure.cycles[:10]):
-        cx = x_start + step * (i + 0.5)
+    # 先算最大 log_rate，用于归一化
+    all_log_rates = []
+    for c in cycles:
+        all_log_rates.append(abs(getattr(c.entry, 'log_rate', 0) or 0))
+        all_log_rates.append(abs(getattr(c.exit, 'log_rate', 0) or 0))
+    max_log_rate = max(all_log_rates) if all_log_rates else 1.0
 
-        # Entry segment (up or down)
-        entry_h = min(60, max(10, abs(cycle.entry.delta) / 200))
+    for i, cycle in enumerate(cycles):
+        cx = x_start + step * i
+        bar_w = max(step * 0.35, 4)
+
+        entry_h = _cycle_bar_height(cycle.entry, max_log_rate)
+        exit_h = _cycle_bar_height(cycle.exit, max_log_rate)
+
         entry_color = "#26a69a" if cycle.entry.delta > 0 else "#ef5350"
-        ey = y_base - entry_h if cycle.entry.delta > 0 else y_base
-        lines.append(f'<rect x="{cx-8}" y="{ey}" width="6" height="{entry_h}" fill="{entry_color}" rx="1"/>')
-
-        # Exit segment
-        exit_h = min(60, max(10, abs(cycle.exit.delta) / 200))
         exit_color = "#26a69a" if cycle.exit.delta > 0 else "#ef5350"
+
+        # Entry bar（左）
+        ey = y_base - entry_h if cycle.entry.delta > 0 else y_base
+        lines.append(
+            f'<rect x="{cx}" y="{ey}" width="{bar_w}" height="{entry_h}" '
+            f'fill="{entry_color}" opacity="0.85"/>'
+        )
+        # Exit bar（右）
         exy = y_base - exit_h if cycle.exit.delta > 0 else y_base
-        lines.append(f'<rect x="{cx+2}" y="{exy}" width="6" height="{exit_h}" fill="{exit_color}" rx="1" opacity="0.6"/>')
+        lines.append(
+            f'<rect x="{cx + bar_w + 2}" y="{exy}" width="{bar_w}" height="{exit_h}" '
+            f'fill="{exit_color}" opacity="0.85"/>'
+        )
+        # 速度比标注
+        lines.append(
+            f'<text x="{cx + bar_w}" y="{y_base + 16}" '
+            f'font-size="9" fill="#ccc" text-anchor="middle">'
+            f'{cycle.speed_ratio:.1f}x</text>'
+        )
+        # 时间比标注
+        lines.append(
+            f'<text x="{cx + bar_w}" y="{y_base + 27}" '
+            f'font-size="9" fill="#888" text-anchor="middle">'
+            f't={cycle.time_ratio:.1f}</text>'
+        )
 
-        # Speed ratio label
-        lines.append(f'<text x="{cx}" y="{y_base+20}" fill="#888" font-size="8" text-anchor="middle">{cycle.speed_ratio:.1f}</text>')
+    # 基准线（Zone 价格中心）
+    lines.append(
+        f'<line x1="{x_start}" y1="{y_base}" '
+        f'x2="{x_start + usable_w}" y2="{y_base}" '
+        f'stroke="#555" stroke-dasharray="4,3"/>'
+    )
+    lines.append(
+        f'<text x="{x_start - 5}" y="{y_base + 4}" '
+        f'font-size="9" fill="#666" text-anchor="end">Zone</text>'
+    )
 
-    # Legend
-    lines.append(f'<rect x="20" y="{height-30}" width="10" height="10" fill="#26a69a"/>')
-    lines.append(f'<text x="35" y="{height-21}" fill="#888" font-size="9">上涨段</text>')
-    lines.append(f'<rect x="80" y="{height-30}" width="10" height="10" fill="#ef5350"/>')
-    lines.append(f'<text x="95" y="{height-21}" fill="#888" font-size="9">下跌段</text>')
-    lines.append(f'<text x="{width/2}" y="{height-21}" fill="#666" font-size="9" text-anchor="middle">左=entry  右=exit</text>')
+    # 图例
+    legend_x = width - 200
+    for color, label in [("#26a69a", "上涨段"), ("#ef5350", "下跌段")]:
+        lines.append(
+            f'<rect x="{legend_x}" y="55" width="10" height="10" fill="{color}"/>'
+        )
+        lines.append(
+            f'<text x="{legend_x + 14}" y="64" font-size="10" fill="#aaa">{label}</text>'
+        )
+        legend_x += 70
 
-    return f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}">\n' + '\n'.join(lines) + '\n</svg>'
+    lines.append(
+        f'<text x="{width - 200}" y="82" font-size="9" fill="#555">'
+        f'左=entry 右=exit | 高度=log幅度归一化</text>'
+    )
+
+    lines.append('</svg>')
+    return '\n'.join(lines)
 
 
 def main():
