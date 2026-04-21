@@ -1,0 +1,60 @@
+# price-structure 项目配置
+
+project:
+  name: "价格结构形式系统"
+  version: "1.0.0"
+
+# ─── 数据层 ────────────────────────────────────────────────
+
+data:
+  dir: "data"
+  cache_dir: "data/cache"
+  symbols:
+    - id: "CU000"
+      name: "铜连续合约"
+      file: "cu0.csv"
+      format: "csv"       # csv | mysql | parquet
+
+# ─── 编译器参数 ────────────────────────────────────────────
+
+compiler:
+  # 极值提取
+  pivot:
+    min_amplitude: 0.03       # 最小摆动幅度（相对价格比例）
+    min_duration: 3           # 最小持续天数
+    noise_filter: 0.008       # 噪声过滤阈值
+
+  # Zone 识别
+  zone:
+    bandwidth: 0.015          # Zone 带宽（相对价格比例）
+    cluster_eps: 0.02         # 聚类距离阈值
+    cluster_min_points: 2     # 最小聚类点数
+
+  # 结构组装
+  structure:
+    min_cycles: 2             # 最小 Cycle 数
+    tolerance: 0.03           # 容差
+
+  # 丛识别
+  bundle:
+    speed_tol: 0.4            # 速度比相似容差
+    time_tol: 0.5             # 时间比相似容差
+
+# ─── 规则引擎（阶段4）──────────────────────────────────────
+
+rules:
+  dir: "src/dsl/rules"
+  default_file: "default.yaml"
+
+# ─── 样本库（阶段5）────────────────────────────────────────
+
+samples:
+  dir: "data/samples"
+  library_file: "library.jsonl"
+
+# ─── 输出 ──────────────────────────────────────────────────
+
+output:
+  dir: "output"
+  charts: true                # 是否生成 SVG 图表
+  report: true                # 是否生成 Markdown 报告

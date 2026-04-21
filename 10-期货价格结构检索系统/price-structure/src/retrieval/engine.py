@@ -1,0 +1,151 @@
+"""
+相似结构检索 + 后验统计
+
+给定一个当前结构，从样本库中找到最相似的历史案例，
+并聚合它们的前向演化结果，输出后验分布。
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+
+from src.models import Structure, Zone, ZoneSource
+from src.sample.store import Sample, SampleStore
+from src.retrieval.similarity import similarity, SimilarityScore
+
+
+@dataclass
+class Neighbor:
+    """一个近邻样本 + 相似度"""
+    sample: Sample
+    score: SimilarityScore
+
+
+@dataclass
+class PosteriorStats:
+    """后验统计 — 近邻样本的前向演化聚合"""
+    sample_size: int
+    mean_ret_5d: float
+    mean_ret_10d: float
+    mean_ret_20d: float
+    median_ret_20d: float
+    prob_positive_10d: float
+    mean_max_dd_20d: float
+    mean_max_rise_20d: float
+
+
+@dataclass
+class RetrievalResult:
+    """检索结果"""
+    query: Structure
+    neighbors: list[Neighbor]
+    posterior: PosteriorStats
+
+
+class RetrievalEngine:
+    """相似结构检索引擎"""
+
+    def __init__(self, store: SampleStore):
+        self.store = store
+
+    def retrieve(
+        self,
+        query: Structure,
+        top_k: int = 10,
+        filter_label: str | None = None,
+        min_score: float = 0.3,
+    ) -> RetrievalResult:
+        """
+        检索最相似的历史结构
+
+        Args:
+            query: 当前编译出的结构
+            top_k: 返回前 K 个近邻
+            filter_label: 只检索特定类型
+            min_score: 最低相似度阈值
+
+        Returns:
+            RetrievalResult 含近邻列表 + 后验统计
+        """
+        candidates = self.store.filter(label_type=filter_label) if filter_label else self.store.load_all()
+
+        scored: list[Neighbor] = []
+        for sp in candidates:
+            s2 = _rebuild_structure_shim(sp)
+            if s2 is None:
+                continue
+            sc = similarity(query, s2)
+            if sc.total >= min_score:
+                scored.append(Neighbor(sample=sp, score=sc))
+
+        scored.sort(key=lambda n: n.score.total, reverse=True)
+        top = scored[:top_k]
+        posterior = _aggregate_posterior([n.sample for n in top])
+        return RetrievalResult(query=query, neighbors=top, posterior=posterior)
+
+
+def _rebuild_structure_shim(sp: Sample) -> Structure | None:
+    """
+    从 Sample.structure (dict) 重建一个最小 Structure 用于相似度计算
+    只保留 invariants 与 zone / label，不重建 Point / Segment 细节
+    """
+    try:
+        zd = sp.structure["zone"]
+        zone = Zone(
+            price_center=zd["price_center"],
+            bandwidth=zd["bandwidth"],
+            source=ZoneSource(zd["source"]),
+            strength=zd.get("strength", 0.0),
+        )
+        s = Structure(
+            zone=zone,
+            invariants=sp.structure.get("invariants", {}),
+            label=sp.label_type,
+            symbol=sp.symbol,
+            typicality=sp.typicality,
+        )
+        return s
+    except Exception:
+        return None
+
+
+def _aggregate_posterior(samples: list[Sample]) -> PosteriorStats:
+    """聚合前向演化结果为后验统计"""
+    n = len(samples)
+    if n == 0:
+        return PosteriorStats(0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+
+    def field_vals(name: str) -> list[float]:
+        vals = []
+        for s in samples:
+            if s.forward_outcome and s.forward_outcome.get(name) is not None:
+                vals.append(s.forward_outcome[name])
+        return vals
+
+    def mean(xs: list[float]) -> float:
+        return sum(xs) / len(xs) if xs else 0.0
+
+    def median(xs: list[float]) -> float:
+        if not xs:
+            return 0.0
+        xs = sorted(xs)
+        m = len(xs) // 2
+        return xs[m] if len(xs) % 2 == 1 else (xs[m - 1] + xs[m]) / 2
+
+    r5 = field_vals("ret_5d")
+    r10 = field_vals("ret_10d")
+    r20 = field_vals("ret_20d")
+    dd = field_vals("max_dd_20d")
+    rise = field_vals("max_rise_20d")
+    prob_pos = sum(1 for x in r10 if x > 0) / len(r10) if r10 else 0.0
+
+    return PosteriorStats(
+        sample_size=n,
+        mean_ret_5d=mean(r5),
+        mean_ret_10d=mean(r10),
+        mean_ret_20d=mean(r20),
+        median_ret_20d=median(r20),
+        prob_positive_10d=prob_pos,
+        mean_max_dd_20d=mean(dd),
+        mean_max_rise_20d=mean(rise),
+    )
