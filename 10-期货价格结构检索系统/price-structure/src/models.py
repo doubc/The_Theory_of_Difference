@@ -61,7 +61,7 @@ class Point:
 
     @property
     def log_x(self) -> float:
-        """对数价格 — 跨品种可比"""
+        """对数价格 — 消除宏观量纲漂移，关注比例关系"""
         return math.log(self.x) if self.x > 0 else float("-inf")
 
     def to_dict(self) -> dict:
@@ -91,14 +91,15 @@ class Segment:
     noise_level: float = 0.0     # 噪声水平
 
     def __post_init__(self):
-        if self.duration == 0 and self.start.t != self.end.t:
-            self.duration = (self.end.t - self.start.t).days
-        if self.delta == 0:
-            self.delta = self.end.x - self.start.x
-        if self.avg_rate == 0 and self.duration > 0:
+        if self.start.t != self.end.t:
+            days = (self.end.t - self.start.t).days
+            if days == 0:
+                days = (self.end.t - self.start.t).total_seconds() / 86400
+            self.duration = days
+        self.delta = self.end.x - self.start.x
+        if self.duration > 0:
             self.avg_rate = self.delta / self.duration
-        if self.direction == Direction.FLAT:
-            self.direction = Direction.from_delta(self.delta)
+        self.direction = Direction.from_delta(self.delta)
 
     @property
     def abs_delta(self) -> float:
@@ -168,7 +169,7 @@ class Zone:
 
     @property
     def relative_bandwidth(self) -> float:
-        """相对带宽 (跨品种可比)"""
+        """相对带宽 (消除价格量纲，关注结构紧凑度)"""
         return self.bandwidth / self.price_center if self.price_center > 0 else 0.0
 
     def contains(self, price: float) -> bool:

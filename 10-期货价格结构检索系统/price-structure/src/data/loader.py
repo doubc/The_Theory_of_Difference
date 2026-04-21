@@ -278,13 +278,12 @@ class CSVLoader:
 class MySQLLoader:
     """
     生产环境从 MySQL 读取。
-    通过 config.yaml 中的 column_mapping 适配不同表结构。
+    适配 sina 数据库结构: {code} (日线), {code}m5 (5分钟线)
     """
 
-    def __init__(self, config_path: str = "config.yaml"):
-        import yaml
-        with open(config_path) as f:
-            self.config = yaml.safe_load(f)
+    def __init__(self, host='localhost', user='root', password='root', db='sina'):
+        from sqlalchemy import create_engine
+        self.engine = create_engine(f'mysql+pymysql://{user}:{password}@{host}/{db}?charset=utf8')
 
     def get(
             self,
@@ -293,7 +292,54 @@ class MySQLLoader:
             end: str | datetime | None = None,
             freq: str = "1d",
     ) -> list[Bar]:
-        raise NotImplementedError("MySQL 连接待实现，先用 CSVLoader")
+        import pandas as pd
+        
+        # 根据频率选择表名
+        table_name = f"{symbol}m5" if freq == "5m" else symbol
+        
+        sql = f"SELECT `date`, `open`, `high`, `low`, `close`, `vol` FROM sina.`{table_name}`"
+        conditions = []
+        params = {}
+        
+        if start:
+            s = _to_dt(start).strftime('%Y-%m-%d')
+            conditions.append("`date` >= %(start)s")
+            params['start'] = s
+        if end:
+            e = _to_dt(end).strftime('%Y-%m-%d')
+            conditions.append("`date` <= %(end)s")
+            params['end'] = e
+            
+        if conditions:
+            sql += " WHERE " + " AND ".join(conditions)
+        
+        sql += " ORDER BY `date`"
+        
+        try:
+            df = pd.read_sql(sql, con=self.engine, params=params)
+            if df.empty:
+                return []
+            
+            # 核心修复：按日期去重，保留最后一条记录
+            df['date'] = pd.to_datetime(df['date'])
+            df = df.drop_duplicates(subset=['date'], keep='last')
+            df = df.sort_values('date').reset_index(drop=True)
+            
+            bars = []
+            for _, row in df.iterrows():
+                bars.append(Bar(
+                    symbol=symbol,
+                    timestamp=row['date'],
+                    open=float(row['open']),
+                    high=float(row['high']),
+                    low=float(row['low']),
+                    close=float(row['close']),
+                    volume=float(row.get('vol', 0)),
+                ))
+            return bars
+        except Exception as e:
+            print(f"MySQL 读取失败: {e}")
+            return []
 
 
 # ─── 工具函数 ──────────────────────────────────────────────

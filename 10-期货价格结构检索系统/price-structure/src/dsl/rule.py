@@ -135,22 +135,22 @@ def scan(structures: list[Structure], rules: list[Rule]) -> list[RuleMatch]:
     """
     用规则扫描结构列表
 
-    每个结构可以匹配多条规则（取第一个匹配的），
-    匹配后自动给 structure 打上 label 和 typicality。
+    每个结构匹配所有规则，取最高 typicality 的命中。
     """
     matches: list[RuleMatch] = []
     for s in structures:
+        best_match: RuleMatch | None = None
         for r in rules:
             passed, checks = r.match(s)
             if passed:
                 typ = r.typicality_score(checks)
-                s.label = r.name
-                s.typicality = typ
-                matches.append(RuleMatch(
-                    rule=r,
-                    structure=s,
-                    checks=checks,
-                    typicality=typ,
-                ))
-                break  # 每个结构只匹配第一条命中的规则
+                candidate = RuleMatch(
+                    rule=r, structure=s, checks=checks, typicality=typ,
+                )
+                if best_match is None or typ > best_match.typicality:
+                    best_match = candidate
+        if best_match:
+            s.label = best_match.rule.name
+            s.typicality = best_match.typicality
+            matches.append(best_match)
     return matches

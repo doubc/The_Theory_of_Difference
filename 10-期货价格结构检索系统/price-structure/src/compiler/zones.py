@@ -1,10 +1,68 @@
 """
-关键区识别 — 对极值点做价格聚类
+关键区识别 — 对极值点做 1D 价格聚类
+
+修复：
+1. 高低点用交替序列判定（不排除首尾）
+2. 聚类用固定容差（避免动态中心漂移）
 """
 
 from __future__ import annotations
-
 from src.models import Point, Zone, ZoneSource
+
+
+def _classify_highs_lows(pivots: list[Point]) -> tuple[list[Point], list[Point]]:
+    """
+    把 pivot 分成高点与低点：
+    - 交替序列中相邻点类型不同
+    - 首点用与第二点的比较来定性
+    """
+    if len(pivots) < 2:
+        return [], []
+
+    highs, lows = [], []
+
+    if pivots[0].x > pivots[1].x:
+        highs.append(pivots[0])
+        start_is_high = True
+    else:
+        lows.append(pivots[0])
+        start_is_high = False
+
+    is_high = not start_is_high
+    for p in pivots[1:]:
+        if is_high:
+            highs.append(p)
+        else:
+            lows.append(p)
+        is_high = not is_high
+
+    return highs, lows
+
+
+def _cluster_by_fixed_pct(
+    points: list[Point],
+    eps: float,
+) -> list[list[Point]]:
+    """
+    基于"范围容差"的聚类，避免动态中心漂移。
+    按价格排序后贪心合并：若新点与当前簇的价格范围差 <= eps*center，则合并。
+    """
+    if not points:
+        return []
+    sorted_pts = sorted(points, key=lambda p: p.x)
+    clusters: list[list[Point]] = [[sorted_pts[0]]]
+
+    for p in sorted_pts[1:]:
+        last_cluster = clusters[-1]
+        cmin = min(pt.x for pt in last_cluster)
+        cmax = max(pt.x for pt in last_cluster)
+        center = (cmin + cmax) / 2
+        tol = center * eps
+        if p.x - cmax <= tol:
+            last_cluster.append(p)
+        else:
+            clusters.append([p])
+    return clusters
 
 
 def detect_zones(
@@ -13,63 +71,35 @@ def detect_zones(
     cluster_eps: float = 0.015,
     cluster_min_points: int = 2,
 ) -> list[Zone]:
-    """
-    Zone 识别流程：
-
-    1. 分离高点和低点（通过与邻居比较）
-    2. 对高点/低点分别做 1D 聚类（按相对价格距离）
-    3. 每个聚类生成一个 Zone
-    """
-    if not pivots:
+    if len(pivots) < 2:
         return []
 
-    high_points: list[Point] = []
-    low_points: list[Point] = []
+    highs, lows = _classify_highs_lows(pivots)
 
-    for i, p in enumerate(pivots):
-        if i == 0 or i == len(pivots) - 1:
-            continue
-        if p.x > pivots[i - 1].x and p.x > pivots[i + 1].x:
-            high_points.append(p)
-        elif p.x < pivots[i - 1].x and p.x < pivots[i + 1].x:
-            low_points.append(p)
-
-    def cluster_points(points: list[Point], source: ZoneSource) -> list[Zone]:
+    def _build(points: list[Point], source: ZoneSource) -> list[Zone]:
         if not points:
             return []
-        sorted_pts = sorted(points, key=lambda p: p.x)
-        clusters: list[list[Point]] = [[sorted_pts[0]]]
-
-        for p in sorted_pts[1:]:
-            center = sum(pt.x for pt in clusters[-1]) / len(clusters[-1])
-            if abs(p.x - center) / center <= cluster_eps:
-                clusters[-1].append(p)
-            else:
-                clusters.append([p])
-
-        result = []
-        for cluster in clusters:
-            if len(cluster) < cluster_min_points:
+        clusters = _cluster_by_fixed_pct(points, cluster_eps)
+        zones: list[Zone] = []
+        for cl in clusters:
+            if len(cl) < cluster_min_points:
                 continue
-            center = sum(p.x for p in cluster) / len(cluster)
+            center = sum(p.x for p in cl) / len(cl)
             bw = center * zone_bandwidth
-
-            n_touches = len(cluster)
-            price_range = max(p.x for p in cluster) - min(p.x for p in cluster)
+            price_range = max(p.x for p in cl) - min(p.x for p in cl)
             compactness = 1.0 / (1.0 + price_range / center)
-            strength = n_touches * compactness
-
-            result.append(Zone(
+            strength = len(cl) * compactness
+            zones.append(Zone(
                 price_center=center,
                 bandwidth=bw,
                 source=source,
                 strength=strength,
-                touches=cluster,
+                touches=list(cl),
             ))
-        return result
+        return zones
 
-    zones = []
-    zones.extend(cluster_points(high_points, ZoneSource.HIGH_CLUSTER))
-    zones.extend(cluster_points(low_points, ZoneSource.LOW_CLUSTER))
+    zones: list[Zone] = []
+    zones.extend(_build(highs, ZoneSource.HIGH_CLUSTER))
+    zones.extend(_build(lows, ZoneSource.LOW_CLUSTER))
     zones.sort(key=lambda z: z.strength, reverse=True)
     return zones

@@ -7,6 +7,8 @@
   3.3 关键区识别 (zones.py)
   3.4 结构组装 (cycles.py)
   3.5 丛识别   (bundles.py)
+
+关系算子层：relations.py（独立模块）
 """
 
 from __future__ import annotations
@@ -15,9 +17,8 @@ from dataclasses import dataclass
 from src.models import Point, Segment, Zone, Cycle, Structure, Bundle
 from src.data.loader import Bar
 
-# 子模块导入（保持对外 API 不变）
 from src.compiler.pivots import extract_pivots
-from src.compiler.segments import build_segments
+from src.compiler.segments import build_segments, merge_micro_segments
 from src.compiler.zones import detect_zones
 from src.compiler.cycles import build_cycles, assemble_structures
 from src.compiler.bundles import detect_bundles
@@ -30,12 +31,13 @@ class CompilerConfig:
     min_amplitude: float = 0.02
     min_duration: int = 2
     noise_filter: float = 0.005
+    use_log_price: bool = True
+    min_segment_delta_pct: float = 0.005
     zone_bandwidth: float = 0.01
     cluster_eps: float = 0.015
     cluster_min_points: int = 2
     min_cycles: int = 2
     tolerance: float = 0.02
-    # 丛识别
     bundle_speed_tol: float = 0.4
     bundle_time_tol: float = 0.5
 
@@ -72,7 +74,7 @@ def compile_full(bars: list[Bar], config: CompilerConfig | None = None, symbol: 
     """
     价格序列 → 结构对象
 
-    完整编译流程：极值 → 段 → 区 → 循环 → 结构 → 丛
+    完整编译流程：极值 → 段 → 段合并 → 区 → 循环 → 结构 → 丛
     """
     if config is None:
         config = CompilerConfig()
@@ -83,10 +85,12 @@ def compile_full(bars: list[Bar], config: CompilerConfig | None = None, symbol: 
         min_amplitude=config.min_amplitude,
         min_duration=config.min_duration,
         noise_filter=config.noise_filter,
+        use_log=config.use_log_price,
     )
 
-    # 3.2 段生成
+    # 3.2 段生成 + 微段合并
     segments = build_segments(pivots)
+    segments = merge_micro_segments(segments, config.min_segment_delta_pct)
 
     # 3.3 关键区识别
     zones = detect_zones(

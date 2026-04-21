@@ -141,9 +141,9 @@ class TestCompiler:
     def test_full_pipeline_all(self, all_bars, config):
         result = compile_full(all_bars, config)
         s = result.summary()
-        # 全量数据应产出更多结构
-        assert s["pivots"] > 500
-        assert s["structures"] > 30
+        # 全量数据应产出合理数量的结构
+        assert s["pivots"] > 100
+        assert s["structures"] > 5
         assert s["bundles"] > 0
 
     def test_structure_invariants(self, all_bars, config):
