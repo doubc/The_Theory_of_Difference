@@ -16,10 +16,11 @@ from datetime import timedelta
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from src.data.loader import MySQLLoader
+from src.data.symbol_meta import symbol_name
 
-CONFIRMATION_LAG = 3  # 结构结束后等待 N 个交易日再开始计算 outcome
-LOOKFORWARD_DAYS = 30  # outcome 观察窗口
-MIN_MOVE_THRESHOLD = 0.10  # 筛选阈值
+CONFIRMATION_LAG = 3
+LOOKFORWARD_DAYS = 30
+MIN_MOVE_THRESHOLD = 0.10
 
 
 def analyze_post_performance(loader, symbol, end_date_str,
@@ -27,7 +28,7 @@ def analyze_post_performance(loader, symbol, end_date_str,
                              lookforward_days=LOOKFORWARD_DAYS):
     """
     分析结构结束后（经过确认等待期）的前瞻走势。
-    返回 (up_move, down_move, outcome_start_date)
+    返回包含 up_move, down_move, days_to_peak/trough, max_drawdown 等全量统计。
     """
     end_date = pd.to_datetime(end_date_str)
     outcome_start = end_date + timedelta(days=confirmation_lag)
@@ -46,19 +47,41 @@ def analyze_post_performance(loader, symbol, end_date_str,
     if start_price <= 0:
         return None
 
-    max_price = max(b.high for b in bars)
-    min_price = min(b.low for b in bars)
+    # 逐 bar 追踪峰/谷位置
+    peak_price, peak_idx = start_price, 0
+    trough_price, trough_idx = start_price, 0
+    for i, b in enumerate(bars):
+        if b.high > peak_price:
+            peak_price, peak_idx = b.high, i
+        if b.low < trough_price:
+            trough_price, trough_idx = b.low, i
 
-    up_move = (max_price - start_price) / start_price
-    down_move = (start_price - min_price) / start_price
+    up_move = (peak_price - start_price) / start_price
+    down_move = (start_price - trough_price) / start_price
+
+    # 最大回撤
+    max_dd = 0.0
+    running_max = start_price
+    for b in bars:
+        if b.high > running_max:
+            running_max = b.high
+        dd = (running_max - b.low) / running_max if running_max > 0 else 0
+        if dd > max_dd:
+            max_dd = dd
+
+    direction = "up" if up_move >= down_move else "down"
 
     return {
         "up_move": round(up_move, 4),
         "down_move": round(down_move, 4),
         "max_move": round(max(up_move, down_move), 4),
+        "max_drawdown": round(max_dd, 4),
+        "days_to_peak": peak_idx,
+        "days_to_trough": trough_idx,
         "outcome_start_date": outcome_start.strftime('%Y-%m-%d'),
         "outcome_end_date": outcome_end.strftime('%Y-%m-%d'),
         "bars_count": len(bars),
+        "direction": direction,
     }
 
 
@@ -97,11 +120,8 @@ def identify_representative_structures(
 
                 if outcome['max_move'] >= min_move:
                     record['outcome'] = outcome
-                    # 明确标注主方向
-                    if outcome['up_move'] >= outcome['down_move']:
-                        record['primary_direction'] = 'up'
-                    else:
-                        record['primary_direction'] = 'down'
+                    record['primary_direction'] = outcome['direction']
+                    record['symbol_name'] = symbol_name(record['symbol'])
                     high_potential_templates.append(record)
 
             except Exception as e:
