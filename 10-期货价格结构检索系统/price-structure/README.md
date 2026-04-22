@@ -52,6 +52,7 @@ price-structure/
 │   ├── retrieval/             # 相似性检索（四层：几何+关系+运动+族）
 │   ├── sample/                # 样本库
 │   ├── learning/              # 学习模型
+│   ├── graph/                 # 知识图谱（结构演化链/叙事递归/差异转移/反身性闭环）
 │   └── workbench/             # 研究工作台
 │       ├── app.py             #   主界面（五页布局）
 │       ├── daily_report.py    #   HTML报告渲染
@@ -115,12 +116,21 @@ Point → Segment → Zone → Cycle → Structure → Bundle
                                          ↓
                                    MotionState（运动态）
                                    ProjectionAwareness（投影觉知）
+                                   StabilityVerdict（错觉检测红绿灯）
+                                         ↓
+                                   SystemState（系统态 = 结构 × 运动）
+                                         ↓
+                                   StructureGraph（知识图谱）
 ```
 
 每个 Structure 携带三重态：
 - **结构态**：Zone、Cycles、Phases、invariants
 - **运动态**：阶段趋势、守恒通量、稳态趋近、转移路径
 - **投影觉知**：压缩度、盲区通道、可信度
+
+SystemState 封装全部计算 + 差异分层（流动性应力/边界恐惧/时间压缩）+ 稳定性判定。
+
+知识图谱显式追踪：结构演化链、叙事递归链、差异转移路径、反身性闭环。
 
 ## 弱公理
 

@@ -19,9 +19,32 @@ def extract_pivots(
     min_duration: int = 2,
     noise_filter: float = 0.005,
     use_log: bool = True,
+    volume_weighted: bool = False,
+    volume_boost: float = 0.3,
 ) -> list[Point]:
+    """
+    极值点提取。
+
+    Args:
+        volume_weighted: 是否启用成交量加权模式（V1.6 P1 D6.3）
+                         高成交量极值被赋予更低的过滤阈值，更容易被保留
+        volume_boost: 成交量加权系数，越大 = 高量极值越容易保留
+    """
     if len(bars) < 2 * min_duration + 1:
         return []
+
+    # 预计算成交量分位数（用于 volume_weighted 模式）
+    if volume_weighted and bars:
+        vols = sorted([b.volume for b in bars if b.volume > 0])
+        if vols:
+            vol_median = vols[len(vols) // 2]
+            vol_p75 = vols[int(len(vols) * 0.75)]
+        else:
+            vol_median = 1.0
+            vol_p75 = 1.0
+    else:
+        vol_median = 1.0
+        vol_p75 = 1.0
 
     # Step 1: 找所有 swing high / swing low（带等号，但要至少有一侧严格）
     n = min_duration
@@ -63,11 +86,22 @@ def extract_pivots(
         else:
             merged.append(c)
 
-    # Step 3: 异类幅度过滤
+    # Step 3: 异类幅度过滤（含 volume_weighted 模式）
     def amp(a: float, b: float) -> float:
         if use_log and a > 0 and b > 0:
             return abs(math.log(b) - math.log(a))
         return abs(b - a) / max(abs(a), 1e-9)
+
+    def _effective_threshold(idx: int) -> float:
+        """根据成交量调整阈值：高成交量极值更容易保留"""
+        if not volume_weighted:
+            return min_amplitude
+        vol = bars[idx].volume if idx < len(bars) else 0
+        if vol > vol_p75:
+            return min_amplitude * (1 - volume_boost)  # 高量极值：降低阈值
+        elif vol < vol_median:
+            return min_amplitude * (1 + volume_boost * 0.5)  # 低量极值：提高阈值
+        return min_amplitude
 
     filtered: list[tuple[int, str, float]] = []
     for c in merged:
@@ -76,8 +110,9 @@ def extract_pivots(
             continue
         last = filtered[-1]
         delta = amp(last[2], c[2])
+        effective_threshold = _effective_threshold(c[0])
 
-        if delta >= min_amplitude:
+        if delta >= effective_threshold:
             filtered.append(c)
         elif delta < noise_filter:
             # 整段噪声：丢弃新 c
@@ -85,15 +120,11 @@ def extract_pivots(
         else:
             # 中间灰区：保留更极端的一端
             if len(filtered) >= 2:
-                # 若 c 比 last 更极端（延续方向），用 c 替换 last
-                # 但必须保证替换后仍然交替（c 与 filtered[-2] 同类型则不能替换）
                 if last[1] == "high" and c[2] > last[2]:
                     filtered[-1] = c
                 elif last[1] == "low" and c[2] < last[2]:
                     filtered[-1] = c
-                # 否则丢弃 c（last 是真正的反转极值）
             else:
-                # filtered 只有一个元素，无法做方向判断，保守保留
                 filtered.append(c)
 
     # Step 4: 后处理 — 强制交替（修复灰区替换可能破坏的交替性）

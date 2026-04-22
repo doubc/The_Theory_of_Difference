@@ -13,8 +13,8 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from src.models import Point, Segment, Zone, Cycle, Structure, Bundle
+from dataclasses import dataclass, field
+from src.models import Point, Segment, Zone, Cycle, Structure, Bundle, SystemState
 from src.data.loader import Bar
 
 from src.compiler.pivots import extract_pivots
@@ -22,7 +22,11 @@ from src.compiler.segments import build_segments, merge_micro_segments
 from src.compiler.zones import detect_zones
 from src.compiler.cycles import build_cycles, assemble_structures
 from src.compiler.bundles import detect_bundles
-from src.relations import infer_narrative_context, check_conservation, compute_motion, compute_projection
+from src.relations import (
+    infer_narrative_context, check_conservation, compute_motion, compute_projection,
+    build_system_state,
+)
+from src.graph import StructureGraph
 
 
 # ─── 配置 ─────────────────────────────────────────────────
@@ -41,6 +45,9 @@ class CompilerConfig:
     tolerance: float = 0.02
     bundle_speed_tol: float = 0.4
     bundle_time_tol: float = 0.5
+    # ── V1.6 P1 新增 ──
+    volume_weighted: bool = False   # 是否启用成交量加权极值提取 (D6.3)
+    volume_boost: float = 0.3       # 成交量加权系数
 
 
 # ─── 编译结果 ──────────────────────────────────────────────
@@ -55,9 +62,11 @@ class CompileResult:
     structures: list[Structure]
     bundles: list[Bundle]
     config: CompilerConfig
+    system_states: list[SystemState] = field(default_factory=list)
+    graph: StructureGraph | None = None  # V1.6 P2: 知识图谱
 
     def summary(self) -> dict:
-        return {
+        result = {
             "bars": self.bars_count,
             "pivots": len(self.pivots),
             "segments": len(self.segments),
@@ -67,6 +76,11 @@ class CompileResult:
             "bundles": len(self.bundles),
             "top_structure": str(self.structures[0]) if self.structures else None,
         }
+        if self.system_states:
+            result["system_states"] = len(self.system_states)
+            result["reliable_count"] = sum(1 for ss in self.system_states if ss.is_reliable)
+            result["blind_count"] = sum(1 for ss in self.system_states if ss.projection.is_blind)
+        return result
 
 
 # ─── 统一入口 ──────────────────────────────────────────────
@@ -87,6 +101,8 @@ def compile_full(bars: list[Bar], config: CompilerConfig | None = None, symbol: 
         min_duration=config.min_duration,
         noise_filter=config.noise_filter,
         use_log=config.use_log_price,
+        volume_weighted=config.volume_weighted,
+        volume_boost=config.volume_boost,
     )
 
     # 3.2 段生成 + 微段合并
@@ -107,11 +123,14 @@ def compile_full(bars: list[Bar], config: CompilerConfig | None = None, symbol: 
     structures = assemble_structures(cycles, zones, min_cycles=config.min_cycles, symbol=sym)
 
     # ── V1.6 P0+: 叙事 + 守恒 + 运动 + 投影觉知 ──
+    # ── V1.6 P1: 升级为 SystemState（结构×运动 + 差异分层 + 错觉检测）──
+    system_states = []
     for st in structures:
         st.narrative_context = infer_narrative_context(st)
-        st.invariants["conservation"] = check_conservation(st, bars)
-        st.motion = compute_motion(st)          # 系统 = 结构 × 运动
-        st.projection = compute_projection(st)  # 价格 = Π(差异)，分析的是影子
+        # build_system_state 内部会计算：motion, projection, conservation,
+        # liquidity_stress, fear_index, time_compression, stability_verdict
+        ss = build_system_state(st, bars)
+        system_states.append(ss)
 
     # 3.5 丛识别
     bundles = detect_bundles(
@@ -119,6 +138,9 @@ def compile_full(bars: list[Bar], config: CompilerConfig | None = None, symbol: 
         speed_tol=config.bundle_speed_tol,
         time_tol=config.bundle_time_tol,
     )
+
+    # 3.6 知识图谱构建（V1.6 P2）
+    graph = StructureGraph.from_structures(structures)
 
     return CompileResult(
         bars_count=len(bars),
@@ -129,4 +151,6 @@ def compile_full(bars: list[Bar], config: CompilerConfig | None = None, symbol: 
         structures=structures,
         bundles=bundles,
         config=config,
+        system_states=system_states,
+        graph=graph,
     )

@@ -5,14 +5,22 @@
 V1.6 P0 新增：
 - infer_narrative_context: 结构叙事背景推断（V1.6 命题 2.3 可叙事性）
 - check_conservation: 差异守恒检查骨架（V1.6 命题 4.1-4.2）
+
+V1.6 P1 新增：
+- compute_liquidity_stress: 流动性差异度量（D6.3）
+- compute_fear_index: 边界恐惧度量（D6.4）
+- compute_time_compression: 时间差异度量（D6.2）
+- detect_stability_illusion: 错觉检测（D7.2）
+- build_system_state: 系统态构建（D9.1）
 """
 
 from __future__ import annotations
 import math
 from typing import Sequence
 from src.models import (
-    Point, Segment, Zone, Structure, ContrastType,
+    Point, Segment, Zone, Cycle, Structure, ContrastType,
     MotionState, Phase, ProjectionAwareness,
+    StabilityVerdict, SystemState,
 )
 
 
@@ -395,3 +403,253 @@ def compute_projection(s: Structure, bars: list | None = None) -> ProjectionAwar
     proj.observation = " | ".join(parts)
 
     return proj
+
+
+# ═══ V1.6 P1 新增算子 ═════════════════════════════════════
+
+
+def compute_liquidity_stress(
+    s: Structure,
+    bars: list | None = None,
+) -> float:
+    """
+    V1.6 D6.3: 流动性差异度量
+    流动性差异 = 能不能把价格变成钱
+
+    通过 Zone 内外成交量变异系数比值衡量：
+    > 1.5 → 差异在释放（多空激烈交锋）
+    < 0.5 → 差异被压缩（流动性枯竭）
+    """
+    if not bars or not s.cycles:
+        return 0.0
+
+    zone_lower = s.zone.price_center - s.zone.bandwidth
+    zone_upper = s.zone.price_center + s.zone.bandwidth
+
+    volumes_in = []
+    volumes_out = []
+
+    for bar in bars:
+        if zone_lower <= bar.close <= zone_upper:
+            volumes_in.append(bar.volume)
+        else:
+            volumes_out.append(bar.volume)
+
+    if len(volumes_in) < 5 or len(volumes_out) < 5:
+        return 0.0
+
+    def cv(vals: list[float]) -> float:
+        m = sum(vals) / len(vals)
+        if m == 0:
+            return 0.0
+        var = sum((v - m) ** 2 for v in vals) / len(vals)
+        return math.sqrt(var) / m
+
+    cv_in = cv(volumes_in)
+    cv_out = cv(volumes_out)
+
+    if cv_out < 0.01:
+        return 0.0
+
+    return round(cv_in / cv_out, 4)
+
+
+def compute_fear_index(
+    s: Structure,
+    bars: list | None = None,
+) -> float:
+    """
+    V1.6 D6.4: 边界恐惧度量
+    怕被踢出局的紧张程度
+
+    由三部分加权：
+    - 价格跳空频率（35%）
+    - 波动率突变（35%）
+    - Zone 试探密集度（30%）
+    """
+    if not bars or len(bars) < 10:
+        return 0.0
+
+    # 1. 跳空频率（最近 30 根 bar）
+    recent = bars[-30:]
+    gaps = 0
+    for i in range(1, len(recent)):
+        gap = abs(recent[i].open - recent[i - 1].close) / max(recent[i - 1].close, 1e-9)
+        if gap > 0.005:  # > 0.5% 的跳空
+            gaps += 1
+    gap_freq = gaps / max(len(recent) - 1, 1)
+
+    # 2. 波动率突变（最近 10 根 vs 之前 20 根的波动率比）
+    if len(bars) >= 30:
+        def daily_range_pct(b) -> float:
+            return (b.high - b.low) / max(b.close, 1e-9)
+
+        recent_vol = [daily_range_pct(b) for b in bars[-10:]]
+        prev_vol = [daily_range_pct(b) for b in bars[-30:-10]]
+        avg_recent = sum(recent_vol) / len(recent_vol)
+        avg_prev = sum(prev_vol) / len(prev_vol)
+        vol_spike = avg_recent / max(avg_prev, 1e-9) if avg_prev > 0 else 1.0
+    else:
+        vol_spike = 1.0
+
+    # 3. 试探密集度（cycle 数 / 时间跨度天数）
+    if s.cycles and s.t_start and s.t_end:
+        span_days = max((s.t_end - s.t_start).days, 1)
+        touch_intensity = s.cycle_count / span_days * 30  # 标准化为月频
+    else:
+        touch_intensity = 0.0
+
+    # 加权合成
+    fear = 0.35 * min(gap_freq * 10, 1.0) + 0.35 * min(max(vol_spike - 1, 0), 1.0) + 0.30 * min(touch_intensity, 1.0)
+    return round(min(fear, 1.0), 4)
+
+
+def compute_time_compression(s: Structure) -> float:
+    """
+    V1.6 D6.2: 时间差异度量
+    时间差异 = 谁能等、谁不能等
+
+    = avg_entry_duration / avg_exit_duration
+    > 1.5 → 入场慢出场快 = 恐慌性退出 = 时间差异剧烈
+    < 0.67 → 入场快出场慢 = 缓慢消化 = 时间差异平缓
+    """
+    if not s.cycles:
+        return 0.0
+
+    entry_durs = [c.entry.duration for c in s.cycles if c.entry.duration > 0]
+    exit_durs = [c.exit.duration for c in s.cycles if c.exit.duration > 0]
+
+    if not entry_durs or not exit_durs:
+        return 0.0
+
+    avg_entry = sum(entry_durs) / len(entry_durs)
+    avg_exit = sum(exit_durs) / len(exit_durs)
+
+    if avg_exit == 0:
+        return 0.0
+
+    return round(avg_entry / avg_exit, 4)
+
+
+def detect_stability_illusion(
+    s: Structure,
+    bars: list | None = None,
+) -> StabilityVerdict:
+    """
+    V1.6 D7.2 命题 7.4: 错觉检测
+    系统不应在波动率下降时立即报告"结构稳定"。
+    表面变平 ≠ 真的稳定，差异可能转移到了其他维度。
+    """
+    verdict = StabilityVerdict()
+
+    if not s.cycles:
+        return verdict
+
+    # ── 判断表面稳定性 ──
+    bw = s.zone.relative_bandwidth
+    is_surface_stable = bw < 0.015  # 相对带宽 < 1.5%
+
+    if not is_surface_stable:
+        verdict.surface = "unstable"
+        verdict.verdict_label = verdict.traffic_light
+        return verdict
+
+    # ── 表面稳定，进入验证 ──
+    verdict.surface = "stable"
+
+    # 待验证通道
+    pending = []
+
+    # 检查1：速度比是否在收窄（差异被压缩 → 转移风险）
+    if s.cycles and len(s.cycles) >= 3:
+        recent_srs = [c.speed_ratio for c in s.cycles[-3:]]
+        sr_cv = _safe_cv(recent_srs)
+        if sr_cv < 0.2:
+            # 速度比高度一致 → 可能只是表面收敛
+            pending.append("shorter_timeframe")
+            pending.append("volume")
+
+    # 检查2：守恒检查是否有转移警告
+    conservation = s.invariants.get("conservation", {})
+    transfer_channels = conservation.get("transfer_channels", [])
+    for ch in transfer_channels:
+        if ch not in pending:
+            pending.append(ch)
+
+    # 检查3：最近稳态阻力评分异常低 → 可能是假稳态
+    stable_cycles = [c for c in s.cycles if c.has_stable_state]
+    if stable_cycles:
+        avg_res = sum(c.next_stable.resistance_level for c in stable_cycles) / len(stable_cycles)
+        if avg_res < 0.2:
+            pending.append("stable_state_validation")
+
+    # 检查4：投影觉知高压缩
+    if s.projection and s.projection.is_blind:
+        pending.append("projection_blind")
+
+    if pending:
+        verdict.verified = False
+        verdict.pending_channels = pending
+        verdict.verification_window = 20  # 20天观察期
+        verdict.verdict_label = verdict.traffic_light
+    else:
+        verdict.verified = True
+        verdict.verdict_label = verdict.traffic_light
+
+    return verdict
+
+
+def _safe_cv(vals: list[float]) -> float:
+    """安全计算变异系数"""
+    if len(vals) < 2:
+        return 0.0
+    m = sum(vals) / len(vals)
+    if m == 0:
+        return 0.0
+    var = sum((v - m) ** 2 for v in vals) / len(vals)
+    return math.sqrt(var) / abs(m)
+
+
+def build_system_state(
+    s: Structure,
+    bars: list | None = None,
+) -> SystemState:
+    """
+    V1.6 D9.1: 系统态构建
+    System = Structure × Motion
+    顶层封装函数，将所有分散的计算统一为一个 SystemState。
+    """
+    # 确保 motion / projection / conservation 已计算
+    if s.motion is None:
+        s.motion = compute_motion(s)
+    if s.projection is None:
+        s.projection = compute_projection(s, bars)
+
+    conservation = s.invariants.get("conservation")
+    if conservation is None:
+        conservation = check_conservation(s, bars)
+        s.invariants["conservation"] = conservation
+
+    # 差异分层
+    liq = compute_liquidity_stress(s, bars)
+    fear = compute_fear_index(s, bars)
+    tcomp = compute_time_compression(s)
+
+    # 错觉检测
+    stability = detect_stability_illusion(s, bars)
+
+    # 更新 Structure 上的字段
+    s.liquidity_stress = liq
+    s.fear_index = fear
+    s.time_compression = tcomp
+    s.stability_verdict = stability
+
+    return SystemState(
+        structure=s,
+        motion=s.motion,
+        projection=s.projection,
+        stability=stability,
+        liquidity_stress=liq,
+        fear_index=fear,
+        time_compression=tcomp,
+    )

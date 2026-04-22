@@ -1,8 +1,13 @@
 """
-相似结构检索 + 后验统计
+相似结构检索 + 后验统计 + 最近稳态分析
 
 给定一个当前结构，从样本库中找到最相似的历史案例，
-并聚合它们的前向演化结果，输出后验分布。
+并聚合它们的前向演化结果，输出后验分布 + 稳态分析。
+
+V1.6 P1 升级：
+- context_contrast 作为首要过滤条件（同反差类型才能匹配）
+- 检索结果附带"最近稳态"分析
+- 匹配原因归因解释
 """
 
 from __future__ import annotations
@@ -16,9 +21,10 @@ from src.retrieval.similarity import similarity, SimilarityScore
 
 @dataclass
 class Neighbor:
-    """一个近邻样本 + 相似度"""
+    """一个近邻样本 + 相似度 + 匹配归因"""
     sample: Sample
     score: SimilarityScore
+    match_reason: str = ""  # 匹配原因归因解释（V1.6 P1）
 
 
 @dataclass
@@ -43,7 +49,7 @@ class RetrievalResult:
 
 
 class RetrievalEngine:
-    """相似结构检索引擎"""
+    """相似结构检索引擎（V1.6 P1 升级）"""
 
     def __init__(self, store: SampleStore):
         self.store = store
@@ -54,6 +60,7 @@ class RetrievalEngine:
         top_k: int = 10,
         filter_label: str | None = None,
         min_score: float = 0.3,
+        filter_contrast: bool = True,
     ) -> RetrievalResult:
         """
         检索最相似的历史结构
@@ -63,11 +70,22 @@ class RetrievalEngine:
             top_k: 返回前 K 个近邻
             filter_label: 只检索特定类型
             min_score: 最低相似度阈值
+            filter_contrast: 是否按共同反差类型过滤（V1.6 P1，D2.2）
 
         Returns:
             RetrievalResult 含近邻列表 + 后验统计
         """
         candidates = self.store.filter(label_type=filter_label) if filter_label else self.store.load_all()
+
+        # ── V1.6 P1: 反差类型过滤 ──
+        query_contrast = query.zone.context_contrast.value if query.zone else "unknown"
+        if filter_contrast and query_contrast != "unknown":
+            # 优先筛选同反差类型的样本；如果没有同类型的，放宽到 unknown
+            same_contrast = [sp for sp in candidates
+                             if sp.structure.get("invariants", {}).get("contrast_type") == query_contrast]
+            if same_contrast:
+                candidates = same_contrast
+            # 如果完全没有同类型候选，则不做过滤（退化为全库检索）
 
         scored: list[Neighbor] = []
         for sp in candidates:
@@ -76,7 +94,9 @@ class RetrievalEngine:
                 continue
             sc = similarity(query, s2)
             if sc.total >= min_score:
-                scored.append(Neighbor(sample=sp, score=sc))
+                # ── 生成匹配归因 ──
+                reason = _generate_match_reason(query, s2, sc)
+                scored.append(Neighbor(sample=sp, score=sc, match_reason=reason))
 
         scored.sort(key=lambda n: n.score.total, reverse=True)
         top = scored[:top_k]
@@ -87,15 +107,22 @@ class RetrievalEngine:
 def _rebuild_structure_shim(sp: Sample) -> Structure | None:
     """
     从 Sample.structure (dict) 重建一个最小 Structure 用于相似度计算
-    只保留 invariants 与 zone / label，不重建 Point / Segment 细节
+    只保留 invariants 与 zone / label / contrast_type，不重建 Point / Segment 细节
     """
     try:
+        from src.models import ContrastType
         zd = sp.structure["zone"]
+        ct_val = zd.get("context_contrast", sp.structure.get("invariants", {}).get("contrast_type", "unknown"))
+        try:
+            ct = ContrastType(ct_val)
+        except (ValueError, KeyError):
+            ct = ContrastType.UNKNOWN
         zone = Zone(
             price_center=zd["price_center"],
             bandwidth=zd["bandwidth"],
             source=ZoneSource(zd["source"]),
             strength=zd.get("strength", 0.0),
+            context_contrast=ct,
         )
         s = Structure(
             zone=zone,
@@ -107,6 +134,48 @@ def _rebuild_structure_shim(sp: Sample) -> Structure | None:
         return s
     except Exception:
         return None
+
+
+def _generate_match_reason(query: Structure, matched: Structure, score: SimilarityScore) -> str:
+    """生成匹配归因解释（V1.6 P1：可叙事性）"""
+    parts = []
+
+    # 反差类型匹配
+    qc = query.zone.context_contrast.value if query.zone else "unknown"
+    mc = matched.zone.context_contrast.value if matched.zone else "unknown"
+    if qc != "unknown" and mc != "unknown" and qc == mc:
+        contrast_labels = {
+            "panic": "恐慌型",
+            "oversupply": "供需失衡型",
+            "policy": "政策驱动型",
+            "liquidity": "流动性驱动型",
+            "speculation": "投机驱动型",
+        }
+        parts.append(f"共同面临{contrast_labels.get(qc, qc)}反差")
+
+    # 几何特征匹配
+    if score.geometric > 0.7:
+        parts.append("几何形态高度一致")
+    elif score.geometric > 0.5:
+        parts.append("几何形态大致相似")
+
+    # 关系特征匹配
+    qi = query.invariants
+    mi = matched.invariants
+    qsr = qi.get("avg_speed_ratio", 0)
+    msr = mi.get("avg_speed_ratio", 0)
+    if qsr and msr and abs(qsr - msr) < 0.3:
+        parts.append("速度比高度一致")
+
+    qtr = qi.get("avg_time_ratio", 0)
+    mtr = mi.get("avg_time_ratio", 0)
+    if qtr and mtr and abs(qtr - mtr) < 0.3:
+        parts.append("试探频率高度一致")
+
+    if not parts:
+        parts.append(f"综合相似度 {score.total:.2f}")
+
+    return "，".join(parts)
 
 
 def _aggregate_posterior(samples: list[Sample]) -> PosteriorStats:

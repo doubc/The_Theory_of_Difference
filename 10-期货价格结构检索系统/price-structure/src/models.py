@@ -342,6 +342,12 @@ class Structure:
     narrative_context: str = ""  # 结构形成时的市场叙事背景（V1.6 命题 2.3 可叙事性）
     motion: MotionState | None = None  # 运动态（V1.6「系统 = 结构 × 运动」）
     projection: ProjectionAwareness | None = None  # 投影觉知（D0：价格=影子）
+    # ── V1.6 P1 新增：差异分层（Ch6 三种差异）──
+    liquidity_stress: float = 0.0   # 流动性差异：Zone内外成交量变异系数比 (D6.3)
+    fear_index: float = 0.0         # 边界恐惧：跳空+波动率突变+试探密集度 (D6.4)
+    time_compression: float = 0.0   # 时间差异：avg_entry_dur / avg_exit_dur (D6.2)
+    # ── V1.6 P1 新增：稳定性判定（D7.2 错觉检测）──
+    stability_verdict: StabilityVerdict | None = None
 
     @property
     def cycle_count(self) -> int:
@@ -424,6 +430,10 @@ class Structure:
             "projection": self.projection.to_dict() if self.projection else None,
             "stable_state_ratio": self.stable_state_ratio,
             "signature": self.signature(),
+            "liquidity_stress": self.liquidity_stress,
+            "fear_index": self.fear_index,
+            "time_compression": self.time_compression,
+            "stability_verdict": self.stability_verdict.to_dict() if self.stability_verdict else None,
         }
 
     def __repr__(self):
@@ -521,6 +531,141 @@ class MotionState:
         return (f"Motion(→{self.phase_tendency} "
                 f"flux={self.conservation_flux:+.2f} "
                 f"stable_d={self.stable_distance:.2f})")
+
+
+@dataclass
+class StabilityVerdict:
+    """
+    错觉检测 — V1.6 D7.2 命题 7.4
+    系统不应在波动率下降时立即报告"结构稳定"。
+    价格表面变平，差异可能转移到了系统看不到的维度。
+    """
+    surface: str = "unstable"              # "stable" | "unstable"
+    verified: bool = False                 # 是否经过多维度验证
+    verification_window: int = 0           # 需要等待多少天才能确认
+    pending_channels: list[str] = field(default_factory=list)  # 待检查的转移通道
+    verdict_label: str = ""                # 人可读："黄灯" / "绿灯" / "红灯"
+
+    @property
+    def traffic_light(self) -> str:
+        """红绿灯状态"""
+        if self.verified and self.surface == "stable":
+            return "🟢 绿灯：结构稳定（已验证）"
+        if self.surface == "stable" and not self.verified:
+            pending = ", ".join(self.pending_channels) if self.pending_channels else "待确认"
+            return f"🟡 黄灯：表面稳定，待验证（{pending}，{self.verification_window}天观察期）"
+        return "🔴 红灯：结构不稳定"
+
+    def to_dict(self) -> dict:
+        return {
+            "surface": self.surface,
+            "verified": self.verified,
+            "verification_window": self.verification_window,
+            "pending_channels": self.pending_channels,
+            "verdict_label": self.traffic_light,
+        }
+
+    @classmethod
+    def from_dict(cls, d: dict) -> StabilityVerdict:
+        return cls(
+            surface=d.get("surface", "unstable"),
+            verified=d.get("verified", False),
+            verification_window=d.get("verification_window", 0),
+            pending_channels=d.get("pending_channels", []),
+        )
+
+    def __repr__(self):
+        return self.traffic_light
+
+
+@dataclass
+class SystemState:
+    """
+    系统态 — V1.6 D9.1「系统 = 结构 × 运动」
+    顶层对象，封装一个结构的完整系统状态。
+    不是静态快照，而是结构在运动中的瞬时呈现。
+    """
+    structure: Structure                           # 静态骨架
+    motion: MotionState = field(default_factory=MotionState)        # 运动态
+    projection: ProjectionAwareness = field(default_factory=ProjectionAwareness)  # 投影觉知
+    stability: StabilityVerdict = field(default_factory=StabilityVerdict)         # 稳定性判定
+    # ── 差异分层（V1.6 Ch6 三种差异）──
+    liquidity_stress: float = 0.0      # 流动性差异：Zone内外成交量CV比 (D6.3)
+    fear_index: float = 0.0            # 边界恐惧：跳空+波动率突变+试探密集度 (D6.4)
+    time_compression: float = 0.0      # 时间差异：entry_duration / exit_duration (D6.2)
+
+    @property
+    def system_time(self) -> dict:
+        """系统时间：结构变化的节奏，不是日历时间"""
+        return {
+            "structural_age": self.motion.structural_age,
+            "phase_progress": self.motion.phase_duration,
+            "stable_countdown": max(0, self.motion.stable_distance * 20),  # 归一化→天数近似
+            "phase_tendency": self.motion.phase_tendency,
+        }
+
+    @property
+    def is_reliable(self) -> bool:
+        """系统态是否可信：非高压缩 + 非黄灯"""
+        return not self.projection.is_blind and self.stability.verified
+
+    def narrative_report(self) -> str:
+        """自然语言状态报告"""
+        parts = []
+        st = self.structure
+
+        # 结构是什么
+        if st.narrative_context:
+            parts.append(f"结构：{st.narrative_context}")
+        else:
+            parts.append(f"结构：Zone {st.zone.price_center:.0f}，{st.cycle_count}次试探")
+
+        # 在怎么动
+        if self.motion.phase_tendency:
+            parts.append(f"运动：{self.motion.phase_tendency}，通量{self.motion.conservation_flux:+.2f}")
+            if self.motion.flux_detail:
+                parts.append(f"  → {self.motion.flux_detail}")
+
+        # 可信度
+        parts.append(f"稳定性：{self.stability.traffic_light}")
+        if self.projection.is_blind:
+            parts.append(f"⚠️ 投影压缩{self.projection.compression_level:.0%}，差异可能藏在：{', '.join(self.projection.blind_channels)}")
+
+        # 差异分层
+        layer_parts = []
+        if self.liquidity_stress > 1.5:
+            layer_parts.append(f"流动性差异释放(应力={self.liquidity_stress:.1f})")
+        elif self.liquidity_stress < 0.5 and self.liquidity_stress > 0:
+            layer_parts.append(f"流动性枯竭(应力={self.liquidity_stress:.1f})")
+        if self.fear_index > 0.6:
+            layer_parts.append(f"边界恐惧升高(恐惧={self.fear_index:.2f})")
+        if self.time_compression > 1.5:
+            layer_parts.append(f"时间差异剧烈(入场慢出场快)")
+        elif self.time_compression < 0.67 and self.time_compression > 0:
+            layer_parts.append(f"时间差异平缓(入场快出场慢)")
+        if layer_parts:
+            parts.append("差异分层：" + "，".join(layer_parts))
+
+        return "\n".join(parts)
+
+    def to_dict(self) -> dict:
+        return {
+            "structure": self.structure.to_dict(),
+            "motion": self.motion.to_dict(),
+            "projection": self.projection.to_dict(),
+            "stability": self.stability.to_dict(),
+            "liquidity_stress": self.liquidity_stress,
+            "fear_index": self.fear_index,
+            "time_compression": self.time_compression,
+            "system_time": self.system_time,
+            "is_reliable": self.is_reliable,
+        }
+
+    def __repr__(self):
+        return (f"SystemState(zone={self.structure.zone.price_center:.0f} "
+                f"motion={self.motion.phase_tendency} "
+                f"stable={self.stability.surface} "
+                f"reliable={self.is_reliable})")
 
 
 @dataclass

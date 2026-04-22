@@ -107,11 +107,13 @@ Ch4 命题 4.4、Ch7 命题 7.6、Ch12 命题 12.6 反复回响。
 
 **后果**：代码把"差异密度极高的社会结构结果"简化成了"价格形态的几何分析"。理论说价格是差异显影，代码只显影了一层。
 
-**修改方向**：
-- `Bar` 增加 `open_interest: float`（已有但未使用）和 `turnover_rate: float`
-- `extract_pivots()` 增加 `volume_weighted` 模式：极值判定不只看价格，还看成交量是否同步放大
-- 新增 `VolumeZone` 类：基于成交量聚类的区域（差异在流动性维度的显影）
-- `Structure` 增加三个分层指标：`time_compression_ratio`、`liquidity_stress`、`fear_index`
+**修改方向**：→ ✅ 已实现 (P1)
+- `Structure` 新增 `liquidity_stress`、`fear_index`、`time_compression` 字段
+- `compute_liquidity_stress()`：Zone 内外成交量变异系数比 (D6.3)
+- `compute_fear_index()`：跳空频率 + 波动率突变 + 试探密集度加权 (D6.4)
+- `compute_time_compression()`：entry/exit duration 比值 (D6.2)
+- `extract_pivots()` 新增 `volume_weighted` 模式：高成交量极值降低过滤阈值
+- `SystemState` 封装三层差异分层
 
 ---
 
@@ -123,10 +125,11 @@ Ch4 命题 4.4、Ch7 命题 7.6、Ch12 命题 12.6 反复回响。
 
 **代码现状**：整条管线是单向的——编译 → 规则匹配 → 检索 → 输出。没有"输出如何反过来改变被检索对象"的回路。
 
-**修改方向**：
-- `daily_scan.py` / `active_match.py` 增加 `impact_estimate` 字段：预估如果这份报告被 N 人看到并据此行动，市场结构会受到多大影响
-- 新增 `src/retrieval/reflexivity.py`：追踪一段时间内，被系统标记过的品种的后续结构变化，检验系统自身的反身性效应
-- 周期性回测：被系统标记为"高关注度"的机会，后续表现是否系统性偏离历史分布
+**修改方向**：→ 🔲 骨架完成 (P2)
+- 新增 `src/reflexivity.py`：`ReflexivityTracker` + `RulePerformanceRecord`
+- 支持规则匹配记录 → 实际结果回填 → 准确率衰减检测 → 权重建议
+- 持久化到 `data/reflexivity/records.jsonl`
+- 完整效果需长期运行积累数据
 
 ---
 
@@ -165,9 +168,13 @@ Ch4 命题 4.4、Ch7 命题 7.6、Ch12 命题 12.6 反复回响。
 | **P0** | 偏差 2：最近稳态 | ✅ 完成 | 理论方法论核心，Ch3/4/7/12 反复回响 |
 | **P0** | 偏差 1：共同反差 | ✅ 完成 | 聚簇驱动力，决定 zone 质量 |
 | **P0** | 偏差 3：守恒验证 | ✅ 骨架完成 | 防止误判"结构稳定" |
-| **P1** | 偏差 4：三种差异分层 | 🔲 待做 | 需引入 volume/OI 数据 |
-| **P1** | 偏差 3：守恒完整版 | 🔲 待做 | 需多频率数据交叉 |
-| **P2** | 偏差 5：反身性 | 🔲 待做 | 长期架构问题 |
+| **P1** | 偏差 4：三种差异分层 | ✅ 完成 | liquidity_stress + fear_index + time_compression + volume_weighted pivots |
+| **P1** | 错觉检测 (D7.2) | ✅ 完成 | StabilityVerdict 红绿灯机制 |
+| **P1** | SystemState (D9.1) | ✅ 完成 | Structure × Motion 顶层封装 |
+| **P1** | 叙事化输出 | ✅ 完成 | narrative.py 生成自然语言报告 |
+| **P1** | 检索反差过滤 | ✅ 完成 | context_contrast 作为首要过滤条件 + 匹配归因 |
+| **P1** | 守恒完整版 | 🔲 待做 | 需多频率数据交叉 |
+| **P2** | 偏差 5：反身性 | 🔲 骨架完成 | ReflexivityTracker + 衰减检测 |
 | **P3** | 偏差 6：叙事递归 | 🔲 待做 | 需大量样本积累 |
 | **P3** | 偏差 7：跨周期 | 🔲 待做 | 数据工程量大 |
 
@@ -224,3 +231,11 @@ Ch4 命题 4.4、Ch7 命题 7.6、Ch12 命题 12.6 反复回响。
    - 叙事上下文推断（`infer_narrative_context()`）
    - 守恒检查骨架（`check_conservation()`）
    - 文档更新
+2. P1 修改完成（外部审校意见驱动升级）：
+   - **模型层**：新增 `StabilityVerdict`（错觉检测红绿灯）、`SystemState`（系统态=结构×运动）、`Structure` 增加 `liquidity_stress`/`fear_index`/`time_compression`
+   - **算子层**：新增 `compute_liquidity_stress()` (D6.3)、`compute_fear_index()` (D6.4)、`compute_time_compression()` (D6.2)、`detect_stability_illusion()` (D7.2)、`build_system_state()` (D9.1)
+   - **编译器层**：`extract_pivots()` 新增 `volume_weighted` 模式；`compile_full()` 集成 SystemState 构建
+   - **检索层**：`RetrievalEngine` 以 `context_contrast` 为首要过滤器；匹配结果附带归因解释
+   - **叙事层**：新增 `src/narrative.py`——自然语言诊断报告、每日摘要、匹配归因解释
+   - **反身性**：新增 `src/reflexivity.py`——`ReflexivityTracker` 骨架，规则准确率衰减检测
+   - 全部 73 个测试通过
