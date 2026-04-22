@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>主动匹配报告 — AL0 — 20260422</title>
+<style>
+body{background:#0f1020;color:#e5e5e5;font-family:-apple-system,"PingFang SC","Microsoft YaHei",monospace;margin:0;padding:24px}
+h1{color:#90caf9;margin:0 0 4px 0}
+.meta{color:#888;font-size:13px;margin-bottom:6px}
+.ctx-line{color:#ccc;font-size:14px;margin:6px 0;padding:8px 12px;background:#1a1a2e;border-left:3px solid #ffb74d;border-radius:4px}
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}
+.summary .s{background:#1a1a2e;border:1px solid #333;border-radius:6px;padding:12px;text-align:center}
+.summary .s .n{font-size:22px;font-weight:bold;color:#fff}
+.summary .s .l{color:#888;font-size:12px}
+
+.struct-card{background:#1a1a2e;border:1px solid #333;border-left:3px solid #90caf9;border-radius:8px;padding:16px 20px;margin:18px 0}
+.struct-head{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.sym-badge{background:#90caf9;color:#0f1020;padding:3px 10px;border-radius:4px;font-weight:bold}
+.sym-code{color:#888;font-size:12px}
+.period{color:#ccc;font-size:14px}
+.cycle-badge{background:#333;color:#aaa;padding:2px 8px;border-radius:3px;font-size:12px}
+.struct-meta{color:#aaa;font-size:12px;margin-bottom:12px}
+
+.case-table{width:100%;border-collapse:collapse;font-size:13px}
+.case-table th{background:#12132a;color:#90caf9;padding:8px 10px;text-align:left;border-bottom:1px solid #333}
+.case-table td{padding:8px 10px;border-bottom:1px solid #2a2a4a}
+.case-table tr:hover td{background:#22223a}
+
+.guide-box{margin-top:14px;padding:12px 16px;background:#12132a;border:1px solid #2a2a4a;border-radius:6px}
+.guide-title{color:#ffb74d;font-weight:bold;margin-bottom:8px}
+.guide-box ol{margin:0 0 0 18px;padding:0;color:#ccc;font-size:13px}
+.guide-box li{margin-bottom:4px}
+
+.empty{padding:40px;text-align:center;color:#888;background:#1a1a2e;border-radius:8px}
+</style>
+</head>
+<body>
+<h1>主动匹配报告</h1>
+<div class="meta">
+  扫描时间 2026-04-22 08:34 &nbsp;|&nbsp;
+  品种 AL0 &nbsp;|&nbsp;
+  窗口 2023-01-01 ~ 2026-04-21
+</div>
+
+<div class="ctx-line"><b>用户观点：</b>铝价历史走势匹配分析（含跨品种）</div>
+
+<div class="summary">
+  <div class="s"><div class="n">8</div><div class="l">窗口内结构</div></div>
+  <div class="s"><div class="n">80</div><div class="l">历史相似案例</div></div>
+  <div class="s"><div class="n">8</div><div class="l">匹配结果组</div></div>
+  <div class="s"><div class="n">10</div><div class="l">每组 Top K</div></div>
+</div>
+
+
+        <div class="struct-card">
+          <div class="struct-head">
+            <span class="sym-badge">铝连续</span>
+            <span class="sym-code">AL0</span>
+            <span class="period">2024-04-15 ~ 2025-09-15</span>
+            <span class="cycle-badge">19 cycles</span>
+          </div>
+          <div class="struct-meta">
+            SR=1.092 &nbsp;|&nbsp;
+            TR=1.374 &nbsp;|&nbsp;
+            LogSR=1.087 &nbsp;|&nbsp;
+            Zone=0.0100 &nbsp;|&nbsp;
+            Strength=26.1
+          </div>
+          <table class="case-table">
+            <thead><tr>
+              <th>相似度</th><th>拆解</th><th>历史段</th>
+              <th>方向</th><th>幅度</th><th>天数</th><th>描述</th>
+            </tr></thead>
+            <tbody>
+            <tr>
+              <td><b>0.992</b></td>
+              <td style="font-size:11px">形0.99 节0.99</td>
+              <td>铝连续 2025-05~2025-09</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">白银连续(ag0) 2025-05~2025-09: 丛结构 cycles=4, SR=1.08</td>
+            </tr>
+            <tr>
+              <td><b>0.992</b></td>
+              <td style="font-size:11px">形0.99 节0.99</td>
+              <td>铝连续 2025-05~2025-09</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">白银连续(ag0) 2025-05~2025-09: 丛结构 cycles=4, SR=1.08</td>
+            </tr>
+            <tr>
+              <td><b>0.985</b></td>
+              <td style="font-size:11px">形0.97 节0.99</td>
+              <td>铝连续 2015-06~2016-07</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">镍连续(ni0) 2015-06~2016-07: 丛结构 cycles=5, SR=1.13</td>
+            </tr>
+            <tr>
+              <td><b>0.984</b></td>
+              <td style="font-size:11px">形1.00 节0.96</td>
+              <td>铝连续 2008-11~2016-02</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">oi0(oi0) 2008-11~2016-02: 丛结构 cycles=9, SR=1.09</td>
+            </tr>
+            <tr>
+              <td><b>0.984</b></td>
+              <td style="font-size:11px">形1.00 节0.96</td>
+              <td>铝连续 2005-06~2026-02</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">fu0(fu0) 2005-06~2026-02: 丛结构 cycles=47, SR=1.09</td>
+            </tr>
+            <tr>
+              <td><b>0.981</b></td>
+              <td style="font-size:11px">形0.96 节0.99</td>
+              <td>铝连续 2008-06~2008-07</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">cl(cl) 2008-06~2008-07: 丛结构 cycles=2, SR=1.14</td>
+            </tr>
+            <tr>
+              <td><b>0.981</b></td>
+              <td style="font-size:11px">形0.95 节1.00</td>
+              <td>铝连续 2020-07~2021-02</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">PTA连续(ta0) 2020-07~2021-02: 丛结构 cycles=5, SR=1.15</td>
+            </tr>
+            <tr>
+              <td><b>0.981</b></td>
+              <td style="font-size:11px">形0.98 节0.97</td>
+              <td>铝连续 2023-04~2023-05</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">工业硅连续(si0) 2023-04~2023-05: 丛结构 cycles=2, SR=1.07</td>
+            </tr>
+            <tr>
+              <td><b>0.981</b></td>
+              <td style="font-size:11px">形1.00 节0.95</td>
+              <td>铝连续 2013-01~2024-06</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">玻璃连续(fg0) 2013-01~2024-06: 丛结构 cycles=11, SR=1.09</td>
+            </tr>
+            <tr>
+              <td><b>0.980</b></td>
+              <td style="font-size:11px">形0.97 节0.98</td>
+              <td>铝连续 2019-12~2026-03</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">eb0(eb0) 2019-12~2026-03: 丛结构 cycles=11, SR=1.06</td>
+            </tr></tbody>
+          </table>
+          <div class="guide-box">
+            <div class="guide-title">对比指引</div>
+            <ol><li>[跨品种 10 条 + 自身 0 条]
+</li><li>历史方向分歧：上涨 0 段 / 下跌 0 段 / 不明 10 段</li><li>建议：调出最相似的 2~3 段历史 K 线图，逐根对比 Zone 周围的 Cycle 节奏变化，特别关注 speed_ratio 的转折点</li></ol>
+          </div>
+        </div>
+        <div class="struct-card">
+          <div class="struct-head">
+            <span class="sym-badge">铝连续</span>
+            <span class="sym-code">AL0</span>
+            <span class="period">2024-04-15 ~ 2025-09-15</span>
+            <span class="cycle-badge">18 cycles</span>
+          </div>
+          <div class="struct-meta">
+            SR=0.850 &nbsp;|&nbsp;
+            TR=1.298 &nbsp;|&nbsp;
+            LogSR=0.848 &nbsp;|&nbsp;
+            Zone=0.0100 &nbsp;|&nbsp;
+            Strength=35.2
+          </div>
+          <table class="case-table">
+            <thead><tr>
+              <th>相似度</th><th>拆解</th><th>历史段</th>
+              <th>方向</th><th>幅度</th><th>天数</th><th>描述</th>
+            </tr></thead>
+            <tbody>
+            <tr>
+              <td><b>0.988</b></td>
+              <td style="font-size:11px">形0.99 节0.98</td>
+              <td>铝连续 2005-01~2009-03</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">铜连续(cu0) 2005-01~2009-03: 丛结构 cycles=7, SR=0.84</td>
+            </tr>
+            <tr>
+              <td><b>0.988</b></td>
+              <td style="font-size:11px">形0.99 节0.98</td>
+              <td>铝连续 2005-01~2009-03</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">铜连续(cu0) 2005-01~2009-03: 丛结构 cycles=7, SR=0.84</td>
+            </tr>
+            <tr>
+              <td><b>0.982</b></td>
+              <td style="font-size:11px">形0.98 节0.98</td>
+              <td>铝连续 2019-09~2026-03</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">nid(nid) 2019-09~2026-03: 丛结构 cycles=17, SR=0.87</td>
+            </tr>
+            <tr>
+              <td><b>0.979</b></td>
+              <td style="font-size:11px">形1.00 节0.95</td>
+              <td>铝连续 2016-07~2020-04</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">nid(nid) 2016-07~2020-04: 丛结构 cycles=13, SR=0.85</td>
+            </tr>
+            <tr>
+              <td><b>0.978</b></td>
+              <td style="font-size:11px">形0.98 节0.96</td>
+              <td>铝连续 2016-07~2020-04</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">nid(nid) 2016-07~2020-04: 丛结构 cycles=13, SR=0.87</td>
+            </tr>
+            <tr>
+              <td><b>0.977</b></td>
+              <td style="font-size:11px">形0.94 节1.00</td>
+              <td>铝连续 2014-11~2016-07</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">螺纹钢连续(rb0) 2014-11~2016-07: 丛结构 cycles=6, SR=0.90</td>
+            </tr>
+            <tr>
+              <td><b>0.968</b></td>
+              <td style="font-size:11px">形0.98 节0.93</td>
+              <td>铝连续 2024-07~2025-08</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">工业硅连续(si0) 2024-07~2025-08: 丛结构 cycles=6, SR=0.86</td>
+            </tr>
+            <tr>
+              <td><b>0.967</b></td>
+              <td style="font-size:11px">形0.98 节0.94</td>
+              <td>铝连续 2014-12~2019-01</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">铁矿石连续(i0) 2014-12~2019-01: 丛结构 cycles=12, SR=0.83</td>
+            </tr>
+            <tr>
+              <td><b>0.965</b></td>
+              <td style="font-size:11px">形0.92 节1.00</td>
+              <td>铝连续 2016-08~2020-05</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">zc0(zc0) 2016-08~2020-05: 丛结构 cycles=5, SR=0.93</td>
+            </tr>
+            <tr>
+              <td><b>0.964</b></td>
+              <td style="font-size:11px">形0.99 节0.92</td>
+              <td>铝连续 2016-09~2021-02</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">oil(oil) 2016-09~2021-02: 丛结构 cycles=13, SR=0.84</td>
+            </tr></tbody>
+          </table>
+          <div class="guide-box">
+            <div class="guide-title">对比指引</div>
+            <ol><li>[跨品种 10 条 + 自身 0 条]
+</li><li>历史方向分歧：上涨 0 段 / 下跌 0 段 / 不明 10 段</li><li>建议：调出最相似的 2~3 段历史 K 线图，逐根对比 Zone 周围的 Cycle 节奏变化，特别关注 speed_ratio 的转折点</li></ol>
+          </div>
+        </div>
+        <div class="struct-card">
+          <div class="struct-head">
+            <span class="sym-badge">铝连续</span>
+            <span class="sym-code">AL0</span>
+            <span class="period">2023-01-20 ~ 2025-04-30</span>
+            <span class="cycle-badge">12 cycles</span>
+          </div>
+          <div class="struct-meta">
+            SR=2.294 &nbsp;|&nbsp;
+            TR=3.134 &nbsp;|&nbsp;
+            LogSR=2.303 &nbsp;|&nbsp;
+            Zone=0.0100 &nbsp;|&nbsp;
+            Strength=4.0
+          </div>
+          <table class="case-table">
+            <thead><tr>
+              <th>相似度</th><th>拆解</th><th>历史段</th>
+              <th>方向</th><th>幅度</th><th>天数</th><th>描述</th>
+            </tr></thead>
+            <tbody>
+            <tr>
+              <td><b>0.985</b></td>
+              <td style="font-size:11px">形0.99 节0.97</td>
+              <td>铝连续 2019-09~2026-01</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">ur0(ur0) 2019-09~2026-01: 丛结构 cycles=21, SR=2.27</td>
+            </tr>
+            <tr>
+              <td><b>0.983</b></td>
+              <td style="font-size:11px">形0.96 节1.00</td>
+              <td>铝连续 2009-05~2026-01</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">ru0(ru0) 2009-05~2026-01: 丛结构 cycles=26, SR=2.20</td>
+            </tr>
+            <tr>
+              <td><b>0.975</b></td>
+              <td style="font-size:11px">形0.99 节0.95</td>
+              <td>铝连续 2021-02~2023-05</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">s(s) 2021-02~2023-05: 丛结构 cycles=12, SR=2.31</td>
+            </tr>
+            <tr>
+              <td><b>0.975</b></td>
+              <td style="font-size:11px">形0.96 节0.98</td>
+              <td>铝连续 2018-09~2020-07</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">bo(bo) 2018-09~2020-07: 丛结构 cycles=12, SR=2.19</td>
+            </tr>
+            <tr>
+              <td><b>0.973</b></td>
+              <td style="font-size:11px">形0.96 节0.97</td>
+              <td>铝连续 2025-04~2026-04</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">纯碱连续(sa0) 2025-04~2026-04: 丛结构 cycles=9, SR=2.21</td>
+            </tr>
+            <tr>
+              <td><b>0.971</b></td>
+              <td style="font-size:11px">形0.94 节0.99</td>
+              <td>铝连续 2016-10~2020-12</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">锡连续(sn0) 2016-10~2020-12: 丛结构 cycles=5, SR=2.15</td>
+            </tr>
+            <tr>
+              <td><b>0.971</b></td>
+              <td style="font-size:11px">形0.99 节0.94</td>
+              <td>铝连续 2021-07~2023-12</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">纯碱连续(sa0) 2021-07~2023-12: 丛结构 cycles=7, SR=2.27</td>
+            </tr>
+            <tr>
+              <td><b>0.971</b></td>
+              <td style="font-size:11px">形0.95 节0.98</td>
+              <td>铝连续 2022-05~2025-08</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">snd(snd) 2022-05~2025-08: 丛结构 cycles=9, SR=2.42</td>
+            </tr>
+            <tr>
+              <td><b>0.970</b></td>
+              <td style="font-size:11px">形0.98 节0.94</td>
+              <td>铝连续 2016-11~2025-06</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">热卷连续(hc0) 2016-11~2025-06: 丛结构 cycles=7, SR=2.34</td>
+            </tr>
+            <tr>
+              <td><b>0.969</b></td>
+              <td style="font-size:11px">形0.96 节0.96</td>
+              <td>铝连续 2016-11~2024-09</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">bo(bo) 2016-11~2024-09: 丛结构 cycles=5, SR=2.21</td>
+            </tr></tbody>
+          </table>
+          <div class="guide-box">
+            <div class="guide-title">对比指引</div>
+            <ol><li>[跨品种 10 条 + 自身 0 条]
+</li><li>历史方向分歧：上涨 0 段 / 下跌 0 段 / 不明 10 段</li><li>建议：调出最相似的 2~3 段历史 K 线图，逐根对比 Zone 周围的 Cycle 节奏变化，特别关注 speed_ratio 的转折点</li></ol>
+          </div>
+        </div>
+        <div class="struct-card">
+          <div class="struct-head">
+            <span class="sym-badge">铝连续</span>
+            <span class="sym-code">AL0</span>
+            <span class="period">2023-02-08 ~ 2024-01-02</span>
+            <span class="cycle-badge">7 cycles</span>
+          </div>
+          <div class="struct-meta">
+            SR=1.925 &nbsp;|&nbsp;
+            TR=1.379 &nbsp;|&nbsp;
+            LogSR=1.905 &nbsp;|&nbsp;
+            Zone=0.0100 &nbsp;|&nbsp;
+            Strength=2.0
+          </div>
+          <table class="case-table">
+            <thead><tr>
+              <th>相似度</th><th>拆解</th><th>历史段</th>
+              <th>方向</th><th>幅度</th><th>天数</th><th>描述</th>
+            </tr></thead>
+            <tbody>
+            <tr>
+              <td><b>0.982</b></td>
+              <td style="font-size:11px">形0.96 节1.00</td>
+              <td>铝连续 2015-01~2025-12</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">玻璃连续(fg0) 2015-01~2025-12: 丛结构 cycles=4, SR=1.84</td>
+            </tr>
+            <tr>
+              <td><b>0.979</b></td>
+              <td style="font-size:11px">形0.97 节0.98</td>
+              <td>铝连续 2016-03~2016-11</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">cad(cad) 2016-03~2016-11: 丛结构 cycles=8, SR=1.86</td>
+            </tr>
+            <tr>
+              <td><b>0.977</b></td>
+              <td style="font-size:11px">形0.95 节1.00</td>
+              <td>铝连续 2017-03~2021-02</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">ahd(ahd) 2017-03~2021-02: 丛结构 cycles=16, SR=1.82</td>
+            </tr>
+            <tr>
+              <td><b>0.961</b></td>
+              <td style="font-size:11px">形0.95 节0.96</td>
+              <td>铝连续 2017-01~2020-03</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">cad(cad) 2017-01~2020-03: 丛结构 cycles=22, SR=1.82</td>
+            </tr>
+            <tr>
+              <td><b>0.959</b></td>
+              <td style="font-size:11px">形0.96 节0.94</td>
+              <td>铝连续 2016-03~2016-11</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">cad(cad) 2016-03~2016-11: 丛结构 cycles=7, SR=1.84</td>
+            </tr>
+            <tr>
+              <td><b>0.959</b></td>
+              <td style="font-size:11px">形1.00 节0.90</td>
+              <td>铝连续 2016-02~2026-01</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">聚丙烯连续(pp0) 2016-02~2026-01: 丛结构 cycles=3, SR=1.92</td>
+            </tr>
+            <tr>
+              <td><b>0.956</b></td>
+              <td style="font-size:11px">形0.89 节1.00</td>
+              <td>铝连续 2020-04~2026-03</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">纯碱连续(sa0) 2020-04~2026-03: 丛结构 cycles=7, SR=2.18</td>
+            </tr>
+            <tr>
+              <td><b>0.956</b></td>
+              <td style="font-size:11px">形0.90 节0.98</td>
+              <td>铝连续 2026-01~2026-03</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">锡连续(sn0) 2026-01~2026-03: 丛结构 cycles=2, SR=1.74</td>
+            </tr>
+            <tr>
+              <td><b>0.948</b></td>
+              <td style="font-size:11px">形0.93 节0.94</td>
+              <td>铝连续 2024-06~2025-05</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">si(si) 2024-06~2025-05: 丛结构 cycles=8, SR=1.79</td>
+            </tr>
+            <tr>
+              <td><b>0.947</b></td>
+              <td style="font-size:11px">形0.99 节0.88</td>
+              <td>铝连续 2015-08~2016-04</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">rm0(rm0) 2015-08~2016-04: 丛结构 cycles=7, SR=1.91</td>
+            </tr></tbody>
+          </table>
+          <div class="guide-box">
+            <div class="guide-title">对比指引</div>
+            <ol><li>[跨品种 10 条 + 自身 0 条]
+</li><li>历史方向分歧：上涨 0 段 / 下跌 0 段 / 不明 10 段</li><li>建议：调出最相似的 2~3 段历史 K 线图，逐根对比 Zone 周围的 Cycle 节奏变化，特别关注 speed_ratio 的转折点</li></ol>
+          </div>
+        </div>
+        <div class="struct-card">
+          <div class="struct-head">
+            <span class="sym-badge">铝连续</span>
+            <span class="sym-code">AL0</span>
+            <span class="period">2023-02-08 ~ 2024-01-02</span>
+            <span class="cycle-badge">5 cycles</span>
+          </div>
+          <div class="struct-meta">
+            SR=2.007 &nbsp;|&nbsp;
+            TR=1.364 &nbsp;|&nbsp;
+            LogSR=1.982 &nbsp;|&nbsp;
+            Zone=0.0100 &nbsp;|&nbsp;
+            Strength=7.7
+          </div>
+          <table class="case-table">
+            <thead><tr>
+              <th>相似度</th><th>拆解</th><th>历史段</th>
+              <th>方向</th><th>幅度</th><th>天数</th><th>描述</th>
+            </tr></thead>
+            <tbody>
+            <tr>
+              <td><b>0.967</b></td>
+              <td style="font-size:11px">形0.93 节0.99</td>
+              <td>铝连续 2020-04~2026-03</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">纯碱连续(sa0) 2020-04~2026-03: 丛结构 cycles=7, SR=2.18</td>
+            </tr>
+            <tr>
+              <td><b>0.963</b></td>
+              <td style="font-size:11px">形0.92 节0.99</td>
+              <td>铝连续 2015-01~2025-12</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">玻璃连续(fg0) 2015-01~2025-12: 丛结构 cycles=4, SR=1.84</td>
+            </tr>
+            <tr>
+              <td><b>0.959</b></td>
+              <td style="font-size:11px">形0.91 节0.99</td>
+              <td>铝连续 2017-03~2021-02</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">ahd(ahd) 2017-03~2021-02: 丛结构 cycles=16, SR=1.82</td>
+            </tr>
+            <tr>
+              <td><b>0.959</b></td>
+              <td style="font-size:11px">形0.93 节0.97</td>
+              <td>铝连续 2016-03~2016-11</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">cad(cad) 2016-03~2016-11: 丛结构 cycles=8, SR=1.86</td>
+            </tr>
+            <tr>
+              <td><b>0.956</b></td>
+              <td style="font-size:11px">形0.96 节0.93</td>
+              <td>铝连续 2015-08~2021-01</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">bu0(bu0) 2015-08~2021-01: 丛结构 cycles=10, SR=2.10</td>
+            </tr>
+            <tr>
+              <td><b>0.948</b></td>
+              <td style="font-size:11px">形0.92 节0.95</td>
+              <td>铝连续 2016-03~2016-11</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">cad(cad) 2016-03~2016-11: 丛结构 cycles=7, SR=1.84</td>
+            </tr>
+            <tr>
+              <td><b>0.946</b></td>
+              <td style="font-size:11px">形0.94 节0.92</td>
+              <td>铝连续 2022-12~2023-02</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">ur0(ur0) 2022-12~2023-02: 丛结构 cycles=2, SR=2.14</td>
+            </tr>
+            <tr>
+              <td><b>0.945</b></td>
+              <td style="font-size:11px">形0.87 节1.00</td>
+              <td>铝连续 2026-01~2026-03</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">锡连续(sn0) 2026-01~2026-03: 丛结构 cycles=2, SR=1.74</td>
+            </tr>
+            <tr>
+              <td><b>0.942</b></td>
+              <td style="font-size:11px">形0.91 节0.95</td>
+              <td>铝连续 2017-01~2020-03</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">cad(cad) 2017-01~2020-03: 丛结构 cycles=22, SR=1.82</td>
+            </tr>
+            <tr>
+              <td><b>0.939</b></td>
+              <td style="font-size:11px">形0.95 节0.89</td>
+              <td>铝连续 2016-02~2026-01</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">聚丙烯连续(pp0) 2016-02~2026-01: 丛结构 cycles=3, SR=1.92</td>
+            </tr></tbody>
+          </table>
+          <div class="guide-box">
+            <div class="guide-title">对比指引</div>
+            <ol><li>[跨品种 10 条 + 自身 0 条]
+</li><li>历史方向分歧：上涨 0 段 / 下跌 0 段 / 不明 10 段</li><li>建议：调出最相似的 2~3 段历史 K 线图，逐根对比 Zone 周围的 Cycle 节奏变化，特别关注 speed_ratio 的转折点</li></ol>
+          </div>
+        </div>
+        <div class="struct-card">
+          <div class="struct-head">
+            <span class="sym-badge">铝连续</span>
+            <span class="sym-code">AL0</span>
+            <span class="period">2026-01-30 ~ 2026-04-01</span>
+            <span class="cycle-badge">2 cycles</span>
+          </div>
+          <div class="struct-meta">
+            SR=0.375 &nbsp;|&nbsp;
+            TR=0.501 &nbsp;|&nbsp;
+            LogSR=0.381 &nbsp;|&nbsp;
+            Zone=0.0100 &nbsp;|&nbsp;
+            Strength=3.9
+          </div>
+          <table class="case-table">
+            <thead><tr>
+              <th>相似度</th><th>拆解</th><th>历史段</th>
+              <th>方向</th><th>幅度</th><th>天数</th><th>描述</th>
+            </tr></thead>
+            <tbody>
+            <tr>
+              <td><b>0.945</b></td>
+              <td style="font-size:11px">形0.97 节0.89</td>
+              <td>铝连续 2020-08~2020-10</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">pg0(pg0) 2020-08~2020-10: 丛结构 cycles=2, SR=0.36</td>
+            </tr>
+            <tr>
+              <td><b>0.929</b></td>
+              <td style="font-size:11px">形0.97 节0.86</td>
+              <td>铝连续 2015-12~2016-02</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">焦炭连续(j0) 2015-12~2016-02: 丛结构 cycles=2, SR=0.39</td>
+            </tr>
+            <tr>
+              <td><b>0.924</b></td>
+              <td style="font-size:11px">形0.92 节0.89</td>
+              <td>铝连续 2024-09~2025-01</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">黄金连续(au0) 2024-09~2025-01: 丛结构 cycles=3, SR=0.35</td>
+            </tr>
+            <tr>
+              <td><b>0.921</b></td>
+              <td style="font-size:11px">形0.87 节0.93</td>
+              <td>铝连续 2008-06~2013-05</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">fu0(fu0) 2008-06~2013-05: 丛结构 cycles=6, SR=0.44</td>
+            </tr>
+            <tr>
+              <td><b>0.909</b></td>
+              <td style="font-size:11px">形0.99 节0.78</td>
+              <td>铝连续 1998-05~1998-10</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">cl(cl) 1998-05~1998-10: 丛结构 cycles=2, SR=0.37</td>
+            </tr>
+            <tr>
+              <td><b>0.908</b></td>
+              <td style="font-size:11px">形0.93 节0.84</td>
+              <td>铝连续 2014-05~2014-06</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">焦炭连续(j0) 2014-05~2014-06: 丛结构 cycles=2, SR=0.41</td>
+            </tr>
+            <tr>
+              <td><b>0.902</b></td>
+              <td style="font-size:11px">形0.77 节0.99</td>
+              <td>铝连续 2020-10~2023-12</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">si(si) 2020-10~2023-12: 丛结构 cycles=11, SR=0.54</td>
+            </tr>
+            <tr>
+              <td><b>0.900</b></td>
+              <td style="font-size:11px">形0.85 节0.90</td>
+              <td>铝连续 2023-12~2024-01</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">碳酸锂连续(lc0) 2023-12~2024-01: 丛结构 cycles=2, SR=0.46</td>
+            </tr>
+            <tr>
+              <td><b>0.900</b></td>
+              <td style="font-size:11px">形0.80 节0.95</td>
+              <td>铝连续 2022-12~2023-02</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">工业硅连续(si0) 2022-12~2023-02: 丛结构 cycles=2, SR=0.50</td>
+            </tr>
+            <tr>
+              <td><b>0.895</b></td>
+              <td style="font-size:11px">形0.84 节0.90</td>
+              <td>铝连续 2008-12~2020-05</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">铝连续(al0) 2008-12~2020-05: 丛结构 cycles=6, SR=0.46</td>
+            </tr></tbody>
+          </table>
+          <div class="guide-box">
+            <div class="guide-title">对比指引</div>
+            <ol><li>[跨品种 10 条 + 自身 0 条]
+</li><li>历史方向分歧：上涨 0 段 / 下跌 0 段 / 不明 10 段</li><li>建议：调出最相似的 2~3 段历史 K 线图，逐根对比 Zone 周围的 Cycle 节奏变化，特别关注 speed_ratio 的转折点</li></ol>
+          </div>
+        </div>
+        <div class="struct-card">
+          <div class="struct-head">
+            <span class="sym-badge">铝连续</span>
+            <span class="sym-code">AL0</span>
+            <span class="period">2026-01-09 ~ 2026-04-09</span>
+            <span class="cycle-badge">2 cycles</span>
+          </div>
+          <div class="struct-meta">
+            SR=0.505 &nbsp;|&nbsp;
+            TR=1.000 &nbsp;|&nbsp;
+            LogSR=0.497 &nbsp;|&nbsp;
+            Zone=0.0100 &nbsp;|&nbsp;
+            Strength=2.0
+          </div>
+          <table class="case-table">
+            <thead><tr>
+              <th>相似度</th><th>拆解</th><th>历史段</th>
+              <th>方向</th><th>幅度</th><th>天数</th><th>描述</th>
+            </tr></thead>
+            <tbody>
+            <tr>
+              <td><b>0.943</b></td>
+              <td style="font-size:11px">形0.91 节0.94</td>
+              <td>铝连续 2024-10~2025-09</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">碳酸锂连续(lc0) 2024-10~2025-09: 丛结构 cycles=3, SR=0.56</td>
+            </tr>
+            <tr>
+              <td><b>0.937</b></td>
+              <td style="font-size:11px">形0.97 节0.88</td>
+              <td>铝连续 2016-01~2016-07</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">sm0(sm0) 2016-01~2016-07: 丛结构 cycles=4, SR=0.52</td>
+            </tr>
+            <tr>
+              <td><b>0.926</b></td>
+              <td style="font-size:11px">形0.90 节0.91</td>
+              <td>铝连续 2025-10~2025-11</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">黄金连续(au0) 2025-10~2025-11: 丛结构 cycles=2, SR=0.56</td>
+            </tr>
+            <tr>
+              <td><b>0.925</b></td>
+              <td style="font-size:11px">形0.88 节0.93</td>
+              <td>铝连续 2025-08~2025-09</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">ps0(ps0) 2025-08~2025-09: 丛结构 cycles=3, SR=0.58</td>
+            </tr>
+            <tr>
+              <td><b>0.919</b></td>
+              <td style="font-size:11px">形0.81 节0.98</td>
+              <td>铝连续 2024-04~2024-07</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">gc(gc) 2024-04~2024-07: 丛结构 cycles=5, SR=0.65</td>
+            </tr>
+            <tr>
+              <td><b>0.916</b></td>
+              <td style="font-size:11px">形0.98 节0.81</td>
+              <td>铝连续 2007-04~2007-04</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">锌连续(zn0) 2007-04~2007-04: 丛结构 cycles=2, SR=0.50</td>
+            </tr>
+            <tr>
+              <td><b>0.905</b></td>
+              <td style="font-size:11px">形0.85 节0.92</td>
+              <td>铝连续 2015-11~2016-01</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">聚丙烯连续(pp0) 2015-11~2016-01: 丛结构 cycles=3, SR=0.62</td>
+            </tr>
+            <tr>
+              <td><b>0.897</b></td>
+              <td style="font-size:11px">形0.76 节0.98</td>
+              <td>铝连续 2003-02~2020-06</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">cl(cl) 2003-02~2020-06: 丛结构 cycles=5, SR=0.74</td>
+            </tr>
+            <tr>
+              <td><b>0.886</b></td>
+              <td style="font-size:11px">形0.72 节0.99</td>
+              <td>铝连续 2015-04~2025-06</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">sm0(sm0) 2015-04~2025-06: 丛结构 cycles=7, SR=0.82</td>
+            </tr>
+            <tr>
+              <td><b>0.886</b></td>
+              <td style="font-size:11px">形0.73 节0.98</td>
+              <td>铝连续 2013-04~2025-07</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">焦炭连续(j0) 2013-04~2025-07: 丛结构 cycles=8, SR=0.79</td>
+            </tr></tbody>
+          </table>
+          <div class="guide-box">
+            <div class="guide-title">对比指引</div>
+            <ol><li>[跨品种 10 条 + 自身 0 条]
+</li><li>历史方向分歧：上涨 0 段 / 下跌 0 段 / 不明 10 段</li><li>建议：调出最相似的 2~3 段历史 K 线图，逐根对比 Zone 周围的 Cycle 节奏变化，特别关注 speed_ratio 的转折点</li></ol>
+          </div>
+        </div>
+        <div class="struct-card">
+          <div class="struct-head">
+            <span class="sym-badge">铝连续</span>
+            <span class="sym-code">AL0</span>
+            <span class="period">2026-01-21 ~ 2026-03-20</span>
+            <span class="cycle-badge">2 cycles</span>
+          </div>
+          <div class="struct-meta">
+            SR=3.427 &nbsp;|&nbsp;
+            TR=3.091 &nbsp;|&nbsp;
+            LogSR=3.449 &nbsp;|&nbsp;
+            Zone=0.0100 &nbsp;|&nbsp;
+            Strength=2.0
+          </div>
+          <table class="case-table">
+            <thead><tr>
+              <th>相似度</th><th>拆解</th><th>历史段</th>
+              <th>方向</th><th>幅度</th><th>天数</th><th>描述</th>
+            </tr></thead>
+            <tbody>
+            <tr>
+              <td><b>1.000</b></td>
+              <td style="font-size:11px">形1.00 节1.00</td>
+              <td>铝连续 2026-01~2026-03</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">铝连续(al0) 2026-01~2026-03: 丛结构 cycles=2, SR=3.43</td>
+            </tr>
+            <tr>
+              <td><b>0.972</b></td>
+              <td style="font-size:11px">形0.95 节0.98</td>
+              <td>铝连续 2015-10~2020-03</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">cs0(cs0) 2015-10~2020-03: 丛结构 cycles=20, SR=3.27</td>
+            </tr>
+            <tr>
+              <td><b>0.965</b></td>
+              <td style="font-size:11px">形0.97 节0.94</td>
+              <td>铝连续 2015-11~2016-01</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">热卷连续(hc0) 2015-11~2016-01: 丛结构 cycles=2, SR=3.53</td>
+            </tr>
+            <tr>
+              <td><b>0.960</b></td>
+              <td style="font-size:11px">形1.00 节0.90</td>
+              <td>铝连续 2015-07~2016-05</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">锡连续(sn0) 2015-07~2016-05: 丛结构 cycles=6, SR=3.43</td>
+            </tr>
+            <tr>
+              <td><b>0.952</b></td>
+              <td style="font-size:11px">形1.00 节0.88</td>
+              <td>铝连续 2021-06~2021-08</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">铁矿石连续(i0) 2021-06~2021-08: 丛结构 cycles=3, SR=3.41</td>
+            </tr>
+            <tr>
+              <td><b>0.944</b></td>
+              <td style="font-size:11px">形0.97 节0.89</td>
+              <td>铝连续 2022-02~2026-02</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">ahd(ahd) 2022-02~2026-02: 丛结构 cycles=3, SR=3.34</td>
+            </tr>
+            <tr>
+              <td><b>0.944</b></td>
+              <td style="font-size:11px">形0.98 节0.88</td>
+              <td>铝连续 2016-03~2017-06</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">nid(nid) 2016-03~2017-06: 丛结构 cycles=6, SR=3.48</td>
+            </tr>
+            <tr>
+              <td><b>0.939</b></td>
+              <td style="font-size:11px">形0.85 节1.00</td>
+              <td>铝连续 2015-11~2020-05</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">棉花连续(cf0) 2015-11~2020-05: 丛结构 cycles=3, SR=2.91</td>
+            </tr>
+            <tr>
+              <td><b>0.934</b></td>
+              <td style="font-size:11px">形0.95 节0.89</td>
+              <td>铝连续 2012-09~2025-07</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">焦炭连续(j0) 2012-09~2025-07: 丛结构 cycles=7, SR=3.25</td>
+            </tr>
+            <tr>
+              <td><b>0.933</b></td>
+              <td style="font-size:11px">形0.95 节0.88</td>
+              <td>铝连续 2015-12~2016-10</td>
+              <td style="color:#9e9e9e;font-weight:bold">○不明</td>
+              <td>0.0%</td>
+              <td>0天</td>
+              <td style="font-size:11px;color:#aaa">bu0(bu0) 2015-12~2016-10: 丛结构 cycles=5, SR=3.26</td>
+            </tr></tbody>
+          </table>
+          <div class="guide-box">
+            <div class="guide-title">对比指引</div>
+            <ol><li>[跨品种 10 条 + 自身 0 条]
+</li><li>历史方向分歧：上涨 0 段 / 下跌 0 段 / 不明 10 段</li><li>建议：调出最相似的 2~3 段历史 K 线图，逐根对比 Zone 周围的 Cycle 节奏变化，特别关注 speed_ratio 的转折点</li></ol>
+          </div>
+        </div>
+
+</body>
+</html>

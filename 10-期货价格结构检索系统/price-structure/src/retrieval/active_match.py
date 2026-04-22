@@ -294,14 +294,42 @@ def _compile_structures(
     return result.structures
 
 
-def active_match(query: ActiveMatchQuery, data_dir: str = "data") -> ActiveMatchResult:
+def _load_cross_symbol_pool(data_dir: str = "data") -> list[dict]:
+    """加载全市场丛结构池（跨品种检索库）"""
+    from pathlib import Path
+    import json
+    
+    pool_path = Path(data_dir) / "library" / "full_structure_pool.jsonl"
+    if not pool_path.exists():
+        return []
+    
+    pool = []
+    with open(pool_path, "r", encoding="utf-8") as f:
+        for line in f:
+            try:
+                pool.append(json.loads(line.strip()))
+            except json.JSONDecodeError:
+                continue
+    return pool
+
+
+def _build_structure_from_pool_entry(entry: dict, symbol_bars: dict[str, list[Bar]]) -> Structure | None:
+    """从丛结构池条目重建 Structure 对象（用于相似度计算）"""
+    # 这里简化处理：直接用 invariants 做相似度，不重建完整 Structure
+    # 如果需要更精确的对比，需要存储完整的 structure 序列化数据
+    return None
+
+
+def active_match(query: ActiveMatchQuery, data_dir: str = "data", use_cross_symbol: bool = True) -> ActiveMatchResult:
     """
     核心匹配函数。
 
     对每个指定品种：
     1. 加载全量历史数据（MySQL 优先，CSV 降级）
     2. 在用户指定窗口内编译结构
-    3. 对每个编译出的结构，在全量历史中找最相似的段
+    3. 对每个编译出的结构，在以下范围找最相似的段：
+       - 自身历史（同品种不同时间段）
+       - 跨品种丛结构库（如果 use_cross_symbol=True）
     4. 生成对比指引
     """
     config = query.compiler_config
@@ -309,6 +337,12 @@ def active_match(query: ActiveMatchQuery, data_dir: str = "data") -> ActiveMatch
     matched_structures: list[MatchedStructure] = []
     total_structures = 0
     total_cases = 0
+
+    # 加载跨品种丛结构池（可选）
+    cross_pool = _load_cross_symbol_pool(data_dir) if use_cross_symbol else []
+    print(f"  [检索模式] {'跨品种+自身历史' if use_cross_symbol and cross_pool else '仅自身历史'}")
+    if cross_pool:
+        print(f"  [丛结构库] {len(cross_pool)} 条全市场结构")
 
     for sym in query.symbols:
         # 加载全量数据
@@ -318,7 +352,7 @@ def active_match(query: ActiveMatchQuery, data_dir: str = "data") -> ActiveMatch
 
         sname = symbol_name(sym)
 
-        # 编译全量历史结构（作为检索库）
+        # 编译全量历史结构（作为自身检索库）
         all_structures = _compile_structures(all_bars, config, sym)
 
         # 编译用户窗口内的结构
@@ -329,18 +363,19 @@ def active_match(query: ActiveMatchQuery, data_dir: str = "data") -> ActiveMatch
         )
         total_structures += len(window_structures)
 
-        # 对窗口内的每个结构，找全量历史中的相似段
+        # 对窗口内的每个结构，找相似段
         for ws in window_structures:
             ws_inv = ws.invariants or {}
             ws_start = ws.t_start.strftime("%Y-%m-%d") if ws.t_start else ""
             ws_end = ws.t_end.strftime("%Y-%m-%d") if ws.t_end else ""
 
-            # 排除自身（时间重叠的算自身）
             candidates = []
+
+            # ── 1. 自身历史对比 ──
             for hs in all_structures:
                 if hs is ws:
                     continue
-                # 跳过时间窗口内的（已经在窗口中了，找的是历史）
+                # 跳过时间窗口内的
                 if hs.t_end and ws.t_start and hs.t_end >= ws.t_start:
                     continue
 
@@ -375,13 +410,65 @@ def active_match(query: ActiveMatchQuery, data_dir: str = "data") -> ActiveMatch
                 case.description = _case_description(case)
                 candidates.append(case)
 
-            # 按相似度排序取 top_k
+            # ── 2. 跨品种丛结构库对比 ──
+            if cross_pool:
+                for entry in cross_pool:
+                    # 跳过同品种（已在自身历史中处理）
+                    if entry.get("symbol") == sym:
+                        continue
+
+                    pool_inv = entry.get("invariants", {})
+                    if not pool_inv:
+                        continue
+
+                    # 用 invariants 直接计算相似度（简化版）
+                    sc_geom = 1.0 / (1.0 + abs((ws_inv.get('avg_speed_ratio', 0) - pool_inv.get('avg_speed_ratio', 0)) / max(pool_inv.get('avg_speed_ratio', 1), 0.01)))
+                    sc_rel = 1.0 / (1.0 + abs((ws_inv.get('avg_time_ratio', 0) - pool_inv.get('avg_time_ratio', 0)) / max(pool_inv.get('avg_time_ratio', 1), 0.01)))
+                    sc_fam = 1.0 / (1.0 + abs((ws_inv.get('zone_rel_bw', 0) - pool_inv.get('zone_rel_bw', 0)) / 0.01))
+                    sc_total = (sc_geom * 0.4 + sc_rel * 0.4 + sc_fam * 0.2)
+
+                    cross_sym = entry.get("symbol", "unknown")
+                    cross_sname = symbol_name(cross_sym)
+
+                    case = HistoricalCase(
+                        symbol=cross_sym,
+                        symbol_name=cross_sname,
+                        period_start=entry.get("start_date", "N/A"),
+                        period_end=entry.get("end_date", "N/A"),
+                        similarity=round(sc_total, 4),
+                        sim_geometry=round(sc_geom, 4),
+                        sim_relation=round(sc_rel, 4),
+                        sim_family=round(sc_fam, 4),
+                        diff_detail=_diff_detail(ws_inv, pool_inv),
+                        direction="cross_ref",  # 跨品种标记
+                        outcome_move=0.0,
+                        outcome_days=0,
+                        cycle_count=entry.get("cycle_count", 0),
+                        avg_speed_ratio=round(pool_inv.get('avg_speed_ratio', 0), 4),
+                        avg_time_ratio=round(pool_inv.get('avg_time_ratio', 0), 4),
+                        zone_center=round(pool_inv.get('zone_center', 0), 2),
+                        zone_bandwidth=round(pool_inv.get('zone_rel_bw', 0), 4),
+                        description=f"{cross_sname}({cross_sym}) {entry.get('start_date', '')[:7]}~{entry.get('end_date', '')[:7]}: 丛结构 cycles={entry.get('cycle_count', 0)}, SR={pool_inv.get('avg_speed_ratio', 0):.2f}",
+                    )
+                    candidates.append(case)
+
+            # 按相似度排序取 top_k（混合自身历史+跨品种）
             candidates.sort(key=lambda c: c.similarity, reverse=True)
             top = candidates[:query.top_k]
             total_cases += len(top)
 
+            # 统计来源分布
+            self_count = sum(1 for c in top if c.symbol == sym)
+            cross_count = len(top) - self_count
+            if cross_count > 0:
+                guide_prefix = f"[跨品种 {cross_count} 条 + 自身 {self_count} 条]\n"
+            else:
+                guide_prefix = ""
+
             # 生成对比指引
             guide = _generate_comparison_guide(ws, top, query)
+            if guide_prefix:
+                guide.insert(0, guide_prefix)
 
             matched_structures.append(MatchedStructure(
                 structure=ws,

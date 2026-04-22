@@ -92,7 +92,8 @@ def _render_html(result, output_dir="output"):
         # 历史案例表
         case_rows = []
         for c in ms.historical_cases:
-            d_color = "#26a69a" if c.direction == "up" else "#ef5350" if c.direction == "down" else "#9e9e9e"
+            # 国内习惯：红涨绿跌
+            d_color = "#ef5350" if c.direction == "up" else "#26a69a" if c.direction == "down" else "#9e9e9e"
             d_text = "↗涨" if c.direction == "up" else "↘跌" if c.direction == "down" else "○不明"
             case_rows.append(f"""
             <tr>
