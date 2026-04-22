@@ -461,7 +461,141 @@ class GraphStore:
             **idx_stats,
         }
 
-    # ─── 统计 ──────────────────────────────────────────────
+    # ─── 每日增量编译（核心入口）────────────────────────────
+
+    def daily_ingest(self, structures: list, symbol: str = "") -> dict:
+        """
+        每日增量编译入口。
+
+        相比 ingest_compile_result()，增加了跨天关联：
+        1. 比对同 Zone 的"昨日结构"，建立 evolves_to 演化边
+        2. 叙事变化时建立 narrative_evolves 递归边
+        3. 差异转移建 transfer_to 边
+        4. 自动保存当日快照
+
+        每日调用一次，自动处理去重和关联。
+        """
+        ts = datetime.now().strftime("%Y-%m-%d")
+
+        # ── 1. 加载已有数据 ──
+        existing_structures = self.load_all_structures()
+        existing_narratives = self.load_all_narratives()
+
+        # 建索引：zone_key → 最新的结构记录
+        latest_by_zone: dict[str, dict] = {}
+        for s in existing_structures:
+            zk = s.get("zone_key", "")
+            ct = s.get("compile_date", "")
+            if zk:
+                prev = latest_by_zone.get(zk)
+                if prev is None or ct > prev.get("compile_date", ""):
+                    latest_by_zone[zk] = s
+
+        # 建索引：zone_key → 最新的叙事文本
+        latest_narrative_by_zone: dict[str, dict] = {}
+        for n in existing_narratives:
+            zk = n.get("zone_key", "")
+            ts_n = n.get("timestamp", "")
+            if zk:
+                prev = latest_narrative_by_zone.get(zk)
+                if prev is None or ts_n > prev.get("timestamp", ""):
+                    latest_narrative_by_zone[zk] = n
+
+        # ── 2. 写入今日数据 ──
+        base_stats = self.ingest_compile_result(structures, symbol)
+
+        # ── 3. 建立跨天关联边 ──
+        evolution_edges = []
+        narrative_edges = []
+        transfer_edges = []
+
+        for i, st in enumerate(structures):
+            sym = st.symbol or symbol or "unknown"
+            zone_key = f"{sym}:{st.zone.price_center:.0f}"
+            compile_date = st.t_start.strftime("%Y%m%d") if st.t_start else "nodate"
+            new_struct_id = f"{sym}_S{i}_{compile_date}"
+            new_s_node = f"struct:{new_struct_id}"
+
+            # 3a. 演化边：昨日结构 → 今日结构
+            prev_struct = latest_by_zone.get(zone_key)
+            if prev_struct:
+                prev_id = prev_struct.get("struct_id", "")
+                prev_date = prev_struct.get("compile_date", "")
+                if prev_id and prev_date != ts:
+                    old_s_node = f"struct:{prev_id}"
+                    # 确认不是同一条记录
+                    if old_s_node != new_s_node:
+                        evolution_edges.append({
+                            "source": old_s_node,
+                            "target": new_s_node,
+                            "edge_type": "evolves_to",
+                            "from_date": prev_date,
+                            "to_date": ts,
+                        })
+
+            # 3b. 叙事递归边：旧叙事 → 新叙事
+            if st.narrative_context:
+                prev_narr = latest_narrative_by_zone.get(zone_key)
+                if prev_narr:
+                    old_text = prev_narr.get("text", "")
+                    old_nid = prev_narr.get("narrative_id", "")
+                    new_nid = f"narrative:{sym}_{i}_{ts}"
+                    if old_text != st.narrative_context and old_nid and new_nid:
+                        narrative_edges.append({
+                            "source": old_nid,
+                            "target": new_nid,
+                            "edge_type": "narrative_evolves",
+                            "old_text": old_text,
+                            "new_text": st.narrative_context,
+                        })
+
+            # 3c. 差异转移边
+            if st.motion and st.motion.transfer_target and st.motion.transfer_strength > 0:
+                # 在已有结构中寻找转移目标
+                transfer_channel = st.motion.transfer_target
+                if transfer_channel == "volume":
+                    # 转移到成交量维度——标记为跨维度转移
+                    transfer_edges.append({
+                        "source": new_s_node,
+                        "target": f"symbol:{sym}",
+                        "edge_type": "transfer_to",
+                        "channel": "volume",
+                        "strength": st.motion.transfer_strength,
+                        "date": ts,
+                    })
+                elif transfer_channel == "shorter_timeframe":
+                    transfer_edges.append({
+                        "source": new_s_node,
+                        "target": f"symbol:{sym}",
+                        "edge_type": "transfer_to",
+                        "channel": "5min",
+                        "strength": st.motion.transfer_strength,
+                        "date": ts,
+                    })
+
+        # 写入关联边
+        for e in evolution_edges:
+            self.append_edge(e)
+        for e in narrative_edges:
+            self.append_edge(e)
+        for e in transfer_edges:
+            self.append_edge(e)
+
+        # ── 4. 重建索引 ──
+        idx_stats = self.rebuild_indexes()
+
+        # ── 5. 保存当日快照 ──
+        snap_path = self.save_snapshot(ts)
+
+        return {
+            "date": ts,
+            **base_stats,
+            "evolution_edges": len(evolution_edges),
+            "narrative_evolves": len(narrative_edges),
+            "transfer_edges": len(transfer_edges),
+            "snapshot": snap_path,
+            **idx_stats,
+        }
 
     def stats(self) -> dict:
         """存储概览"""
