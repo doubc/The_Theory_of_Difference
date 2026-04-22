@@ -22,6 +22,7 @@ from enum import Enum
 import json
 
 import networkx as nx
+from src.graph.store import GraphStore
 
 
 # ─── 节点类型 ──────────────────────────────────────────────
@@ -419,7 +420,120 @@ class StructureGraph:
 
         return graph
 
-    # ─── 持久化 ────────────────────────────────────────────
+    # ─── 持久化（GraphStore JSONL）──────────────────────────
+
+    def save_to_store(self, store: GraphStore) -> dict:
+        """
+        将内存图谱增量写入 JSONL 存储。
+        自动处理去重（Zone 不重复、边不重复）。
+        """
+        records_s = []
+        records_z = []
+        records_n = []
+        records_e = []
+
+        for node in self.G.nodes:
+            attrs = dict(self.G.nodes[node])
+            nt = attrs.get("node_type", "")
+
+            if nt == NodeType.STRUCTURE.value:
+                rec = {k: v for k, v in attrs.items() if k != "node_type"}
+                rec["struct_id"] = node.replace("struct:", "")
+                records_s.append(rec)
+            elif nt == NodeType.ZONE.value:
+                rec = {k: v for k, v in attrs.items() if k != "node_type"}
+                rec["zone_id"] = node
+                rec["zone_key"] = f"{attrs.get('symbol', '')}:{attrs.get('price_center', 0):.0f}" if "price_center" in attrs else node
+                records_z.append(rec)
+            elif nt == NodeType.NARRATIVE.value:
+                rec = {k: v for k, v in attrs.items() if k != "node_type"}
+                rec["narrative_id"] = node
+                records_n.append(rec)
+
+        for u, v in self.G.edges:
+            edge_attrs = dict(self.G[u][v])
+            records_e.append({
+                "source": u,
+                "target": v,
+                **edge_attrs,
+            })
+
+        for zr in records_z:
+            store.append_zone(zr)
+        store.save_structures(records_s)
+        for nr in records_n:
+            store.append_narrative(nr)
+        store.save_edges(records_e)
+
+        idx_stats = store.rebuild_indexes()
+
+        return {
+            "structures": len(records_s),
+            "zones": len(records_z),
+            "narratives": len(records_n),
+            "edges": len(records_e),
+            **idx_stats,
+        }
+
+    @classmethod
+    def load_from_store(cls, store: GraphStore, symbol: str | None = None) -> StructureGraph:
+        """
+        从 JSONL 存储加载为内存图谱。
+        可按品种过滤。
+        """
+        graph = cls()
+
+        structures = store.load_all_structures()
+        if symbol:
+            structures = [s for s in structures if s.get("symbol") == symbol]
+
+        zones = store.load_all_zones()
+        narratives = store.load_all_narratives()
+        edges = store.load_all_edges()
+
+        # 加载结构节点
+        struct_ids = set()
+        for s in structures:
+            sid = s.get("struct_id", "")
+            if not sid:
+                continue
+            node_id = f"struct:{sid}"
+            struct_ids.add(node_id)
+            attrs = {k: v for k, v in s.items() if k not in ("struct_id", "_ts")}
+            attrs["node_type"] = NodeType.STRUCTURE.value
+            graph.G.add_node(node_id, **attrs)
+
+        # 加载 Zone 节点
+        for z in zones:
+            zid = z.get("zone_id", "")
+            if not zid:
+                continue
+            attrs = {k: v for k, v in z.items() if k not in ("zone_id", "_ts")}
+            attrs["node_type"] = NodeType.ZONE.value
+            graph.G.add_node(zid, **attrs)
+
+        # 加载叙事节点
+        for n in narratives:
+            nid = n.get("narrative_id", "")
+            if not nid:
+                continue
+            attrs = {k: v for k, v in n.items() if k not in ("narrative_id", "_ts")}
+            attrs["node_type"] = NodeType.NARRATIVE.value
+            graph.G.add_node(nid, **attrs)
+
+        # 加载边（只保留连接已加载节点的边）
+        node_ids = set(graph.G.nodes)
+        for e in edges:
+            src = e.get("source", "")
+            tgt = e.get("target", "")
+            if src in node_ids and tgt in node_ids:
+                edge_attrs = {k: v for k, v in e.items()
+                              if k not in ("source", "target", "_edge_key", "_ts")}
+                graph.G.add_edge(src, tgt, **edge_attrs)
+
+        return graph
+
+    # ─── 持久化（单文件 JSON，兼容旧接口）────────────────
 
     def to_json(self) -> dict:
         """序列化为 JSON 可兼容的 dict"""
