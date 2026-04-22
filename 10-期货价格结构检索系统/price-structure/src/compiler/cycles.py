@@ -5,10 +5,17 @@ Cycle 与 Structure 组装
 1. build_cycles 用 O(n) 遍历替代 segments.index(seg)
 2. assemble_structures 用 id(zone) 替代 price_center 作 dict key
 3. 引入 relations.structure_invariants
+
+V1.6 P0 新增：
+4. 最近稳态检测 — V1.6 命题 3.4/3.5, 4.4/4.5
+   exit 之后扫描后续极值，寻找价格最先停驻的位置
 """
 
 from __future__ import annotations
-from src.models import Point, Segment, Zone, Cycle, Structure, Phase
+from src.models import (
+    Point, Segment, Zone, Cycle, Structure, Phase,
+    NearestStableState, Direction, ZoneSource,
+)
 from src.relations import structure_invariants
 
 
@@ -16,6 +23,72 @@ def _touches_zone(p: Point, zone: Zone, slack: float = 0.005) -> bool:
     """点是否触及 zone（允许小幅越界）"""
     slack_abs = zone.price_center * slack
     return (zone.lower - slack_abs) <= p.x <= (zone.upper + slack_abs)
+
+
+def _find_nearest_stable(
+    exit_seg: Segment,
+    subsequent_segments: list[Segment],
+    all_zones: list[Zone],
+    max_lookahead: int = 8,
+    stable_threshold: float = 0.015,
+) -> NearestStableState | None:
+    """
+    V1.6 命题 3.4: 最近稳态检测
+    exit 之后，沿最小变易方向扫描后续段，找到价格最先停驻的位置。
+
+    判定逻辑：
+    1. exit 方向决定搜索方向（exit 向上 → 搜索上方，向下 → 搜索下方）
+    2. 扫描后续 max_lookahead 个段
+    3. 找到第一个：段的终点重新触及某个 zone，或段的幅度开始递减（减速 = 接近稳态）
+    4. 阻力评分 = 到达稳态所需段数 / max_lookahead（越小越好）
+    """
+    if not subsequent_segments:
+        return None
+
+    exit_direction = exit_seg.direction
+    if exit_direction == Direction.FLAT:
+        return None
+
+    # 扫描后续段，寻找最先停驻的位置
+    for k, seg in enumerate(subsequent_segments[:max_lookahead]):
+        if k == 0:
+            continue  # 跳过 exit 本身之后的第一段（通常是反向段）
+
+        # 判定1：该段终点触及某个已知 zone → 最近稳态
+        for z in all_zones:
+            if _touches_zone(seg.end, z):
+                return NearestStableState(
+                    zone=z,
+                    arrival_point=seg.end,
+                    duration_to_arrive=seg.end.t - exit_seg.end.t
+                        if hasattr(seg.end.t, '__sub__') else 0.0,
+                    resistance_level=(k + 1) / max_lookahead,
+                )
+
+        # 判定2：连续两段幅度递减 → 减速，该段终点就是稳态候选
+        if k >= 1:
+            prev_seg = subsequent_segments[k - 1]
+            if prev_seg.abs_delta > 0 and seg.abs_delta < prev_seg.abs_delta * 0.5:
+                # 价格在减速，构造一个临时 zone 作为稳态
+                center = seg.end.x
+                bw = center * stable_threshold
+                stable_zone = Zone(
+                    price_center=center,
+                    bandwidth=bw,
+                    source=ZoneSource.PIVOT,
+                    strength=0.5,
+                )
+                return NearestStableState(
+                    zone=stable_zone,
+                    arrival_point=seg.end,
+                    duration_to_arrive=(
+                        (seg.end.t - exit_seg.end.t).days
+                        if hasattr(seg.end.t, '__sub__') else 0.0
+                    ),
+                    resistance_level=(k + 1) / max_lookahead,
+                )
+
+    return None
 
 
 def build_cycles(
@@ -30,6 +103,8 @@ def build_cycles(
     - entry.end 触及 zone
     - entry.start 不在 zone 内
     - 紧邻的下一段 exit 方向反向且 exit.end 离开 zone
+
+    V1.6 P0: 每个 Cycle 附加最近稳态检测
     """
     cycles: list[Cycle] = []
     if len(segments) < 2 or not zones:
@@ -48,7 +123,17 @@ def build_cycles(
                 continue
             if _touches_zone(exit_.end, z):
                 continue
-            cycles.append(Cycle(entry=entry, exit=exit_, zone=z))
+
+            # ── V1.6 P0: 最近稳态检测 ──
+            subsequent = segments[i + 2:] if i + 2 < len(segments) else []
+            next_stable = _find_nearest_stable(exit_, subsequent, zones)
+
+            cycles.append(Cycle(
+                entry=entry,
+                exit=exit_,
+                zone=z,
+                next_stable=next_stable,
+            ))
     return cycles
 
 

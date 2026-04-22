@@ -4,10 +4,14 @@
 修复：
 1. 高低点用交替序列判定（不排除首尾）
 2. 聚类用固定容差（避免动态中心漂移）
+
+V1.6 P0 新增：
+3. 共同反差推断 — V1.6 定义 2.2, 命题 2.3
+   基于极值点的时序特征推断驱动聚簇的外部反差类型
 """
 
 from __future__ import annotations
-from src.models import Point, Zone, ZoneSource
+from src.models import Point, Zone, ZoneSource, ContrastType
 
 
 def _classify_highs_lows(pivots: list[Point]) -> tuple[list[Point], list[Point]]:
@@ -65,6 +69,51 @@ def _cluster_by_fixed_pct(
     return clusters
 
 
+def _infer_contrast(cluster: list[Point]) -> tuple[ContrastType, str]:
+    """
+    V1.6 定义 2.2: 共同反差推断
+    基于极值点的时序密集度推断驱动聚簇的外部反差类型。
+
+    逻辑：
+    - 极值点在极短时间内密集出现（<30天内 ≥3次） → 恐慌 PANIC
+    - 极值点在长时间内缓慢聚集（跨度 >180天）    → 过剩 OVERSUPPLY
+    - 中等时间跨度、规则间隔                       → 政策 POLICY
+    - 其他                                        → 未知 UNKNOWN
+    """
+    if len(cluster) < 2:
+        return ContrastType.UNKNOWN, ""
+
+    times = sorted([p.t for p in cluster])
+    total_span = (times[-1] - times[0]).days if len(times) >= 2 else 0
+
+    # 计算相邻极值点的平均间隔
+    if len(times) >= 2:
+        gaps = [(times[i + 1] - times[i]).days for i in range(len(times) - 1)]
+        avg_gap = sum(gaps) / len(gaps)
+    else:
+        avg_gap = 0
+
+    n = len(cluster)
+
+    # 恐慌：密集爆发（短时间多次试探同一价位）
+    if total_span < 30 and n >= 3:
+        return ContrastType.PANIC, f"{n}次试探密集在{total_span}天内"
+
+    # 过剩：长时间缓慢堆积
+    if total_span > 180:
+        return ContrastType.OVERSUPPLY, f"{n}次试探跨越{total_span}天"
+
+    # 政策驱动：中等时间、间隔较均匀
+    if 30 <= total_span <= 180 and len(cluster) >= 3:
+        if avg_gap > 0:
+            gaps = [(times[i + 1] - times[i]).days for i in range(len(times) - 1)]
+            gap_cv = (sum((g - avg_gap) ** 2 for g in gaps) / len(gaps)) ** 0.5 / avg_gap
+            if gap_cv < 0.5:
+                return ContrastType.POLICY, f"试探间隔均匀(平均{avg_gap:.0f}天)"
+
+    return ContrastType.UNKNOWN, ""
+
+
 def detect_zones(
     pivots: list[Point],
     zone_bandwidth: float = 0.01,
@@ -89,12 +138,18 @@ def detect_zones(
             price_range = max(p.x for p in cl) - min(p.x for p in cl)
             compactness = 1.0 / (1.0 + price_range / center)
             strength = len(cl) * compactness
+
+            # ── V1.6 P0: 共同反差推断 ──
+            contrast_type, contrast_label = _infer_contrast(cl)
+
             zones.append(Zone(
                 price_center=center,
                 bandwidth=bw,
                 source=source,
                 strength=strength,
                 touches=list(cl),
+                context_contrast=contrast_type,
+                contrast_label=contrast_label,
             ))
         return zones
 

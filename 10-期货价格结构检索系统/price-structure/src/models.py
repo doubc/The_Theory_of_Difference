@@ -42,6 +42,20 @@ class ZoneSource(Enum):
     VOLUME = "volume"
 
 
+class ContrastType(Enum):
+    """
+    共同反差类型 — V1.6 定义 2.2
+    驱动多个极值点聚拢的外部差异类型。
+    不同反差即使价格相近，也不应归为同一结构。
+    """
+    PANIC = "panic"              # 恐慌性抛售/抢购（金融危机、黑天鹅）
+    OVERSUPPLY = "oversupply"    # 产能过剩/供需失衡
+    POLICY = "policy"            # 政策驱动（限产、关税、补贴）
+    LIQUIDITY = "liquidity"      # 流动性驱动（宽松/紧缩周期）
+    SPECULATION = "speculation"  # 投机驱动（资金推动）
+    UNKNOWN = "unknown"          # 未分类
+
+
 class Phase(Enum):
     """结构生命周期阶段"""
     FORMATION = "formation"       # 生成
@@ -158,6 +172,9 @@ class Zone:
     source: ZoneSource = ZoneSource.PIVOT
     strength: float = 0.0        # 强度
     touches: list[Point] = field(default_factory=list)  # 触及该区的极值点
+    # ── V1.6 P0 新增 ──
+    context_contrast: ContrastType = ContrastType.UNKNOWN  # 共同反差类型（V1.6 定义 2.2）
+    contrast_label: str = ""     # 反差的人可读描述
 
     @property
     def upper(self) -> float:
@@ -195,6 +212,8 @@ class Zone:
             "source": self.source.value,
             "strength": self.strength,
             "touches": [p.to_dict() for p in self.touches],
+            "context_contrast": self.context_contrast.value,
+            "contrast_label": self.contrast_label,
         }
 
     @classmethod
@@ -205,10 +224,47 @@ class Zone:
             source=ZoneSource(d["source"]),
             strength=d.get("strength", 0.0),
             touches=[Point.from_dict(p) for p in d.get("touches", [])],
+            context_contrast=ContrastType(d.get("context_contrast", "unknown")),
+            contrast_label=d.get("contrast_label", ""),
         )
 
     def __repr__(self):
         return f"Zone(center={self.price_center:.2f}, bw=±{self.bandwidth:.2f}, strength={self.strength:.1f})"
+
+
+@dataclass
+class NearestStableState:
+    """
+    最近稳态 — V1.6 命题 3.4/3.5, 4.4/4.5, 7.6
+    差异转移后，系统最先停驻的可稳住安排。
+    不是最优解，而是最先可用的解。
+    """
+    zone: Zone | None = None           # 稳态所在的价位区
+    arrival_point: Point | None = None # 到达稳态的极值点
+    duration_to_arrive: float = 0.0    # 从 exit 到达稳态的天数
+    resistance_level: float = 0.0      # 阻力评分（越低越容易到达）
+
+    def to_dict(self) -> dict:
+        return {
+            "zone": self.zone.to_dict() if self.zone else None,
+            "arrival_point": self.arrival_point.to_dict() if self.arrival_point else None,
+            "duration_to_arrive": self.duration_to_arrive,
+            "resistance_level": self.resistance_level,
+        }
+
+    @classmethod
+    def from_dict(cls, d: dict) -> NearestStableState:
+        return cls(
+            zone=Zone.from_dict(d["zone"]) if d.get("zone") else None,
+            arrival_point=Point.from_dict(d["arrival_point"]) if d.get("arrival_point") else None,
+            duration_to_arrive=d.get("duration_to_arrive", 0.0),
+            resistance_level=d.get("resistance_level", 0.0),
+        )
+
+    def __repr__(self):
+        if self.zone:
+            return f"NearestStable(zone={self.zone.price_center:.2f}, days={self.duration_to_arrive:.0f})"
+        return "NearestStable(None)"
 
 
 @dataclass
@@ -217,6 +273,8 @@ class Cycle:
     entry: Segment               # 进入段
     exit: Segment                # 离开段
     zone: Zone
+    # ── V1.6 P0 新增 ──
+    next_stable: NearestStableState | None = None  # 最近稳态（V1.6 命题 3.4）
 
     @property
     def speed_ratio(self) -> float:
@@ -247,6 +305,11 @@ class Cycle:
             return 0.0
         return self.exit.abs_delta / self.entry.abs_delta
 
+    @property
+    def has_stable_state(self) -> bool:
+        """是否已识别最近稳态"""
+        return self.next_stable is not None and self.next_stable.zone is not None
+
     def to_dict(self) -> dict:
         return {
             "entry": self.entry.to_dict(),
@@ -254,11 +317,13 @@ class Cycle:
             "speed_ratio": self.speed_ratio,
             "time_ratio": self.time_ratio,
             "amplitude_ratio": self.amplitude_ratio,
+            "next_stable": self.next_stable.to_dict() if self.next_stable else None,
         }
 
     def __repr__(self):
+        stable_str = f", stable={self.next_stable}" if self.has_stable_state else ""
         return (f"Cycle(entry={self.entry}, exit={self.exit}, "
-                f"speed_r={self.speed_ratio:.2f}, time_r={self.time_ratio:.2f})")
+                f"speed_r={self.speed_ratio:.2f}, time_r={self.time_ratio:.2f}{stable_str})")
 
 
 @dataclass
@@ -273,6 +338,8 @@ class Structure:
     symbol: Optional[str] = None  # 品种
     t_start: Optional[datetime] = None
     t_end: Optional[datetime] = None
+    # ── V1.6 P0 新增 ──
+    narrative_context: str = ""  # 结构形成时的市场叙事背景（V1.6 命题 2.3 可叙事性）
 
     @property
     def cycle_count(self) -> int:
@@ -322,6 +389,13 @@ class Structure:
         stddev = (sum((x - mean) ** 2 for x in highs) / len(highs)) ** 0.5
         return stddev / mean
 
+    @property
+    def stable_state_ratio(self) -> float:
+        """已识别最近稳态的 Cycle 占比 — V1.6 命题 3.4"""
+        if not self.cycles:
+            return 0.0
+        return sum(1 for c in self.cycles if c.has_stable_state) / len(self.cycles)
+
     def signature(self) -> str:
         """结构签名 — 用于检索与去重"""
         parts = [
@@ -343,6 +417,8 @@ class Structure:
             "symbol": self.symbol,
             "t_start": self.t_start.isoformat() if self.t_start else None,
             "t_end": self.t_end.isoformat() if self.t_end else None,
+            "narrative_context": self.narrative_context,
+            "stable_state_ratio": self.stable_state_ratio,
             "signature": self.signature(),
         }
 

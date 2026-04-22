@@ -1,12 +1,16 @@
 """
 关系算子层 — 不存储，纯计算
 所有"点间/段间/结构间"的关系在这里定义
+
+V1.6 P0 新增：
+- infer_narrative_context: 结构叙事背景推断（V1.6 命题 2.3 可叙事性）
+- check_conservation: 差异守恒检查骨架（V1.6 命题 4.1-4.2）
 """
 
 from __future__ import annotations
 import math
 from typing import Sequence
-from src.models import Point, Segment, Zone, Structure
+from src.models import Point, Segment, Zone, Structure, ContrastType
 
 
 # ─── 点间 ──────────────────────────────────────────────────
@@ -114,6 +118,13 @@ def structure_invariants(s: Structure) -> dict:
     log_srs = [c.log_speed_ratio for c in s.cycles if c.log_speed_ratio > 0]
     avg_log_sr = sum(log_srs) / len(log_srs) if log_srs else 0.0
 
+    # 最近稳态统计（V1.6 命题 3.4）
+    stable_cycles = [c for c in s.cycles if c.has_stable_state]
+    avg_resistance = (
+        sum(c.next_stable.resistance_level for c in stable_cycles) / len(stable_cycles)
+        if stable_cycles else 1.0
+    )
+
     return {
         "cycle_count": s.cycle_count,
         "avg_speed_ratio": s.avg_speed_ratio,       # 速度比：|v_exit| / |v_entry|
@@ -125,4 +136,104 @@ def structure_invariants(s: Structure) -> dict:
         "low_trend": extrema_trend(lows_below),     # 低点趋势斜率 (归一化)
         "zone_rel_bw": s.zone.relative_bandwidth,   # 相对带宽：bw / center
         "zone_strength": s.zone.strength,           # 强度：试探次数加权
+        # ── V1.6 P0 新增 ──
+        "stable_state_ratio": s.stable_state_ratio,  # 已识别稳态的 cycle 占比
+        "avg_resistance_level": avg_resistance,      # 平均阻力评分
+        "contrast_type": s.zone.context_contrast.value,  # 共同反差类型
     }
+
+
+# ═══ V1.6 P0 新增算子 ═════════════════════════════════════
+
+
+def infer_narrative_context(s: Structure) -> str:
+    """
+    V1.6 命题 2.3: 可叙事性
+    基于结构的反差类型、阶段、速度特征生成人可读的叙事背景。
+    """
+    contrast = s.zone.context_contrast
+    contrast_map = {
+        ContrastType.PANIC: "恐慌性结构",
+        ContrastType.OVERSUPPLY: "供需失衡结构",
+        ContrastType.POLICY: "政策驱动结构",
+        ContrastType.LIQUIDITY: "流动性驱动结构",
+        ContrastType.SPECULATION: "投机驱动结构",
+        ContrastType.UNKNOWN: "",
+    }
+    base = contrast_map.get(contrast, "")
+
+    # 速度特征
+    if s.avg_speed_ratio > 1.5:
+        speed_desc = "急跌/急涨型"
+    elif s.avg_speed_ratio < 0.67:
+        speed_desc = "慢跌/慢涨型"
+    else:
+        speed_desc = "均衡型"
+
+    # 试探次数
+    n = s.cycle_count
+    if n >= 4:
+        freq_desc = f"{n}次密集试探"
+    elif n >= 2:
+        freq_desc = f"{n}次试探"
+    else:
+        freq_desc = ""
+
+    parts = [p for p in [base, speed_desc, freq_desc] if p]
+    return " · ".join(parts) if parts else "未分类结构"
+
+
+def check_conservation(
+    s: Structure,
+    bars: list | None = None,
+) -> dict:
+    """
+    V1.6 命题 4.1-4.2: 差异守恒检查骨架
+    当检测到日线级别波动率下降时，检查差异是否转移到其他维度。
+
+    返回守恒状态报告。
+    此函数为骨架，完整实现需要 volume / OI / 低频数据。
+    """
+    result = {
+        "conservation_violated": False,
+        "transfer_channels": [],
+        "notes": [],
+    }
+
+    if not s.cycles:
+        return result
+
+    # 检查1：速度比是否在收窄（差异被压缩）
+    speed_ratios = [c.speed_ratio for c in s.cycles]
+    if len(speed_ratios) >= 3:
+        first_half = speed_ratios[: len(speed_ratios) // 2]
+        second_half = speed_ratios[len(speed_ratios) // 2:]
+        avg_first = sum(first_half) / len(first_half)
+        avg_second = sum(second_half) / len(second_half)
+
+        if abs(avg_second - avg_first) / max(avg_first, 0.01) > 0.3:
+            result["notes"].append(
+                f"速度比变化显著: {avg_first:.2f} → {avg_second:.2f}，"
+                f"差异可能在转移"
+            )
+
+    # 检查2：zone 带宽是否在压缩（波动率被压平）
+    if s.zone.relative_bandwidth < 0.01:
+        result["notes"].append(
+            f"Zone 相对带宽极窄 ({s.zone.relative_bandwidth:.4f})，"
+            f"差异可能被转移到更短周期或成交量维度"
+        )
+        result["transfer_channels"].append("shorter_timeframe")
+        result["transfer_channels"].append("volume")
+
+    # 检查3：最近稳态阻力评分是否异常低（容易到达 → 可能是假稳态）
+    stable_cycles = [c for c in s.cycles if c.has_stable_state]
+    if stable_cycles:
+        avg_res = sum(c.next_stable.resistance_level for c in stable_cycles) / len(stable_cycles)
+        if avg_res < 0.2:
+            result["notes"].append(
+                f"最近稳态阻力评分异常低 ({avg_res:.2f})，"
+                f"可能是表面稳态，差异正在隐性积累"
+            )
+
+    return result

@@ -22,6 +22,7 @@ from src.compiler.segments import build_segments, merge_micro_segments
 from src.compiler.zones import detect_zones
 from src.compiler.cycles import build_cycles, assemble_structures
 from src.compiler.bundles import detect_bundles
+from src.relations import infer_narrative_context, check_conservation
 
 
 # ─── 配置 ─────────────────────────────────────────────────
@@ -104,6 +105,11 @@ def compile_full(bars: list[Bar], config: CompilerConfig | None = None, symbol: 
     cycles = build_cycles(segments, zones, min_cycles=config.min_cycles)
     sym = symbol or (bars[0].symbol if bars else None)
     structures = assemble_structures(cycles, zones, min_cycles=config.min_cycles, symbol=sym)
+
+    # ── V1.6 P0: 叙事上下文推断 + 守恒检查 ──
+    for st in structures:
+        st.narrative_context = infer_narrative_context(st)
+        st.invariants["conservation"] = check_conservation(st, bars)
 
     # 3.5 丛识别
     bundles = detect_bundles(

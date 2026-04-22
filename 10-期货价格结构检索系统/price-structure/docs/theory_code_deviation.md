@@ -1,6 +1,7 @@
 # 理论-代码偏差分析与修改路线图
 
-> 基于《差异论 V1.6》逐章对照 price-structure 项目代码，2026-04-21
+> 基于《差异论 V1.6》逐章对照 price-structure 项目代码
+> 初版: 2026-04-21 | P0 完成: 2026-04-22
 
 ---
 
@@ -9,7 +10,11 @@
 | 理论章节 | 命题 | 代码对应 | 状态 |
 |----------|------|---------|------|
 | Ch1 差异是成立条件 | 无差异则无世界 | `Point` — 一阶差分/对数差分定义最小可区分单位 | ✅ |
+| Ch2 聚簇与结构形成 | 共同反差驱动聚簇 | `Zone.context_contrast` + `_infer_contrast()` | ✅ P0 |
+| Ch2 聚簇与结构形成 | 可叙事性 | `Structure.narrative_context` + `infer_narrative_context()` | ✅ P0 |
 | Ch3 离散事件 | 变化是离散的，非连续流 | `Cycle` — entry/exit 离散定义 | ✅ |
+| Ch3 最近稳态 | 阻力最小方向，最先可用 | `Cycle.next_stable` + `_find_nearest_stable()` | ✅ P0 |
+| Ch4 守恒与转移 | 差异不能无代价清零 | `check_conservation()` 骨架 | ✅ P0(骨架) |
 | Ch5 结构反过来约束差异 | 结构不只是结果，还重塑差异 | `Structure.invariants` 反向用于检索 | ✅ |
 | Ch8 迁移的离散事件结构 | 阈值、锁定 | `pivots.py` — 摆动极值 = 阈值触发 | ✅ |
 | Ch18 可能性空间分析 | 找有承接条件的分支 | `active_match.py` — 检索历史相似结构 | ✅ |
@@ -18,7 +23,7 @@
 
 ## 二、偏差清单（按严重度排序）
 
-### 🔴 偏差 1：聚簇驱动力丢失——"共同反差"没有建模
+### ~~🔴 偏差 1：聚簇驱动力丢失——"共同反差"没有建模~~ ✅ 已修复 (P0)
 
 **理论（Ch2 定义 2.2）**：
 
@@ -30,14 +35,17 @@
 
 **后果**：2008 年金融危机低点和 2015 年产能过剩低点可能因为价格相近被聚为同一 zone，但驱动它们的共同反差完全不同（恐慌 vs 过剩）。理论上这两个不应该被归为同一个结构。
 
-**修改方向**：
-- `Zone` 增加 `context_contrast: str` 字段，记录驱动该 zone 形成的外部反差
-- `detect_zones()` 增加"共同反差"维度的判定：不只看价格距离，还要看这些极值点所在的宏观环境是否属于同一类反差（可以用时间段 + 叙事标签辅助判定）
-- `Structure` 增加 `narrative_context: str`，记录结构形成时的市场叙事背景
+**修改方向**：→ ✅ 已实现
+- `Zone` 增加 `context_contrast: ContrastType` + `contrast_label` 字段
+- `_infer_contrast()` 函数：基于极值点时序密集度推断反差类型（恐慌/过剩/政策/流动性/投机）
+- `detect_zones()` 集成反差推断
+- `Structure` 增加 `narrative_context` 字段
+- `infer_narrative_context()` 函数：生成人可读的结构叙事背景
+- `structure_invariants()` 增加 `contrast_type` 字段
 
 ---
 
-### 🔴 偏差 2：最近稳态完全缺失
+### ~~🔴 偏差 2：最近稳态完全缺失~~ ✅ 已修复 (P0)
 
 **理论（Ch3 命题 3.4）**：
 
@@ -51,14 +59,19 @@ Ch4 命题 4.4、Ch7 命题 7.6、Ch12 命题 12.6 反复回响。
 
 **后果**：active_match 只能说"历史上类似结构后续涨/跌了多少"，不能说"如果这个结构崩塌，最可能先滑向哪个最近稳态"。这恰恰是理论最强调的判断工具。
 
-**修改方向**：
-- `Cycle` 增加 `next_stable_state: Zone | None` 字段：exit 之后价格最先停驻的位置
-- 在 `build_cycles()` 中，每个 exit 段结束后，扫描后续 N 根 bar，找到第一个重新形成极值聚类的位置，标记为最近稳态
-- `active_match.py` 的 comparison_guide 增加："历史上类似结构崩塌后，最常先滑向什么价位/什么形态的最近稳态"
+**修改方向**：→ ✅ 已实现
+- `NearestStableState` dataclass：zone + arrival_point + duration + resistance_level
+- `Cycle.next_stable: NearestStableState | None` 字段
+- `_find_nearest_stable()` 函数：exit 后扫描后续段，两种判定：
+  1. 终点触及已知 zone → 最近稳态
+  2. 连续两段幅度递减 → 减速点 = 稳态候选
+- `build_cycles()` 集成稳态检测
+- `Structure.stable_state_ratio` 属性
+- `structure_invariants()` 增加 `stable_state_ratio` + `avg_resistance_level`
 
 ---
 
-### 🟡 偏差 3：差异守恒没有验证
+### ~~🟡 偏差 3：差异守恒没有验证~~ ✅ 已修复 (P0骨架)
 
 **理论（Ch4 定义 4.1）**：
 
@@ -70,11 +83,13 @@ Ch4 命题 4.4、Ch7 命题 7.6、Ch12 命题 12.6 反复回响。
 
 **后果**：代码会误判"结构稳定了"——实际上差异可能只是被转移到了代码没观察的维度（比如成交量异动、更短周期的张力积累）。
 
-**修改方向**：
-- 新增 `src/relations/conservation.py` 模块
-- `verify_conservation(structure, bars)` 函数：当检测到日线级别波动率下降时，检查 5 分钟线的波动率是否上升、成交量变异系数是否放大
-- `track_transfer(source_dim, target_dim, window)` 函数：追踪差异从一个维度到另一个维度的转移路径
-- `Structure` 增加 `conservation_status: dict` 字段
+**修改方向**：→ ✅ 已实现（骨架）
+- `check_conservation()` 函数：三项检查
+  1. 速度比变化显著 → 差异在转移
+  2. Zone 带宽极窄 → 差异可能转移到短周期/成交量
+  3. 稳态阻力异常低 → 假稳态，差异在隐性积累
+- `compile_full()` 集成守恒检查到每个 Structure
+- 完整实现需引入 volume/OI 低频数据（P1）
 
 ---
 
@@ -140,41 +155,71 @@ Ch4 命题 4.4、Ch7 命题 7.6、Ch12 命题 12.6 反复回响。
 
 ---
 
-## 三、修改优先级
+## 三、修改优先级与进度
 
 按"理论核心性 × 实现可行性"排序：
 
-| 优先级 | 偏差 | 理由 |
-|--------|------|------|
-| **P0** | 偏差 2：最近稳态 | 理论方法论核心，Ch3/4/7/12 反复回响，且实现不复杂（exit 后扫描后续 bar） |
-| **P0** | 偏差 1：共同反差 | 聚簇驱动力，决定 zone 质量，但需要定义"反差"的计算方式 |
-| **P1** | 偏差 4：三种差异分层 | 让代码从"几何分析"升级为"差异显影"，需要引入 volume/OI 数据 |
-| **P1** | 偏差 3：守恒验证 | 防止误判"结构稳定"，需要多维度交叉 |
-| **P2** | 偏差 5：反身性 | 长期架构问题，需要设计反馈回路 |
-| **P3** | 偏差 6：叙事递归 | 需要大量样本积累后才有统计意义 |
-| **P3** | 偏差 7：跨周期 | 数据工程量大，可以后做 |
+| 优先级 | 偏差 | 状态 | 理由 |
+|--------|------|------|------|
+| **P0** | 偏差 2：最近稳态 | ✅ 完成 | 理论方法论核心，Ch3/4/7/12 反复回响 |
+| **P0** | 偏差 1：共同反差 | ✅ 完成 | 聚簇驱动力，决定 zone 质量 |
+| **P0** | 偏差 3：守恒验证 | ✅ 骨架完成 | 防止误判"结构稳定" |
+| **P1** | 偏差 4：三种差异分层 | 🔲 待做 | 需引入 volume/OI 数据 |
+| **P1** | 偏差 3：守恒完整版 | 🔲 待做 | 需多频率数据交叉 |
+| **P2** | 偏差 5：反身性 | 🔲 待做 | 长期架构问题 |
+| **P3** | 偏差 6：叙事递归 | 🔲 待做 | 需大量样本积累 |
+| **P3** | 偏差 7：跨周期 | 🔲 待做 | 数据工程量大 |
 
 ---
 
-## 四、下一步行动
+## 四、P0 修改清单（2026-04-22）
 
-1. **从 P0 开始**：先实现"最近稳态"——在 `build_cycles()` 中每个 exit 段之后寻找最近稳态，这是理论最核心的方法论支点，也是投入产出比最高的修改
-2. **然后 P0 的共同反差**：为 zone 增加反差维度的标记，让聚簇不只是价格聚类
-3. **P1 分层**：引入 volume 数据，让编译器从"只看价格"升级为"看价格+流动性+时间"
+### 修改的文件
+
+| 文件 | 修改内容 |
+|------|---------|
+| `src/models.py` | 新增 `ContrastType` 枚举、`NearestStableState` 数据类；`Zone` 增加 `context_contrast`/`contrast_label`；`Cycle` 增加 `next_stable`；`Structure` 增加 `narrative_context`/`stable_state_ratio` |
+| `src/compiler/zones.py` | 新增 `_infer_contrast()` 函数；`detect_zones()` 集成反差推断 |
+| `src/compiler/cycles.py` | 新增 `_find_nearest_stable()` 函数；`build_cycles()` 集成最近稳态检测 |
+| `src/compiler/pipeline.py` | `compile_full()` 增加叙事上下文推断 + 守恒检查 |
+| `src/relations.py` | 新增 `infer_narrative_context()`、`check_conservation()` 函数；`structure_invariants()` 增加稳定态/反差字段 |
+
+### 新增的理论对应
+
+| V1.6 理论 | 命题 | 代码实现 |
+|-----------|------|---------|
+| Ch2 定义 2.2 共同反差 | 多个差异单元共同面对的外部差异 | `Zone.context_contrast` + `_infer_contrast()` |
+| Ch2 命题 2.3 可叙事性 | 差异能被讲出来才持久 | `Structure.narrative_context` + `infer_narrative_context()` |
+| Ch3 命题 3.4 最小变易 | 变化沿阻力最小方向 | `_find_nearest_stable()` — 从 exit 段扫描最近停驻点 |
+| Ch3 命题 3.5 最近稳态 | 不是最优而是最先可用 | `NearestStableState.resistance_level` |
+| Ch4 命题 4.1 守恒 | 差异不能无代价清零 | `check_conservation()` — 波动率转移检测 |
+| Ch4 命题 4.2 转移 | 压缩后沿低阻通道走 | `check_conservation().transfer_channels` |
 
 ---
 
-## 五、今天的工作记录
+## 五、下一步（P1）
 
-### 已完成
+1. **偏差 4 分层**：引入 volume 数据 → `extract_pivots()` 增加 `volume_weighted` 模式
+2. **守恒完整版**：接入 MySQL 5 分钟线数据 → 跨频率守恒验证
+3. **active_match.py** 更新：comparison_guide 增加最近稳态分析
+
+---
+
+## 六、工作记录
+
+### 2026-04-21
 1. 同步 GitHub 仓库到本地
 2. 落地阶段三整改意见（similarity.py 对齐 invariant keys、pivots.py 容错、config.yaml 字段对齐）
 3. 重写 daily_scan.py（委托 opportunity + daily_report 模块）
-4. 新增主动匹配功能（active_match）：用户带观点检索历史相似结构
-5. CU0 2025-04~2026-04 测试通过，产出 HTML+JSON
+4. 新增主动匹配功能（active_match）
+5. CU0 2025-04~2026-04 测试通过
 6. 推送到 GitHub（commit 13004d1）
 7. 深入阅读差异论 V1.6，完成理论-代码偏差分析
 
-### 待办
-- 按本文档 P0→P1→P2→P3 优先级逐步修改
-- 每次修改后对照理论命题验证是否对齐
+### 2026-04-22
+1. P0 修改完成：
+   - 最近稳态检测（`NearestStableState` + `_find_nearest_stable()`）
+   - 共同反差推断（`ContrastType` + `_infer_contrast()`）
+   - 叙事上下文推断（`infer_narrative_context()`）
+   - 守恒检查骨架（`check_conservation()`）
+   - 文档更新
