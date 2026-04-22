@@ -10,7 +10,10 @@ V1.6 P0 新增：
 from __future__ import annotations
 import math
 from typing import Sequence
-from src.models import Point, Segment, Zone, Structure, ContrastType, MotionState, Phase
+from src.models import (
+    Point, Segment, Zone, Structure, ContrastType,
+    MotionState, Phase, ProjectionAwareness,
+)
 
 
 # ─── 点间 ──────────────────────────────────────────────────
@@ -332,3 +335,63 @@ def compute_motion(s: Structure) -> MotionState:
             motion.flux_detail = "差异平衡"
 
     return motion
+
+
+def compute_projection(s: Structure, bars: list | None = None) -> ProjectionAwareness:
+    """
+    D0 章：投影觉知
+    价格 = Π(现实差异)，系统分析的是影子。
+    此函数评估当前影子的可信度，标记盲区。
+    """
+    proj = ProjectionAwareness()
+
+    if not s.cycles:
+        return proj
+
+    # ── 1. 压缩度 ──
+    # Zone 带宽越窄 → 投影压缩度越高（价格被压平，底层差异可能在别处）
+    bw = s.zone.relative_bandwidth
+    if bw < 0.005:
+        proj.compression_level = 0.9
+    elif bw < 0.01:
+        proj.compression_level = 0.7
+    elif bw < 0.02:
+        proj.compression_level = 0.4
+    else:
+        proj.compression_level = 0.1
+
+    # ── 2. 盲区通道 ──
+    # 基于守恒检查和压缩度，判断差异可能去了哪
+    conservation = s.invariants.get("conservation", {})
+    channels = conservation.get("transfer_channels", [])
+
+    blind = list(channels)  # 从守恒检查继承
+
+    # 基于压缩度追加盲区
+    if proj.compression_level > 0.6:
+        if "shorter_timeframe" not in blind:
+            blind.append("shorter_timeframe")
+        if "volume" not in blind:
+            blind.append("volume")
+
+    proj.blind_channels = blind
+
+    # ── 3. 投影可信度 ──
+    # cycle 数越多，历史验证越充分 → 可信度越高
+    # 但高压缩度会降低可信度
+    n = s.cycle_count
+    history_confidence = min(n / 5.0, 1.0)  # 5个cycle以上满信心
+    compression_penalty = proj.compression_level * 0.3
+    proj.projection_confidence = max(history_confidence - compression_penalty, 0.1)
+
+    # ── 4. 人可读观测 ──
+    parts = []
+    if proj.is_blind:
+        parts.append(f"⚠️ 高压缩({proj.compression_level:.0%})，影子可能不代表实体")
+        parts.append(f"差异可能藏在: {', '.join(blind)}")
+    else:
+        parts.append(f"投影压缩度{proj.compression_level:.0%}，可信度{proj.projection_confidence:.0%}")
+
+    proj.observation = " | ".join(parts)
+
+    return proj

@@ -341,6 +341,7 @@ class Structure:
     # ── V1.6 P0 新增 ──
     narrative_context: str = ""  # 结构形成时的市场叙事背景（V1.6 命题 2.3 可叙事性）
     motion: MotionState | None = None  # 运动态（V1.6「系统 = 结构 × 运动」）
+    projection: ProjectionAwareness | None = None  # 投影觉知（D0：价格=影子）
 
     @property
     def cycle_count(self) -> int:
@@ -420,6 +421,7 @@ class Structure:
             "t_end": self.t_end.isoformat() if self.t_end else None,
             "narrative_context": self.narrative_context,
             "motion": self.motion.to_dict() if self.motion else None,
+            "projection": self.projection.to_dict() if self.projection else None,
             "stable_state_ratio": self.stable_state_ratio,
             "signature": self.signature(),
         }
@@ -427,6 +429,46 @@ class Structure:
     def __repr__(self):
         return (f"Structure(zone={self.zone}, cycles={self.cycle_count}, "
                 f"typicality={self.typicality:.2f})")
+
+
+@dataclass
+class ProjectionAwareness:
+    """
+    投影觉知 — D0 章
+    价格 = Π(现实差异)，代码分析的是影子，不是实体。
+    此对象记录系统对自身认知边界的觉知。
+    """
+    compression_level: float = 0.0   # 投影压缩度 [0,1]，越高=价格越平但底层差异可能越大
+    blind_channels: list[str] = field(default_factory=list)  # 可能携带被压缩差异的通道
+    projection_confidence: float = 1.0  # 当前投影的可信度（制度变化时下降）
+    observation: str = ""  # 人可读：系统看到了什么、没看到什么
+
+    @property
+    def is_blind(self) -> bool:
+        """高压缩度 = 系统可能在看假象"""
+        return self.compression_level > 0.7
+
+    def to_dict(self) -> dict:
+        return {
+            "compression_level": self.compression_level,
+            "blind_channels": self.blind_channels,
+            "projection_confidence": self.projection_confidence,
+            "observation": self.observation,
+        }
+
+    @classmethod
+    def from_dict(cls, d: dict) -> ProjectionAwareness:
+        return cls(
+            compression_level=d.get("compression_level", 0.0),
+            blind_channels=d.get("blind_channels", []),
+            projection_confidence=d.get("projection_confidence", 1.0),
+            observation=d.get("observation", ""),
+        )
+
+    def __repr__(self):
+        if self.is_blind:
+            return f"⚠️ Projection(blind, 压缩={self.compression_level:.0%}, 可能→{self.blind_channels})"
+        return f"Projection(压缩={self.compression_level:.0%}, 可信={self.projection_confidence:.0%})"
 
 
 @dataclass

@@ -22,7 +22,7 @@ from src.compiler.segments import build_segments, merge_micro_segments
 from src.compiler.zones import detect_zones
 from src.compiler.cycles import build_cycles, assemble_structures
 from src.compiler.bundles import detect_bundles
-from src.relations import infer_narrative_context, check_conservation, compute_motion
+from src.relations import infer_narrative_context, check_conservation, compute_motion, compute_projection
 
 
 # ─── 配置 ─────────────────────────────────────────────────
@@ -106,11 +106,12 @@ def compile_full(bars: list[Bar], config: CompilerConfig | None = None, symbol: 
     sym = symbol or (bars[0].symbol if bars else None)
     structures = assemble_structures(cycles, zones, min_cycles=config.min_cycles, symbol=sym)
 
-    # ── V1.6 P0+: 叙事上下文 + 守恒检查 + 运动态 ──
+    # ── V1.6 P0+: 叙事 + 守恒 + 运动 + 投影觉知 ──
     for st in structures:
         st.narrative_context = infer_narrative_context(st)
         st.invariants["conservation"] = check_conservation(st, bars)
-        st.motion = compute_motion(st)  # 系统 = 结构 × 运动
+        st.motion = compute_motion(st)          # 系统 = 结构 × 运动
+        st.projection = compute_projection(st)  # 价格 = Π(差异)，分析的是影子
 
     # 3.5 丛识别
     bundles = detect_bundles(
