@@ -1,11 +1,12 @@
 """
-结构相似性度量 — 三层
+结构相似性度量 — 四层
 
 1. 几何相似 — 不变量向量的归一化欧氏距离
 2. 关系相似 — 方向序列 / Zone 来源 / Cycle 数的一致性
-3. 结构族相似 — 是否同一标签类或镜像变体
+3. 运动相似 — 阶段趋势 / 守恒通量 / 稳态距离的一致性 (V1.6)
+4. 结构族相似 — 是否同一标签类或镜像变体
 
-sim_total = w1·sim_geometric + w2·sim_relational + w3·sim_family
+sim_total = w1·sim_geometric + w2·sim_relational + w3·sim_motion + w4·sim_family
 """
 
 from __future__ import annotations
@@ -22,6 +23,7 @@ class SimilarityScore:
     total: float
     geometric: float
     relational: float
+    motion: float
     family: float
     matched_invariants: dict
 
@@ -115,6 +117,59 @@ def relational_similarity(s1: Structure, s2: Structure) -> float:
     return score / n if n > 0 else 0.0
 
 
+# ─── 运动相似 (V1.6) ───────────────────────────────────────
+
+def motion_similarity(s1: Structure, s2: Structure) -> float:
+    """
+    V1.6 运动相似：阶段趋势、守恒通量、稳态距离的一致性
+    
+    两个几何相似但运动方向相反的结构，后验行为可能完全不同。
+    运动维度确保我们区分"在走向 breakdown"和"在走向 confirmation"。
+    """
+    m1, m2 = s1.motion, s2.motion
+
+    # 无运动态 → 两者都无 = 完全一致；只有一方无 = 不确定
+    if m1 is None and m2 is None:
+        return 1.0
+    if m1 is None or m2 is None:
+        return 0.5
+
+    score = 0.0
+    n = 0
+
+    # 1. 阶段趋势一致性
+    n += 1
+    if m1.phase_tendency == m2.phase_tendency:
+        score += 1.0
+    elif ("breakdown" in m1.phase_tendency) == ("breakdown" in m2.phase_tendency):
+        score += 0.5  # 都含 breakdown 或都不含
+
+    # 2. 守恒通量方向一致性（同为正或同为负）
+    n += 1
+    if m1.conservation_flux * m2.conservation_flux > 0:
+        score += 1.0
+    elif abs(m1.conservation_flux) < 0.1 and abs(m2.conservation_flux) < 0.1:
+        score += 0.8  # 都接近零
+
+    # 3. 稳态距离相近
+    n += 1
+    dd = abs(m1.stable_distance - m2.stable_distance)
+    score += max(0.0, 1.0 - dd)
+
+    # 4. 反差类型一致性
+    n += 1
+    c1 = s1.zone.context_contrast.value if s1.zone else ""
+    c2 = s2.zone.context_contrast.value if s2.zone else ""
+    if c1 and c2 and c1 == c2:
+        score += 1.0
+    elif c1 == "unknown" or c2 == "unknown":
+        score += 0.5
+    else:
+        score += 0.0
+
+    return score / n if n > 0 else 0.0
+
+
 # ─── 结构族相似 ────────────────────────────────────────────
 
 # 镜像对：顶部和底部是镜像关系
@@ -149,18 +204,25 @@ def family_similarity(s1: Structure, s2: Structure) -> float:
 def similarity(
     s1: Structure,
     s2: Structure,
-    weights: tuple[float, float, float] = (0.4, 0.4, 0.2),
+    weights: tuple[float, ...] = (0.35, 0.35, 0.15, 0.15),
 ) -> SimilarityScore:
     """
-    三层加权相似度
+    四层加权相似度
 
-    默认权重：几何 0.4, 关系 0.4, 族 0.2
+    默认权重：几何 0.35, 关系 0.35, 运动 0.15, 族 0.15
     """
-    w_g, w_r, w_f = weights
+    if len(weights) == 3:
+        # 兼容旧调用（3权重）
+        w_g, w_r, w_f = weights
+        w_m = 0.0
+    else:
+        w_g, w_r, w_m, w_f = weights
+
     g = geometric_similarity(s1, s2)
     r = relational_similarity(s1, s2)
+    m = motion_similarity(s1, s2) if w_m > 0 else 0.0
     f = family_similarity(s1, s2)
-    total = w_g * g + w_r * r + w_f * f
+    total = w_g * g + w_r * r + w_m * m + w_f * f
 
     # 匹配详情
     matched = {}
@@ -175,6 +237,6 @@ def similarity(
         }
 
     return SimilarityScore(
-        total=total, geometric=g, relational=r, family=f,
+        total=total, geometric=g, relational=r, motion=m, family=f,
         matched_invariants=matched,
     )

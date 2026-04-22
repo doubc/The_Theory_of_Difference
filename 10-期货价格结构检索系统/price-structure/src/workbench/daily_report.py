@@ -71,6 +71,23 @@ def _match_thumbnails(top_matches: list) -> str:
 
 def _opp_card(opp: Opportunity) -> str:
     """单张重点关注卡片"""
+    # V1.6: 运动态标签
+    motion_badge = ""
+    if opp.motion_tendency:
+        t = opp.motion_tendency
+        color = "#ef5350" if "breakdown" in t else "#26a69a" if "confirmation" in t else "#ffa726"
+        motion_badge = f'<span class="badge" style="background:{color}22;color:{color};border:1px solid {color}">运动 {t}</span>'
+    
+    # V1.6: 投影警告
+    proj_warn = ""
+    if opp.projection_blind:
+        proj_warn = f'<span class="badge" style="background:#ff980022;color:#ff9800;border:1px solid #ff9800">⚠️ 高压缩 {opp.projection_compression:.0%}</span>'
+    
+    # V1.6: 最近稳态
+    stable_text = ""
+    if opp.stable_distance > 0:
+        stable_text = f'<div class="label">距最近稳态</div><div class="window">阻力 {opp.stable_distance:.2f}</div>'
+
     return f"""
     <div class="opp-card">
       <div class="card-head">
@@ -78,6 +95,39 @@ def _opp_card(opp: Opportunity) -> str:
           <span class="attention">{opp.attention_score:.0f}</span>
           <span class="sym-name">{opp.symbol_name}</span>
           <span class="sym-code">{opp.symbol}</span>
+          {motion_badge}
+          {proj_warn}
+        </div>
+        <div class="card-price">
+          当前 {opp.current_price:.1f} → 触发 <b>{opp.trigger_price:.1f}</b>
+          {f' <span style="color:#888;font-size:0.85em">反差:{opp.contrast_type}</span>' if opp.contrast_type else ''}
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-left">
+          <div class="label">潜在幅度（同类模板中位数 / 区间）</div>
+          {_potential_bar(opp.potential_p25, opp.potential_median, opp.potential_p75)}
+          <div class="label" style="margin-top:10px">预期兑现窗口</div>
+          <div class="window">≈ {opp.expected_window_days} 个交易日</div>
+
+          <div class="label" style="margin-top:10px">相似性拆解</div>
+          {_sim_bars(opp.sim_geometry, opp.sim_relation, opp.sim_family)}
+          
+          {f'<div class="label" style="margin-top:10px">守恒通量</div><div class="window">{opp.motion_flux:+.2f} {opp.motion_flux_detail}</div>' if opp.motion_flux_detail else ''}
+          {stable_text}
+        </div>
+
+        <div class="card-right">
+          <div class="label">最像的三段历史（点击对照）</div>
+          {_match_thumbnails(opp.top_matches)}
+
+          <div class="label" style="margin-top:10px">下一步研究建议</div>
+          <ol class="actions">
+            {"".join(f"<li>{a}</li>" for a in opp.next_actions)}
+          </ol>
+        </div>
+      </div>
+    </div>"""
           {_direction_badge(opp.direction, opp.direction_confidence)}
         </div>
         <div class="card-price">当前 {opp.current_price:.1f} → 触发 <b>{opp.trigger_price:.1f}</b></div>

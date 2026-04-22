@@ -61,6 +61,16 @@ class Opportunity:
     evidence: dict
     next_actions: list[str] = field(default_factory=list)
 
+    # ── V1.6 新增 ──
+    motion_tendency: str = ""           # →breakdown / →confirmation / stable / forming
+    motion_flux: float = 0.0            # 守恒通量
+    motion_flux_detail: str = ""        # 通量说明
+    stable_distance: float = 0.0        # 距最近稳态距离
+    projection_compression: float = 0.0 # 投影压缩度
+    projection_blind: bool = False      # 是否高压缩
+    projection_channels: list[str] = field(default_factory=list)  # 盲区通道
+    contrast_type: str = ""             # 共同反差类型
+
     def to_dict(self) -> dict:
         d = asdict(self)
         d["top_matches"] = [asdict(m) for m in self.top_matches]
@@ -148,6 +158,7 @@ def aggregate_opportunity(
         current_inv: dict,
         top_matches: list[TemplateMatch],
         evidence: dict,
+        structure=None,  # V1.6: 传入 Structure 以提取 motion/projection
 ) -> Opportunity | None:
     """核心聚合函数"""
     if not top_matches:
@@ -203,6 +214,29 @@ def aggregate_opportunity(
 
     actions = generate_next_actions(symbol, direction, trigger_price, top_matches)
 
+    # ── V1.6: 从 Structure 提取运动态 + 投影觉知 ──
+    motion_tendency = ""
+    motion_flux = 0.0
+    motion_flux_detail = ""
+    stable_dist = 0.0
+    proj_compression = 0.0
+    proj_blind = False
+    proj_channels = []
+    contrast = ""
+
+    if structure is not None:
+        if structure.motion:
+            motion_tendency = structure.motion.phase_tendency
+            motion_flux = structure.motion.conservation_flux
+            motion_flux_detail = structure.motion.flux_detail
+            stable_dist = structure.motion.stable_distance
+        if structure.projection:
+            proj_compression = structure.projection.compression_level
+            proj_blind = structure.projection.is_blind
+            proj_channels = structure.projection.blind_channels
+        if structure.zone:
+            contrast = structure.zone.context_contrast.value
+
     return Opportunity(
         symbol=symbol,
         symbol_name=symbol_name,
@@ -224,4 +258,12 @@ def aggregate_opportunity(
         diff_detail=diff_detail,
         evidence=evidence,
         next_actions=actions,
+        motion_tendency=motion_tendency,
+        motion_flux=round(motion_flux, 3),
+        motion_flux_detail=motion_flux_detail,
+        stable_distance=round(stable_dist, 3),
+        projection_compression=round(proj_compression, 3),
+        projection_blind=proj_blind,
+        projection_channels=proj_channels,
+        contrast_type=contrast,
     )

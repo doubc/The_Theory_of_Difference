@@ -190,6 +190,59 @@ def _generate_comparison_guide(
         guides.append("未找到足够相似的历史案例，建议扩大检索窗口或降低 min_cycles")
         return guides
 
+    # ── V1.6 P0: 最近稳态分析 ──
+    # 从当前结构的 cycles 中提取最近稳态信息
+    stable_cycles = [c for c in matched.cycles if c.has_stable_state]
+    if stable_cycles:
+        # 统计最近稳态的价位分布
+        stable_zones = {}
+        for c in stable_cycles:
+            z = c.next_stable.zone
+            key = f"{z.price_center:.0f}"
+            stable_zones[key] = stable_zones.get(key, 0) + 1
+        
+        avg_resistance = sum(c.next_stable.resistance_level for c in stable_cycles) / len(stable_cycles)
+        most_common_zone = max(stable_zones, key=stable_zones.get)
+        
+        guides.append(
+            f"【最近稳态分析】{len(stable_cycles)}/{len(matched.cycles)} 个 Cycle 已识别最近稳态，"
+            f"最常停驻价位 {most_common_zone}，"
+            f"平均阻力 {avg_resistance:.2f}"
+            f"{'（低阻力=容易到达=可能是假稳态）' if avg_resistance < 0.25 else ''}"
+        )
+        
+        # 如果当前结构在 breakdown 阶段，强调稳态分析
+        phases = [p.value for p in matched.phases]
+        if "breakdown" in phases:
+            guides.append(
+                f"⚠️ 结构处于 breakdown 阶段——"
+                f"历史上类似结构崩塌后，最先停驻的价位通常是最近稳态，"
+                f"而非最低点或最优反弹位"
+            )
+
+    # ── V1.6 P0: 运动态分析 ──
+    if matched.motion:
+        m = matched.motion
+        if m.phase_tendency == "→breakdown":
+            guides.append(
+                f"【运动态】阶段趋势 →breakdown（置信度 {m.phase_confidence:.0%}），"
+                f"守恒通量 {m.conservation_flux:+.2f}（{'差异在释放' if m.conservation_flux > 0 else '差异在压缩'}），"
+                f"距最近稳态 {m.stable_distance:.2f}"
+            )
+        elif m.phase_tendency == "→confirmation":
+            guides.append(
+                f"【运动态】阶段趋势 →confirmation（置信度 {m.phase_confidence:.0%}），"
+                f"结构正在自我确认中"
+            )
+
+    # ── V1.6 P0: 投影觉知 ──
+    if matched.projection and matched.projection.is_blind:
+        guides.append(
+            f"⚠️ 【投影觉知】当前结构压缩度 {matched.projection.compression_level:.0%}，"
+            f"价格可能不是差异的真实反映——差异可能藏在: "
+            f"{', '.join(matched.projection.blind_channels)}"
+        )
+
     # 方向统计
     up_cases = [c for c in cases if c.direction == "up"]
     down_cases = [c for c in cases if c.direction == "down"]
@@ -208,6 +261,14 @@ def _generate_comparison_guide(
     else:
         guides.append(f"历史方向分歧：上涨 {len(up_cases)} 段 / 下跌 {len(down_cases)} 段 / "
                       f"不明 {n - len(up_cases) - len(down_cases)} 段")
+
+    # ── V1.6: 最近稳态在历史案例中的验证 ──
+    if stable_cycles and (down_cases or up_cases):
+        guides.append(
+            f"【稳态验证】建议对照历史案例中类似结构崩塌/突破后的实际停驻价位，"
+            f"与当前最近稳态预测做比较——如果历史实际停驻位与预测一致，"
+            f"说明当前结构的稳态识别可靠"
+        )
 
     # 具体对照建议
     if up_cases:
