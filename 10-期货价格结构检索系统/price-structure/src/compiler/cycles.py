@@ -60,8 +60,10 @@ def _find_nearest_stable(
                 return NearestStableState(
                     zone=z,
                     arrival_point=seg.end,
-                    duration_to_arrive=seg.end.t - exit_seg.end.t
-                        if hasattr(seg.end.t, '__sub__') else 0.0,
+                    duration_to_arrive=(
+                        (seg.end.t - exit_seg.end.t).days
+                        if hasattr(seg.end.t, '__sub__') else 0.0
+                    ),
                     resistance_level=(k + 1) / max_lookahead,
                 )
 

@@ -85,8 +85,8 @@ def extract_pivots(
         else:
             # 中间灰区：保留更极端的一端
             if len(filtered) >= 2:
-                prev = filtered[-2]  # 与 last 异类
                 # 若 c 比 last 更极端（延续方向），用 c 替换 last
+                # 但必须保证替换后仍然交替（c 与 filtered[-2] 同类型则不能替换）
                 if last[1] == "high" and c[2] > last[2]:
                     filtered[-1] = c
                 elif last[1] == "low" and c[2] < last[2]:
@@ -96,7 +96,28 @@ def extract_pivots(
                 # filtered 只有一个元素，无法做方向判断，保守保留
                 filtered.append(c)
 
+    # Step 4: 后处理 — 强制交替（修复灰区替换可能破坏的交替性）
+    if len(filtered) < 2:
+        return [
+            Point(t=bars[idx].timestamp, x=price, idx=idx)
+            for idx, _, price in filtered
+        ]
+
+    strict: list[tuple[int, str, float]] = [filtered[0]]
+    for c in filtered[1:]:
+        last = strict[-1]
+        if c[1] != last[1]:
+            # 类型不同 → 交替成立
+            strict.append(c)
+        else:
+            # 类型相同 → 合并：保留更极端的
+            if c[1] == "high" and c[2] > last[2]:
+                strict[-1] = c
+            elif c[1] == "low" and c[2] < last[2]:
+                strict[-1] = c
+            # 否则丢弃 c
+
     return [
         Point(t=bars[idx].timestamp, x=price, idx=idx)
-        for idx, _, price in filtered
+        for idx, _, price in strict
     ]

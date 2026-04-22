@@ -340,6 +340,7 @@ class Structure:
     t_end: Optional[datetime] = None
     # ── V1.6 P0 新增 ──
     narrative_context: str = ""  # 结构形成时的市场叙事背景（V1.6 命题 2.3 可叙事性）
+    motion: MotionState | None = None  # 运动态（V1.6「系统 = 结构 × 运动」）
 
     @property
     def cycle_count(self) -> int:
@@ -418,6 +419,7 @@ class Structure:
             "t_start": self.t_start.isoformat() if self.t_start else None,
             "t_end": self.t_end.isoformat() if self.t_end else None,
             "narrative_context": self.narrative_context,
+            "motion": self.motion.to_dict() if self.motion else None,
             "stable_state_ratio": self.stable_state_ratio,
             "signature": self.signature(),
         }
@@ -425,6 +427,58 @@ class Structure:
     def __repr__(self):
         return (f"Structure(zone={self.zone}, cycles={self.cycle_count}, "
                 f"typicality={self.typicality:.2f})")
+
+
+@dataclass
+class MotionState:
+    """
+    运动态 — V1.6「系统 = 结构 × 运动」
+    描述差异正在如何运动，不只是结构是什么。
+    """
+    # 阶段转换趋势
+    phase_tendency: str = ""        # "→confirmation", "→breakdown", "stable" 等
+    phase_confidence: float = 0.0   # 阶段判断的置信度 [0,1]
+
+    # 差异转移流
+    transfer_source: str = ""       # 差异从哪流出（"zone_bandwidth", "speed_ratio" 等）
+    transfer_target: str = ""       # 差异流向哪（"shorter_timeframe", "volume" 等）
+    transfer_strength: float = 0.0  # 转移强度 [0,1]
+
+    # 稳态趋近
+    stable_distance: float = 0.0    # 距最近稳态的归一化距离
+    stable_velocity: float = 0.0    # 趋近稳态的速度（正=靠近，负=远离）
+
+    # 守恒通量
+    conservation_flux: float = 0.0  # 守恒通量（正值=差异在释放，负值=在压缩）
+    flux_detail: str = ""           # 人可读的通量说明
+
+    # 系统时间
+    structural_age: int = 0         # 结构已有的 cycle 数
+    phase_duration: int = 0         # 当前阶段已持续的 cycle 数
+
+    def to_dict(self) -> dict:
+        return {
+            "phase_tendency": self.phase_tendency,
+            "phase_confidence": self.phase_confidence,
+            "transfer_source": self.transfer_source,
+            "transfer_target": self.transfer_target,
+            "transfer_strength": self.transfer_strength,
+            "stable_distance": self.stable_distance,
+            "stable_velocity": self.stable_velocity,
+            "conservation_flux": self.conservation_flux,
+            "flux_detail": self.flux_detail,
+            "structural_age": self.structural_age,
+            "phase_duration": self.phase_duration,
+        }
+
+    @classmethod
+    def from_dict(cls, d: dict) -> MotionState:
+        return cls(**{k: d.get(k, v) for k, v in cls.__dataclass_fields__.items()})
+
+    def __repr__(self):
+        return (f"Motion(→{self.phase_tendency} "
+                f"flux={self.conservation_flux:+.2f} "
+                f"stable_d={self.stable_distance:.2f})")
 
 
 @dataclass

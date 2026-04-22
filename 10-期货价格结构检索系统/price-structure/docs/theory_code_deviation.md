@@ -5,11 +5,12 @@
 
 ---
 
-## 一、对齐的部分（不需要改）
+## 一、对齐的部分
 
 | 理论章节 | 命题 | 代码对应 | 状态 |
 |----------|------|---------|------|
 | Ch1 差异是成立条件 | 无差异则无世界 | `Point` — 一阶差分/对数差分定义最小可区分单位 | ✅ |
+| 核心隐喻 | 系统 = 结构 × 运动 | `Structure` + `MotionState` | ✅ 本轮新增 |
 | Ch2 聚簇与结构形成 | 共同反差驱动聚簇 | `Zone.context_contrast` + `_infer_contrast()` | ✅ P0 |
 | Ch2 聚簇与结构形成 | 可叙事性 | `Structure.narrative_context` + `infer_narrative_context()` | ✅ P0 |
 | Ch3 离散事件 | 变化是离散的，非连续流 | `Cycle` — entry/exit 离散定义 | ✅ |

@@ -10,7 +10,7 @@ V1.6 P0 新增：
 from __future__ import annotations
 import math
 from typing import Sequence
-from src.models import Point, Segment, Zone, Structure, ContrastType
+from src.models import Point, Segment, Zone, Structure, ContrastType, MotionState, Phase
 
 
 # ─── 点间 ──────────────────────────────────────────────────
@@ -237,3 +237,98 @@ def check_conservation(
             )
 
     return result
+
+
+def compute_motion(s: Structure) -> MotionState:
+    """
+    V1.6「系统 = 结构 × 运动」
+    给定一个 Structure（静态骨架），计算它的 MotionState（运动态）。
+
+    运动不是独立于结构的外部输入，而是从结构自身的演化趋势中推导出来的。
+    """
+    motion = MotionState()
+    motion.structural_age = s.cycle_count
+
+    if not s.cycles:
+        return motion
+
+    n = len(s.cycles)
+
+    # ── 1. 阶段转换趋势 ──
+    # 从最后几个 cycle 的速度比趋势推断下一个阶段
+    if n >= 3:
+        recent_srs = [c.speed_ratio for c in s.cycles[-3:]]
+        sr_trend = recent_srs[-1] - recent_srs[0]
+
+        # 速度比在加速上升 → 可能走向 breakdown
+        if sr_trend > 0.5:
+            motion.phase_tendency = "→breakdown"
+            motion.phase_confidence = min(abs(sr_trend) / 2.0, 1.0)
+        # 速度比在收敛 → 走向 confirmation
+        elif sr_trend < -0.3:
+            motion.phase_tendency = "→confirmation"
+            motion.phase_confidence = min(abs(sr_trend) / 1.0, 1.0)
+        # 速度比方向反转 → inversion
+        elif (recent_srs[0] > 1) != (recent_srs[-1] > 1):
+            motion.phase_tendency = "→inversion"
+            motion.phase_confidence = 0.7
+        else:
+            motion.phase_tendency = "stable"
+            motion.phase_confidence = 0.5
+    elif n >= 1:
+        motion.phase_tendency = "forming"
+        motion.phase_confidence = 0.3
+
+    # 计算当前阶段已持续的 cycle 数
+    current_phase = s.phases[-1] if s.phases else Phase.FORMATION
+    phase_count = 0
+    for c in reversed(s.phases):
+        if c == current_phase:
+            phase_count += 1
+        else:
+            break
+    motion.phase_duration = phase_count
+
+    # ── 2. 差异转移流 ──
+    # 从守恒检查中提取转移方向
+    conservation = s.invariants.get("conservation", {})
+    channels = conservation.get("transfer_channels", [])
+    if channels:
+        motion.transfer_source = "zone_bandwidth"
+        motion.transfer_target = channels[0]
+        motion.transfer_strength = 0.5 if len(channels) == 1 else 0.8
+
+    # ── 3. 稳态趋近 ──
+    stable_cycles = [c for c in s.cycles if c.has_stable_state]
+    if stable_cycles:
+        # 平均阻力评分 = 距稳态的归一化距离
+        avg_resistance = sum(c.next_stable.resistance_level for c in stable_cycles) / len(stable_cycles)
+        motion.stable_distance = avg_resistance
+
+        # 稳态速度: 从最近两个有稳态的 cycle 的阻力变化推断
+        if len(stable_cycles) >= 2:
+            r_prev = stable_cycles[-2].next_stable.resistance_level
+            r_curr = stable_cycles[-1].next_stable.resistance_level
+            motion.stable_velocity = r_prev - r_curr  # 正值=在靠近
+    else:
+        motion.stable_distance = 1.0  # 未识别到稳态 = 距离最远
+
+    # ── 4. 守恒通量 ──
+    if n >= 2:
+        first_half_srs = [c.speed_ratio for c in s.cycles[:n // 2]]
+        second_half_srs = [c.speed_ratio for c in s.cycles[n // 2:]]
+        avg_first = sum(first_half_srs) / len(first_half_srs)
+        avg_second = sum(second_half_srs) / len(second_half_srs)
+
+        # 正通量 = 速度比上升 = 差异在释放
+        # 负通量 = 速度比下降 = 差异在压缩
+        motion.conservation_flux = avg_second - avg_first
+
+        if motion.conservation_flux > 0.3:
+            motion.flux_detail = f"差异释放中 (sr {avg_first:.2f}→{avg_second:.2f})"
+        elif motion.conservation_flux < -0.3:
+            motion.flux_detail = f"差异压缩中 (sr {avg_first:.2f}→{avg_second:.2f})"
+        else:
+            motion.flux_detail = "差异平衡"
+
+    return motion
