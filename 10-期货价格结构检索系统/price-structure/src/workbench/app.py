@@ -684,6 +684,53 @@ with tabs[0]:
                     for j, sug in enumerate(r["suggestions"], 1):
                         st.markdown(f"  {j}. {sug}")
 
+            # ── 今日三选 ──
+            st.markdown("---")
+            st.markdown("#### 🎯 今日三选")
+            st.caption("从 Top 10 中精选三种策略类型 — 激进 / 稳健 / 潜伏")
+
+            # 激进型：breakdown + 最高通量
+            aggressive = [r for r in scan_results[:20]
+                          if r["motion"] and "breakdown" in r["motion"]]
+            aggressive.sort(key=lambda r: abs(r["flux"]), reverse=True)
+
+            # 稳健型：confirmation + 非零通量
+            stable = [r for r in scan_results[:20]
+                      if r["motion"] and "confirmation" in r["motion"]]
+            stable.sort(key=lambda r: r["score"], reverse=True)
+
+            # 潜伏型：forming/stable + 高压缩或高关注度
+            latent = [r for r in scan_results[:20]
+                      if r["motion"] in ("forming", "stable", "") and (r["is_blind"] or r["score"] >= 50)]
+            latent.sort(key=lambda r: r["score"], reverse=True)
+
+            trio = [
+                ("🔴 激进型", "breakdown + 高通量，波动大", aggressive),
+                ("🟢 稳健型", "confirmation，方向明确", stable),
+                ("🔵 潜伏型", "forming + 高压缩，等待突破", latent),
+            ]
+
+            trio_cols = st.columns(3)
+            for col, (label, desc, candidates) in zip(trio_cols, trio):
+                with col:
+                    st.markdown(f"**{label}**")
+                    st.caption(desc)
+                    if candidates:
+                        r = candidates[0]
+                        pos = _price_vs_zone(r["last_price"], r["zone_center"], r["zone_bw"])
+                        risk_color = {"高": "#ef5350", "中": "#ff9800", "低": "#26a69a"}.get(r["risk_level"], "#999")
+                        st.markdown(f"""
+                        <div class="structure-card">
+                            <span class="zone-label">{r['symbol']} · {r['symbol_name']}</span><br>
+                            <span class="meta-text">Zone {r['zone_center']:.0f} (±{r['zone_bw']:.0f}) · {motion_badge(r['motion'])} · 通量 {r['flux']:+.2f}</span><br>
+                            <span class="meta-text">{pos}</span><br>
+                            <span style="color:{risk_color};font-weight:700">关注度 {r['score']:.0f}分 · {r['risk_level']}关注度</span>
+                        </div>
+                        """, unsafe_allow_html=True)
+                        st.caption(f"💡 {r['suggestions'][0]}" if r['suggestions'] else "")
+                    else:
+                        st.info("暂无符合条件的结构")
+
             # ── 跨品种信号一致性分析 ──
             st.markdown("---")
             st.markdown("#### 🔗 跨品种信号一致性")
