@@ -20,8 +20,6 @@ from __future__ import annotations
 import sys
 import time
 import json
-import asyncio
-import aiohttp
 from datetime import datetime
 from pathlib import Path
 from dataclasses import dataclass, field
