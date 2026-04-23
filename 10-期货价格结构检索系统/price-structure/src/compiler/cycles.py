@@ -223,7 +223,14 @@ def assemble_structures(
     min_cycles: int = 2,
     symbol: str | None = None,
 ) -> list[Structure]:
-    """对每个 Zone 组装 Structure 候选"""
+    """
+    对每个 Zone 组装 Structure 候选。
+
+    先天完备性原则（机制四）：
+      编译层不预判哪个结构会"赢"。
+      候选结构按发现顺序返回，不做排序。
+      排序在展示层（工作台）按需进行。
+    """
     if not cycles:
         return []
 
@@ -254,8 +261,5 @@ def assemble_structures(
         st.invariants = structure_invariants(st)
         structures.append(st)
 
-    structures.sort(
-        key=lambda s: (s.cycle_count, s.zone.strength),
-        reverse=True,
-    )
+    # 不排序——先天完备性：候选结构逻辑平等，排序在展示层进行
     return structures

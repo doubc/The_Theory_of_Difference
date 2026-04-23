@@ -68,6 +68,19 @@ class CompileResult:
     system_states: list[SystemState] = field(default_factory=list)
     graph: StructureGraph | None = None  # V1.6 P2: 知识图谱
 
+    @property
+    def ranked_structures(self) -> list[Structure]:
+        """
+        按 cycle_count + zone_strength 排序的结构列表。
+        用于展示层（工作台、报告），不用于编译层。
+        编译层保持先天完备性：候选结构逻辑平等。
+        """
+        return sorted(
+            self.structures,
+            key=lambda s: (s.cycle_count, s.zone.strength),
+            reverse=True,
+        )
+
     def summary(self) -> dict:
         result = {
             "bars": self.bars_count,

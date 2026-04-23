@@ -231,7 +231,7 @@ with tab1:
     # 结构卡片矩阵
     st.markdown("#### 结构态一览")
     cols = st.columns(min(len(result.structures), 4))
-    for i, st_obj in enumerate(result.structures[:4]):
+    for i, st_obj in enumerate(result.ranked_structures[:4]):
         with cols[i % 4]:
             m = st_obj.motion
             p = st_obj.projection
@@ -282,13 +282,13 @@ with tab2:
             "选择结构",
             range(len(result.structures)),
             format_func=lambda i: (
-                f"#{i+1} Zone={result.structures[i].zone.price_center:.0f} "
-                f"({result.structures[i].label or '?'}) "
-                f"{result.structures[i].motion.phase_tendency if result.structures[i].motion else ''}"
+                f"#{i+1} Zone={result.ranked_structures[i].zone.price_center:.0f} "
+                f"({result.ranked_structures[i].label or '?'}) "
+                f"{result.ranked_structures[i].motion.phase_tendency if result.ranked_structures[i].motion else ''}"
             ),
             key="deep_idx",
         )
-        st_obj = result.structures[idx]
+        st_obj = result.ranked_structures[idx]
         m = st_obj.motion
         p = st_obj.projection
 
@@ -400,10 +400,10 @@ with tab3:
         idx = st.selectbox(
             "选择查询结构",
             range(len(result.structures)),
-            format_func=lambda i: f"#{i+1} Zone={result.structures[i].zone.price_center:.0f}",
+            format_func=lambda i: f"#{i+1} Zone={result.ranked_structures[i].zone.price_center:.0f}",
             key="match_idx",
         )
-        query_st = result.structures[idx]
+        query_st = result.ranked_structures[idx]
 
         # 当前结构态
         m = query_st.motion
@@ -555,7 +555,7 @@ with tab5:
             f"- 数据: {bars[0].timestamp:%Y-%m-%d} → {bars[-1].timestamp:%Y-%m-%d} ({len(bars)} bars)",
             f"- 结构: {len(result.structures)} 个",
         ]
-        for i, s in enumerate(result.structures[:4]):
+        for i, s in enumerate(result.ranked_structures[:4]):
             m = s.motion
             context_lines.append(
                 f"- S{i}: zone={s.zone.price_center:.0f} "

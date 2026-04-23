@@ -142,8 +142,8 @@ with tab1:
 with tab2:
     if result.structures:
         idx = st.selectbox("选择结构", range(len(result.structures)),
-                           format_func=lambda i: f"#{i+1} Zone={result.structures[i].zone.price_center:.0f}")
-        st_obj = result.structures[idx]
+                           format_func=lambda i: f"#{i+1} Zone={result.ranked_structures[i].zone.price_center:.0f}")
+        st_obj = result.ranked_structures[idx]
 
         col1, col2 = st.columns(2)
         with col1:
@@ -198,9 +198,9 @@ with tab3:
 
         # 选一个结构做检索
         idx = st.selectbox("选择查询结构", range(len(result.structures)),
-                           format_func=lambda i: f"#{i+1} Zone={result.structures[i].zone.price_center:.0f} ({result.structures[i].label or 'unlabeled'})",
+                           format_func=lambda i: f"#{i+1} Zone={result.ranked_structures[i].zone.price_center:.0f} ({result.ranked_structures[i].label or 'unlabeled'})",
                            key="retrieval_idx")
-        query = result.structures[idx]
+        query = result.ranked_structures[idx]
 
         # 样本库检索
         store = SampleStore("data/samples/library.jsonl")
