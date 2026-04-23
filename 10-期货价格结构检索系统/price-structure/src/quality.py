@@ -38,9 +38,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Optional
 
-from src.models import Structure, SystemState, MotionState, ProjectionAwareness, StabilityVerdict
 
 
 # ─── 质量等级 ─────────────────────────────────────────────
