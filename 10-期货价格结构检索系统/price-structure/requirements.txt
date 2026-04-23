@@ -1,9 +1,9 @@
-# 价格结构形式系统 依赖
-# 核心（无外部依赖也能跑）
-# 可选依赖
 pandas>=2.0
 pyarrow>=10.0
 plotly>=5.0
 pyyaml>=6.0
 streamlit>=1.30
 networkx>=3.0
+pymysql>=1.1
+sqlalchemy>=2.0
+requests>=2.31
