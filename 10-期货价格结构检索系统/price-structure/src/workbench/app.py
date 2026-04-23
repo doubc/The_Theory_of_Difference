@@ -652,7 +652,20 @@ with tabs[1]:
         with col_params:
             search_years = st.slider("历史检索范围（年）", 1, 10, 3)
             top_k = st.slider("返回案例数", 3, 20, 8)
-            run_search = st.button("🚀 开始检索", type="primary")
+
+        # ── 检索范围 ──
+        col_scope, col_btn = st.columns([2, 1])
+        with col_scope:
+            search_scope = st.radio(
+                "检索范围",
+                ["仅当前品种", "全品种（MySQL + CSV）"],
+                horizontal=True,
+                help="全品种模式会加载所有可用品种的历史数据进行对比",
+            )
+            is_cross_symbol = "全品种" in search_scope
+
+        with col_btn:
+            run_search = st.button("🚀 开始检索", type="primary", use_container_width=True)
 
         # 当前结构概要
         m = query_st.motion
@@ -667,67 +680,91 @@ with tabs[1]:
 
         # ── 执行检索 ──
         if run_search:
-            with st.spinner(f"正在从 {'MySQL' if mysql_ok else 'CSV'} 加载 {selected_symbol} 全量历史数据..."):
-                all_bars = load_bars(selected_symbol)
-                if not all_bars:
-                    st.error("无法加载历史数据")
-                    st.stop()
+            search_symbols = ALL_SYMBOLS if is_cross_symbol else [selected_symbol]
+            all_candidates = []
 
-                # 编译全量历史
-                all_config = CompilerConfig(
+            progress = st.progress(0, text="正在加载数据...")
+
+            for si, sym in enumerate(search_symbols):
+                progress.progress(
+                    si / max(len(search_symbols), 1),
+                    text=f"正在处理 {sym} ({symbol_name(sym)})... ({si+1}/{len(search_symbols)})"
+                )
+
+                sym_bars = load_bars(sym)
+                if not sym_bars or len(sym_bars) < 30:
+                    continue
+
+                sym_config = CompilerConfig(
                     min_amplitude=sens["min_amp"],
                     min_duration=sens["min_dur"],
                     min_cycles=sens["min_cycles"],
                     adaptive_pivots=True, fractal_threshold=0.34,
                 )
-                all_result = compile_full(all_bars, all_config, symbol=selected_symbol)
-
-            st.success(f"历史数据: {len(all_bars)} 根 bar，{len(all_result.structures)} 个历史结构")
-
-            # 在历史结构中找最相似的
-            candidates = []
-            for hs in all_result.structures:
-                if hs is query_st:
-                    continue
-                # 跳过时间重叠的
-                if hs.t_end and query_st.t_start and hs.t_end >= query_st.t_start:
+                sym_result = compile_full(sym_bars, sym_config, symbol=sym)
+                if not sym_result.structures:
                     continue
 
-                sc = similarity(query_st, hs)
+                for hs in sym_result.structures:
+                    # 跳过自身（同品种同时间）
+                    if sym == selected_symbol and hs is query_st:
+                        continue
+                    # 同品种跳过时间重叠
+                    if sym == selected_symbol:
+                        if hs.t_end and query_st.t_start and hs.t_end >= query_st.t_start:
+                            continue
 
-                # 计算前向表现
-                if hs.t_end:
-                    outcome_start = hs.t_end + timedelta(days=3)
-                    outcome_end = outcome_start + timedelta(days=30)
-                    future = [b for b in all_bars if outcome_start <= b.timestamp <= outcome_end]
-                    if future:
-                        start_p = future[0].open
-                        peak = max(b.high for b in future)
-                        trough = min(b.low for b in future)
-                        up = (peak - start_p) / start_p if start_p > 0 else 0
-                        down = (start_p - trough) / start_p if start_p > 0 else 0
-                        direction = "up" if up >= down else "down"
-                        move = max(up, down)
-                    else:
-                        direction = "unclear"
-                        move = 0
-                else:
-                    direction = "unclear"
-                    move = 0
+                    sc = similarity(query_st, hs)
 
-                candidates.append({
-                    "structure": hs,
-                    "score": sc,
-                    "direction": direction,
-                    "move": move,
-                })
+                    # 计算前向表现
+                    direction, move = "unclear", 0.0
+                    if hs.t_end:
+                        outcome_start = hs.t_end + timedelta(days=3)
+                        outcome_end = outcome_start + timedelta(days=30)
+                        future = [b for b in sym_bars if outcome_start <= b.timestamp <= outcome_end]
+                        if future:
+                            start_p = future[0].open
+                            if start_p > 0:
+                                peak = max(b.high for b in future)
+                                trough = min(b.low for b in future)
+                                up = (peak - start_p) / start_p
+                                down = (start_p - trough) / start_p
+                                direction = "up" if up >= down else "down"
+                                move = max(up, down)
 
-            candidates.sort(key=lambda c: c["score"].total, reverse=True)
-            top_cases = candidates[:top_k]
+                    all_candidates.append({
+                        "structure": hs,
+                        "score": sc,
+                        "direction": direction,
+                        "move": move,
+                        "symbol": sym,
+                        "symbol_name": symbol_name(sym),
+                    })
+
+            progress.progress(1.0, text="检索完成")
+
+            # 排序取 top_k
+            all_candidates.sort(key=lambda c: c["score"].total, reverse=True)
+            top_cases = all_candidates[:top_k]
 
             if top_cases:
+                # 品种来源统计
+                sym_distribution = {}
+                for c in top_cases:
+                    s = c["symbol"]
+                    sym_distribution[s] = sym_distribution.get(s, 0) + 1
+
                 st.markdown("---")
-                st.markdown(f"**找到 {len(top_cases)} 个历史相似案例（按相似度排序）：**")
+                scope_label = f"全品种 {len(search_symbols)} 个" if is_cross_symbol else selected_symbol
+                st.markdown(f"**找到 {len(top_cases)} 个历史相似案例**（检索范围: {scope_label}）")
+
+                # ── 品种来源分布 ──
+                if is_cross_symbol and len(sym_distribution) > 1:
+                    dist_text = " · ".join(
+                        f"**{s}**({symbol_name(s)}) ×{n}"
+                        for s, n in sorted(sym_distribution.items(), key=lambda x: -x[1])
+                    )
+                    st.caption(f"来源分布: {dist_text}")
 
                 # ── 统计面板 ──
                 up_cases = [c for c in top_cases if c["direction"] == "up"]
@@ -753,12 +790,15 @@ with tabs[1]:
                     sc = case["score"]
                     direction = case["direction"]
                     move = case["move"]
+                    case_sym = case["symbol"]
+                    case_sym_name = case["symbol_name"]
 
                     direction_icon = "📈" if direction == "up" else "📉" if direction == "down" else "➡️"
-                    case_cls = "case-up" if direction == "up" else "case-down"
 
+                    # 标题包含品种信息（全品种模式下）
+                    sym_tag = f"[{case_sym}] " if is_cross_symbol else ""
                     with st.expander(
-                        f"{direction_icon} #{i+1}  "
+                        f"{direction_icon} #{i+1}  {sym_tag}"
                         f"{hs.t_start:%Y-%m-%d} ~ {hs.t_end:%Y-%m-%d}  "
                         f"相似度 {sc.total:.0%}  "
                         f"后续{'涨' if direction=='up' else '跌' if direction=='down' else '横'}{move:.1%}",
@@ -771,7 +811,7 @@ with tabs[1]:
                             diff_df = _invariant_diff_table(
                                 query_st.invariants or {},
                                 hs.invariants or {},
-                                "当前", "历史",
+                                "当前", f"历史({case_sym})",
                             )
                             st.dataframe(diff_df, hide_index=True, use_container_width=True)
 
@@ -782,7 +822,8 @@ with tabs[1]:
                             sim_cols[1].metric("关系", f"{sc.relational:.0%}")
 
                             st.markdown("**结构特征**")
-                            st.caption(f"Cycle: {hs.cycle_count} · "
+                            st.caption(f"品种: {case_sym} ({case_sym_name})\n\n"
+                                      f"Cycle: {hs.cycle_count} · "
                                       f"SR: {hs.avg_speed_ratio:.2f} · "
                                       f"TR: {hs.avg_time_ratio:.2f} · "
                                       f"BW: {hs.zone.relative_bandwidth:.3f}")
@@ -792,12 +833,14 @@ with tabs[1]:
 
                         # 历史段 K 线
                         if hs.t_start and hs.t_end:
+                            # 从对应品种加载 bars
+                            case_bars = load_bars(case_sym)
                             margin = timedelta(days=15)
-                            hist_bars = [b for b in all_bars
+                            hist_bars = [b for b in case_bars
                                         if hs.t_start - margin <= b.timestamp <= hs.t_end + margin]
                             if hist_bars:
                                 fig = make_candlestick(hist_bars,
-                                    title=f"历史段 {hs.t_start:%Y-%m-%d} ~ {hs.t_end:%Y-%m-%d}")
+                                    title=f"{case_sym} {hs.t_start:%Y-%m-%d} ~ {hs.t_end:%Y-%m-%d}")
                                 fig.add_hline(y=hs.zone.price_center, line_dash="dot",
                                              line_color="#4a90d9",
                                              annotation_text=f"Zone {hs.zone.price_center:.0f}")
@@ -817,6 +860,21 @@ with tabs[1]:
                             f"平均跌幅 {sum(c['move'] for c in down_cases)/len(down_cases):.1%}")
                 else:
                     st.warning(f"**分歧**：上涨 {len(up_cases)} / 下跌 {len(down_cases)}，方向不明")
+
+                # 跨品种洞察
+                if is_cross_symbol and len(sym_distribution) > 1:
+                    st.markdown("---")
+                    st.markdown("#### 🔗 跨品种洞察")
+                    for sym, count in sym_distribution.items():
+                        sym_cases = [c for c in top_cases if c["symbol"] == sym]
+                        sym_up = sum(1 for c in sym_cases if c["direction"] == "up")
+                        sym_down = sum(1 for c in sym_cases if c["direction"] == "down")
+                        avg_sim = sum(c["score"].total for c in sym_cases) / len(sym_cases)
+                        st.markdown(
+                            f"**{sym} ({symbol_name(sym)})** × {count} 例 · "
+                            f"平均相似度 {avg_sim:.0%} · "
+                            f"📈{sym_up} / 📉{sym_down}"
+                        )
 
             else:
                 st.info("未找到足够的历史相似案例，建议降低灵敏度或扩大检索范围")
