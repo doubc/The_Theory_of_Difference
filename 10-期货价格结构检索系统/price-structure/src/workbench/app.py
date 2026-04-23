@@ -610,10 +610,12 @@ with tabs[1]:
         # 当前结构概要
         m = query_st.motion
         p = query_st.projection
+        flux_str = f"{m.conservation_flux:+.2f}" if m else "—"
+        tendency_str = m.phase_tendency if m else "—"
         st.markdown(f"""
         **当前结构** · Zone {query_st.zone.price_center:.0f} (±{query_st.zone.bandwidth:.0f})
         · {query_st.cycle_count}次试探 · {query_st.narrative_context or '?'}
-        · 运动: {m.phase_tendency if m else '—'} · 通量: {m.conservation_flux:+.2f if m else 0}
+        · 运动: {tendency_str} · 通量: {flux_str}
         """)
 
         # ── 执行检索 ──
