@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 """
-价格结构形式系统 — 研究工作台 v2.0
+价格结构研究工作台 v2.5
+
+按人类问题组织，不是按系统功能组织：
+  1. 今天值得关注什么  — 有什么结构在形成/在破缺
+  2. 跟历史上哪些像    — 这个结构历史上出现过吗，之后发生了什么
+  3. 这个品种的稳态    — 如果崩塌，先到哪
+  4. 研究笔记          — 我的观察和想法
 
 运行: streamlit run src/workbench/app.py
-
-五页布局:
-  1. 系统总览  — 全市场结构态一览（结构×运动×投影）
-  2. 结构深潜  — 单个结构的完整解剖
-  3. 主动匹配  — 带观点检索历史相似
-  4. 稳态地图  — 最近稳态分布与验证
-  5. 研究日志  — 笔记与发现
 """
 
 import sys, os
@@ -24,9 +23,10 @@ from datetime import datetime
 from src.data.loader import load_cu0, Bar
 from src.compiler.pipeline import compile_full, CompilerConfig, CompileResult
 from src.dsl.rule import load_rules, scan
-from src.retrieval.similarity import similarity, motion_similarity
+from src.retrieval.similarity import similarity
 from src.retrieval.engine import RetrievalEngine
 from src.sample.store import SampleStore
+from src.narrative import generate_daily_summary
 
 # ─── 页面配置 ──────────────────────────────────────────────
 
@@ -37,19 +37,10 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ─── 自定义样式 ────────────────────────────────────────────
+# ─── 样式 ──────────────────────────────────────────────────
 
 st.markdown("""
 <style>
-    .metric-card {
-        background: #1a1a2e;
-        border-radius: 8px;
-        padding: 12px 16px;
-        border-left: 3px solid #4a90d9;
-    }
-    .metric-card.warning { border-left-color: #ff9800; }
-    .metric-card.danger  { border-left-color: #ef5350; }
-    .metric-card.ok      { border-left-color: #26a69a; }
     .motion-badge {
         display: inline-block;
         padding: 2px 8px;
@@ -61,53 +52,66 @@ st.markdown("""
     .badge-confirmation { background: #26a69a22; color: #26a69a; }
     .badge-stable { background: #ffa72622; color: #ffa726; }
     .badge-forming { background: #42a5f522; color: #42a5f5; }
-    .stable-card {
-        background: #1e1e3a;
-        border-radius: 8px;
-        padding: 16px;
+    .structure-card {
+        background: #1a1a2e;
+        border-radius: 12px;
+        padding: 16px 20px;
         margin: 8px 0;
-        border: 1px solid #333;
+        border-left: 4px solid #4a90d9;
+    }
+    .structure-card.warning { border-left-color: #ff9800; }
+    .structure-card.danger  { border-left-color: #ef5350; }
+    .structure-card.ok      { border-left-color: #26a69a; }
+    .section-title {
+        font-size: 1.1em;
+        font-weight: 600;
+        margin-bottom: 8px;
     }
 </style>
 """, unsafe_allow_html=True)
 
 
-# ─── 侧栏：数据与参数 ──────────────────────────────────────
+# ─── 侧栏：极简 ──────────────────────────────────────────
 
 with st.sidebar:
-    st.markdown("## 🔬 价格结构研究工作台")
-    st.caption("差异论 V1.6 · 系统 = 结构 × 运动")
+    st.markdown("## 🔬 价格结构工作台")
+    st.caption("统一语法 · 系统 = 结构 × 运动")
     st.divider()
 
-    st.markdown("### ⚙️ 编译参数")
-    min_amplitude = st.slider("最小摆动幅度", 0.01, 0.10, 0.03, 0.005)
-    min_duration = st.slider("最小持续天数", 1, 10, 3)
-    noise_filter = st.slider("噪声过滤", 0.001, 0.02, 0.008, 0.001)
-    zone_bandwidth = st.slider("Zone 带宽", 0.005, 0.05, 0.015, 0.005)
-    cluster_eps = st.slider("聚类距离", 0.005, 0.05, 0.02, 0.005)
-    min_cycles = st.slider("最小 Cycle 数", 1, 5, 2)
+    # 数据范围
+    st.markdown("### 📊 数据范围")
+    data_range = st.selectbox(
+        "时间范围",
+        ["最近60天", "最近120天", "最近半年", "最近一年", "全部数据"],
+        index=1,
+    )
+    range_map = {
+        "最近60天": 60, "最近120天": 120,
+        "最近半年": 180, "最近一年": 365, "全部数据": 99999,
+    }
 
     st.divider()
-    st.markdown("### 🧠 v2.5 参数")
-    adaptive_pivots = st.checkbox("自适应极值窗口", value=True,
-        help="根据局部波动率自动调整 swing 检测窗口")
-    fractal_threshold = st.slider("分形一致性阈值", 0.0, 1.0, 0.34, 0.01,
-        help="至少多少比例的窗口确认才保留极值点") if adaptive_pivots else 0.34
-    volume_weighted = st.checkbox("成交量加权极值", value=False,
-        help="高成交量极值更容易保留")
-
-    st.divider()
-    st.markdown("### 🔍 检索参数")
-    top_k = st.slider("返回近邻数", 3, 20, 5)
-    min_score = st.slider("最低相似度", 0.1, 0.8, 0.3, 0.05)
+    # 灵敏度（只给一个旋钮）
+    st.markdown("### 🎛️ 灵敏度")
+    sensitivity = st.select_slider(
+        "结构识别灵敏度",
+        options=["粗糙", "标准", "精细"],
+        value="标准",
+        help="粗糙=只看大结构，精细=捕捉小波动",
+    )
+    sens_map = {
+        "粗糙": {"min_amp": 0.05, "min_dur": 5, "min_cycles": 3},
+        "标准": {"min_amp": 0.03, "min_dur": 3, "min_cycles": 2},
+        "精细": {"min_amp": 0.015, "min_dur": 2, "min_cycles": 2},
+    }
 
     st.divider()
     st.caption(f"数据: CU0 连续合约")
-    if st.button("🔄 重新编译"):
+    if st.button("🔄 刷新"):
         st.cache_data.clear()
 
 
-# ─── 数据加载 ──────────────────────────────────────────────
+# ─── 数据加载与编译 ──────────────────────────────────────
 
 @st.cache_data
 def load_data():
@@ -115,28 +119,24 @@ def load_data():
     return loader.get()
 
 @st.cache_data
-def do_compile(min_amp, min_dur, noise, zbw, eps, mc,
-               adaptive=True, fractal=0.34, vol_weighted=False):
+def do_compile(min_amp, min_dur, min_cycles):
     bars = load_data()
     config = CompilerConfig(
-        min_amplitude=min_amp, min_duration=min_dur, noise_filter=noise,
-        zone_bandwidth=zbw, cluster_eps=eps, cluster_min_points=2,
-        min_cycles=mc, tolerance=0.03,
-        adaptive_pivots=adaptive, fractal_threshold=fractal,
-        volume_weighted=vol_weighted,
+        min_amplitude=min_amp, min_duration=min_dur,
+        min_cycles=min_cycles,
+        adaptive_pivots=True, fractal_threshold=0.34,
     )
     return compile_full(bars, config, symbol="CU000")
 
-@st.cache_data
-def do_rules():
-    return load_rules(Path("src/dsl/rules/default.yaml"))
-
 bars = load_data()
-result = do_compile(min_amplitude, min_duration, noise_filter,
-                     zone_bandwidth, cluster_eps, min_cycles,
-                     adaptive_pivots, fractal_threshold, volume_weighted)
-rules = do_rules()
-matches = scan(result.structures, rules)
+sens = sens_map[sensitivity]
+result = do_compile(sens["min_amp"], sens["min_dur"], sens["min_cycles"])
+
+# 按时间范围过滤显示
+days = range_map[data_range]
+cutoff = bars[-1].timestamp - pd.Timedelta(days=days)
+recent_structures = [s for s in result.ranked_structures
+                     if s.t_end and s.t_end >= cutoff]
 
 
 # ─── 工具函数 ──────────────────────────────────────────────
@@ -152,349 +152,220 @@ def motion_badge(tendency: str) -> str:
     return f'<span class="motion-badge {cls}">{tendency}</span>'
 
 
-def flux_bar(flux: float) -> str:
-    """守恒通量可视化条"""
-    if flux > 0.5:
-        color, label = "#ef5350", "释放"
-    elif flux < -0.5:
-        color, label = "#26a69a", "压缩"
-    else:
-        color, label = "#ffa726", "平衡"
-    w = min(abs(flux) * 30, 100)
-    return f'<div style="display:flex;align-items:center;gap:8px"><div style="background:{color};width:{w:.0f}%;height:6px;border-radius:3px"></div><span style="color:{color};font-size:0.85em">{flux:+.2f} {label}</span></div>'
-
-
-def price_chart(bars: list[Bar], zone_center: float = 0, zone_bw: float = 0,
-                stable_zones: list[float] = None) -> go.Figure:
-    """带 zone 和稳态标注的 K 线图"""
+def make_candlestick(bars, title=""):
     df = pd.DataFrame([{
-        "date": b.timestamp,
-        "open": b.open, "high": b.high,
-        "low": b.low, "close": b.close,
+        "date": b.timestamp, "open": b.open, "high": b.high,
+        "low": b.low, "close": b.close, "volume": b.volume,
     } for b in bars])
-
-    fig = go.Figure()
-    fig.add_trace(go.Candlestick(
+    fig = go.Figure(data=[go.Candlestick(
         x=df["date"], open=df["open"], high=df["high"],
         low=df["low"], close=df["close"],
         increasing_line_color="#26a69a", decreasing_line_color="#ef5350",
-        name="K线",
-    ))
-
-    # Zone 标注
-    if zone_center > 0 and zone_bw > 0:
-        fig.add_hline(y=zone_center, line_dash="dash", line_color="#4a90d9",
-                      annotation_text=f"Zone {zone_center:.0f}")
-        fig.add_hrect(y0=zone_center - zone_bw, y1=zone_center + zone_bw,
-                      fillcolor="#4a90d9", opacity=0.1)
-
-    # 最近稳态标注
-    if stable_zones:
-        for sz in set(stable_zones):
-            fig.add_hline(y=sz, line_dash="dot", line_color="#ff9800",
-                          annotation_text=f"稳态 {sz:.0f}", annotation_position="bottom right")
-
+    )])
     fig.update_layout(
-        height=400, margin=dict(l=0, r=0, t=30, b=0),
+        height=350, template="plotly_dark",
         xaxis_rangeslider_visible=False,
-        template="plotly_dark",
-        title="",
+        margin=dict(l=0, r=0, t=30, b=0),
+        title=title,
     )
     return fig
 
 
 # ═══════════════════════════════════════════════════════════
-# 主布局：5 个 Tab
+# 主页面：按人类问题组织
 # ═══════════════════════════════════════════════════════════
 
-tab1, tab2, tab3, tab4, tab5 = st.tabs([
-    "📡 系统总览",
-    "🔬 结构深潜",
-    "🎯 主动匹配",
+st.markdown("### 🔬 价格结构研究工作台")
+st.caption(f"{bars[0].timestamp:%Y-%m-%d} → {bars[-1].timestamp:%Y-%m-%d} · "
+           f"{len(recent_structures)} 个结构在 {data_range} 内")
+
+tab1, tab2, tab3, tab4 = st.tabs([
+    "📡 今天值得关注什么",
+    "🔍 跟历史哪些像",
     "🗺️ 稳态地图",
-    "📝 研究日志",
+    "📝 研究笔记",
 ])
 
 
 # ═══════════════════════════════════════════════════════════
-# Tab 1: 系统总览 — 结构 × 运动 × 投影
+# Tab 1: 今天值得关注什么
 # ═══════════════════════════════════════════════════════════
 
 with tab1:
-    st.markdown("### 📡 系统总览")
-    st.caption(f"数据: {bars[0].timestamp:%Y-%m-%d} → {bars[-1].timestamp:%Y-%m-%d} · {len(bars)} bars · "
-               f"编译: {len(result.structures)} 结构 · {len(matches)} 规则匹配")
+    st.markdown("#### 📡 今天值得关注什么")
+    st.caption("有什么结构在形成、在确认、或正在破缺")
 
-    # K 线总览
-    st.plotly_chart(price_chart(bars), use_container_width=True)
+    if not recent_structures:
+        st.info("当前时间范围内没有显著结构")
+    else:
+        # 分类：正在破缺的 / 趋向确认的 / 形成中的
+        breaking = [s for s in recent_structures
+                    if s.motion and "breakdown" in s.motion.phase_tendency]
+        confirming = [s for s in recent_structures
+                      if s.motion and "confirmation" in s.motion.phase_tendency]
+        forming = [s for s in recent_structures
+                   if s.motion and s.motion.phase_tendency in ("forming", "stable", "")]
 
-    # 结构卡片矩阵
-    st.markdown("#### 结构态一览")
-    cols = st.columns(min(len(result.structures), 4))
-    for i, st_obj in enumerate(result.ranked_structures[:4]):
-        with cols[i % 4]:
-            m = st_obj.motion
-            p = st_obj.projection
-            contrast = st_obj.zone.context_contrast.value
+        # 破缺的先显示
+        if breaking:
+            st.markdown("**🔴 正在破缺**")
+            for s in breaking[:3]:
+                with st.container():
+                    st.markdown(f"""
+                    <div class="structure-card danger">
+                        <b>Zone {s.zone.price_center:.0f}</b> (±{s.zone.bandwidth:.0f})
+                        · {s.cycle_count}次试探
+                        · {motion_badge(s.motion.phase_tendency)}
+                        · 通量 {s.motion.conservation_flux:+.2f}
+                        <br><small>{s.narrative_context}</small>
+                    </div>
+                    """, unsafe_allow_html=True)
 
-            # 运动标签
-            tendency = m.phase_tendency if m else "?"
-            flux = m.conservation_flux if m else 0
-            stable_d = m.stable_distance if m else 0
-
-            # 投影状态
-            compression = p.compression_level if p else 0
-            proj_warn = "⚠️" if (p and p.is_blind) else ""
-
-            # 规则标签
-            label = st_obj.label or "未匹配"
-
-            card_class = "warning" if proj_warn else ("danger" if "breakdown" in tendency else "ok")
-
-            st.markdown(f"""
-            <div class="metric-card {card_class}">
-                <div style="font-size:1.1em;font-weight:700">
-                    Zone {st_obj.zone.price_center:.0f}
-                    {motion_badge(tendency)}
+        # 趋向确认的
+        if confirming:
+            st.markdown("**🟢 趋向确认**")
+            for s in confirming[:3]:
+                st.markdown(f"""
+                <div class="structure-card ok">
+                    <b>Zone {s.zone.price_center:.0f}</b> (±{s.zone.bandwidth:.0f})
+                    · {s.cycle_count}次试探
+                    · {motion_badge(s.motion.phase_tendency)}
+                    · 通量 {s.motion.conservation_flux:+.2f}
+                    <br><small>{s.narrative_context}</small>
                 </div>
-                <div style="margin-top:8px;font-size:0.9em;color:#aaa">
-                    {label} · {st_obj.cycle_count} cycles · 反差:{contrast}
+                """, unsafe_allow_html=True)
+
+        # 形成中的
+        if forming:
+            st.markdown("**🔵 形成中**")
+            for s in forming[:5]:
+                proj_warn = "⚠️ 高压缩" if (s.projection and s.projection.is_blind) else ""
+                st.markdown(f"""
+                <div class="structure-card">
+                    <b>Zone {s.zone.price_center:.0f}</b> (±{s.zone.bandwidth:.0f})
+                    · {s.cycle_count}次试探
+                    · {motion_badge(s.motion.phase_tendency if s.motion else 'unknown')}
+                    {f'· {proj_warn}' if proj_warn else ''}
+                    <br><small>{s.narrative_context}</small>
                 </div>
-                <div style="margin-top:6px">
-                    守恒通量 {flux_bar(flux)}
-                </div>
-                <div style="margin-top:4px;font-size:0.85em;color:#888">
-                    稳态距:{stable_d:.2f} · 投影:{compression:.0%} {proj_warn}
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
+                """, unsafe_allow_html=True)
+
+        # K 线图 + Zone 标注
+        st.markdown("---")
+        st.markdown("**K 线 + 关键区**")
+        fig = make_candlestick(bars[-120:])
+        for s in recent_structures[:5]:
+            fig.add_hline(y=s.zone.price_center, line_dash="dot",
+                         line_color="#4a90d9", opacity=0.5,
+                         annotation_text=f"Zone {s.zone.price_center:.0f}")
+            fig.add_hrect(y0=s.zone.lower, y1=s.zone.upper,
+                         fillcolor="#4a90d9", opacity=0.08, line_width=0)
+        st.plotly_chart(fig, use_container_width=True)
 
 
 # ═══════════════════════════════════════════════════════════
-# Tab 2: 结构深潜 — 单个结构的完整解剖
+# Tab 2: 跟历史哪些像
 # ═══════════════════════════════════════════════════════════
 
 with tab2:
-    st.markdown("### 🔬 结构深潜")
+    st.markdown("#### 🔍 跟历史哪些像")
+    st.caption("选一个当前结构，看历史上类似的结构之后发生了什么")
 
-    if result.structures:
-        idx = st.selectbox(
-            "选择结构",
-            range(len(result.structures)),
-            format_func=lambda i: (
-                f"#{i+1} Zone={result.ranked_structures[i].zone.price_center:.0f} "
-                f"({result.ranked_structures[i].label or '?'}) "
-                f"{result.ranked_structures[i].motion.phase_tendency if result.ranked_structures[i].motion else ''}"
-            ),
-            key="deep_idx",
-        )
-        st_obj = result.ranked_structures[idx]
-        m = st_obj.motion
-        p = st_obj.projection
+    if not recent_structures:
+        st.info("没有可比较的结构")
+    else:
+        # 选择要查看的结构
+        options = [f"Zone {s.zone.price_center:.0f} ({s.cycle_count}次试探, "
+                   f"{s.narrative_context or '?'})"
+                   for s in recent_structures]
+        sel = st.selectbox("选择一个结构", options, index=0)
+        idx = options.index(sel)
+        query_st = recent_structures[idx]
 
-        # K 线图 + zone + 稳态
-        stable_z = []
-        for c in st_obj.cycles:
-            if c.has_stable_state:
-                stable_z.append(c.next_stable.zone.price_center)
-
-        bars_window = bars  # 全量，后续可缩小
-        st.plotly_chart(
-            price_chart(bars_window, st_obj.zone.price_center,
-                       st_obj.zone.bandwidth, stable_z),
-            use_container_width=True,
-        )
-
-        # 三栏：结构 / 运动 / 投影
-        c1, c2, c3 = st.columns(3)
-
-        with c1:
-            st.markdown("#### 🦴 结构（骨架）")
+        # 显示选中结构的详情
+        col1, col2 = st.columns([1, 1])
+        with col1:
+            st.markdown("**选中的结构**")
+            m = query_st.motion
+            p = query_st.projection
             st.markdown(f"""
-            - **Zone**: {st_obj.zone.price_center:.0f} ±{st_obj.zone.bandwidth:.0f}
-            - **来源**: {st_obj.zone.source.value}
-            - **反差**: {st_obj.zone.context_contrast.value} {st_obj.zone.contrast_label}
-            - **强度**: {st_obj.zone.strength:.1f}
-            - **Cycles**: {st_obj.cycle_count}
-            - **Phases**: {', '.join(p.value for p in st_obj.phases)}
-            - **标签**: {st_obj.label or '未匹配'}
-            - **叙事**: {st_obj.narrative_context}
+            - Zone: {query_st.zone.price_center:.0f} (±{query_st.zone.bandwidth:.0f})
+            - 试探次数: {query_st.cycle_count}
+            - 叙事: {query_st.narrative_context}
+            - 运动: {m.phase_tendency if m else '—'}
+            - 通量: {m.conservation_flux:+.2f if m else 0}
+            - 压缩度: {p.compression_level:.0% if p else '—'}
             """)
 
-        with c2:
-            st.markdown("#### 🌊 运动（趋势）")
-            if m:
-                st.markdown(f"""
-                - **阶段趋势**: {motion_badge(m.phase_tendency)} 置信度 {m.phase_confidence:.0%}
-                - **守恒通量**: {flux_bar(m.conservation_flux)}
-                - **通量说明**: {m.flux_detail}
-                - **稳态距离**: {m.stable_distance:.2f}
-                - **趋近速度**: {m.stable_velocity:+.3f}
-                - **转移流**: {m.transfer_source} → {m.transfer_target}
-                - **系统时间**: {m.structural_age} cycles / 阶段持续 {m.phase_duration}
-                """, unsafe_allow_html=True)
+            # 投影觉知建议
+            if p and p.recommended_actions:
+                st.markdown("**系统建议:**")
+                for action in p.recommended_actions:
+                    st.markdown(f"  {action}")
+
+        with col2:
+            st.markdown("**这个品种历史上**")
+            st.caption("这个 Zone 附近，历史上类似结构之后发生了什么")
+
+            # 在样本库中检索
+            sample_store = SampleStore("data/samples")
+            if sample_store.load_all():
+                engine = RetrievalEngine(sample_store)
+                result_retrieval = engine.retrieve(query_st, top_k=5)
+
+                if result_retrieval.neighbors:
+                    for i, n in enumerate(result_retrieval.neighbors):
+                        st.markdown(f"""
+                        **#{i+1}** 匹配度 {n.score.total:.0%}
+                        · {n.match_reason}
+                        """)
+                else:
+                    st.info("样本库中暂无匹配")
+
+                # 后验统计
+                post = result_retrieval.posterior
+                if post.sample_size > 0:
+                    st.markdown("---")
+                    st.markdown("**后验统计** (匹配案例的后续表现)")
+                    c1, c2, c3 = st.columns(3)
+                    c1.metric("5日收益", f"{post.mean_ret_5d:+.2%}")
+                    c2.metric("10日收益", f"{post.mean_ret_10d:+.2%}")
+                    c3.metric("20日收益", f"{post.mean_ret_20d:+.2%}")
+                    st.metric("10日上涨概率", f"{post.prob_positive_10d:.0%}")
             else:
-                st.info("运动态未计算")
+                st.info("样本库为空，暂无历史匹配")
 
-        with c3:
-            st.markdown("#### 👁️ 投影（觉知）")
-            if p:
-                proj_color = "#ef5350" if p.is_blind else "#26a69a"
+        # 最近稳态
+        stable_cycles = [c for c in query_st.cycles if c.has_stable_state]
+        if stable_cycles:
+            st.markdown("---")
+            st.markdown("**如果崩塌，先到哪？**")
+            latest = stable_cycles[-1].next_stable
+            if latest.zone:
                 st.markdown(f"""
-                - **压缩度**: <span style="color:{proj_color}">{p.compression_level:.0%}</span>
-                - **可信度**: {p.projection_confidence:.0%}
-                - **盲区**: {', '.join(p.blind_channels) if p.blind_channels else '无'}
-                - **观测**: {p.observation}
-                """, unsafe_allow_html=True)
-
-                # v2.5: 推荐行动
-                if p.recommended_actions:
-                    st.markdown("**建议:**")
-                    for action in p.recommended_actions:
-                        st.markdown(f"  {action}")
-
-                # v2.5: 盲区证据
-                if p.blind_evidence:
-                    st.markdown("**盲区证据:**")
-                    for channel, evidence in p.blind_evidence.items():
-                        st.markdown(f"  · {channel}: {evidence}")
-            else:
-                st.info("投影觉知未计算")
-
-        # Cycle 表格
-        st.markdown("#### 📋 Cycle 详情")
-        cycle_rows = []
-        for i, c in enumerate(st_obj.cycles):
-            stable_info = ""
-            if c.has_stable_state:
-                ns = c.next_stable
-                stable_info = f"Zone {ns.zone.price_center:.0f} (阻力 {ns.resistance_level:.2f})"
-
-            cycle_rows.append({
-                "#": i + 1,
-                "Entry": f"{'↑' if c.entry.delta > 0 else '↓'} {c.entry.abs_delta:.0f} ({c.entry.duration:.0f}d)",
-                "Exit": f"{'↑' if c.exit.delta > 0 else '↓'} {c.exit.abs_delta:.0f} ({c.exit.duration:.0f}d)",
-                "Speed R": f"{c.speed_ratio:.2f}",
-                "Time R": f"{c.time_ratio:.2f}",
-                "最近稳态": stable_info or "—",
-            })
-        st.dataframe(pd.DataFrame(cycle_rows), use_container_width=True, hide_index=True)
-
-        # 守恒检查
-        cons = st_obj.invariants.get("conservation", {})
-        if cons.get("notes"):
-            st.markdown("#### ⚠️ 守恒警告")
-            for note in cons["notes"]:
-                st.warning(note)
+                - 最近稳态价位: **{latest.zone.price_center:.0f}**
+                - 到达耗时: {latest.duration_to_arrive:.0f} 天
+                - 阻力评分: {latest.resistance_level:.2f} (越低越容易到)
+                """)
 
 
 # ═══════════════════════════════════════════════════════════
-# Tab 3: 主动匹配 — 带观点检索
+# Tab 3: 稳态地图
 # ═══════════════════════════════════════════════════════════
 
 with tab3:
-    st.markdown("### 🎯 主动匹配")
-    st.caption("选择一个当前结构，系统检索历史相似并给出对比指引")
+    st.markdown("#### 🗺️ 稳态地图")
+    st.caption("如果结构崩塌，市场最可能先滑向哪里")
 
-    if result.structures:
-        idx = st.selectbox(
-            "选择查询结构",
-            range(len(result.structures)),
-            format_func=lambda i: f"#{i+1} Zone={result.ranked_structures[i].zone.price_center:.0f}",
-            key="match_idx",
-        )
-        query_st = result.ranked_structures[idx]
-
-        # 当前结构态
-        m = query_st.motion
-        col1, col2, col3 = st.columns(3)
-        col1.metric("Zone", f"{query_st.zone.price_center:.0f}")
-        col2.metric("运动", m.phase_tendency if m else "?")
-        col3.metric("通量", f"{m.conservation_flux:+.2f}" if m else "—")
-
-        # 两结构间相似性对比
-        st.markdown("#### 与其他结构的相似性")
-        sim_rows = []
-        for j, other in enumerate(result.structures):
-            if j == idx:
-                continue
-            sc = similarity(query_st, other)
-            sim_rows.append({
-                "#": j + 1,
-                "Zone": f"{other.zone.price_center:.0f}",
-                "标签": other.label or "—",
-                "Total": f"{sc.total:.3f}",
-                "几何": f"{sc.geometric:.3f}",
-                "关系": f"{sc.relational:.3f}",
-                "运动": f"{sc.motion:.3f}",
-                "族": f"{sc.family:.3f}",
-            })
-        if sim_rows:
-            st.dataframe(pd.DataFrame(sim_rows), use_container_width=True, hide_index=True)
-
-        # 样本库检索
-        st.markdown("#### 历史相似案例")
-        store = SampleStore("data/samples/library.jsonl")
-        if store.count() > 0:
-            engine = RetrievalEngine(store)
-            ret = engine.retrieve(query_st, top_k=top_k, min_score=min_score)
-
-            if ret.neighbors:
-                for i, n in enumerate(ret.neighbors[:5]):
-                    with st.expander(
-                        f"[{i+1}] {n.sample.label_type} — "
-                        f"score={n.score.total:.3f} "
-                        f"({n.sample.t_start:%Y-%m} ~ {n.sample.t_end:%Y-m})"
-                    ):
-                        cc1, cc2 = st.columns(2)
-                        with cc1:
-                            st.write(f"**ID**: {n.sample.id}")
-                            st.write(f"**典型度**: {n.sample.typicality:.2f}")
-                            if n.sample.forward_outcome:
-                                fo = n.sample.forward_outcome
-                                st.write(f"**5d**: {fo.get('ret_5d', 0):+.2%}")
-                                st.write(f"**10d**: {fo.get('ret_10d', 0):+.2%}")
-                                st.write(f"**20d**: {fo.get('ret_20d', 0):+.2%}")
-                        with cc2:
-                            st.write(f"几何: {n.score.geometric:.3f}")
-                            st.write(f"关系: {n.score.relational:.3f}")
-                            st.write(f"运动: {n.score.motion:.3f}")
-                            st.write(f"族: {n.score.family:.3f}")
-
-                # 后验统计
-                p = ret.posterior
-                st.markdown("#### 后验分布")
-                mc1, mc2, mc3, mc4 = st.columns(4)
-                mc1.metric("样本数", p.sample_size)
-                mc2.metric("ret_5d", f"{p.mean_ret_5d:+.2%}")
-                mc3.metric("ret_10d", f"{p.mean_ret_10d:+.2%}")
-                mc4.metric("ret_20d", f"{p.mean_ret_20d:+.2%}")
-            else:
-                st.info("无足够相似样本")
-        else:
-            st.warning("样本库为空")
-
-
-# ═══════════════════════════════════════════════════════════
-# Tab 4: 稳态地图 — 最近稳态分布与验证
-# ═══════════════════════════════════════════════════════════
-
-with tab4:
-    st.markdown("### 🗺️ 稳态地图")
-    st.caption("V1.6 命题 3.4/3.5：系统先滑向最近能稳住的安排，不是最优解")
-
-    # 收集所有稳态信息
     stable_data = []
-    for si, st_obj in enumerate(result.structures):
+    for si, st_obj in enumerate(recent_structures):
         for ci, c in enumerate(st_obj.cycles):
             if c.has_stable_state:
                 ns = c.next_stable
                 stable_data.append({
-                    "结构": f"S{si}",
+                    "结构": f"Zone {st_obj.zone.price_center:.0f}",
                     "Cycle": ci + 1,
-                    "Zone": st_obj.zone.price_center,
                     "Exit方向": "↑" if c.exit.delta > 0 else "↓",
-                    "Exit幅度": c.exit.abs_delta,
                     "稳态价位": ns.zone.price_center if ns.zone else 0,
                     "到达天数": ns.duration_to_arrive,
                     "阻力": ns.resistance_level,
@@ -504,14 +375,11 @@ with tab4:
         sdf = pd.DataFrame(stable_data)
         st.dataframe(sdf, use_container_width=True, hide_index=True)
 
-        # 稳态分布图
-        st.markdown("#### 稳态价位分布")
+        # 稳态分布
         fig = go.Figure()
         fig.add_trace(go.Histogram(
-            x=sdf["稳态价位"],
-            nbinsx=20,
-            marker_color="#ff9800",
-            name="最近稳态",
+            x=sdf["稳态价位"], nbinsx=20,
+            marker_color="#ff9800", name="最近稳态",
         ))
         fig.update_layout(
             height=300, template="plotly_dark",
@@ -520,64 +388,45 @@ with tab4:
         )
         st.plotly_chart(fig, use_container_width=True)
 
-        # 阻力分布
-        st.markdown("#### 阻力评分分布")
+        # 统计
         c1, c2, c3 = st.columns(3)
         c1.metric("平均阻力", f"{sdf['阻力'].mean():.3f}")
         c2.metric("低阻力占比(<0.3)", f"{(sdf['阻力'] < 0.3).mean():.0%}")
-        c3.metric("稳态覆盖率", f"{len(sdf) / sum(st.cycle_count for st in result.structures):.0%}")
+        c3.metric("稳态覆盖率", f"{len(sdf) / max(sum(s.cycle_count for s in recent_structures), 1):.0%}")
 
-        # 低阻力警告
         low_res = sdf[sdf["阻力"] < 0.2]
         if not low_res.empty:
-            st.warning(
-                f"⚠️ {len(low_res)} 个 Cycle 的稳态阻力 < 0.2 — "
-                f"可能是假稳态，差异正在隐性积累"
-            )
+            st.warning(f"⚠️ {len(low_res)} 个稳态阻力 < 0.2 — 可能是假稳态")
     else:
-        st.info("当前编译结果中未识别到最近稳态")
+        st.info("当前没有识别到最近稳态")
 
 
 # ═══════════════════════════════════════════════════════════
-# Tab 5: 研究日志
+# Tab 4: 研究笔记
 # ═══════════════════════════════════════════════════════════
 
-with tab5:
-    st.markdown("### 📝 研究日志")
+with tab4:
+    st.markdown("#### 📝 研究笔记")
+    st.caption("记录你的观察和想法")
 
     log_dir = Path("data/logs")
     log_dir.mkdir(parents=True, exist_ok=True)
+    today = datetime.now().strftime("%Y-%m-%d")
+    log_file = log_dir / f"{today}.md"
 
-    # 自动生成上下文摘要
-    if result.structures:
-        context_lines = [
-            f"## 编译上下文 {datetime.now():%Y-%m-%d %H:%M}",
-            f"- 数据: {bars[0].timestamp:%Y-%m-%d} → {bars[-1].timestamp:%Y-%m-%d} ({len(bars)} bars)",
-            f"- 结构: {len(result.structures)} 个",
-        ]
-        for i, s in enumerate(result.ranked_structures[:4]):
-            m = s.motion
-            context_lines.append(
-                f"- S{i}: zone={s.zone.price_center:.0f} "
-                f"cycles={s.cycle_count} "
-                f"motion={m.phase_tendency if m else '?'} "
-                f"flux={m.conservation_flux:+.2f if m else 0}"
-            )
-        default_note = "\n".join(context_lines)
-    else:
-        default_note = ""
+    # 自动上下文
+    if recent_structures:
+        context = f"## 编译上下文 {datetime.now():%Y-%m-%d %H:%M}\n"
+        context += f"- 数据: {bars[0].timestamp:%Y-%m-%d} → {bars[-1].timestamp:%Y-%m-%d}\n"
+        context += f"- 结构: {len(recent_structures)} 个\n"
+        for s in recent_structures[:5]:
+            context += f"  - Zone {s.zone.price_center:.0f}: {s.narrative_context or '?'}\n"
+        st.code(context, language="markdown")
 
-    note = st.text_area("记录研究笔记", value=default_note, height=200)
-    if st.button("保存日志"):
-        ts = datetime.now().strftime("%Y-%m-%d_%H%M%S")
-        log_file = log_dir / f"{ts}.md"
-        log_file.write_text(note, encoding="utf-8")
-        st.success(f"已保存 → {log_file}")
-
-    # 历史日志
-    logs = sorted(log_dir.glob("*.md"), reverse=True)
-    if logs:
-        st.markdown("#### 历史日志")
-        for log_file in logs[:10]:
-            with st.expander(f"📄 {log_file.stem}"):
-                st.text(log_file.read_text(encoding="utf-8"))
+    # 笔记编辑
+    existing = log_file.read_text() if log_file.exists() else ""
+    notes = st.text_area("今日笔记", value=existing, height=200,
+                         placeholder="记录你的观察、想法、疑问...")
+    if st.button("💾 保存"):
+        log_file.write_text(notes)
+        st.success(f"已保存到 {log_file}")
