@@ -22,8 +22,8 @@ def example_basic_query():
     loader = MySQLLoader(
         host='localhost',
         user='root',
-        password='root',  # ← 修改为你的密码
-        db='sina_futures'
+        password='',  # ← 修改为你的密码
+        db='sina'
     )
     
     # 获取最近 30 天数据
@@ -54,8 +54,8 @@ def example_batch_query():
     loader = MySQLLoader(
         host='localhost',
         user='root',
-        password='root',
-        db='sina_futures'
+        password='',
+        db='sina'
     )
     
     symbols = ['cu0', 'rb0', 'al0']
@@ -86,8 +86,8 @@ def example_price_change():
     loader = MySQLLoader(
         host='localhost',
         user='root',
-        password='root',
-        db='sina_futures'
+        password='',
+        db='sina'
     )
     
     bars = loader.get(symbol='cu0', freq='1d')
@@ -117,8 +117,8 @@ def example_moving_average():
     loader = MySQLLoader(
         host='localhost',
         user='root',
-        password='root',
-        db='sina_futures'
+        password='',
+        db='sina'
     )
     
     bars = loader.get(symbol='cu0', freq='1d')

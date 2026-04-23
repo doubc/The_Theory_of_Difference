@@ -126,7 +126,7 @@ def get_mysql_engine():
     """尝试连接 MySQL，返回 engine 或 None"""
     try:
         from sqlalchemy import create_engine, inspect
-        engine = create_engine("mysql+pymysql://root:root@localhost/sina?charset=utf8")
+        engine = create_engine("mysql+pymysql://root:@localhost/sina?charset=utf8")
         # 快速验证连接
         insp = inspect(engine)
         _ = insp.get_table_names()
@@ -188,7 +188,7 @@ def load_bars(symbol: str, source: str = "auto") -> list[Bar]:
     # 尝试 MySQL
     if source in ("auto", "mysql"):
         try:
-            loader = MySQLLoader(host="localhost", user="root", password="root", db="sina")
+            loader = MySQLLoader(host="localhost", user="root", password="", db="sina")
             bars = loader.get(symbol=symbol, freq="1d")
             if bars:
                 return bars

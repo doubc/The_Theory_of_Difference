@@ -36,11 +36,11 @@ DB_CONFIG = {
     'host': 'localhost',
     'port': 3306,
     'user': 'root',
-    'password': 'root',  # 请修改为你的 MySQL 密码
+    'password': '',  # 空密码
     'charset': 'utf8mb4',
 }
 
-DB_NAME = 'sina_futures'
+DB_NAME = 'sina'
 
 
 # ─── SQL 建表语句 ──────────────────────────────────────────
@@ -93,9 +93,9 @@ class MySQLManager:
         """建立数据库连接"""
         try:
             self.conn = pymysql.connect(**self.config, cursorclass=DictCursor)
-            print(f"✓ MySQL 连接成功: {self.config['host']}:{self.config['port']}")
+            print(f"[OK] MySQL 连接成功: {self.config['host']}:{self.config['port']}")
         except Exception as e:
-            print(f"✗ MySQL 连接失败: {e}")
+            print(f"[ERROR] MySQL 连接失败: {e}")
             raise
             
     def ensure_database(self):
@@ -103,7 +103,7 @@ class MySQLManager:
         with self.conn.cursor() as cursor:
             cursor.execute(CREATE_DB_SQL)
             self.conn.commit()
-            print(f"✓ 数据库 '{DB_NAME}' 已就绪")
+            print(f"[OK] 数据库 '{DB_NAME}' 已就绪")
             
     def use_database(self):
         """切换到目标数据库"""
@@ -261,15 +261,15 @@ class DataSync:
         bars = fetch_bars(symbol, freq=freq)
         
         if not bars:
-            print(f"✗ 未能获取到 {symbol} 的数据")
+            print(f"[ERROR] 未能获取到 {symbol} 的数据")
             return False
             
-        print(f"✓ 获取到 {len(bars)} 条数据")
+        print(f"[OK] 获取到 {len(bars)} 条数据")
         print(f"  时间范围: {bars[0].timestamp} ~ {bars[-1].timestamp}")
         
         # 4. 写入数据库
         inserted = self.db.insert_bars(symbol, freq, bars)
-        print(f"✓ 成功写入 {inserted} 条数据")
+        print(f"[OK] 成功写入 {inserted} 条数据")
         
         # 5. 显示统计
         stats = self.db.get_stats(symbol, freq)
@@ -295,7 +295,7 @@ class DataSync:
                 try:
                     self.sync_contract(symbol, freq)
                 except Exception as e:
-                    print(f"✗ 同步失败: {e}")
+                    print(f"[ERROR] 同步失败: {e}")
                     continue
                     
         print(f"\n{'='*60}")
@@ -311,7 +311,7 @@ def main():
     parser.add_argument('--all', '-a', action='store_true', help='同步所有预置合约')
     parser.add_argument('--freq', '-f', type=str, default='1d', choices=['1d', '5m'], help='数据频率')
     parser.add_argument('--force', action='store_true', help='强制全量更新')
-    parser.add_argument('--password', '-p', type=str, default='root', help='MySQL 密码')
+    parser.add_argument('--password', '-p', type=str, default='', help='MySQL 密码')
     parser.add_argument('--host', type=str, default='localhost', help='MySQL 主机')
     parser.add_argument('--list', '-l', action='store_true', help='列出所有已同步的表')
     

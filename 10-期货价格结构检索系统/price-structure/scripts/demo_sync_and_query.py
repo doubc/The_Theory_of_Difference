@@ -56,7 +56,7 @@ def demo():
         host=DB_CONFIG['host'],
         user=DB_CONFIG['user'],
         password=DB_CONFIG['password'],
-        db='sina_futures'
+        db='sina'
     )
     
     # 获取全部数据

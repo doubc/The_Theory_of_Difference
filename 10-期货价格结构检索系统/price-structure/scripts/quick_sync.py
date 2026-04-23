@@ -30,7 +30,7 @@ def main():
     DB_CONFIG = {
         'host': 'localhost',
         'user': 'root',
-        'password': 'root',  # ← 修改为你的密码
+        'password': '',  # 空密码
     }
     
     # 解析命令行参数
@@ -84,7 +84,7 @@ def main():
         sync.sync_contract(symbol, freq)
         
     db.close()
-    print("\n✓ 同步完成!")
+    print("\n[OK] 同步完成!")
 
 
 if __name__ == "__main__":

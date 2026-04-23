@@ -52,15 +52,15 @@ def test_connection(host='localhost', user='root', password='root', port=3306):
             databases = [row['Database'] for row in cursor.fetchall()]
             print(f"\n现有数据库 ({len(databases)} 个):")
             for db in databases:
-                prefix = "  → " if db == 'sina_futures' else "    "
+                prefix = "  → " if db == 'sina' else "    "
                 print(f"{prefix}{db}")
                 
-            # 检查 sina_futures 数据库
-            if 'sina_futures' in databases:
-                print(f"\n✓ sina_futures 数据库已存在")
-                cursor.execute("USE sina_futures")
+            # 检查 sina 数据库
+            if 'sina' in databases:
+                print(f"\n✓ sina 数据库已存在")
+                cursor.execute("USE sina")
                 cursor.execute("SHOW TABLES")
-                tables = [row[f"Tables_in_sina_futures"] for row in cursor.fetchall()]
+                tables = [row[f"Tables_in_sina"] for row in cursor.fetchall()]
                 print(f"✓ 数据表数量: {len(tables)}")
                 if tables:
                     print(f"  表列表:")
@@ -69,7 +69,7 @@ def test_connection(host='localhost', user='root', password='root', port=3306):
                     if len(tables) > 10:
                         print(f"    ... 还有 {len(tables)-10} 个表")
             else:
-                print(f"\n✗ sina_futures 数据库不存在")
+                print(f"\n✗ sina 数据库不存在")
                 print("  运行同步脚本会自动创建")
                 
         conn.close()
