@@ -238,21 +238,20 @@ def check_conservation(
     bars: list | None = None,
 ) -> dict:
     """
-    差异守恒检查 — v2.5 统一语法版
+    差异守恒检查 — v2.5 影子层版
 
-    核心命题（V1.6 Ch7）：
-      差异不能被无代价清零，只能在权力差异、财富差异、身份差异之间转化。
-      价格上的守恒是这三种差异转化的微弱投影。
+    核心命题（V1.6 Ch4）：
+      差异不能被无代价清零，只能转移。
 
-    价格投影：
-      权力差异 → 时间差异（谁能等）     → time_compression
-      财富差异 → 流动性差异（谁能变现） → liquidity_stress
-      身份差异 → 边界恐惧（怕被踢出局） → fear_index
+    投影层注意：
+      价格 = Π(现实差异)，Π 有损、不可逆、非线性、时变。
+      系统在影子层工作，不能从影子反推实体。
+      守恒的正确表述：当价格结构的某些特征被压缩时，
+      另一些特征会补偿性变化。
 
-    守恒检测逻辑：
-      当价格差异被压缩时（Zone 收窄、速度比收敛），
-      检查三种投影差异是否在补偿性上升——
-      如果是，则差异从价格转化到了那种差异维度。
+    影子层守恒检测：
+      不声称"差异转到了某社会差异维度"
+      只观测"价格特征A被压缩时，价格特征B是否在补偿性变化"
     """
     result = {
         "conservation_violated": False,
@@ -260,7 +259,6 @@ def check_conservation(
         "notes": [],
         "flux_score": 0.0,
         "channel_scores": {},
-        "transformation": {},  # v2.5: 三种差异之间的转化关系
     }
 
     if not s.cycles:
@@ -317,89 +315,76 @@ def check_conservation(
                     flux_signals.append(-0.3)
                     result["notes"].append(f"振幅衰减 ({amp_decay:.2f})，价格差异在压缩")
 
-    # ── 第二步：如果价格被压缩，检查三种投影差异的转化 ──
+    # ── 第二步：如果价格被压缩，检查其他价格特征是否在补偿性变化 ──
     if price_compressed:
-        # 计算三种投影差异
-        tc = compute_time_compression(s)
-        ls = compute_liquidity_stress(s, bars)
-        fi = compute_fear_index(s, bars)
+        compensations = []
 
-        result["transformation"]["time_compression"] = tc
-        result["transformation"]["liquidity_stress"] = ls
-        result["transformation"]["fear_index"] = fi
+        # 检查速度比是否在扩张（与带宽压缩相反方向）
+        if n >= 3:
+            sr = result["channel_scores"].get("speed_ratio", 0)
+            if sr > 0.3:
+                compensations.append("speed_ratio_expanding")
+                result["notes"].append(
+                    f"速度比在扩张 ({sr:+.2f})，价格差异在重新分配"
+                )
 
-        # 检查转化方向：哪种差异在上升？
-        transformations = []
-
-        # 时间差异上升 → 差异从价格转到时间维度（谁能等）
-        if tc > 1.5:
-            transformations.append("price→time")
-            result["transfer_channels"].append("time_difference")
-            result["notes"].append(
-                f"时间差异上升 (入/出比={tc:.1f})，"
-                f"差异从价格转到「谁能等」维度"
-            )
-
-        # 流动性差异异常 → 差异从价格转到流动性维度（谁能变现）
-        if ls > 1.5:
-            transformations.append("price→liquidity")
-            result["transfer_channels"].append("liquidity_difference")
-            result["notes"].append(
-                f"流动性差异释放 (应力={ls:.1f})，"
-                f"差异从价格转到「谁能变现」维度"
-            )
-        elif ls < 0.5 and ls > 0:
-            transformations.append("price→liquidity_drought")
-            result["transfer_channels"].append("liquidity_drought")
-            result["notes"].append(
-                f"流动性枯竭 (应力={ls:.1f})，"
-                f"差异被压缩在流动性维度"
-            )
-
-        # 边界恐惧上升 → 差异从价格转到身份维度（怕被踢出局）
-        if fi > 0.6:
-            transformations.append("price→fear")
-            result["transfer_channels"].append("boundary_fear")
-            result["notes"].append(
-                f"边界恐惧升高 (恐惧={fi:.2f})，"
-                f"差异从价格转到「怕被踢出局」维度"
-            )
-
-        result["transformation"]["directions"] = transformations
-
-        # 如果价格被压缩但三种差异都没有上升 → 可能是真正的稳定
-        # 但也可能是差异转到了系统看不到的维度
-        if not transformations:
-            result["notes"].append(
-                "价格差异被压缩，但三种投影差异未见补偿性上升——"
-                "可能真正稳定，也可能差异转到了系统看不到的维度"
-            )
-
-    # ── 第三步：试探密度加速 ──
-    if n >= 4 and s.t_start and s.t_end:
-        mid_point = s.t_start + (s.t_end - s.t_start) / 2
-        first_half_cycles = [c for c in s.cycles if c.entry.start.t <= mid_point]
-        second_half_cycles = [c for c in s.cycles if c.entry.start.t > mid_point]
-        if first_half_cycles and second_half_cycles:
-            first_span = max((mid_point - s.t_start).days, 1)
-            second_span = max((s.t_end - mid_point).days, 1)
-            density_first = len(first_half_cycles) / first_span
-            density_second = len(second_half_cycles) / second_span
-            if density_first > 0:
-                density_ratio = density_second / density_first
-                result["channel_scores"]["touch_density"] = density_ratio
-                if density_ratio > 1.5:
-                    flux_signals.append(-0.3)
+        # 检查时间比是否在变化
+        entry_durs = [c.entry.duration for c in s.cycles if c.entry.duration > 0]
+        exit_durs = [c.exit.duration for c in s.cycles if c.exit.duration > 0]
+        if entry_durs and exit_durs:
+            avg_entry = sum(entry_durs) / len(entry_durs)
+            avg_exit = sum(exit_durs) / len(exit_durs)
+            if avg_exit > 0:
+                time_ratio = avg_entry / avg_exit
+                result["channel_scores"]["time_ratio"] = time_ratio
+                if time_ratio > 1.5:
+                    compensations.append("time_ratio_asymmetric")
                     result["notes"].append(
-                        f"试探密度加速 ({density_ratio:.1f}x)，差异在压缩"
+                        f"时间比不对称 ({time_ratio:.1f})，进出节奏在重新分配"
+                    )
+                elif time_ratio < 0.67:
+                    compensations.append("time_ratio_inverse")
+                    result["notes"].append(
+                        f"时间比反转 ({time_ratio:.1f})，进出节奏在重新分配"
                     )
 
-    # ── 综合守恒通量 ──
+        # 检查试探密度是否在加速
+        if n >= 4 and s.t_start and s.t_end:
+            mid_point = s.t_start + (s.t_end - s.t_start) / 2
+            first_half_cycles = [c for c in s.cycles if c.entry.start.t <= mid_point]
+            second_half_cycles = [c for c in s.cycles if c.entry.start.t > mid_point]
+            if first_half_cycles and second_half_cycles:
+                first_span = max((mid_point - s.t_start).days, 1)
+                second_span = max((s.t_end - mid_point).days, 1)
+                density_first = len(first_half_cycles) / first_span
+                density_second = len(second_half_cycles) / second_span
+                if density_first > 0:
+                    density_ratio = density_second / density_first
+                    result["channel_scores"]["touch_density"] = density_ratio
+                    if density_ratio > 1.5:
+                        compensations.append("density_accelerating")
+                        result["notes"].append(
+                            f"试探密度加速 ({density_ratio:.1f}x)，差异在重新分配"
+                        )
+
+        result["transfer_channels"] = compensations
+
+        # 如果价格被压缩但没有任何补偿性变化
+        if not compensations:
+            result["notes"].append(
+                "价格差异被压缩，但其他价格特征未见补偿性变化——"
+                "可能真正稳定，也可能差异转到了影子层看不到的地方"
+            )
+        else:
+            result["notes"].append(
+                f"价格差异被压缩，但 {len(compensations)} 个特征在补偿性变化——"
+                f"结构正在重新分配差异，不是真正变平"
+            )
+
+    # ── 第三步：综合守恒通量 ──
     if flux_signals:
         result["flux_score"] = sum(flux_signals) / len(flux_signals)
         result["conservation_violated"] = abs(result["flux_score"]) > 0.3
-
-    result["transfer_channels"] = list(set(result["transfer_channels"]))
 
     return result
 
