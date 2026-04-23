@@ -22,17 +22,13 @@ from plotly.subplots import make_subplots
 from pathlib import Path
 from datetime import datetime, timedelta
 import json
-import math
+import time as _time
 
 from src.data.loader import Bar, CSVLoader, MySQLLoader
 from src.data.symbol_meta import symbol_name, load_symbol_meta
-from src.compiler.pipeline import compile_full, CompilerConfig, CompileResult
+from src.data.sina_fetcher import fetch_bars as sina_fetch_bars, detect_source, available_contracts
+from src.compiler.pipeline import compile_full, CompilerConfig
 from src.retrieval.similarity import similarity, INVARIANT_KEYS, INVARIANT_SCALES
-from src.retrieval.active_match import (
-    active_match, ActiveMatchQuery, ActiveMatchResult,
-    HistoricalCase, MatchedStructure,
-)
-from src.narrative import generate_daily_summary
 
 # ─── 页面配置 ──────────────────────────────────────────────
 
@@ -78,20 +74,9 @@ st.markdown("""
     .structure-card .meta-text { color: #495057; font-size: 0.88em; }
     .structure-card .narrative-text { color: #6c757d; font-size: 0.85em; margin-top: 4px; }
     .structure-card.warning { border-left-color: #ff9800; }
+    /* A股惯例：红涨绿跌 — danger=看多(红), ok=看空(绿) */
     .structure-card.danger  { border-left-color: #ef5350; background: linear-gradient(135deg, #fff5f5 0%, #ffe0e0 100%); }
     .structure-card.ok      { border-left-color: #26a69a; background: linear-gradient(135deg, #f0faf8 0%, #d4efea 100%); }
-
-    /* 案例卡片 */
-    .case-card {
-        background: #f0f4f8;
-        border-radius: 8px;
-        padding: 12px 16px;
-        margin: 6px 0;
-        border-left: 3px solid #4a90d9;
-        color: #212529;
-    }
-    .case-up { border-left-color: #26a69a; }
-    .case-down { border-left-color: #ef5350; }
 
     /* 复盘日志条目 */
     .journal-entry {
@@ -124,8 +109,9 @@ st.markdown("""
         font-size: 0.8em;
         margin-right: 4px;
     }
-    .tag-bullish { background: #d4edda; color: #155724; }
-    .tag-bearish { background: #f8d7da; color: #721c24; }
+    /* A股惯例：红涨绿跌 */
+    .tag-bullish { background: #f8d7da; color: #721c24; }
+    .tag-bearish { background: #d4edda; color: #155724; }
     .tag-neutral { background: #fff3cd; color: #856404; }
 </style>
 """, unsafe_allow_html=True)
@@ -381,6 +367,30 @@ def motion_badge(tendency: str) -> str:
     return f'<span class="motion-badge {cls}">{tendency}</span>'
 
 
+def _extract_key(label: str) -> str:
+    """从中文标签中提取英文 key，如 '📈 上涨(up)' → 'up'"""
+    if "(" in label and ")" in label:
+        return label[label.index("(") + 1 : label.index(")")]
+    return label
+
+
+def _price_vs_zone(last_price: float, zone_center: float, zone_bw: float) -> str:
+    """当前价格相对于 Zone 的位置描述"""
+    if zone_bw <= 0:
+        return ""
+    upper = zone_center + zone_bw
+    lower = zone_center - zone_bw
+    if lower <= last_price <= upper:
+        dist_pct = (last_price - zone_center) / zone_bw * 100
+        return f"📍 价格在 Zone 内（偏{'上' if dist_pct > 0 else '下'}{abs(dist_pct):.0f}%）"
+    elif last_price > upper:
+        pct = (last_price - zone_center) / zone_center * 100
+        return f"📍 价格在 Zone 上方 +{pct:.1f}%"
+    else:
+        pct = (zone_center - last_price) / zone_center * 100
+        return f"📍 价格在 Zone 下方 -{pct:.1f}%"
+
+
 def make_candlestick(bars_list, title="", height=350):
     df = pd.DataFrame([{
         "date": b.timestamp, "open": b.open, "high": b.high,
@@ -389,7 +399,7 @@ def make_candlestick(bars_list, title="", height=350):
     fig = go.Figure(data=[go.Candlestick(
         x=df["date"], open=df["open"], high=df["high"],
         low=df["low"], close=df["close"],
-        increasing_line_color="#26a69a", decreasing_line_color="#ef5350",
+        increasing_line_color="#ef5350", decreasing_line_color="#26a69a",
     )])
     fig.update_layout(
         height=height, template="plotly_dark",
@@ -416,7 +426,7 @@ def make_comparison_chart(bars_a, bars_b, name_a, name_b, zones_a=None, zones_b=
     fig.add_trace(go.Candlestick(
         x=df_a["date"], open=df_a["open"], high=df_a["high"],
         low=df_a["low"], close=df_a["close"],
-        increasing_line_color="#26a69a", decreasing_line_color="#ef5350",
+        increasing_line_color="#ef5350", decreasing_line_color="#26a69a",
         name=name_a,
     ), row=1, col=1)
 
@@ -428,7 +438,7 @@ def make_comparison_chart(bars_a, bars_b, name_a, name_b, zones_a=None, zones_b=
     fig.add_trace(go.Candlestick(
         x=df_b["date"], open=df_b["open"], high=df_b["high"],
         low=df_b["low"], close=df_b["close"],
-        increasing_line_color="#42a5f5", decreasing_line_color="#ff9800",
+        increasing_line_color="#ef5350", decreasing_line_color="#26a69a",
         name=name_b,
     ), row=2, col=1)
 
@@ -450,52 +460,6 @@ def make_comparison_chart(bars_a, bars_b, name_a, name_b, zones_a=None, zones_b=
         showlegend=False,
     )
     return fig
-
-
-def _describe_outcome(fo: dict) -> str:
-    if not fo:
-        return "无后续数据"
-    parts = []
-    ret5 = fo.get("ret_5d", 0) or 0
-    ret10 = fo.get("ret_10d", 0) or 0
-    ret20 = fo.get("ret_20d", 0) or 0
-    max_rise = fo.get("max_rise_20d", 0) or 0
-    max_dd = fo.get("max_dd_20d", 0) or 0
-    if ret20 > 0.03:
-        parts.append("之后整体上涨")
-    elif ret20 < -0.03:
-        parts.append("之后整体下跌")
-    elif ret10 > 0.01:
-        parts.append("之后先涨后回落")
-    elif ret10 < -0.01:
-        parts.append("之后先跌后反弹")
-    else:
-        parts.append("之后横盘整理")
-    if abs(ret5) > 0.01:
-        d = "涨" if ret5 > 0 else "跌"
-        parts.append(f"5日{d}了约{abs(ret5):.0%}")
-    if abs(ret10) > 0.01:
-        d = "涨" if ret10 > 0 else "跌"
-        parts.append(f"10日{d}了约{abs(ret10):.0%}")
-    if max_rise > 0.05:
-        parts.append(f"期间最高涨{max_rise:.0%}")
-    if max_dd < -0.05:
-        parts.append(f"期间最大回撤{abs(max_dd):.0%}")
-    return "，".join(parts) if parts else "变化不大"
-
-
-def _format_invariants(inv: dict) -> str:
-    """格式化不变量为可读字符串"""
-    parts = []
-    if inv.get("cycle_count"):
-        parts.append(f"Cycle={inv['cycle_count']}")
-    if inv.get("avg_speed_ratio"):
-        parts.append(f"SR={inv['avg_speed_ratio']:.2f}")
-    if inv.get("avg_time_ratio"):
-        parts.append(f"TR={inv['avg_time_ratio']:.2f}")
-    if inv.get("zone_rel_bw"):
-        parts.append(f"BW={inv['zone_rel_bw']:.3f}")
-    return " · ".join(parts)
 
 
 def _invariant_diff_table(inv1: dict, inv2: dict, name1: str, name2: str) -> pd.DataFrame:
@@ -539,6 +503,7 @@ tab_names = [
     "📊 跨品种对比",
     "🗺️ 稳态地图",
     "📝 复盘日志",
+    "🔎 合约检索",
 ]
 tabs = st.tabs(tab_names)
 
@@ -551,6 +516,255 @@ with tabs[0]:
     st.markdown("#### 📡 今天值得关注什么")
     st.caption("有什么结构在形成、在确认、或正在破缺")
 
+    # ── 全市场机会扫描 ──
+    @st.cache_data(ttl=300)
+    def _scan_all_symbols(sens_key: str) -> list[dict]:
+        """扫描所有品种，返回按关注度排序的 Top 机会列表"""
+        _sens = {
+            "粗糙": {"min_amp": 0.05, "min_dur": 5, "min_cycles": 3},
+            "标准": {"min_amp": 0.03, "min_dur": 3, "min_cycles": 2},
+            "精细": {"min_amp": 0.015, "min_dur": 2, "min_cycles": 2},
+        }
+        _s = _sens.get(sens_key, _sens["标准"])
+        results = []
+        for sym in ALL_SYMBOLS:
+            bars_data = load_bars(sym)
+            if not bars_data or len(bars_data) < 30:
+                continue
+            cfg = CompilerConfig(
+                min_amplitude=_s["min_amp"], min_duration=_s["min_dur"],
+                min_cycles=_s["min_cycles"],
+                adaptive_pivots=True, fractal_threshold=0.34,
+            )
+            cr = compile_full(bars_data, cfg, symbol=sym)
+            if not cr.ranked_structures:
+                continue
+            last_price = bars_data[-1].close
+            for s in cr.ranked_structures[:3]:
+                m = s.motion
+                p = s.projection
+                # 关注度评分: 基于结构强度 + 运动态 + 通量
+                base = 30  # 基础分
+                base += min(s.cycle_count, 8) * 3
+                flux = abs(m.conservation_flux) if m else 0
+                base += min(flux * 10, 20)
+                if m and "breakdown" in m.phase_tendency:
+                    base += 15
+                elif m and "confirmation" in m.phase_tendency:
+                    base += 12
+                elif m and m.phase_tendency == "forming":
+                    base += 5
+                if p and p.is_blind:
+                    base += 10
+                # 方向判断
+                direction = "unclear"
+                if m and "breakdown" in m.phase_tendency:
+                    direction = "down" if m.conservation_flux < 0 else "up"
+                elif m and "confirmation" in m.phase_tendency:
+                    direction = "up" if m.conservation_flux > 0 else "down"
+
+                # 研究建议（基于结构特征生成）
+                suggestions = []
+                if direction == "up":
+                    suggestions.append(f"观察价格突破 Zone 上沿 {s.zone.price_center + s.zone.bandwidth:.0f} 后的放量情况")
+                elif direction == "down":
+                    suggestions.append(f"观察价格跌破 Zone 下沿 {s.zone.price_center - s.zone.bandwidth:.0f} 后的反抽力度")
+                else:
+                    suggestions.append("方向不明，等待明确信号再介入研究")
+                if m and "breakdown" in m.phase_tendency:
+                    suggestions.append("处于破缺阶段，关注是否能稳住在新价位")
+                if p and p.is_blind:
+                    suggestions.append("高压缩结构，突破后波动可能放大，注意节奏")
+
+                # 风控评级（基于关注度评分）
+                if base >= 75:
+                    risk_level = "高"
+                    risk_pct = "5-8%"
+                elif base >= 55:
+                    risk_level = "中"
+                    risk_pct = "3-5%"
+                else:
+                    risk_level = "低"
+                    risk_pct = "1-3%"
+
+                results.append({
+                    "symbol": sym,
+                    "symbol_name": symbol_name(sym),
+                    "zone_center": s.zone.price_center,
+                    "zone_bw": s.zone.bandwidth,
+                    "cycles": s.cycle_count,
+                    "motion": m.phase_tendency if m else "—",
+                    "flux": round(m.conservation_flux, 2) if m else 0,
+                    "score": round(base, 1),
+                    "direction": direction,
+                    "is_blind": p.is_blind if p else False,
+                    "contrast": s.zone.context_contrast.value if s.zone else "",
+                    "narrative": s.narrative_context or "",
+                    "last_price": last_price,
+                    "suggestions": suggestions,
+                    "risk_level": risk_level,
+                    "risk_pct": risk_pct,
+                })
+        results.sort(key=lambda x: x["score"], reverse=True)
+        return results
+
+    scan_col1, scan_col2, scan_col3 = st.columns([1, 2, 1])
+    with scan_col1:
+        run_scan = st.button("🔍 全市场扫描", type="primary", use_container_width=True, key="btn_market_scan")
+    with scan_col2:
+        st.caption("扫描所有品种的活跃结构，按关注度评分排序，展示 Top 10 机会")
+    with scan_col3:
+        with st.popover("ℹ️ 评分说明"):
+            st.markdown("""
+            **关注度评分**（满分 100）由以下因素加权：
+
+            | 因素 | 权重 | 说明 |
+            |---|---|---|
+            | 基础分 | 30 | 存在即得分 |
+            | 试探次数 | +3×N | cycle_count，上限 8 次 |
+            | 通量强度 | +min(|通量|×10, 20) | 守恒通量绝对值 |
+            | 破缺 | +15 | →breakdown 状态 |
+            | 确认 | +12 | →confirmation 状态 |
+            | 形成中 | +5 | forming 状态 |
+            | 高压缩 | +10 | 投影盲区警告 |
+            """)
+
+    if run_scan:
+        total_syms = len(ALL_SYMBOLS)
+        with st.spinner(f"🔍 正在扫描 {total_syms} 个品种的结构..."):
+            prog = st.progress(0, text=f"准备扫描 {total_syms} 个品种...")
+            scan_results = _scan_all_symbols(sensitivity)
+            prog.progress(1.0, text=f"✅ 扫描完成，发现 {len(scan_results)} 个活跃结构")
+
+        if scan_results:
+            top10 = scan_results[:10]
+            st.markdown("---")
+            st.markdown(f"**🏆 Top 10 关注机会**（共扫描 {len(scan_results)} 个活跃结构）")
+
+            # 统计面板
+            dir_up = sum(1 for r in top10 if r["direction"] == "up")
+            dir_down = sum(1 for r in top10 if r["direction"] == "down")
+            dir_unclear = sum(1 for r in top10 if r["direction"] == "unclear")
+            stat_c = st.columns(4)
+            stat_c[0].metric("总机会", len(top10))
+            stat_c[1].metric("📈 偏多", dir_up)
+            stat_c[2].metric("📉 偏空", dir_down)
+            stat_c[3].metric("➡️ 不明", dir_unclear)
+
+            # 逐卡片展示
+            for i, r in enumerate(top10):
+                dir_icon = "📈" if r["direction"] == "up" else "📉" if r["direction"] == "down" else "➡️"
+                # A股惯例：红涨绿跌
+                card_cls = "danger" if r["direction"] == "up" else "ok" if r["direction"] == "down" else ""
+                motion_html = motion_badge(r["motion"])
+                blind_tag = " · ⚠️高压缩" if r["is_blind"] else ""
+                contrast_tag = f" · {r['contrast']}" if r["contrast"] else ""
+                price_pos = _price_vs_zone(r["last_price"], r["zone_center"], r["zone_bw"])
+
+                # 风控评级颜色
+                risk_color = {"高": "#ef5350", "中": "#ff9800", "低": "#26a69a"}.get(r["risk_level"], "#999")
+
+                st.markdown(f"""
+                <div class="structure-card {card_cls}">
+                    <b>#{i+1}</b> {dir_icon}
+                    <span class="zone-label">{r['symbol']} · {r['symbol_name']}</span>
+                    <span class="meta-text"> Zone {r['zone_center']:.0f} (±{r['zone_bw']:.0f}) · {r['cycles']}次试探</span>
+                    · {motion_html} · 通量 {r['flux']:+.2f}{blind_tag}{contrast_tag}
+                    · <b>关注度 {r['score']:.0f}分</b>
+                    · <span style="color:{risk_color};font-weight:700">⚖️ {r['risk_level']}关注度</span>
+                    <div class="meta-text">{price_pos} · 现价 {r['last_price']:.1f}</div>
+                    <div class="narrative-text">{r['narrative']}</div>
+                </div>
+                """, unsafe_allow_html=True)
+
+                # 研究建议（折叠显示）
+                with st.expander(f"💡 #{i+1} {r['symbol']} 研究建议", expanded=False):
+                    st.markdown(f"**风控建议**：基于 {r['score']:.0f} 分关注度，建议单笔关注不超过总资金的 **{r['risk_pct']}**")
+                    st.markdown("**下一步研究动作**：")
+                    for j, sug in enumerate(r["suggestions"], 1):
+                        st.markdown(f"  {j}. {sug}")
+
+            # ── 跨品种信号一致性分析 ──
+            st.markdown("---")
+            st.markdown("#### 🔗 跨品种信号一致性")
+
+            # 按交易所分组
+            exchange_groups = {}
+            for r in scan_results[:20]:
+                info = META.get(r["symbol"], META.get(r["symbol"].upper(), {}))
+                ex = info.get("exchange", "其他") if isinstance(info, dict) else "其他"
+                exchange_groups.setdefault(ex, []).append(r)
+
+            for ex, items in sorted(exchange_groups.items()):
+                if len(items) < 2:
+                    continue
+                up_n = sum(1 for r in items if r["direction"] == "up")
+                down_n = sum(1 for r in items if r["direction"] == "down")
+                total = len(items)
+                names = ", ".join(f"{r['symbol']}" for r in items[:5])
+
+                if up_n > down_n and up_n >= total * 0.6:
+                    st.success(f"**{ex}** 板块偏多：{up_n}/{total} 偏多 · {names}")
+                elif down_n > up_n and down_n >= total * 0.6:
+                    st.error(f"**{ex}** 板块偏空：{down_n}/{total} 偏空 · {names}")
+                else:
+                    st.warning(f"**{ex}** 板块信号分歧：📈{up_n} / 📉{down_n} / ➡️{total - up_n - down_n} · {names}")
+
+            # ── 每日变化报告 ──
+            st.markdown("---")
+            st.markdown("#### 📋 每日变化报告")
+
+            _today_key = datetime.now().strftime("%Y-%m-%d")
+            _prev_results = st.session_state.get("prev_scan_results", {})
+            _prev_date = st.session_state.get("prev_scan_date", "")
+
+            if _prev_date == _today_key and _prev_results:
+                # 对比上次扫描
+                prev_map = {(r["symbol"], r["zone_center"]): r for r in _prev_results}
+                curr_map = {(r["symbol"], r["zone_center"]): r for r in scan_results[:20]}
+
+                new_items = [(k, v) for k, v in curr_map.items() if k not in prev_map]
+                gone_items = [(k, v) for k, v in prev_map.items() if k not in curr_map]
+                changed_items = []
+                for k, v in curr_map.items():
+                    if k in prev_map:
+                        pv = prev_map[k]
+                        if pv["motion"] != v["motion"] or abs(pv["flux"] - v["flux"]) > 0.3:
+                            changed_items.append((k, v, pv))
+
+                if new_items:
+                    st.markdown("**🆕 新增结构**")
+                    for (sym, zone), r in new_items:
+                        st.markdown(f"  - {sym} Zone {zone:.0f} · {r['motion']} · 关注度 {r['score']:.0f}分")
+
+                if changed_items:
+                    st.markdown("**🔄 状态变化**")
+                    for (sym, zone), r, pv in changed_items:
+                        motion_change = f"{pv['motion']} → {r['motion']}" if pv['motion'] != r['motion'] else ""
+                        flux_change = f"通量 {pv['flux']:+.2f} → {r['flux']:+.2f}" if abs(pv['flux'] - r['flux']) > 0.3 else ""
+                        parts = [p for p in [motion_change, flux_change] if p]
+                        st.markdown(f"  - {sym} Zone {zone:.0f} · {' · '.join(parts)}")
+
+                if gone_items:
+                    st.markdown("**❌ 退出 Top 20**")
+                    for (sym, zone), r in gone_items:
+                        st.markdown(f"  - {sym} Zone {zone:.0f} · 原关注度 {r['score']:.0f}分")
+
+                if not new_items and not changed_items and not gone_items:
+                    st.caption("与上次扫描相比无变化")
+            else:
+                st.caption(f"首次扫描（{_today_key}），下次扫描将自动对比变化")
+
+            # 保存本次结果供下次对比
+            st.session_state["prev_scan_results"] = scan_results[:20]
+            st.session_state["prev_scan_date"] = _today_key
+        else:
+            st.warning("🔍 未扫描到活跃结构")
+            st.caption("可能原因：① 数据源无数据（检查 MySQL 连接或 data/ 目录）② 当前灵敏度下无满足条件的结构 — 试试侧栏调为「精细」")
+
+        st.markdown("---")
+
+    # ── 当前品种结构展示（保留原有内容）──
     if not recent_structures:
         st.info("当前时间范围内没有显著结构")
     else:
@@ -637,7 +851,7 @@ with tabs[1]:
     st.caption("从 MySQL/CSV 加载全量历史 → 编译 → 找最相似的历史段 → 对比详情")
 
     if not recent_structures:
-        st.info("没有可比较的结构")
+        st.info("📡 当前时间范围内没有显著结构 — 试试侧栏扩大时间范围或降低灵敏度")
     else:
         # ── 选择要查询的结构 ──
         col_sel, col_params = st.columns([1, 1])
@@ -678,6 +892,73 @@ with tabs[1]:
             )
             is_cross_symbol = "全品种" in search_scope
 
+        # ── 精细检索条件 ──
+        with st.expander("🎛️ 精细检索条件（可选）", expanded=False):
+            fin_col1, fin_col2, fin_col3 = st.columns(3)
+
+            with fin_col1:
+                date_col1, date_col2 = st.columns(2)
+                with date_col1:
+                    search_date_start = st.date_input(
+                        "起始日期",
+                        value=datetime.now().date() - timedelta(days=search_years * 365),
+                        key="search_date_start",
+                    )
+                with date_col2:
+                    search_date_end = st.date_input(
+                        "结束日期",
+                        value=datetime.now().date(),
+                        key="search_date_end",
+                    )
+                search_zone_range = st.slider(
+                    "Zone 价位范围",
+                    min_value=0.0, max_value=100000.0,
+                    value=(0.0, 100000.0),
+                    step=100.0,
+                    key="search_zone_range",
+                    help="筛选 Zone price_center 在此范围内的案例",
+                )
+
+            with fin_col2:
+                search_dir_filter = st.multiselect(
+                    "方向筛选",
+                    ["📈 上涨(up)", "📉 下跌(down)", "➡️ 不明(unclear)"],
+                    default=[],
+                    key="search_dir_filter",
+                    help="只看指定方向的案例，留空=全部",
+                )
+                search_contrast_filter = st.multiselect(
+                    "反差类型",
+                    ["恐慌(panic)", "过剩(oversupply)", "政策(policy)",
+                     "流动性(liquidity)", "投机(speculation)", "未知(unknown)"],
+                    default=[],
+                    key="search_contrast_filter",
+                    help="筛选 zone.context_contrast 类型",
+                )
+                search_motion_filter = st.multiselect(
+                    "运动状态",
+                    ["🔻 破缺(→breakdown)", "✅ 确认(→confirmation)",
+                     "⚖️ 稳定(stable)", "🔄 形成中(forming)"],
+                    default=[],
+                    key="search_motion_filter",
+                    help="筛选结构的 phase_tendency",
+                )
+
+            with fin_col3:
+                search_min_sim = st.slider(
+                    "最小相似度",
+                    min_value=0.0, max_value=1.0,
+                    value=0.0, step=0.05,
+                    key="search_min_sim",
+                    help="过滤掉相似度低于此值的案例",
+                )
+                search_sort_by = st.radio(
+                    "结果排序",
+                    ["按相似度", "按后续涨幅", "按日期"],
+                    key="search_sort_by",
+                    help="选择检索结果的排序方式",
+                )
+
         with col_btn:
             run_search = st.button("🚀 开始检索", type="primary", use_container_width=True)
 
@@ -696,13 +977,21 @@ with tabs[1]:
         if run_search:
             search_symbols = ALL_SYMBOLS if is_cross_symbol else [selected_symbol]
             all_candidates = []
+            total_syms = len(search_symbols)
+            _t0 = _time.time()
 
-            progress = st.progress(0, text="正在加载数据...")
+            progress = st.progress(0, text=f"准备检索 {total_syms} 个品种...")
 
             for si, sym in enumerate(search_symbols):
+                elapsed = _time.time() - _t0
+                if si > 0:
+                    eta = elapsed / si * (total_syms - si)
+                    time_text = f"⏱️ 已用 {elapsed:.0f}s · 预估剩余 {eta:.0f}s"
+                else:
+                    time_text = "⏱️ 启动中..."
                 progress.progress(
-                    si / max(len(search_symbols), 1),
-                    text=f"正在处理 {sym} ({symbol_name(sym)})... ({si+1}/{len(search_symbols)})"
+                    si / max(total_syms, 1),
+                    text=f"[{si+1}/{total_syms}] {sym} ({symbol_name(sym)}) · {time_text}"
                 )
 
                 sym_bars = load_bars(sym)
@@ -755,10 +1044,59 @@ with tabs[1]:
                         "symbol_name": symbol_name(sym),
                     })
 
-            progress.progress(1.0, text="检索完成")
+            progress.progress(0.95, text="应用精细筛选...")
 
-            # 排序取 top_k
-            all_candidates.sort(key=lambda c: c["score"].total, reverse=True)
+            # ── 应用精细筛选 ──
+            filtered_candidates = []
+            _min_sim = st.session_state.get("search_min_sim", 0.0)
+            _d_start = st.session_state.get("search_date_start")
+            _d_end = st.session_state.get("search_date_end")
+            _zr = st.session_state.get("search_zone_range", (0.0, 100000.0))
+            _dir_f_raw = st.session_state.get("search_dir_filter", [])
+            _contrast_f_raw = st.session_state.get("search_contrast_filter", [])
+            _motion_f_raw = st.session_state.get("search_motion_filter", [])
+
+            # 从中文标签中提取英文 key（使用模块级 _extract_key）
+            _dir_f = [_extract_key(v) for v in _dir_f_raw]
+            _contrast_f = [_extract_key(v) for v in _contrast_f_raw]
+            _motion_f = [_extract_key(v) for v in _motion_f_raw]
+
+            for c in all_candidates:
+                hs = c["structure"]
+                if c["score"].total < _min_sim:
+                    continue
+                if hs.t_start:
+                    d = hs.t_start.date()
+                    if _d_start and d < _d_start:
+                        continue
+                    if _d_end and d > _d_end:
+                        continue
+                if not (_zr[0] <= hs.zone.price_center <= _zr[1]):
+                    continue
+                if _dir_f and c["direction"] not in _dir_f:
+                    continue
+                if _contrast_f:
+                    hs_contrast = hs.zone.context_contrast.value if hs.zone else ""
+                    if hs_contrast not in _contrast_f:
+                        continue
+                if _motion_f:
+                    hs_motion = hs.motion.phase_tendency if hs.motion else ""
+                    if hs_motion not in _motion_f:
+                        continue
+                filtered_candidates.append(c)
+
+            all_candidates = filtered_candidates
+
+            # 排序
+            _sort_by = st.session_state.get("search_sort_by", "按相似度")
+            if _sort_by == "按相似度":
+                all_candidates.sort(key=lambda c: c["score"].total, reverse=True)
+            elif _sort_by == "按后续涨幅":
+                all_candidates.sort(key=lambda c: c["move"], reverse=True)
+            elif _sort_by == "按日期":
+                all_candidates.sort(key=lambda c: c["structure"].t_start or datetime.min, reverse=True)
+
+            progress.progress(1.0, text=f"✅ 检索完成 · {_time.time() - _t0:.1f}s · {len(all_candidates)} 个匹配")
             top_cases = all_candidates[:top_k]
 
             if top_cases:
@@ -780,12 +1118,13 @@ with tabs[1]:
                     )
                     st.caption(f"来源分布: {dist_text}")
 
-                # ── 统计面板 ──
+                # ── 统计面板（增加中位数收益）──
                 up_cases = [c for c in top_cases if c["direction"] == "up"]
                 down_cases = [c for c in top_cases if c["direction"] == "down"]
+                all_moves = [c["move"] for c in top_cases if c["move"] > 0]
                 n = len(top_cases)
 
-                stat_cols = st.columns(5)
+                stat_cols = st.columns(6)
                 stat_cols[0].metric("总案例", n)
                 stat_cols[1].metric("上涨", f"{len(up_cases)} ({len(up_cases)/n:.0%})")
                 stat_cols[2].metric("下跌", f"{len(down_cases)} ({len(down_cases)/n:.0%})")
@@ -795,11 +1134,38 @@ with tabs[1]:
                 if down_cases:
                     avg_down = sum(c["move"] for c in down_cases) / len(down_cases)
                     stat_cols[4].metric("平均跌幅", f"{avg_down:.1%}")
+                if all_moves:
+                    median_move = sorted(all_moves)[len(all_moves) // 2]
+                    stat_cols[5].metric("中位数收益", f"{median_move:.1%}")
+
+                # ── 实时过滤控件 ──
+                st.markdown("---")
+                rt_col1, rt_col2 = st.columns(2)
+                with rt_col1:
+                    rt_dir_filter = st.multiselect(
+                        "🔎 按方向筛选显示",
+                        ["📈 上涨(up)", "📉 下跌(down)", "➡️ 不明(unclear)"],
+                        default=[],
+                        key="rt_dir_filter",
+                    )
+                with rt_col2:
+                    rt_sort = st.selectbox(
+                        "🔃 按相似度排序",
+                        ["相似度降序", "相似度升序"],
+                        key="rt_sort",
+                    )
+
+                display_cases = top_cases
+                if rt_dir_filter:
+                    rt_dir_keys = [_extract_key(v) for v in rt_dir_filter]
+                    display_cases = [c for c in display_cases if c["direction"] in rt_dir_keys]
+                if rt_sort == "相似度升序":
+                    display_cases = sorted(display_cases, key=lambda c: c["score"].total)
 
                 st.markdown("---")
 
-                # ── 逐案例展示 ──
-                for i, case in enumerate(top_cases):
+                # ── 逐案例展示（增加反差类型 + 运动状态标签）──
+                for i, case in enumerate(display_cases):
                     hs = case["structure"]
                     sc = case["score"]
                     direction = case["direction"]
@@ -809,10 +1175,20 @@ with tabs[1]:
 
                     direction_icon = "📈" if direction == "up" else "📉" if direction == "down" else "➡️"
 
+                    # 反差类型 + 运动状态标签
+                    contrast_val = hs.zone.context_contrast.value if hs.zone else ""
+                    motion_val = hs.motion.phase_tendency if hs.motion else ""
+                    tag_parts = []
+                    if contrast_val:
+                        tag_parts.append(f"[{contrast_val}]")
+                    if motion_val:
+                        tag_parts.append(f"[{motion_val}]")
+                    tag_str = " ".join(tag_parts) + " " if tag_parts else ""
+
                     # 标题包含品种信息（全品种模式下）
                     sym_tag = f"[{case_sym}] " if is_cross_symbol else ""
                     with st.expander(
-                        f"{direction_icon} #{i+1}  {sym_tag}"
+                        f"{direction_icon} #{i+1}  {sym_tag}{tag_str}"
                         f"{hs.t_start:%Y-%m-%d} ~ {hs.t_end:%Y-%m-%d}  "
                         f"相似度 {sc.total:.0%}  "
                         f"后续{'涨' if direction=='up' else '跌' if direction=='down' else '横'}{move:.1%}",
@@ -842,12 +1218,16 @@ with tabs[1]:
                                       f"TR: {hs.avg_time_ratio:.2f} · "
                                       f"BW: {hs.zone.relative_bandwidth:.3f}")
 
+                            # 标签展示
+                            if contrast_val or motion_val:
+                                st.markdown(f"**反差类型**: {contrast_val or '—'} · "
+                                           f"**运动状态**: {motion_val or '—'}")
+
                             if direction != "unclear":
                                 st.markdown(f"**后续走势**: {direction} {move:.1%}")
 
                         # 历史段 K 线
                         if hs.t_start and hs.t_end:
-                            # 从对应品种加载 bars
                             case_bars = load_bars(case_sym)
                             margin = timedelta(days=15)
                             hist_bars = [b for b in case_bars
@@ -891,7 +1271,7 @@ with tabs[1]:
                         )
 
             else:
-                st.info("未找到足够的历史相似案例，建议降低灵敏度或扩大检索范围")
+                st.warning("🔍 匹配不足 — 试试：① 降低「最小相似度」阈值 ② 切换到「粗粒度」③ 扩大检索范围到「全品种」④ 增加历史检索年数")
 
 
 # ═══════════════════════════════════════════════════════════
@@ -1140,7 +1520,6 @@ with tabs[4]:
         with col_save:
             if st.button("💾 保存日志", type="primary", use_container_width=True):
                 if content.strip():
-                    import json as _json
                     entry = {
                         "timestamp": datetime.now().isoformat(),
                         "date": today,
@@ -1162,7 +1541,7 @@ with tabs[4]:
                         ],
                     }
                     with open(journal_file, "a", encoding="utf-8") as f:
-                        f.write(_json.dumps(entry, ensure_ascii=False) + "\n")
+                        f.write(json.dumps(entry, ensure_ascii=False) + "\n")
                     st.success(f"✅ 已保存 · {entry_type} · {selected_symbol} · {today}")
                 else:
                     st.warning("请输入日志内容")
@@ -1194,15 +1573,14 @@ with tabs[4]:
         if not journal_file.exists():
             st.info("暂无复盘记录，在「写日志」标签页开始记录")
         else:
-            import json as _json
             entries = []
             with open(journal_file, "r", encoding="utf-8") as f:
                 for line in f:
                     line = line.strip()
                     if line:
                         try:
-                            entries.append(_json.loads(line))
-                        except _json.JSONDecodeError:
+                            entries.append(json.loads(line))
+                        except json.JSONDecodeError:
                             continue
 
             if not entries:
@@ -1304,3 +1682,207 @@ with tabs[4]:
                         st.success(f"已导出到 {export_path}")
                 with col_export2:
                     st.caption(f"数据文件: `{journal_file}`")
+
+
+# ═══════════════════════════════════════════════════════════
+# Tab 6: 合约检索 — 输入任意合约代码，实时拉取 + 编译
+# ═══════════════════════════════════════════════════════════
+
+with tabs[5]:
+    st.markdown("#### 🔎 合约检索")
+    st.caption("输入任意合约代码（如 cu2507、rb2510、cad），从新浪实时拉取数据 → 编译结构 → 展示分析")
+
+    # ── 合约选择 ──
+    contracts = available_contracts()
+
+    col_input, col_freq = st.columns([3, 1])
+    with col_input:
+        # 预置合约下拉 + 自由输入
+        all_presets = []
+        for group, codes in contracts.items():
+            for c in codes:
+                all_presets.append(f"{c} ({group})")
+
+        contract_mode = st.radio(
+            "选择方式",
+            ["📋 预置合约", "✏️ 自由输入"],
+            horizontal=True,
+            key="contract_mode",
+        )
+
+        if contract_mode == "📋 预置合约":
+            preset_sel = st.selectbox(
+                "选择合约",
+                all_presets,
+                key="preset_contract",
+            )
+            # 提取代码
+            contract_code = preset_sel.split(" ")[0].strip()
+        else:
+            contract_code = st.text_input(
+                "合约代码",
+                value="cu0",
+                placeholder="输入合约代码，如 cu2507、rb2510、cad、usdcny",
+                key="free_contract",
+            ).strip().lower()
+
+    with col_freq:
+        freq = st.selectbox("数据频率", ["日线", "5分钟线"], key="contract_freq")
+        freq_code = "5m" if freq == "5分钟线" else "1d"
+
+        # 数据源识别
+        if contract_code:
+            src = detect_source(contract_code)
+            src_labels = {"inner": "🇨🇳 国内期货", "global": "🌍 外盘期货", "fx": "💱 外汇"}
+            st.caption(f"数据源: {src_labels.get(src, src)}")
+
+    # ── 编译参数 ──
+    col_sens, col_btn = st.columns([3, 1])
+    with col_sens:
+        contract_sensitivity = st.select_slider(
+            "结构灵敏度",
+            options=["粗糙", "标准", "精细"],
+            value="标准",
+            key="contract_sensitivity",
+        )
+    with col_btn:
+        st.markdown("<br>", unsafe_allow_html=True)
+        run_fetch = st.button("🚀 拉取并编译", type="primary", use_container_width=True, key="btn_contract_fetch")
+
+    # ── 执行 ──
+    if run_fetch and contract_code:
+
+        with st.spinner(f"📡 正在从新浪拉取 {contract_code} 的{freq}数据..."):
+            _t0 = _time.time()
+            bars_data = sina_fetch_bars(contract_code, freq=freq_code, timeout=15)
+            fetch_time = _time.time() - _t0
+
+        if not bars_data:
+            st.error(f"❌ 未能获取 {contract_code} 的数据")
+            st.caption("可能原因：① 合约代码不存在 ② 新浪 API 暂时不可用 ③ 该合约已退市")
+        else:
+            st.success(f"✅ 获取 {len(bars_data)} 条 {freq}数据 · 用时 {fetch_time:.1f}s · "
+                       f"{bars_data[0].timestamp:%Y-%m-%d} → {bars_data[-1].timestamp:%Y-%m-%d}")
+
+            # 编译结构
+            _sens_map = {
+                "粗糙": {"min_amp": 0.05, "min_dur": 5, "min_cycles": 3},
+                "标准": {"min_amp": 0.03, "min_dur": 3, "min_cycles": 2},
+                "精细": {"min_amp": 0.015, "min_dur": 2, "min_cycles": 2},
+            }
+            _s = _sens_map[contract_sensitivity]
+
+            with st.spinner("🔧 正在编译价格结构..."):
+                cfg = CompilerConfig(
+                    min_amplitude=_s["min_amp"], min_duration=_s["min_dur"],
+                    min_cycles=_s["min_cycles"],
+                    adaptive_pivots=True, fractal_threshold=0.34,
+                )
+                comp_result = compile_full(bars_data, cfg, symbol=contract_code.upper())
+
+            if not comp_result.structures:
+                st.warning("🔍 未识别到显著结构 — 试试降低灵敏度到「精细」")
+            else:
+                n_structs = len(comp_result.structures)
+                n_zones = len(comp_result.zones)
+                last_price = bars_data[-1].close
+
+                # ── 概要指标 ──
+                st.markdown("---")
+                metric_cols = st.columns(6)
+                metric_cols[0].metric("最新价", f"{last_price:.2f}")
+                metric_cols[1].metric("结构数", n_structs)
+                metric_cols[2].metric("Zone 数", n_zones)
+                metric_cols[3].metric("数据条数", len(bars_data))
+                ss_reliable = sum(1 for ss in comp_result.system_states if ss.is_reliable)
+                metric_cols[4].metric("可信结构", ss_reliable)
+                blind_count = sum(1 for ss in comp_result.system_states if ss.projection.is_blind)
+                metric_cols[5].metric("⚠️ 高压缩", blind_count)
+
+                # ── 结构卡片 ──
+                ranked = comp_result.ranked_structures
+                breaking = [s for s in ranked if s.motion and "breakdown" in s.motion.phase_tendency]
+                confirming = [s for s in ranked if s.motion and "confirmation" in s.motion.phase_tendency]
+                forming = [s for s in ranked if s.motion and s.motion.phase_tendency in ("forming", "stable", "")]
+
+                if breaking:
+                    st.markdown("**🔴 正在破缺**")
+                    for s in breaking[:3]:
+                        flux = f"{s.motion.conservation_flux:+.2f}" if s.motion else "—"
+                        pos = _price_vs_zone(last_price, s.zone.price_center, s.zone.bandwidth)
+                        st.markdown(f"""
+                        <div class="structure-card danger">
+                            <span class="zone-label">Zone {s.zone.price_center:.0f}</span>
+                            <span class="meta-text">(±{s.zone.bandwidth:.0f}) · {s.cycle_count}次试探</span>
+                            · {motion_badge(s.motion.phase_tendency)}
+                            · <span class="meta-text">通量 {flux}</span>
+                            <div class="meta-text">{pos}</div>
+                            <div class="narrative-text">{s.narrative_context or ''}</div>
+                        </div>
+                        """, unsafe_allow_html=True)
+
+                if confirming:
+                    st.markdown("**🟢 趋向确认**")
+                    for s in confirming[:3]:
+                        flux = f"{s.motion.conservation_flux:+.2f}" if s.motion else "—"
+                        pos = _price_vs_zone(last_price, s.zone.price_center, s.zone.bandwidth)
+                        st.markdown(f"""
+                        <div class="structure-card ok">
+                            <span class="zone-label">Zone {s.zone.price_center:.0f}</span>
+                            <span class="meta-text">(±{s.zone.bandwidth:.0f}) · {s.cycle_count}次试探</span>
+                            · {motion_badge(s.motion.phase_tendency)}
+                            · <span class="meta-text">通量 {flux}</span>
+                            <div class="meta-text">{pos}</div>
+                            <div class="narrative-text">{s.narrative_context or ''}</div>
+                        </div>
+                        """, unsafe_allow_html=True)
+
+                if forming:
+                    st.markdown("**🔵 形成中**")
+                    for s in forming[:5]:
+                        proj_warn = " · ⚠️ 高压缩" if (s.projection and s.projection.is_blind) else ""
+                        tendency = s.motion.phase_tendency if s.motion else 'unknown'
+                        pos = _price_vs_zone(last_price, s.zone.price_center, s.zone.bandwidth)
+                        st.markdown(f"""
+                        <div class="structure-card">
+                            <span class="zone-label">Zone {s.zone.price_center:.0f}</span>
+                            <span class="meta-text">(±{s.zone.bandwidth:.0f}) · {s.cycle_count}次试探</span>
+                            · {motion_badge(tendency)}{proj_warn}
+                            <div class="meta-text">{pos}</div>
+                            <div class="narrative-text">{s.narrative_context or ''}</div>
+                        </div>
+                        """, unsafe_allow_html=True)
+
+                # ── K 线图 + Zone 标注 ──
+                st.markdown("---")
+                st.markdown(f"**K 线图 · {contract_code.upper()}**")
+                fig = make_candlestick(bars_data[-120:])
+                for s in ranked[:5]:
+                    fig.add_hline(y=s.zone.price_center, line_dash="dot",
+                                 line_color="#4a90d9", opacity=0.5,
+                                 annotation_text=f"Zone {s.zone.price_center:.0f}")
+                    fig.add_hrect(y0=s.zone.lower, y1=s.zone.upper,
+                                 fillcolor="#4a90d9", opacity=0.08, line_width=0)
+                st.plotly_chart(fig, use_container_width=True)
+
+                # ── 不变量汇总 ──
+                if ranked:
+                    with st.expander("📊 结构不变量详情"):
+                        inv_rows = []
+                        for s in ranked[:10]:
+                            inv = s.invariants or {}
+                            m = s.motion
+                            inv_rows.append({
+                                "Zone": f"{s.zone.price_center:.0f}",
+                                "Cycle数": s.cycle_count,
+                                "速度比": f"{s.avg_speed_ratio:.2f}",
+                                "时间比": f"{s.avg_time_ratio:.2f}",
+                                "带宽": f"{s.zone.relative_bandwidth:.3f}",
+                                "运动": m.phase_tendency if m else "—",
+                                "通量": f"{m.conservation_flux:+.2f}" if m else "—",
+                                "反差": s.zone.context_contrast.value,
+                            })
+                        st.dataframe(pd.DataFrame(inv_rows), hide_index=True, use_container_width=True)
+
+    elif run_fetch:
+        st.warning("请输入合约代码")
