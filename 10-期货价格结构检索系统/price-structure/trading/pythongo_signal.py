@@ -513,7 +513,214 @@ def _score_breakout_reversal(
 # PythonGO 策略
 # ═══════════════════════════════════════════════════════════
 
-class Params(BaseParams):
+# ═══════════════════════════════════════════════════════════
+# 跨品种共振检测 — 多品种同步监测 + 板块联动
+# ═══════════════════════════════════════════════════════════
+
+import time as _time
+
+# 板块映射（品种代码 → 板块）
+SECTOR_MAP = {
+    # 有色金属
+    "cu": "有色金属", "al": "有色金属", "zn": "有色金属",
+    "pb": "有色金属", "ni": "有色金属", "sn": "有色金属",
+    # 贵金属
+    "au": "贵金属", "ag": "贵金属",
+    # 黑色系
+    "rb": "黑色系", "hc": "黑色系", "ss": "黑色系",
+    "i": "黑色系", "j": "黑色系", "jm": "黑色系",
+    # 能化
+    "bu": "能化", "ru": "能化", "fu": "能化", "sc": "能化",
+    "l": "能化", "v": "能化", "pp": "能化", "eg": "能化",
+    "eb": "能化", "pg": "能化", "ma": "能化", "ta": "能化",
+    # 农产品
+    "m": "农产品", "y": "农产品", "p": "农产品", "a": "农产品",
+    "b": "农产品", "c": "农产品", "cs": "农产品",
+    "sr": "农产品", "cf": "农产品", "oi": "农产品", "rm": "农产品",
+    # 建材
+    "fg": "建材", "sa": "建材", "ur": "建材", "zc": "建材",
+    # 新能源
+    "lc": "新能源", "si": "新能源",
+}
+
+
+def _get_sector(exchange_code: str) -> str:
+    """从 'SHFE.cu' 提取板块"""
+    code = exchange_code.split(".")[-1].lower() if "." in exchange_code else exchange_code.lower()
+    return SECTOR_MAP.get(code, "其他")
+
+
+def _get_direction_polarity(direction: str) -> int:
+    """方向转极性：bullish=+1, bearish=-1, mixed=0"""
+    if direction == "bullish":
+        return 1
+    elif direction == "bearish":
+        return -1
+    return 0
+
+
+@dataclass
+class SignalRecord:
+    """单条信号记录"""
+    instrument: str
+    sector: str
+    direction: str       # "bullish" / "bearish"
+    signal_type: str     # "structure" / "breakout_reversal"
+    quality_tier: str
+    quality_score: float
+    zone_center: float
+    timestamp: float     # time.time()
+
+
+@dataclass
+class ResonanceAlert:
+    """共振信号"""
+    sector: str
+    direction: str               # "bullish" / "bearish" / "mixed"
+    participating: list[str]     # 参与品种列表
+    resonance_level: int         # 2=共振, 3+=强共振
+    avg_quality: float
+    signal_type_summary: str     # 各品种信号类型摘要
+
+    @property
+    def is_strong(self) -> bool:
+        return self.resonance_level >= 3
+
+    def format(self) -> str:
+        icon = "🔥" if self.is_strong else "⚡"
+        dir_text = {"bullish": "看涨", "bearish": "看跌", "mixed": "混合"}.get(self.direction, "?")
+        level_text = "强共振" if self.is_strong else "共振"
+        parts = [
+            f"{icon} {level_text} [{self.sector}] {dir_text} ×{self.resonance_level}",
+            f"   参与: {', '.join(self.participating)}",
+            f"   平均质量: {self.avg_quality:.0%}",
+        ]
+        return "\n".join(parts)
+
+
+class ResonanceTracker:
+    """
+    跨品种共振追踪器
+
+    在一个滑动时间窗口内，追踪所有品种的信号。
+    当同板块多个品种同时触发信号时，检测到共振。
+
+    逻辑：
+    1. 每个信号记录 instrument + sector + direction + timestamp
+    2. 在 window 秒内的信号视为"同时"
+    3. 同板块 ≥2 个品种同时触发 → 共振
+    4. 同板块 ≥3 个品种同时触发 → 强共振
+    5. 方向一致性检查：同向 > 异向
+    """
+
+    def __init__(self, window_seconds: int = 600):
+        self.window = window_seconds
+        self.history: list[SignalRecord] = []
+        self._last_resonance: dict[str, float] = {}  # sector → last resonance time
+
+    def record(self, record: SignalRecord):
+        """记录一个信号"""
+        self.history.append(record)
+        self._cleanup()
+
+    def check_resonance(self, new_record: SignalRecord) -> ResonanceAlert | None:
+        """
+        检查新信号是否触发共振
+
+        Returns:
+            ResonanceAlert 如果检测到共振，否则 None
+        """
+        sector = new_record.sector
+        now = new_record.timestamp
+
+        # 获取同板块、同时间窗口内的信号
+        window_start = now - self.window
+        recent = [
+            r for r in self.history
+            if r.sector == sector and r.timestamp >= window_start
+        ]
+
+        if len(recent) < 2:
+            return None
+
+        # 去重：每个品种只取最新的一条
+        by_instrument: dict[str, SignalRecord] = {}
+        for r in recent:
+            if r.instrument not in by_instrument or r.timestamp > by_instrument[r.instrument].timestamp:
+                by_instrument[r.instrument] = r
+
+        instruments = list(by_instrument.keys())
+        if len(instruments) < 2:
+            return None
+
+        # 共振冷却：同板块 5 分钟内不重复触发
+        last = self._last_resonance.get(sector, 0)
+        if now - last < 300:
+            return None
+
+        # 方向一致性
+        polarities = [_get_direction_polarity(by_instrument[i].direction) for i in instruments]
+        positive = sum(1 for p in polarities if p > 0)
+        negative = sum(1 for p in polarities if p < 0)
+
+        if positive > negative * 1.5:
+            direction = "bullish"
+        elif negative > positive * 1.5:
+            direction = "bearish"
+        else:
+            direction = "mixed"
+
+        # 平均质量
+        avg_quality = sum(by_instrument[i].quality_score for i in instruments) / len(instruments)
+
+        # 信号类型摘要
+        types = [by_instrument[i].signal_type for i in instruments]
+        type_summary = " / ".join(f"{t}×{types.count(t)}" for t in set(types))
+
+        self._last_resonance[sector] = now
+
+        return ResonanceAlert(
+            sector=sector,
+            direction=direction,
+            participating=instruments,
+            resonance_level=len(instruments),
+            avg_quality=avg_quality,
+            signal_type_summary=type_summary,
+        )
+
+    def get_sector_status(self) -> dict[str, dict]:
+        """获取各板块当前信号状态"""
+        now = _time.time()
+        window_start = now - self.window
+        recent = [r for r in self.history if r.timestamp >= window_start]
+
+        status = {}
+        for r in recent:
+            if r.sector not in status:
+                status[r.sector] = {"count": 0, "instruments": set(), "directions": []}
+            status[r.sector]["count"] += 1
+            status[r.sector]["instruments"].add(r.instrument)
+            status[r.sector]["directions"].append(r.direction)
+
+        # 转为可序列化格式
+        return {
+            sector: {
+                "signal_count": info["count"],
+                "instruments": list(info["instruments"]),
+                "direction": max(set(info["directions"]), key=info["directions"].count)
+                if info["directions"] else "unknown",
+            }
+            for sector, info in status.items()
+        }
+
+    def _cleanup(self):
+        """清理过期记录"""
+        cutoff = _time.time() - self.window * 2
+        self.history = [r for r in self.history if r.timestamp >= cutoff]
+
+
+# ═══════════════════════════════════════════════════════════
+# PythonGO 策略
     """参数映射"""
     # 品种设置（逗号分隔多个品种）
     instruments: str = Field(
@@ -535,6 +742,8 @@ class Params(BaseParams):
     enable_alert: bool = Field(default=True, title="启用信号提示")
     enable_sound: bool = Field(default=True, title="启用声音提示")
     alert_cooldown: int = Field(default=300, title="信号冷却时间（秒）")
+    resonance_window: int = Field(default=600, title="共振检测窗口（秒）")
+    status_interval: int = Field(default=1800, title="市场状态输出间隔（秒）")
 
     # 交易设置（可选）
     enable_trade: bool = Field(default=False, title="启用自动下单")
@@ -579,6 +788,12 @@ class PriceStructureSignal(BaseStrategy):
         # 信号冷却
         self._last_signal_ts: dict[str, float] = {}
 
+        # 跨品种共振追踪
+        self.resonance_tracker = ResonanceTracker(
+            window_seconds=self.params_map.resonance_window
+        )
+        self._last_status_time: float = 0
+
         # 解析品种列表
         self.instrument_list = self._parse_instruments(self.params_map.instruments)
 
@@ -609,8 +824,20 @@ class PriceStructureSignal(BaseStrategy):
         self.output(f"   周期: {self.params_map.kline_style}")
         self.output(f"   回看: {self.params_map.lookback} 根K线")
         self.output(f"   最低层级: {self.params_map.min_quality_tier}")
+        self.output(f"   共振窗口: {self.params_map.resonance_window}秒")
+        self.output(f"   状态间隔: {self.params_map.status_interval}秒")
         self.output(f"   自动下单: {'是' if self.params_map.enable_trade else '否'}")
         self.output("=" * 50)
+
+        # 显示板块分组
+        sectors: dict[str, list] = {}
+        for exchange, code in self.instrument_list:
+            sector = _get_sector(f"{exchange}.{code}")
+            sectors.setdefault(sector, []).append(code)
+        self.output("板块分组:")
+        for sector, codes in sectors.items():
+            self.output(f"   {sector}: {', '.join(codes)}")
+        self.output("")
 
         # 订阅所有品种
         for exchange, code in self.instrument_list:
@@ -716,6 +943,30 @@ class PriceStructureSignal(BaseStrategy):
 
         self._emit_structure_signal(instrument, bar, structure)
 
+        # ── 定期输出市场状态 ──
+        self._maybe_show_status()
+
+    def _maybe_show_status(self):
+        """定期输出各板块信号状态"""
+        now = _time.time()
+        if now - self._last_status_time < self.params_map.status_interval:
+            return
+        self._last_status_time = now
+
+        status = self.resonance_tracker.get_sector_status()
+        if not status:
+            return
+
+        self.output("")
+        self.output("📊 ── 板块信号状态 ──")
+        for sector, info in sorted(status.items()):
+            icon = {"bullish": "🔴", "bearish": "🟢", "mixed": "🟡"}.get(info["direction"], "⚪")
+            self.output(
+                f"   {icon} {sector}: {info['signal_count']}条信号 · "
+                f"{', '.join(info['instruments'])}"
+            )
+        self.output("")
+
     # ─── 交易逻辑 ──────────────────────────────────────────
 
     def _auto_trade(self, bar: KLineData, structure: LightweightStructure):
@@ -790,7 +1041,7 @@ class PriceStructureSignal(BaseStrategy):
         return True
 
     def _emit_structure_signal(self, instrument: str, bar: KLineData, structure):
-        """输出结构信号"""
+        """输出结构信号 + 共振检测"""
         direction_icon = "🔴" if structure.direction == "bullish" else "🟢"
         tier_icon = {"A": "🟢", "B": "🔵", "C": "🟡"}.get(structure.quality_tier, "⚪")
 
@@ -811,16 +1062,28 @@ class PriceStructureSignal(BaseStrategy):
         if self.params_map.enable_trade:
             self._auto_trade(bar, structure)
 
+        # ── 共振检测 ──
+        self._check_and_emit_resonance(
+            instrument=instrument,
+            direction=structure.direction,
+            signal_type="structure",
+            quality_tier=structure.quality_tier,
+            quality_score=structure.quality_score,
+            zone_center=structure.zone.center,
+        )
+
     def _emit_breakout_signal(self, instrument: str, bar: KLineData, signal: BreakoutReversalSignal):
-        """输出假突破反转信号"""
+        """输出假突破反转信号 + 共振检测"""
         if signal.signal_type == "bearish_reversal":
             icon = "🔻"
             label = "上破回落"
             direction_text = "看跌"
+            direction = "bearish"
         else:
             icon = "🔺"
             label = "下破反弹"
             direction_text = "看涨"
+            direction = "bullish"
 
         tier_icon = {"A": "🟢", "B": "🔵", "C": "🟡"}.get(signal.quality_tier, "⚪")
 
@@ -859,6 +1122,57 @@ class PriceStructureSignal(BaseStrategy):
                     order_direction="buy",
                 )
                 self.output(f"   📈 买入 {bar.instrument_id} @ {bar.close:.2f} (假突破反转)")
+
+        # ── 共振检测 ──
+        self._check_and_emit_resonance(
+            instrument=instrument,
+            direction=direction,
+            signal_type="breakout_reversal",
+            quality_tier=signal.quality_tier,
+            quality_score=signal.quality_score,
+            zone_center=signal.zone.center,
+        )
+
+    def _check_and_emit_resonance(
+        self, instrument: str, direction: str,
+        signal_type: str, quality_tier: str,
+        quality_score: float, zone_center: float,
+    ):
+        """
+        记录信号并检查共振
+
+        如果检测到板块共振，输出共振提示。
+        """
+        sector = _get_sector(instrument)
+
+        record = SignalRecord(
+            instrument=instrument,
+            sector=sector,
+            direction=direction,
+            signal_type=signal_type,
+            quality_tier=quality_tier,
+            quality_score=quality_score,
+            zone_center=zone_center,
+            timestamp=_time.time(),
+        )
+
+        self.resonance_tracker.record(record)
+
+        # 检查共振
+        resonance = self.resonance_tracker.check_resonance(record)
+        if resonance:
+            self.output("")
+            self.output(resonance.format())
+            self.output("")
+
+            # 强共振额外提示
+            if resonance.is_strong:
+                self.output(f"🔥🔥🔥 强共振！{sector}板块 {resonance.resonance_level} 个品种同时触发！")
+                if self.params_map.enable_sound:
+                    # 强共振：连续提示音
+                    self.play_sound()
+                    _time.sleep(0.3)
+                    self.play_sound()
         """输出到控制台"""
         print(f"[结构信号] {msg}")
 
