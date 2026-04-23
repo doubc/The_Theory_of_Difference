@@ -88,7 +88,7 @@ class DataQualityReport:
 
 def _detect_format(file_path: Path) -> str:
     """检测 CSV 格式: 'A' = 独立引号, 'B' = 整行引号"""
-    with open(file_path) as f:
+    with open(file_path, encoding="utf-8", errors="replace") as f:
         first_line = f.readline().rstrip("\n")
     # 格式B: 整行以 " 开头，内部包含 ;"""
     if first_line.startswith('"') and '""' in first_line:
@@ -96,10 +96,10 @@ def _detect_format(file_path: Path) -> str:
     return "A"
 
 
-def _parse_format_a(file_path: Path) -> list[dict]:
+def _parse_format_a(file_path: Path) -> tuple[list[str], list[dict]]:
     """格式A: "date";"open";"high";..."""
     rows = []
-    with open(file_path, newline="") as f:
+    with open(file_path, newline="", encoding="utf-8", errors="replace") as f:
         reader = csv.reader(f, delimiter=";")
         header = [h.strip('"').strip() for h in next(reader)]
         col = {name: i for i, name in enumerate(header)}
@@ -112,11 +112,11 @@ def _parse_format_a(file_path: Path) -> list[dict]:
     return header, rows
 
 
-def _parse_format_b(file_path: Path) -> list[dict]:
+def _parse_format_b(file_path: Path) -> tuple[list[str], list[dict]]:
     # 格式B: 整行被双引号包裹, 内部每个值用双引号包围, 以分号分隔
     # 例如: "date;"open";"high";..."
     rows = []
-    with open(file_path) as f:
+    with open(file_path, encoding="utf-8", errors="replace") as f:
         # 第一行: header
         first = f.readline().rstrip("\n")
         # 去掉外层引号
@@ -185,6 +185,12 @@ class CSVLoader:
                 if h < l:
                     anomaly_flags.append(f"{date_str}: high({h}) < low({l})")
                     h, l = max(h, l), min(h, l)
+                if o <= 0 or c <= 0:
+                    anomaly_flags.append(f"{date_str}: non-positive price (open={o}, close={c})")
+                    continue
+                if v < 0:
+                    anomaly_flags.append(f"{date_str}: negative volume ({v})")
+                    v = 0
 
                 # 换月标记
                 new_flag = None

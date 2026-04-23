@@ -535,7 +535,16 @@ class MotionState:
 
     @classmethod
     def from_dict(cls, d: dict) -> MotionState:
-        return cls(**{k: d.get(k, v) for k, v in cls.__dataclass_fields__.items()})
+        import dataclasses
+        kwargs = {}
+        for f in dataclasses.fields(cls):
+            if f.name in d:
+                kwargs[f.name] = d[f.name]
+            elif f.default is not dataclasses.MISSING:
+                kwargs[f.name] = f.default
+            elif f.default_factory is not dataclasses.MISSING:
+                kwargs[f.name] = f.default_factory()
+        return cls(**kwargs)
 
     def __repr__(self):
         return (f"Motion(→{self.phase_tendency} "
@@ -695,6 +704,8 @@ class Bundle:
 
 
 # ─── 关系算子（不存储，计算时使用）────────────────────────────
+# 权威定义在此，relations.py 从这里导入。
+
 
 def first_diff(p1: Point, p2: Point) -> float:
     """一阶差分：两点间价格差"""
@@ -764,20 +775,22 @@ def extrema_similarity(points1: list[Point], points2: list[Point]) -> float:
     seq2 = _normalize(points2)
     n, m = len(seq1), len(seq2)
 
-    # DTW with Sakoe-Chiba band
+    # DTW with Sakoe-Chiba band — 空间优化：只保留两行
     window = max(n, m) // 2
     INF = float("inf")
-    dtw = [[INF] * (m + 1) for _ in range(n + 1)]
-    dtw[0][0] = 0.0
+    prev = [INF] * (m + 1)
+    prev[0] = 0.0
 
     for i in range(1, n + 1):
+        curr = [INF] * (m + 1)
         j_lo = max(1, i - window)
         j_hi = min(m, i + window)
         for j in range(j_lo, j_hi + 1):
             cost = (seq1[i - 1] - seq2[j - 1]) ** 2
-            dtw[i][j] = cost + min(dtw[i - 1][j], dtw[i][j - 1], dtw[i - 1][j - 1])
+            curr[j] = cost + min(prev[j], curr[j - 1], prev[j - 1])
+        prev = curr
 
-    dist = math.sqrt(dtw[n][m])
+    dist = math.sqrt(prev[m])
     max_len = max(n, m)
     normalized_dist = dist / math.sqrt(max_len)
     return 1.0 / (1.0 + normalized_dist)

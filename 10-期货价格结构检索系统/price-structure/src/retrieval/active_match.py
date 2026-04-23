@@ -374,13 +374,6 @@ def _load_cross_symbol_pool(data_dir: str = "data") -> list[dict]:
     return pool
 
 
-def _build_structure_from_pool_entry(entry: dict, symbol_bars: dict[str, list[Bar]]) -> Structure | None:
-    """从丛结构池条目重建 Structure 对象（用于相似度计算）"""
-    # 这里简化处理：直接用 invariants 做相似度，不重建完整 Structure
-    # 如果需要更精确的对比，需要存储完整的 structure 序列化数据
-    return None
-
-
 def active_match(query: ActiveMatchQuery, data_dir: str = "data", use_cross_symbol: bool = True) -> ActiveMatchResult:
     """
     核心匹配函数。

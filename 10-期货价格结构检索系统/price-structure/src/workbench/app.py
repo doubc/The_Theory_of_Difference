@@ -20,7 +20,8 @@ import plotly.graph_objects as go
 from pathlib import Path
 from datetime import datetime
 
-from src.data.loader import load_cu0, Bar
+from src.data.loader import load_cu0, Bar, CSVLoader
+from src.data.symbol_meta import symbol_name, load_symbol_meta
 from src.compiler.pipeline import compile_full, CompilerConfig, CompileResult
 from src.dsl.rule import load_rules, scan
 from src.retrieval.similarity import similarity
@@ -106,31 +107,71 @@ with st.sidebar:
     }
 
     st.divider()
-    st.caption(f"数据: CU0 连续合约")
+    # 品种选择
+    st.markdown("### 📈 品种")
+    selected_symbol = st.selectbox(
+        "选择品种",
+        AVAILABLE_SYMBOLS,
+        index=AVAILABLE_SYMBOLS.index("CU000") if "CU000" in AVAILABLE_SYMBOLS else 0,
+        format_func=lambda s: f"{s} — {symbol_name(s)}" if symbol_name(s) != s else s,
+    )
+
+    st.divider()
+    st.caption(f"数据: {selected_symbol} ({symbol_name(selected_symbol)})")
     if st.button("🔄 刷新"):
         st.cache_data.clear()
 
 
 # ─── 数据加载与编译 ──────────────────────────────────────
 
+def _discover_csv_symbols() -> list[str]:
+    """自动发现 data/ 目录下可用的 CSV 品种"""
+    data_dir = Path("data")
+    if not data_dir.exists():
+        return ["CU000"]
+    symbols = []
+    for f in sorted(data_dir.glob("*.csv")):
+        sym = f.stem.upper()
+        if len(sym) >= 2:
+            symbols.append(sym)
+    return symbols or ["CU000"]
+
+
+AVAILABLE_SYMBOLS = _discover_csv_symbols()
+
+
 @st.cache_data
-def load_data():
-    loader = load_cu0("data", dedup=True)
+def load_data(symbol: str = "CU000"):
+    if symbol == "CU000":
+        loader = load_cu0("data", dedup=True)
+    else:
+        csv_path = Path("data") / f"{symbol.lower()}.csv"
+        if not csv_path.exists():
+            csv_path = Path("data") / f"{symbol}.csv"
+        if not csv_path.exists():
+            return []
+        loader = CSVLoader(str(csv_path), symbol=symbol)
     return loader.get()
 
 @st.cache_data
-def do_compile(min_amp, min_dur, min_cycles):
-    bars = load_data()
+def do_compile(symbol: str, min_amp, min_dur, min_cycles):
+    bars = load_data(symbol)
+    if not bars:
+        return None
     config = CompilerConfig(
         min_amplitude=min_amp, min_duration=min_dur,
         min_cycles=min_cycles,
         adaptive_pivots=True, fractal_threshold=0.34,
     )
-    return compile_full(bars, config, symbol="CU000")
+    return compile_full(bars, config, symbol=symbol)
 
-bars = load_data()
+bars = load_data(selected_symbol)
 sens = sens_map[sensitivity]
-result = do_compile(sens["min_amp"], sens["min_dur"], sens["min_cycles"])
+result = do_compile(selected_symbol, sens["min_amp"], sens["min_dur"], sens["min_cycles"])
+
+if result is None or not bars:
+    st.warning(f"无法加载 {selected_symbol} 的数据，请检查 data/ 目录下是否有对应的 CSV 文件")
+    st.stop()
 
 # 按时间范围过滤显示
 days = range_map[data_range]
@@ -221,7 +262,8 @@ def _describe_outcome(fo: dict) -> str:
 # ═══════════════════════════════════════════════════════════
 
 st.markdown("### 🔬 价格结构研究工作台")
-st.caption(f"{bars[0].timestamp:%Y-%m-%d} → {bars[-1].timestamp:%Y-%m-%d} · "
+st.caption(f"{selected_symbol} ({symbol_name(selected_symbol)}) · "
+           f"{bars[0].timestamp:%Y-%m-%d} → {bars[-1].timestamp:%Y-%m-%d} · "
            f"{len(recent_structures)} 个结构在 {data_range} 内")
 
 tab1, tab2, tab3, tab4 = st.tabs([

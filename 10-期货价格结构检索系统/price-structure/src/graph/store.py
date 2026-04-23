@@ -47,6 +47,7 @@ class GraphStore:
     知识图谱持久化存储
 
     基于 JSONL 的 append-only 存储 + 派生索引 + 每日快照。
+    内置 _zone_keys / _edge_keys 缓存，避免批量写入时 O(n²) 文件扫描。
     """
     base_path: str = "data/graph"
 
@@ -55,6 +56,9 @@ class GraphStore:
         self.idx_dir = self.base / "index"
         self.snap_dir = self.base / "snapshots"
         self._ensure_dirs()
+        # 缓存：已存在的 key 集合，避免每次 append 时全文件扫描
+        self._zone_keys: set[str] | None = None
+        self._edge_keys: set[str] | None = None
 
     def _ensure_dirs(self):
         for d in [self.base, self.idx_dir, self.snap_dir]:
@@ -92,6 +96,9 @@ class GraphStore:
             return
         record["_ts"] = datetime.now().isoformat()
         self._append(self.zones_file, record)
+        # 更新缓存
+        if zone_key and self._zone_keys is not None:
+            self._zone_keys.add(zone_key)
 
     def append_narrative(self, record: dict) -> None:
         """追加一个叙事节点"""
@@ -106,35 +113,56 @@ class GraphStore:
         record["_edge_key"] = edge_key
         record["_ts"] = datetime.now().isoformat()
         self._append(self.edges_file, record)
+        # 更新缓存
+        if self._edge_keys is not None:
+            self._edge_keys.add(edge_key)
 
     def _append(self, path: Path, record: dict) -> None:
         safe = _json_safe(record)
         with open(path, "a", encoding="utf-8") as f:
             f.write(json.dumps(safe, ensure_ascii=False) + "\n")
 
+    def _load_zone_keys_cache(self) -> set[str]:
+        """懒加载 zone_key 缓存"""
+        if self._zone_keys is None:
+            self._zone_keys = set()
+            if self.zones_file.exists():
+                with open(self.zones_file, encoding="utf-8") as f:
+                    for line in f:
+                        if line.strip():
+                            try:
+                                rec = json.loads(line)
+                                zk = rec.get("zone_key", "")
+                                if zk:
+                                    self._zone_keys.add(zk)
+                            except json.JSONDecodeError:
+                                continue
+        return self._zone_keys
+
+    def _load_edge_keys_cache(self) -> set[str]:
+        """懒加载 edge_key 缓存"""
+        if self._edge_keys is None:
+            self._edge_keys = set()
+            if self.edges_file.exists():
+                with open(self.edges_file, encoding="utf-8") as f:
+                    for line in f:
+                        if line.strip():
+                            try:
+                                rec = json.loads(line)
+                                ek = rec.get("_edge_key", "")
+                                if ek:
+                                    self._edge_keys.add(ek)
+                            except json.JSONDecodeError:
+                                continue
+        return self._edge_keys
+
     def _zone_exists(self, zone_key: str) -> bool:
-        """检查 Zone 是否已存在"""
-        if not self.zones_file.exists():
-            return False
-        with open(self.zones_file, encoding="utf-8") as f:
-            for line in f:
-                if line.strip():
-                    rec = json.loads(line)
-                    if rec.get("zone_key") == zone_key:
-                        return True
-        return False
+        """检查 Zone 是否已存在（O(1) 缓存查找）"""
+        return zone_key in self._load_zone_keys_cache()
 
     def _edge_exists(self, edge_key: str) -> bool:
-        """检查边是否已存在"""
-        if not self.edges_file.exists():
-            return False
-        with open(self.edges_file, encoding="utf-8") as f:
-            for line in f:
-                if line.strip():
-                    rec = json.loads(line)
-                    if rec.get("_edge_key") == edge_key:
-                        return True
-        return False
+        """检查边是否已存在（O(1) 缓存查找）"""
+        return edge_key in self._load_edge_keys_cache()
 
     # ─── 批量写入 ──────────────────────────────────────────
 

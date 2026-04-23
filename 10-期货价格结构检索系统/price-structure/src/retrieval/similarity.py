@@ -251,6 +251,8 @@ def _dtw_distance(seq1: list[float], seq2: list[float], window: int | None = Non
     两个价格序列之间的最优对齐距离。
     允许时间轴非线性拉伸/压缩，捕捉"形状相似但时间错位"的结构。
 
+    空间优化：只保留 DP 矩阵的两行，内存从 O(nm) 降到 O(m)。
+
     Args:
         seq1, seq2: 归一化价格序列（建议先做 min-max 归一化）
         window: Sakoe-Chiba 带宽约束（None = 无约束）
@@ -267,19 +269,21 @@ def _dtw_distance(seq1: list[float], seq2: list[float], window: int | None = Non
         window = max(n, m)
     window = max(window, abs(n - m))
 
-    # 初始化 DP 矩阵（只保留带宽内的值）
+    # 空间优化：只保留两行
     INF = float("inf")
-    dtw = [[INF] * (m + 1) for _ in range(n + 1)]
-    dtw[0][0] = 0.0
+    prev = [INF] * (m + 1)
+    prev[0] = 0.0
 
     for i in range(1, n + 1):
+        curr = [INF] * (m + 1)
         j_lo = max(1, i - window)
         j_hi = min(m, i + window)
         for j in range(j_lo, j_hi + 1):
             cost = (seq1[i - 1] - seq2[j - 1]) ** 2
-            dtw[i][j] = cost + min(dtw[i - 1][j], dtw[i][j - 1], dtw[i - 1][j - 1])
+            curr[j] = cost + min(prev[j], curr[j - 1], prev[j - 1])
+        prev = curr
 
-    return math.sqrt(dtw[n][m])
+    return math.sqrt(prev[m])
 
 
 def _normalize_series(values: list[float]) -> list[float]:

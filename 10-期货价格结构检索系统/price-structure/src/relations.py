@@ -21,28 +21,14 @@ from src.models import (
     Point, Segment, Zone, Cycle, Structure, ContrastType,
     MotionState, Phase, ProjectionAwareness,
     StabilityVerdict, SystemState,
+    # 复用 models.py 中定义的基础算子，不重复定义
+    first_diff, log_diff, second_diff, time_gap,
+    distance_to_zone, relative_distance_to_zone,
+    extrema_dispersion,
 )
 
-
-# ─── 点间 ──────────────────────────────────────────────────
-
-def first_diff(p1: Point, p2: Point) -> float:
-    return p2.x - p1.x
-
-
-def log_diff(p1: Point, p2: Point) -> float:
-    return p2.log_x - p1.log_x
-
-
-def second_diff(p1: Point, p2: Point, p3: Point) -> float:
-    return p3.x - 2 * p2.x + p1.x
-
-
-def time_gap_days(p1: Point, p2: Point) -> float:
-    return (p2.t - p1.t).days
-
-
-# ─── 段间 ──────────────────────────────────────────────────
+# 向后兼容别名
+time_gap_days = time_gap
 
 def segment_speed_ratio(s1: Segment, s2: Segment) -> float:
     if s1.abs_rate == 0:
@@ -72,30 +58,8 @@ def direction_change(s1: Segment, s2: Segment) -> int:
     return -1
 
 
-# ─── 点与 Zone ─────────────────────────────────────────────
-
-def distance_to_zone(p: Point, z: Zone) -> float:
-    return z.distance_to(p.x)
-
-
-def relative_distance_to_zone(p: Point, z: Zone) -> float:
-    if z.bandwidth == 0:
-        return 0.0
-    return z.distance_to(p.x) / z.bandwidth
-
-
-# ─── 极值点聚集度 ──────────────────────────────────────────
-
-def extrema_dispersion(points: Sequence[Point]) -> float:
-    if len(points) < 2:
-        return 0.0
-    prices = [p.x for p in points]
-    mean = sum(prices) / len(prices)
-    if mean == 0:
-        return 0.0
-    var = sum((x - mean) ** 2 for x in prices) / len(prices)
-    return math.sqrt(var) / mean
-
+# ─── 极值点聚集度（新增：trend）─────────────────────────────
+# extrema_dispersion 已从 models.py 导入，不重复定义
 
 def extrema_trend(points: Sequence[Point]) -> float:
     if len(points) < 2:

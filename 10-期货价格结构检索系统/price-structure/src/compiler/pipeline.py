@@ -52,6 +52,26 @@ class CompilerConfig:
     adaptive_pivots: bool = True    # 自适应极值窗口
     fractal_threshold: float = 0.34 # 分形一致性阈值
 
+    def __post_init__(self):
+        """参数合理性校验"""
+        errors = []
+        if self.min_amplitude <= 0:
+            errors.append(f"min_amplitude must be > 0, got {self.min_amplitude}")
+        if self.min_duration < 1:
+            errors.append(f"min_duration must be >= 1, got {self.min_duration}")
+        if self.noise_filter < 0:
+            errors.append(f"noise_filter must be >= 0, got {self.noise_filter}")
+        if self.zone_bandwidth <= 0:
+            errors.append(f"zone_bandwidth must be > 0, got {self.zone_bandwidth}")
+        if self.cluster_eps <= 0:
+            errors.append(f"cluster_eps must be > 0, got {self.cluster_eps}")
+        if self.min_cycles < 1:
+            errors.append(f"min_cycles must be >= 1, got {self.min_cycles}")
+        if not 0 <= self.fractal_threshold <= 1:
+            errors.append(f"fractal_threshold must be in [0,1], got {self.fractal_threshold}")
+        if errors:
+            raise ValueError(f"CompilerConfig validation failed:\n" + "\n".join(f"  - {e}" for e in errors))
+
 
 # ─── 编译结果 ──────────────────────────────────────────────
 
@@ -110,6 +130,12 @@ def compile_full(bars: list[Bar], config: CompilerConfig | None = None, symbol: 
     if config is None:
         config = CompilerConfig()
 
+    if not bars:
+        return CompileResult(
+            bars_count=0, pivots=[], segments=[], zones=[],
+            cycles=[], structures=[], bundles=[], config=config,
+        )
+
     # 3.1 极值提取
     pivots = extract_pivots(
         bars,
@@ -142,12 +168,18 @@ def compile_full(bars: list[Bar], config: CompilerConfig | None = None, symbol: 
 
     # ── V1.6 P0+: 叙事 + 守恒 + 运动 + 投影觉知 ──
     # ── V1.6 P1: 升级为 SystemState（结构×运动 + 差异分层 + 错觉检测）──
+    # 优化：为每个结构预过滤相关 bars，避免 build_system_state 内部重复遍历全量 bars
     system_states = []
     for st in structures:
         st.narrative_context = infer_narrative_context(st)
-        # build_system_state 内部会计算：motion, projection, conservation,
-        # liquidity_stress, fear_index, time_compression, stability_verdict
-        ss = build_system_state(st, bars)
+        # 预过滤：只传入结构时间窗口 ± 30天 的 bars（减少 compute_fear_index 等的遍历量）
+        if st.t_start and st.t_end:
+            from datetime import timedelta
+            margin = timedelta(days=30)
+            window_bars = [b for b in bars if st.t_start - margin <= b.timestamp <= st.t_end + margin]
+        else:
+            window_bars = bars
+        ss = build_system_state(st, window_bars)
         system_states.append(ss)
 
     # 3.5 丛识别
