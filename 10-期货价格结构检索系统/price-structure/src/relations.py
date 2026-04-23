@@ -476,9 +476,9 @@ def compute_motion(s: Structure) -> MotionState:
 
 def compute_projection(s: Structure, bars: list | None = None) -> ProjectionAwareness:
     """
-    D0 章：投影觉知
+    D0 章：投影觉知 + v2.5 D0.3 深化
     价格 = Π(现实差异)，系统分析的是影子。
-    此函数评估当前影子的可信度，标记盲区。
+    此函数评估当前影子的可信度，标记盲区，给出可操作建议。
     """
     proj = ProjectionAwareness()
 
@@ -486,7 +486,6 @@ def compute_projection(s: Structure, bars: list | None = None) -> ProjectionAwar
         return proj
 
     # ── 1. 压缩度 ──
-    # Zone 带宽越窄 → 投影压缩度越高（价格被压平，底层差异可能在别处）
     bw = s.zone.relative_bandwidth
     if bw < 0.005:
         proj.compression_level = 0.9
@@ -498,13 +497,10 @@ def compute_projection(s: Structure, bars: list | None = None) -> ProjectionAwar
         proj.compression_level = 0.1
 
     # ── 2. 盲区通道 ──
-    # 基于守恒检查和压缩度，判断差异可能去了哪
     conservation = s.invariants.get("conservation", {})
     channels = conservation.get("transfer_channels", [])
+    blind = list(channels)
 
-    blind = list(channels)  # 从守恒检查继承
-
-    # 基于压缩度追加盲区
     if proj.compression_level > 0.6:
         if "shorter_timeframe" not in blind:
             blind.append("shorter_timeframe")
@@ -514,10 +510,8 @@ def compute_projection(s: Structure, bars: list | None = None) -> ProjectionAwar
     proj.blind_channels = blind
 
     # ── 3. 投影可信度 ──
-    # cycle 数越多，历史验证越充分 → 可信度越高
-    # 但高压缩度会降低可信度
     n = s.cycle_count
-    history_confidence = min(n / 5.0, 1.0)  # 5个cycle以上满信心
+    history_confidence = min(n / 5.0, 1.0)
     compression_penalty = proj.compression_level * 0.3
     proj.projection_confidence = max(history_confidence - compression_penalty, 0.1)
 
@@ -530,6 +524,40 @@ def compute_projection(s: Structure, bars: list | None = None) -> ProjectionAwar
         parts.append(f"投影压缩度{proj.compression_level:.0%}，可信度{proj.projection_confidence:.0%}")
 
     proj.observation = " | ".join(parts)
+
+    # ── 5. v2.5: 推荐行动 ──
+    actions = []
+    evidence = {}
+
+    if proj.compression_level > 0.6:
+        actions.append(f"⚠️ Zone 带宽极窄({bw:.1%})，差异可能在其他维度积累")
+        if "shorter_timeframe" in blind:
+            actions.append("建议：检查更短周期的波动率是否在上升")
+            evidence["shorter_timeframe"] = "日线 Zone 带宽压缩，待验证短周期"
+        if "volume" in blind:
+            actions.append("检查：成交量变异系数是否在放大")
+            evidence["volume"] = f"Zone 相对带宽 {bw:.4f}，流动性维度待验证"
+
+    # 从守恒检查提取证据
+    flux = conservation.get("flux_score", 0.0)
+    if abs(flux) > 0.3:
+        direction = "释放" if flux > 0 else "压缩"
+        actions.append(f"守恒通量 {flux:+.2f}：差异正在{direction}")
+        channel_scores = conservation.get("channel_scores", {})
+        for ch, score in channel_scores.items():
+            if abs(score) > 0.3:
+                evidence[ch] = f"通道异常值 {score:.2f}"
+
+    # 稳态阻力异常
+    stable_cycles = [c for c in s.cycles if c.has_stable_state]
+    if stable_cycles:
+        avg_res = sum(c.next_stable.resistance_level for c in stable_cycles) / len(stable_cycles)
+        if avg_res < 0.2:
+            actions.append(f"⚠️ 稳态阻力异常低({avg_res:.2f})，可能是假稳态")
+            evidence["stable_state"] = f"平均阻力 {avg_res:.2f}，差异可能在隐性积累"
+
+    proj.recommended_actions = actions
+    proj.blind_evidence = evidence
 
     return proj
 

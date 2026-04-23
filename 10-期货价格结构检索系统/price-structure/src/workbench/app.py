@@ -88,6 +88,15 @@ with st.sidebar:
     min_cycles = st.slider("最小 Cycle 数", 1, 5, 2)
 
     st.divider()
+    st.markdown("### 🧠 v2.5 参数")
+    adaptive_pivots = st.checkbox("自适应极值窗口", value=True,
+        help="根据局部波动率自动调整 swing 检测窗口")
+    fractal_threshold = st.slider("分形一致性阈值", 0.0, 1.0, 0.34, 0.01,
+        help="至少多少比例的窗口确认才保留极值点") if adaptive_pivots else 0.34
+    volume_weighted = st.checkbox("成交量加权极值", value=False,
+        help="高成交量极值更容易保留")
+
+    st.divider()
     st.markdown("### 🔍 检索参数")
     top_k = st.slider("返回近邻数", 3, 20, 5)
     min_score = st.slider("最低相似度", 0.1, 0.8, 0.3, 0.05)
@@ -106,12 +115,15 @@ def load_data():
     return loader.get()
 
 @st.cache_data
-def do_compile(min_amp, min_dur, noise, zbw, eps, mc):
+def do_compile(min_amp, min_dur, noise, zbw, eps, mc,
+               adaptive=True, fractal=0.34, vol_weighted=False):
     bars = load_data()
     config = CompilerConfig(
         min_amplitude=min_amp, min_duration=min_dur, noise_filter=noise,
         zone_bandwidth=zbw, cluster_eps=eps, cluster_min_points=2,
         min_cycles=mc, tolerance=0.03,
+        adaptive_pivots=adaptive, fractal_threshold=fractal,
+        volume_weighted=vol_weighted,
     )
     return compile_full(bars, config, symbol="CU000")
 
@@ -121,7 +133,8 @@ def do_rules():
 
 bars = load_data()
 result = do_compile(min_amplitude, min_duration, noise_filter,
-                     zone_bandwidth, cluster_eps, min_cycles)
+                     zone_bandwidth, cluster_eps, min_cycles,
+                     adaptive_pivots, fractal_threshold, volume_weighted)
 rules = do_rules()
 matches = scan(result.structures, rules)
 
@@ -333,6 +346,18 @@ with tab2:
                 - **盲区**: {', '.join(p.blind_channels) if p.blind_channels else '无'}
                 - **观测**: {p.observation}
                 """, unsafe_allow_html=True)
+
+                # v2.5: 推荐行动
+                if p.recommended_actions:
+                    st.markdown("**建议:**")
+                    for action in p.recommended_actions:
+                        st.markdown(f"  {action}")
+
+                # v2.5: 盲区证据
+                if p.blind_evidence:
+                    st.markdown("**盲区证据:**")
+                    for channel, evidence in p.blind_evidence.items():
+                        st.markdown(f"  · {channel}: {evidence}")
             else:
                 st.info("投影觉知未计算")
 
