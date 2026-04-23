@@ -128,32 +128,6 @@ def _opp_card(opp: Opportunity) -> str:
         </div>
       </div>
     </div>"""
-          {_direction_badge(opp.direction, opp.direction_confidence)}
-        </div>
-        <div class="card-price">当前 {opp.current_price:.1f} → 触发 <b>{opp.trigger_price:.1f}</b></div>
-      </div>
-      <div class="card-body">
-        <div class="card-left">
-          <div class="label">潜在幅度（同类模板中位数 / 区间）</div>
-          {_potential_bar(opp.potential_p25, opp.potential_median, opp.potential_p75)}
-          <div class="label" style="margin-top:10px">预期兑现窗口</div>
-          <div class="window">≈ {opp.expected_window_days} 个交易日</div>
-
-          <div class="label" style="margin-top:10px">相似性拆解</div>
-          {_sim_bars(opp.sim_geometry, opp.sim_relation, opp.sim_family)}
-        </div>
-
-        <div class="card-right">
-          <div class="label">最像的三段历史（点击对照）</div>
-          {_match_thumbnails(opp.top_matches)}
-
-          <div class="label" style="margin-top:10px">下一步研究建议</div>
-          <ol class="actions">
-            {"".join(f"<li>{a}</li>" for a in opp.next_actions)}
-          </ol>
-        </div>
-      </div>
-    </div>"""
 
 
 def _summary_block(opportunities: list[Opportunity], scan_meta: dict) -> str:
