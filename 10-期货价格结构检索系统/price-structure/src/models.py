@@ -444,14 +444,20 @@ class Structure:
 @dataclass
 class ProjectionAwareness:
     """
-    投影觉知 — D0 章
+    投影觉知 — D0 章 + v2.5 D0.3 深化
     价格 = Π(现实差异)，代码分析的是影子，不是实体。
     此对象记录系统对自身认知边界的觉知。
+
+    v2.5: 增加 recommended_actions（系统建议研究者做什么）
+          和 blind_evidence（每个盲区通道的具体证据）
     """
     compression_level: float = 0.0   # 投影压缩度 [0,1]，越高=价格越平但底层差异可能越大
     blind_channels: list[str] = field(default_factory=list)  # 可能携带被压缩差异的通道
     projection_confidence: float = 1.0  # 当前投影的可信度（制度变化时下降）
     observation: str = ""  # 人可读：系统看到了什么、没看到什么
+    # ── v2.5 D0.3 新增 ──
+    recommended_actions: list[str] = field(default_factory=list)  # 系统建议研究者做什么
+    blind_evidence: dict = field(default_factory=dict)  # 每个盲区通道的具体证据
 
     @property
     def is_blind(self) -> bool:
@@ -464,6 +470,8 @@ class ProjectionAwareness:
             "blind_channels": self.blind_channels,
             "projection_confidence": self.projection_confidence,
             "observation": self.observation,
+            "recommended_actions": self.recommended_actions,
+            "blind_evidence": self.blind_evidence,
         }
 
     @classmethod
@@ -473,6 +481,8 @@ class ProjectionAwareness:
             blind_channels=d.get("blind_channels", []),
             projection_confidence=d.get("projection_confidence", 1.0),
             observation=d.get("observation", ""),
+            recommended_actions=d.get("recommended_actions", []),
+            blind_evidence=d.get("blind_evidence", {}),
         )
 
     def __repr__(self):
