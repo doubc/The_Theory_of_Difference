@@ -47,41 +47,86 @@ st.set_page_config(
 
 st.markdown("""
 <style>
+    /* 运动标签 */
     .motion-badge {
         display: inline-block;
-        padding: 2px 8px;
+        padding: 3px 10px;
         border-radius: 4px;
         font-size: 0.85em;
-        font-weight: 600;
+        font-weight: 700;
+        letter-spacing: 0.02em;
     }
-    .badge-breakdown { background: #ef535022; color: #ef5350; }
-    .badge-confirmation { background: #26a69a22; color: #26a69a; }
-    .badge-stable { background: #ffa72622; color: #ffa726; }
-    .badge-forming { background: #42a5f522; color: #42a5f5; }
+    .badge-breakdown { background: rgba(239,83,80,0.15); color: #ff6b6b; }
+    .badge-confirmation { background: rgba(38,166,154,0.15); color: #4ecdc4; }
+    .badge-stable { background: rgba(255,167,38,0.15); color: #ffb74d; }
+    .badge-forming { background: rgba(66,165,245,0.15); color: #64b5f6; }
+
+    /* 结构卡片 — 浅色背景 + 深色文字，确保可读性 */
     .structure-card {
-        background: #1a1a2e;
-        border-radius: 12px;
-        padding: 16px 20px;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 10px;
+        padding: 14px 18px;
         margin: 8px 0;
-        border-left: 4px solid #4a90d9;
+        border-left: 5px solid #4a90d9;
+        color: #212529;
+        font-size: 0.92em;
+        line-height: 1.6;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     }
+    .structure-card b { color: #1a1a2e; }
+    .structure-card .zone-label { font-size: 1.05em; font-weight: 700; color: #0d1b2a; }
+    .structure-card .meta-text { color: #495057; font-size: 0.88em; }
+    .structure-card .narrative-text { color: #6c757d; font-size: 0.85em; margin-top: 4px; }
     .structure-card.warning { border-left-color: #ff9800; }
-    .structure-card.danger  { border-left-color: #ef5350; }
-    .structure-card.ok      { border-left-color: #26a69a; }
-    .section-title {
-        font-size: 1.1em;
-        font-weight: 600;
-        margin-bottom: 8px;
-    }
+    .structure-card.danger  { border-left-color: #ef5350; background: linear-gradient(135deg, #fff5f5 0%, #ffe0e0 100%); }
+    .structure-card.ok      { border-left-color: #26a69a; background: linear-gradient(135deg, #f0faf8 0%, #d4efea 100%); }
+
+    /* 案例卡片 */
     .case-card {
-        background: #16213e;
+        background: #f0f4f8;
         border-radius: 8px;
         padding: 12px 16px;
         margin: 6px 0;
         border-left: 3px solid #4a90d9;
+        color: #212529;
     }
     .case-up { border-left-color: #26a69a; }
     .case-down { border-left-color: #ef5350; }
+
+    /* 复盘日志条目 */
+    .journal-entry {
+        background: #ffffff;
+        border-radius: 8px;
+        padding: 14px 18px;
+        margin: 8px 0;
+        border: 1px solid #dee2e6;
+        color: #212529;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+    .journal-entry .entry-header {
+        font-weight: 700;
+        color: #0d1b2a;
+        font-size: 0.95em;
+        margin-bottom: 6px;
+        border-bottom: 1px solid #e9ecef;
+        padding-bottom: 6px;
+    }
+    .journal-entry .entry-body {
+        color: #343a40;
+        font-size: 0.9em;
+        line-height: 1.7;
+        white-space: pre-wrap;
+    }
+    .journal-tag {
+        display: inline-block;
+        padding: 1px 8px;
+        border-radius: 3px;
+        font-size: 0.8em;
+        margin-right: 4px;
+    }
+    .tag-bullish { background: #d4edda; color: #155724; }
+    .tag-bearish { background: #f8d7da; color: #721c24; }
+    .tag-neutral { background: #fff3cd; color: #856404; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -493,7 +538,7 @@ tab_names = [
     "🔍 历史对照（主动拉取）",
     "📊 跨品种对比",
     "🗺️ 稳态地图",
-    "📝 研究笔记",
+    "📝 复盘日志",
 ]
 tabs = st.tabs(tab_names)
 
@@ -519,40 +564,42 @@ with tabs[0]:
         if breaking:
             st.markdown("**🔴 正在破缺**")
             for s in breaking[:3]:
+                flux = f"{s.motion.conservation_flux:+.2f}" if s.motion else "—"
                 st.markdown(f"""
                 <div class="structure-card danger">
-                    <b>Zone {s.zone.price_center:.0f}</b> (±{s.zone.bandwidth:.0f})
-                    · {s.cycle_count}次试探
+                    <span class="zone-label">Zone {s.zone.price_center:.0f}</span>
+                    <span class="meta-text">(±{s.zone.bandwidth:.0f}) · {s.cycle_count}次试探</span>
                     · {motion_badge(s.motion.phase_tendency)}
-                    · 通量 {s.motion.conservation_flux:+.2f}
-                    <br><small>{s.narrative_context}</small>
+                    · <span class="meta-text">通量 {flux}</span>
+                    <div class="narrative-text">{s.narrative_context or ''}</div>
                 </div>
                 """, unsafe_allow_html=True)
 
         if confirming:
             st.markdown("**🟢 趋向确认**")
             for s in confirming[:3]:
+                flux = f"{s.motion.conservation_flux:+.2f}" if s.motion else "—"
                 st.markdown(f"""
                 <div class="structure-card ok">
-                    <b>Zone {s.zone.price_center:.0f}</b> (±{s.zone.bandwidth:.0f})
-                    · {s.cycle_count}次试探
+                    <span class="zone-label">Zone {s.zone.price_center:.0f}</span>
+                    <span class="meta-text">(±{s.zone.bandwidth:.0f}) · {s.cycle_count}次试探</span>
                     · {motion_badge(s.motion.phase_tendency)}
-                    · 通量 {s.motion.conservation_flux:+.2f}
-                    <br><small>{s.narrative_context}</small>
+                    · <span class="meta-text">通量 {flux}</span>
+                    <div class="narrative-text">{s.narrative_context or ''}</div>
                 </div>
                 """, unsafe_allow_html=True)
 
         if forming:
             st.markdown("**🔵 形成中**")
             for s in forming[:5]:
-                proj_warn = "⚠️ 高压缩" if (s.projection and s.projection.is_blind) else ""
+                proj_warn = " · ⚠️ 高压缩" if (s.projection and s.projection.is_blind) else ""
+                tendency = s.motion.phase_tendency if s.motion else 'unknown'
                 st.markdown(f"""
                 <div class="structure-card">
-                    <b>Zone {s.zone.price_center:.0f}</b> (±{s.zone.bandwidth:.0f})
-                    · {s.cycle_count}次试探
-                    · {motion_badge(s.motion.phase_tendency if s.motion else 'unknown')}
-                    {f'· {proj_warn}' if proj_warn else ''}
-                    <br><small>{s.narrative_context}</small>
+                    <span class="zone-label">Zone {s.zone.price_center:.0f}</span>
+                    <span class="meta-text">(±{s.zone.bandwidth:.0f}) · {s.cycle_count}次试探</span>
+                    · {motion_badge(tendency)}{proj_warn}
+                    <div class="narrative-text">{s.narrative_context or ''}</div>
                 </div>
                 """, unsafe_allow_html=True)
 
@@ -951,33 +998,237 @@ with tabs[3]:
 
 
 # ═══════════════════════════════════════════════════════════
-# Tab 5: 研究笔记
+# Tab 5: 复盘日志
 # ═══════════════════════════════════════════════════════════
 
 with tabs[4]:
-    st.markdown("#### 📝 研究笔记")
-    st.caption("记录你的观察和想法")
+    st.markdown("#### 📝 复盘日志")
+    st.caption("结构化记录 · 自动保存到本地 · 可回溯查看")
 
     log_dir = Path("data/logs")
     log_dir.mkdir(parents=True, exist_ok=True)
+    journal_file = log_dir / "journal.jsonl"
     today = datetime.now().strftime("%Y-%m-%d")
-    log_file = log_dir / f"{today}.md"
+    md_file = log_dir / f"{today}.md"
 
-    # 自动上下文
-    if recent_structures:
-        context = f"## 编译上下文 {datetime.now():%Y-%m-%d %H:%M}\n"
-        context += f"- 品种: {selected_symbol} ({ds_name})\n"
-        context += f"- 数据: {bars[0].timestamp:%Y-%m-%d} → {bars[-1].timestamp:%Y-%m-%d}\n"
-        context += f"- 结构: {len(recent_structures)} 个\n"
-        for s in recent_structures[:5]:
-            context += f"  - Zone {s.zone.price_center:.0f}: {s.narrative_context or '?'}\n"
-        if compare_codes:
-            context += f"- 对比品种: {', '.join(compare_codes)}\n"
-        st.code(context, language="markdown")
+    # ── 子 Tab：写日志 / 历史回顾 ──
+    sub_tab_write, sub_tab_history = st.tabs(["✏️ 写日志", "📚 历史回顾"])
 
-    existing = log_file.read_text() if log_file.exists() else ""
-    notes = st.text_area("今日笔记", value=existing, height=200,
-                         placeholder="记录你的观察、想法、疑问...")
-    if st.button("💾 保存"):
-        log_file.write_text(notes)
-        st.success(f"已保存到 {log_file}")
+    # ════════════════════════════════════════════════════════
+    # 写日志
+    # ════════════════════════════════════════════════════════
+    with sub_tab_write:
+        st.markdown("**新建一条复盘记录**")
+
+        # 自动填充当前结构上下文
+        auto_context = ""
+        if recent_structures:
+            auto_context = f"[{selected_symbol}] {len(recent_structures)}个结构活跃: "
+            auto_context += ", ".join(
+                f"Zone {s.zone.price_center:.0f}({s.motion.phase_tendency if s.motion else '?'})"
+                for s in recent_structures[:3]
+            )
+
+        col_a, col_b = st.columns([1, 1])
+        with col_a:
+            entry_type = st.selectbox(
+                "记录类型",
+                ["结构观察", "交易想法", "复盘总结", "疑问待解", "其他"],
+                index=0,
+            )
+        with col_b:
+            sentiment = st.selectbox(
+                "倾向判断",
+                ["偏多 📈", "偏空 📉", "中性 ➡️", "不确定 ❓"],
+                index=2,
+            )
+
+        # 关联结构（可选）
+        if recent_structures:
+            zone_options = ["不关联"] + [
+                f"Zone {s.zone.price_center:.0f} ({s.cycle_count}次试探)"
+                for s in recent_structures
+            ]
+            linked_zone = st.selectbox("关联结构", zone_options, index=0)
+        else:
+            linked_zone = "不关联"
+
+        # 正文
+        content = st.text_area(
+            "日志内容",
+            value="",
+            height=180,
+            placeholder=f"记录你的观察、判断、理由...\n\n自动上下文：{auto_context}",
+        )
+
+        # 标签
+        tags_input = st.text_input("标签（逗号分隔）", placeholder="例如: 铜,关键区突破,需要验证")
+
+        col_save, col_info = st.columns([1, 2])
+        with col_save:
+            if st.button("💾 保存日志", type="primary", use_container_width=True):
+                if content.strip():
+                    import json as _json
+                    entry = {
+                        "timestamp": datetime.now().isoformat(),
+                        "date": today,
+                        "symbol": selected_symbol,
+                        "symbol_name": ds_name,
+                        "type": entry_type,
+                        "sentiment": sentiment,
+                        "linked_zone": linked_zone if linked_zone != "不关联" else "",
+                        "content": content.strip(),
+                        "tags": [t.strip() for t in tags_input.split(",") if t.strip()],
+                        "structures_snapshot": [
+                            {
+                                "zone": s.zone.price_center,
+                                "cycles": s.cycle_count,
+                                "tendency": s.motion.phase_tendency if s.motion else "",
+                                "flux": round(s.motion.conservation_flux, 2) if s.motion else 0,
+                            }
+                            for s in recent_structures[:5]
+                        ],
+                    }
+                    with open(journal_file, "a", encoding="utf-8") as f:
+                        f.write(_json.dumps(entry, ensure_ascii=False) + "\n")
+                    st.success(f"✅ 已保存 · {entry_type} · {selected_symbol} · {today}")
+                else:
+                    st.warning("请输入日志内容")
+
+        with col_info:
+            st.caption(f"保存位置: `{journal_file}`")
+            st.caption("JSONL 格式，每行一条记录，可用 Python/pandas 直接读取分析")
+
+        # 今日自动上下文预览
+        if recent_structures:
+            with st.expander("📋 当前编译上下文（自动记录）"):
+                ctx = f"品种: {selected_symbol} ({ds_name})\n"
+                ctx += f"数据: {bars[0].timestamp:%Y-%m-%d} → {bars[-1].timestamp:%Y-%m-%d}\n"
+                ctx += f"结构: {len(recent_structures)} 个\n"
+                for s in recent_structures[:5]:
+                    m = s.motion
+                    ctx += f"  Zone {s.zone.price_center:.0f}: {s.narrative_context or '?'}"
+                    if m:
+                        ctx += f" [{m.phase_tendency}, 通量{m.conservation_flux:+.2f}]"
+                    ctx += "\n"
+                st.code(ctx, language="text")
+
+    # ════════════════════════════════════════════════════════
+    # 历史回顾
+    # ════════════════════════════════════════════════════════
+    with sub_tab_history:
+        st.markdown("**浏览历史复盘记录**")
+
+        if not journal_file.exists():
+            st.info("暂无复盘记录，在「写日志」标签页开始记录")
+        else:
+            import json as _json
+            entries = []
+            with open(journal_file, "r", encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if line:
+                        try:
+                            entries.append(_json.loads(line))
+                        except _json.JSONDecodeError:
+                            continue
+
+            if not entries:
+                st.info("暂无复盘记录")
+            else:
+                # 过滤器
+                col_f1, col_f2, col_f3 = st.columns(3)
+                with col_f1:
+                    filter_symbols = list(set(e.get("symbol", "") for e in entries))
+                    filter_sym = st.selectbox("品种筛选", ["全部"] + sorted(filter_symbols))
+                with col_f2:
+                    filter_types = list(set(e.get("type", "") for e in entries))
+                    filter_type = st.selectbox("类型筛选", ["全部"] + sorted(filter_types))
+                with col_f3:
+                    filter_dates = sorted(set(e.get("date", "") for e in entries), reverse=True)
+                    filter_date = st.selectbox("日期筛选", ["全部"] + filter_dates)
+
+                # 应用过滤
+                filtered = entries
+                if filter_sym != "全部":
+                    filtered = [e for e in filtered if e.get("symbol") == filter_sym]
+                if filter_type != "全部":
+                    filtered = [e for e in filtered if e.get("type") == filter_type]
+                if filter_date != "全部":
+                    filtered = [e for e in filtered if e.get("date") == filter_date]
+
+                # 倒序展示（最新在前）
+                filtered = list(reversed(filtered))
+
+                st.caption(f"共 {len(filtered)} 条记录")
+
+                for entry in filtered[:20]:
+                    ts = entry.get("timestamp", "")
+                    try:
+                        dt = datetime.fromisoformat(ts)
+                        time_str = dt.strftime("%m-%d %H:%M")
+                    except Exception:
+                        time_str = ts[:16]
+
+                    sym = entry.get("symbol", "")
+                    sym_name = entry.get("symbol_name", "")
+                    etype = entry.get("type", "")
+                    sentiment = entry.get("sentiment", "")
+                    zone = entry.get("linked_zone", "")
+                    content = entry.get("content", "")
+                    tags = entry.get("tags", [])
+
+                    # 情绪标签颜色
+                    if "偏多" in sentiment:
+                        tag_cls = "tag-bullish"
+                    elif "偏空" in sentiment:
+                        tag_cls = "tag-bearish"
+                    else:
+                        tag_cls = "tag-neutral"
+
+                    header_parts = [f"🕐 {time_str}", f"**{sym}** ({sym_name})", etype]
+                    if zone:
+                        header_parts.append(f"🔗 {zone}")
+                    header = " · ".join(header_parts)
+
+                    with st.expander(f"{time_str} | {sym} | {etype} | {sentiment}", expanded=False):
+                        st.markdown(f"""
+                        <div class="journal-entry">
+                            <div class="entry-header">{header}</div>
+                            <div class="entry-body">{content}</div>
+                        </div>
+                        """, unsafe_allow_html=True)
+                        if tags:
+                            tags_html = " ".join(
+                                f'<span class="journal-tag {tag_cls}">{t}</span>' for t in tags
+                            )
+                            st.markdown(tags_html, unsafe_allow_html=True)
+                        # 关联的结构快照
+                        snapshot = entry.get("structures_snapshot", [])
+                        if snapshot:
+                            snap_text = "当时结构: " + ", ".join(
+                                f"Zone {s['zone']:.0f}({s['tendency']}, 通量{s['flux']:+.2f})"
+                                for s in snapshot
+                            )
+                            st.caption(snap_text)
+
+                # 导出
+                st.markdown("---")
+                col_export1, col_export2 = st.columns(2)
+                with col_export1:
+                    if st.button("📥 导出为 Markdown"):
+                        md_lines = [f"# 复盘日志导出 {today}\n"]
+                        for e in filtered:
+                            md_lines.append(f"## {e.get('date', '')} {e.get('symbol', '')} {e.get('type', '')}")
+                            md_lines.append(f"倾向: {e.get('sentiment', '')}")
+                            if e.get("linked_zone"):
+                                md_lines.append(f"关联: {e['linked_zone']}")
+                            md_lines.append(f"\n{e.get('content', '')}\n")
+                            if e.get("tags"):
+                                md_lines.append(f"标签: {', '.join(e['tags'])}")
+                            md_lines.append("---\n")
+                        export_path = log_dir / f"export_{today}.md"
+                        export_path.write_text("\n".join(md_lines), encoding="utf-8")
+                        st.success(f"已导出到 {export_path}")
+                with col_export2:
+                    st.caption(f"数据文件: `{journal_file}`")
