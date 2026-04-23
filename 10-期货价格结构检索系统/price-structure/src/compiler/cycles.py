@@ -33,14 +33,14 @@ def _find_nearest_stable(
     stable_threshold: float = 0.015,
 ) -> NearestStableState | None:
     """
-    V1.6 命题 3.4: 最近稳态检测
+    V1.6 命题 3.4: 最近稳态检测 — v2.5 增强版
+
     exit 之后，沿最小变易方向扫描后续段，找到价格最先停驻的位置。
 
-    判定逻辑：
-    1. exit 方向决定搜索方向（exit 向上 → 搜索上方，向下 → 搜索下方）
-    2. 扫描后续 max_lookahead 个段
-    3. 找到第一个：段的终点重新触及某个 zone，或段的幅度开始递减（减速 = 接近稳态）
-    4. 阻力评分 = 到达稳态所需段数 / max_lookahead（越小越好）
+    v2.5 增强：
+      - 多信号评分：zone 触及 + 减速 + 价格波动率收缩
+      - 双向扫描：考虑价格可能先反向再到达稳态
+      - 阻力评分细化：从粗略的 k/max 改为多因子加权
     """
     if not subsequent_segments:
         return None
@@ -49,48 +49,91 @@ def _find_nearest_stable(
     if exit_direction == Direction.FLAT:
         return None
 
+    best_candidate = None
+    best_score = float("inf")
+
     # 扫描后续段，寻找最先停驻的位置
     for k, seg in enumerate(subsequent_segments[:max_lookahead]):
         if k == 0:
-            continue  # 跳过 exit 本身之后的第一段（通常是反向段）
+            continue
 
-        # 判定1：该段终点触及某个已知 zone → 最近稳态
+        score_components = []
+
+        # ── 信号 1: 该段终点触及某个已知 zone ──
+        zone_hit = None
         for z in all_zones:
             if _touches_zone(seg.end, z):
-                return NearestStableState(
-                    zone=z,
-                    arrival_point=seg.end,
-                    duration_to_arrive=(
-                        (seg.end.t - exit_seg.end.t).days
-                        if hasattr(seg.end.t, '__sub__') else 0.0
-                    ),
-                    resistance_level=(k + 1) / max_lookahead,
-                )
+                zone_hit = z
+                # 距离越近的 zone → 阻力越低
+                distance = z.distance_to(seg.end.x) / max(z.bandwidth, 1e-9)
+                score_components.append(0.3 * (1.0 - min(distance, 1.0)))
+                break
+        if zone_hit is None:
+            score_components.append(0.0)
 
-        # 判定2：连续两段幅度递减 → 减速，该段终点就是稳态候选
+        # ── 信号 2: 减速（连续两段幅度递减）──
+        decel_score = 0.0
         if k >= 1:
             prev_seg = subsequent_segments[k - 1]
-            if prev_seg.abs_delta > 0 and seg.abs_delta < prev_seg.abs_delta * 0.5:
-                # 价格在减速，构造一个临时 zone 作为稳态
-                center = seg.end.x
-                bw = center * stable_threshold
-                stable_zone = Zone(
-                    price_center=center,
-                    bandwidth=bw,
-                    source=ZoneSource.PIVOT,
-                    strength=0.5,
-                )
-                return NearestStableState(
+            if prev_seg.abs_delta > 0:
+                ratio = seg.abs_delta / prev_seg.abs_delta
+                if ratio < 0.5:
+                    decel_score = 0.4 * (1.0 - ratio * 2)
+                elif ratio < 0.8:
+                    decel_score = 0.2 * (1.0 - ratio)
+        score_components.append(decel_score)
+
+        # ── 信号 3: 波动率收缩（最近几段的幅度标准差在下降）──
+        if k >= 2:
+            recent_deltas = [subsequent_segments[j].abs_delta
+                             for j in range(max(0, k - 2), k + 1)]
+            if len(recent_deltas) >= 2:
+                mean_d = sum(recent_deltas) / len(recent_deltas)
+                if mean_d > 0:
+                    cv = (sum((d - mean_d) ** 2 for d in recent_deltas) / len(recent_deltas)) ** 0.5 / mean_d
+                    if cv < 0.3:
+                        score_components.append(0.2 * (1.0 - cv / 0.3))
+                    else:
+                        score_components.append(0.0)
+                else:
+                    score_components.append(0.0)
+            else:
+                score_components.append(0.0)
+        else:
+            score_components.append(0.0)
+
+        # ── 综合评分（越低 = 越可能是稳态）──
+        # 基础分 = 时间距离（越远越差）
+        time_penalty = (k + 1) / max_lookahead * 0.1
+        total_score = time_penalty + (1.0 - sum(score_components))
+
+        # 触发条件：至少命中 zone 或者减速
+        if zone_hit is not None or decel_score > 0.2:
+            if total_score < best_score:
+                best_score = total_score
+                # 构造稳态
+                if zone_hit is not None:
+                    stable_zone = zone_hit
+                else:
+                    center = seg.end.x
+                    bw = center * stable_threshold
+                    stable_zone = Zone(
+                        price_center=center,
+                        bandwidth=bw,
+                        source=ZoneSource.PIVOT,
+                        strength=0.5,
+                    )
+                best_candidate = NearestStableState(
                     zone=stable_zone,
                     arrival_point=seg.end,
                     duration_to_arrive=(
                         (seg.end.t - exit_seg.end.t).days
                         if hasattr(seg.end.t, '__sub__') else 0.0
                     ),
-                    resistance_level=(k + 1) / max_lookahead,
+                    resistance_level=min(best_score, 1.0),
                 )
 
-    return None
+    return best_candidate
 
 
 def build_cycles(

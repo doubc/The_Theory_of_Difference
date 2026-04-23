@@ -48,6 +48,9 @@ class CompilerConfig:
     # ── V1.6 P1 新增 ──
     volume_weighted: bool = False   # 是否启用成交量加权极值提取 (D6.3)
     volume_boost: float = 0.3       # 成交量加权系数
+    # ── v2.5 新增 ──
+    adaptive_pivots: bool = True    # 自适应极值窗口
+    fractal_threshold: float = 0.34 # 分形一致性阈值
 
 
 # ─── 编译结果 ──────────────────────────────────────────────
@@ -103,6 +106,8 @@ def compile_full(bars: list[Bar], config: CompilerConfig | None = None, symbol: 
         use_log=config.use_log_price,
         volume_weighted=config.volume_weighted,
         volume_boost=config.volume_boost,
+        adaptive=config.adaptive_pivots,
+        fractal_threshold=config.fractal_threshold,
     )
 
     # 3.2 段生成 + 微段合并

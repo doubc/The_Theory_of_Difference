@@ -14,7 +14,7 @@ from __future__ import annotations
 import math
 from dataclasses import dataclass
 
-from src.models import Structure
+from src.models import Structure, Cycle
 
 
 @dataclass
@@ -240,3 +240,159 @@ def similarity(
         total=total, geometric=g, relational=r, motion=m, family=f,
         matched_invariants=matched,
     )
+
+
+# ═══ v2.5 新增: DTW 时间序列相似度 ═══════════════════════════
+
+def _dtw_distance(seq1: list[float], seq2: list[float], window: int | None = None) -> float:
+    """
+    Dynamic Time Warping 距离 — v2.5 核心新增
+
+    两个价格序列之间的最优对齐距离。
+    允许时间轴非线性拉伸/压缩，捕捉"形状相似但时间错位"的结构。
+
+    Args:
+        seq1, seq2: 归一化价格序列（建议先做 min-max 归一化）
+        window: Sakoe-Chiba 带宽约束（None = 无约束）
+
+    Returns:
+        DTW 距离（越小越相似）
+    """
+    n, m = len(seq1), len(seq2)
+    if n == 0 or m == 0:
+        return float("inf")
+
+    # 带宽约束
+    if window is None:
+        window = max(n, m)
+    window = max(window, abs(n - m))
+
+    # 初始化 DP 矩阵（只保留带宽内的值）
+    INF = float("inf")
+    dtw = [[INF] * (m + 1) for _ in range(n + 1)]
+    dtw[0][0] = 0.0
+
+    for i in range(1, n + 1):
+        j_lo = max(1, i - window)
+        j_hi = min(m, i + window)
+        for j in range(j_lo, j_hi + 1):
+            cost = (seq1[i - 1] - seq2[j - 1]) ** 2
+            dtw[i][j] = cost + min(dtw[i - 1][j], dtw[i][j - 1], dtw[i - 1][j - 1])
+
+    return math.sqrt(dtw[n][m])
+
+
+def _normalize_series(values: list[float]) -> list[float]:
+    """Min-max 归一化到 [0, 1]"""
+    if not values:
+        return []
+    lo, hi = min(values), max(values)
+    if hi - lo < 1e-12:
+        return [0.5] * len(values)
+    return [(v - lo) / (hi - lo) for v in values]
+
+
+def _series_from_structure(s: Structure) -> list[float]:
+    """
+    从结构中提取用于 DTW 的特征序列。
+
+    使用 Cycle 级别的速度比序列作为结构的"指纹"：
+    - 有 Cycle → [speed_ratio_1, speed_ratio_2, ...]
+    - 无 Cycle → 退化为不变量向量
+    """
+    if s.cycles:
+        return [c.speed_ratio for c in s.cycles]
+    # 退化：用不变量向量
+    return _normalized_vector(s.invariants)
+
+
+def dtw_similarity(s1: Structure, s2: Structure) -> float:
+    """
+    v2.5: 基于 DTW 的时间序列结构相似度。
+
+    核心思想：两个结构的 Cycle 速度比序列越"形状相似"，
+    即使时间轴拉伸/压缩，它们的后验行为也越接近。
+
+    返回 [0, 1]，1 = 完全相同，0 = 完全不同。
+    """
+    seq1 = _series_from_structure(s1)
+    seq2 = _series_from_structure(s2)
+
+    if not seq1 or not seq2:
+        return 0.0
+
+    # 归一化
+    n1 = _normalize_series(seq1)
+    n2 = _normalize_series(seq2)
+
+    # DTW 距离
+    dist = _dtw_distance(n1, n2, window=max(len(n1), len(n2)) // 2)
+
+    # 转换为相似度 [0, 1]
+    # 典型 DTW 距离在 [0, sqrt(n)] 范围，用 sigmoid 压缩
+    max_len = max(len(n1), len(n2))
+    if max_len == 0:
+        return 0.0
+    normalized_dist = dist / math.sqrt(max_len)
+    return 1.0 / (1.0 + normalized_dist)
+
+
+def segment_shape_similarity(s1: Structure, s2: Structure) -> float:
+    """
+    v2.5: 段级形状相似度 — 比较两个结构的段序列形状。
+
+    不只比较不变量，而是直接比较段的 (方向, 相对幅度, 相对时长) 序列。
+    用编辑距离 (Levenshtein) 度量序列差异。
+    """
+    if not s1.cycles or not s2.cycles:
+        return 0.0
+
+    def _seg_signature(cycle: Cycle) -> str:
+        """将 Cycle 编码为离散符号"""
+        # 速度比分桶
+        sr = cycle.speed_ratio
+        if sr > 1.5:
+            sr_bin = "F"  # Fast
+        elif sr > 0.8:
+            sr_bin = "M"  # Medium
+        else:
+            sr_bin = "S"  # Slow
+
+        # 时间比分桶
+        tr = cycle.time_ratio
+        if tr > 1.5:
+            tr_bin = "L"  # Long entry
+        elif tr > 0.8:
+            tr_bin = "E"  # Equal
+        else:
+            tr_bin = "S"  # Short entry
+
+        # 方向
+        d = "U" if cycle.entry.direction.value > 0 else "D"
+
+        return f"{d}{sr_bin}{tr_bin}"
+
+    seq1 = [_seg_signature(c) for c in s1.cycles]
+    seq2 = [_seg_signature(c) for c in s2.cycles]
+
+    # 编辑距离
+    n, m = len(seq1), len(seq2)
+    dp = [[0] * (m + 1) for _ in range(n + 1)]
+    for i in range(n + 1):
+        dp[i][0] = i
+    for j in range(m + 1):
+        dp[0][j] = j
+
+    for i in range(1, n + 1):
+        for j in range(1, m + 1):
+            cost = 0 if seq1[i - 1] == seq2[j - 1] else 1
+            dp[i][j] = min(
+                dp[i - 1][j] + 1,
+                dp[i][j - 1] + 1,
+                dp[i - 1][j - 1] + cost,
+            )
+
+    max_len = max(n, m)
+    if max_len == 0:
+        return 1.0
+    return 1.0 - dp[n][m] / max_len

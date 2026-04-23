@@ -159,9 +159,16 @@ def structure_invariants(s: Structure) -> dict:
 
 def infer_narrative_context(s: Structure) -> str:
     """
-    V1.6 命题 2.3: 可叙事性
-    基于结构的反差类型、阶段、速度特征生成人可读的叙事背景。
+    V1.6 命题 2.3: 可叙事性 — v2.5 增强版
+
+    基于结构的反差类型、阶段、速度特征、运动态、守恒状态，
+    生成人可读的多维度叙事背景。
+
+    v2.5: 增加运动态描述、守恒通量描述、稳定性描述。
     """
+    parts = []
+
+    # ── 维度 1: 反差类型 ──
     contrast = s.zone.context_contrast
     contrast_map = {
         ContrastType.PANIC: "恐慌性结构",
@@ -172,25 +179,57 @@ def infer_narrative_context(s: Structure) -> str:
         ContrastType.UNKNOWN: "",
     }
     base = contrast_map.get(contrast, "")
+    if base:
+        parts.append(base)
 
-    # 速度特征
+    # ── 维度 2: 速度特征 ──
     if s.avg_speed_ratio > 1.5:
-        speed_desc = "急跌/急涨型"
+        parts.append("急跌/急涨型")
     elif s.avg_speed_ratio < 0.67:
-        speed_desc = "慢跌/慢涨型"
+        parts.append("慢跌/慢涨型")
     else:
-        speed_desc = "均衡型"
+        parts.append("均衡型")
 
-    # 试探次数
+    # ── 维度 3: 试探次数 + 密集度 ──
     n = s.cycle_count
-    if n >= 4:
-        freq_desc = f"{n}次密集试探"
+    if n >= 5:
+        parts.append(f"{n}次密集试探")
+    elif n >= 3:
+        parts.append(f"{n}次试探")
     elif n >= 2:
-        freq_desc = f"{n}次试探"
-    else:
-        freq_desc = ""
+        parts.append(f"{n}次试探")
 
-    parts = [p for p in [base, speed_desc, freq_desc] if p]
+    # ── 维度 4: 运动态 (v2.5 新增) ──
+    if s.motion:
+        if s.motion.phase_tendency:
+            tendency_map = {
+                "→breakdown": "趋向破坏",
+                "→confirmation": "趋向确认",
+                "→inversion": "趋向反演",
+                "stable": "稳态运行",
+                "forming": "形成中",
+            }
+            desc = tendency_map.get(s.motion.phase_tendency, "")
+            if desc:
+                parts.append(desc)
+
+        if abs(s.motion.conservation_flux) > 0.3:
+            if s.motion.conservation_flux > 0:
+                parts.append("差异释放中")
+            else:
+                parts.append("差异压缩中")
+
+    # ── 维度 5: 稳定性状态 (v2.5 新增) ──
+    if s.stability_verdict:
+        if s.stability_verdict.surface == "stable" and not s.stability_verdict.verified:
+            parts.append("表面稳定待验证")
+        elif s.stability_verdict.surface == "unstable":
+            parts.append("不稳定")
+
+    # ── 维度 6: 投影觉知 (v2.5 新增) ──
+    if s.projection and s.projection.is_blind:
+        parts.append("⚠️高压缩")
+
     return " · ".join(parts) if parts else "未分类结构"
 
 
@@ -199,53 +238,143 @@ def check_conservation(
     bars: list | None = None,
 ) -> dict:
     """
-    V1.6 命题 4.1-4.2: 差异守恒检查骨架
-    当检测到日线级别波动率下降时，检查差异是否转移到其他维度。
+    V1.6 命题 4.1-4.2: 差异守恒检查 — v2.5 增强版
 
-    返回守恒状态报告。
-    此函数为骨架，完整实现需要 volume / OI / 低频数据。
+    核心命题：差异不能被无代价清零，只能沿低阻通道转移。
+
+    v2.5 增强：
+      - 五通道检查（速度比、带宽、时间压缩、振幅衰减、试探密度）
+      - 守恒通量量化（不只是 bool，给出 [-1, 1] 的通量值）
+      - 差异转移路径推断
     """
     result = {
         "conservation_violated": False,
         "transfer_channels": [],
         "notes": [],
+        "flux_score": 0.0,  # v2.5: 守恒通量 [-1, 1]
+        "channel_scores": {},  # v2.5: 每个通道的异常评分
     }
 
     if not s.cycles:
         return result
 
-    # 检查1：速度比是否在收窄（差异被压缩）
+    n = len(s.cycles)
     speed_ratios = [c.speed_ratio for c in s.cycles]
-    if len(speed_ratios) >= 3:
-        first_half = speed_ratios[: len(speed_ratios) // 2]
-        second_half = speed_ratios[len(speed_ratios) // 2:]
+    time_ratios = [c.time_ratio for c in s.cycles]
+
+    flux_signals = []  # 收集所有守恒信号
+
+    # ── 通道 1: 速度比压缩/扩张 ──
+    if n >= 3:
+        first_half = speed_ratios[: n // 2]
+        second_half = speed_ratios[n // 2:]
         avg_first = sum(first_half) / len(first_half)
         avg_second = sum(second_half) / len(second_half)
 
-        if abs(avg_second - avg_first) / max(avg_first, 0.01) > 0.3:
+        sr_change = (avg_second - avg_first) / max(avg_first, 0.01)
+        result["channel_scores"]["speed_ratio"] = sr_change
+        flux_signals.append(sr_change)
+
+        if abs(sr_change) > 0.3:
+            direction = "扩张" if sr_change > 0 else "收窄"
             result["notes"].append(
-                f"速度比变化显著: {avg_first:.2f} → {avg_second:.2f}，"
+                f"速度比{direction}: {avg_first:.2f} → {avg_second:.2f}，"
                 f"差异可能在转移"
             )
+            if sr_change < -0.3:
+                result["transfer_channels"].append("shorter_timeframe")
 
-    # 检查2：zone 带宽是否在压缩（波动率被压平）
-    if s.zone.relative_bandwidth < 0.01:
+    # ── 通道 2: Zone 带宽压缩 ──
+    bw = s.zone.relative_bandwidth
+    if bw < 0.01:
+        result["channel_scores"]["zone_bandwidth"] = -1.0
+        flux_signals.append(-0.5)
         result["notes"].append(
-            f"Zone 相对带宽极窄 ({s.zone.relative_bandwidth:.4f})，"
+            f"Zone 相对带宽极窄 ({bw:.4f})，"
             f"差异可能被转移到更短周期或成交量维度"
         )
         result["transfer_channels"].append("shorter_timeframe")
         result["transfer_channels"].append("volume")
+    elif bw < 0.02:
+        result["channel_scores"]["zone_bandwidth"] = -0.3
+        flux_signals.append(-0.2)
+    else:
+        result["channel_scores"]["zone_bandwidth"] = 0.0
 
-    # 检查3：最近稳态阻力评分是否异常低（容易到达 → 可能是假稳态）
-    stable_cycles = [c for c in s.cycles if c.has_stable_state]
-    if stable_cycles:
-        avg_res = sum(c.next_stable.resistance_level for c in stable_cycles) / len(stable_cycles)
-        if avg_res < 0.2:
-            result["notes"].append(
-                f"最近稳态阻力评分异常低 ({avg_res:.2f})，"
-                f"可能是表面稳态，差异正在隐性积累"
-            )
+    # ── 通道 3: 时间压缩 (v2.5 新增) ──
+    entry_durs = [c.entry.duration for c in s.cycles if c.entry.duration > 0]
+    exit_durs = [c.exit.duration for c in s.cycles if c.exit.duration > 0]
+    if entry_durs and exit_durs:
+        avg_entry = sum(entry_durs) / len(entry_durs)
+        avg_exit = sum(exit_durs) / len(exit_durs)
+        if avg_exit > 0:
+            time_comp = avg_entry / avg_exit
+            result["channel_scores"]["time_compression"] = time_comp
+
+            if time_comp > 2.0:
+                flux_signals.append(-0.4)
+                result["notes"].append(
+                    f"时间压缩显著 (入场{avg_entry:.1f}天/出场{avg_exit:.1f}天)，"
+                    f"差异可能在加速释放"
+                )
+                result["transfer_channels"].append("accelerated_exit")
+            elif time_comp < 0.5:
+                flux_signals.append(0.3)
+                result["notes"].append(
+                    f"时间膨胀 (入场{avg_entry:.1f}天/出场{avg_exit:.1f}天)，"
+                    f"差异在缓慢消化"
+                )
+
+    # ── 通道 4: 振幅衰减 (v2.5 新增) ──
+    if n >= 3:
+        recent_deltas = [c.exit.abs_delta for c in s.cycles[-3:]]
+        early_deltas = [c.exit.abs_delta for c in s.cycles[:3]]
+        if early_deltas and recent_deltas:
+            avg_early = sum(early_deltas) / len(early_deltas)
+            avg_recent = sum(recent_deltas) / len(recent_deltas)
+            if avg_early > 0:
+                amp_decay = avg_recent / avg_early
+                result["channel_scores"]["amplitude_decay"] = amp_decay
+
+                if amp_decay < 0.5:
+                    flux_signals.append(-0.3)
+                    result["notes"].append(
+                        f"振幅衰减显著 ({amp_decay:.2f})，"
+                        f"差异可能在向成交量或更短周期转移"
+                    )
+                    result["transfer_channels"].append("volume")
+
+    # ── 通道 5: 试探密度加速 (v2.5 新增) ──
+    if n >= 4 and s.t_start and s.t_end:
+        total_days = max((s.t_end - s.t_start).days, 1)
+        mid_point = s.t_start + (s.t_end - s.t_start) / 2
+        first_half_cycles = [c for c in s.cycles
+                             if c.entry.start.t <= mid_point]
+        second_half_cycles = [c for c in s.cycles
+                              if c.entry.start.t > mid_point]
+        if first_half_cycles and second_half_cycles:
+            first_span = max((mid_point - s.t_start).days, 1)
+            second_span = max((s.t_end - mid_point).days, 1)
+            density_first = len(first_half_cycles) / first_span
+            density_second = len(second_half_cycles) / second_span
+            if density_first > 0:
+                density_ratio = density_second / density_first
+                result["channel_scores"]["touch_density"] = density_ratio
+
+                if density_ratio > 1.5:
+                    flux_signals.append(-0.3)
+                    result["notes"].append(
+                        f"试探密度加速 ({density_ratio:.1f}x)，"
+                        f"差异在压缩，可能即将突破"
+                    )
+
+    # ── 综合守恒通量 ──
+    if flux_signals:
+        result["flux_score"] = sum(flux_signals) / len(flux_signals)
+        result["conservation_violated"] = abs(result["flux_score"]) > 0.3
+
+    # 去重转移通道
+    result["transfer_channels"] = list(set(result["transfer_channels"]))
 
     return result
 

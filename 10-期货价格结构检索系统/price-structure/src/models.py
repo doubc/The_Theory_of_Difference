@@ -731,6 +731,43 @@ def extrema_dispersion(points: list[Point]) -> float:
 
 
 def extrema_similarity(points1: list[Point], points2: list[Point]) -> float:
-    """极值点相似度（简化版，后续在 M7 完善）"""
-    # TODO: 实现 DTW 或其他相似度度量
-    return 0.0
+    """
+    极值点序列相似度 — v2.5 实现
+
+    用 DTW (Dynamic Time Warping) 比较两组极值点的价格序列形状。
+    允许时间轴非线性拉伸，捕捉"形状相似但时间错位"的结构。
+
+    返回 [0, 1]，1 = 完全相同，0 = 完全不同。
+    """
+    if not points1 or not points2:
+        return 0.0
+
+    # 提取归一化价格序列
+    def _normalize(pts: list[Point]) -> list[float]:
+        prices = [p.x for p in pts]
+        lo, hi = min(prices), max(prices)
+        if hi - lo < 1e-12:
+            return [0.5] * len(prices)
+        return [(p - lo) / (hi - lo) for p in prices]
+
+    seq1 = _normalize(points1)
+    seq2 = _normalize(points2)
+    n, m = len(seq1), len(seq2)
+
+    # DTW with Sakoe-Chiba band
+    window = max(n, m) // 2
+    INF = float("inf")
+    dtw = [[INF] * (m + 1) for _ in range(n + 1)]
+    dtw[0][0] = 0.0
+
+    for i in range(1, n + 1):
+        j_lo = max(1, i - window)
+        j_hi = min(m, i + window)
+        for j in range(j_lo, j_hi + 1):
+            cost = (seq1[i - 1] - seq2[j - 1]) ** 2
+            dtw[i][j] = cost + min(dtw[i - 1][j], dtw[i][j - 1], dtw[i - 1][j - 1])
+
+    dist = math.sqrt(dtw[n][m])
+    max_len = max(n, m)
+    normalized_dist = dist / math.sqrt(max_len)
+    return 1.0 / (1.0 + normalized_dist)
