@@ -653,8 +653,22 @@ with tabs[1]:
             search_years = st.slider("历史检索范围（年）", 1, 10, 3)
             top_k = st.slider("返回案例数", 3, 20, 8)
 
-        # ── 检索范围 ──
-        col_scope, col_btn = st.columns([2, 1])
+        # ── 检索颗粒度（独立于侧栏灵敏度）──
+        col_gran, col_scope, col_btn = st.columns([1, 2, 1])
+        with col_gran:
+            search_granularity = st.select_slider(
+                "检索颗粒度",
+                options=["粗粒度", "中等", "细粒度"],
+                value="细粒度",
+                help="粗粒度=只匹配大结构(高振幅/长周期)，细粒度=捕捉小波动结构",
+            )
+            search_sens_map = {
+                "粗粒度": {"min_amp": 0.06, "min_dur": 6, "min_cycles": 3},
+                "中等":   {"min_amp": 0.03, "min_dur": 3, "min_cycles": 2},
+                "细粒度": {"min_amp": 0.015, "min_dur": 2, "min_cycles": 2},
+            }
+            search_sens = search_sens_map[search_granularity]
+
         with col_scope:
             search_scope = st.radio(
                 "检索范围",
@@ -696,9 +710,9 @@ with tabs[1]:
                     continue
 
                 sym_config = CompilerConfig(
-                    min_amplitude=sens["min_amp"],
-                    min_duration=sens["min_dur"],
-                    min_cycles=sens["min_cycles"],
+                    min_amplitude=search_sens["min_amp"],
+                    min_duration=search_sens["min_dur"],
+                    min_cycles=search_sens["min_cycles"],
                     adaptive_pivots=True, fractal_threshold=0.34,
                 )
                 sym_result = compile_full(sym_bars, sym_config, symbol=sym)
@@ -756,7 +770,7 @@ with tabs[1]:
 
                 st.markdown("---")
                 scope_label = f"全品种 {len(search_symbols)} 个" if is_cross_symbol else selected_symbol
-                st.markdown(f"**找到 {len(top_cases)} 个历史相似案例**（检索范围: {scope_label}）")
+                st.markdown(f"**找到 {len(top_cases)} 个历史相似案例**（检索范围: {scope_label} · 颗粒度: {search_granularity}）")
 
                 # ── 品种来源分布 ──
                 if is_cross_symbol and len(sym_distribution) > 1:
