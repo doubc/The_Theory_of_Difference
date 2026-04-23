@@ -171,6 +171,51 @@ def make_candlestick(bars, title=""):
     return fig
 
 
+def _describe_outcome(fo: dict) -> str:
+    """
+    把 forward_outcome 数字转成自然语言描述。
+    "5日涨2.3%，10日跌1.1%" → "结构结束后先涨后跌，5日涨了约2%，10日跌了约1%"
+    """
+    if not fo:
+        return "无后续数据"
+
+    parts = []
+
+    ret5 = fo.get("ret_5d", 0) or 0
+    ret10 = fo.get("ret_10d", 0) or 0
+    ret20 = fo.get("ret_20d", 0) or 0
+    max_rise = fo.get("max_rise_20d", 0) or 0
+    max_dd = fo.get("max_dd_20d", 0) or 0
+
+    # 整体方向
+    if ret20 > 0.03:
+        parts.append("之后整体上涨")
+    elif ret20 < -0.03:
+        parts.append("之后整体下跌")
+    elif ret10 > 0.01:
+        parts.append("之后先涨后回落")
+    elif ret10 < -0.01:
+        parts.append("之后先跌后反弹")
+    else:
+        parts.append("之后横盘整理")
+
+    # 具体幅度
+    if abs(ret5) > 0.01:
+        direction = "涨" if ret5 > 0 else "跌"
+        parts.append(f"5日{direction}了约{abs(ret5):.0%}")
+    if abs(ret10) > 0.01:
+        direction = "涨" if ret10 > 0 else "跌"
+        parts.append(f"10日{direction}了约{abs(ret10):.0%}")
+
+    # 波动特征
+    if max_rise > 0.05:
+        parts.append(f"期间最高涨{max_rise:.0%}")
+    if max_dd < -0.05:
+        parts.append(f"期间最大回撤{abs(max_dd):.0%}")
+
+    return "，".join(parts) if parts else "变化不大"
+
+
 # ═══════════════════════════════════════════════════════════
 # 主页面：按人类问题组织
 # ═══════════════════════════════════════════════════════════
@@ -282,58 +327,65 @@ with tab2:
         idx = options.index(sel)
         query_st = recent_structures[idx]
 
-        # 显示选中结构的详情
-        col1, col2 = st.columns([1, 1])
-        with col1:
-            st.markdown("**选中的结构**")
-            m = query_st.motion
-            p = query_st.projection
-            st.markdown(f"""
-            - Zone: {query_st.zone.price_center:.0f} (±{query_st.zone.bandwidth:.0f})
-            - 试探次数: {query_st.cycle_count}
-            - 叙事: {query_st.narrative_context}
-            - 运动: {m.phase_tendency if m else '—'}
-            - 通量: {m.conservation_flux:+.2f if m else 0}
-            - 压缩度: {p.compression_level:.0% if p else '—'}
-            """)
+        # 选中结构的概要
+        m = query_st.motion
+        p = query_st.projection
+        st.markdown(f"""
+        **当前结构** · Zone {query_st.zone.price_center:.0f} (±{query_st.zone.bandwidth:.0f})
+        · {query_st.cycle_count}次试探 · {query_st.narrative_context or '?'}
+        · 运动: {m.phase_tendency if m else '—'} · 通量: {m.conservation_flux:+.2f if m else 0}
+        """)
 
-            # 投影觉知建议
-            if p and p.recommended_actions:
-                st.markdown("**系统建议:**")
+        # 投影觉知建议
+        if p and p.recommended_actions:
+            with st.expander("💡 系统建议"):
                 for action in p.recommended_actions:
                     st.markdown(f"  {action}")
 
-        with col2:
-            st.markdown("**这个品种历史上**")
-            st.caption("这个 Zone 附近，历史上类似结构之后发生了什么")
+        st.markdown("---")
 
-            # 在样本库中检索
-            sample_store = SampleStore("data/samples")
-            if sample_store.load_all():
-                engine = RetrievalEngine(sample_store)
-                result_retrieval = engine.retrieve(query_st, top_k=5)
+        # 在样本库中检索
+        sample_store = SampleStore("data/samples")
+        if sample_store.load_all():
+            engine = RetrievalEngine(sample_store)
+            result_retrieval = engine.retrieve(query_st, top_k=5)
 
-                if result_retrieval.neighbors:
-                    for i, n in enumerate(result_retrieval.neighbors):
-                        st.markdown(f"""
-                        **#{i+1}** 匹配度 {n.score.total:.0%}
-                        · {n.match_reason}
-                        """)
-                else:
-                    st.info("样本库中暂无匹配")
+            if result_retrieval.neighbors:
+                st.markdown("**历史上类似的情况：**")
 
-                # 后验统计
+                for i, n in enumerate(result_retrieval.neighbors):
+                    sp = n.sample
+                    fo = sp.forward_outcome or {}
+
+                    # 时间段
+                    period = f"{sp.t_start:%Y-%m-%d} ~ {sp.t_end:%Y-%m-%d}"
+
+                    # 自然语言描述发生了什么
+                    outcome_text = _describe_outcome(fo)
+
+                    # 匹配原因
+                    reason = n.match_reason or "综合相似"
+
+                    st.markdown(f"""
+                    **#{i+1}** · {period} · 匹配度 {n.score.total:.0%}
+                    · {reason}
+                    · 之后：{outcome_text}
+                    """)
+
+                # 后验统计（聚合）
                 post = result_retrieval.posterior
                 if post.sample_size > 0:
                     st.markdown("---")
-                    st.markdown("**后验统计** (匹配案例的后续表现)")
+                    st.markdown(f"**综合 {post.sample_size} 个相似案例：**")
                     c1, c2, c3 = st.columns(3)
-                    c1.metric("5日收益", f"{post.mean_ret_5d:+.2%}")
-                    c2.metric("10日收益", f"{post.mean_ret_10d:+.2%}")
-                    c3.metric("20日收益", f"{post.mean_ret_20d:+.2%}")
+                    c1.metric("5日平均", f"{post.mean_ret_5d:+.2%}")
+                    c2.metric("10日平均", f"{post.mean_ret_10d:+.2%}")
+                    c3.metric("20日平均", f"{post.mean_ret_20d:+.2%}")
                     st.metric("10日上涨概率", f"{post.prob_positive_10d:.0%}")
             else:
-                st.info("样本库为空，暂无历史匹配")
+                st.info("样本库中暂无匹配")
+        else:
+            st.info("样本库为空，暂无历史匹配")
 
         # 最近稳态
         stable_cycles = [c for c in query_st.cycles if c.has_stable_state]
