@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <float.h>
+#include <stdint.h>
 
 /* ═══════════════════════════════════════════════════════════
  * 1. 二分查找 — Bar 时间戳过滤
