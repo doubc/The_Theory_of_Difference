@@ -20,9 +20,10 @@ from datetime import datetime
 from src.data.loader import load_cu0
 from src.compiler.pipeline import compile_full, CompilerConfig
 from src.dsl.rule import load_rules, scan
-from src.sample.store import SampleStore, Sample, ForwardOutcome
-from src.sample.outcome import compute_forward_outcome
+from src.sample.store import SampleStore, Sample
 from src.retrieval.engine import RetrievalEngine
+from src.quality import assess_quality, stratify_structures
+from src.lifecycle import LifecycleTracker
 
 
 def run_daily(output_dir: str = "output"):
@@ -55,6 +56,17 @@ def run_daily(output_dir: str = "output"):
     matches = scan(result.structures, rules)
     print(f"      {len(matches)} 匹配")
 
+    # 3.5 质量分层
+    print("  [3.5] 质量分层...")
+    strat = stratify_structures(result.structures, result.system_states)
+    print(f"      {strat.summary()}")
+
+    # 3.6 生命周期记录
+    print("  [3.6] 生命周期记录...")
+    tracker = LifecycleTracker()
+    lc_records = tracker.record("CU000", result.structures, result.system_states, date_str=today)
+    print(f"      记录 {len(lc_records)} 个结构快照")
+
     # 4. 检索
     print("  [4] 相似检索...")
     store = SampleStore("data/samples/library.jsonl")
@@ -76,11 +88,15 @@ def run_daily(output_dir: str = "output"):
     ]
 
     for i, (m, ret) in enumerate(retrieval_results):
-        report_lines.append(f"## 候选 {i+1}: {m.rule.name}\n")
+        qa = assess_quality(m.structure)
+        report_lines.append(f"## 候选 {i+1}: {m.rule.name} [{qa.tier.value}层 {qa.score:.0%}]\n")
         report_lines.append(f"- Zone: {m.structure.zone.price_center:.0f} (±{m.structure.zone.bandwidth:.0f})")
         report_lines.append(f"- Cycles: {m.structure.cycle_count}")
         report_lines.append(f"- speed_r: {m.structure.avg_speed_ratio:.2f}, time_r: {m.structure.avg_time_ratio:.2f}")
-        report_lines.append(f"- typicality: {m.typicality:.2f}\n")
+        report_lines.append(f"- typicality: {m.typicality:.2f}")
+        if qa.flags:
+            report_lines.append(f"- 质量标记: {' · '.join(qa.flags[:3])}")
+        report_lines.append("")
 
         if ret.neighbors:
             p = ret.posterior

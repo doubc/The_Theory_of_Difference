@@ -244,6 +244,13 @@ def similarity(
 
 # ═══ v2.5 新增: DTW 时间序列相似度 ═══════════════════════════
 
+# 尝试加载 C 加速 DTW（自动 fallback 到 Python）
+try:
+    from src.fast import dtw_distance_fast as _dtw_distance_fast
+    _HAS_FAST_DTW = True
+except ImportError:
+    _HAS_FAST_DTW = False
+
 def _dtw_distance(seq1: list[float], seq2: list[float], window: int | None = None) -> float:
     """
     Dynamic Time Warping 距离 — v2.5 核心新增
@@ -329,8 +336,12 @@ def dtw_similarity(s1: Structure, s2: Structure) -> float:
     n1 = _normalize_series(seq1)
     n2 = _normalize_series(seq2)
 
-    # DTW 距离
-    dist = _dtw_distance(n1, n2, window=max(len(n1), len(n2)) // 2)
+    # DTW 距离（优先使用 C 加速版）
+    w = max(len(n1), len(n2)) // 2
+    if _HAS_FAST_DTW:
+        dist = _dtw_distance_fast(n1, n2, window=w)
+    else:
+        dist = _dtw_distance(n1, n2, window=w)
 
     # 转换为相似度 [0, 1]
     # 典型 DTW 距离在 [0, sqrt(n)] 范围，用 sigmoid 压缩

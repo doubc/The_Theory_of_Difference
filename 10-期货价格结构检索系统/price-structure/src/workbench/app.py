@@ -29,6 +29,7 @@ from src.data.symbol_meta import symbol_name, load_symbol_meta
 from src.data.sina_fetcher import fetch_bars as sina_fetch_bars, detect_source, available_contracts
 from src.compiler.pipeline import compile_full, CompilerConfig
 from src.retrieval.similarity import similarity, INVARIANT_KEYS, INVARIANT_SCALES
+from src.quality import assess_quality, QualityTier
 
 # ─── 页面配置 ──────────────────────────────────────────────
 
@@ -371,6 +372,10 @@ def motion_badge(tendency: str) -> str:
     return f'<span class="motion-badge {cls}">{tendency}</span>'
 
 
+TIER_COLORS = {"A": ("#1b5e20", "#c8e6c9"), "B": ("#0d47a1", "#bbdefb"),
+               "C": ("#e65100", "#ffe0b2"), "D": ("#b71c1c", "#ffcdd2")}
+
+
 def _extract_key(label: str) -> str:
     """从中文标签中提取英文 key，如 '📈 上涨(up)' → 'up'"""
     if "(" in label and ")" in label:
@@ -546,22 +551,14 @@ with tabs[0]:
             if not cr.ranked_structures:
                 continue
             last_price = bars_data[-1].close
-            for s in cr.ranked_structures[:3]:
+            for idx_s, s in enumerate(cr.ranked_structures[:3]):
                 m = s.motion
                 p = s.projection
-                # 关注度评分: 基于结构强度 + 运动态 + 通量
-                base = 30  # 基础分
-                base += min(s.cycle_count, 8) * 3
-                flux = abs(m.conservation_flux) if m else 0
-                base += min(flux * 10, 20)
-                if m and "breakdown" in m.phase_tendency:
-                    base += 15
-                elif m and "confirmation" in m.phase_tendency:
-                    base += 12
-                elif m and m.phase_tendency == "forming":
-                    base += 5
-                if p and p.is_blind:
-                    base += 10
+                # 关注度评分：使用 quality.py 五维度评估
+                ss = cr.system_states[idx_s] if idx_s < len(cr.system_states) else None
+                qa = assess_quality(s, ss)
+                score_100 = round(qa.score * 100, 1)  # quality 分是 [0,1]，转为百分制
+
                 # 方向判断
                 direction = "unclear"
                 if m and "breakdown" in m.phase_tendency:
@@ -569,7 +566,7 @@ with tabs[0]:
                 elif m and "confirmation" in m.phase_tendency:
                     direction = "up" if m.conservation_flux > 0 else "down"
 
-                # 研究建议（基于结构特征生成）
+                # 研究建议（基于质量评估 flags + 结构特征）
                 suggestions = []
                 if direction == "up":
                     suggestions.append(f"观察价格突破 Zone 上沿 {s.zone.price_center + s.zone.bandwidth:.0f} 后的放量情况")
@@ -581,12 +578,15 @@ with tabs[0]:
                     suggestions.append("处于破缺阶段，关注是否能稳住在新价位")
                 if p and p.is_blind:
                     suggestions.append("高压缩结构，突破后波动可能放大，注意节奏")
+                # 基于质量评估的补充建议
+                for rec in qa.recommendations[:2]:
+                    suggestions.append(f"📋 {rec}")
 
-                # 风控评级（基于关注度评分）
-                if base >= 75:
+                # 风控评级（基于质量分层）
+                if qa.tier == QualityTier.A:
                     risk_level = "高"
                     risk_pct = "5-8%"
-                elif base >= 55:
+                elif qa.tier == QualityTier.B:
                     risk_level = "中"
                     risk_pct = "3-5%"
                 else:
@@ -601,7 +601,8 @@ with tabs[0]:
                     "cycles": s.cycle_count,
                     "motion": m.phase_tendency if m else "—",
                     "flux": round(m.conservation_flux, 2) if m else 0,
-                    "score": round(base, 1),
+                    "score": score_100,
+                    "tier": qa.tier.value,
                     "direction": direction,
                     "is_blind": p.is_blind if p else False,
                     "contrast": s.zone.context_contrast.value if s.zone else "",
@@ -610,6 +611,7 @@ with tabs[0]:
                     "suggestions": suggestions,
                     "risk_level": risk_level,
                     "risk_pct": risk_pct,
+                    "quality_flags": qa.flags[:3],
                 })
         results.sort(key=lambda x: x["score"], reverse=True)
         return results
@@ -622,25 +624,58 @@ with tabs[0]:
     with scan_col3:
         with st.popover("ℹ️ 评分说明"):
             st.markdown("""
-            **关注度评分**（满分 100）由以下因素加权：
+            **质量评分**（满分 100）基于 `quality.py` 五维度评估：
 
-            | 因素 | 权重 | 说明 |
+            | 维度 | 权重 | 说明 |
             |---|---|---|
-            | 基础分 | 30 | 存在即得分 |
-            | 试探次数 | +3×N | cycle_count，上限 8 次 |
-            | 通量强度 | +min(|通量|×10, 20) | 守恒通量绝对值 |
-            | 破缺 | +15 | →breakdown 状态 |
-            | 确认 | +12 | →confirmation 状态 |
-            | 形成中 | +5 | forming 状态 |
-            | 高压缩 | +10 | 投影盲区警告 |
+            | 结构完整性 | 25% | cycle 数、zone 强度、不变量完整度 |
+            | 运动可信度 | 25% | 稳定性验证、投影非盲、运动态置信度 |
+            | 守恒一致性 | 20% | 通量合理性、速度比/时间比范围 |
+            | 时间成熟度 | 15% | cycle 数适中（3-8 为佳）|
+            | 后验可追溯 | 15% | 标签、典型度、叙事背景 |
+
+            **分层标准**：A 层 ≥75 · B 层 50-74 · C 层 25-49 · D 层 <25
             """)
 
     if run_scan:
+        from src.lifecycle import LifecycleTracker, LifecycleRecord
         total_syms = len(ALL_SYMBOLS)
         with st.spinner(f"🔍 正在扫描 {total_syms} 个品种的结构..."):
             prog = st.progress(0, text=f"准备扫描 {total_syms} 个品种...")
             scan_results = _scan_all_symbols(sensitivity)
             prog.progress(1.0, text=f"✅ 扫描完成，发现 {len(scan_results)} 个活跃结构")
+
+        # 生命周期记录：从扫描 dict 直接构建 LifecycleRecord（无需重新编译）
+        if scan_results:
+            _tracker = LifecycleTracker()
+            _today_str = datetime.now().strftime("%Y-%m-%d")
+            _recorded = 0
+            for r in scan_results[:20]:
+                try:
+                    zc = r["zone_center"]
+                    lifecycle_id = _tracker._match_existing_zone(r["symbol"], zc, _today_str)
+                    rec = LifecycleRecord(
+                        date=_today_str,
+                        symbol=r["symbol"],
+                        zone_center=zc,
+                        zone_bw=r["zone_bw"],
+                        cycle_count=r["cycles"],
+                        quality_tier=r.get("tier", "?"),
+                        quality_score=r["score"] / 100.0,
+                        phase_tendency=r["motion"],
+                        conservation_flux=r["flux"],
+                        speed_ratio=0,  # 扫描 dict 中无此字段
+                        direction=r["direction"],
+                        is_blind=r["is_blind"],
+                        stability="unknown",
+                        lifecycle_id=lifecycle_id,
+                    )
+                    _tracker._append_records(r["symbol"], [rec])
+                    _recorded += 1
+                except Exception:
+                    pass
+            if _recorded:
+                st.caption(f"📝 已记录 {_recorded} 个品种的生命周期")
 
         if scan_results:
             top10 = scan_results[:10]
@@ -667,6 +702,11 @@ with tabs[0]:
                 contrast_tag = f" · {r['contrast']}" if r["contrast"] else ""
                 price_pos = _price_vs_zone(r["last_price"], r["zone_center"], r["zone_bw"])
 
+                # 质量层级颜色
+                tier = r.get("tier", "?")
+                tier_fg, tier_bg = TIER_COLORS.get(tier, ("#666", "#eee"))
+                tier_badge = f'<span style="background:{tier_bg};color:{tier_fg};padding:1px 6px;border-radius:3px;font-size:0.8em;font-weight:700">{tier}层</span>'
+
                 # 风控评级颜色
                 risk_color = {"高": "#ef5350", "中": "#ff9800", "低": "#26a69a"}.get(r["risk_level"], "#999")
 
@@ -674,9 +714,10 @@ with tabs[0]:
                 <div class="structure-card {card_cls}">
                     <b>#{i+1}</b> {dir_icon}
                     <span class="zone-label">{r['symbol']} · {r['symbol_name']}</span>
+                    {tier_badge}
                     <span class="meta-text"> Zone {r['zone_center']:.0f} (±{r['zone_bw']:.0f}) · {r['cycles']}次试探</span>
                     · {motion_html} · 通量 {r['flux']:+.2f}{blind_tag}{contrast_tag}
-                    · <b>关注度 {r['score']:.0f}分</b>
+                    · <b>质量 {r['score']:.0f}分</b>
                     · <span style="color:{risk_color};font-weight:700">⚖️ {r['risk_level']}关注度</span>
                     <div class="meta-text">{price_pos} · 现价 {r['last_price']:.1f}</div>
                     <div class="narrative-text">{r['narrative']}</div>
@@ -684,8 +725,12 @@ with tabs[0]:
                 """, unsafe_allow_html=True)
 
                 # 研究建议（折叠显示）
-                with st.expander(f"💡 #{i+1} {r['symbol']} 研究建议", expanded=False):
-                    st.markdown(f"**风控建议**：基于 {r['score']:.0f} 分关注度，建议单笔关注不超过总资金的 **{r['risk_pct']}**")
+                with st.expander(f"💡 #{i+1} {r['symbol']} 研究建议 · {tier}层", expanded=False):
+                    st.markdown(f"**风控建议**：{tier}层质量（{r['score']:.0f}分），建议单笔关注不超过总资金的 **{r['risk_pct']}**")
+                    # 质量标记
+                    flags = r.get("quality_flags", [])
+                    if flags:
+                        st.markdown("**质量标记**：" + " · ".join(flags))
                     st.markdown("**下一步研究动作**：")
                     for j, sug in enumerate(r["suggestions"], 1):
                         st.markdown(f"  {j}. {sug}")
@@ -725,12 +770,14 @@ with tabs[0]:
                         r = candidates[0]
                         pos = _price_vs_zone(r["last_price"], r["zone_center"], r["zone_bw"])
                         risk_color = {"高": "#ef5350", "中": "#ff9800", "低": "#26a69a"}.get(r["risk_level"], "#999")
+                        t = r.get("tier", "?")
                         st.markdown(f"""
                         <div class="structure-card">
-                            <span class="zone-label">{r['symbol']} · {r['symbol_name']}</span><br>
+                            <span class="zone-label">{r['symbol']} · {r['symbol_name']}</span>
+                            <span style="background:{TIER_COLORS.get(t, ('#666','#eee'))[1]};color:{TIER_COLORS.get(t, ('#666','#eee'))[0]};padding:1px 6px;border-radius:3px;font-size:0.8em;font-weight:700">{t}层</span><br>
                             <span class="meta-text">Zone {r['zone_center']:.0f} (±{r['zone_bw']:.0f}) · {motion_badge(r['motion'])} · 通量 {r['flux']:+.2f}</span><br>
                             <span class="meta-text">{pos}</span><br>
-                            <span style="color:{risk_color};font-weight:700">关注度 {r['score']:.0f}分 · {r['risk_level']}关注度</span>
+                            <span style="color:{risk_color};font-weight:700">质量 {r['score']:.0f}分 · {r['risk_level']}关注度</span>
                         </div>
                         """, unsafe_allow_html=True)
                         st.caption(f"💡 {r['suggestions'][0]}" if r['suggestions'] else "")

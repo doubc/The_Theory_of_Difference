@@ -23,7 +23,7 @@ from src.compiler.zones import detect_zones
 from src.compiler.cycles import build_cycles, assemble_structures
 from src.compiler.bundles import detect_bundles
 from src.relations import (
-    infer_narrative_context, check_conservation, compute_motion, compute_projection,
+    infer_narrative_context,
     build_system_state,
 )
 from src.graph import StructureGraph
