@@ -151,6 +151,32 @@ def render(ctx: dict):
                     "days_since_end": days_since_end,
                 })
 
+        # v3.2: 同品种 Zone 去重（避免相近 Zone 重复上榜）
+        deduped = []
+        seen_zones = {}  # {symbol: [(zone_center, zone_bw), ...]}
+        
+        for r in results:
+            sym = r["symbol"]
+            zc = r["zone_center"]
+            zb = r["zone_bw"]
+            
+            if sym not in seen_zones:
+                seen_zones[sym] = []
+            
+            # 检查是否与已存在的 Zone 重叠
+            is_duplicate = False
+            for (prev_zc, prev_zb) in seen_zones[sym]:
+                # 如果 Zone 中心距离 < 2倍带宽，认为是重叠
+                if abs(zc - prev_zc) < 2 * max(zb, prev_zb):
+                    is_duplicate = True
+                    break
+            
+            if not is_duplicate:
+                seen_zones[sym].append((zc, zb))
+                deduped.append(r)
+        
+        results = deduped
+        
         # 排序：质量 70% + recency 30%
         results.sort(key=lambda x: x["score"] * 0.7 + x["recency"] * 30, reverse=True)
         return results
