@@ -32,11 +32,13 @@ from src.data.loader import Bar
 
 # ─── 数据库配置 ────────────────────────────────────────────
 
+import os
+
 DB_CONFIG = {
     'host': 'localhost',
     'port': 3306,
     'user': 'root',
-    'password': '',  # 空密码
+    'password': os.getenv('MYSQL_PASSWORD', ''),  # 从环境变量读取，默认空密码
     'charset': 'utf8mb4',
 }
 

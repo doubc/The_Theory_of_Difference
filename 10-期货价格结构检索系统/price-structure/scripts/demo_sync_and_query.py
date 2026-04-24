@@ -18,11 +18,11 @@ from src.data.loader import MySQLLoader
 def demo():
     """完整演示"""
     
-    # 配置（请修改为你的密码）
+    # 配置（从环境变量读取密码）
     DB_CONFIG = {
         'host': 'localhost',
         'user': 'root',
-        'password': 'root',  # ← 修改为你的密码
+        'password': os.getenv('MYSQL_PASSWORD', 'root'),  # 从环境变量读取，默认 root
     }
     
     print("🚀 新浪期货数据同步演示")

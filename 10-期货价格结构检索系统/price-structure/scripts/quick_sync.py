@@ -26,11 +26,11 @@ from scripts.sina_to_mysql import MySQLManager, DataSync, available_contracts
 
 
 def main():
-    # 默认配置（请根据你的 MySQL 设置修改）
+    # 默认配置（从环境变量读取密码）
     DB_CONFIG = {
         'host': 'localhost',
         'user': 'root',
-        'password': '',  # 空密码
+        'password': os.getenv('MYSQL_PASSWORD', ''),  # 从环境变量读取，默认空密码
     }
     
     # 解析命令行参数

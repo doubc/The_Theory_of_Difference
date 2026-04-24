@@ -15,8 +15,12 @@ import pymysql
 from pymysql.cursors import DictCursor
 
 
-def test_connection(host='localhost', user='root', password='root', port=3306):
+def test_connection(host='localhost', user='root', password=None, port=3306):
     """测试 MySQL 连接"""
+    import os
+    if password is None:
+        password = os.getenv('MYSQL_PASSWORD', 'root')
+    
     print("=" * 60)
     print("MySQL 连接测试")
     print("=" * 60)

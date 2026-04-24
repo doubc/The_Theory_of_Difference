@@ -14,10 +14,12 @@ import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 def main():
+    import os
     print("正在连接本地 MySQL 数据库 (sina.cu0)...")
     
-    # 1. 初始化加载器
-    loader = MySQLLoader(host='localhost', user='root', password='root', db='sina')
+    # 1. 初始化加载器（从环境变量读取密码）
+    password = os.getenv('MYSQL_PASSWORD', 'root')
+    loader = MySQLLoader(host='localhost', user='root', password=password, db='sina')
     
     # 2. 获取数据（最近 500 个交易日）
     bars = loader.get(symbol='cu0', freq='1d')

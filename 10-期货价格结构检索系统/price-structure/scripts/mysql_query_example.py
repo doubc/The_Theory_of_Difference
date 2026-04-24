@@ -18,11 +18,11 @@ def example_basic_query():
     print("示例1: 基础查询")
     print("=" * 60)
     
-    # 初始化加载器（请修改密码）
+    # 初始化加载器（从环境变量读取密码）
     loader = MySQLLoader(
         host='localhost',
         user='root',
-        password='',  # ← 修改为你的密码
+        password=os.getenv('MYSQL_PASSWORD', ''),  # 从环境变量读取，默认空密码
         db='sina'
     )
     
@@ -54,7 +54,7 @@ def example_batch_query():
     loader = MySQLLoader(
         host='localhost',
         user='root',
-        password='',
+        password=os.getenv('MYSQL_PASSWORD', ''),
         db='sina'
     )
     
@@ -86,7 +86,7 @@ def example_price_change():
     loader = MySQLLoader(
         host='localhost',
         user='root',
-        password='',
+        password=os.getenv('MYSQL_PASSWORD', ''),
         db='sina'
     )
     
@@ -117,7 +117,7 @@ def example_moving_average():
     loader = MySQLLoader(
         host='localhost',
         user='root',
-        password='',
+        password=os.getenv('MYSQL_PASSWORD', ''),
         db='sina'
     )
     

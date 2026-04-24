@@ -287,8 +287,11 @@ class MySQLLoader:
     适配 sina 数据库结构: {code} (日线), {code}m5 (5分钟线)
     """
 
-    def __init__(self, host='localhost', user='root', password='root', db='sina'):
+    def __init__(self, host='localhost', user='root', password=None, db='sina'):
+        import os
         from sqlalchemy import create_engine
+        if password is None:
+            password = os.getenv('MYSQL_PASSWORD', 'root')
         self.engine = create_engine(f'mysql+pymysql://{user}:{password}@{host}/{db}?charset=utf8')
 
     def get(
