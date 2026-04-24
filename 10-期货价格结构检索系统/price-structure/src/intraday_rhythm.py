@@ -25,7 +25,8 @@ from dataclasses import dataclass, field
 from datetime import datetime, time
 from collections import defaultdict
 
-from src.models import Structure, SystemState, Bar
+from src.models import Structure, SystemState
+from src.data.loader import Bar
 from src.quality import assess_quality
 
 
