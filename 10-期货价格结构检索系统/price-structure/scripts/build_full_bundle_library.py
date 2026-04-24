@@ -27,8 +27,10 @@ def get_all_symbols(db_name='sina'):
     return symbols
 
 def build_library():
+    import os
     print("正在连接数据库并获取全量品种列表...")
-    loader = MySQLLoader(host='localhost', user='root', password='root', db='sina')
+    password = os.getenv('MYSQL_PASSWORD', 'root')
+    loader = MySQLLoader(host='localhost', user='root', password=password, db='sina')
     symbols = get_all_symbols()
     
     config = CompilerConfig(

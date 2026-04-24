@@ -119,7 +119,9 @@ def daily_scan(scan_window_years: int = 3):
         return
 
     # 2. 扫描全市场
-    loader = MySQLLoader(host="localhost", user="root", password="root", db="sina")
+    import os
+    password = os.getenv('MYSQL_PASSWORD', 'root')
+    loader = MySQLLoader(host="localhost", user="root", password=password, db="sina")
     config = CompilerConfig(min_amplitude=0.02, min_duration=3, zone_bandwidth=0.01)
     cfg_hash = _config_hash(config)
     symbols = _get_symbols()

@@ -298,7 +298,9 @@ def _generate_comparison_guide(
 def _load_all_bars_mysql(symbol: str) -> list[Bar]:
     """从 MySQL 加载全部历史数据"""
     try:
-        loader = MySQLLoader(host="localhost", user="root", password="root", db="sina")
+        import os
+        password = os.getenv('MYSQL_PASSWORD', 'root')
+        loader = MySQLLoader(host="localhost", user="root", password=password, db="sina")
         return loader.get(symbol=symbol, freq="1d")
     except Exception:
         return []

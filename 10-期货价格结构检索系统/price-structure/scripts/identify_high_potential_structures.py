@@ -95,7 +95,7 @@ def identify_representative_structures(
         os.path.dirname(__file__), "..", "data", "library", "full_structure_pool.jsonl"
     )
 
-    loader = MySQLLoader(host='localhost', user='root', password='root', db='sina')
+    loader = MySQLLoader(host='localhost', user='root', password=os.getenv('MYSQL_PASSWORD', 'root'), db='sina')
     high_potential_templates = []
     total = 0
     errors = 0

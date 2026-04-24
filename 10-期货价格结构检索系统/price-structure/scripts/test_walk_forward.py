@@ -24,8 +24,10 @@ def calculate_distance(inv1, inv2):
     return math.sqrt(dist_sq)
 
 def run_walk_forward_test():
+    import os
     print("正在初始化 Walk-Forward 相似性预测测试...")
-    loader = MySQLLoader(host='localhost', user='root', password='root', db='sina')
+    password = os.getenv('MYSQL_PASSWORD', 'root')
+    loader = MySQLLoader(host='localhost', user='root', password=password, db='sina')
     
     config = CompilerConfig(min_amplitude=0.02, min_duration=3, zone_bandwidth=0.01)
     start_year, end_year = 2005, 2026
