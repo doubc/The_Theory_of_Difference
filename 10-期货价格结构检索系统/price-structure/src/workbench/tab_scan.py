@@ -485,7 +485,7 @@ def render(ctx: dict):
                     "date": _today_key,
                     "sensitivity": sensitivity,
                     "total": len(scan_results),
-                    "top10": [{
+                    "top50": [{
                         "rank": i + 1,
                         "symbol": r["symbol"],
                         "symbol_name": r["symbol_name"],
@@ -499,7 +499,7 @@ def render(ctx: dict):
                         "narrative": r["narrative"],
                         "last_price": r["last_price"],
                         "days_since_end": r.get("days_since_end", 0),
-                    } for i, r in enumerate(scan_results[:10])],
+                    } for i, r in enumerate(scan_results[:50])],
                     "exported_at": datetime.now().isoformat(),
                 }
                 st.download_button(
@@ -511,7 +511,7 @@ def render(ctx: dict):
                 )
             with exp_c2:
                 md_lines = [f"# 全市场扫描 {_today_key}\n灵敏度: {sensitivity} · 活跃结构: {len(scan_results)}\n"]
-                for i, r in enumerate(scan_results[:10], 1):
+                for i, r in enumerate(scan_results[:50], 1):
                     dir_icon = "📈" if r["direction"] == "up" else "📉" if r["direction"] == "down" else "➡️"
                     md_lines.append(f"## #{i} {r['symbol']} ({r['symbol_name']})")
                     md_lines.append(f"- {dir_icon} Zone {r['zone_center']:.0f} · {r['cycles']}次试探 · {r['motion']}")
