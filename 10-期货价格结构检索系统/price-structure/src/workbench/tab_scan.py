@@ -239,51 +239,54 @@ def render(ctx: dict):
             stat_c[3].metric("➡️ 不明", dir_unclear)
 
             for i, r in enumerate(top10):
-                dir_icon = "📈" if r["direction"] == "up" else "📉" if r["direction"] == "down" else "➡️"
-                card_cls = "danger" if r["direction"] == "up" else "ok" if r["direction"] == "down" else ""
-                motion_html = motion_badge(r["motion"])
-                blind_tag = " · ⚠️高压缩" if r["is_blind"] else ""
-                contrast_tag = f" · {r['contrast']}" if r["contrast"] else ""
-                price_pos = _price_vs_zone(r["last_price"], r["zone_center"], r["zone_bw"])
+                try:
+                    dir_icon = "📈" if r.get("direction") == "up" else "📉" if r.get("direction") == "down" else "➡️"
+                    card_cls = "danger" if r.get("direction") == "up" else "ok" if r.get("direction") == "down" else ""
+                    motion_html = motion_badge(r.get("motion") or "—")
+                    blind_tag = " · ⚠️高压缩" if r.get("is_blind") else ""
+                    contrast_tag = f' · {r.get("contrast", "")}' if r.get("contrast") else ""
+                    price_pos = _price_vs_zone(r.get("last_price", 0), r.get("zone_center", 0), r.get("zone_bw", 0))
 
-                tier = r.get("tier", "?")
-                tier_fg, tier_bg = TIER_COLORS.get(tier, ("#666", "#eee"))
-                tier_badge = f'<span style="background:{tier_bg};color:{tier_fg};padding:1px 6px;border-radius:3px;font-size:0.8em;font-weight:700">{tier}层</span>'
+                    tier = r.get("tier", "?")
+                    tier_fg, tier_bg = TIER_COLORS.get(tier, ("#666", "#eee"))
+                    tier_badge = f'<span style="background:{tier_bg};color:{tier_fg};padding:1px 6px;border-radius:3px;font-size:0.8em;font-weight:700">{tier}层</span>'
 
-                risk_color = {"高": "#ef5350", "中": "#ff9800", "低": "#26a69a"}.get(r["risk_level"], "#999")
+                    risk_color = {"高": "#ef5350", "中": "#ff9800", "低": "#26a69a"}.get(r.get("risk_level", "低"), "#999")
 
-                # 新鲜度标记
-                ds = r.get("days_since_end", 0)
-                if ds <= 3:
-                    fresh_tag = f'<span style="color:#4caf50;font-weight:600">🟢 {ds}天前</span>'
-                elif ds <= 7:
-                    fresh_tag = f'<span style="color:#ff9800;font-weight:600">🟡 {ds}天前</span>'
-                else:
-                    fresh_tag = f'<span style="color:#999">{ds}天前</span>'
+                    # 新鲜度标记
+                    ds = r.get("days_since_end", 0) or 0
+                    if ds <= 3:
+                        fresh_tag = f'<span style="color:#4caf50;font-weight:600">🟢 {ds}天前</span>'
+                    elif ds <= 7:
+                        fresh_tag = f'<span style="color:#ff9800;font-weight:600">🟡 {ds}天前</span>'
+                    else:
+                        fresh_tag = f'<span style="color:#999">{ds}天前</span>'
 
-                st.markdown(f"""
-                <div class="structure-card {card_cls}">
-                    <b>#{i+1}</b> {dir_icon}
-                    <span class="zone-label">{r['symbol']} · {r['symbol_name']}</span>
-                    {tier_badge}
-                    <span class="meta-text"> Zone {r['zone_center']:.0f} (±{r['zone_bw']:.0f}) · {r['cycles']}次试探</span>
-                    · {motion_html} · 通量 {r['flux']:+.2f}{blind_tag}{contrast_tag}
-                    · <b>质量 {r['score']:.0f}分</b>
-                    · <span style="color:{risk_color};font-weight:700">⚖️ {r['risk_level']}关注度</span>
-                    · {fresh_tag}
-                    <div class="meta-text">{price_pos} · 现价 {r['last_price']:.1f}</div>
-                    <div class="narrative-text">{r['narrative']}</div>
-                </div>
-                """, unsafe_allow_html=True)
+                    st.markdown(f"""
+                    <div class="structure-card {card_cls}">
+                        <b>#{i+1}</b> {dir_icon}
+                        <span class="zone-label">{r.get('symbol', '')} · {r.get('symbol_name', '')}</span>
+                        {tier_badge}
+                        <span class="meta-text"> Zone {r.get('zone_center', 0):.0f} (±{r.get('zone_bw', 0):.0f}) · {r.get('cycles', 0)}次试探</span>
+                        · {motion_html} · 通量 {r.get('flux', 0) or 0:+.2f}{blind_tag}{contrast_tag}
+                        · <b>质量 {r.get('score', 0):.0f}分</b>
+                        · <span style="color:{risk_color};font-weight:700">⚖️ {r.get('risk_level', '低')}关注度</span>
+                        · {fresh_tag}
+                        <div class="meta-text">{price_pos} · 现价 {r.get('last_price', 0):.1f}</div>
+                        <div class="narrative-text">{r.get('narrative', '')}</div>
+                    </div>
+                    """, unsafe_allow_html=True)
 
-                with st.expander(f"💡 #{i+1} {r['symbol']} 研究建议 · {tier}层", expanded=False):
-                    st.markdown(f"**风控建议**：{tier}层质量（{r['score']:.0f}分），建议单笔关注不超过总资金的 **{r['risk_pct']}**")
-                    flags = r.get("quality_flags", [])
-                    if flags:
-                        st.markdown("**质量标记**：" + " · ".join(flags))
-                    st.markdown("**下一步研究动作**：")
-                    for j, sug in enumerate(r["suggestions"], 1):
-                        st.markdown(f"  {j}. {sug}")
+                    with st.expander(f"💡 #{i+1} {r.get('symbol', '')} 研究建议 · {tier}层", expanded=False):
+                        st.markdown(f"**风控建议**：{tier}层质量（{r.get('score', 0):.0f}分），建议单笔关注不超过总资金的 **{r.get('risk_pct', '1-3%')}**")
+                        flags = r.get("quality_flags", [])
+                        if flags:
+                            st.markdown("**质量标记**：" + " · ".join(flags))
+                        st.markdown("**下一步研究动作**：")
+                        for j, sug in enumerate(r.get("suggestions", []), 1):
+                            st.markdown(f"  {j}. {sug}")
+                except Exception as card_ex:
+                    st.caption(f"卡片渲染跳过: {card_ex}")
 
             # ── 今日三选 ──
             st.markdown("---")
@@ -335,26 +338,29 @@ def render(ctx: dict):
             st.markdown("---")
             st.markdown("#### 🔗 跨品种信号一致性")
 
-            exchange_groups = {}
-            for r in scan_results[:20]:
-                info = META.get(r["symbol"], META.get(r["symbol"].upper(), {}))
-                ex = info.get("exchange", "其他") if isinstance(info, dict) else "其他"
-                exchange_groups.setdefault(ex, []).append(r)
+            try:
+                exchange_groups = {}
+                for r in scan_results[:20]:
+                    info = META.get(r["symbol"], META.get(r["symbol"].upper(), {}))
+                    ex = (info.get("exchange") or "其他") if isinstance(info, dict) else "其他"
+                    exchange_groups.setdefault(ex, []).append(r)
 
-            for ex, items in sorted(exchange_groups.items()):
-                if len(items) < 2:
-                    continue
-                up_n = sum(1 for r in items if r["direction"] == "up")
-                down_n = sum(1 for r in items if r["direction"] == "down")
-                total = len(items)
-                names = ", ".join(f"{r['symbol']}" for r in items[:5])
+                for ex, items in sorted(exchange_groups.items()):
+                    if len(items) < 2:
+                        continue
+                    up_n = sum(1 for r in items if r.get("direction") == "up")
+                    down_n = sum(1 for r in items if r.get("direction") == "down")
+                    total = len(items)
+                    names = ", ".join(f"{r.get('symbol', '?')}" for r in items[:5])
 
-                if up_n > down_n and up_n >= total * 0.6:
-                    st.success(f"**{ex}** 板块偏多：{up_n}/{total} 偏多 · {names}")
-                elif down_n > up_n and down_n >= total * 0.6:
-                    st.error(f"**{ex}** 板块偏空：{down_n}/{total} 偏空 · {names}")
-                else:
-                    st.warning(f"**{ex}** 板块信号分歧：📈{up_n} / 📉{down_n} / ➡️{total - up_n - down_n} · {names}")
+                    if up_n > down_n and up_n >= total * 0.6:
+                        st.success(f"**{ex}** 板块偏多：{up_n}/{total} 偏多 · {names}")
+                    elif down_n > up_n and down_n >= total * 0.6:
+                        st.error(f"**{ex}** 板块偏空：{down_n}/{total} 偏空 · {names}")
+                    else:
+                        st.warning(f"**{ex}** 板块信号分歧：📈{up_n} / 📉{down_n} / ➡️{total - up_n - down_n} · {names}")
+            except Exception as ex:
+                st.caption(f"跨品种分析跳过: {ex}")
 
             # ── 每日变化报告 ──
             st.markdown("---")
