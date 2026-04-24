@@ -217,6 +217,13 @@ def render(ctx: dict):
             if _recorded:
                 st.caption(f"📝 已记录 {_recorded} 个品种的生命周期")
 
+            # v3.1: 自动保存扫描结果到活动日志
+            try:
+                from src.workbench.activity_log import ActivityLog
+                ActivityLog().save_scan(scan_results, sensitivity=sensitivity)
+            except Exception:
+                pass
+
         if scan_results:
             top10 = scan_results[:10]
             st.markdown("---")

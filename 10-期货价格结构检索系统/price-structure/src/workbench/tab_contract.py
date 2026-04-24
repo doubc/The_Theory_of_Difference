@@ -114,6 +114,26 @@ def render(ctx: dict):
                 n_zones = len(comp_result.zones)
                 last_price = bars_data[-1].close
 
+                # v3.1: 自动保存合约检索结果到活动日志
+                try:
+                    from src.workbench.activity_log import ActivityLog
+                    _struct_data = []
+                    for s in comp_result.ranked_structures[:5]:
+                        m = s.motion
+                        _struct_data.append({
+                            "zone": s.zone.price_center,
+                            "cycles": s.cycle_count,
+                            "motion": m.phase_tendency if m else "",
+                            "flux": round(m.conservation_flux, 2) if m else 0,
+                        })
+                    ActivityLog().save_contract(
+                        symbol=contract_code.upper(),
+                        bars_count=len(bars_data),
+                        structures=_struct_data,
+                    )
+                except Exception:
+                    pass
+
                 # ── 概要指标 ──
                 st.markdown("---")
                 metric_cols = st.columns(6)

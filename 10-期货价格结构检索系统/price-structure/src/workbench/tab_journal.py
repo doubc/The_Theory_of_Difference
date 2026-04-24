@@ -30,8 +30,8 @@ def render(ctx: dict):
     today = datetime.now().strftime("%Y-%m-%d")
     md_file = log_dir / f"{today}.md"
 
-    # ── 子 Tab：写日志 / 历史回顾 ──
-    sub_tab_write, sub_tab_history = st.tabs(["✏️ 写日志", "📚 历史回顾"])
+    # ── 子 Tab：写日志 / 活动日志 / 历史回顾 ──
+    sub_tab_write, sub_tab_activity, sub_tab_history = st.tabs(["✏️ 写日志", "📊 活动日志", "📚 历史回顾"])
 
     # ════════════════════════════════════════════════════════
     # 写日志
@@ -125,6 +125,108 @@ def render(ctx: dict):
                         ctx_str += f" [{m.phase_tendency}, 通量{m.conservation_flux:+.2f}]"
                     ctx_str += "\n"
                 st.code(ctx_str, language="text")
+
+    # ════════════════════════════════════════════════════════
+    # 活动日志 — 自动沉淀的扫描/检索/对比结果
+    # ════════════════════════════════════════════════════════
+    with sub_tab_activity:
+        st.markdown("**📊 活动日志** — 扫描、检索、对比的结果自动沉淀")
+        st.caption("每次全市场扫描、历史检索、合约检索的结果自动记录，形成可回溯的研究轨迹")
+
+        try:
+            from src.workbench.activity_log import ActivityLog
+            act_log = ActivityLog()
+            stats = act_log.get_stats()
+
+            if stats["total"] == 0:
+                st.info("暂无活动记录 — 使用「今天值得关注」「历史对照」「合约检索」后，结果会自动保存到这里")
+            else:
+                # 统计概要
+                stat_cols = st.columns(4)
+                stat_cols[0].metric("总记录", stats["total"])
+                type_labels = {"scan": "扫描", "retrieval": "检索", "compare": "对比",
+                               "contract": "合约", "insight": "洞察"}
+                for i, (t, label) in enumerate(type_labels.items()):
+                    count = stats.get("by_type", {}).get(t, 0)
+                    if count > 0 and i < 3:
+                        stat_cols[i + 1].metric(label, count)
+
+                # 筛选
+                f_col1, f_col2, f_col3 = st.columns(3)
+                with f_col1:
+                    act_types = list(stats.get("by_type", {}).keys())
+                    f_type = st.selectbox("类型", ["全部"] + act_types, key="act_f_type")
+                with f_col2:
+                    act_syms = list(stats.get("by_symbol", {}).keys())[:15]
+                    f_sym = st.selectbox("品种", ["全部"] + act_syms, key="act_f_sym")
+                with f_col3:
+                    f_days = st.selectbox("时间", [7, 14, 30, 90], index=1, key="act_f_days")
+
+                entries = act_log.search(
+                    symbol=f_sym if f_sym != "全部" else None,
+                    type=f_type if f_type != "全部" else None,
+                    days=f_days,
+                    limit=30,
+                )
+
+                st.caption(f"最近 {f_days} 天 · {len(entries)} 条记录")
+
+                # 类型图标
+                type_icons = {
+                    "scan": "📡", "retrieval": "🔍", "compare": "📊",
+                    "contract": "🔎", "insight": "💡",
+                }
+
+                for e in entries:
+                    icon = type_icons.get(e.type, "📝")
+                    type_label = type_labels.get(e.type, e.type)
+                    header = f"{icon} {e.date} · {type_label}"
+                    if e.symbol:
+                        header += f" · {e.symbol}"
+
+                    with st.expander(f"{header} — {e.summary[:60]}", expanded=False):
+                        st.markdown(f"**{e.summary}**")
+                        st.caption(f"时间: {e.timestamp[:19]} · 标签: {', '.join(e.tags)}")
+
+                        # 按类型展示详情
+                        d = e.details
+                        if e.type == "scan" and "top10" in d:
+                            st.markdown("**Top 10 机会：**")
+                            for j, r in enumerate(d["top10"]):
+                                dir_icon = "📈" if r.get("direction") == "up" else "📉" if r.get("direction") == "down" else "➡️"
+                                st.markdown(f"  {j+1}. {dir_icon} {r['symbol']} Zone {r['zone_center']:.0f} "
+                                           f"· {r.get('motion', '')} · 通量{r.get('flux', 0):+.2f} · {r.get('score', 0):.0f}分")
+
+                        elif e.type == "retrieval" and "neighbors" in d:
+                            st.markdown(f"**相似案例 ({d.get('neighbor_count', 0)} 个)：**")
+                            for nb in d["neighbors"][:5]:
+                                st.markdown(f"  - {nb.get('symbol', '')} {nb.get('period', '')} "
+                                           f"· 相似度 {nb.get('similarity', 0):.2f} · {nb.get('direction', '')}")
+                            if d.get("posterior"):
+                                p = d["posterior"]
+                                st.caption(f"后验: 10d均收益 {p.get('mean_ret_10d', 0):.2%} · "
+                                          f"上涨概率 {p.get('prob_positive_10d', 0):.0%}")
+
+                        elif e.type == "contract" and "structures" in d:
+                            st.markdown(f"**K线 {d.get('bars_count', 0)} 根 · 结构：**")
+                            for s in d["structures"]:
+                                st.markdown(f"  - Zone {s.get('zone', 0):.0f} · {s.get('cycles', 0)}次试探 "
+                                           f"· {s.get('motion', '')} · 通量{s.get('flux', 0):+.2f}")
+
+                # 活动趋势图
+                if len(stats.get("by_date", {})) >= 3:
+                    st.markdown("---")
+                    st.markdown("**📈 活动趋势**")
+                    dates = sorted(stats["by_date"].keys())[-14:]
+                    counts = [stats["by_date"][d] for d in dates]
+                    import plotly.graph_objects as go
+                    fig = go.Figure(go.Bar(x=dates, y=counts, marker_color="#4a90d9"))
+                    fig.update_layout(height=200, margin=dict(l=0, r=0, t=10, b=0),
+                                     xaxis_title="", yaxis_title="记录数")
+                    st.plotly_chart(fig, use_container_width=True)
+
+        except Exception as ex:
+            st.warning(f"活动日志加载失败: {ex}")
 
     # ════════════════════════════════════════════════════════
     # 历史回顾

@@ -282,6 +282,28 @@ def render(ctx: dict):
             progress.progress(1.0, text=f"✅ 检索完成 · {_time.time() - _t0:.1f}s · {len(all_candidates)} 个匹配")
             top_cases = all_candidates[:top_k]
 
+            # v3.1: 自动保存检索结果到活动日志
+            if top_cases:
+                try:
+                    from src.workbench.activity_log import ActivityLog
+                    _neighbors = []
+                    for c in top_cases[:10]:
+                        _neighbors.append({
+                            "symbol": c.get("symbol", ""),
+                            "period": f"{c.get('period_start', '')}~{c.get('period_end', '')}",
+                            "similarity": round(c.get("similarity", 0), 4),
+                            "direction": c.get("direction", ""),
+                            "outcome": round(c.get("outcome_move", 0), 4),
+                        })
+                    ActivityLog().save_retrieval(
+                        symbol=selected_symbol,
+                        query_zone=current_zone_center,
+                        neighbors=_neighbors,
+                        search_window=f"{start_date}~{end_date}",
+                    )
+                except Exception:
+                    pass
+
             if top_cases:
                 sym_distribution = {}
                 for c in top_cases:
