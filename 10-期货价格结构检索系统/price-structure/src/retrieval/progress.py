@@ -33,15 +33,12 @@
 
 from __future__ import annotations
 
-import math
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from typing import Sequence
 
 from src.data.loader import Bar
-from src.compiler.pipeline import compile_full, CompilerConfig
 from src.retrieval.similarity import similarity, SimilarityScore
-from src.models import Structure, SystemState
+from src.models import Structure
 
 
 # ─── 数据结构 ──────────────────────────────────────────────

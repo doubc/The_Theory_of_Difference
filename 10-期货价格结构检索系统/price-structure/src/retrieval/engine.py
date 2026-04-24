@@ -17,7 +17,6 @@ V1.6 P2 升级（2026-04-24）：
 
 from __future__ import annotations
 
-import math
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 

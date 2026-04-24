@@ -21,10 +21,8 @@ from src.models import (
     Point, Segment, Zone, Cycle, Structure, ContrastType,
     MotionState, Phase, ProjectionAwareness,
     StabilityVerdict, SystemState,
-    # 复用 models.py 中定义的基础算子，不重复定义
-    first_diff, log_diff, second_diff, time_gap,
-    distance_to_zone, relative_distance_to_zone,
-    extrema_dispersion,
+    # 复用 models.py 中定义的基础算子
+    time_gap, extrema_dispersion,
 )
 
 # 向后兼容别名
