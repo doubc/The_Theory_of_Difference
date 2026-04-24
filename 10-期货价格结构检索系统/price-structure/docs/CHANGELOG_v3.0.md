@@ -9,10 +9,10 @@
 
 | 类型 | 数量 | 说明 |
 |------|------|------|
-| 新增文件 | 11 | 数据层3 + C扩展3 + 多时间维度2 + 脚本2 + 文档1 |
-| 修改文件 | 0 | 未直接修改现有文件（独立模块化） |
+| 新增文件 | 13 | 数据层3 + C扩展3 + 多时间维度2 + 脚本2 + 文档1 + 模块化拆分2 |
+| 修改文件 | 1 | `pythongo_signal.py` 重构优化 |
 | 删除文件 | 0 | — |
-| 新增代码行 | ~3,200 | Python 2,600 + C 600 + Markdown 200 |
+| 新增代码行 | ~3,600 | Python 3,000 + C 600 + Markdown 200 |
 
 ---
 
@@ -180,6 +180,63 @@ class CrossTimeframeMatch:
 
 ---
 
+### 11. `src/workbench/shared.py` — 共享工具函数 & 常量（app.py 模块化拆分）
+
+**提取自** `app.py` 行 45-490，供各 Tab 页面复用。
+
+**导出内容**：
+- `CSS_STYLE` — 全局 CSS 样式字符串常量
+- `TIER_COLORS` — 质量等级颜色字典 `{A/B/C/D: (fg, bg)}`
+- `SENS_MAP` — 灵敏度映射 `{"粗糙/标准/精细": {min_amp, min_dur, min_cycles}}`
+- `motion_badge(tendency)` — 运动状态 HTML 标签
+- `_extract_key(label)` — 中文标签提取英文 key（如 `'📈 上涨(up)'` → `'up'`）
+- `_price_vs_zone(price, center, bw)` — 价格与 Zone 位置描述
+- `make_candlestick(bars, title, height)` — Plotly K 线图
+- `make_comparison_chart(bars_a, bars_b, ...)` — 并排 K 线对比图
+- `_invariant_diff_table(inv1, inv2, name1, name2)` — 不变量对比 DataFrame
+
+**依赖**：`pandas`, `plotly`, `src.retrieval.similarity`
+
+---
+
+### 12. `src/workbench/data_layer.py` — 数据层（app.py 模块化拆分）
+
+**提取自** `app.py` 行 121-227，集中管理数据加载 & 编译。
+
+**导出内容**：
+- `get_mysql_engine()` — MySQL 连接（`@st.cache_resource`）
+- `discover_mysql_symbols()` — MySQL 品种发现（`@st.cache_data(ttl=300)`）
+- `discover_csv_symbols()` — CSV 品种发现（`@st.cache_data`）
+- `get_all_available_symbols()` — 合并 MySQL + CSV + symbol_meta 去重
+- `load_bars(symbol, source)` — 加载 K 线数据，MySQL 优先 CSV 降级
+- `compile_structures(symbol, min_amp, min_dur, min_cycles, source)` — 编译结构
+
+**依赖**：`streamlit`, `sqlalchemy`, `src.data.loader`, `src.data.symbol_meta`, `src.compiler.pipeline`
+
+---
+
+### 13. `trading/pythongo_signal.py` — PythonGO 策略重构
+
+**修改类型**：代码优化 + bug 修复（185 行新增，177 行删除）
+
+**5 项优化**：
+
+| # | 优化 | 变更 |
+|---|------|------|
+| 1 | 提取 `_place_order()` | 合并 `_emit_structure_signal` 和 `_emit_breakout_signal` 中重复的下单逻辑（12 行→1 行调用） |
+| 2 | 统一时间导入 | `_check_cooldown` 中删除局部 `import time`，统一用模块级 `_time` |
+| 3 | 缓存初始化移入 `__init__` | `high_cache`/`low_cache` 从 `on_bar` 的 `hasattr` 动态创建改为 `__init__` 正常初始化 |
+| 4 | 拆分 `check_resonance` | 70 行方法拆为 `_find_recent_signals()` + `_check_direction_consistency()` + 主方法 |
+| 5 | 提取 `_check_single_direction` | 上破回落 / 下破反弹对称逻辑从 ~80 行重复→2 次调用（减少 ~40 行） |
+
+**Bug 修复**：
+- 补 `class Params(BaseParams):` 定义行（原文件缺失，导致 Params 未定义）
+
+**清理**：
+- 删除未使用导入：`json`, `datetime.time as dtime`, `dataclasses.field`
+
+---
+
 ## 决策日志
 
 | 日期 | 决策 | 原因 |
@@ -190,6 +247,9 @@ class CrossTimeframeMatch:
 | 2026-04-24 | 多时间维度用重采样而非插值 | 重采样是降采样（信息减少），插值是上采样（信息伪造） |
 | 2026-04-24 | 一致性权重 Zone=0.4, 方向=0.3, 速度比=0.3 | Zone 重叠是结构相似的最强信号 |
 | 2026-04-24 | 独立模块化，不修改现有文件 | 降低集成风险，可渐进式升级 |
+| 2026-04-24 | app.py 拆分为 shared.py + data_layer.py | 2848 行单文件→模块化，Tab 页面可独立复用 |
+| 2026-04-24 | PythonGO 策略保持自包含，不拆分 | PythonGO 运行在无限易独立环境，无法访问 src/ 包 |
+| 2026-04-24 | PythonGO 内部优化：提取公共方法减少重复 | 可读性优先，不影响自包含约束 |
 
 ---
 
@@ -203,6 +263,10 @@ class CrossTimeframeMatch:
 - [ ] 跨维度 Zone 重叠度计算边界情况
 - [ ] 批量编译多进程稳定性
 - [ ] Streamlit 页面无数据时的容错
+- [x] shared.py 导入 + 函数逻辑验证（语法✓ 导入✓ DataFrame✓ Figure✓）
+- [x] data_layer.py 导入 + 函数签名验证（语法✓ 装饰器✓）
+- [x] pythongo_signal.py 语法检查 + 未使用导入清理
+- [x] shared.py / data_layer.py 与 app.py 原始函数逐行比对一致
 
 ---
 
