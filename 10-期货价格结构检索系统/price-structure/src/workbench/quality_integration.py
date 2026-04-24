@@ -1,10 +1,12 @@
 """
 质量分层集成 — 给现有 app.py 添加质量分层显示的补丁代码
 
-在 app.py 的结构卡片渲染处加入质量徽章。
-在检索引擎中用质量加权替代等权检索。
-
-集成方式：将下面的函数和逻辑粘贴到 app.py 对应位置。
+⚠️ 质量分层功能已集成到 app.py Tab 8（"🔬 v3.0 质量与共振"）。
+    此文件保留为参考实现，提供可复用的工具函数：
+    - quality_badge_html(): 质量徽章 HTML
+    - scan_with_quality(): 质量分层扫描
+    - quality_weighted_retrieval(): 质量加权检索
+    - render_quality_panel(): 质量统计面板
 """
 
 import streamlit as st

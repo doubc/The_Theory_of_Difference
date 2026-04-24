@@ -1,11 +1,8 @@
 """
 v3.0 统一集成页 — 质量分层 + 共振检测 + 生命周期 + 日内节奏
 
-这是 Streamlit 工作台的新页面，整合所有 v3.0 升级功能。
-
-集成方式：
-    在 app.py 的 tab_names 中加入 "🔬 v3.0 质量与共振"
-    with tabs[6]: 粘贴本文件内容
+⚠️ 此文件内容已集成到 app.py Tab 8（"🔬 v3.0 质量与共振"）。
+    保留此文件作为独立运行入口和参考实现。
 
 独立运行：
     streamlit run src/workbench/v3_page.py

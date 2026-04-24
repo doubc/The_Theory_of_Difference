@@ -1,14 +1,11 @@
 """
 Tab 7: 多时间维度对比 — 5分钟/1小时/日线 跨尺度结构验证
 
-插入到 app.py 的 tab_names 列表末尾，作为第 7 个 Tab。
+⚠️ 此文件内容已集成到 app.py Tab 7（"⏱️ 多时间维度对比"）。
+    保留此文件作为独立运行入口和参考实现。
 
-集成方式：
-1. 在 app.py 的 tab_names 列表中添加 "⏱️ 多时间维度对比"
-2. 在 tabs = st.tabs(tab_names) 后添加 with tabs[6]: 包裹此文件内容
-3. 或者直接将此文件内容粘贴到 app.py 末尾
-
-本文件也可独立运行：streamlit run src/workbench/multitimeframe_page.py
+独立运行：
+    streamlit run src/workbench/multitimeframe_page.py
 """
 
 import streamlit as st

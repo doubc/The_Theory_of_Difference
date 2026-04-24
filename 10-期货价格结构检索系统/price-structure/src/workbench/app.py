@@ -1947,8 +1947,8 @@ with tabs[5]:
 
 with tabs[6]:
     from src.multitimeframe.comparator import (
-        MultiTimeframeComparator, resample_bars,
-        cross_timeframe_consistency, compute_zone_overlap,
+        resample_bars,
+        cross_timeframe_consistency,
     )
 
     st.markdown("#### ⏱️ 多时间维度对比")
@@ -2265,7 +2265,7 @@ with tabs[6]:
                     - 速度比: {s_a.avg_speed_ratio:.2f}
                     - 时间比: {s_a.avg_time_ratio:.2f}
                     - 运动态: {s_a.motion.phase_tendency if s_a.motion else '—'}
-                    - 通量: {s_a.motion.conservation_flux:+.2f if s_a.motion else '—'}
+                    - 通量: {f'{s_a.motion.conservation_flux:+.2f}' if s_a.motion else '—'}
                     """)
                 with col_b:
                     st.markdown(f"**{best.freq_b} 结构**")
@@ -2276,7 +2276,7 @@ with tabs[6]:
                     - 速度比: {s_b.avg_speed_ratio:.2f}
                     - 时间比: {s_b.avg_time_ratio:.2f}
                     - 运动态: {s_b.motion.phase_tendency if s_b.motion else '—'}
-                    - 通量: {s_b.motion.conservation_flux:+.2f if s_b.motion else '—'}
+                    - 通量: {f'{s_b.motion.conservation_flux:+.2f}' if s_b.motion else '—'}
                     """)
 
             inconsistent = [m for m in all_matches if not m.is_consistent]
@@ -2429,8 +2429,8 @@ with tabs[6]:
 # ═══════════════════════════════════════════════════════════
 
 with tabs[7]:
-    from src.quality import assess_quality, stratify_structures, QualityTier
-    from src.resonance import ResonanceDetector, get_sector
+    from src.quality import stratify_structures, QualityTier
+    from src.resonance import ResonanceDetector
     from src.lifecycle import LifecycleTracker
     from src.intraday_rhythm import IntradayRhythmAnalyzer, SESSION_LABELS
 
