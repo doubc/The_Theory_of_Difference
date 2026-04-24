@@ -131,7 +131,7 @@ class Playbook:
 def _compute_after_outcome(
     bars: list[Bar],
     structure: Structure,
-    window_days: int = 20,
+    window_days: int = 120,
 ) -> dict:
     """
     计算一个历史结构结束后的前向走势。
@@ -267,7 +267,7 @@ def progress_retrieve(
     query: Structure,
     history_structures: list[Structure],
     history_bars: list[Bar],
-    after_window: int = 20,
+    after_window: int = 120,
     min_similarity: float = 0.3,
     top_k: int = 15,
 ) -> tuple[Playbook, list[HistoricalCase]]:
