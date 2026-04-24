@@ -183,9 +183,24 @@ A10 系统 = 结构 × 运动
 
 ```bash
 python3 -m pytest tests/ -v
-# 73 passed
+# 85 passed
+```
+
+## 性能
+
+C 扩展加速（`src/fast/`）：
+
+| 模块 | 加速比 | 说明 |
+|------|--------|------|
+| `_pivots.c` | 24x | 极值提取：自适应窗口 + 分形一致性 + 强制交替 |
+| `_dtw.c` | 132x | DTW 距离 + 编辑距离：栈分配 + 工作区复用 |
+| `_compiler.c` | 132x | 二分查找 bar 过滤 + 批量相似度 + 批量特征提取 |
+
+```bash
+# 编译 C 扩展
+python3 setup_fast.py build_ext --inplace
 ```
 
 ## 技术栈
 
-Python · dataclass · Pandas · Plotly · Streamlit · YAML
+Python · dataclass · NumPy · Pandas · Plotly · Streamlit · YAML · C Extensions
