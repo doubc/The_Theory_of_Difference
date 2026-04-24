@@ -19,11 +19,10 @@
 作者：价格结构形式系统 v3.0
 """
 
-from datetime import time as dtime
 from collections import deque
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 import math
-import json
+import time as _time
 
 from pythongo.base import BaseParams, BaseState, Field
 from pythongo.classdef import KLineData, TickData, OrderData, TradeData
@@ -333,6 +332,94 @@ class BreakoutReversalSignal:
         return self.quality_tier in ("A", "B")
 
 
+def _check_single_direction(
+    prices_extreme: list[float],
+    zone_bound: float,
+    zone_bandwidth: float,
+    current_close: float,
+    zone_center: float,
+    n: int,
+    lookback: int,
+    min_breakout_pct: float,
+    zone: Zone,
+    signal_type: str,
+    is_upper: bool,
+) -> BreakoutReversalSignal | None:
+    """
+    检测单方向的假突破反转（上破回落 or 下破反弹）
+
+    Args:
+        prices_extreme: 高价序列（上破）或低价序列（下破）
+        zone_bound: Zone 上界（上破）或下界（下破）
+        zone_bandwidth: Zone 带宽
+        current_close: 当前收盘价
+        zone_center: Zone 中心
+        n: 价格序列长度
+        lookback: 回看 K 线数
+        min_breakout_pct: 最小突破幅度
+        zone: Zone 对象
+        signal_type: "bearish_reversal" 或 "bullish_reversal"
+        is_upper: True=上破回落, False=下破反弹
+
+    Returns:
+        BreakoutReversalSignal 或 None
+    """
+    # 找到突破极值
+    best_depth = 0
+    best_idx = -1
+    for i in range(max(0, n - lookback - 1), n - 1):
+        if is_upper:
+            if prices_extreme[i] > zone_bound:
+                depth = (prices_extreme[i] - zone_bound) / zone_bandwidth
+        else:
+            if prices_extreme[i] < zone_bound:
+                depth = (zone_bound - prices_extreme[i]) / zone_bandwidth
+        if depth > best_depth:
+            best_depth = depth
+            best_idx = i
+
+    if best_depth < min_breakout_pct:
+        return None
+
+    # 检查当前价格是否已反转到另一侧
+    if is_upper and current_close >= zone_center:
+        return None
+    if not is_upper and current_close <= zone_center:
+        return None
+
+    # 计算反转速度
+    breakout_extreme = prices_extreme[best_idx]
+    if is_upper:
+        reversal_distance = breakout_extreme - current_close
+        breakout_distance = breakout_extreme - zone_bound
+    else:
+        reversal_distance = current_close - breakout_extreme
+        breakout_distance = zone_bound - breakout_extreme
+    reversal_speed = reversal_distance / breakout_distance if breakout_distance > 0 else 0
+
+    # 质量评分
+    score = _score_breakout_reversal(
+        breakout_depth=best_depth,
+        reversal_speed=reversal_speed,
+        zone_strength=zone.strength,
+        zone_touches=zone.touches,
+        bars_since_breakout=(n - 1) - best_idx,
+    )
+    tier = "A" if score >= 0.75 else "B" if score >= 0.50 else "C" if score >= 0.25 else "D"
+
+    return BreakoutReversalSignal(
+        signal_type=signal_type,
+        zone=zone,
+        breakout_price=breakout_extreme,
+        reversal_price=current_close,
+        breakout_depth=best_depth,
+        reversal_speed=reversal_speed,
+        quality_score=score,
+        quality_tier=tier,
+        bar_index=n - 1,
+    )
+
+
 def detect_breakout_reversal(
     highs: list[float],
     lows: list[float],
@@ -371,94 +458,27 @@ def detect_breakout_reversal(
         if zone.bandwidth <= 0:
             continue
 
-        # ── 信号 1: 上破回落 (bearish_reversal) ──
-        # 在过去 lookback 根 K 线中，检查是否有 high 突破 Zone 上方
-        max_high_above = 0
-        max_high_idx = -1
-        for i in range(max(0, n - lookback - 1), n - 1):
-            if highs[i] > zone.upper:
-                depth = (highs[i] - zone.upper) / zone.bandwidth
-                if depth > max_high_above:
-                    max_high_above = depth
-                    max_high_idx = i
+        # ── 上破回落 (bearish_reversal) ──
+        sig = _check_single_direction(
+            prices_extreme=highs, zone_bound=zone.upper,
+            zone_bandwidth=zone.bandwidth, current_close=current_close,
+            zone_center=zone.center, n=n, lookback=lookback,
+            min_breakout_pct=min_breakout_pct, zone=zone,
+            signal_type="bearish_reversal", is_upper=True,
+        )
+        if sig and (best_signal is None or sig.quality_score > best_signal.quality_score):
+            best_signal = sig
 
-        # 如果有突破，且当前价格已回到 Zone 下方
-        if max_high_above >= min_breakout_pct and current_close < zone.center:
-            # 计算反转速度：从突破极值到当前价的回落 / 突破幅度
-            breakout_extreme = highs[max_high_idx]
-            reversal_distance = breakout_extreme - current_close
-            breakout_distance = breakout_extreme - zone.upper
-            reversal_speed = reversal_distance / breakout_distance if breakout_distance > 0 else 0
-
-            # 质量评分
-            score = _score_breakout_reversal(
-                breakout_depth=max_high_above,
-                reversal_speed=reversal_speed,
-                zone_strength=zone.strength,
-                zone_touches=zone.touches,
-                bars_since_breakout=(n - 1) - max_high_idx,
-            )
-
-            tier = "A" if score >= 0.75 else "B" if score >= 0.50 else "C" if score >= 0.25 else "D"
-
-            signal = BreakoutReversalSignal(
-                signal_type="bearish_reversal",
-                zone=zone,
-                breakout_price=breakout_extreme,
-                reversal_price=current_close,
-                breakout_depth=max_high_above,
-                reversal_speed=reversal_speed,
-                quality_score=score,
-                quality_tier=tier,
-                bar_index=n - 1,
-            )
-
-            if best_signal is None or signal.quality_score > best_signal.quality_score:
-                best_signal = signal
-
-        # ── 信号 2: 下破反弹 (bullish_reversal) ──
-        # 在过去 lookback 根 K 线中，检查是否有 low 跌破 Zone 下方
-        min_low_below = 0
-        min_low_idx = -1
-        for i in range(max(0, n - lookback - 1), n - 1):
-            if lows[i] < zone.lower:
-                depth = (zone.lower - lows[i]) / zone.bandwidth
-                if depth > min_low_below:
-                    min_low_below = depth
-                    min_low_idx = i
-
-        # 如果有跌破，且当前价格已回到 Zone 上方
-        if min_low_below >= min_breakout_pct and current_close > zone.center:
-            # 计算反转速度
-            breakout_extreme = lows[min_low_idx]
-            reversal_distance = current_close - breakout_extreme
-            breakout_distance = zone.lower - breakout_extreme
-            reversal_speed = reversal_distance / breakout_distance if breakout_distance > 0 else 0
-
-            score = _score_breakout_reversal(
-                breakout_depth=min_low_below,
-                reversal_speed=reversal_speed,
-                zone_strength=zone.strength,
-                zone_touches=zone.touches,
-                bars_since_breakout=(n - 1) - min_low_idx,
-            )
-
-            tier = "A" if score >= 0.75 else "B" if score >= 0.50 else "C" if score >= 0.25 else "D"
-
-            signal = BreakoutReversalSignal(
-                signal_type="bullish_reversal",
-                zone=zone,
-                breakout_price=breakout_extreme,
-                reversal_price=current_close,
-                breakout_depth=min_low_below,
-                reversal_speed=reversal_speed,
-                quality_score=score,
-                quality_tier=tier,
-                bar_index=n - 1,
-            )
-
-            if best_signal is None or signal.quality_score > best_signal.quality_score:
-                best_signal = signal
+        # ── 下破反弹 (bullish_reversal) ──
+        sig = _check_single_direction(
+            prices_extreme=lows, zone_bound=zone.lower,
+            zone_bandwidth=zone.bandwidth, current_close=current_close,
+            zone_center=zone.center, n=n, lookback=lookback,
+            min_breakout_pct=min_breakout_pct, zone=zone,
+            signal_type="bullish_reversal", is_upper=False,
+        )
+        if sig and (best_signal is None or sig.quality_score > best_signal.quality_score):
+            best_signal = sig
 
     return best_signal
 
@@ -510,14 +530,8 @@ def _score_breakout_reversal(
 
 
 # ═══════════════════════════════════════════════════════════
-# PythonGO 策略
-# ═══════════════════════════════════════════════════════════
-
-# ═══════════════════════════════════════════════════════════
 # 跨品种共振检测 — 多品种同步监测 + 板块联动
 # ═══════════════════════════════════════════════════════════
-
-import time as _time
 
 # 板块映射（品种代码 → 板块）
 SECTOR_MAP = {
@@ -633,42 +647,20 @@ class ResonanceTracker:
         sector = new_record.sector
         now = new_record.timestamp
 
-        # 获取同板块、同时间窗口内的信号
-        window_start = now - self.window
-        recent = [
-            r for r in self.history
-            if r.sector == sector and r.timestamp >= window_start
-        ]
-
-        if len(recent) < 2:
-            return None
-
-        # 去重：每个品种只取最新的一条
-        by_instrument: dict[str, SignalRecord] = {}
-        for r in recent:
-            if r.instrument not in by_instrument or r.timestamp > by_instrument[r.instrument].timestamp:
-                by_instrument[r.instrument] = r
-
-        instruments = list(by_instrument.keys())
-        if len(instruments) < 2:
-            return None
-
         # 共振冷却：同板块 5 分钟内不重复触发
         last = self._last_resonance.get(sector, 0)
         if now - last < 300:
             return None
 
-        # 方向一致性
-        polarities = [_get_direction_polarity(by_instrument[i].direction) for i in instruments]
-        positive = sum(1 for p in polarities if p > 0)
-        negative = sum(1 for p in polarities if p < 0)
+        # 获取同板块、同时间窗口内去重后的信号
+        by_instrument = self._find_recent_signals(sector, now)
+        if len(by_instrument) < 2:
+            return None
 
-        if positive > negative * 1.5:
-            direction = "bullish"
-        elif negative > positive * 1.5:
-            direction = "bearish"
-        else:
-            direction = "mixed"
+        instruments = list(by_instrument.keys())
+
+        # 方向一致性
+        direction = self._check_direction_consistency(by_instrument, instruments)
 
         # 平均质量
         avg_quality = sum(by_instrument[i].quality_score for i in instruments) / len(instruments)
@@ -687,6 +679,37 @@ class ResonanceTracker:
             avg_quality=avg_quality,
             signal_type_summary=type_summary,
         )
+
+    def _find_recent_signals(self, sector: str, now: float) -> dict[str, SignalRecord]:
+        """获取同板块、同时间窗口内每个品种最新的信号"""
+        window_start = now - self.window
+        recent = [
+            r for r in self.history
+            if r.sector == sector and r.timestamp >= window_start
+        ]
+        if len(recent) < 2:
+            return {}
+
+        by_instrument: dict[str, SignalRecord] = {}
+        for r in recent:
+            if r.instrument not in by_instrument or r.timestamp > by_instrument[r.instrument].timestamp:
+                by_instrument[r.instrument] = r
+        return by_instrument
+
+    @staticmethod
+    def _check_direction_consistency(
+        by_instrument: dict[str, SignalRecord], instruments: list[str]
+    ) -> str:
+        """检查方向一致性，返回 'bullish' / 'bearish' / 'mixed'"""
+        polarities = [_get_direction_polarity(by_instrument[i].direction) for i in instruments]
+        positive = sum(1 for p in polarities if p > 0)
+        negative = sum(1 for p in polarities if p < 0)
+
+        if positive > negative * 1.5:
+            return "bullish"
+        elif negative > positive * 1.5:
+            return "bearish"
+        return "mixed"
 
     def get_sector_status(self) -> dict[str, dict]:
         """获取各板块当前信号状态"""
@@ -721,6 +744,9 @@ class ResonanceTracker:
 
 # ═══════════════════════════════════════════════════════════
 # PythonGO 策略
+# ═══════════════════════════════════════════════════════════
+
+class Params(BaseParams):
     """参数映射"""
     # 品种设置（逗号分隔多个品种）
     instruments: str = Field(
@@ -784,6 +810,8 @@ class PriceStructureSignal(BaseStrategy):
         # K 线缓存 {instrument: deque}
         self.kline_cache: dict[str, deque] = {}
         self.price_cache: dict[str, list] = {}
+        self.high_cache: dict[str, list] = {}
+        self.low_cache: dict[str, list] = {}
 
         # 信号冷却
         self._last_signal_ts: dict[str, float] = {}
@@ -844,6 +872,8 @@ class PriceStructureSignal(BaseStrategy):
             self.sub_market_data(exchange=exchange, instrument_id=code)
             self.kline_cache[f"{exchange}.{code}"] = deque(maxlen=self.params_map.lookback)
             self.price_cache[f"{exchange}.{code}"] = []
+            self.high_cache[f"{exchange}.{code}"] = []
+            self.low_cache[f"{exchange}.{code}"] = []
             self.output(f"   ✓ 订阅 {exchange}.{code}")
 
     def on_stop(self):
@@ -882,9 +912,6 @@ class PriceStructureSignal(BaseStrategy):
             self.price_cache[instrument] = self.price_cache[instrument][-self.params_map.lookback:]
 
         # 更新高低价缓存
-        if not hasattr(self, 'high_cache'):
-            self.high_cache: dict[str, list] = {}
-            self.low_cache: dict[str, list] = {}
         self.high_cache.setdefault(instrument, []).append(bar.high)
         self.low_cache.setdefault(instrument, []).append(bar.low)
         if len(self.high_cache[instrument]) > self.params_map.lookback:
@@ -969,6 +996,35 @@ class PriceStructureSignal(BaseStrategy):
 
     # ─── 交易逻辑 ──────────────────────────────────────────
 
+    def _place_order(self, bar: KLineData, direction: str, label: str = ""):
+        """
+        统一下单入口
+
+        Args:
+            bar: K 线数据
+            direction: "bullish" (买入) 或 "bearish" (卖出)
+            label: 附加标签（如 "假突破反转"）
+        """
+        suffix = f" ({label})" if label else ""
+        if direction == "bullish":
+            self.send_order(
+                exchange=bar.exchange,
+                instrument_id=bar.instrument_id,
+                volume=self.params_map.trade_volume,
+                price=bar.close + self.params_map.pay_up,
+                order_direction="buy",
+            )
+            self.output(f"   📈 买入 {bar.instrument_id} @ {bar.close:.2f}{suffix}")
+        elif direction == "bearish":
+            self.send_order(
+                exchange=bar.exchange,
+                instrument_id=bar.instrument_id,
+                volume=self.params_map.trade_volume,
+                price=bar.close - self.params_map.pay_up,
+                order_direction="sell",
+            )
+            self.output(f"   📉 卖出 {bar.instrument_id} @ {bar.close:.2f}{suffix}")
+
     def _auto_trade(self, bar: KLineData, structure: LightweightStructure):
         """
         自动下单逻辑
@@ -979,35 +1035,7 @@ class PriceStructureSignal(BaseStrategy):
             return
         if structure.direction == "mixed":
             return
-
-        instrument = f"{bar.exchange}.{bar.instrument_id}"
-        current_price = bar.close
-
-        # 检查持仓
-        position = self.get_position(bar.instrument_id)
-        # position 需要根据实际 API 调整
-
-        if structure.direction == "bullish":
-            # 看涨信号 → 买入
-            self.send_order(
-                exchange=bar.exchange,
-                instrument_id=bar.instrument_id,
-                volume=self.params_map.trade_volume,
-                price=current_price + self.params_map.pay_up,
-                order_direction="buy",
-            )
-            self.output(f"   📈 买入 {bar.instrument_id} @ {current_price:.2f}")
-
-        elif structure.direction == "bearish":
-            # 看跌信号 → 卖出
-            self.send_order(
-                exchange=bar.exchange,
-                instrument_id=bar.instrument_id,
-                volume=self.params_map.trade_volume,
-                price=current_price - self.params_map.pay_up,
-                order_direction="sell",
-            )
-            self.output(f"   📉 卖出 {bar.instrument_id} @ {current_price:.2f}")
+        self._place_order(bar, structure.direction)
 
     # ─── 成交回调 ──────────────────────────────────────────
 
@@ -1031,8 +1059,7 @@ class PriceStructureSignal(BaseStrategy):
 
     def _check_cooldown(self, instrument: str) -> bool:
         """检查信号冷却"""
-        import time
-        now = time.time()
+        now = _time.time()
         last = self._last_signal_ts.get(instrument, 0)
         if now - last < self.params_map.alert_cooldown:
             return False
@@ -1102,26 +1129,9 @@ class PriceStructureSignal(BaseStrategy):
         if self.params_map.enable_alert:
             self.show_alert(signal_text)
 
-        # 假突破自动下单逻辑
+        # 假突破自动下单
         if self.params_map.enable_trade:
-            if signal.signal_type == "bearish_reversal":
-                self.send_order(
-                    exchange=bar.exchange,
-                    instrument_id=bar.instrument_id,
-                    volume=self.params_map.trade_volume,
-                    price=bar.close - self.params_map.pay_up,
-                    order_direction="sell",
-                )
-                self.output(f"   📉 卖出 {bar.instrument_id} @ {bar.close:.2f} (假突破反转)")
-            else:
-                self.send_order(
-                    exchange=bar.exchange,
-                    instrument_id=bar.instrument_id,
-                    volume=self.params_map.trade_volume,
-                    price=bar.close + self.params_map.pay_up,
-                    order_direction="buy",
-                )
-                self.output(f"   📈 买入 {bar.instrument_id} @ {bar.close:.2f} (假突破反转)")
+            self._place_order(bar, direction, label="假突破反转")
 
         # ── 共振检测 ──
         self._check_and_emit_resonance(
@@ -1173,8 +1183,6 @@ class PriceStructureSignal(BaseStrategy):
                     self.play_sound()
                     _time.sleep(0.3)
                     self.play_sound()
-        """输出到控制台"""
-        print(f"[结构信号] {msg}")
 
     def play_sound(self):
         """播放提示音"""
