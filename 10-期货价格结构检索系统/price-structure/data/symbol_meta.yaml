@@ -1,30 +1,73 @@
-# 期货品种元数据：代码 → 中文名 / 交易所 / 主力单位
-# 后续所有展示层从这里读中文名，避免散落在代码里
-CU0: { name: 铜连续,       exchange: SHFE, unit: 吨 }
-AL0: { name: 铝连续,       exchange: SHFE, unit: 吨 }
-ZN0: { name: 锌连续,       exchange: SHFE, unit: 吨 }
-AU0: { name: 黄金连续,     exchange: SHFE, unit: 克 }
-AG0: { name: 白银连续,     exchange: SHFE, unit: 千克 }
-RB0: { name: 螺纹钢连续,   exchange: SHFE, unit: 吨 }
-HC0: { name: 热卷连续,     exchange: SHFE, unit: 吨 }
-NI0: { name: 镍连续,       exchange: SHFE, unit: 吨 }
-SN0: { name: 锡连续,       exchange: SHFE, unit: 吨 }
-I0: { name: 铁矿石连续,   exchange: DCE,  unit: 吨 }
-JM0: { name: 焦煤连续,     exchange: DCE,  unit: 吨 }
-J0: { name: 焦炭连续,     exchange: DCE,  unit: 吨 }
-M0: { name: 豆粕连续,     exchange: DCE,  unit: 吨 }
-Y0: { name: 豆油连续,     exchange: DCE,  unit: 吨 }
-P0: { name: 棕榈油连续,   exchange: DCE,  unit: 吨 }
-C0: { name: 玉米连续,     exchange: DCE,  unit: 吨 }
-V0: { name: PVC连续,      exchange: DCE,  unit: 吨 }
-PP0: { name: 聚丙烯连续,   exchange: DCE,  unit: 吨 }
-L0: { name: 聚乙烯连续,   exchange: DCE,  unit: 吨 }
-TA0: { name: PTA连续,      exchange: CZCE, unit: 吨 }
-MA0: { name: 甲醇连续,     exchange: CZCE, unit: 吨 }
-SR0: { name: 白糖连续,     exchange: CZCE, unit: 吨 }
-CF0: { name: 棉花连续,     exchange: CZCE, unit: 吨 }
-FG0: { name: 玻璃连续,     exchange: CZCE, unit: 吨 }
-SA0: { name: 纯碱连续,     exchange: CZCE, unit: 吨 }
-LC0: { name: 碳酸锂连续,   exchange: GFEX, unit: 吨 }
-SI0: { name: 工业硅连续,   exchange: GFEX, unit: 吨 }
-USDCNY: { name: 美元人民币, exchange: CFETS, unit: 1 }
+# 期货品种元数据 v2 — 增强版
+# 支持：中文名 / 交易所 / 单位 / 板块 / 典型波动率 / 合约乘数 / 手续费
+#
+# 字段说明：
+#   name:      中文名
+#   exchange:  交易所 (SHFE/DCE/CZCE/GFEX/CFETS)
+#   unit:      计价单位
+#   sector:    板块分类（用于共振检测和反差推断）
+#   multiplier: 合约乘数（每手对应的吨/克/千克数）
+#   tick_size:  最小变动价位
+#   typical_vol: 典型日波动率（日收益率标准差的长期中位数）
+#   vol_regime:  波动率特征（high/medium/low）— 品种固有属性
+
+# ─── 有色金属 ──────────────────────────────────────────────
+CU0: { name: 铜连续,       exchange: SHFE, unit: 吨, sector: 有色金属, multiplier: 5,    tick_size: 10,   typical_vol: 0.012, vol_regime: medium }
+AL0: { name: 铝连续,       exchange: SHFE, unit: 吨, sector: 有色金属, multiplier: 5,    tick_size: 5,    typical_vol: 0.009, vol_regime: low    }
+ZN0: { name: 锌连续,       exchange: SHFE, unit: 吨, sector: 有色金属, multiplier: 5,    tick_size: 5,    typical_vol: 0.013, vol_regime: medium }
+PB0: { name: 铅连续,       exchange: SHFE, unit: 吨, sector: 有色金属, multiplier: 5,    tick_size: 5,    typical_vol: 0.010, vol_regime: low    }
+NI0: { name: 镍连续,       exchange: SHFE, unit: 吨, sector: 有色金属, multiplier: 1,    tick_size: 10,   typical_vol: 0.018, vol_regime: high   }
+SN0: { name: 锡连续,       exchange: SHFE, unit: 吨, sector: 有色金属, multiplier: 1,    tick_size: 10,   typical_vol: 0.016, vol_regime: high   }
+
+# ─── 贵金属 ────────────────────────────────────────────────
+AU0: { name: 黄金连续,     exchange: SHFE, unit: 克,  sector: 贵金属,   multiplier: 1000, tick_size: 0.02, typical_vol: 0.008, vol_regime: low    }
+AG0: { name: 白银连续,     exchange: SHFE, unit: 千克, sector: 贵金属,  multiplier: 15,   tick_size: 1,    typical_vol: 0.016, vol_regime: high   }
+
+# ─── 黑色系 ────────────────────────────────────────────────
+RB0: { name: 螺纹钢连续,   exchange: SHFE, unit: 吨, sector: 黑色系, multiplier: 10,   tick_size: 1,    typical_vol: 0.012, vol_regime: medium }
+HC0: { name: 热卷连续,     exchange: SHFE, unit: 吨, sector: 黑色系, multiplier: 10,   tick_size: 1,    typical_vol: 0.012, vol_regime: medium }
+SS0: { name: 不锈钢连续,   exchange: SHFE, unit: 吨, sector: 黑色系, multiplier: 5,    tick_size: 5,    typical_vol: 0.011, vol_regime: medium }
+I0:  { name: 铁矿石连续,   exchange: DCE,  unit: 吨, sector: 黑色系, multiplier: 100,  tick_size: 0.5,  typical_vol: 0.017, vol_regime: high   }
+J0:  { name: 焦炭连续,     exchange: DCE,  unit: 吨, sector: 黑色系, multiplier: 100,  tick_size: 0.5,  typical_vol: 0.015, vol_regime: high   }
+JM0: { name: 焦煤连续,     exchange: DCE,  unit: 吨, sector: 黑色系, multiplier: 60,   tick_size: 0.5,  typical_vol: 0.016, vol_regime: high   }
+
+# ─── 能化 ──────────────────────────────────────────────────
+BU0: { name: 沥青连续,     exchange: SHFE, unit: 吨, sector: 能化, multiplier: 10,   tick_size: 1,    typical_vol: 0.014, vol_regime: medium }
+RU0: { name: 橡胶连续,     exchange: SHFE, unit: 吨, sector: 能化, multiplier: 10,   tick_size: 5,    typical_vol: 0.015, vol_regime: high   }
+FU0: { name: 燃料油连续,   exchange: SHFE, unit: 吨, sector: 能化, multiplier: 10,   tick_size: 1,    typical_vol: 0.016, vol_regime: high   }
+SC0: { name: 原油连续,     exchange: INE,  unit: 桶, sector: 能化, multiplier: 1000, tick_size: 0.1,  typical_vol: 0.018, vol_regime: high   }
+L0:  { name: 聚乙烯连续,   exchange: DCE,  unit: 吨, sector: 能化, multiplier: 5,    tick_size: 5,    typical_vol: 0.010, vol_regime: low    }
+V0:  { name: PVC连续,      exchange: DCE,  unit: 吨, sector: 能化, multiplier: 5,    tick_size: 5,    typical_vol: 0.010, vol_regime: low    }
+PP0: { name: 聚丙烯连续,   exchange: DCE,  unit: 吨, sector: 能化, multiplier: 5,    tick_size: 1,    typical_vol: 0.010, vol_regime: low    }
+EG0: { name: 乙二醇连续,   exchange: DCE,  unit: 吨, sector: 能化, multiplier: 10,   tick_size: 1,    typical_vol: 0.013, vol_regime: medium }
+EB0: { name: 苯乙烯连续,   exchange: DCE,  unit: 吨, sector: 能化, multiplier: 5,    tick_size: 1,    typical_vol: 0.014, vol_regime: medium }
+PG0: { name: LPG连续,      exchange: DCE,  unit: 吨, sector: 能化, multiplier: 20,   tick_size: 1,    typical_vol: 0.016, vol_regime: high   }
+MA0: { name: 甲醇连续,     exchange: CZCE, unit: 吨, sector: 能化, multiplier: 10,   tick_size: 1,    typical_vol: 0.012, vol_regime: medium }
+TA0: { name: PTA连续,      exchange: CZCE, unit: 吨, sector: 能化, multiplier: 5,    tick_size: 2,    typical_vol: 0.011, vol_regime: medium }
+
+# ─── 农产品 ────────────────────────────────────────────────
+M0:  { name: 豆粕连续,     exchange: DCE,  unit: 吨, sector: 农产品, multiplier: 10,   tick_size: 1,    typical_vol: 0.012, vol_regime: medium }
+Y0:  { name: 豆油连续,     exchange: DCE,  unit: 吨, sector: 农产品, multiplier: 10,   tick_size: 2,    typical_vol: 0.011, vol_regime: medium }
+P0:  { name: 棕榈油连续,   exchange: DCE,  unit: 吨, sector: 农产品, multiplier: 10,   tick_size: 2,    typical_vol: 0.015, vol_regime: high   }
+A0:  { name: 豆一连续,     exchange: DCE,  unit: 吨, sector: 农产品, multiplier: 10,   tick_size: 1,    typical_vol: 0.010, vol_regime: low    }
+C0:  { name: 玉米连续,     exchange: DCE,  unit: 吨, sector: 农产品, multiplier: 10,   tick_size: 1,    typical_vol: 0.007, vol_regime: low    }
+CS0: { name: 淀粉连续,     exchange: DCE,  unit: 吨, sector: 农产品, multiplier: 10,   tick_size: 1,    typical_vol: 0.008, vol_regime: low    }
+SR0: { name: 白糖连续,     exchange: CZCE, unit: 吨, sector: 农产品, multiplier: 10,   tick_size: 1,    typical_vol: 0.009, vol_regime: low    }
+CF0: { name: 棉花连续,     exchange: CZCE, unit: 吨, sector: 农产品, multiplier: 5,    tick_size: 5,    typical_vol: 0.012, vol_regime: medium }
+OI0: { name: 菜油连续,     exchange: CZCE, unit: 吨, sector: 农产品, multiplier: 10,   tick_size: 1,    typical_vol: 0.011, vol_regime: medium }
+RM0: { name: 菜粕连续,     exchange: CZCE, unit: 吨, sector: 农产品, multiplier: 10,   tick_size: 1,    typical_vol: 0.013, vol_regime: medium }
+AP0: { name: 苹果连续,     exchange: CZCE, unit: 吨, sector: 农产品, multiplier: 10,   tick_size: 1,    typical_vol: 0.015, vol_regime: high   }
+CJ0: { name: 红枣连续,     exchange: CZCE, unit: 吨, sector: 农产品, multiplier: 5,    tick_size: 5,    typical_vol: 0.014, vol_regime: medium }
+
+# ─── 建材 ──────────────────────────────────────────────────
+FG0: { name: 玻璃连续,     exchange: CZCE, unit: 吨, sector: 建材, multiplier: 20,   tick_size: 1,    typical_vol: 0.014, vol_regime: medium }
+SA0: { name: 纯碱连续,     exchange: CZCE, unit: 吨, sector: 建材, multiplier: 20,   tick_size: 1,    typical_vol: 0.015, vol_regime: high   }
+UR0: { name: 尿素连续,     exchange: CZCE, unit: 吨, sector: 建材, multiplier: 20,   tick_size: 1,    typical_vol: 0.012, vol_regime: medium }
+ZC0: { name: 动力煤连续,   exchange: CZCE, unit: 吨, sector: 建材, multiplier: 100,  tick_size: 0.2,  typical_vol: 0.010, vol_regime: low    }
+
+# ─── 新能源 ────────────────────────────────────────────────
+LC0: { name: 碳酸锂连续,   exchange: GFEX, unit: 吨, sector: 新能源, multiplier: 1,    tick_size: 50,   typical_vol: 0.020, vol_regime: high   }
+SI0: { name: 工业硅连续,   exchange: GFEX, unit: 吨, sector: 新能源, multiplier: 5,    tick_size: 5,    typical_vol: 0.015, vol_regime: high   }
+
+# ─── 金融 / 外汇 ──────────────────────────────────────────
+USDCNY: { name: 美元人民币, exchange: CFETS, unit: 1, sector: 外汇, multiplier: 1, tick_size: 0.0001, typical_vol: 0.002, vol_regime: low }
