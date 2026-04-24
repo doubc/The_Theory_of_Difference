@@ -96,5 +96,51 @@ def extract_features(s: Structure) -> list[float]:
 
 
 def extract_features_batch(structures: Sequence[Structure]) -> list[list[float]]:
-    """批量提取特征"""
-    return [extract_features(s) for s in structures]
+    """批量提取特征（v3.1: 尝试 C 加速，fallback 到逐个调用）"""
+    try:
+        from src.fast import batch_extract_features_fast
+        import numpy as np
+
+        # 准备扁平化数据
+        all_sr, all_tr, all_lsr, all_ar = [], [], [], []
+        all_ade, all_adx, all_due, all_dux, all_dir = [], [], [], [], []
+        offsets = [0]
+        bw_rel, strength, cv = [], [], []
+
+        for s in structures:
+            cycles = s.cycles
+            for c in cycles:
+                all_sr.append(c.speed_ratio)
+                all_tr.append(c.time_ratio)
+                lsr = c.log_speed_ratio
+                all_lsr.append(lsr if lsr > 0 and lsr != float('inf') else 0.0)
+                all_ar.append(c.amplitude_ratio)
+                all_ade.append(c.entry.abs_delta)
+                all_adx.append(c.exit.abs_delta)
+                all_due.append(c.entry.duration)
+                all_dux.append(c.exit.duration)
+                all_dir.append(1 if c.entry.direction.value > 0 else -1)
+            offsets.append(len(all_sr))
+            bw_rel.append(s.zone.relative_bandwidth)
+            strength.append(s.zone.strength)
+            cv.append(s.high_cluster_cv)
+
+        data = {
+            'speed_ratios': np.array(all_sr, dtype=np.float64),
+            'time_ratios': np.array(all_tr, dtype=np.float64),
+            'log_speed_ratios': np.array(all_lsr, dtype=np.float64),
+            'amplitude_ratios': np.array(all_ar, dtype=np.float64),
+            'abs_deltas_entry': np.array(all_ade, dtype=np.float64),
+            'abs_deltas_exit': np.array(all_adx, dtype=np.float64),
+            'durations_entry': np.array(all_due, dtype=np.float64),
+            'durations_exit': np.array(all_dux, dtype=np.float64),
+            'directions_entry': np.array(all_dir, dtype=np.int32),
+            'cycle_offsets': np.array(offsets, dtype=np.int32),
+            'zone_bw_rel': np.array(bw_rel, dtype=np.float64),
+            'zone_strength': np.array(strength, dtype=np.float64),
+            'high_cluster_cv': np.array(cv, dtype=np.float64),
+        }
+        features = batch_extract_features_fast(data)
+        return features.tolist()
+    except (ImportError, Exception):
+        return [extract_features(s) for s in structures]

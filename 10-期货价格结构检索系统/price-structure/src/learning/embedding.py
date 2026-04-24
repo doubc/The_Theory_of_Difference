@@ -10,7 +10,6 @@ Stage B: 对比学习 embedding（需要训练数据量足够时启用）
 
 from __future__ import annotations
 
-import math
 from typing import Sequence
 
 from src.models import Structure
@@ -56,31 +55,56 @@ def embed_batch(structures: Sequence[Structure]) -> list[list[float]]:
     return [embed(s) for s in structures]
 
 
-def cosine_similarity(v1: list[float], v2: list[float]) -> float:
-    """余弦相似度"""
-    dot = sum(a * b for a, b in zip(v1, v2))
-    n1 = math.sqrt(sum(a * a for a in v1))
-    n2 = math.sqrt(sum(b * b for b in v2))
-    if n1 == 0 or n2 == 0:
-        return 0.0
-    return dot / (n1 * n2)
-
-
-def euclidean_distance(v1: list[float], v2: list[float]) -> float:
-    """欧氏距离"""
-    return math.sqrt(sum((a - b) ** 2 for a, b in zip(v1, v2)))
-
-
 def find_nearest(
     query_vec: list[float],
     candidate_vecs: list[list[float]],
     top_k: int = 5,
 ) -> list[tuple[int, float]]:
     """
-    找最近邻
+    找最近邻（v3.1: numpy 向量化）
 
     返回 [(index, similarity), ...] 按相似度降序
     """
-    scores = [(i, cosine_similarity(query_vec, v)) for i, v in enumerate(candidate_vecs)]
-    scores.sort(key=lambda x: x[1], reverse=True)
-    return scores[:top_k]
+    import numpy as np
+    q = np.asarray(query_vec, dtype=np.float64)
+    c = np.asarray(candidate_vecs, dtype=np.float64)
+
+    # 向量化余弦相似度
+    dot = c @ q
+    n2 = np.sqrt(np.sum(c * c, axis=1))
+    nq = np.sqrt(np.dot(q, q))
+    denom = n2 * nq
+    denom[denom == 0] = 1e-12
+    scores = dot / denom
+
+    # Top-K（用 argpartition 避免全排序）
+    n = len(scores)
+    if n <= top_k:
+        indices = np.argsort(scores)[::-1]
+    else:
+        indices = np.argpartition(scores, -top_k)[-top_k:]
+        indices = indices[np.argsort(scores[indices])[::-1]]
+
+    return [(int(i), float(scores[i])) for i in indices]
+
+
+def cosine_similarity(v1: list[float], v2: list[float]) -> float:
+    """余弦相似度（v3.1: numpy 向量化）"""
+    import numpy as np
+    a = np.asarray(v1, dtype=np.float64)
+    b = np.asarray(v2, dtype=np.float64)
+    dot = np.dot(a, b)
+    n1 = np.sqrt(np.dot(a, a))
+    n2 = np.sqrt(np.dot(b, b))
+    if n1 == 0 or n2 == 0:
+        return 0.0
+    return float(dot / (n1 * n2))
+
+
+def euclidean_distance(v1: list[float], v2: list[float]) -> float:
+    """欧氏距离（v3.1: numpy 向量化）"""
+    import numpy as np
+    a = np.asarray(v1, dtype=np.float64)
+    b = np.asarray(v2, dtype=np.float64)
+    d = a - b
+    return float(np.sqrt(np.dot(d, d)))

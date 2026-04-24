@@ -122,11 +122,20 @@ class ActiveMatchResult:
 # ─── 核心逻辑 ──────────────────────────────────────────────
 
 def _compute_outcome(bars: list[Bar], end_date: datetime, window_days: int = 30) -> dict:
-    """计算结构结束后的前向表现"""
+    """计算结构结束后的前向表现（v3.1: 用二分查找加速）"""
     outcome_start = end_date + timedelta(days=3)
     outcome_end = outcome_start + timedelta(days=window_days)
 
-    future = [b for b in bars if outcome_start <= b.timestamp <= outcome_end]
+    # 二分查找过滤
+    try:
+        import numpy as np
+        from src.fast import binary_filter_bars
+        ts = np.array([int(b.timestamp.timestamp()) for b in bars], dtype=np.int64)
+        s, e = binary_filter_bars(ts, int(outcome_start.timestamp()), int(outcome_end.timestamp()))
+        future = bars[s:e]
+    except (ImportError, Exception):
+        future = [b for b in bars if outcome_start <= b.timestamp <= outcome_end]
+
     if not future:
         return {"direction": "unclear", "move": 0.0, "days": 0}
 
@@ -338,17 +347,26 @@ def _compile_structures(
     start: str | None = None,
     end: str | None = None,
 ) -> list[Structure]:
-    """编译指定时间窗口内的结构"""
+    """编译指定时间窗口内的结构（v3.1: 用二分查找过滤时间窗口）"""
     if start or end:
         from src.data.loader import _to_dt
-        filtered = bars
-        if start:
-            s = _to_dt(start)
-            filtered = [b for b in filtered if b.timestamp >= s]
-        if end:
-            e = _to_dt(end)
-            filtered = [b for b in filtered if b.timestamp <= e]
-        bars = filtered
+        try:
+            import numpy as np
+            from src.fast import binary_filter_bars
+            ts = np.array([int(b.timestamp.timestamp()) for b in bars], dtype=np.int64)
+            s_ts = int(_to_dt(start).timestamp()) if start else -2**62
+            e_ts = int(_to_dt(end).timestamp()) if end else 2**62
+            s_idx, e_idx = binary_filter_bars(ts, s_ts, e_ts)
+            bars = bars[s_idx:e_idx]
+        except (ImportError, Exception):
+            filtered = bars
+            if start:
+                s = _to_dt(start)
+                filtered = [b for b in filtered if b.timestamp >= s]
+            if end:
+                e = _to_dt(end)
+                filtered = [b for b in filtered if b.timestamp <= e]
+            bars = filtered
 
     if len(bars) < 30:
         return []

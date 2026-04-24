@@ -322,7 +322,7 @@ static PyObject* py_extract_pivots_c(PyObject* self, PyObject* args) {
     int max_pivots;
 
     /* 解析参数 */
-    if (!PyArg_ParseTuple(args, "O!O!dididdiO!O!O!i",
+    if (!PyArg_ParseTuple(args, "O!O!dididdO!O!O!i",
                           &PyArray_Type, &prices_arr,
                           &PyArray_Type, &returns_arr,
                           &min_amplitude, &base_window,

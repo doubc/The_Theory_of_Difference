@@ -61,9 +61,17 @@ dtw_ext = Extension(
     extra_link_args=link_args,
 )
 
+compiler_ext = Extension(
+    "src.fast._compiler",
+    sources=["src/fast/_compiler.c"],
+    include_dirs=numpy_include,
+    extra_compile_args=compile_args,
+    extra_link_args=link_args,
+)
+
 setup(
     name="price-structure-fast",
-    version="3.0.0",
+    version="3.1.0",
     description="C extensions for price-structure compiler",
-    ext_modules=[pivots_ext, dtw_ext],
+    ext_modules=[pivots_ext, dtw_ext, compiler_ext],
 )

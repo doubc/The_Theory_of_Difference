@@ -126,6 +126,8 @@ def compile_full(bars: list[Bar], config: CompilerConfig | None = None, symbol: 
     价格序列 → 结构对象
 
     完整编译流程：极值 → 段 → 段合并 → 区 → 循环 → 结构 → 丛
+
+    v3.1 优化：bar 预过滤使用二分查找 O(log n)，替代线性扫描 O(n)。
     """
     if config is None:
         config = CompilerConfig()
@@ -168,19 +170,38 @@ def compile_full(bars: list[Bar], config: CompilerConfig | None = None, symbol: 
 
     # ── V1.6 P0+: 叙事 + 守恒 + 运动 + 投影觉知 ──
     # ── V1.6 P1: 升级为 SystemState（结构×运动 + 差异分层 + 错觉检测）──
-    # 优化：为每个结构预过滤相关 bars，避免 build_system_state 内部重复遍历全量 bars
+    # v3.1 优化：预提取 bar 时间戳为 int64 数组，用二分查找过滤窗口
     system_states = []
-    for st in structures:
-        st.narrative_context = infer_narrative_context(st)
-        # 预过滤：只传入结构时间窗口 ± 30天 的 bars（减少 compute_fear_index 等的遍历量）
-        if st.t_start and st.t_end:
-            from datetime import timedelta
-            margin = timedelta(days=30)
-            window_bars = [b for b in bars if st.t_start - margin <= b.timestamp <= st.t_end + margin]
-        else:
-            window_bars = bars
-        ss = build_system_state(st, window_bars)
-        system_states.append(ss)
+    if structures:
+        import numpy as np
+        _bar_ts = np.array([int(b.timestamp.timestamp()) for b in bars], dtype=np.int64)
+        _margin_sec = 30 * 86400  # 30天
+
+        try:
+            from src.fast import binary_filter_bars
+            _use_binary = True
+        except ImportError:
+            _use_binary = False
+
+        for st in structures:
+            st.narrative_context = infer_narrative_context(st)
+            if st.t_start and st.t_end:
+                if _use_binary:
+                    s_idx, e_idx = binary_filter_bars(
+                        _bar_ts,
+                        int(st.t_start.timestamp()),
+                        int(st.t_end.timestamp()),
+                        margin=_margin_sec,
+                    )
+                    window_bars = bars[s_idx:e_idx]
+                else:
+                    from datetime import timedelta
+                    margin = timedelta(days=30)
+                    window_bars = [b for b in bars if st.t_start - margin <= b.timestamp <= st.t_end + margin]
+            else:
+                window_bars = bars
+            ss = build_system_state(st, window_bars)
+            system_states.append(ss)
 
     # 3.5 丛识别
     bundles = detect_bundles(

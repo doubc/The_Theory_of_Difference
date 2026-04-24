@@ -65,6 +65,8 @@ class RetrievalEngine:
         """
         检索最相似的历史结构
 
+        v3.1 优化：批量预提取不变量向量，向量化几何相似度计算。
+
         Args:
             query: 当前编译出的结构
             top_k: 返回前 K 个近邻
@@ -80,23 +82,68 @@ class RetrievalEngine:
         # ── V1.6 P1: 反差类型过滤 ──
         query_contrast = query.zone.context_contrast.value if query.zone else "unknown"
         if filter_contrast and query_contrast != "unknown":
-            # 优先筛选同反差类型的样本；如果没有同类型的，放宽到 unknown
             same_contrast = [sp for sp in candidates
                              if sp.structure.get("invariants", {}).get("contrast_type") == query_contrast]
             if same_contrast:
                 candidates = same_contrast
-            # 如果完全没有同类型候选，则不做过滤（退化为全库检索）
 
-        scored: list[Neighbor] = []
-        for sp in candidates:
-            s2 = _rebuild_structure_shim(sp)
-            if s2 is None:
-                continue
-            sc = similarity(query, s2)
-            if sc.total >= min_score:
-                # ── 生成匹配归因 ──
-                reason = _generate_match_reason(query, s2, sc)
-                scored.append(Neighbor(sample=sp, score=sc, match_reason=reason))
+        # ── v3.1: 批量预提取不变量，向量化几何相似度 ──
+        try:
+            import numpy as np
+            from src.fast import batch_geometric_similarity_fast
+            from src.retrieval.similarity import (
+                _normalized_vector, INVARIANT_KEYS, INVARIANT_SCALES,
+                relational_similarity, motion_similarity, family_similarity,
+                SimilarityScore,
+            )
+
+            # 提取查询向量
+            q_vec = np.array(_normalized_vector(query.invariants), dtype=np.float64)
+            dim = len(q_vec)
+
+            # 预构建候选矩阵
+            valid_samples = []
+            c_matrix_rows = []
+            for sp in candidates:
+                s2 = _rebuild_structure_shim(sp)
+                if s2 is None:
+                    continue
+                valid_samples.append((sp, s2))
+                c_matrix_rows.append(_normalized_vector(s2.invariants))
+
+            if not c_matrix_rows:
+                return RetrievalResult(query=query, neighbors=[], posterior=_aggregate_posterior([]))
+
+            c_matrix = np.array(c_matrix_rows, dtype=np.float64)
+            n = len(c_matrix_rows)
+
+            # 批量几何相似度（C 加速）
+            geo_scores = np.array(batch_geometric_similarity_fast(q_vec, c_matrix), dtype=np.float64)
+
+            # 快速预筛：只对几何相似度 > 阈值的做完整计算
+            geo_threshold = min_score * 0.5  # 几何分太低的直接跳过
+            scored: list[Neighbor] = []
+
+            for i, (sp, s2) in enumerate(valid_samples):
+                if geo_scores[i] < geo_threshold:
+                    continue
+
+                sc = similarity(query, s2)
+                if sc.total >= min_score:
+                    reason = _generate_match_reason(query, s2, sc)
+                    scored.append(Neighbor(sample=sp, score=sc, match_reason=reason))
+
+        except (ImportError, Exception):
+            # Fallback: 逐个计算
+            scored: list[Neighbor] = []
+            for sp in candidates:
+                s2 = _rebuild_structure_shim(sp)
+                if s2 is None:
+                    continue
+                sc = similarity(query, s2)
+                if sc.total >= min_score:
+                    reason = _generate_match_reason(query, s2, sc)
+                    scored.append(Neighbor(sample=sp, score=sc, match_reason=reason))
 
         scored.sort(key=lambda n: n.score.total, reverse=True)
         top = scored[:top_k]

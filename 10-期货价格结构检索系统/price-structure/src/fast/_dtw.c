@@ -5,11 +5,21 @@
  * 支持 Sakoe-Chiba 带宽约束 + 空间优化 O(m)。
  *
  * 比 Python 实现快 50-100x（纯数值计算）。
+ *
+ * v3.1 优化：
+ *   - 工作区预分配，批量场景零 malloc
+ *   - 内层循环 min 展开，减少分支
+ *   - 静态栈分配小序列（<1024），避免堆分配
+ *   - batch_dtw 并行友好
  */
 
 #include <math.h>
 #include <stdlib.h>
+#include <string.h>
 #include <float.h>
+
+/* 小序列用栈分配，大序列才 malloc */
+#define DTW_STACK_SIZE 1024
 
 /*
  * DTW 距离计算（空间优化版，只保留两行 DP）
@@ -36,49 +46,60 @@ double dtw_distance_c(
     if (diff < 0) diff = -diff;
     if (window < diff) window = diff;
 
-    /* 空间优化：只保留两行 */
-    double *prev = (double *)malloc((n2 + 1) * sizeof(double));
-    double *curr = (double *)malloc((n2 + 1) * sizeof(double));
+    /* 栈分配小序列，避免 malloc 开销 */
+    double stack_prev[DTW_STACK_SIZE + 1];
+    double stack_curr[DTW_STACK_SIZE + 1];
+    double *prev, *curr;
+    int use_stack = (n2 <= DTW_STACK_SIZE);
 
-    if (!prev || !curr) {
-        free(prev);
-        free(curr);
-        return DBL_MAX;
+    if (use_stack) {
+        prev = stack_prev;
+        curr = stack_curr;
+    } else {
+        prev = (double *)malloc((n2 + 1) * sizeof(double));
+        curr = (double *)malloc((n2 + 1) * sizeof(double));
+        if (!prev || !curr) {
+            free(prev);
+            free(curr);
+            return DBL_MAX;
+        }
     }
 
-    /* 初始化 */
-    for (int j = 0; j <= n2; j++) {
-        prev[j] = DBL_MAX;
-        curr[j] = DBL_MAX;
-    }
+    /* 初始化：prev = [0, INF, INF, ...] */
     prev[0] = 0.0;
+    for (int j = 1; j <= n2; j++) {
+        prev[j] = DBL_MAX;
+    }
 
     /* DP 填充 */
     for (int i = 1; i <= n1; i++) {
-        /* 重置当前行 */
+        /* 重置当前行为 INF */
         for (int j = 0; j <= n2; j++) {
             curr[j] = DBL_MAX;
         }
+        curr[0] = DBL_MAX;
 
         int j_lo = i - window;
         if (j_lo < 1) j_lo = 1;
         int j_hi = i + window;
         if (j_hi > n2) j_hi = n2;
 
+        double s1_i = seq1[i - 1];  /* 预取，减少内存访问 */
+
         for (int j = j_lo; j <= j_hi; j++) {
-            double diff_val = seq1[i - 1] - seq2[j - 1];
+            double diff_val = s1_i - seq2[j - 1];
             double cost = diff_val * diff_val;
 
-            double min_val = prev[j];           /* deletion */
-            if (curr[j - 1] < min_val)          /* insertion */
-                min_val = curr[j - 1];
-            if (prev[j - 1] < min_val)          /* match */
-                min_val = prev[j - 1];
+            /* 展开 min 三路，减少分支预测失败 */
+            double a = prev[j];       /* deletion  */
+            double b = curr[j - 1];   /* insertion  */
+            double c = prev[j - 1];   /* match      */
 
+            double min_val = a < b ? (a < c ? a : c) : (b < c ? b : c);
             curr[j] = cost + min_val;
         }
 
-        /* 交换 prev/curr */
+        /* 交换 prev/curr（指针交换，零拷贝） */
         double *tmp = prev;
         prev = curr;
         curr = tmp;
@@ -86,10 +107,99 @@ double dtw_distance_c(
 
     double result = sqrt(prev[n2]);
 
-    free(prev);
-    free(curr);
+    if (!use_stack) {
+        free(prev);
+        free(curr);
+    }
 
     return result;
+}
+
+
+/*
+ * 工作区结构 — 批量 DTW 时预分配一次，复用多次
+ */
+typedef struct {
+    double *buf1;   /* [capacity] */
+    double *buf2;   /* [capacity] */
+    int capacity;
+} DTWWorkspace;
+
+/* 初始化工作区（capacity = 最大候选序列长度） */
+DTWWorkspace* dtw_workspace_create(int capacity) {
+    if (capacity < 1) capacity = 1;
+    DTWWorkspace *ws = (DTWWorkspace *)malloc(sizeof(DTWWorkspace));
+    if (!ws) return NULL;
+    ws->buf1 = (double *)malloc((capacity + 1) * sizeof(double));
+    ws->buf2 = (double *)malloc((capacity + 1) * sizeof(double));
+    ws->capacity = capacity;
+    if (!ws->buf1 || !ws->buf2) {
+        free(ws->buf1);
+        free(ws->buf2);
+        free(ws);
+        return NULL;
+    }
+    return ws;
+}
+
+void dtw_workspace_free(DTWWorkspace *ws) {
+    if (!ws) return;
+    free(ws->buf1);
+    free(ws->buf2);
+    free(ws);
+}
+
+/*
+ * DTW 距离（使用预分配工作区，零 malloc）
+ */
+double dtw_distance_ws(
+    const double *seq1,
+    const double *seq2,
+    int n1,
+    int n2,
+    int window,
+    DTWWorkspace *ws
+) {
+    if (n1 == 0 || n2 == 0) return DBL_MAX;
+
+    if (window <= 0) window = n1 > n2 ? n1 : n2;
+    int diff = n1 - n2;
+    if (diff < 0) diff = -diff;
+    if (window < diff) window = diff;
+
+    /* 如果候选序列超出工作区容量，fallback 到独立分配 */
+    if (n2 > ws->capacity) {
+        return dtw_distance_c(seq1, seq2, n1, n2, window);
+    }
+
+    double *prev = ws->buf1;
+    double *curr = ws->buf2;
+
+    prev[0] = 0.0;
+    for (int j = 1; j <= n2; j++) prev[j] = DBL_MAX;
+
+    for (int i = 1; i <= n1; i++) {
+        for (int j = 0; j <= n2; j++) curr[j] = DBL_MAX;
+        curr[0] = DBL_MAX;
+
+        int j_lo = i - window;
+        if (j_lo < 1) j_lo = 1;
+        int j_hi = i + window;
+        if (j_hi > n2) j_hi = n2;
+
+        double s1_i = seq1[i - 1];
+
+        for (int j = j_lo; j <= j_hi; j++) {
+            double d = s1_i - seq2[j - 1];
+            double cost = d * d;
+            double a = prev[j], b = curr[j - 1], c = prev[j - 1];
+            curr[j] = cost + (a < b ? (a < c ? a : c) : (b < c ? b : c));
+        }
+
+        double *tmp = prev; prev = curr; curr = tmp;
+    }
+
+    return sqrt(prev[n2]);
 }
 
 /*
@@ -121,8 +231,8 @@ double dtw_similarity_c(
 /*
  * 批量 DTW：计算一个序列与多个候选序列的 DTW 距离
  *
- * 用于检索场景：给定当前结构的速度比序列，
- * 与历史库中所有结构做 DTW 比较。
+ * 使用预分配工作区，批量场景零 malloc。
+ * 用于检索场景：给定当前结构的速度比序列，与历史库中所有结构做 DTW 比较。
  *
  * 参数：
  *   query        — 查询序列 [query_len]
@@ -144,21 +254,44 @@ void batch_dtw(
     int window,
     double *out_dist
 ) {
+    /* 预分配工作区（找到最大候选长度） */
+    int max_cand_len = 0;
+    for (int i = 0; i < n_candidates; i++) {
+        int len = cand_offsets[i + 1] - cand_offsets[i];
+        if (len > max_cand_len) max_cand_len = len;
+    }
+
+    DTWWorkspace *ws = dtw_workspace_create(max_cand_len);
+    if (!ws) {
+        /* 分配失败，fallback 到逐个独立分配 */
+        for (int i = 0; i < n_candidates; i++) {
+            int start = cand_offsets[i];
+            int end = cand_offsets[i + 1];
+            out_dist[i] = dtw_distance_c(
+                query, candidates + start,
+                query_len, end - start, window
+            );
+        }
+        return;
+    }
+
     for (int i = 0; i < n_candidates; i++) {
         int start = cand_offsets[i];
         int end = cand_offsets[i + 1];
-        int len = end - start;
-
-        out_dist[i] = dtw_distance_c(
+        out_dist[i] = dtw_distance_ws(
             query, candidates + start,
-            query_len, len, window
+            query_len, end - start, window, ws
         );
     }
+
+    dtw_workspace_free(ws);
 }
 
 
 /*
  * 编辑距离（Levenshtein）— 用于段形状相似度
+ *
+ * v3.1: 小序列栈分配
  *
  * 参数：
  *   seq1, seq2 — 符号序列（整数编码）[n1], [n2]
@@ -175,35 +308,45 @@ int edit_distance_c(
     if (n1 == 0) return n2;
     if (n2 == 0) return n1;
 
-    /* 空间优化：只保留两行 */
-    int *prev = (int *)malloc((n2 + 1) * sizeof(int));
-    int *curr = (int *)malloc((n2 + 1) * sizeof(int));
+    /* 栈分配小序列 */
+    int stack_prev[DTW_STACK_SIZE + 1];
+    int stack_curr[DTW_STACK_SIZE + 1];
+    int *prev, *curr;
+    int use_stack = (n2 <= DTW_STACK_SIZE);
 
-    if (!prev || !curr) {
-        free(prev);
-        free(curr);
-        return n1 + n2;  /* 最坏情况 */
+    if (use_stack) {
+        prev = stack_prev;
+        curr = stack_curr;
+    } else {
+        prev = (int *)malloc((n2 + 1) * sizeof(int));
+        curr = (int *)malloc((n2 + 1) * sizeof(int));
+        if (!prev || !curr) {
+            free(prev);
+            free(curr);
+            return n1 + n2;
+        }
     }
 
     for (int j = 0; j <= n2; j++) prev[j] = j;
 
     for (int i = 1; i <= n1; i++) {
         curr[0] = i;
+        int s1_i = seq1[i - 1];  /* 预取 */
         for (int j = 1; j <= n2; j++) {
-            int cost = (seq1[i - 1] == seq2[j - 1]) ? 0 : 1;
+            int cost = (s1_i == seq2[j - 1]) ? 0 : 1;
             int del = prev[j] + 1;
             int ins = curr[j - 1] + 1;
             int sub = prev[j - 1] + cost;
             curr[j] = del < ins ? (del < sub ? del : sub) : (ins < sub ? ins : sub);
         }
-        int *tmp = prev;
-        prev = curr;
-        curr = tmp;
+        int *tmp = prev; prev = curr; curr = tmp;
     }
 
     int result = prev[n2];
-    free(prev);
-    free(curr);
+    if (!use_stack) {
+        free(prev);
+        free(curr);
+    }
     return result;
 }
 
@@ -319,4 +462,113 @@ void batch_similarity(
 
         out_scores[i] = w_geo * geo + w_rel * rel + w_motion * mot + w_family * fam;
     }
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+ * Python C API 绑定
+ * ═══════════════════════════════════════════════════════════ */
+
+#define PY_SSIZE_T_CLEAN
+#include <Python.h>
+#include <numpy/arrayobject.h>
+
+/* ── dtw_distance_c ── */
+static PyObject* py_dtw_distance_c(PyObject* self, PyObject* args) {
+    PyArrayObject *s1_arr, *s2_arr;
+    int n1, n2, window;
+
+    if (!PyArg_ParseTuple(args, "O!O!iii",
+                          &PyArray_Type, &s1_arr,
+                          &PyArray_Type, &s2_arr,
+                          &n1, &n2, &window))
+        return NULL;
+
+    double *s1 = (double *)PyArray_DATA(s1_arr);
+    double *s2 = (double *)PyArray_DATA(s2_arr);
+    double dist = dtw_distance_c(s1, s2, n1, n2, window);
+    return PyFloat_FromDouble(dist);
+}
+
+/* ── dtw_similarity_c ── */
+static PyObject* py_dtw_similarity_c(PyObject* self, PyObject* args) {
+    PyArrayObject *s1_arr, *s2_arr;
+    int n1, n2, window;
+
+    if (!PyArg_ParseTuple(args, "O!O!iii",
+                          &PyArray_Type, &s1_arr,
+                          &PyArray_Type, &s2_arr,
+                          &n1, &n2, &window))
+        return NULL;
+
+    double *s1 = (double *)PyArray_DATA(s1_arr);
+    double *s2 = (double *)PyArray_DATA(s2_arr);
+    double sim = dtw_similarity_c(s1, s2, n1, n2, window);
+    return PyFloat_FromDouble(sim);
+}
+
+/* ── segment_shape_similarity_c ── */
+static PyObject* py_segment_shape_similarity_c(PyObject* self, PyObject* args) {
+    PyArrayObject *s1_arr, *s2_arr;
+    int n1, n2;
+
+    if (!PyArg_ParseTuple(args, "O!O!ii",
+                          &PyArray_Type, &s1_arr,
+                          &PyArray_Type, &s2_arr,
+                          &n1, &n2))
+        return NULL;
+
+    int *s1 = (int *)PyArray_DATA(s1_arr);
+    int *s2 = (int *)PyArray_DATA(s2_arr);
+    double sim = segment_shape_similarity_c(s1, s2, n1, n2);
+    return PyFloat_FromDouble(sim);
+}
+
+/* ── batch_dtw ── */
+static PyObject* py_batch_dtw(PyObject* self, PyObject* args) {
+    PyArrayObject *query_arr, *cand_arr, *offsets_arr, *out_arr;
+    int query_len, n_candidates, window;
+
+    if (!PyArg_ParseTuple(args, "O!iO!O!iO!",
+                          &PyArray_Type, &query_arr, &query_len,
+                          &PyArray_Type, &cand_arr,
+                          &PyArray_Type, &offsets_arr,
+                          &window,
+                          &PyArray_Type, &out_arr))
+        return NULL;
+
+    double *query = (double *)PyArray_DATA(query_arr);
+    double *cands = (double *)PyArray_DATA(cand_arr);
+    int *offsets = (int *)PyArray_DATA(offsets_arr);
+    double *out = (double *)PyArray_DATA(out_arr);
+    n_candidates = (int)PyArray_DIM(offsets_arr, 0) - 1;
+
+    batch_dtw(query, query_len, cands, offsets, n_candidates, window, out);
+    Py_RETURN_NONE;
+}
+
+/* 方法表 */
+static PyMethodDef DtwMethods[] = {
+    {"dtw_distance_c", py_dtw_distance_c, METH_VARARGS,
+     "DTW distance (C accelerated)"},
+    {"dtw_similarity_c", py_dtw_similarity_c, METH_VARARGS,
+     "DTW similarity [0,1] (C accelerated)"},
+    {"segment_shape_similarity_c", py_segment_shape_similarity_c, METH_VARARGS,
+     "Segment shape similarity via edit distance (C accelerated)"},
+    {"batch_dtw", py_batch_dtw, METH_VARARGS,
+     "Batch DTW distances (C accelerated, workspace reused)"},
+    {NULL, NULL, 0, NULL}
+};
+
+static struct PyModuleDef dtwmodule = {
+    PyModuleDef_HEAD_INIT,
+    "_dtw",
+    "DTW and edit distance C extension module",
+    -1,
+    DtwMethods
+};
+
+PyMODINIT_FUNC PyInit__dtw(void) {
+    import_array();
+    return PyModule_Create(&dtwmodule);
 }

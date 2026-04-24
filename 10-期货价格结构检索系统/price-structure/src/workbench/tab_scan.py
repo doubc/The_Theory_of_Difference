@@ -42,18 +42,35 @@ def render(ctx: dict):
     # ── 全市场机会扫描 ──
     @st.cache_data(ttl=300)
     def _scan_all_symbols(sens_key: str) -> list[dict]:
-        """扫描所有品种，返回按关注度排序的 Top 机会列表"""
+        """
+        扫描所有品种，返回按关注度排序的 Top 机会列表。
+
+        v3.1 修复：
+        - 只加载最近 N 天数据（避免全量历史导致旧结构上榜）
+        - 只保留最近 30 天内仍有活动的结构
+        - 排序加入 recency 权重
+        """
+        from datetime import timedelta
         _sens = {
-            "粗糙": {"min_amp": 0.05, "min_dur": 5, "min_cycles": 3},
-            "标准": {"min_amp": 0.03, "min_dur": 3, "min_cycles": 2},
-            "精细": {"min_amp": 0.015, "min_dur": 2, "min_cycles": 2},
+            "粗糙": {"min_amp": 0.05, "min_dur": 5, "min_cycles": 3, "lookback_days": 240},
+            "标准": {"min_amp": 0.03, "min_dur": 3, "min_cycles": 2, "lookback_days": 180},
+            "精细": {"min_amp": 0.015, "min_dur": 2, "min_cycles": 2, "lookback_days": 120},
         }
         _s = _sens.get(sens_key, _sens["标准"])
+        lookback = _s["lookback_days"]
+        recency_cutoff_days = 30  # 结构必须在最近 N 天内有活动
+
+        now = datetime.now()
         results = []
         for sym in ALL_SYMBOLS:
             bars_data = load_bars(sym)
             if not bars_data or len(bars_data) < 30:
                 continue
+
+            # 只取最近 lookback 天的数据
+            if len(bars_data) > lookback:
+                bars_data = bars_data[-lookback:]
+
             cfg = CompilerConfig(
                 min_amplitude=_s["min_amp"], min_duration=_s["min_dur"],
                 min_cycles=_s["min_cycles"],
@@ -62,8 +79,15 @@ def render(ctx: dict):
             cr = compile_full(bars_data, cfg, symbol=sym)
             if not cr.ranked_structures:
                 continue
+
             last_price = bars_data[-1].close
-            for idx_s, s in enumerate(cr.ranked_structures[:3]):
+            last_ts = bars_data[-1].timestamp
+
+            for idx_s, s in enumerate(cr.ranked_structures[:5]):
+                # 只保留最近 recency_cutoff_days 内有活动的结构
+                if s.t_end and (last_ts - s.t_end).days > recency_cutoff_days:
+                    continue
+
                 m = s.motion
                 p = s.projection
                 ss = cr.system_states[idx_s] if idx_s < len(cr.system_states) else None
@@ -100,6 +124,10 @@ def render(ctx: dict):
                     risk_level = "低"
                     risk_pct = "1-3%"
 
+                # recency score: 越近越高 (0~1)
+                days_since_end = (last_ts - s.t_end).days if s.t_end else recency_cutoff_days
+                recency = max(0, 1.0 - days_since_end / recency_cutoff_days)
+
                 results.append({
                     "symbol": sym,
                     "symbol_name": symbol_name(sym),
@@ -119,8 +147,12 @@ def render(ctx: dict):
                     "risk_level": risk_level,
                     "risk_pct": risk_pct,
                     "quality_flags": qa.flags[:3],
+                    "recency": recency,
+                    "days_since_end": days_since_end,
                 })
-        results.sort(key=lambda x: x["score"], reverse=True)
+
+        # 排序：质量 70% + recency 30%
+        results.sort(key=lambda x: x["score"] * 0.7 + x["recency"] * 30, reverse=True)
         return results
 
     scan_col1, scan_col2, scan_col3 = st.columns([1, 2, 1])
@@ -213,6 +245,15 @@ def render(ctx: dict):
 
                 risk_color = {"高": "#ef5350", "中": "#ff9800", "低": "#26a69a"}.get(r["risk_level"], "#999")
 
+                # 新鲜度标记
+                ds = r.get("days_since_end", 0)
+                if ds <= 3:
+                    fresh_tag = f'<span style="color:#4caf50;font-weight:600">🟢 {ds}天前</span>'
+                elif ds <= 7:
+                    fresh_tag = f'<span style="color:#ff9800;font-weight:600">🟡 {ds}天前</span>'
+                else:
+                    fresh_tag = f'<span style="color:#999">{ds}天前</span>'
+
                 st.markdown(f"""
                 <div class="structure-card {card_cls}">
                     <b>#{i+1}</b> {dir_icon}
@@ -222,6 +263,7 @@ def render(ctx: dict):
                     · {motion_html} · 通量 {r['flux']:+.2f}{blind_tag}{contrast_tag}
                     · <b>质量 {r['score']:.0f}分</b>
                     · <span style="color:{risk_color};font-weight:700">⚖️ {r['risk_level']}关注度</span>
+                    · {fresh_tag}
                     <div class="meta-text">{price_pos} · 现价 {r['last_price']:.1f}</div>
                     <div class="narrative-text">{r['narrative']}</div>
                 </div>

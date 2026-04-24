@@ -16,8 +16,6 @@ src/fast/__init__.py — C 扩展 Python 包装器
 from __future__ import annotations
 
 import math
-import sys
-from pathlib import Path
 
 # ─── 检测 C 扩展 ──────────────────────────────────────────
 
@@ -141,12 +139,12 @@ def extract_pivots_fast(
         out_fractal = np.zeros(max_pivots, dtype=np.float64)
 
         count = _C_MODULE.extract_pivots_c(
-            prices_np, returns_np, n,
-            min_amplitude, base_window, noise_filter,
-            1 if adaptive else 0,
-            fractal_threshold, vol_scale,
+            prices_np, returns_np,
+            float(min_amplitude), int(base_window), float(noise_filter),
+            int(1 if adaptive else 0),
+            float(fractal_threshold), float(vol_scale),
             out_idx, out_dir, out_fractal,
-            max_pivots,
+            int(max_pivots),
         )
 
         return [
@@ -448,3 +446,187 @@ def batch_extract_pivots(all_prices, offsets, **kwargs) -> list[list[dict]]:
         pivots = extract_pivots_fast(prices, **kwargs)
         results.append(pivots)
     return results
+
+
+# ═══════════════════════════════════════════════════════════
+# 编译器 C 加速 (_compiler 模块)
+# ═══════════════════════════════════════════════════════════
+
+_COMPILER_AVAILABLE = False
+try:
+    from src.fast import _compiler as _COMPILER
+    _COMPILER_AVAILABLE = True
+except ImportError:
+    pass
+
+
+def has_compiler_extension() -> bool:
+    return _COMPILER_AVAILABLE
+
+
+def binary_filter_bars(timestamps, t_start: int, t_end: int, margin: int = 0) -> tuple[int, int]:
+    """
+    二分查找过滤 bar 时间范围 — O(log n)
+
+    Args:
+        timestamps: int64 numpy array，已排序的 epoch seconds
+        t_start: 窗口起始 epoch seconds
+        t_end: 窗口结束 epoch seconds
+        margin: 边距（秒）
+
+    Returns:
+        (start_idx, end_idx) — 切片区间 [start_idx:end_idx]
+    """
+    import numpy as np
+    ts = np.asarray(timestamps, dtype=np.int64)
+    if _COMPILER_AVAILABLE:
+        return _COMPILER.binary_filter_bars(ts, int(t_start), int(t_end), int(margin))
+    else:
+        # Python fallback
+        lo = t_start - margin
+        hi = t_end + margin
+        start = np.searchsorted(ts, lo, side='left')
+        end = np.searchsorted(ts, hi, side='right')
+        return int(start), int(end)
+
+
+def batch_geometric_similarity_fast(query_vec, candidate_matrix) -> list[float]:
+    """
+    批量几何相似度（C 加速）
+
+    Args:
+        query_vec: 查询不变量向量 (list/array, length=dim)
+        candidate_matrix: 候选不变量矩阵 (2D array, shape=[n, dim])
+
+    Returns:
+        相似度列表 [0, 1]
+    """
+    import numpy as np
+    q = np.asarray(query_vec, dtype=np.float64)
+    c = np.asarray(candidate_matrix, dtype=np.float64)
+    n, dim = c.shape
+    out = np.zeros(n, dtype=np.float64)
+
+    if _COMPILER_AVAILABLE:
+        _COMPILER.batch_geometric_similarity(q, c, int(dim), int(n), out)
+    else:
+        # Python fallback
+        inv_sqrt_dim = 1.0 / math.sqrt(dim)
+        for i in range(n):
+            d = c[i] - q
+            dist = math.sqrt(float(np.dot(d, d)))
+            out[i] = max(0.0, 1.0 - dist * inv_sqrt_dim)
+
+    return out.tolist()
+
+
+def batch_total_similarity_fast(
+    query_geo, cand_geo,
+    query_rel, cand_rel,
+    query_mot, cand_mot,
+    family_scores,
+    weights=(0.35, 0.35, 0.15, 0.15),
+) -> list[float]:
+    """
+    批量综合相似度（C 加速 + Python fallback）
+
+    Args:
+        query_geo: 查询几何向量 [dim]
+        cand_geo: 候选几何矩阵 [n, dim]
+        query_rel: 查询关系向量 [4]
+        cand_rel: 候选关系矩阵 [n, 4]
+        query_mot: 查询运动向量 [4]
+        cand_mot: 候选运动矩阵 [n, 4]
+        family_scores: 族相似度 [n]
+        weights: (几何, 关系, 运动, 族) 权重
+
+    Returns:
+        综合相似度列表 [0, 1]
+    """
+    import numpy as np
+    qg = np.asarray(query_geo, dtype=np.float64)
+    cg = np.asarray(cand_geo, dtype=np.float64)
+    qr = np.asarray(query_rel, dtype=np.float64)
+    cr = np.asarray(cand_rel, dtype=np.float64)
+    qm = np.asarray(query_mot, dtype=np.float64)
+    cm = np.asarray(cand_mot, dtype=np.float64)
+    fam = np.asarray(family_scores, dtype=np.float64)
+    n = len(fam)
+    dim = qg.shape[0] if qg.ndim > 0 else 1
+    out = np.zeros(n, dtype=np.float64)
+    w_g, w_r, w_m, w_f = weights
+
+    if _COMPILER_AVAILABLE:
+        _COMPILER.batch_total_similarity(
+            qg, cg, qr, cr, qm, cm, fam,
+            int(dim), int(n), float(w_g), float(w_r), float(w_m), out, float(w_f)
+        )
+    else:
+        # Python fallback
+        geo_scores = batch_geometric_similarity_fast(qg, cg)
+        for i in range(n):
+            # 关系
+            rel = 0.0
+            if qr[0] == cr[i * 4]: rel += 0.25
+            dn = abs(qr[1] - cr[i * 4 + 1])
+            rel += max(0, 1.0 - dn / 5.0) * 0.25
+            if (qr[2] > 1) == (cr[i * 4 + 2] > 1): rel += 0.25
+            if (qr[3] > 1) == (cr[i * 4 + 3] > 1): rel += 0.25
+            # 运动
+            mot = 0.0
+            if qm[0] == cm[i * 4]: mot += 0.25
+            if qm[1] * cm[i * 4 + 1] > 0: mot += 0.25
+            dd = abs(qm[2] - cm[i * 4 + 2])
+            mot += max(0, 1.0 - dd) * 0.25
+            if qm[3] == cm[i * 4 + 3]: mot += 0.25
+            out[i] = w_g * geo_scores[i] + w_r * rel + w_m * mot + w_f * fam[i]
+
+    return out.tolist()
+
+
+def batch_extract_features_fast(
+    structures_data: dict,
+) -> "np.ndarray":
+    """
+    批量特征提取（C 加速 + Python fallback）
+
+    Args:
+        structures_data: 包含以下 numpy arrays 的 dict:
+            - speed_ratios, time_ratios, log_speed_ratios, amplitude_ratios
+            - abs_deltas_entry, abs_deltas_exit, durations_entry, durations_exit
+            - directions_entry
+            - cycle_offsets [n_structures+1]
+            - zone_bw_rel, zone_strength, high_cluster_cv [n_structures]
+
+    Returns:
+        features matrix [n_structures, 13]
+    """
+    import numpy as np
+    n = len(structures_data['zone_bw_rel'])
+    out = np.zeros((n, 13), dtype=np.float64)
+
+    if _COMPILER_AVAILABLE:
+        _COMPILER.batch_extract_features(
+            structures_data['speed_ratios'],
+            structures_data['time_ratios'],
+            structures_data['log_speed_ratios'],
+            structures_data['amplitude_ratios'],
+            structures_data['abs_deltas_entry'],
+            structures_data['abs_deltas_exit'],
+            structures_data['durations_entry'],
+            structures_data['durations_exit'],
+            structures_data['directions_entry'].astype(np.int32),
+            structures_data['cycle_offsets'].astype(np.int32),
+            int(n),
+            structures_data['zone_bw_rel'],
+            structures_data['zone_strength'],
+            structures_data['high_cluster_cv'],
+            out,
+        )
+    else:
+        # Python fallback: 逐结构调用
+        from src.learning.features import extract_features
+        for i, s in enumerate(structures_data.get('_structures', [])):
+            out[i] = extract_features(s)
+
+    return out
