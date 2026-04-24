@@ -250,6 +250,11 @@ class CrossTimeframeMatch:
 | 2026-04-24 | app.py 拆分为 shared.py + data_layer.py | 2848 行单文件→模块化，Tab 页面可独立复用 |
 | 2026-04-24 | PythonGO 策略保持自包含，不拆分 | PythonGO 运行在无限易独立环境，无法访问 src/ 包 |
 | 2026-04-24 | PythonGO 内部优化：提取公共方法减少重复 | 可读性优先，不影响自包含约束 |
+| 2026-04-24 | 品种描述改为交易导向五要素格式 | 学术描述对交易无指导价值 |
+| 2026-04-24 | 结构时效标签从"X天前"改为判断性标签 | 🔥实时/✅活跃/⚡需刷新/⚠️老化/📋仅参考 |
+| 2026-04-24 | MySQL 密码硬编码→环境变量 MYSQL_PASSWORD | 安全合规，4 文件修改 |
+| 2026-04-24 | requirements.txt + pyproject.toml 依赖同步 | 外审发现依赖不一致 |
+| 2026-04-24 | 新增 .env.example + 更新 .gitignore | 密码不入库 |
 
 ---
 
@@ -267,6 +272,40 @@ class CrossTimeframeMatch:
 - [x] data_layer.py 导入 + 函数签名验证（语法✓ 装饰器✓）
 - [x] pythongo_signal.py 语法检查 + 未使用导入清理
 - [x] shared.py / data_layer.py 与 app.py 原始函数逐行比对一致
+- [x] MySQL 密码环境变量替换（4 文件无硬编码残留）
+- [x] requirements.txt 与 pyproject.toml 依赖一致
+- [x] .gitignore 覆盖 .env/.idea/temp/history
+
+---
+
+## v3.1 变更（2026-04-24）
+
+### 修改文件
+
+| 文件 | 修改内容 |
+|------|----------|
+| `src/workbench/tab_scan.py` | 品种描述改为交易导向 + 结构时效标签改为判断性标签 |
+| `data/symbol_meta.yaml` | 42 品种描述改为五要素格式（关键价位/突破条件/供需/季节性/驱动因子） |
+| `src/data/loader.py` | MySQL 密码→`os.getenv("MYSQL_PASSWORD")` |
+| `src/retrieval/active_match.py` | MySQL 密码→`os.getenv("MYSQL_PASSWORD")` |
+| `src/workbench/data_layer.py` | MySQL 密码→`os.getenv("MYSQL_PASSWORD")` |
+| `src/workbench/tab_multitime.py` | MySQL 密码→`os.getenv("MYSQL_PASSWORD")` |
+| `requirements.txt` | 新增 numpy/xgboost/requests |
+| `pyproject.toml` | 同步 requirements.txt 依赖 |
+| `.gitignore` | 新增 .env/.idea/temp/history |
+
+### 新增文件
+
+| 文件 | 内容 |
+|------|------|
+| `.env.example` | 环境变量模板（MYSQL_PASSWORD 必填） |
+
+### Commits
+
+| SHA | 描述 |
+|-----|------|
+| 80dc2dd | refactor: 品种描述改为交易导向，结构时效改为判断性标签 |
+| bbae40f | security: 消除MySQL硬编码密码，补全依赖，完善.gitignore |
 
 ---
 

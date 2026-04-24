@@ -66,18 +66,23 @@ price-structure/
 
 ### 配置说明
 
-脚本默认使用以下配置：
+脚本默认使用以下配置（通过环境变量读取）：
 
 ```python
+import os
+
 DB_CONFIG = {
     'host': 'localhost',
     'port': 3306,
     'user': 'root',
-    'password': 'root',  # ← 请修改为你的实际密码
+    'password': os.getenv('MYSQL_PASSWORD', ''),  # 从环境变量读取
 }
 ```
 
-**修改密码**：在脚本中搜索 `'root'` 并替换为你的 MySQL root 密码。
+**设置密码**：在项目根目录创建 `.env` 文件（参考 `.env.example`）：
+```
+MYSQL_PASSWORD=your_actual_password
+```
 
 ---
 
@@ -290,15 +295,22 @@ mysql -u root -p -h localhost
 
 ### Q3: 如何修改数据库配置？
 
-**A**: 编辑脚本中的 `DB_CONFIG`：
+**A**: 编辑 `.env` 文件（项目根目录）：
+
+```
+MYSQL_PASSWORD=your_actual_password
+```
+
+或编辑脚本中的 `DB_CONFIG`：
 
 ```python
 # scripts/sina_to_mysql.py 或 scripts/quick_sync.py
+import os
 DB_CONFIG = {
     'host': 'localhost',      # MySQL 主机
     'port': 3306,             # 端口
     'user': 'root',           # 用户名
-    'password': 'your_pass',  # 密码
+    'password': os.getenv('MYSQL_PASSWORD'),  # 从环境变量读取
 }
 ```
 
