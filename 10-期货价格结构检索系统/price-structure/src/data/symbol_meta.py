@@ -29,3 +29,9 @@ def load_symbol_meta() -> dict:
 def symbol_name(code: str) -> str:
     meta = load_symbol_meta().get(code.upper(), {})
     return meta.get("name") or code
+
+
+def symbol_description(code: str) -> str:
+    """获取品种的独立描述信息"""
+    meta = load_symbol_meta().get(code.upper(), {})
+    return meta.get("description", "")

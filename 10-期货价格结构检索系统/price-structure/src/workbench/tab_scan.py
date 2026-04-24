@@ -12,7 +12,7 @@ from pathlib import Path
 import json
 
 from src.data.loader import Bar
-from src.data.symbol_meta import symbol_name
+from src.data.symbol_meta import symbol_name, symbol_description
 from src.compiler.pipeline import compile_full, CompilerConfig
 from src.quality import assess_quality, QualityTier
 from src.retrieval.progress import progress_retrieve
@@ -328,6 +328,13 @@ def render(ctx: dict):
                         pass
 
                     with st.expander(f"💡 #{i+1} {r.get('symbol', '')} 研究建议 · {tier}层", expanded=False):
+                        # 品种独立描述
+                        sym_desc = symbol_description(r.get('symbol', ''))
+                        if sym_desc:
+                            with st.container(border=True):
+                                st.markdown(f"**📋 {r.get('symbol', '')} · {r.get('symbol_name', '')} 品种特征**")
+                                st.markdown(sym_desc)
+                        
                         st.markdown(f"**风控建议**：{tier}层质量（{r.get('score', 0):.0f}分），建议单笔关注不超过总资金的 **{r.get('risk_pct', '1-3%')}**")
                         flags = r.get("quality_flags", [])
                         if flags:

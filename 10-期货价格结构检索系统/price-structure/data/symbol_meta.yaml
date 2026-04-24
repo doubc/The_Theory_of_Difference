@@ -1,73 +1,664 @@
-# 期货品种元数据 v2 — 增强版
-# 支持：中文名 / 交易所 / 单位 / 板块 / 典型波动率 / 合约乘数 / 手续费
+# 期货品种元数据 v3 — 增强版（含独立品种描述）
+# 支持：中文名 / 交易所 / 单位 / 板块 / 典型波动率 / 合约乘数 / 手续费 / 品种描述
 #
 # 字段说明：
-#   name:      中文名
-#   exchange:  交易所 (SHFE/DCE/CZCE/GFEX/CFETS)
-#   unit:      计价单位
-#   sector:    板块分类（用于共振检测和反差推断）
-#   multiplier: 合约乘数（每手对应的吨/克/千克数）
-#   tick_size:  最小变动价位
+#   name:        中文名
+#   exchange:    交易所 (SHFE/DCE/CZCE/GFEX/CFETS)
+#   unit:        计价单位
+#   sector:      板块分类（用于共振检测和反差推断）
+#   multiplier:  合约乘数（每手对应的吨/克/千克数）
+#   tick_size:   最小变动价位
 #   typical_vol: 典型日波动率（日收益率标准差的长期中位数）
 #   vol_regime:  波动率特征（high/medium/low）— 品种固有属性
+#   description: 品种独立描述（供需特征、价格驱动因素、季节性规律等）
 
 # ─── 有色金属 ──────────────────────────────────────────────
-CU0: { name: 铜连续,       exchange: SHFE, unit: 吨, sector: 有色金属, multiplier: 5,    tick_size: 10,   typical_vol: 0.012, vol_regime: medium }
-AL0: { name: 铝连续,       exchange: SHFE, unit: 吨, sector: 有色金属, multiplier: 5,    tick_size: 5,    typical_vol: 0.009, vol_regime: low    }
-ZN0: { name: 锌连续,       exchange: SHFE, unit: 吨, sector: 有色金属, multiplier: 5,    tick_size: 5,    typical_vol: 0.013, vol_regime: medium }
-PB0: { name: 铅连续,       exchange: SHFE, unit: 吨, sector: 有色金属, multiplier: 5,    tick_size: 5,    typical_vol: 0.010, vol_regime: low    }
-NI0: { name: 镍连续,       exchange: SHFE, unit: 吨, sector: 有色金属, multiplier: 1,    tick_size: 10,   typical_vol: 0.018, vol_regime: high   }
-SN0: { name: 锡连续,       exchange: SHFE, unit: 吨, sector: 有色金属, multiplier: 1,    tick_size: 10,   typical_vol: 0.016, vol_regime: high   }
+CU0:
+  name: 铜连续
+  exchange: SHFE
+  unit: 吨
+  sector: 有色金属
+  multiplier: 5
+  tick_size: 10
+  typical_vol: 0.012
+  vol_regime: medium
+  description: |
+    铜被称为"博士金属"，是全球经济景气度的风向标。价格受全球制造业PMI、中国电网投资、新能源汽车用铜需求驱动。
+    供给端关注智利、秘鲁矿山产量，以及铜精矿加工费TC/RC变化。库存方面，LME+SHFE+保税区库存是核心观测指标。
+    季节性：春季（3-5月）中国开工旺季通常偏强，夏季（7-8月）消费淡季可能承压。
+
+AL0:
+  name: 铝连续
+  exchange: SHFE
+  unit: 吨
+  sector: 有色金属
+  multiplier: 5
+  tick_size: 5
+  typical_vol: 0.009
+  vol_regime: low
+  description: |
+    铝是典型的高能耗品种，电力成本占生产成本的40%以上。中国产能天花板（4500万吨）和云南水电季节性是核心变量。
+    供给端关注电解铝开工率、氧化铝价格、以及云南/广西等水电丰富地区的产能波动。
+    需求端主要来自建筑型材、汽车轻量化、包装。库存方面，铝锭社会库存是短期价格敏感指标。
+
+ZN0:
+  name: 锌连续
+  exchange: SHFE
+  unit: 吨
+  sector: 有色金属
+  multiplier: 5
+  tick_size: 5
+  typical_vol: 0.013
+  vol_regime: medium
+  description: |
+    锌的主要用途是镀锌钢板（占60%），与汽车和建筑行业高度相关。矿山端关注全球锌精矿产量和加工费。
+    中国锌冶炼产能相对过剩，加工费高低决定冶炼利润。LME锌库存和现货升贴水是重要参考。
+    注意锌的"小品种"特性，资金推动时波动可能放大。
+
+PB0:
+  name: 铅连续
+  exchange: SHFE
+  unit: 吨
+  sector: 有色金属
+  multiplier: 5
+  tick_size: 5
+  typical_vol: 0.010
+  vol_regime: low
+  description: |
+    铅的主要需求来自铅酸蓄电池（汽车启动电池+电动自行车电池）。新能源汽车对铅酸电池的替代是长期压制因素。
+    供给端相对集中，再生铅占比逐年提升。环保政策对再生铅产能的影响较大。
+    季节性明显：夏季（7-8月）和冬季（11-12月）电池更换旺季通常偏强。
+
+NI0:
+  name: 镍连续
+  exchange: SHFE
+  unit: 吨
+  sector: 有色金属
+  multiplier: 1
+  tick_size: 10
+  typical_vol: 0.018
+  vol_regime: high
+  description: |
+    镍是新能源电池（三元锂电池）和不锈钢的核心原料。印尼镍矿出口政策和NPI（镍生铁）产能是最大变量。
+    2022年伦镍逼仓事件后，镍价波动率显著上升。关注青山集团等不锈钢巨头的生产动态。
+    高波动品种，适合风险偏好较高的交易者。库存方面，LME镍库存持续去化是长期支撑。
+
+SN0:
+  name: 锡连续
+  exchange: SHFE
+  unit: 吨
+  sector: 有色金属
+  multiplier: 1
+  tick_size: 10
+  typical_vol: 0.016
+  vol_regime: high
+  description: |
+    锡是小金属，全球年产量仅约40万吨。主要用途是焊料（电子行业）、锡化工、镀锡板。
+    供给高度集中：中国、印尼、缅甸佤邦是主要产区。缅甸佤邦停产事件曾多次引发锡价暴涨。
+    库存极低时价格弹性极大，是典型的"小品种大波动"代表。关注电子行业景气度指标。
 
 # ─── 贵金属 ────────────────────────────────────────────────
-AU0: { name: 黄金连续,     exchange: SHFE, unit: 克,  sector: 贵金属,   multiplier: 1000, tick_size: 0.02, typical_vol: 0.008, vol_regime: low    }
-AG0: { name: 白银连续,     exchange: SHFE, unit: 千克, sector: 贵金属,  multiplier: 15,   tick_size: 1,    typical_vol: 0.016, vol_regime: high   }
+AU0:
+  name: 黄金连续
+  exchange: SHFE
+  unit: 克
+  sector: 贵金属
+  multiplier: 1000
+  tick_size: 0.02
+  typical_vol: 0.008
+  vol_regime: low
+  description: |
+    黄金是避险资产和美元信用对冲工具。核心驱动：美元指数（负相关）、实际利率（负相关）、地缘政治风险。
+    美联储货币政策周期是中长期方向的决定因素。COMEX黄金期货和SPDR黄金ETF持仓是重要观测指标。
+    中国黄金期货与外盘高度联动，但人民币汇率波动会带来内外盘价差。适合作为组合避险配置。
+
+AG0:
+  name: 白银连续
+  exchange: SHFE
+  unit: 千克
+  sector: 贵金属
+  multiplier: 15
+  tick_size: 1
+  typical_vol: 0.016
+  vol_regime: high
+  description: |
+    白银兼具贵金属属性和工业属性（光伏银浆、电子），波动率约为黄金的2倍，被称为"穷人的黄金"。
+    金银比（Gold/Silver Ratio）是重要参考指标，历史均值约60-80，极端值可能回归。
+    光伏装机量增长是白银工业需求的长期支撑。高波动特性使其适合波段交易而非长期持有。
 
 # ─── 黑色系 ────────────────────────────────────────────────
-RB0: { name: 螺纹钢连续,   exchange: SHFE, unit: 吨, sector: 黑色系, multiplier: 10,   tick_size: 1,    typical_vol: 0.012, vol_regime: medium }
-HC0: { name: 热卷连续,     exchange: SHFE, unit: 吨, sector: 黑色系, multiplier: 10,   tick_size: 1,    typical_vol: 0.012, vol_regime: medium }
-SS0: { name: 不锈钢连续,   exchange: SHFE, unit: 吨, sector: 黑色系, multiplier: 5,    tick_size: 5,    typical_vol: 0.011, vol_regime: medium }
-I0:  { name: 铁矿石连续,   exchange: DCE,  unit: 吨, sector: 黑色系, multiplier: 100,  tick_size: 0.5,  typical_vol: 0.017, vol_regime: high   }
-J0:  { name: 焦炭连续,     exchange: DCE,  unit: 吨, sector: 黑色系, multiplier: 100,  tick_size: 0.5,  typical_vol: 0.015, vol_regime: high   }
-JM0: { name: 焦煤连续,     exchange: DCE,  unit: 吨, sector: 黑色系, multiplier: 60,   tick_size: 0.5,  typical_vol: 0.016, vol_regime: high   }
+RB0:
+  name: 螺纹钢连续
+  exchange: SHFE
+  unit: 吨
+  sector: 黑色系
+  multiplier: 10
+  tick_size: 1
+  typical_vol: 0.012
+  vol_regime: medium
+  description: |
+    螺纹钢是建筑钢材，与房地产和基建投资高度相关，被称为"中国经济的温度计"。
+    供给端关注钢厂高炉开工率、电炉利润、环保限产政策。需求端跟踪房地产新开工面积、基建投资增速。
+    库存周期：3-5月旺季去库、6-8月梅雨淡季累库、9-11月"金九银十"去库。冬储行情通常在12月启动。
+    成本支撑：铁矿石+焦炭+废钢构成主要成本，钢厂利润是供需平衡的核心指标。
+
+HC0:
+  name: 热卷连续
+  exchange: SHFE
+  unit: 吨
+  sector: 黑色系
+  multiplier: 10
+  tick_size: 1
+  typical_vol: 0.012
+  vol_regime: medium
+  description: |
+    热轧卷板主要用于汽车制造、机械制造、集装箱。与螺纹钢相比，热卷下游更偏制造业而非房地产。
+    冷热轧价差是重要套利指标，通常热卷价格高于螺纹钢。关注汽车产销数据和制造业PMI。
+    出口方面，热卷是中国钢材出口的主要品种，出口退税政策变化对价格影响显著。
+
+SS0:
+  name: 不锈钢连续
+  exchange: SHFE
+  unit: 吨
+  sector: 黑色系
+  multiplier: 5
+  tick_size: 5
+  typical_vol: 0.011
+  vol_regime: medium
+  description: |
+    不锈钢主要原料是镍（约占总成本的70%），因此与镍价高度相关。300系不锈钢是主流品种。
+    下游需求来自餐饮厨具、建筑装饰、化工设备、家电。印尼不锈钢产能扩张是长期压制因素。
+    库存方面，无锡和佛山两大不锈钢市场库存是核心观测指标。
+
+I0:
+  name: 铁矿石连续
+  exchange: DCE
+  unit: 吨
+  sector: 黑色系
+  multiplier: 100
+  tick_size: 0.5
+  typical_vol: 0.017
+  vol_regime: high
+  description: |
+    铁矿石是炼钢核心原料，中国进口依赖度超80%，主要来自澳大利亚（力拓、必和必拓、FMG）和巴西（淡水河谷）。
+    普氏62%铁矿石指数是定价基准。供给端关注四大矿山发运量、巴西雨季、澳洲飓风季节。
+    需求端直接挂钩钢厂高炉开工率和利润。港口库存（45港）是重要缓冲指标，1.2亿吨以下偏紧、1.5亿吨以上宽松。
+    高波动品种，政策干预风险较高（如发改委价格调控）。
+
+J0:
+  name: 焦炭连续
+  exchange: DCE
+  unit: 吨
+  sector: 黑色系
+  multiplier: 100
+  tick_size: 0.5
+  typical_vol: 0.015
+  vol_regime: high
+  description: |
+    焦炭是炼钢还原剂，由焦煤干馏而成。中国焦炭产能相对过剩，但环保限产（山西、河北）经常扰动供给。
+    焦化利润 = 焦炭价格 - 1.33×焦煤价格 - 其他成本，利润高低决定焦化厂开工意愿。
+    钢厂焦炭库存可用天数（通常10-15天）是短期需求指标。关注山西焦化行业环保政策变化。
+
+JM0:
+  name: 焦煤连续
+  exchange: DCE
+  unit: 吨
+  sector: 黑色系
+  multiplier: 60
+  tick_size: 0.5
+  typical_vol: 0.016
+  vol_regime: high
+  description: |
+    焦煤是焦炭的原料，主产区在山西、内蒙古、澳大利亚。优质主焦煤资源稀缺，进口依赖度较高。
+    动力煤和焦煤价格存在联动，但焦煤更偏化工属性。煤矿安监政策对供给影响极大。
+    关注焦化厂焦煤库存、钢厂焦炭库存传导链条。蒙古进口通关量是边际供给变量。
 
 # ─── 能化 ──────────────────────────────────────────────────
-BU0: { name: 沥青连续,     exchange: SHFE, unit: 吨, sector: 能化, multiplier: 10,   tick_size: 1,    typical_vol: 0.014, vol_regime: medium }
-RU0: { name: 橡胶连续,     exchange: SHFE, unit: 吨, sector: 能化, multiplier: 10,   tick_size: 5,    typical_vol: 0.015, vol_regime: high   }
-FU0: { name: 燃料油连续,   exchange: SHFE, unit: 吨, sector: 能化, multiplier: 10,   tick_size: 1,    typical_vol: 0.016, vol_regime: high   }
-SC0: { name: 原油连续,     exchange: INE,  unit: 桶, sector: 能化, multiplier: 1000, tick_size: 0.1,  typical_vol: 0.018, vol_regime: high   }
-L0:  { name: 聚乙烯连续,   exchange: DCE,  unit: 吨, sector: 能化, multiplier: 5,    tick_size: 5,    typical_vol: 0.010, vol_regime: low    }
-V0:  { name: PVC连续,      exchange: DCE,  unit: 吨, sector: 能化, multiplier: 5,    tick_size: 5,    typical_vol: 0.010, vol_regime: low    }
-PP0: { name: 聚丙烯连续,   exchange: DCE,  unit: 吨, sector: 能化, multiplier: 5,    tick_size: 1,    typical_vol: 0.010, vol_regime: low    }
-EG0: { name: 乙二醇连续,   exchange: DCE,  unit: 吨, sector: 能化, multiplier: 10,   tick_size: 1,    typical_vol: 0.013, vol_regime: medium }
-EB0: { name: 苯乙烯连续,   exchange: DCE,  unit: 吨, sector: 能化, multiplier: 5,    tick_size: 1,    typical_vol: 0.014, vol_regime: medium }
-PG0: { name: LPG连续,      exchange: DCE,  unit: 吨, sector: 能化, multiplier: 20,   tick_size: 1,    typical_vol: 0.016, vol_regime: high   }
-MA0: { name: 甲醇连续,     exchange: CZCE, unit: 吨, sector: 能化, multiplier: 10,   tick_size: 1,    typical_vol: 0.012, vol_regime: medium }
-TA0: { name: PTA连续,      exchange: CZCE, unit: 吨, sector: 能化, multiplier: 5,    tick_size: 2,    typical_vol: 0.011, vol_regime: medium }
+BU0:
+  name: 沥青连续
+  exchange: SHFE
+  unit: 吨
+  sector: 能化
+  multiplier: 10
+  tick_size: 1
+  typical_vol: 0.014
+  vol_regime: medium
+  description: |
+    沥青是原油炼制的副产品，主要用于道路铺设（占70%以上）。与原油价格高度相关，但受季节性施工影响更大。
+    南方雨季（6-8月）和北方冬季（11-3月）是施工淡季，需求承压。3-5月和9-10月是施工旺季。
+    库存方面，厂库+社库是核心指标。关注公路建设投资计划和地方政府专项债发行节奏。
+
+RU0:
+  name: 橡胶连续
+  exchange: SHFE
+  unit: 吨
+  sector: 能化
+  multiplier: 10
+  tick_size: 5
+  typical_vol: 0.015
+  vol_regime: high
+  description: |
+    天然橡胶主要用于轮胎制造（占70%），与汽车产销高度相关。主产区在泰国、印尼、马来西亚（东南亚占全球产量90%）。
+    割胶季节性：东南亚旺季为11月-次年2月（旱季），淡季为5-8月（雨季）。
+    20号胶（NR）和全乳胶（RU）存在价差套利机会。青岛保税区库存是重要观测指标。
+    长期受制于产能过剩和替代材料（合成橡胶）发展，价格中枢逐年下移。
+
+FU0:
+  name: 燃料油连续
+  exchange: SHFE
+  unit: 吨
+  sector: 能化
+  multiplier: 10
+  tick_size: 1
+  typical_vol: 0.016
+  vol_regime: high
+  description: |
+    燃料油主要用于船舶动力（船用燃料油，Bunker Fuel）和发电。IMO 2020低硫政策后，高低硫燃料油价差成为重要交易标的。
+    新加坡380CST燃料油价格是亚洲定价基准。原油价格是核心成本驱动。
+    需求端关注全球航运指数（BDI、BCTI）和船舶燃油消费量。季节性：夏季发电需求旺季偏强。
+
+SC0:
+  name: 原油连续
+  exchange: INE
+  unit: 桶
+  sector: 能化
+  multiplier: 1000
+  tick_size: 0.1
+  typical_vol: 0.018
+  vol_regime: high
+  description: |
+    中国原油期货（INE SC）以中东中质含硫原油为交割标的，人民币计价。与WTI、Brent高度联动。
+    OPEC+产量政策是最大供给变量，美国页岩油产量是边际供给调节器。地缘政治（中东、俄罗斯）经常引发脉冲式波动。
+    库存方面，美国EIA原油库存（每周三公布）是全球最关注的短期指标。CFTC持仓中的投机净多头是情绪指标。
+    高波动、高杠杆品种，适合有经验的交易者。
+
+L0:
+  name: 聚乙烯连续
+  exchange: DCE
+  unit: 吨
+  sector: 能化
+  multiplier: 5
+  tick_size: 5
+  typical_vol: 0.010
+  vol_regime: low
+  description: |
+    LLDPE（线性低密度聚乙烯）主要用于薄膜（农膜、包装膜）。与原油价格相关，但下游需求（农业、包装）影响更大。
+    国内产能快速扩张，进口依存度逐年下降。煤化工路线（煤制烯烃）与油化工路线存在成本竞争。
+    季节性：春季地膜需求（3-4月）和秋季棚膜需求（9-10月）是旺季。
+
+V0:
+  name: PVC连续
+  exchange: DCE
+  unit: 吨
+  sector: 能化
+  multiplier: 5
+  tick_size: 5
+  typical_vol: 0.010
+  vol_regime: low
+  description: |
+    PVC（聚氯乙烯）主要用于型材管材（房地产）、薄膜、电线电缆。与房地产竣工周期高度相关。
+    生产工艺分为电石法（中国主流，占80%）和乙烯法。电石价格（受兰炭-石灰石影响）是成本核心。
+    西北（新疆、内蒙）产能占比高，运输成本对华东华南价格影响显著。房地产政策是最大需求变量。
+
+PP0:
+  name: 聚丙烯连续
+  exchange: DCE
+  unit: 吨
+  sector: 能化
+  multiplier: 5
+  tick_size: 1
+  typical_vol: 0.010
+  vol_regime: low
+  description: |
+    PP（聚丙烯）主要用于注塑（家电、汽车）、拉丝（编织袋）、薄膜。与L0（聚乙烯）存在替代和套利关系。
+    产能扩张迅速，油化工、煤化工、PDH（丙烷脱氢）三条路线并存，成本竞争加剧。
+    关注丙烯单体价格、拉丝料与注塑料价差。下游塑编行业开工率是需求先行指标。
+
+EG0:
+  name: 乙二醇连续
+  exchange: DCE
+  unit: 吨
+  sector: 能化
+  multiplier: 10
+  tick_size: 1
+  typical_vol: 0.013
+  vol_regime: medium
+  description: |
+    乙二醇（MEG）主要用于聚酯纤维（涤纶）、瓶片、防冻液。与PTA（对苯二甲酸）是聚酯产业链的两大原料。
+    生产工艺分为油制（乙烯氧化）和煤制（合成气路线），成本差异大。进口依存度较高，中东是主要进口来源。
+    下游聚酯开工率是核心需求指标，通常与纺织服装出口订单相关。港口库存是短期价格敏感变量。
+
+EB0:
+  name: 苯乙烯连续
+  exchange: DCE
+  unit: 吨
+  sector: 能化
+  multiplier: 5
+  tick_size: 1
+  typical_vol: 0.014
+  vol_regime: medium
+  description: |
+    苯乙烯（SM）主要用于聚苯乙烯（PS）、ABS树脂、发泡聚苯乙烯（EPS）。上游是乙烯和纯苯，下游与家电、汽车、包装相关。
+    国内产能快速扩张，进口依存度下降。纯苯-苯乙烯价差是利润核心，关注韩国和美国出口报价。
+    季节性：春节后家电生产旺季（3-5月）和"金九银十"是需求高峰。
+
+PG0:
+  name: LPG连续
+  exchange: DCE
+  unit: 吨
+  sector: 能化
+  multiplier: 20
+  tick_size: 1
+  typical_vol: 0.016
+  vol_regime: high
+  description: |
+    LPG（液化石油气）主要成分是丙烷和丁烷，用途包括民用燃料、化工原料（PDH制丙烯）、汽车燃料。
+    与原油价格联动，但季节性极强：冬季（11-2月）民用取暖需求旺季，夏季（6-8月）需求淡季。
+    中东和美国是主要出口地，CP（沙特合同价）是亚洲定价基准。关注PDH装置开工率和利润。
+
+MA0:
+  name: 甲醇连续
+  exchange: CZCE
+  unit: 吨
+  sector: 能化
+  multiplier: 10
+  tick_size: 1
+  typical_vol: 0.012
+  vol_regime: medium
+  description: |
+    甲醇是重要的基础化工原料，用途广泛：甲醛、醋酸、二甲醚、MTBE、烯烃（MTO）。
+    生产工艺：煤制甲醇（中国主流）、天然气制甲醇（海外主流）。煤炭价格是核心成本变量。
+    MTO（甲醇制烯烃）装置开工率是边际需求关键，华东港口库存是短期供需平衡指标。
+    季节性：冬季（12-2月）因天然气限气导致海外供给收缩，通常偏强。
+
+TA0:
+  name: PTA连续
+  exchange: CZCE
+  unit: 吨
+  sector: 能化
+  multiplier: 5
+  tick_size: 2
+  typical_vol: 0.011
+  vol_regime: medium
+  description: |
+    PTA（精对苯二甲酸）是聚酯产业链核心原料，与乙二醇（EG）聚合生成PET，用于涤纶纤维、瓶片、薄膜。
+    上游是PX（对二甲苯），PX-PTA价差决定加工利润。国内PTA产能高度集中，前几大企业产能占比超70%。
+    下游聚酯开工率是需求核心指标。关注原油-PX-PTA-聚酯全链条利润传导。
 
 # ─── 农产品 ────────────────────────────────────────────────
-M0:  { name: 豆粕连续,     exchange: DCE,  unit: 吨, sector: 农产品, multiplier: 10,   tick_size: 1,    typical_vol: 0.012, vol_regime: medium }
-Y0:  { name: 豆油连续,     exchange: DCE,  unit: 吨, sector: 农产品, multiplier: 10,   tick_size: 2,    typical_vol: 0.011, vol_regime: medium }
-P0:  { name: 棕榈油连续,   exchange: DCE,  unit: 吨, sector: 农产品, multiplier: 10,   tick_size: 2,    typical_vol: 0.015, vol_regime: high   }
-A0:  { name: 豆一连续,     exchange: DCE,  unit: 吨, sector: 农产品, multiplier: 10,   tick_size: 1,    typical_vol: 0.010, vol_regime: low    }
-C0:  { name: 玉米连续,     exchange: DCE,  unit: 吨, sector: 农产品, multiplier: 10,   tick_size: 1,    typical_vol: 0.007, vol_regime: low    }
-CS0: { name: 淀粉连续,     exchange: DCE,  unit: 吨, sector: 农产品, multiplier: 10,   tick_size: 1,    typical_vol: 0.008, vol_regime: low    }
-SR0: { name: 白糖连续,     exchange: CZCE, unit: 吨, sector: 农产品, multiplier: 10,   tick_size: 1,    typical_vol: 0.009, vol_regime: low    }
-CF0: { name: 棉花连续,     exchange: CZCE, unit: 吨, sector: 农产品, multiplier: 5,    tick_size: 5,    typical_vol: 0.012, vol_regime: medium }
-OI0: { name: 菜油连续,     exchange: CZCE, unit: 吨, sector: 农产品, multiplier: 10,   tick_size: 1,    typical_vol: 0.011, vol_regime: medium }
-RM0: { name: 菜粕连续,     exchange: CZCE, unit: 吨, sector: 农产品, multiplier: 10,   tick_size: 1,    typical_vol: 0.013, vol_regime: medium }
-AP0: { name: 苹果连续,     exchange: CZCE, unit: 吨, sector: 农产品, multiplier: 10,   tick_size: 1,    typical_vol: 0.015, vol_regime: high   }
-CJ0: { name: 红枣连续,     exchange: CZCE, unit: 吨, sector: 农产品, multiplier: 5,    tick_size: 5,    typical_vol: 0.014, vol_regime: medium }
+M0:
+  name: 豆粕连续
+  exchange: DCE
+  unit: 吨
+  sector: 农产品
+  multiplier: 10
+  tick_size: 1
+  typical_vol: 0.012
+  vol_regime: medium
+  description: |
+    豆粕是大豆压榨的主要副产品（占78%），主要用于畜禽饲料（猪、禽、水产）。与大豆、豆油存在压榨套利关系。
+    美国大豆（CBOT）价格是定价基准，进口依存度超80%。关注USDA月度供需报告和南美（巴西、阿根廷）产量。
+    季节性：南美收割（2-4月）和美国收割（9-11月）是供给高峰。生猪存栏量是核心需求指标。
+
+Y0:
+  name: 豆油连续
+  exchange: DCE
+  unit: 吨
+  sector: 农产品
+  multiplier: 10
+  tick_size: 2
+  typical_vol: 0.011
+  vol_regime: medium
+  description: |
+    豆油是大豆压榨的主要产品（占18%），食用植物油之一。与棕榈油、菜油存在替代关系和价差套利。
+    关注大豆进口成本、压榨利润（豆粕+豆油-大豆）。节假日（春节、中秋）前的备货需求是季节性因素。
+    生物柴油政策（豆油制生物柴油）是长期需求变量，尤其关注美国和印尼政策。
+
+P0:
+  name: 棕榈油连续
+  exchange: DCE
+  unit: 吨
+  sector: 农产品
+  multiplier: 10
+  tick_size: 2
+  typical_vol: 0.015
+  vol_regime: high
+  description: |
+    棕榈油是全球产量最大的植物油，主产国印尼和马来西亚（占全球产量85%）。
+    与豆油存在强替代关系，豆棕价差是核心套利指标（正常区间500-1500元/吨）。
+    季节性：东南亚旱季（6-9月）产量下降，通常偏强；雨季（10-次年3月）产量恢复。
+    印尼出口政策（DMO、出口税）经常引发价格剧烈波动。高波动品种。
+
+A0:
+  name: 豆一连续
+  exchange: DCE
+  unit: 吨
+  sector: 农产品
+  multiplier: 10
+  tick_size: 1
+  typical_vol: 0.010
+  vol_regime: low
+  description: |
+    豆一是国产非转基因大豆，主要用于直接食用（豆腐、豆浆等）和蛋白提取。与豆二（进口转基因大豆）存在价差。
+    国产大豆产量有限（约2000万吨），进口大豆（约1亿吨）主导市场。政策收储是价格支撑因素。
+    关注东北产区种植面积和单产变化。与豆二价差过大时存在套利机会。
+
+C0:
+  name: 玉米连续
+  exchange: DCE
+  unit: 吨
+  sector: 农产品
+  multiplier: 10
+  tick_size: 1
+  typical_vol: 0.007
+  vol_regime: low
+  description: |
+    玉米是中国产量最大的粮食作物，用途：饲料（60%）、深加工（淀粉、酒精，30%）、食用（10%）。
+    临储政策改革后，价格由市场决定，波动加大。关注东北产区产量、进口（乌克兰、美国）替代。
+    季节性：新粮上市（10-11月）通常承压，春节前后饲用需求旺季偏强。与小麦存在饲用替代关系。
+
+CS0:
+  name: 淀粉连续
+  exchange: DCE
+  unit: 吨
+  sector: 农产品
+  multiplier: 10
+  tick_size: 1
+  typical_vol: 0.008
+  vol_regime: low
+  description: |
+    玉米淀粉是玉米深加工的主要产品，用于造纸、纺织、食品、医药。与玉米存在加工利润套利关系。
+    加工利润 = 淀粉价格 - 1.35×玉米价格 - 其他成本。利润高低决定淀粉厂开工率。
+    季节性：春节前后食品需求旺季偏强，夏季造纸需求淡季偏弱。
+
+SR0:
+  name: 白糖连续
+  exchange: CZCE
+  unit: 吨
+  sector: 农产品
+  multiplier: 10
+  tick_size: 1
+  typical_vol: 0.009
+  vol_regime: low
+  description: |
+    白糖主要用于食品饮料工业。中国产糖区：广西（60%）、云南、新疆、内蒙古（甜菜糖）。
+    与ICE原糖高度联动，进口依存度约30%。关注巴西中南部产糖量（占全球出口50%）。
+    季节性：压榨期（11月-次年4月）新糖上市通常承压，夏季饮料需求旺季偏强。
+
+CF0:
+  name: 棉花连续
+  exchange: CZCE
+  unit: 吨
+  sector: 农产品
+  multiplier: 5
+  tick_size: 5
+  typical_vol: 0.012
+  vol_regime: medium
+  description: |
+    棉花主要用于纺织服装。中国产量约600万吨，进口约200万吨（美棉、巴西棉、澳棉）。
+    与ICE棉花高度联动。关注USDA全球供需平衡表、中国储备棉轮入轮出政策。
+    季节性：北半球新棉上市（9-11月）通常承压，春季纺织开工旺季（3-5月）偏强。
+
+OI0:
+  name: 菜油连续
+  exchange: CZCE
+  unit: 吨
+  sector: 农产品
+  multiplier: 10
+  tick_size: 1
+  typical_vol: 0.011
+  vol_regime: medium
+  description: |
+    菜油是油菜籽压榨产品，与豆油、棕榈油存在替代关系。加拿大是主要进口来源（菜籽）。
+    关注中加关系（孟晚舟事件后菜籽进口受限，价格暴涨）。临储菜油消化完毕后，供需趋紧。
+    季节性：加拿大菜籽收割（9-10月）是供给高峰，春节前后食用需求旺季偏强。
+
+RM0:
+  name: 菜粕连续
+  exchange: CZCE
+  unit: 吨
+  sector: 农产品
+  multiplier: 10
+  tick_size: 1
+  typical_vol: 0.013
+  vol_regime: medium
+  description: |
+    菜粕是油菜籽压榨副产品，主要用于水产饲料（与豆粕竞争）。与菜油存在压榨套利关系。
+    受中加关系影响大（菜籽进口受限）。杂粕（棉粕、花生粕）替代是边际需求变量。
+    季节性：水产养殖旺季（4-9月）需求偏强，冬季淡季偏弱。
+
+AP0:
+  name: 苹果连续
+  exchange: CZCE
+  unit: 吨
+  sector: 农产品
+  multiplier: 10
+  tick_size: 1
+  typical_vol: 0.015
+  vol_regime: high
+  description: |
+    苹果是生鲜农产品，主产区陕西、山东、甘肃。储存期长（冷库可存至次年6月），但质量随时间下降。
+    天气是最大变量：花期霜冻、坐果期干旱、采收期降雨都影响产量和质量。炒作性强。
+    季节性：新果上市（10月）通常承压，春节前后消费旺季偏强。库存果质量下降是隐性风险。
+    小品种，资金推动时波动极大。关注卓创资讯和天下粮仓的库存数据。
+
+CJ0:
+  name: 红枣连续
+  exchange: CZCE
+  unit: 吨
+  sector: 农产品
+  multiplier: 5
+  tick_size: 5
+  typical_vol: 0.014
+  vol_regime: medium
+  description: |
+    红枣主产区新疆（占80%以上）。干果储存期长，但品质分化大（特级、一级、二级价差大）。
+    产量波动大，天气（花期风灾、成熟期降雨）是主要变量。沧州和郑州是主要集散地。
+    季节性：新枣上市（11-12月）通常承压，春节前后礼品需求旺季偏强。小品种，流动性一般。
 
 # ─── 建材 ──────────────────────────────────────────────────
-FG0: { name: 玻璃连续,     exchange: CZCE, unit: 吨, sector: 建材, multiplier: 20,   tick_size: 1,    typical_vol: 0.014, vol_regime: medium }
-SA0: { name: 纯碱连续,     exchange: CZCE, unit: 吨, sector: 建材, multiplier: 20,   tick_size: 1,    typical_vol: 0.015, vol_regime: high   }
-UR0: { name: 尿素连续,     exchange: CZCE, unit: 吨, sector: 建材, multiplier: 20,   tick_size: 1,    typical_vol: 0.012, vol_regime: medium }
-ZC0: { name: 动力煤连续,   exchange: CZCE, unit: 吨, sector: 建材, multiplier: 100,  tick_size: 0.2,  typical_vol: 0.010, vol_regime: low    }
+FG0:
+  name: 玻璃连续
+  exchange: CZCE
+  unit: 吨
+  sector: 建材
+  multiplier: 20
+  tick_size: 1
+  typical_vol: 0.014
+  vol_regime: medium
+  description: |
+    平板玻璃主要用于房地产（门窗）、汽车、光伏背板。与房地产竣工周期高度相关。
+    供给端：浮法玻璃产能相对刚性，冷修/复产周期约1-2年。沙河（河北）是最大产区。
+    季节性：春季（3-5月）开工旺季偏强，夏季（7-8月）高温限产区部分产线停产。
+    关注房地产竣工面积和光伏玻璃产能扩张对原片玻璃的挤压。
+
+SA0:
+  name: 纯碱连续
+  exchange: CZCE
+  unit: 吨
+  sector: 建材
+  multiplier: 20
+  tick_size: 1
+  typical_vol: 0.015
+  vol_regime: high
+  description: |
+    纯碱（碳酸钠）主要用于玻璃制造（占60%）、洗涤剂、化工。与玻璃存在产业链联动。
+    生产工艺：氨碱法、联碱法、天然碱法。内蒙古和青海天然碱产能是成本最低的来源。
+    光伏玻璃需求爆发是纯碱需求增长的核心驱动。关注浮法玻璃和光伏玻璃的开工率。
+    高波动品种，2021年曾出现极端行情。库存方面，厂家库存和交割库库存是核心指标。
+
+UR0:
+  name: 尿素连续
+  exchange: CZCE
+  unit: 吨
+  sector: 建材
+  multiplier: 20
+  tick_size: 1
+  typical_vol: 0.012
+  vol_regime: medium
+  description: |
+    尿素主要用于农业化肥（占70%）和工业（脲醛树脂、车用尿素）。
+    生产工艺：煤制尿素（中国主流，占70%）和天然气制尿素。煤炭和天然气价格是成本核心。
+    季节性极强：春耕（3-5月）和秋播（9-10月）是用肥旺季，价格通常偏强；夏季（6-8月）淡季偏弱。
+    印度招标是出口价格的锚定事件。关注国内产能利用率、印标结果、气头装置限气停产。
+
+ZC0:
+  name: 动力煤连续
+  exchange: CZCE
+  unit: 吨
+  sector: 建材
+  multiplier: 100
+  tick_size: 0.2
+  typical_vol: 0.010
+  vol_regime: low
+  description: |
+    动力煤用于发电（占60%）和工业锅炉。中国产量世界第一，但优质低硫煤资源稀缺。
+    政策干预极强：长协价机制、产能释放、进口配额、环保限产。2021年极端行情后政策管控加强。
+    季节性：夏季（7-8月）制冷用电高峰和冬季（12-2月）取暖用煤高峰是旺季。
+    关注六大电厂库存、港口库存（秦皇岛、曹妃甸）、沿海运费。政策风险高于供需风险。
 
 # ─── 新能源 ────────────────────────────────────────────────
-LC0: { name: 碳酸锂连续,   exchange: GFEX, unit: 吨, sector: 新能源, multiplier: 1,    tick_size: 50,   typical_vol: 0.020, vol_regime: high   }
-SI0: { name: 工业硅连续,   exchange: GFEX, unit: 吨, sector: 新能源, multiplier: 5,    tick_size: 5,    typical_vol: 0.015, vol_regime: high   }
+LC0:
+  name: 碳酸锂连续
+  exchange: GFEX
+  unit: 吨
+  sector: 新能源
+  multiplier: 1
+  tick_size: 50
+  typical_vol: 0.020
+  vol_regime: high
+  description: |
+    碳酸锂是锂电池正极材料核心原料。盐湖提锂（青海、西藏）和锂辉石提锂（四川、澳洲）是主要来源。
+    新能源汽车渗透率是需求核心变量，2022-2023年价格暴涨后，2024年随供给释放暴跌。
+    高波动品种，适合风险偏好高的交易者。关注SMM（上海有色网）现货报价、锂盐厂开工率。
+    季节性：冬季（12-2月）盐湖减产，通常偏强；夏季（6-8月）产量恢复，通常偏弱。
+
+SI0:
+  name: 工业硅连续
+  exchange: GFEX
+  unit: 吨
+  sector: 新能源
+  multiplier: 5
+  tick_size: 5
+  typical_vol: 0.015
+  vol_regime: high
+  description: |
+    工业硅（金属硅）主要用于有机硅、多晶硅（光伏）、铝合金。新疆、云南、四川是主产区。
+    电力成本占生产成本的40%以上，云南水电季节性导致产量波动大。丰水期（6-10月）通常增产。
+    多晶硅需求（光伏装机）是长期增长驱动。关注硅料价格、光伏装机量、有机硅开工率。
+    高波动品种，与碳酸锂同属新能源金属，但波动略小于碳酸锂。
 
 # ─── 金融 / 外汇 ──────────────────────────────────────────
-USDCNY: { name: 美元人民币, exchange: CFETS, unit: 1, sector: 外汇, multiplier: 1, tick_size: 0.0001, typical_vol: 0.002, vol_regime: low }
+USDCNY:
+  name: 美元人民币
+  exchange: CFETS
+  unit: 1
+  sector: 外汇
+  multiplier: 1
+  tick_size: 0.0001
+  typical_vol: 0.002
+  vol_regime: low
+  description: |
+    美元兑人民币汇率，中国外汇交易中心（CFETS）定价。受中美利差、贸易顺差、资本流动影响。
+    央行逆周期因子调节是重要干预手段。7.0和7.3是重要心理关口。
+    低波动品种，适合作为组合对冲工具。关注美联储货币政策、中国出口数据、中美贸易关系。
