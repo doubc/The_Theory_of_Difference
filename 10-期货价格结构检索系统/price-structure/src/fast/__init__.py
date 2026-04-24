@@ -37,9 +37,12 @@ if not _C_AVAILABLE:
         import importlib.util
         ext_dir = Path(__file__).parent
         for name in ["_pivots", "_dtw"]:
+            # 支持 .so (Linux) 和 .pyd (Windows)
             so_path = list(ext_dir.glob(f"{name}*.so"))
-            if so_path:
-                spec = importlib.util.spec_from_file_location(name, so_path[0])
+            pyd_path = list(ext_dir.glob(f"{name}*.pyd"))
+            file_path = so_path + pyd_path
+            if file_path:
+                spec = importlib.util.spec_from_file_location(name, file_path[0])
                 mod = importlib.util.module_from_spec(spec)
                 spec.loader.exec_module(mod)
                 if name == "_pivots":

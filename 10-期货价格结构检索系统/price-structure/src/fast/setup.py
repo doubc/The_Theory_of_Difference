@@ -13,16 +13,16 @@ import numpy as np
 
 pivots_ext = Extension(
     "src.fast._pivots",
-    sources=["src/fast/_pivots.c"],
+    sources=["_pivots.c"],
     include_dirs=[np.get_include()],
-    extra_compile_args=["-O3", "-march=native", "-ffast-math"],
+    extra_compile_args=["/O2"],
 )
 
 dtw_ext = Extension(
     "src.fast._dtw",
-    sources=["src/fast/_dtw.c"],
+    sources=["_dtw.c"],
     include_dirs=[np.get_include()],
-    extra_compile_args=["-O3", "-march=native", "-ffast-math"],
+    extra_compile_args=["/O2"],
 )
 
 setup(

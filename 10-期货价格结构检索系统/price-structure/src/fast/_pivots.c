@@ -301,3 +301,90 @@ int batch_extract_pivots(
 
     return total_pivots;
 }
+
+/* ═══════════════════════════════════════════════════════════
+ * Python C API 绑定
+ * ═══════════════════════════════════════════════════════════ */
+
+#define PY_SSIZE_T_CLEAN
+#include <Python.h>
+#include <numpy/arrayobject.h>
+
+static PyObject* py_extract_pivots_c(PyObject* self, PyObject* args) {
+    PyArrayObject *prices_arr, *returns_arr;
+    double min_amplitude;
+    int base_window;
+    double noise_filter;
+    int adaptive;
+    double fractal_threshold;
+    double vol_scale;
+    PyArrayObject *out_idx_arr, *out_dir_arr, *out_fractal_arr;
+    int max_pivots;
+
+    /* 解析参数 */
+    if (!PyArg_ParseTuple(args, "O!O!dididdiO!O!O!i",
+                          &PyArray_Type, &prices_arr,
+                          &PyArray_Type, &returns_arr,
+                          &min_amplitude, &base_window,
+                          &noise_filter, &adaptive,
+                          &fractal_threshold, &vol_scale,
+                          &PyArray_Type, &out_idx_arr,
+                          &PyArray_Type, &out_dir_arr,
+                          &PyArray_Type, &out_fractal_arr,
+                          &max_pivots)) {
+        return NULL;
+    }
+
+    /* 验证输入数组 */
+    if (PyArray_NDIM(prices_arr) != 1 || PyArray_NDIM(returns_arr) != 1) {
+        PyErr_SetString(PyExc_ValueError, "Prices and returns must be 1D arrays");
+        return NULL;
+    }
+
+    int n = (int)PyArray_DIM(prices_arr, 0);
+    if (n != (int)PyArray_DIM(returns_arr, 0)) {
+        PyErr_SetString(PyExc_ValueError, "Array length mismatch");
+        return NULL;
+    }
+
+    /* 获取数据指针 */
+    double *prices = (double *)PyArray_DATA(prices_arr);
+    double *returns = (double *)PyArray_DATA(returns_arr);
+    int *out_idx = (int *)PyArray_DATA(out_idx_arr);
+    int *out_dir = (int *)PyArray_DATA(out_dir_arr);
+    double *out_fractal = (double *)PyArray_DATA(out_fractal_arr);
+
+    /* 调用核心 C 函数 */
+    int count = extract_pivots_c(
+        prices, returns, n,
+        min_amplitude, base_window, noise_filter,
+        adaptive, fractal_threshold, vol_scale,
+        out_idx, out_dir, out_fractal,
+        max_pivots
+    );
+
+    /* 返回极值点数量 */
+    return PyLong_FromLong(count);
+}
+
+/* 方法表 */
+static PyMethodDef PivotsMethods[] = {
+    {"extract_pivots_c", py_extract_pivots_c, METH_VARARGS,
+     "Extract pivot points (C accelerated)"},
+    {NULL, NULL, 0, NULL}
+};
+
+/* 模块定义 */
+static struct PyModuleDef pivotsmodule = {
+    PyModuleDef_HEAD_INIT,
+    "_pivots",
+    "Pivot extraction C extension module",
+    -1,
+    PivotsMethods
+};
+
+/* 模块初始化函数 */
+PyMODINIT_FUNC PyInit__pivots(void) {
+    import_array();  /* Initialize NumPy C API */
+    return PyModule_Create(&pivotsmodule);
+}
