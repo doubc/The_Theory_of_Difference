@@ -263,14 +263,18 @@ def render(ctx: dict):
 
                     risk_color = {"高": "#ef5350", "中": "#ff9800", "低": "#26a69a"}.get(r.get("risk_level", "低"), "#999")
 
-                    # 新鲜度标记
+                    # 结构时效性 — 交易导向表述
                     ds = r.get("days_since_end", 0) or 0
-                    if ds <= 3:
-                        fresh_tag = f'<span style="color:#4caf50;font-weight:600">🟢 {ds}天前</span>'
+                    if ds <= 1:
+                        fresh_tag = '<span style="color:#4caf50;font-weight:600">🔥 实时结构</span>'
+                    elif ds <= 3:
+                        fresh_tag = '<span style="color:#4caf50;font-weight:600">✅ 结构活跃</span>'
                     elif ds <= 7:
-                        fresh_tag = f'<span style="color:#ff9800;font-weight:600">🟡 {ds}天前</span>'
+                        fresh_tag = '<span style="color:#ff9800;font-weight:600">⚡ 需刷新确认</span>'
+                    elif ds <= 14:
+                        fresh_tag = '<span style="color:#ff9800;font-weight:600">⚠️ 结构老化</span>'
                     else:
-                        fresh_tag = f'<span style="color:#999">{ds}天前</span>'
+                        fresh_tag = '<span style="color:#999">📋 仅作参考</span>'
 
                     st.markdown(f"""
                     <div class="structure-card {card_cls}">
