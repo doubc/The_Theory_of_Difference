@@ -186,6 +186,12 @@ class LifecycleTracker:
                     break  # 太老了
 
                 # Zone 匹配
+                # 同一天同品种同 Zone → 去重，复用已有 lifecycle_id
+                if rec.date == date_str and rec.zone_center > 0:
+                    rel_diff = abs(zone_center - rec.zone_center) / rec.zone_center
+                    if rel_diff < ZONE_MATCH_TOLERANCE:
+                        return rec.lifecycle_id
+
                 if rec.zone_center > 0:
                     rel_diff = abs(zone_center - rec.zone_center) / rec.zone_center
                     if rel_diff < ZONE_MATCH_TOLERANCE:
@@ -217,6 +223,10 @@ class LifecycleTracker:
         if date_str is None:
             date_str = datetime.now().strftime("%Y-%m-%d")
 
+        # 加载已有记录，用于去重检查
+        existing_records = self._load_records(symbol)
+        existing_keys = {(r.lifecycle_id, r.date) for r in existing_records}
+
         records = []
         for i, s in enumerate(structures):
             ss = system_states[i] if system_states and i < len(system_states) else None
@@ -228,6 +238,10 @@ class LifecycleTracker:
 
             # 匹配或创建生命周期 ID
             lifecycle_id = self._match_existing_zone(symbol, s.zone.price_center, date_str)
+
+            # 同一天同 lifecycle_id → 跳过，不重复写入
+            if (lifecycle_id, date_str) in existing_keys:
+                continue
 
             # 方向
             direction = "unknown"
@@ -256,6 +270,7 @@ class LifecycleTracker:
                 lifecycle_id=lifecycle_id,
             )
             records.append(record)
+            existing_keys.add((lifecycle_id, date_str))
 
         # 追加写入
         if records:
