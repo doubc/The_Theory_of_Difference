@@ -7,6 +7,7 @@ Point → Segment → Zone → Cycle → Structure → Bundle
 1. 对象只保存状态，不做复杂计算（计算放在 relations / invariants）
 2. 所有对象支持 to_dict / from_dict（JSON 友好）
 3. Point 只保留 (t, x, idx)，其它属性由算子推导
+4. 类定义顺序：基础类型 → 辅助状态 → 复合对象（消除前向引用）
 """
 
 from __future__ import annotations
@@ -154,7 +155,6 @@ class Segment:
             start=Point.from_dict(d["start"]),
             end=Point.from_dict(d["end"]),
         )
-        # __post_init__ 已经推断了，但如果 dict 有显式值就用显式值
         if "noise_level" in d:
             seg.noise_level = d["noise_level"]
         return seg
@@ -326,120 +326,7 @@ class Cycle:
                 f"speed_r={self.speed_ratio:.2f}, time_r={self.time_ratio:.2f}{stable_str})")
 
 
-@dataclass
-class Structure:
-    """结构 — 围绕一个区组织的多个 Cycle 的集合"""
-    zone: Zone
-    cycles: list[Cycle] = field(default_factory=list)
-    phases: list[Phase] = field(default_factory=list)
-    invariants: dict = field(default_factory=dict)
-    typicality: float = 0.0      # 典型度 [0, 1]
-    label: Optional[str] = None   # 规则引擎打的标签
-    symbol: Optional[str] = None  # 品种
-    t_start: Optional[datetime] = None
-    t_end: Optional[datetime] = None
-    # ── V1.6 P0 新增 ──
-    narrative_context: str = ""  # 结构形成时的市场叙事背景（V1.6 命题 2.3 可叙事性）
-    motion: MotionState | None = None  # 运动态（V1.6「系统 = 结构 × 运动」）
-    projection: ProjectionAwareness | None = None  # 投影觉知（D0：价格=影子）
-    # ── V1.6 P1 新增：差异分层（Ch6 三种差异）──
-    liquidity_stress: float = 0.0   # 流动性差异：Zone内外成交量变异系数比 (D6.3)
-    fear_index: float = 0.0         # 边界恐惧：跳空+波动率突变+试探密集度 (D6.4)
-    time_compression: float = 0.0   # 时间差异：avg_entry_dur / avg_exit_dur (D6.2)
-    # ── V1.6 P1 新增：稳定性判定（D7.2 错觉检测）──
-    stability_verdict: StabilityVerdict | None = None
-
-    @property
-    def cycle_count(self) -> int:
-        return len(self.cycles)
-
-    @property
-    def avg_speed_ratio(self) -> float:
-        if not self.cycles:
-            return 0.0
-        return sum(c.speed_ratio for c in self.cycles) / len(self.cycles)
-
-    @property
-    def avg_time_ratio(self) -> float:
-        if not self.cycles:
-            return 0.0
-        return sum(c.time_ratio for c in self.cycles) / len(self.cycles)
-
-    @property
-    def avg_log_speed_ratio(self) -> float:
-        """对数速度比均值 — 品种无关"""
-        if not self.cycles:
-            return 0.0
-        return sum(c.log_speed_ratio for c in self.cycles) / len(self.cycles)
-
-    @property
-    def high_cluster_stddev(self) -> float:
-        """高点聚集度"""
-        highs = [p.x for c in self.cycles
-                 for p in [c.entry.end, c.exit.start]
-                 if p.x > self.zone.price_center]
-        if len(highs) < 2:
-            return 0.0
-        mean = sum(highs) / len(highs)
-        return (sum((x - mean) ** 2 for x in highs) / len(highs)) ** 0.5
-
-    @property
-    def high_cluster_cv(self) -> float:
-        """高点聚集度（变异系数，无量纲）"""
-        highs = [p.x for c in self.cycles
-                 for p in [c.entry.end, c.exit.start]
-                 if p.x > self.zone.price_center]
-        if len(highs) < 2:
-            return 0.0
-        mean = sum(highs) / len(highs)
-        if mean == 0:
-            return 0.0
-        stddev = (sum((x - mean) ** 2 for x in highs) / len(highs)) ** 0.5
-        return stddev / mean
-
-    @property
-    def stable_state_ratio(self) -> float:
-        """已识别最近稳态的 Cycle 占比 — V1.6 命题 3.4"""
-        if not self.cycles:
-            return 0.0
-        return sum(1 for c in self.cycles if c.has_stable_state) / len(self.cycles)
-
-    def signature(self) -> str:
-        """结构签名 — 用于检索与去重"""
-        parts = [
-            f"n={self.cycle_count}",
-            f"sr={self.avg_speed_ratio:.2f}",
-            f"tr={self.avg_time_ratio:.2f}",
-            f"zbw={self.zone.relative_bandwidth:.3f}",
-        ]
-        return "|".join(parts)
-
-    def to_dict(self) -> dict:
-        return {
-            "zone": self.zone.to_dict(),
-            "cycles": [c.to_dict() for c in self.cycles],
-            "phases": [p.value for p in self.phases],
-            "invariants": self.invariants,
-            "typicality": self.typicality,
-            "label": self.label,
-            "symbol": self.symbol,
-            "t_start": self.t_start.isoformat() if self.t_start else None,
-            "t_end": self.t_end.isoformat() if self.t_end else None,
-            "narrative_context": self.narrative_context,
-            "motion": self.motion.to_dict() if self.motion else None,
-            "projection": self.projection.to_dict() if self.projection else None,
-            "stable_state_ratio": self.stable_state_ratio,
-            "signature": self.signature(),
-            "liquidity_stress": self.liquidity_stress,
-            "fear_index": self.fear_index,
-            "time_compression": self.time_compression,
-            "stability_verdict": self.stability_verdict.to_dict() if self.stability_verdict else None,
-        }
-
-    def __repr__(self):
-        return (f"Structure(zone={self.zone}, cycles={self.cycle_count}, "
-                f"typicality={self.typicality:.2f})")
-
+# ─── 辅助状态对象（在 Structure 之前定义，消除前向引用）─────
 
 @dataclass
 class ProjectionAwareness:
@@ -597,6 +484,123 @@ class StabilityVerdict:
         return self.traffic_light
 
 
+# ─── 复合对象 ──────────────────────────────────────────────
+
+@dataclass
+class Structure:
+    """结构 — 围绕一个区组织的多个 Cycle 的集合"""
+    zone: Zone
+    cycles: list[Cycle] = field(default_factory=list)
+    phases: list[Phase] = field(default_factory=list)
+    invariants: dict = field(default_factory=dict)
+    typicality: float = 0.0      # 典型度 [0, 1]
+    label: Optional[str] = None   # 规则引擎打的标签
+    symbol: Optional[str] = None  # 品种
+    t_start: Optional[datetime] = None
+    t_end: Optional[datetime] = None
+    # ── V1.6 P0 新增 ──
+    narrative_context: str = ""  # 结构形成时的市场叙事背景（V1.6 命题 2.3 可叙事性）
+    motion: MotionState | None = None  # 运动态（V1.6「系统 = 结构 × 运动」）
+    projection: ProjectionAwareness | None = None  # 投影觉知（D0：价格=影子）
+    # ── V1.6 P1 新增：差异分层（Ch6 三种差异）──
+    liquidity_stress: float = 0.0   # 流动性差异：Zone内外成交量变异系数比 (D6.3)
+    fear_index: float = 0.0         # 边界恐惧：跳空+波动率突变+试探密集度 (D6.4)
+    time_compression: float = 0.0   # 时间差异：avg_entry_dur / avg_exit_dur (D6.2)
+    # ── V1.6 P1 新增：稳定性判定（D7.2 错觉检测）──
+    stability_verdict: StabilityVerdict | None = None
+
+    @property
+    def cycle_count(self) -> int:
+        return len(self.cycles)
+
+    @property
+    def avg_speed_ratio(self) -> float:
+        if not self.cycles:
+            return 0.0
+        return sum(c.speed_ratio for c in self.cycles) / len(self.cycles)
+
+    @property
+    def avg_time_ratio(self) -> float:
+        if not self.cycles:
+            return 0.0
+        return sum(c.time_ratio for c in self.cycles) / len(self.cycles)
+
+    @property
+    def avg_log_speed_ratio(self) -> float:
+        """对数速度比均值 — 品种无关"""
+        if not self.cycles:
+            return 0.0
+        return sum(c.log_speed_ratio for c in self.cycles) / len(self.cycles)
+
+    @property
+    def high_cluster_stddev(self) -> float:
+        """高点聚集度"""
+        highs = [p.x for c in self.cycles
+                 for p in [c.entry.end, c.exit.start]
+                 if p.x > self.zone.price_center]
+        if len(highs) < 2:
+            return 0.0
+        mean = sum(highs) / len(highs)
+        return (sum((x - mean) ** 2 for x in highs) / len(highs)) ** 0.5
+
+    @property
+    def high_cluster_cv(self) -> float:
+        """高点聚集度（变异系数，无量纲）"""
+        highs = [p.x for c in self.cycles
+                 for p in [c.entry.end, c.exit.start]
+                 if p.x > self.zone.price_center]
+        if len(highs) < 2:
+            return 0.0
+        mean = sum(highs) / len(highs)
+        if mean == 0:
+            return 0.0
+        stddev = (sum((x - mean) ** 2 for x in highs) / len(highs)) ** 0.5
+        return stddev / mean
+
+    @property
+    def stable_state_ratio(self) -> float:
+        """已识别最近稳态的 Cycle 占比 — V1.6 命题 3.4"""
+        if not self.cycles:
+            return 0.0
+        return sum(1 for c in self.cycles if c.has_stable_state) / len(self.cycles)
+
+    def signature(self) -> str:
+        """结构签名 — 用于检索与去重"""
+        parts = [
+            f"n={self.cycle_count}",
+            f"sr={self.avg_speed_ratio:.2f}",
+            f"tr={self.avg_time_ratio:.2f}",
+            f"zbw={self.zone.relative_bandwidth:.3f}",
+        ]
+        return "|".join(parts)
+
+    def to_dict(self) -> dict:
+        return {
+            "zone": self.zone.to_dict(),
+            "cycles": [c.to_dict() for c in self.cycles],
+            "phases": [p.value for p in self.phases],
+            "invariants": self.invariants,
+            "typicality": self.typicality,
+            "label": self.label,
+            "symbol": self.symbol,
+            "t_start": self.t_start.isoformat() if self.t_start else None,
+            "t_end": self.t_end.isoformat() if self.t_end else None,
+            "narrative_context": self.narrative_context,
+            "motion": self.motion.to_dict() if self.motion else None,
+            "projection": self.projection.to_dict() if self.projection else None,
+            "stable_state_ratio": self.stable_state_ratio,
+            "signature": self.signature(),
+            "liquidity_stress": self.liquidity_stress,
+            "fear_index": self.fear_index,
+            "time_compression": self.time_compression,
+            "stability_verdict": self.stability_verdict.to_dict() if self.stability_verdict else None,
+        }
+
+    def __repr__(self):
+        return (f"Structure(zone={self.zone}, cycles={self.cycle_count}, "
+                f"typicality={self.typicality:.2f})")
+
+
 @dataclass
 class SystemState:
     """
@@ -703,8 +707,9 @@ class Bundle:
         return f"Bundle({len(self.structures)} structures)"
 
 
-# ─── 关系算子（不存储，计算时使用）────────────────────────────
-# 权威定义在此，relations.py 从这里导入。
+# ─── 基础算子（保持向后兼容，权威定义在 relations.py）──────
+# 这些函数保留在 models.py 以维持 import 兼容性。
+# 新代码应从 relations.py 导入。
 
 
 def first_diff(p1: Point, p2: Point) -> float:
@@ -749,48 +754,3 @@ def extrema_dispersion(points: list[Point]) -> float:
         return 0.0
     var = sum((x - mean) ** 2 for x in prices) / len(prices)
     return math.sqrt(var) / mean
-
-
-def extrema_similarity(points1: list[Point], points2: list[Point]) -> float:
-    """
-    极值点序列相似度 — v2.5 实现
-
-    用 DTW (Dynamic Time Warping) 比较两组极值点的价格序列形状。
-    允许时间轴非线性拉伸，捕捉"形状相似但时间错位"的结构。
-
-    返回 [0, 1]，1 = 完全相同，0 = 完全不同。
-    """
-    if not points1 or not points2:
-        return 0.0
-
-    # 提取归一化价格序列
-    def _normalize(pts: list[Point]) -> list[float]:
-        prices = [p.x for p in pts]
-        lo, hi = min(prices), max(prices)
-        if hi - lo < 1e-12:
-            return [0.5] * len(prices)
-        return [(p - lo) / (hi - lo) for p in prices]
-
-    seq1 = _normalize(points1)
-    seq2 = _normalize(points2)
-    n, m = len(seq1), len(seq2)
-
-    # DTW with Sakoe-Chiba band — 空间优化：只保留两行
-    window = max(n, m) // 2
-    INF = float("inf")
-    prev = [INF] * (m + 1)
-    prev[0] = 0.0
-
-    for i in range(1, n + 1):
-        curr = [INF] * (m + 1)
-        j_lo = max(1, i - window)
-        j_hi = min(m, i + window)
-        for j in range(j_lo, j_hi + 1):
-            cost = (seq1[i - 1] - seq2[j - 1]) ** 2
-            curr[j] = cost + min(prev[j], curr[j - 1], prev[j - 1])
-        prev = curr
-
-    dist = math.sqrt(prev[m])
-    max_len = max(n, m)
-    normalized_dist = dist / math.sqrt(max_len)
-    return 1.0 / (1.0 + normalized_dist)
