@@ -13,10 +13,13 @@ license = {text = "MIT"}
 dependencies = [
     "pandas>=2.0",
     "pyarrow>=10.0",
+    "numpy>=1.24",
     "plotly>=5.0",
     "pyyaml>=6.0",
     "streamlit>=1.30",
     "networkx>=3.0",
+    "requests>=2.31",
+    "xgboost>=2.0",
 ]
 
 [project.optional-dependencies]
@@ -24,6 +27,8 @@ mysql = ["sqlalchemy>=2.0", "pymysql>=1.1"]
 dev = [
     "pytest>=7.0",
     "pytest-cov>=4.0",
+    "mypy>=1.0",
+    "ruff>=0.1",
 ]
 
 [tool.pytest.ini_options]

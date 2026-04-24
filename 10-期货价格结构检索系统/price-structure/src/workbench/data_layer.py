@@ -24,7 +24,12 @@ def get_mysql_engine():
     try:
         from sqlalchemy import create_engine, inspect
         password = os.getenv('MYSQL_PASSWORD', '')
-        engine = create_engine(f"mysql+pymysql://root:{password}@localhost/sina?charset=utf8")
+        user = os.getenv('MYSQL_USER', 'root')
+        host = os.getenv('MYSQL_HOST', 'localhost')
+        db = os.getenv('MYSQL_DB', 'sina')
+        if not password:
+            return None
+        engine = create_engine(f"mysql+pymysql://{user}:{password}@{host}/{db}?charset=utf8")
         insp = inspect(engine)
         _ = insp.get_table_names()
         return engine
@@ -89,7 +94,7 @@ def load_bars(symbol: str, source: str = "auto") -> list[Bar]:
     if source in ("auto", "mysql"):
         try:
             password = os.getenv('MYSQL_PASSWORD', '')
-            loader = MySQLLoader(host="localhost", user="root", password=password, db="sina")
+            loader = MySQLLoader(password=password, db="sina")
             bars = loader.get(symbol=symbol, freq="1d")
             if bars:
                 return bars

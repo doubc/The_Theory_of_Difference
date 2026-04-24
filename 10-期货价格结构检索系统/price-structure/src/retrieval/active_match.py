@@ -309,8 +309,10 @@ def _load_all_bars_mysql(symbol: str) -> list[Bar]:
     """从 MySQL 加载全部历史数据"""
     try:
         import os
-        password = os.getenv('MYSQL_PASSWORD', 'root')
-        loader = MySQLLoader(host="localhost", user="root", password=password, db="sina")
+        password = os.getenv('MYSQL_PASSWORD', '')
+        if not password:
+            return []
+        loader = MySQLLoader(password=password, db="sina")
         return loader.get(symbol=symbol, freq="1d")
     except Exception:
         return []

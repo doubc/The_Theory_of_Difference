@@ -1,9 +1,14 @@
+# 核心（与 pyproject.toml dependencies 同步，pip install 用）
 pandas>=2.0
 pyarrow>=10.0
+numpy>=1.24
 plotly>=5.0
 pyyaml>=6.0
 streamlit>=1.30
 networkx>=3.0
-pymysql>=1.1
-sqlalchemy>=2.0
 requests>=2.31
+xgboost>=2.0
+
+# MySQL 支持（可选）
+sqlalchemy>=2.0
+pymysql>=1.1

@@ -89,9 +89,10 @@ def render(ctx: dict):
 
         # 优先尝试 MySQL
         try:
-            password = os.getenv('MYSQL_PASSWORD', 'root')
-            loader = MySQLLoader(host="localhost", user="root", password=password, db="sina")
-            bars = loader.get(symbol=symbol.upper(), start=start, end=end, freq=freq)
+            password = os.getenv('MYSQL_PASSWORD', '')
+            if password:
+                loader = MySQLLoader(password=password, db="sina")
+                bars = loader.get(symbol=symbol.upper(), start=start, end=end, freq=freq)
         except Exception:
             pass
 

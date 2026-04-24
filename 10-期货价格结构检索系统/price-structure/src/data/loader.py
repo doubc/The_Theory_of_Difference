@@ -287,12 +287,15 @@ class MySQLLoader:
     适配 sina 数据库结构: {code} (日线), {code}m5 (5分钟线)
     """
 
-    def __init__(self, host='localhost', user='root', password=None, db='sina'):
+    def __init__(self, host=None, user=None, password=None, db='sina'):
         import os
         from sqlalchemy import create_engine
-        if password is None:
-            password = os.getenv('MYSQL_PASSWORD', 'root')
-        self.engine = create_engine(f'mysql+pymysql://{user}:{password}@{host}/{db}?charset=utf8')
+        _host = host or os.getenv('MYSQL_HOST', 'localhost')
+        _user = user or os.getenv('MYSQL_USER', 'root')
+        _pwd = password or os.getenv('MYSQL_PASSWORD', '')
+        if not _pwd:
+            raise ValueError("MySQL 密码未设置，请配置环境变量 MYSQL_PASSWORD")
+        self.engine = create_engine(f'mysql+pymysql://{_user}:{_pwd}@{_host}/{db}?charset=utf8')
 
     def get(
             self,
