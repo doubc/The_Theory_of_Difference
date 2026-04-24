@@ -400,6 +400,56 @@ def render(ctx: dict):
             else:
                 st.caption(f"首次扫描（{_today_key}），下次扫描将自动对比变化")
 
+            # ── 导出扫描结果 ──
+            st.markdown("---")
+            st.markdown("#### 📤 导出扫描结果")
+            exp_c1, exp_c2 = st.columns(2)
+            with exp_c1:
+                scan_export = {
+                    "date": _today_key,
+                    "sensitivity": sensitivity,
+                    "total": len(scan_results),
+                    "top10": [{
+                        "rank": i + 1,
+                        "symbol": r["symbol"],
+                        "symbol_name": r["symbol_name"],
+                        "zone_center": r["zone_center"],
+                        "cycles": r["cycles"],
+                        "motion": r["motion"],
+                        "flux": r["flux"],
+                        "score": r["score"],
+                        "tier": r.get("tier", "?"),
+                        "direction": r["direction"],
+                        "narrative": r["narrative"],
+                        "last_price": r["last_price"],
+                        "days_since_end": r.get("days_since_end", 0),
+                    } for i, r in enumerate(scan_results[:10])],
+                    "exported_at": datetime.now().isoformat(),
+                }
+                st.download_button(
+                    "📥 导出 JSON",
+                    data=json.dumps(scan_export, ensure_ascii=False, indent=2),
+                    file_name=f"scan_{_today_key}.json",
+                    mime="application/json",
+                    use_container_width=True,
+                )
+            with exp_c2:
+                md_lines = [f"# 全市场扫描 {_today_key}\n灵敏度: {sensitivity} · 活跃结构: {len(scan_results)}\n"]
+                for i, r in enumerate(scan_results[:10], 1):
+                    dir_icon = "📈" if r["direction"] == "up" else "📉" if r["direction"] == "down" else "➡️"
+                    md_lines.append(f"## #{i} {r['symbol']} ({r['symbol_name']})")
+                    md_lines.append(f"- {dir_icon} Zone {r['zone_center']:.0f} · {r['cycles']}次试探 · {r['motion']}")
+                    md_lines.append(f"- 质量 {r['score']:.0f}分 · {r.get('tier', '?')}层 · 通量{r['flux']:+.2f}")
+                    md_lines.append(f"- 现价{r['last_price']:.1f} · {r.get('days_since_end', 0)}天前活跃")
+                    md_lines.append("")
+                st.download_button(
+                    "📥 导出 Markdown",
+                    data="\n".join(md_lines),
+                    file_name=f"scan_{_today_key}.md",
+                    mime="text/markdown",
+                    use_container_width=True,
+                )
+
             st.session_state["prev_scan_results"] = scan_results[:20]
             st.session_state["prev_scan_date"] = _today_key
         else:

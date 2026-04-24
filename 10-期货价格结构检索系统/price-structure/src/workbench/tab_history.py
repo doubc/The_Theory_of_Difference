@@ -8,6 +8,8 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 from datetime import datetime, timedelta
+from pathlib import Path
+import json
 import time as _time
 
 from src.data.loader import Bar
@@ -34,6 +36,7 @@ def render(ctx: dict):
     CSV_SYMBOLS = ctx["CSV_SYMBOLS"]
     META = ctx["META"]
     ds_name = ctx["ds_name"]
+    today = datetime.now().strftime("%Y-%m-%d")
 
     st.markdown("#### 🔍 历史对照 — 主动拉取比较")
     st.caption("从 MySQL/CSV 加载全量历史 → 编译 → 找最相似的历史段 → 对比详情")
@@ -297,9 +300,9 @@ def render(ctx: dict):
                         })
                     ActivityLog().save_retrieval(
                         symbol=selected_symbol,
-                        query_zone=current_zone_center,
+                        query_zone=query_st.zone.price_center,
                         neighbors=_neighbors,
-                        search_window=f"{start_date}~{end_date}",
+                        search_window=f"{search_date_start}~{search_date_end}",
                     )
                 except Exception:
                     pass
@@ -465,6 +468,118 @@ def render(ctx: dict):
                             f"平均相似度 {avg_sim:.0%} · "
                             f"📈{sym_up} / 📉{sym_down}"
                         )
+
+                # ── 导出 & 录入 ──
+                st.markdown("---")
+                st.markdown("#### 📤 导出 & 录入")
+
+                export_col1, export_col2, export_col3 = st.columns(3)
+
+                with export_col1:
+                    # 导出为 JSON
+                    export_data = {
+                        "query": {
+                            "symbol": selected_symbol,
+                            "zone_center": query_st.zone.price_center,
+                            "search_window": f"{search_date_start}~{search_date_end}",
+                            "scope": scope_label,
+                            "granularity": search_granularity,
+                        },
+                        "results": [{
+                            "symbol": c["symbol"],
+                            "period_start": c["period_start"],
+                            "period_end": c["period_end"],
+                            "similarity": round(c["score"].total, 4),
+                            "sim_geometry": round(c["score"].geometric, 4),
+                            "sim_relation": round(c["score"].relational, 4),
+                            "sim_motion": round(c["score"].motion, 4),
+                            "sim_family": round(c["score"].family, 4),
+                            "direction": c["direction"],
+                            "outcome_move": c["move"],
+                            "outcome_days": c["days"],
+                            "cycle_count": c["structure"].cycle_count,
+                            "zone_center": c["structure"].zone.price_center,
+                        } for c in top_cases],
+                        "summary": {
+                            "total": n,
+                            "up": len(up_cases),
+                            "down": len(down_cases),
+                            "avg_up": round(sum(c["move"] for c in up_cases) / len(up_cases), 4) if up_cases else 0,
+                            "avg_down": round(sum(c["move"] for c in down_cases) / len(down_cases), 4) if down_cases else 0,
+                        },
+                        "exported_at": datetime.now().isoformat(),
+                    }
+                    json_str = json.dumps(export_data, ensure_ascii=False, indent=2, default=str)
+                    st.download_button(
+                        "📥 导出 JSON",
+                        data=json_str,
+                        file_name=f"retrieval_{selected_symbol}_{query_st.zone.price_center:.0f}_{today}.json",
+                        mime="application/json",
+                        use_container_width=True,
+                    )
+
+                with export_col2:
+                    # 导出为 Markdown
+                    md_lines = [
+                        f"# 检索结果: {selected_symbol} Zone {query_st.zone.price_center:.0f}",
+                        f"日期: {today} · 范围: {scope_label} · 颗粒度: {search_granularity}",
+                        "",
+                        f"## 综合研判",
+                        f"- 总案例: {n} · 上涨 {len(up_cases)} · 下跌 {len(down_cases)}",
+                    ]
+                    if up_cases:
+                        md_lines.append(f"- 上涨平均涨幅: {sum(c['move'] for c in up_cases)/len(up_cases):.1%}")
+                    if down_cases:
+                        md_lines.append(f"- 下跌平均跌幅: {sum(c['move'] for c in down_cases)/len(down_cases):.1%}")
+                    md_lines.append("")
+                    md_lines.append("## 相似案例")
+                    for i, c in enumerate(top_cases, 1):
+                        md_lines.append(f"### #{i} {c['symbol']} {c['period_start']}~{c['period_end']}")
+                        md_lines.append(f"- 相似度: {c['score'].total:.3f} (几何{c['score'].geometric:.2f} 关系{c['score'].relational:.2f} 运动{c['score'].motion:.2f})")
+                        md_lines.append(f"- 方向: {c['direction']} · 后续 {c['move']:.1%} ({c['days']}天)")
+                        md_lines.append(f"- Cycle数: {c['structure'].cycle_count} · Zone: {c['structure'].zone.price_center:.0f}")
+                        md_lines.append("")
+                    md_str = "\n".join(md_lines)
+                    st.download_button(
+                        "📥 导出 Markdown",
+                        data=md_str,
+                        file_name=f"retrieval_{selected_symbol}_{query_st.zone.price_center:.0f}_{today}.md",
+                        mime="text/markdown",
+                        use_container_width=True,
+                    )
+
+                with export_col3:
+                    # 录入样本库
+                    if st.button("💾 录入样本库", use_container_width=True,
+                                 help="将当前检索结果保存到 data/samples/library.jsonl，供后续检索使用"):
+                        try:
+                            from src.sample.store import SampleStore
+                            sample_dir = Path("data/samples")
+                            sample_dir.mkdir(parents=True, exist_ok=True)
+                            store = SampleStore(str(sample_dir / "library.jsonl"))
+
+                            recorded = 0
+                            for c in top_cases[:20]:
+                                hs = c["structure"]
+                                sample_id = f"{selected_symbol}_{query_st.zone.price_center:.0f}_{today}_{recorded}"
+                                store.append(
+                                    symbol=selected_symbol,
+                                    structure=hs,
+                                    label_type=hs.label or "retrieval_match",
+                                    label_phase=c["direction"],
+                                    typicality=c["score"].total,
+                                    annotation=f"检索匹配: {c['symbol']} {c['period_start']}~{c['period_end']} 相似度{c['score'].total:.2f}",
+                                    forward_outcome={
+                                        "direction": c["direction"],
+                                        "move": c["move"],
+                                        "days": c["days"],
+                                    },
+                                )
+                                recorded += 1
+
+                            st.success(f"✅ 已录入 {recorded} 个样本到样本库")
+                        except Exception as ex:
+                            st.error(f"录入失败: {ex}")
 
             else:
                 st.warning("🔍 匹配不足 — 试试：① 降低「最小相似度」阈值 ② 切换到「粗粒度」③ 扩大检索范围到「全品种」④ 增加历史检索年数")
