@@ -15,6 +15,7 @@ from src.data.loader import Bar
 from src.data.symbol_meta import symbol_name
 from src.compiler.pipeline import compile_full, CompilerConfig
 from src.quality import assess_quality, QualityTier
+from src.retrieval.progress import progress_retrieve
 
 from src.workbench.shared import (
     motion_badge, TIER_COLORS, _extract_key, _price_vs_zone,
@@ -303,11 +304,54 @@ def render(ctx: dict):
                     </div>
                     """, unsafe_allow_html=True)
 
+                    # 候选剧本摘要
+                    try:
+                        sym = r.get("symbol", "")
+                        sym_bars = load_bars(sym)
+                        if sym_bars and len(sym_bars) > 120:
+                            # 编译历史结构
+                            hist_cfg = CompilerConfig(
+                                min_amplitude=sens["min_amp"],
+                                min_duration=sens["min_dur"],
+                                min_cycles=sens["min_cycles"],
+                            )
+                            hist_result = compile_full(sym_bars, hist_cfg, symbol=sym)
+                            if hist_result.structures:
+                                # 找到当前结构对应的 Structure 对象
+                                cr_sym, _ = compile_structures(sym, sens["min_amp"], sens["min_dur"], sens["min_cycles"])
+                                if cr_sym and cr_sym.structures:
+                                    # 取 zone 最接近的结构作为 query
+                                    zc = r.get("zone_center", 0)
+                                    query_s = min(cr_sym.structures,
+                                                  key=lambda s: abs(s.zone.price_center - zc))
+                                    playbook, _ = progress_retrieve(
+                                        query=query_s,
+                                        history_structures=hist_result.structures,
+                                        history_bars=sym_bars,
+                                        after_window=120,
+                                        min_similarity=0.2,
+                                        top_k=10,
+                                    )
+                                    if playbook.n_matches > 0:
+                                        pb_dir = {"bullish": "📈看涨", "bearish": "📉看跌", "unclear": "➡️不明"}
+                                        r["_playbook"] = (
+                                            f"🎬 剧本: {pb_dir.get(playbook.direction, '?')} "
+                                            f"({playbook.confidence}) "
+                                            f"上涨{playbook.prob_up:.0%}/下跌{playbook.prob_down:.0%} "
+                                            f"中位{playbook.median_move:+.1%} "
+                                            f"({playbook.n_matches}例)"
+                                        )
+                    except Exception:
+                        pass
+
                     with st.expander(f"💡 #{i+1} {r.get('symbol', '')} 研究建议 · {tier}层", expanded=False):
                         st.markdown(f"**风控建议**：{tier}层质量（{r.get('score', 0):.0f}分），建议单笔关注不超过总资金的 **{r.get('risk_pct', '1-3%')}**")
                         flags = r.get("quality_flags", [])
                         if flags:
                             st.markdown("**质量标记**：" + " · ".join(flags))
+                        # 候选剧本
+                        if r.get("_playbook"):
+                            st.info(r["_playbook"])
                         st.markdown("**下一步研究动作**：")
                         for j, sug in enumerate(r.get("suggestions", []), 1):
                             st.markdown(f"  {j}. {sug}")
