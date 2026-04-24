@@ -66,7 +66,7 @@ class CrossTimeframeMatch:
         return self.consistency_score > 0.6
 
 
-@dataframe
+@dataclass
 class MultiTimeframeReport:
     """多时间维度对比报告"""
     symbol: str
