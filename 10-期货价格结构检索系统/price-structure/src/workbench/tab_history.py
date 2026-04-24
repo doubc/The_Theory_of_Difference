@@ -231,6 +231,8 @@ def render(ctx: dict):
                         "move": move,
                         "symbol": sym,
                         "symbol_name": symbol_name(sym),
+                        "period_start": hs.t_start.strftime("%Y-%m-%d") if hs.t_start else "",
+                        "period_end": hs.t_end.strftime("%Y-%m-%d") if hs.t_end else "",
                     })
 
             progress.progress(0.95, text="应用精细筛选...")
