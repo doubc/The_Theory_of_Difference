@@ -155,12 +155,14 @@ def compile_full(bars: list[Bar], config: CompilerConfig | None = None, symbol: 
     segments = build_segments(pivots)
     segments = merge_micro_segments(segments, config.min_segment_delta_pct)
 
-    # 3.3 关键区识别
+    # 3.3 关键区识别（传入 bars 和 symbol 以增强反差推断）
     zones = detect_zones(
         pivots,
         zone_bandwidth=config.zone_bandwidth,
         cluster_eps=config.cluster_eps,
         cluster_min_points=config.cluster_min_points,
+        bars=bars,
+        symbol=symbol,
     )
 
     # 3.4 Cycle + Structure 组装

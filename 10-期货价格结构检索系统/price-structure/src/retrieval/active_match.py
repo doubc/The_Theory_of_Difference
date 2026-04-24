@@ -33,6 +33,7 @@ class ActiveMatchQuery:
     price_context: str | None = None
     min_cycles: int = 2
     top_k: int = 10
+    max_lookback_days: int = 60     # 顺时序：历史对比最大回溯天数（默认 2 个月）
     compiler_config: CompilerConfig | None = None
 
     def __post_init__(self):

@@ -21,10 +21,8 @@ from src.models import (
     Point, Segment, Zone, Cycle, Structure, ContrastType,
     MotionState, Phase, ProjectionAwareness,
     StabilityVerdict, SystemState,
-    # 复用 models.py 中定义的基础算子，不重复定义
-    first_diff, log_diff, second_diff, time_gap,
-    distance_to_zone, relative_distance_to_zone,
-    extrema_dispersion,
+    # 复用 models.py 中定义的基础算子
+    time_gap, extrema_dispersion,
 )
 
 # 向后兼容别名
@@ -219,7 +217,8 @@ def check_conservation(
     """
     result = {
         "conservation_violated": False,
-        "transfer_channels": [],
+        "transfer_channels": [],      # 目标维度: ["shorter_timeframe", "volume", ...]
+        "compensation_signals": [],   # 补偿性变化: ["speed_ratio_expanding", ...]
         "notes": [],
         "flux_score": 0.0,
         "channel_scores": {},
@@ -281,7 +280,8 @@ def check_conservation(
 
     # ── 第二步：如果价格被压缩，检查其他价格特征是否在补偿性变化 ──
     if price_compressed:
-        compensations = []
+        compensations = []      # 补偿性变化信号
+        target_channels = []    # 差异可能转移到的目标维度
 
         # 检查速度比是否在扩张（与带宽压缩相反方向）
         if n >= 3:
@@ -331,7 +331,16 @@ def check_conservation(
                             f"试探密度加速 ({density_ratio:.1f}x)，差异在重新分配"
                         )
 
-        result["transfer_channels"] = compensations
+        # 将补偿性变化映射到目标维度
+        # 语义: transfer_channels = 差异可能去了哪（目标维度）
+        #       compensation_signals = 价格层看到了什么变化（观测信号）
+        if any(s in c for c in compensations for s in ["speed_ratio_expanding", "density_accelerating"]):
+            target_channels.append("shorter_timeframe")
+        if "time_ratio_asymmetric" in compensations or "time_ratio_inverse" in compensations:
+            target_channels.append("volume")
+
+        result["compensation_signals"] = compensations
+        result["transfer_channels"] = target_channels
 
         # 如果价格被压缩但没有任何补偿性变化
         if not compensations:
@@ -368,27 +377,75 @@ def compute_motion(s: Structure) -> MotionState:
 
     n = len(s.cycles)
 
-    # ── 1. 阶段转换趋势 ──
-    # 从最后几个 cycle 的速度比趋势推断下一个阶段
+    # ── 1. 阶段转换趋势（多信号投票）──
+    # V1.6 Ch5: 阶段转换应考虑 Zone 完整性、试探密集度、守恒通量、稳态距离
     if n >= 3:
+        votes: dict[str, float] = {}  # tendency → confidence 累计
+
+        # 信号 A: 速度比趋势（权重 0.35）
         recent_srs = [c.speed_ratio for c in s.cycles[-3:]]
         sr_trend = recent_srs[-1] - recent_srs[0]
-
-        # 速度比在加速上升 → 可能走向 breakdown
         if sr_trend > 0.5:
-            motion.phase_tendency = "→breakdown"
-            motion.phase_confidence = min(abs(sr_trend) / 2.0, 1.0)
-        # 速度比在收敛 → 走向 confirmation
+            votes["→breakdown"] = votes.get("→breakdown", 0) + 0.35 * min(sr_trend / 2.0, 1.0)
         elif sr_trend < -0.3:
-            motion.phase_tendency = "→confirmation"
-            motion.phase_confidence = min(abs(sr_trend) / 1.0, 1.0)
-        # 速度比方向反转 → inversion
+            votes["→confirmation"] = votes.get("→confirmation", 0) + 0.35 * min(abs(sr_trend) / 1.0, 1.0)
         elif (recent_srs[0] > 1) != (recent_srs[-1] > 1):
-            motion.phase_tendency = "→inversion"
-            motion.phase_confidence = 0.7
+            votes["→inversion"] = votes.get("→inversion", 0) + 0.35 * 0.7
+        else:
+            votes["stable"] = votes.get("stable", 0) + 0.35 * 0.5
+
+        # 信号 B: 试探密集度加速（权重 0.25）
+        if n >= 4 and s.t_start and s.t_end:
+            mid = s.t_start + (s.t_end - s.t_start) / 2
+            first_half = [c for c in s.cycles if c.entry.start.t <= mid]
+            second_half = [c for c in s.cycles if c.entry.start.t > mid]
+            if first_half and second_half:
+                span1 = max((mid - s.t_start).days, 1)
+                span2 = max((s.t_end - mid).days, 1)
+                density_ratio = (len(second_half) / span2) / max(len(first_half) / span1, 1e-9)
+                if density_ratio > 1.5:
+                    # 密集度加速 → 可能走向 breakdown
+                    votes["→breakdown"] = votes.get("→breakdown", 0) + 0.25 * min(density_ratio / 3.0, 1.0)
+                elif density_ratio < 0.67:
+                    # 密集度放缓 → 走向 confirmation
+                    votes["→confirmation"] = votes.get("→confirmation", 0) + 0.25 * 0.5
+                else:
+                    votes["stable"] = votes.get("stable", 0) + 0.25 * 0.4
+
+        # 信号 C: Zone 带宽变化趋势（权重 0.20）
+        # 如果最近 cycle 的 exit 段离 zone 越来越远 → breakdown
+        if n >= 3:
+            recent_exits = [c.exit for c in s.cycles[-3:]]
+            zone = s.zone
+            exit_distances = [abs(e.end.x - zone.price_center) / max(zone.bandwidth, 1e-9) for e in recent_exits]
+            dist_trend = exit_distances[-1] - exit_distances[0]
+            if dist_trend > 1.0:
+                votes["→breakdown"] = votes.get("→breakdown", 0) + 0.20 * min(dist_trend / 3.0, 1.0)
+            elif dist_trend < -0.5:
+                votes["→confirmation"] = votes.get("→confirmation", 0) + 0.20 * 0.4
+
+        # 信号 D: 守恒通量方向（权重 0.20）
+        conservation = s.invariants.get("conservation", {})
+        flux = conservation.get("flux_score", 0.0)
+        if abs(flux) > 0.3:
+            if flux < -0.3:
+                # 差异压缩 → 走向 confirmation 或稳定
+                votes["→confirmation"] = votes.get("→confirmation", 0) + 0.20 * min(abs(flux), 1.0)
+            elif flux > 0.3:
+                # 差异释放 → 可能走向 breakdown
+                votes["→breakdown"] = votes.get("→breakdown", 0) + 0.20 * min(flux, 1.0)
+        else:
+            votes["stable"] = votes.get("stable", 0) + 0.20 * 0.3
+
+        # 投票决定
+        if votes:
+            best_tendency = max(votes, key=votes.get)
+            motion.phase_tendency = best_tendency
+            motion.phase_confidence = min(votes[best_tendency], 1.0)
         else:
             motion.phase_tendency = "stable"
-            motion.phase_confidence = 0.5
+            motion.phase_confidence = 0.3
+
     elif n >= 1:
         motion.phase_tendency = "forming"
         motion.phase_confidence = 0.3
@@ -700,12 +757,21 @@ def detect_stability_illusion(
             pending.append("shorter_timeframe")
             pending.append("volume")
 
-    # 检查2：守恒检查是否有转移警告
+    # 检查2：守恒检查是否有转移警告（目标维度）
     conservation = s.invariants.get("conservation", {})
     transfer_channels = conservation.get("transfer_channels", [])
     for ch in transfer_channels:
         if ch not in pending:
             pending.append(ch)
+    # 兼容旧格式：compensation_signals 中的映射到目标维度
+    compensation = conservation.get("compensation_signals", [])
+    for sig in compensation:
+        if "speed_ratio" in sig or "density" in sig:
+            if "shorter_timeframe" not in pending:
+                pending.append("shorter_timeframe")
+        if "time_ratio" in sig:
+            if "volume" not in pending:
+                pending.append("volume")
 
     # 检查3：最近稳态阻力评分异常低 → 可能是假稳态
     stable_cycles = [c for c in s.cycles if c.has_stable_state]
@@ -730,15 +796,14 @@ def detect_stability_illusion(
     return verdict
 
 
-def _safe_cv(vals: list[float]) -> float:
-    """安全计算变异系数"""
-    if len(vals) < 2:
-        return 0.0
-    m = sum(vals) / len(vals)
-    if m == 0:
-        return 0.0
-    var = sum((v - m) ** 2 for v in vals) / len(vals)
-    return math.sqrt(var) / abs(m)
+def safe_cv(vals: list[float]) -> float:
+    """安全计算变异系数（公开函数，供其他模块复用）"""
+    from src.utils import safe_cv as _cv
+    return _cv(vals)
+
+
+# 向后兼容别名
+_safe_cv = safe_cv
 
 
 def build_system_state(

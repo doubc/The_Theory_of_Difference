@@ -16,6 +16,7 @@ from src.data.loader import Bar
 from src.data.symbol_meta import symbol_name
 from src.compiler.pipeline import compile_full, CompilerConfig
 from src.retrieval.similarity import similarity, INVARIANT_KEYS, INVARIANT_SCALES
+from src.retrieval.progress import progress_retrieve
 
 from src.workbench.shared import (
     motion_badge, TIER_COLORS, _extract_key, _price_vs_zone,
@@ -468,6 +469,64 @@ def render(ctx: dict):
                             f"平均相似度 {avg_sim:.0%} · "
                             f"📈{sym_up} / 📉{sym_down}"
                         )
+
+                # ── 候选剧本（结构进度检索）──
+                st.markdown("---")
+                st.markdown("#### 🎬 候选剧本 — 历史前半程后续走势")
+
+                try:
+                    all_hist_structures = []
+                    for sym in list(sym_distribution.keys()) if is_cross_symbol else [selected_symbol]:
+                        sym_bars = load_bars(sym)
+                        _, sym_result = compile_structures(
+                            sym, sens["min_amp"], sens["min_dur"], sens["min_cycles"]
+                        )
+                        if sym_result:
+                            all_hist_structures.extend(sym_result.structures)
+
+                    playbook, pb_cases = progress_retrieve(
+                        query=query_st,
+                        history_structures=all_hist_structures,
+                        history_bars=bars,
+                        after_window=120,
+                        min_similarity=0.2,
+                        top_k=15,
+                    )
+
+                    if playbook.n_matches > 0:
+                        # 方向指示
+                        if playbook.direction == "bullish":
+                            st.success(f"**{playbook.summary}**")
+                        elif playbook.direction == "bearish":
+                            st.error(f"**{playbook.summary}**")
+                        else:
+                            st.warning(f"**{playbook.summary}**")
+
+                        # 关键指标
+                        pb_cols = st.columns(5)
+                        pb_cols[0].metric("匹配数", f"{playbook.n_matches}")
+                        pb_cols[1].metric("上涨概率", f"{playbook.prob_up:.0%}")
+                        pb_cols[2].metric("中位收益", f"{playbook.median_move:+.1%}")
+                        pb_cols[3].metric("兑现天数", f"{playbook.median_days}天")
+                        pb_cols[4].metric("置信度", playbook.confidence)
+
+                        # 匹配案例展开
+                        with st.expander(f"📂 查看 {len(pb_cases)} 个历史前半程案例", expanded=False):
+                            for i, c in enumerate(pb_cases[:8]):
+                                dir_icon = "📈" if c.after_direction == "up" else "📉" if c.after_direction == "down" else "➡️"
+                                st.markdown(
+                                    f"{dir_icon} **#{i+1}** {c.period} · "
+                                    f"zone={c.zone_center:.0f} · cycles={c.cycle_count} · "
+                                    f"sim={c.similarity.total:.0%} · "
+                                    f"后半程: {c.after_direction} {c.after_move:+.1%} ({c.after_days}天) · "
+                                    f"max涨{c.after_max_rise:+.1%}/max跌{c.after_max_dd:.1%}"
+                                )
+                                st.caption(f"匹配原因: {c.match_reason}")
+                    else:
+                        st.info("📋 无足够相似的历史前半程案例，无法生成候选剧本")
+
+                except Exception as ex:
+                    st.warning(f"候选剧本生成异常: {ex}")
 
                 # ── 导出 & 录入 ──
                 st.markdown("---")

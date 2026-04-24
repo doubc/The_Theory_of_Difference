@@ -15,6 +15,7 @@ from src.data.loader import Bar
 from src.data.symbol_meta import symbol_name
 from src.compiler.pipeline import compile_full, CompilerConfig
 from src.quality import assess_quality, QualityTier
+from src.retrieval.progress import progress_retrieve
 
 from src.workbench.shared import (
     motion_badge, TIER_COLORS, _extract_key, _price_vs_zone,
@@ -151,31 +152,14 @@ def render(ctx: dict):
                     "days_since_end": days_since_end,
                 })
 
-        # v3.2: 同品种 Zone 去重（避免相近 Zone 重复上榜）
-        deduped = []
-        seen_zones = {}  # {symbol: [(zone_center, zone_bw), ...]}
-        
+        # v3.3: 品种去重 — 每个合约代码只保留得分最高的结构
+        # 避免同一品种占多个显示位，让 Top 10 覆盖更多品种
+        best_per_symbol = {}
         for r in results:
             sym = r["symbol"]
-            zc = r["zone_center"]
-            zb = r["zone_bw"]
-            
-            if sym not in seen_zones:
-                seen_zones[sym] = []
-            
-            # 检查是否与已存在的 Zone 重叠
-            is_duplicate = False
-            for (prev_zc, prev_zb) in seen_zones[sym]:
-                # 如果 Zone 中心距离 < 2倍带宽，认为是重叠
-                if abs(zc - prev_zc) < 2 * max(zb, prev_zb):
-                    is_duplicate = True
-                    break
-            
-            if not is_duplicate:
-                seen_zones[sym].append((zc, zb))
-                deduped.append(r)
-        
-        results = deduped
+            if sym not in best_per_symbol or r["score"] > best_per_symbol[sym]["score"]:
+                best_per_symbol[sym] = r
+        results = sorted(best_per_symbol.values(), key=lambda x: x["score"], reverse=True)
         
         # 排序：质量 70% + recency 30%
         results.sort(key=lambda x: x["score"] * 0.7 + x["recency"] * 30, reverse=True)
@@ -303,11 +287,54 @@ def render(ctx: dict):
                     </div>
                     """, unsafe_allow_html=True)
 
+                    # 候选剧本摘要
+                    try:
+                        sym = r.get("symbol", "")
+                        sym_bars = load_bars(sym)
+                        if sym_bars and len(sym_bars) > 120:
+                            # 编译历史结构
+                            hist_cfg = CompilerConfig(
+                                min_amplitude=sens["min_amp"],
+                                min_duration=sens["min_dur"],
+                                min_cycles=sens["min_cycles"],
+                            )
+                            hist_result = compile_full(sym_bars, hist_cfg, symbol=sym)
+                            if hist_result.structures:
+                                # 找到当前结构对应的 Structure 对象
+                                cr_sym, _ = compile_structures(sym, sens["min_amp"], sens["min_dur"], sens["min_cycles"])
+                                if cr_sym and cr_sym.structures:
+                                    # 取 zone 最接近的结构作为 query
+                                    zc = r.get("zone_center", 0)
+                                    query_s = min(cr_sym.structures,
+                                                  key=lambda s: abs(s.zone.price_center - zc))
+                                    playbook, _ = progress_retrieve(
+                                        query=query_s,
+                                        history_structures=hist_result.structures,
+                                        history_bars=sym_bars,
+                                        after_window=120,
+                                        min_similarity=0.2,
+                                        top_k=10,
+                                    )
+                                    if playbook.n_matches > 0:
+                                        pb_dir = {"bullish": "📈看涨", "bearish": "📉看跌", "unclear": "➡️不明"}
+                                        r["_playbook"] = (
+                                            f"🎬 剧本: {pb_dir.get(playbook.direction, '?')} "
+                                            f"({playbook.confidence}) "
+                                            f"上涨{playbook.prob_up:.0%}/下跌{playbook.prob_down:.0%} "
+                                            f"中位{playbook.median_move:+.1%} "
+                                            f"({playbook.n_matches}例)"
+                                        )
+                    except Exception:
+                        pass
+
                     with st.expander(f"💡 #{i+1} {r.get('symbol', '')} 研究建议 · {tier}层", expanded=False):
                         st.markdown(f"**风控建议**：{tier}层质量（{r.get('score', 0):.0f}分），建议单笔关注不超过总资金的 **{r.get('risk_pct', '1-3%')}**")
                         flags = r.get("quality_flags", [])
                         if flags:
                             st.markdown("**质量标记**：" + " · ".join(flags))
+                        # 候选剧本
+                        if r.get("_playbook"):
+                            st.info(r["_playbook"])
                         st.markdown("**下一步研究动作**：")
                         for j, sug in enumerate(r.get("suggestions", []), 1):
                             st.markdown(f"  {j}. {sug}")
@@ -441,7 +468,7 @@ def render(ctx: dict):
                     "date": _today_key,
                     "sensitivity": sensitivity,
                     "total": len(scan_results),
-                    "top10": [{
+                    "top50": [{
                         "rank": i + 1,
                         "symbol": r["symbol"],
                         "symbol_name": r["symbol_name"],
@@ -455,7 +482,7 @@ def render(ctx: dict):
                         "narrative": r["narrative"],
                         "last_price": r["last_price"],
                         "days_since_end": r.get("days_since_end", 0),
-                    } for i, r in enumerate(scan_results[:10])],
+                    } for i, r in enumerate(scan_results[:50])],
                     "exported_at": datetime.now().isoformat(),
                 }
                 st.download_button(
@@ -467,7 +494,7 @@ def render(ctx: dict):
                 )
             with exp_c2:
                 md_lines = [f"# 全市场扫描 {_today_key}\n灵敏度: {sensitivity} · 活跃结构: {len(scan_results)}\n"]
-                for i, r in enumerate(scan_results[:10], 1):
+                for i, r in enumerate(scan_results[:50], 1):
                     dir_icon = "📈" if r["direction"] == "up" else "📉" if r["direction"] == "down" else "➡️"
                     md_lines.append(f"## #{i} {r['symbol']} ({r['symbol_name']})")
                     md_lines.append(f"- {dir_icon} Zone {r['zone_center']:.0f} · {r['cycles']}次试探 · {r['motion']}")

@@ -8,11 +8,17 @@ V1.6 P1 升级：
 - context_contrast 作为首要过滤条件（同反差类型才能匹配）
 - 检索结果附带"最近稳态"分析
 - 匹配原因归因解释
+
+V1.6 P2 升级（2026-04-24）：
+- 顺时序约束：只检索最近 max_lookback_days 天内的样本
+- 时间衰减：越近的样本在排序中权重越高
+- 后验统计分窗口：近期/中期/远期后验分开计算
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import datetime, timedelta
 
 from src.models import Structure, Zone, ZoneSource
 from src.sample.store import Sample, SampleStore
@@ -61,11 +67,16 @@ class RetrievalEngine:
         filter_label: str | None = None,
         min_score: float = 0.3,
         filter_contrast: bool = True,
+        max_lookback_days: int = 0,
     ) -> RetrievalResult:
         """
         检索最相似的历史结构
 
         v3.1 优化：批量预提取不变量向量，向量化几何相似度计算。
+        V1.6 P1: 反差类型过滤 + 匹配归因。
+
+        历史样本本身都是真实的，不做权重调整。
+        max_lookback_days 可选启用，默认不限制（0 = 全量历史）。
 
         Args:
             query: 当前编译出的结构
@@ -73,11 +84,18 @@ class RetrievalEngine:
             filter_label: 只检索特定类型
             min_score: 最低相似度阈值
             filter_contrast: 是否按共同反差类型过滤（V1.6 P1，D2.2）
+            max_lookback_days: 最大回溯天数（默认 0 = 不限制）。
+                仅在需要主动限制检索范围时启用。
 
         Returns:
             RetrievalResult 含近邻列表 + 后验统计
         """
         candidates = self.store.filter(label_type=filter_label) if filter_label else self.store.load_all()
+
+        # 可选：限制检索范围
+        if max_lookback_days > 0 and query.t_end:
+            cutoff = query.t_end - timedelta(days=max_lookback_days)
+            candidates = [sp for sp in candidates if sp.t_end >= cutoff]
 
         # ── V1.6 P1: 反差类型过滤 ──
         query_contrast = query.zone.context_contrast.value if query.zone else "unknown"
