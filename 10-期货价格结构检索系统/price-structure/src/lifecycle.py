@@ -19,6 +19,7 @@
     "quality_tier": "A",
     "quality_score": 0.82,
     "phase_tendency": "→confirmation",
+    "movement_type": "oscillation",
     "conservation_flux": -0.35,
     "speed_ratio": 1.2,
     "direction": "bullish",
@@ -66,6 +67,7 @@ class LifecycleRecord:
     quality_tier: str
     quality_score: float
     phase_tendency: str
+    movement_type: str              # trend_up / trend_down / oscillation / reversal
     conservation_flux: float
     speed_ratio: float
     direction: str
@@ -262,6 +264,7 @@ class LifecycleTracker:
                 quality_tier=qa.tier.value,
                 quality_score=qa.score,
                 phase_tendency=s.motion.phase_tendency if s.motion else "",
+                movement_type=s.motion.movement_type.value if s.motion and hasattr(s.motion, 'movement_type') else "",
                 conservation_flux=s.motion.conservation_flux if s.motion else 0,
                 speed_ratio=s.avg_speed_ratio,
                 direction=direction,

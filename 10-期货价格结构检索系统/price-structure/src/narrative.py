@@ -84,8 +84,11 @@ def generate_daily_summary(system_states: list[SystemState]) -> str:
         lines.append(f"  ✅ {len(reliable)} 个可信结构")
         for ss in reliable[:3]:
             st = ss.structure
+            mt = ss.motion.movement_type.value if hasattr(ss.motion, 'movement_type') else ""
+            mt_cn = {"trend_up": "↑趋势", "trend_down": "↓趋势",
+                     "oscillation": "震荡", "reversal": "反转"}.get(mt, "")
             lines.append(f"    · {st.symbol or '?'} {st.narrative_context or st.zone.price_center:.0f} "
-                         f"— {ss.motion.phase_tendency}")
+                         f"— {mt_cn or ss.motion.phase_tendency}")
 
     if warning:
         lines.append(f"  🟡 {len(warning)} 个表面稳定、待验证")
@@ -148,6 +151,16 @@ def _section_motion(ss: SystemState) -> str:
     parts.append("【运动】")
 
     m = ss.motion
+
+    # 运动类型（稳态跃迁定义）
+    if hasattr(m, 'movement_type') and m.movement_type:
+        mt = m.movement_type.value
+        mt_cn = {"trend_up": "上涨趋势（后一稳态 > 前一稳态）",
+                 "trend_down": "下跌趋势（后一稳态 < 前一稳态）",
+                 "oscillation": "震荡（同一稳态内部往复）",
+                 "reversal": "反转（趋势方向切换）"}.get(mt, mt)
+        parts.append(f"  运动类型：{mt_cn}")
+
     if m.phase_tendency:
         parts.append(f"  阶段趋势：{m.phase_tendency}（置信度 {m.phase_confidence:.0%}）")
 

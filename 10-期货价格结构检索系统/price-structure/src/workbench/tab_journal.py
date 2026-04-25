@@ -43,7 +43,7 @@ def render(ctx: dict):
         if recent_structures:
             auto_context = f"[{selected_symbol}] {len(recent_structures)}个结构活跃: "
             auto_context += ", ".join(
-                f"Zone {s.zone.price_center:.0f}({s.motion.phase_tendency if s.motion else '?'})"
+                f"Zone {s.zone.price_center:.0f}({s.motion.movement_type.value if s.motion and hasattr(s.motion, 'movement_type') else s.motion.phase_tendency if s.motion else '?'})"
                 for s in recent_structures[:3]
             )
 
@@ -98,6 +98,7 @@ def render(ctx: dict):
                                 "zone": s.zone.price_center,
                                 "cycles": s.cycle_count,
                                 "tendency": s.motion.phase_tendency if s.motion else "",
+                                "movement_type": s.motion.movement_type.value if s.motion and hasattr(s.motion, 'movement_type') else "",
                                 "flux": round(s.motion.conservation_flux, 2) if s.motion else 0,
                             }
                             for s in recent_structures[:5]
@@ -122,7 +123,7 @@ def render(ctx: dict):
                     m = s.motion
                     ctx_str += f"  Zone {s.zone.price_center:.0f}: {s.narrative_context or '?'}"
                     if m:
-                        ctx_str += f" [{m.phase_tendency}, 通量{m.conservation_flux:+.2f}]"
+                        ctx_str += f" [{m.movement_type.value if hasattr(m, 'movement_type') else m.phase_tendency}, 通量{m.conservation_flux:+.2f}]"
                     ctx_str += "\n"
                 st.code(ctx_str, language="text")
 

@@ -129,6 +129,94 @@ def motion_badge(tendency: str) -> str:
     return f'<span class="motion-badge {cls}">{tendency}</span>'
 
 
+def movement_badge(movement_type: str) -> str:
+    """运动类型标签：A股习惯 — 红涨绿跌"""
+    mapping = {
+        "trend_up": ("📈 上涨趋势", "#ef5350"),
+        "trend_down": ("📉 下跌趋势", "#4caf50"),
+        "oscillation": ("🔄 震荡", "#ffc107"),
+        "reversal": ("🔀 反转", "#ff9800"),
+    }
+    label, color = mapping.get(movement_type, (movement_type, "#999"))
+    return f'<span style="color:{color};font-weight:600">{label}</span>'
+
+
+def struct_status(s) -> str:
+    """从 Structure 对象生成状态描述（运动类型 + 阶段 + 通量）"""
+    parts = []
+    m = s.motion
+    if m:
+        mt = m.movement_type.value if hasattr(m, 'movement_type') else ""
+        mt_cn = {"trend_up": "上涨趋势", "trend_down": "下跌趋势",
+                 "oscillation": "震荡", "reversal": "反转"}.get(mt, "")
+        if mt_cn:
+            parts.append(mt_cn)
+        phase_cn = {"→breakout": "正在突破", "→confirmation": "确认中",
+                    "→inversion": "趋向反演", "stable": "运行稳定",
+                    "forming": "形成中"}.get(m.phase_tendency, "")
+        if phase_cn and phase_cn != mt_cn:
+            parts.append(phase_cn)
+        flux = m.conservation_flux
+        if abs(flux) > 0.3:
+            parts.append("差异释放中" if flux > 0 else "差异压缩中")
+    if s.projection and s.projection.is_blind:
+        parts.append("⚠️高压缩")
+    return " · ".join(parts)
+
+
+def struct_scenario(s) -> str:
+    """从 Structure 对象生成候选剧本"""
+    m = s.motion
+    if not m:
+        return ""
+    mt = m.movement_type.value if hasattr(m, 'movement_type') else ""
+    flux = m.conservation_flux
+    cycles = s.cycle_count
+    zc = s.zone.price_center
+    zb = s.zone.bandwidth
+
+    if mt == "trend_up":
+        return "📈 上涨趋势延续中 — 关注能否站稳 Zone 上沿发起突破"
+    elif mt == "trend_down":
+        return "📉 下跌趋势延续中 — 关注能否守住 Zone 下沿"
+    elif mt == "reversal":
+        return "🔀 反转刚发生 — 回踩不破反转点是好信号"
+    elif mt == "oscillation":
+        if cycles >= 5:
+            return f"🔄 已 {cycles} 次密集试探 — 关注方向选择"
+        elif flux < -0.3:
+            return "🔄 差异压缩中 — 可能是突破前的蓄力"
+        else:
+            return "🔄 Zone 内正常震荡 — 高抛低吸区间"
+    if "breakout" in m.phase_tendency:
+        return "⚡ 突破阶段 — 观察是否站稳 Zone 外侧"
+    if "confirmation" in m.phase_tendency:
+        return "✅ 确认阶段 — 关注通量方向"
+    return ""
+
+
+def struct_invalidation(s) -> str:
+    """从 Structure 对象生成失效条件"""
+    m = s.motion
+    if not m:
+        return ""
+    mt = m.movement_type.value if hasattr(m, 'movement_type') else ""
+    zc = s.zone.price_center
+    zb = s.zone.bandwidth
+    zone_upper = zc + zb
+    zone_lower = zc - zb
+
+    if mt == "trend_up":
+        return f"❌ 失效：价格跌回 {zone_lower:.0f} 以下 → 趋势中断"
+    elif mt == "trend_down":
+        return f"❌ 失效：价格涨回 {zone_upper:.0f} 以上 → 趋势中断"
+    elif mt == "reversal":
+        return f"❌ 失效：价格回到 {zc:.0f}±{zb:.0f} 内 → 反转失败"
+    elif mt == "oscillation":
+        return f"❌ 转向：突破 {zone_upper:.0f} 或 {zone_lower:.0f} → 震荡结束"
+    return ""
+
+
 def _extract_key(label: str) -> str:
     """从中文标签中提取英文 key，如 '📈 上涨(up)' → 'up'"""
     if "(" in label and ")" in label:

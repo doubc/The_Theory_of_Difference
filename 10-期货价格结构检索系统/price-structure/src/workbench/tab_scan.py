@@ -18,8 +18,8 @@ from src.quality import assess_quality, QualityTier
 from src.retrieval.progress import progress_retrieve
 
 from src.workbench.shared import (
-    motion_badge, TIER_COLORS, _extract_key, _price_vs_zone,
-    make_candlestick, SENS_MAP,
+    motion_badge, movement_badge, struct_status, struct_scenario, struct_invalidation,
+    TIER_COLORS, _extract_key, _price_vs_zone, make_candlestick, SENS_MAP,
 )
 from src.workbench.data_layer import load_bars, compile_structures
 
@@ -32,13 +32,158 @@ def _judgment_html(j: dict | None) -> str:
     stage = j.get("stage", "")
     detail = j.get("detail", "")
     conf = j.get("confidence", 0)
-    # 颜色：上行绿、下行红、反转橙、震荡黄、其他灰
-    color = "#4caf50" if "趋势上行" in stage else \
-            "#ef5350" if "趋势下行" in stage or "突破失败" in stage else \
+    # 颜色：A股习惯 — 红涨绿跌，橙反转，黄震荡
+    color = "#ef5350" if "上涨趋势" in stage or "趋势上行" in stage else \
+            "#4caf50" if "下跌趋势" in stage or "趋势下行" in stage or "突破失败" in stage else \
             "#ff9800" if "反转" in stage else \
             "#ffc107" if "震荡" in stage or "高波动" in stage else \
             "#999"
     return f'<span style="color:{color};font-weight:600">{icon} {stage}</span> <span style="color:#888;font-size:0.85em">({detail}·{conf:.0%})</span>'
+
+
+def _build_status_desc(r: dict) -> str:
+    """
+    为每个扫描结果生成一句状态描述。
+    综合运动类型、阶段、通量、信号、时效，给出「现在在发生什么」的完整画面。
+    """
+    parts = []
+
+    # 1. 运动类型
+    mt = r.get("movement_type", "")
+    mt_cn = {"trend_up": "上涨趋势", "trend_down": "下跌趋势",
+             "oscillation": "震荡", "reversal": "反转"}.get(mt, "")
+    if mt_cn:
+        parts.append(mt_cn)
+
+    # 2. 阶段状态
+    motion = r.get("motion", "")
+    phase_cn = {"→breakout": "正在突破", "→confirmation": "确认中",
+                "→inversion": "趋向反演", "stable": "运行稳定",
+                "forming": "形成中"}.get(motion, "")
+    if phase_cn and phase_cn not in (mt_cn,):
+        parts.append(phase_cn)
+
+    # 3. 通量状态
+    flux = r.get("flux", 0) or 0
+    if abs(flux) > 0.3:
+        if flux > 0:
+            parts.append("差异释放中")
+        else:
+            parts.append("差异压缩中")
+    elif abs(flux) > 0.1:
+        parts.append("通量微动")
+
+    # 4. 信号
+    sig = r.get("signal")
+    if sig:
+        sig_kind = sig.get("kind", "")
+        sig_label = sig.get("display_label", "")
+        if sig_kind == "fake_breakout":
+            parts.append("⚡假突破信号")
+        elif sig_kind == "breakout_confirm":
+            parts.append("✅突破确认")
+        elif sig_kind == "pullback_confirm":
+            parts.append("🔄回踩确认")
+        elif sig_kind == "structure_expired":
+            parts.append("⏳结构老化")
+        elif sig_label:
+            parts.append(sig_label)
+
+    # 5. 时效
+    ds = r.get("days_since_end", 0) or 0
+    if ds <= 1:
+        parts.append("🔥实时")
+    elif ds <= 3:
+        parts.append("活跃")
+    elif ds > 14:
+        parts.append("📋仅参考")
+
+    # 6. 投影警告
+    if r.get("is_blind"):
+        parts.append("⚠️高压缩")
+
+    return " · ".join(parts) if parts else "状态未知"
+
+
+def _build_scenario(r: dict) -> str:
+    """
+    候选剧本：基于运动类型 + 历史检索，给出「接下来可能怎样」。
+    """
+    mt = r.get("movement_type", "")
+    motion = r.get("motion", "")
+    flux = r.get("flux", 0) or 0
+    cycles = r.get("cycles", 0)
+    last_price = r.get("last_price", 0)
+    zc = r.get("zone_center", 0)
+    zb = r.get("zone_bw", 0)
+    zone_upper = zc + zb
+    zone_lower = zc - zb
+
+    # 优先用已有的 playbook
+    pb = r.get("_playbook")
+    if pb:
+        return pb
+
+    # 基于运动类型的通用剧本
+    if mt == "trend_up":
+        if last_price > zone_upper:
+            return "📈 价格在 Zone 上方，趋势延续中 — 历史上类似结构多继续创新高，回踩 Zone 上沿是加仓观察点"
+        elif last_price > zc:
+            return "📈 价格在 Zone 内偏上 — 趋势确认中，关注能否站稳 Zone 上沿发起突破"
+        else:
+            return "📈 价格回到 Zone 下沿 — 趋势中的回踩，观察支撑是否有效"
+
+    elif mt == "trend_down":
+        if last_price < zone_lower:
+            return "📉 价格在 Zone 下方，下跌延续中 — 历史上类似结构多继续破低，反弹 Zone 下沿是观察点"
+        elif last_price < zc:
+            return "📉 价格在 Zone 内偏下 — 下跌确认中，关注能否守住 Zone 下沿"
+        else:
+            return "📉 价格回到 Zone 上沿 — 下跌中的反弹，观察压力是否有效"
+
+    elif mt == "reversal":
+        return "🔀 反转刚发生 — 历史上首次反转后 55% 回踩确认、45% 直接走，回踩不破反转点是好信号"
+
+    elif mt == "oscillation":
+        if cycles >= 5:
+            return f"🔄 已 {cycles} 次密集试探 — 震荡持续越久，突破后动能越大，关注方向选择"
+        elif flux < -0.3:
+            return "🔄 差异压缩中 — 震荡收窄，波动率下降，可能是突破前的蓄力"
+        else:
+            return "🔄 Zone 内正常震荡 — 高抛低吸区间，突破 Zone 边界前维持区间判断"
+
+    # fallback
+    if "breakout" in motion:
+        return "⚡ 突破阶段 — 观察是否站稳 Zone 外侧，站稳则趋势成立"
+    if "confirmation" in motion:
+        return "✅ 确认阶段 — 结构在自我验证中，关注通量方向"
+    return "📋 结构尚在形成，等待更多信息"
+
+
+def _build_invalidation(r: dict) -> str:
+    """
+    关键条件：什么情况下当前判断失效。
+    """
+    mt = r.get("movement_type", "")
+    last_price = r.get("last_price", 0)
+    zc = r.get("zone_center", 0)
+    zb = r.get("zone_bw", 0)
+    zone_upper = zc + zb
+    zone_lower = zc - zb
+
+    if mt == "trend_up":
+        return f"❌ 失效条件：价格跌回 Zone 下沿 {zone_lower:.0f} 以下 → 上涨趋势中断，回到震荡"
+
+    elif mt == "trend_down":
+        return f"❌ 失效条件：价格涨回 Zone 上沿 {zone_upper:.0f} 以上 → 下跌趋势中断，回到震荡"
+
+    elif mt == "reversal":
+        return f"❌ 失效条件：价格回到反转前的稳态 Zone（{zc:.0f}±{zb:.0f}）内 → 反转失败"
+
+    elif mt == "oscillation":
+        return f"❌ 转向条件：价格有效突破 Zone 上沿 {zone_upper:.0f} 或下沿 {zone_lower:.0f} → 震荡结束，可能选方向"
+
+    return ""
 
 
 def render(ctx: dict):
@@ -163,6 +308,7 @@ def render(ctx: dict):
                     "zone_bw": s.zone.bandwidth,
                     "cycles": s.cycle_count,
                     "motion": m.phase_tendency if m else "—",
+                    "movement_type": m.movement_type.value if m and hasattr(m, 'movement_type') else "",
                     "flux": round(m.conservation_flux, 2) if m else 0,
                     "score": score_100,
                     "tier": qa.tier.value,
@@ -282,6 +428,8 @@ def render(ctx: dict):
                     dir_icon = "📈" if r.get("direction") == "up" else "📉" if r.get("direction") == "down" else "➡️"
                     card_cls = "danger" if r.get("direction") == "up" else "ok" if r.get("direction") == "down" else ""
                     motion_html = motion_badge(r.get("motion") or "—")
+                    mt = r.get("movement_type", "")
+                    mt_html = f" · {movement_badge(mt)}" if mt else ""
                     blind_tag = " · ⚠️高压缩" if r.get("is_blind") else ""
                     contrast_tag = f' · {r.get("contrast", "")}' if r.get("contrast") else ""
                     price_pos = _price_vs_zone(r.get("last_price", 0), r.get("zone_center", 0), r.get("zone_bw", 0))
@@ -290,7 +438,7 @@ def render(ctx: dict):
                     tier_fg, tier_bg = TIER_COLORS.get(tier, ("#666", "#eee"))
                     tier_badge = f'<span style="background:{tier_bg};color:{tier_fg};padding:1px 6px;border-radius:3px;font-size:0.8em;font-weight:700">{tier}层</span>'
 
-                    risk_color = {"高": "#ef5350", "中": "#ff9800", "低": "#26a69a"}.get(r.get("risk_level", "低"), "#999")
+                    risk_color = {"高": "#ef5350", "中": "#ff9800", "低": "#4caf50"}.get(r.get("risk_level", "低"), "#999")
 
                     # 结构时效性 — 交易导向表述
                     ds = r.get("days_since_end", 0) or 0
@@ -329,17 +477,22 @@ def render(ctx: dict):
 
                         signal_html = f'<div style="margin-top:6px"><span style="color:{sig_color};font-weight:600">{sig_icon} {sig_label} {sig_dir} (置信{sig_conf:.0%})</span></div>'
 
+                    scenario = _build_scenario(r)
+                    invalidation = _build_invalidation(r)
                     st.markdown(f"""
                     <div class="structure-card {card_cls}">
                         <b>#{i+1}</b> {dir_icon}
                         <span class="zone-label">{r.get('symbol', '')} · {r.get('symbol_name', '')}</span>
                         {tier_badge}
                         <span class="meta-text"> Zone {r.get('zone_center', 0):.0f} (±{r.get('zone_bw', 0):.0f}) · {r.get('cycles', 0)}次试探</span>
-                        · {motion_html} · 通量 {r.get('flux', 0) or 0:+.2f}{blind_tag}{contrast_tag}
+                        · {motion_html}{mt_html} · 通量 {r.get('flux', 0) or 0:+.2f}{blind_tag}{contrast_tag}
                         · <b>质量 {r.get('score', 0):.0f}分</b>
                         · <span style="color:{risk_color};font-weight:700">⚖️ {r.get('risk_level', '低')}关注度</span>
                         · {fresh_tag}
                         {signal_html}
+                        <div style="margin-top:4px;padding:4px 8px;background:#f5f5f5;border-radius:4px;font-size:0.9em;color:#333">{_build_status_desc(r)}</div>
+                        <div style="margin-top:4px;padding:4px 8px;background:#e8f5e9;border-radius:4px;font-size:0.88em;color:#2e7d32">{scenario}</div>
+                        <div style="margin-top:2px;padding:3px 8px;background:#fff3e0;border-radius:4px;font-size:0.85em;color:#e65100">{invalidation}</div>
                         <div class="meta-text">{price_pos} · 现价 {r.get('last_price', 0):.1f} · {_judgment_html(r.get('judgment'))}</div>
                         <div class="narrative-text">{r.get('narrative', '')}</div>
                     </div>
@@ -633,12 +786,23 @@ def render(ctx: dict):
             st.markdown("**🔴 正在破缺**")
             for s in breaking[:3]:
                 flux = f"{s.motion.conservation_flux:+.2f}" if s.motion else "—"
+                mt = s.motion.movement_type.value if s.motion and hasattr(s.motion, 'movement_type') else ""
+                mt_html = f" · {movement_badge(mt)}" if mt else ""
+                status = struct_status(s)
+                status_html = f'<div style="margin-top:4px;padding:4px 8px;background:#f5f5f5;border-radius:4px;font-size:0.9em;color:#333">{status}</div>' if status else ""
+                scenario = struct_scenario(s)
+                scenario_html = f'<div style="margin-top:4px;padding:4px 8px;background:#e8f5e9;border-radius:4px;font-size:0.88em;color:#2e7d32">{scenario}</div>' if scenario else ""
+                invalidation = struct_invalidation(s)
+                inv_html = f'<div style="margin-top:2px;padding:3px 8px;background:#fff3e0;border-radius:4px;font-size:0.85em;color:#e65100">{invalidation}</div>' if invalidation else ""
                 st.markdown(f"""
                 <div class="structure-card danger">
                     <span class="zone-label">Zone {s.zone.price_center:.0f}</span>
                     <span class="meta-text">(±{s.zone.bandwidth:.0f}) · {s.cycle_count}次试探</span>
-                    · {motion_badge(s.motion.phase_tendency)}
+                    · {motion_badge(s.motion.phase_tendency)}{mt_html}
                     · <span class="meta-text">通量 {flux}</span>
+                    {status_html}
+                    {scenario_html}
+                    {inv_html}
                     <div class="narrative-text">{s.narrative_context or ''}</div>
                 </div>
                 """, unsafe_allow_html=True)
@@ -647,12 +811,23 @@ def render(ctx: dict):
             st.markdown("**🟢 趋向确认**")
             for s in confirming[:3]:
                 flux = f"{s.motion.conservation_flux:+.2f}" if s.motion else "—"
+                mt = s.motion.movement_type.value if s.motion and hasattr(s.motion, 'movement_type') else ""
+                mt_html = f" · {movement_badge(mt)}" if mt else ""
+                status = struct_status(s)
+                status_html = f'<div style="margin-top:4px;padding:4px 8px;background:#f5f5f5;border-radius:4px;font-size:0.9em;color:#333">{status}</div>' if status else ""
+                scenario = struct_scenario(s)
+                scenario_html = f'<div style="margin-top:4px;padding:4px 8px;background:#e8f5e9;border-radius:4px;font-size:0.88em;color:#2e7d32">{scenario}</div>' if scenario else ""
+                invalidation = struct_invalidation(s)
+                inv_html = f'<div style="margin-top:2px;padding:3px 8px;background:#fff3e0;border-radius:4px;font-size:0.85em;color:#e65100">{invalidation}</div>' if invalidation else ""
                 st.markdown(f"""
                 <div class="structure-card ok">
                     <span class="zone-label">Zone {s.zone.price_center:.0f}</span>
                     <span class="meta-text">(±{s.zone.bandwidth:.0f}) · {s.cycle_count}次试探</span>
-                    · {motion_badge(s.motion.phase_tendency)}
+                    · {motion_badge(s.motion.phase_tendency)}{mt_html}
                     · <span class="meta-text">通量 {flux}</span>
+                    {status_html}
+                    {scenario_html}
+                    {inv_html}
                     <div class="narrative-text">{s.narrative_context or ''}</div>
                 </div>
                 """, unsafe_allow_html=True)
@@ -662,11 +837,22 @@ def render(ctx: dict):
             for s in forming[:5]:
                 proj_warn = " · ⚠️ 高压缩" if (s.projection and s.projection.is_blind) else ""
                 tendency = s.motion.phase_tendency if s.motion else 'unknown'
+                mt = s.motion.movement_type.value if s.motion and hasattr(s.motion, 'movement_type') else ""
+                mt_html = f" · {movement_badge(mt)}" if mt else ""
+                status = struct_status(s)
+                status_html = f'<div style="margin-top:4px;padding:4px 8px;background:#f5f5f5;border-radius:4px;font-size:0.9em;color:#333">{status}</div>' if status else ""
+                scenario = struct_scenario(s)
+                scenario_html = f'<div style="margin-top:4px;padding:4px 8px;background:#e8f5e9;border-radius:4px;font-size:0.88em;color:#2e7d32">{scenario}</div>' if scenario else ""
+                invalidation = struct_invalidation(s)
+                inv_html = f'<div style="margin-top:2px;padding:3px 8px;background:#fff3e0;border-radius:4px;font-size:0.85em;color:#e65100">{invalidation}</div>' if invalidation else ""
                 st.markdown(f"""
                 <div class="structure-card">
                     <span class="zone-label">Zone {s.zone.price_center:.0f}</span>
                     <span class="meta-text">(±{s.zone.bandwidth:.0f}) · {s.cycle_count}次试探</span>
-                    · {motion_badge(tendency)}{proj_warn}
+                    · {motion_badge(tendency)}{mt_html}{proj_warn}
+                    {status_html}
+                    {scenario_html}
+                    {inv_html}
                     <div class="narrative-text">{s.narrative_context or ''}</div>
                 </div>
                 """, unsafe_allow_html=True)

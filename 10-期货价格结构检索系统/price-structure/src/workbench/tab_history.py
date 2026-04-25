@@ -130,10 +130,11 @@ def render(ctx: dict):
                 search_motion_filter = st.multiselect(
                     "运动状态",
                     ["🔻 破缺(→breakout)", "✅ 确认(→confirmation)",
-                     "⚖️ 稳定(stable)", "🔄 形成中(forming)"],
+                     "⚖️ 稳定(stable)", "🔄 形成中(forming)",
+                     "📈 上涨趋势", "📉 下跌趋势", "🔄 震荡", "🔀 反转"],
                     default=[],
                     key="search_motion_filter",
-                    help="筛选结构的 phase_tendency",
+                    help="筛选结构的 phase_tendency / movement_type",
                 )
 
             with fin_col3:
@@ -159,6 +160,7 @@ def render(ctx: dict):
         p = query_st.projection
         flux_str = f"{m.conservation_flux:+.2f}" if m else "—"
         tendency_str = m.phase_tendency if m else "—"
+        mt_str = m.movement_type.value if m and hasattr(m, 'movement_type') else ""
         st.markdown(f"""
         **当前结构** · Zone {query_st.zone.price_center:.0f} (±{query_st.zone.bandwidth:.0f})
         · {query_st.cycle_count}次试探 · {query_st.narrative_context or '?'}
@@ -271,6 +273,7 @@ def render(ctx: dict):
                         continue
                 if _motion_f:
                     hs_motion = hs.motion.phase_tendency if hs.motion else ""
+                    hs_mt = hs.motion.movement_type.value if hs.motion and hasattr(hs.motion, 'movement_type') else ""
                     if hs_motion not in _motion_f:
                         continue
                 filtered_candidates.append(c)
@@ -384,6 +387,7 @@ def render(ctx: dict):
 
                     contrast_val = hs.zone.context_contrast.value if hs.zone else ""
                     motion_val = hs.motion.phase_tendency if hs.motion else ""
+                    mt_val = hs.motion.movement_type.value if hs.motion and hasattr(hs.motion, 'movement_type') else ""
                     tag_parts = []
                     if contrast_val:
                         tag_parts.append(f"[{contrast_val}]")

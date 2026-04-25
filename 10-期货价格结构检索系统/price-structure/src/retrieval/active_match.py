@@ -233,6 +233,15 @@ def _generate_comparison_guide(
     # ── V1.6 P0: 运动态分析 ──
     if matched.motion:
         m = matched.motion
+        mt = m.movement_type.value if hasattr(m, 'movement_type') else ""
+        mt_cn = {"trend_up": "上涨趋势", "trend_down": "下跌趋势",
+                 "oscillation": "震荡", "reversal": "反转"}.get(mt, "")
+        if mt_cn:
+            guides.append(
+                f"【运动类型】{mt_cn}"
+                f"（守恒通量 {m.conservation_flux:+.2f}，"
+                f"距最近稳态 {m.stable_distance:.2f}）"
+            )
         if m.phase_tendency == "→breakout":
             guides.append(
                 f"【运动态】阶段趋势 →突破（置信度 {m.phase_confidence:.0%}），"

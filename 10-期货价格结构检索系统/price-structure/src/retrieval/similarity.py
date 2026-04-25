@@ -121,7 +121,7 @@ def relational_similarity(s1: Structure, s2: Structure) -> float:
 
 def motion_similarity(s1: Structure, s2: Structure) -> float:
     """
-    V1.6 运动相似：阶段趋势、守恒通量、稳态距离的一致性
+    V1.6 运动相似：运动类型、阶段趋势、守恒通量、稳态距离的一致性
     
     两个几何相似但运动方向相反的结构，后验行为可能完全不同。
     运动维度确保我们区分"在走向 breakout"和"在走向 confirmation"。
@@ -137,26 +137,35 @@ def motion_similarity(s1: Structure, s2: Structure) -> float:
     score = 0.0
     n = 0
 
-    # 1. 阶段趋势一致性
+    # 1. 运动类型一致性（权重最高）
+    n += 1
+    if m1.movement_type == m2.movement_type:
+        score += 1.0
+    elif (m1.movement_type.value.startswith("trend") and m2.movement_type.value.startswith("trend")):
+        score += 0.5  # 都是趋势但方向不同
+    elif m1.movement_type.value == "reversal" or m2.movement_type.value == "reversal":
+        score += 0.2  # 有一个是反转
+
+    # 2. 阶段趋势一致性
     n += 1
     if m1.phase_tendency == m2.phase_tendency:
         score += 1.0
     elif ("breakout" in m1.phase_tendency) == ("breakout" in m2.phase_tendency):
         score += 0.5  # 都含 breakdown 或都不含
 
-    # 2. 守恒通量方向一致性（同为正或同为负）
+    # 3. 守恒通量方向一致性（同为正或同为负）
     n += 1
     if m1.conservation_flux * m2.conservation_flux > 0:
         score += 1.0
     elif abs(m1.conservation_flux) < 0.1 and abs(m2.conservation_flux) < 0.1:
         score += 0.8  # 都接近零
 
-    # 3. 稳态距离相近
+    # 4. 稳态距离相近
     n += 1
     dd = abs(m1.stable_distance - m2.stable_distance)
     score += max(0.0, 1.0 - dd)
 
-    # 4. 反差类型一致性
+    # 5. 反差类型一致性
     n += 1
     c1 = s1.zone.context_contrast.value if s1.zone else ""
     c2 = s2.zone.context_contrast.value if s2.zone else ""

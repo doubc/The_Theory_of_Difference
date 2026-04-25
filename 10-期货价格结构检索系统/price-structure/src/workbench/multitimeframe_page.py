@@ -151,6 +151,7 @@ def _render_structure_card(s, freq_label: str, last_price: float):
     motion = s.motion
     flux = f"{motion.conservation_flux:+.2f}" if motion else "—"
     tendency = motion.phase_tendency if motion else "unknown"
+    mt = motion.movement_type.value if motion and hasattr(motion, 'movement_type') else ""
     proj_warn = " · ⚠️ 高压缩" if (s.projection and s.projection.is_blind) else ""
 
     # 运动态颜色
@@ -357,7 +358,7 @@ if mtf_run and mtf_symbol:
                 - Cycle 数: {s_a.cycle_count}
                 - 速度比: {s_a.avg_speed_ratio:.2f}
                 - 时间比: {s_a.avg_time_ratio:.2f}
-                - 运动态: {s_a.motion.phase_tendency if s_a.motion else '—'}
+                - 运动态: {s_a.motion.phase_tendency if s_a.motion else '—'} ({s_a.motion.movement_type.value if s_a.motion and hasattr(s_a.motion, 'movement_type') else '—'})
                 - 通量: {s_a.motion.conservation_flux:+.2f if s_a.motion else '—'}
                 """)
             with col_b:
@@ -368,7 +369,7 @@ if mtf_run and mtf_symbol:
                 - Cycle 数: {s_b.cycle_count}
                 - 速度比: {s_b.avg_speed_ratio:.2f}
                 - 时间比: {s_b.avg_time_ratio:.2f}
-                - 运动态: {s_b.motion.phase_tendency if s_b.motion else '—'}
+                - 运动态: {s_b.motion.phase_tendency if s_b.motion else '—'} ({s_b.motion.movement_type.value if s_b.motion and hasattr(s_b.motion, 'movement_type') else '—'})
                 - 通量: {s_b.motion.conservation_flux:+.2f if s_b.motion else '—'}
                 """)
 

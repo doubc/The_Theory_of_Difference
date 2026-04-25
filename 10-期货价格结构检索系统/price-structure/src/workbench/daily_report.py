@@ -56,7 +56,7 @@ def _match_thumbnails(top_matches: list) -> str:
     cells = []
     for m in top_matches[:3]:
         move_text = f"+{m.up_move * 100:.1f}%" if m.direction == "up" else f"-{m.down_move * 100:.1f}%"
-        color = "#26a69a" if m.direction == "up" else "#ef5350"
+        color = "#ef5350" if m.direction == "up" else "#4caf50"
         cells.append(f"""
         <div class="match-cell">
           <div class="match-head">{m.symbol_name} <span style="color:#888">({m.symbol})</span></div>
@@ -75,8 +75,15 @@ def _opp_card(opp: Opportunity) -> str:
     motion_badge = ""
     if opp.motion_tendency:
         t = opp.motion_tendency
-        color = "#ef5350" if "breakdown" in t else "#26a69a" if "confirmation" in t else "#ffa726"
+        color = "#ef5350" if "breakdown" in t else "#4caf50" if "confirmation" in t else "#ffa726"
         motion_badge = f'<span class="badge" style="background:{color}22;color:{color};border:1px solid {color}">运动 {t}</span>'
+    mt = getattr(opp, 'movement_type', '')
+    if mt:
+        mt_color = {"trend_up": "#ef5350", "trend_down": "#4caf50",
+                    "oscillation": "#ffc107", "reversal": "#ff9800"}.get(mt, "#999")
+        mt_cn = {"trend_up": "上涨趋势", "trend_down": "下跌趋势",
+                 "oscillation": "震荡", "reversal": "反转"}.get(mt, mt)
+        motion_badge += f' <span class="badge" style="background:{mt_color}22;color:{mt_color};border:1px solid {mt_color}">{mt_cn}</span>'
     
     # V1.6: 投影警告
     proj_warn = ""
@@ -206,7 +213,7 @@ h1{color:#90caf9;margin:0 0 4px 0}
 .sum-grid div{display:flex;flex-direction:column;align-items:flex-start}
 .sum-grid .big{font-size:22px;font-weight:bold;color:#fff}
 .sum-grid .big.up{color:#26a69a}
-.sum-grid .big.down{color:#ef5350}
+.sum-grid .big.down{color:#4caf50}
 .sum-grid .big.neutral{color:#9e9e9e}
 .sum-grid span:last-child{color:#888;font-size:12px}
 
@@ -223,14 +230,14 @@ h1{color:#90caf9;margin:0 0 4px 0}
 
 .badge{padding:2px 8px;border-radius:3px;font-size:12px;font-weight:bold}
 .badge.up{background:#26a69a33;color:#26a69a}
-.badge.down{background:#ef535033;color:#ef5350}
+.badge.down{background:#4caf5033;color:#4caf50}
 .badge.neutral{background:#9e9e9e33;color:#9e9e9e}
 
 .card-body{display:grid;grid-template-columns:1fr 1.2fr;gap:20px}
 .label{color:#888;font-size:12px;margin-bottom:4px}
 .window{color:#fff;font-size:14px;margin-bottom:4px}
 
-.potential-bar .bar-outer{height:6px;background:linear-gradient(90deg,#ef5350 0%,#ffb74d 50%,#26a69a 100%);
+.potential-bar .bar-outer{height:6px;background:linear-gradient(90deg,#4caf50 0%,#ffb74d 50%,#ef5350 100%);
   border-radius:3px;position:relative;margin:4px 0 6px 0}
 .potential-bar .bar-marker{position:absolute;top:-3px;width:2px;height:12px;background:#fff}
 .potential-bar .bar-text{font-size:13px}

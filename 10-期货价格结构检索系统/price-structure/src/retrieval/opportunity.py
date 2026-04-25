@@ -63,6 +63,7 @@ class Opportunity:
 
     # ── V1.6 新增 ──
     motion_tendency: str = ""           # →breakdown / →confirmation / stable / forming
+    movement_type: str = ""             # trend_up / trend_down / oscillation / reversal
     motion_flux: float = 0.0            # 守恒通量
     motion_flux_detail: str = ""        # 通量说明
     stable_distance: float = 0.0        # 距最近稳态距离
@@ -216,6 +217,7 @@ def aggregate_opportunity(
 
     # ── V1.6: 从 Structure 提取运动态 + 投影觉知 ──
     motion_tendency = ""
+    movement_type = ""
     motion_flux = 0.0
     motion_flux_detail = ""
     stable_dist = 0.0
@@ -227,6 +229,7 @@ def aggregate_opportunity(
     if structure is not None:
         if structure.motion:
             motion_tendency = structure.motion.phase_tendency
+            movement_type = structure.motion.movement_type.value if hasattr(structure.motion, 'movement_type') else ""
             motion_flux = structure.motion.conservation_flux
             motion_flux_detail = structure.motion.flux_detail
             stable_dist = structure.motion.stable_distance
@@ -259,6 +262,7 @@ def aggregate_opportunity(
         evidence=evidence,
         next_actions=actions,
         motion_tendency=motion_tendency,
+        movement_type=movement_type,
         motion_flux=round(motion_flux, 3),
         motion_flux_detail=motion_flux_detail,
         stable_distance=round(stable_dist, 3),

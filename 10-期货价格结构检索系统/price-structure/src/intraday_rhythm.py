@@ -79,6 +79,7 @@ class SessionStats:
     avg_quality_score: float = 0.0
     dominant_direction: str = "mixed"
     phase_distribution: dict[str, int] = field(default_factory=dict)
+    movement_type_distribution: dict[str, int] = field(default_factory=dict)  # trend_up/trend_down/oscillation/reversal
     avg_amplitude: float = 0.0  # 该时段的平均振幅
 
 
@@ -256,11 +257,14 @@ class IntradayRhythmAnalyzer:
             else:
                 ss.dominant_direction = "mixed"
 
-        # 阶段分布
+        # 阶段分布 + 运动类型分布
         for s, _ in structures:
             if s.motion:
                 phase = s.motion.phase_tendency or "unknown"
                 ss.phase_distribution[phase] = ss.phase_distribution.get(phase, 0) + 1
+                if hasattr(s.motion, 'movement_type') and s.motion.movement_type:
+                    mt = s.motion.movement_type.value
+                    ss.movement_type_distribution[mt] = ss.movement_type_distribution.get(mt, 0) + 1
 
         # 平均振幅
         if bars:

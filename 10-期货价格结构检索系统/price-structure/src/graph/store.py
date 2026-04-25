@@ -402,6 +402,7 @@ class GraphStore:
             }
             if st.motion:
                 struct_rec["phase_tendency"] = st.motion.phase_tendency
+                struct_rec["movement_type"] = st.motion.movement_type.value if hasattr(st.motion, 'movement_type') else ""
                 struct_rec["conservation_flux"] = round(st.motion.conservation_flux, 4)
                 struct_rec["stable_distance"] = round(st.motion.stable_distance, 4)
             if st.projection:

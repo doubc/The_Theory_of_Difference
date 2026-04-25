@@ -48,7 +48,7 @@ def render(ctx: dict):
                 "速度比": f"{s.avg_speed_ratio:.2f}",
                 "时间比": f"{s.avg_time_ratio:.2f}",
                 "带宽": f"{s.zone.relative_bandwidth:.3f}",
-                "运动": s.motion.phase_tendency if s.motion else "—",
+                "运动": f"{s.motion.phase_tendency} ({s.motion.movement_type.value})" if s.motion and hasattr(s.motion, 'movement_type') else (s.motion.phase_tendency if s.motion else "—"),
                 "通量": f"{s.motion.conservation_flux:+.2f}" if s.motion else "—",
                 "反差": s.zone.context_contrast.value,
             })
@@ -69,7 +69,7 @@ def render(ctx: dict):
                     "速度比": f"{s.avg_speed_ratio:.2f}",
                     "时间比": f"{s.avg_time_ratio:.2f}",
                     "带宽": f"{s.zone.relative_bandwidth:.3f}",
-                    "运动": s.motion.phase_tendency if s.motion else "—",
+                    "运动": f"{s.motion.phase_tendency} ({s.motion.movement_type.value})" if s.motion and hasattr(s.motion, 'movement_type') else (s.motion.phase_tendency if s.motion else "—"),
                     "通量": f"{s.motion.conservation_flux:+.2f}" if s.motion else "—",
                     "反差": s.zone.context_contrast.value,
                 })

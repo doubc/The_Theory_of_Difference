@@ -241,6 +241,7 @@ with sub_tabs[2]:
                     tiers = [r.quality_tier for r in lc.records]
                     cycles = [r.cycle_count for r in lc.records]
                     phases = [r.phase_tendency for r in lc.records]
+                    mtypes = [r.movement_type if hasattr(r, 'movement_type') else "" for r in lc.records]
 
                     fig_timeline = go.Figure()
 
@@ -285,7 +286,8 @@ with sub_tabs[2]:
                             tier_color = {"A": "🟢", "B": "🔵", "C": "🟡", "D": "🔴"}.get(r.quality_tier, "⚪")
                             st.caption(
                                 f"  {r.date}: {tier_color} {r.quality_tier}层 "
-                                f"({r.quality_score:.0%}) · {r.phase_tendency} · "
+                                f"({r.quality_score:.0%}) · {r.phase_tendency}"
+                                f"{' (' + r.movement_type + ')' if hasattr(r, 'movement_type') and r.movement_type else ''} · "
                                 f"通量 {r.conservation_flux:+.2f}"
                             )
 

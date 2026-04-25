@@ -349,6 +349,7 @@ class StructureGraph:
             }
             if st.motion:
                 s_attrs["phase_tendency"] = st.motion.phase_tendency
+                s_attrs["movement_type"] = st.motion.movement_type.value if hasattr(st.motion, 'movement_type') else ""
                 s_attrs["conservation_flux"] = st.motion.conservation_flux
                 s_attrs["stable_distance"] = st.motion.stable_distance
             if st.projection:

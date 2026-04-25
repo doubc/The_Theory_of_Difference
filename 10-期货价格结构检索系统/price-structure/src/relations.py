@@ -21,6 +21,7 @@ from src.models import (
     Point, Segment, Structure, ContrastType,
     MotionState, Phase, ProjectionAwareness,
     StabilityVerdict, SystemState,
+    MarketMovementType,
     # 复用 models.py 中定义的基础算子
     time_gap, extrema_dispersion,
 )
@@ -508,6 +509,43 @@ def compute_motion(s: Structure) -> MotionState:
     else:
         motion.flux_detail = "差异平衡"
 
+    # ── 5. 运动类型（稳态跃迁关系判定）──
+    # 震荡：在同一个稳态内部的价格往复运动
+    # 上涨趋势：时序上后一个稳态比前一个稳态的位置高
+    # 下跌趋势：时序上后一个稳态比前一个稳态的位置低
+    # 反转：趋势方向的转换（上涨→下跌，或下跌→上涨）
+    if stable_cycles and len(stable_cycles) >= 2:
+        zone_a = stable_cycles[-2].next_stable.zone
+        zone_b = stable_cycles[-1].next_stable.zone
+
+        if zone_a is not None and zone_b is not None:
+            price_diff = zone_b.price_center - zone_a.price_center
+            zones_differ = abs(price_diff) > max(zone_a.bandwidth, zone_b.bandwidth) * 0.5
+
+            if zones_differ:
+                # 跨 Zone → 判断趋势方向
+                if price_diff > 0:
+                    current_direction = MarketMovementType.TREND_UP
+                else:
+                    current_direction = MarketMovementType.TREND_DOWN
+
+                # 检查是否为反转：如果前面有趋势记录且方向不同
+                prev_tendency = s.invariants.get("prev_movement_type", "")
+                if prev_tendency in ("trend_up", "trend_down") and prev_tendency != current_direction.value:
+                    motion.movement_type = MarketMovementType.REVERSAL
+                else:
+                    motion.movement_type = current_direction
+            else:
+                # 同 Zone 内部 → 震荡
+                motion.movement_type = MarketMovementType.OSCILLATION
+        else:
+            motion.movement_type = MarketMovementType.OSCILLATION
+    elif stable_cycles and len(stable_cycles) == 1:
+        # 只有一个稳态，无法判断跨 Zone → 震荡
+        motion.movement_type = MarketMovementType.OSCILLATION
+    else:
+        motion.movement_type = MarketMovementType.OSCILLATION
+
     return motion
 
 
@@ -596,7 +634,32 @@ def qualitative_judgment(
             "confidence": max(conf, 0.5),
         }
 
-    # ── 3. 运动态判断 ──
+    # ── 3. 运动类型判断（movement_type 优先）──
+    mt = motion.movement_type.value if hasattr(motion, 'movement_type') else ""
+
+    if mt == "trend_up":
+        return {
+            "stage": "上涨趋势",
+            "icon": "📈",
+            "detail": f"后一稳态 > 前一稳态，通量{flux:+.2f}",
+            "confidence": max(conf, 0.5),
+        }
+    if mt == "trend_down":
+        return {
+            "stage": "下跌趋势",
+            "icon": "📉",
+            "detail": f"后一稳态 < 前一稳态，通量{flux:+.2f}",
+            "confidence": max(conf, 0.5),
+        }
+    if mt == "reversal":
+        return {
+            "stage": "趋势反转",
+            "icon": "🔀",
+            "detail": f"趋势方向切换，通量{flux:+.2f}",
+            "confidence": max(conf, 0.5),
+        }
+
+    # ── 4. 阶段趋势判断（phase_tendency 补充）──
     if "breakout" in tendency:
         # 结合 flux 和方向判断
         if flux > 0 and direction == "short":

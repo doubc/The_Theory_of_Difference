@@ -65,6 +65,23 @@ class Phase(Enum):
     INVERSION = "inversion"       # 反演
 
 
+class MarketMovementType(Enum):
+    """
+    市场运动类型 — 由稳态（NearestStableState）跃迁关系定义。
+
+    震荡：在同一个稳态内部的价格往复运动
+    上涨趋势：时序上后一个稳态比前一个稳态的位置高
+    下跌趋势：时序上后一个稳态比前一个稳态的位置低
+    反转：趋势方向的转换（上涨→下跌，或下跌→上涨）
+
+    与 Phase 的区别：Phase 描述结构的生命周期，MarketMovementType 描述价格在稳态间的运动方式。
+    """
+    TREND_UP = "trend_up"         # 上涨趋势：后一稳态 > 前一稳态
+    TREND_DOWN = "trend_down"     # 下跌趋势：后一稳态 < 前一稳态
+    OSCILLATION = "oscillation"   # 震荡：同一稳态内部往复
+    REVERSAL = "reversal"         # 反转：趋势方向切换
+
+
 # ─── 基础对象 ──────────────────────────────────────────────
 
 @dataclass
@@ -392,6 +409,9 @@ class MotionState:
     phase_tendency: str = ""        # "→confirmation", "→breakdown", "stable" 等
     phase_confidence: float = 0.0   # 阶段判断的置信度 [0,1]
 
+    # 运动类型（由稳态跃迁关系判定）
+    movement_type: MarketMovementType = MarketMovementType.OSCILLATION  # 趋势/震荡/反转
+
     # 差异转移流
     transfer_source: str = ""       # 差异从哪流出（"zone_bandwidth", "speed_ratio" 等）
     transfer_target: str = ""       # 差异流向哪（"shorter_timeframe", "volume" 等）
@@ -413,6 +433,7 @@ class MotionState:
         return {
             "phase_tendency": self.phase_tendency,
             "phase_confidence": self.phase_confidence,
+            "movement_type": self.movement_type.value,
             "transfer_source": self.transfer_source,
             "transfer_target": self.transfer_target,
             "transfer_strength": self.transfer_strength,
@@ -430,7 +451,11 @@ class MotionState:
         kwargs = {}
         for f in dataclasses.fields(cls):
             if f.name in d:
-                kwargs[f.name] = d[f.name]
+                val = d[f.name]
+                # 枚举字段：字符串 → 枚举值
+                if f.type == "MarketMovementType" and isinstance(val, str):
+                    val = MarketMovementType(val)
+                kwargs[f.name] = val
             elif f.default is not dataclasses.MISSING:
                 kwargs[f.name] = f.default
             elif f.default_factory is not dataclasses.MISSING:
@@ -438,7 +463,8 @@ class MotionState:
         return cls(**kwargs)
 
     def __repr__(self):
-        return (f"Motion(→{self.phase_tendency} "
+        return (f"Motion({self.movement_type.value} "
+                f"→{self.phase_tendency} "
                 f"flux={self.conservation_flux:+.2f} "
                 f"stable_d={self.stable_distance:.2f})")
 
@@ -629,6 +655,7 @@ class SystemState:
             "phase_progress": self.motion.phase_duration,
             "stable_countdown": max(0, self.motion.stable_distance * 20),  # 归一化→天数近似
             "phase_tendency": self.motion.phase_tendency,
+            "movement_type": self.motion.movement_type.value if hasattr(self.motion, 'movement_type') else "",
         }
 
     @property
@@ -649,7 +676,10 @@ class SystemState:
 
         # 在怎么动
         if self.motion.phase_tendency:
-            parts.append(f"运动：{self.motion.phase_tendency}，通量{self.motion.conservation_flux:+.2f}")
+            mt = self.motion.movement_type.value if hasattr(self.motion, 'movement_type') else ""
+            mt_cn = {"trend_up": "上涨趋势", "trend_down": "下跌趋势",
+                     "oscillation": "震荡", "reversal": "反转"}.get(mt, "")
+            parts.append(f"运动：{mt_cn or self.motion.phase_tendency}，通量{self.motion.conservation_flux:+.2f}")
             if self.motion.flux_detail:
                 parts.append(f"  → {self.motion.flux_detail}")
 

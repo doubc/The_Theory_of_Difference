@@ -14,7 +14,8 @@ from src.data.sina_fetcher import fetch_bars as sina_fetch_bars, detect_source, 
 from src.compiler.pipeline import compile_full, CompilerConfig
 
 from src.workbench.shared import (
-    motion_badge, _price_vs_zone, make_candlestick, SENS_MAP,
+    motion_badge, movement_badge, struct_status, struct_scenario, struct_invalidation,
+    _price_vs_zone, make_candlestick, SENS_MAP,
 )
 
 
@@ -124,6 +125,7 @@ def render(ctx: dict):
                             "zone": s.zone.price_center,
                             "cycles": s.cycle_count,
                             "motion": m.phase_tendency if m else "",
+                            "movement_type": m.movement_type.value if m and hasattr(m, 'movement_type') else "",
                             "flux": round(m.conservation_flux, 2) if m else 0,
                         })
                     ActivityLog().save_contract(
@@ -157,12 +159,23 @@ def render(ctx: dict):
                     for s in breaking[:3]:
                         flux = f"{s.motion.conservation_flux:+.2f}" if s.motion else "—"
                         pos = _price_vs_zone(last_price, s.zone.price_center, s.zone.bandwidth)
+                        mt = s.motion.movement_type.value if s.motion and hasattr(s.motion, 'movement_type') else ""
+                        mt_html = f" · {movement_badge(mt)}" if mt else ""
+                        status = struct_status(s)
+                        status_html = f'<div style="margin-top:4px;padding:4px 8px;background:#f5f5f5;border-radius:4px;font-size:0.9em;color:#333">{status}</div>' if status else ""
+                        scenario = struct_scenario(s)
+                        scenario_html = f'<div style="margin-top:4px;padding:4px 8px;background:#e8f5e9;border-radius:4px;font-size:0.88em;color:#2e7d32">{scenario}</div>' if scenario else ""
+                        invalidation = struct_invalidation(s)
+                        inv_html = f'<div style="margin-top:2px;padding:3px 8px;background:#fff3e0;border-radius:4px;font-size:0.85em;color:#e65100">{invalidation}</div>' if invalidation else ""
                         st.markdown(f"""
                         <div class="structure-card danger">
                             <span class="zone-label">Zone {s.zone.price_center:.0f}</span>
                             <span class="meta-text">(±{s.zone.bandwidth:.0f}) · {s.cycle_count}次试探</span>
-                            · {motion_badge(s.motion.phase_tendency)}
+                            · {motion_badge(s.motion.phase_tendency)}{mt_html}
                             · <span class="meta-text">通量 {flux}</span>
+                            {status_html}
+                            {scenario_html}
+                            {inv_html}
                             <div class="meta-text">{pos}</div>
                             <div class="narrative-text">{s.narrative_context or ''}</div>
                         </div>
@@ -173,12 +186,23 @@ def render(ctx: dict):
                     for s in confirming[:3]:
                         flux = f"{s.motion.conservation_flux:+.2f}" if s.motion else "—"
                         pos = _price_vs_zone(last_price, s.zone.price_center, s.zone.bandwidth)
+                        mt = s.motion.movement_type.value if s.motion and hasattr(s.motion, 'movement_type') else ""
+                        mt_html = f" · {movement_badge(mt)}" if mt else ""
+                        status = struct_status(s)
+                        status_html = f'<div style="margin-top:4px;padding:4px 8px;background:#f5f5f5;border-radius:4px;font-size:0.9em;color:#333">{status}</div>' if status else ""
+                        scenario = struct_scenario(s)
+                        scenario_html = f'<div style="margin-top:4px;padding:4px 8px;background:#e8f5e9;border-radius:4px;font-size:0.88em;color:#2e7d32">{scenario}</div>' if scenario else ""
+                        invalidation = struct_invalidation(s)
+                        inv_html = f'<div style="margin-top:2px;padding:3px 8px;background:#fff3e0;border-radius:4px;font-size:0.85em;color:#e65100">{invalidation}</div>' if invalidation else ""
                         st.markdown(f"""
                         <div class="structure-card ok">
                             <span class="zone-label">Zone {s.zone.price_center:.0f}</span>
                             <span class="meta-text">(±{s.zone.bandwidth:.0f}) · {s.cycle_count}次试探</span>
-                            · {motion_badge(s.motion.phase_tendency)}
+                            · {motion_badge(s.motion.phase_tendency)}{mt_html}
                             · <span class="meta-text">通量 {flux}</span>
+                            {status_html}
+                            {scenario_html}
+                            {inv_html}
                             <div class="meta-text">{pos}</div>
                             <div class="narrative-text">{s.narrative_context or ''}</div>
                         </div>
@@ -189,12 +213,23 @@ def render(ctx: dict):
                     for s in forming[:5]:
                         proj_warn = " · ⚠️ 高压缩" if (s.projection and s.projection.is_blind) else ""
                         tendency = s.motion.phase_tendency if s.motion else 'unknown'
+                        mt = s.motion.movement_type.value if s.motion and hasattr(s.motion, 'movement_type') else ""
+                        mt_html = f" · {movement_badge(mt)}" if mt else ""
                         pos = _price_vs_zone(last_price, s.zone.price_center, s.zone.bandwidth)
+                        status = struct_status(s)
+                        status_html = f'<div style="margin-top:4px;padding:4px 8px;background:#f5f5f5;border-radius:4px;font-size:0.9em;color:#333">{status}</div>' if status else ""
+                        scenario = struct_scenario(s)
+                        scenario_html = f'<div style="margin-top:4px;padding:4px 8px;background:#e8f5e9;border-radius:4px;font-size:0.88em;color:#2e7d32">{scenario}</div>' if scenario else ""
+                        invalidation = struct_invalidation(s)
+                        inv_html = f'<div style="margin-top:2px;padding:3px 8px;background:#fff3e0;border-radius:4px;font-size:0.85em;color:#e65100">{invalidation}</div>' if invalidation else ""
                         st.markdown(f"""
                         <div class="structure-card">
                             <span class="zone-label">Zone {s.zone.price_center:.0f}</span>
                             <span class="meta-text">(±{s.zone.bandwidth:.0f}) · {s.cycle_count}次试探</span>
-                            · {motion_badge(tendency)}{proj_warn}
+                            · {motion_badge(tendency)}{mt_html}{proj_warn}
+                            {status_html}
+                            {scenario_html}
+                            {inv_html}
                             <div class="meta-text">{pos}</div>
                             <div class="narrative-text">{s.narrative_context or ''}</div>
                         </div>

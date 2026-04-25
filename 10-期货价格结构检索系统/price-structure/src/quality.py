@@ -208,6 +208,14 @@ def _score_motion_credibility(s: Structure, ss: SystemState | None) -> tuple[flo
         else:
             mot_score = 0.3
             flags.append(f"⚠ 运动态置信度低({conf:.0%})")
+
+        # 运动类型加成
+        if hasattr(m, 'movement_type') and m.movement_type:
+            mt = m.movement_type.value
+            if mt in ("trend_up", "trend_down"):
+                mot_score = min(mot_score * 1.15, 1.0)  # 有明确趋势方向加分
+            elif mt == "reversal":
+                mot_score = min(mot_score * 1.1, 1.0)   # 反转是明确事件
     else:
         mot_score = 0.1
     score += 0.25 * mot_score
