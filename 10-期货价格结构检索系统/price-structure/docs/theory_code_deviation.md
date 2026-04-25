@@ -175,6 +175,7 @@ Ch4 命题 4.4、Ch7 命题 7.6、Ch12 命题 12.6 反复回响。
 | **P1** | 叙事化输出 | ✅ 完成 | narrative.py 生成自然语言报告 |
 | **P1** | 检索反差过滤 | ✅ 完成 | context_contrast 作为首要过滤条件 + 匹配归因 |
 | **P1** | 守恒完整版 | 🔲 待做 | 需多频率数据交叉 |
+| **P1** | 交易信号层 | 🔧 实现中 | Signal dataclass + 5维突破评分 + 假突破5模式 + flux过滤 + stability准入 |
 | **P2** | 偏差 5：反身性 | 🔲 骨架完成 | ReflexivityTracker + 衰减检测 |
 | **P3** | 偏差 6：叙事递归 | 🔲 待做 | 需大量样本积累 |
 | **P3** | 偏差 7：跨周期 | 🔲 待做 | 数据工程量大 |
@@ -212,6 +213,9 @@ Ch4 命题 4.4、Ch7 命题 7.6、Ch12 命题 12.6 反复回响。
 1. **守恒完整版**：接入 MySQL 5 分钟线数据 → 跨频率守恒验证
 2. **config.yaml 对齐**：添加 MySQL 连接配置（含 ${MYSQL_PASSWORD} 环境变量引用）、Parquet 路径、多频率参数
 3. **MySQL数据同步指南更新**：文档中仍有硬编码密码示例，需改为环境变量方式
+4. **🔧 交易信号层落地**：`src/signals.py` + `tab_scan.py` 卡片信号区块（详见 `docs/头脑风暴-多视角交集分析.md`）
+5. **stability_verdict 接入信号准入**：红灯 → 无方向性信号
+6. **多时间框架共振信号化**：TA视角 S4，算法化判决逻辑
 
 ### P0 待落地（来自想法文档）
 4. **结构生命周期追踪**：lifecycle.py 已有骨架，需确认前端是否完整接入
@@ -262,3 +266,20 @@ Ch4 命题 4.4、Ch7 命题 7.6、Ch12 命题 12.6 反复回响。
    - 新增 `.env.example`、更新 `.gitignore`（.env/.idea/temp/history）
    - commit bbae40f
 3. **文档阅读**：完成 20 个文档全量阅读，确认文档体系比外审认知更完善，外审部分建议已在文档中解决
+4. **交易信号优化**（多视角交集头脑风暴）：
+   - 4 视角（Quant/TA/Risk/MM）对同一问题独立给子集，取交集
+   - **5 条强共识**：①Zone突破必须 flux 同向确认 ②假突破判定关键=flux反向 ③conservation_flux 应参与所有信号过滤 ④stability_verdict 红灯覆盖方向性判断 ⑤结构老化显式建模
+   - **1 条核心分歧**：盲区（is_blind）交易策略——Risk禁止 vs MM引爆突破，暂定标记⚠️低样本仅观察
+   - 新增文档 `docs/头脑风暴-多视角交集分析.md`
+   - 新增 `src/signals.py`：Signal dataclass + 5假突破模式 + 5维突破评分 + 仓位系数
+   - 修改 `tab_scan.py`：卡片追加信号显示区块
+   - commit 5db8d00
+
+### 2026-04-25
+1. **信号层4视角测试与修复**（集思广益阶段）：
+   - quant-tester：数值正确性测试 ✅ 6/6通过，发现FAKE_GAP顺序问题
+   - edge-tester：边界测试 ✅ 24/25通过，发现stability None崩溃
+   - integration-tester：集成测试 ✅ 全部通过
+   - perf-tester：性能测试 ✅ 单次0.69ms，全市场135ms
+   - **修复**：stability None检查、FAKE_GAP检测顺序调整
+   - commit 692764e
