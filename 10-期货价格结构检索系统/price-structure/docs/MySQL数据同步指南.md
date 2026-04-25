@@ -47,18 +47,18 @@ export MYSQL_PASSWORD=your_actual_password
 ### 自动配置
 
 运行同步脚本时会自动：
-1. 创建数据库 `sina_futures`
+1. 创建数据库 `sina`
 2. 创建数据表（每个合约一张表）
 3. 建立索引优化查询
 
 ### 手动配置（可选）
 
 ```sql
-CREATE DATABASE IF NOT EXISTS sina_futures 
+CREATE DATABASE IF NOT EXISTS sina 
 CHARACTER SET utf8mb4 
 COLLATE utf8mb4_unicode_ci;
 
-USE sina_futures;
+USE sina;
 SHOW TABLES;
 ```
 
@@ -130,7 +130,7 @@ loader = MySQLLoader(
     host='localhost',
     user='root',
     password=os.getenv('MYSQL_PASSWORD'),
-    db='sina_futures'
+    db='sina'
 )
 
 # 获取全部数据
@@ -157,7 +157,7 @@ SELECT * FROM cu0_m5 ORDER BY datetime DESC LIMIT 10;
 -- 统计各表数据量
 SELECT table_name, table_rows
 FROM information_schema.tables 
-WHERE table_schema = 'sina_futures';
+WHERE table_schema = 'sina';
 
 -- 查看数据时间范围
 SELECT MIN(date) as start_date, MAX(date) as end_date, COUNT(*) as total_rows
