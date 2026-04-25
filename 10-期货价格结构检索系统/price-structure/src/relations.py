@@ -517,13 +517,17 @@ def qualitative_judgment(
     s: Structure,
     motion: MotionState | None = None,
     signal: object | None = None,
+    direction: str | None = None,
 ) -> dict:
     """
     综合运动态 + 规则标签 + 信号，输出一句中文定性判断。
 
-    返回:
+    Args:
+        direction: "long"/"short"/None，由信号方向或价格位置推导
+
+    Returns:
         {
-            "stage": str,       # 趋势上行 / 趋势下行 / 震荡整理 / 顶部反转 / 底部反转 / 形成中 / 结构老化
+            "stage": str,       # 趋势上行/趋势下行/震荡整理/顶部反转/底部反转/突破失败/假突破反转/形成中/结构老化
             "icon": str,        # emoji
             "detail": str,      # 补充说明
             "confidence": float # 0-1
@@ -531,6 +535,10 @@ def qualitative_judgment(
     """
     if motion is None:
         motion = s.motion or MotionState()
+
+    # 从信号推导方向
+    if direction is None and signal is not None:
+        direction = getattr(signal, "direction", None)
 
     tendency = motion.phase_tendency or ""
     label = (s.label or "").lower()
@@ -590,26 +598,36 @@ def qualitative_judgment(
 
     # ── 3. 运动态判断 ──
     if "breakout" in tendency:
-        # flux 方向决定是真突破还是假突破
-        if flux > 0:
-            stage = "趋势上行"
-            icon = "📈"
-            detail = f"价格突破zone，差异释放中"
-        else:
+        # 结合 flux 和方向判断
+        if flux > 0 and direction == "short":
+            # 正flux但方向做空 → 矛盾，突破失败
             stage = "突破失败"
             icon = "📉"
-            detail = f"突破后通量反向，结构可能瓦解"
+            detail = f"通量与方向矛盾，结构可能瓦解"
+        elif flux < 0 and direction == "long":
+            # 负flux但方向做多 → 假突破
+            stage = "突破失败"
+            icon = "📉"
+            detail = f"通量反向，假突破风险高"
+        elif direction == "short" or flux < 0:
+            stage = "趋势下行"
+            icon = "📉"
+            detail = f"价格向下突破zone，差异释放中"
+        else:
+            stage = "趋势上行"
+            icon = "📈"
+            detail = f"价格向上突破zone，差异释放中"
         return {"stage": stage, "icon": icon, "detail": detail, "confidence": conf}
 
     if "confirmation" in tendency:
-        if flux < -0.3:
-            stage = "趋势确认"
-            icon = "✅"
-            detail = f"差异压缩，方向明确"
+        if direction == "short":
+            stage = "趋势下行"
+            icon = "📉"
+            detail = f"下行趋势确认，差异压缩中"
         else:
-            stage = "趋势确认"
-            icon = "✅"
-            detail = f"结构稳固，通量{flux:+.2f}"
+            stage = "趋势上行"
+            icon = "📈"
+            detail = f"上行趋势确认，差异压缩中"
         return {"stage": stage, "icon": icon, "detail": detail, "confidence": conf}
 
     if "inversion" in tendency:

@@ -32,10 +32,11 @@ def _judgment_html(j: dict | None) -> str:
     stage = j.get("stage", "")
     detail = j.get("detail", "")
     conf = j.get("confidence", 0)
-    # 颜色：趋势类绿、反转类红、震荡黄、形成中灰
-    color = "#4caf50" if "趋势确认" in stage or "趋势上行" in stage else \
-            "#ef5350" if "反转" in stage or "破坏" in stage or "假突破" in stage else \
-            "#ff9800" if "震荡" in stage or "高波动" in stage else \
+    # 颜色：上行绿、下行红、反转橙、震荡黄、其他灰
+    color = "#4caf50" if "趋势上行" in stage else \
+            "#ef5350" if "趋势下行" in stage or "突破失败" in stage else \
+            "#ff9800" if "反转" in stage else \
+            "#ffc107" if "震荡" in stage or "高波动" in stage else \
             "#999"
     return f'<span style="color:{color};font-weight:600">{icon} {stage}</span> <span style="color:#888;font-size:0.85em">({detail}·{conf:.0%})</span>'
 
@@ -152,7 +153,8 @@ def render(ctx: dict):
 
                 # 定性判断
                 from src.relations import qualitative_judgment
-                judgment = qualitative_judgment(s, m, signal)
+                dir_for_judgment = {"up": "long", "down": "short"}.get(direction)
+                judgment = qualitative_judgment(s, m, signal, direction=dir_for_judgment)
 
                 results.append({
                     "symbol": sym,
