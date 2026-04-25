@@ -525,13 +525,34 @@ def render(ctx: dict):
             # ── 导出扫描结果 ──
             st.markdown("---")
             st.markdown("#### 📤 导出扫描结果")
+
+            # 按阶段分类筛选
+            stage_groups = {}
+            for r in scan_results:
+                stage = (r.get("judgment") or {}).get("stage", "未分类")
+                stage_groups.setdefault(stage, []).append(r)
+
+            stage_options = ["全部"] + sorted(stage_groups.keys(), key=lambda s: -len(stage_groups[s]))
+            selected_stage = st.selectbox("按阶段筛选", stage_options, index=0, key="export_stage_filter")
+
+            if selected_stage == "全部":
+                export_results = scan_results[:50]
+            else:
+                export_results = stage_groups.get(selected_stage, [])[:50]
+
+            # 阶段分布摘要
+            dist_parts = [f"{s}({len(stage_groups[s])})" for s in sorted(stage_groups, key=lambda s: -len(stage_groups[s]))]
+            st.caption(f"分布：{' · '.join(dist_parts)}")
+
             exp_c1, exp_c2 = st.columns(2)
             with exp_c1:
                 scan_export = {
                     "date": _today_key,
                     "sensitivity": sensitivity,
-                    "total": len(scan_results),
-                    "top50": [{
+                    "filter": selected_stage,
+                    "total": len(export_results),
+                    "stage_distribution": {s: len(v) for s, v in stage_groups.items()},
+                    "results": [{
                         "rank": i + 1,
                         "symbol": r["symbol"],
                         "symbol_name": r["symbol_name"],
@@ -542,32 +563,47 @@ def render(ctx: dict):
                         "score": r["score"],
                         "tier": r.get("tier", "?"),
                         "direction": r["direction"],
+                        "stage": (r.get("judgment") or {}).get("stage", ""),
+                        "judgment_detail": (r.get("judgment") or {}).get("detail", ""),
+                        "stop_loss_price": (r.get("signal") or {}).get("stop_loss_price", 0),
+                        "take_profit_price": (r.get("signal") or {}).get("take_profit_price", 0),
+                        "rr_ratio": (r.get("signal") or {}).get("rr_ratio", 0),
                         "narrative": r["narrative"],
                         "last_price": r["last_price"],
                         "days_since_end": r.get("days_since_end", 0),
-                    } for i, r in enumerate(scan_results[:50])],
+                    } for i, r in enumerate(export_results)],
                     "exported_at": datetime.now().isoformat(),
                 }
                 st.download_button(
                     "📥 导出 JSON",
                     data=json.dumps(scan_export, ensure_ascii=False, indent=2),
-                    file_name=f"scan_{_today_key}.json",
+                    file_name=f"scan_{_today_key}_{selected_stage}.json",
                     mime="application/json",
                     use_container_width=True,
                 )
             with exp_c2:
-                md_lines = [f"# 全市场扫描 {_today_key}\n灵敏度: {sensitivity} · 活跃结构: {len(scan_results)}\n"]
-                for i, r in enumerate(scan_results[:50], 1):
+                md_lines = [f"# 全市场扫描 {_today_key}\n灵敏度: {sensitivity} · 筛选: {selected_stage} · 结果: {len(export_results)}\n"]
+                for i, r in enumerate(export_results, 1):
                     dir_icon = "📈" if r["direction"] == "up" else "📉" if r["direction"] == "down" else "➡️"
+                    j = r.get("judgment") or {}
+                    stage_icon = j.get("icon", "")
+                    stage_name = j.get("stage", "")
+                    sig = r.get("signal") or {}
+                    sl = sig.get("stop_loss_price", 0)
+                    tp = sig.get("take_profit_price", 0)
+                    rr = sig.get("rr_ratio", 0)
+
                     md_lines.append(f"## #{i} {r['symbol']} ({r['symbol_name']})")
-                    md_lines.append(f"- {dir_icon} Zone {r['zone_center']:.0f} · {r['cycles']}次试探 · {r['motion']}")
+                    md_lines.append(f"- {dir_icon} {stage_icon} **{stage_name}** · Zone {r['zone_center']:.0f} · {r['cycles']}次试探")
                     md_lines.append(f"- 质量 {r['score']:.0f}分 · {r.get('tier', '?')}层 · 通量{r['flux']:+.2f}")
                     md_lines.append(f"- 现价{r['last_price']:.1f} · {r.get('days_since_end', 0)}天前活跃")
+                    if sl > 0:
+                        md_lines.append(f"- 止损 {sl:.1f} · 目标 {tp:.1f} · 盈亏比 {rr:.1f}")
                     md_lines.append("")
                 st.download_button(
                     "📥 导出 Markdown",
                     data="\n".join(md_lines),
-                    file_name=f"scan_{_today_key}.md",
+                    file_name=f"scan_{_today_key}_{selected_stage}.md",
                     mime="text/markdown",
                     use_container_width=True,
                 )
