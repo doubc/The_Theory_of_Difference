@@ -511,6 +511,145 @@ def compute_motion(s: Structure) -> MotionState:
     return motion
 
 
+# ─── 定性判断 ──────────────────────────────────────────────
+
+def qualitative_judgment(
+    s: Structure,
+    motion: MotionState | None = None,
+    signal: object | None = None,
+) -> dict:
+    """
+    综合运动态 + 规则标签 + 信号，输出一句中文定性判断。
+
+    返回:
+        {
+            "stage": str,       # 趋势上行 / 趋势下行 / 震荡整理 / 顶部反转 / 底部反转 / 形成中 / 结构老化
+            "icon": str,        # emoji
+            "detail": str,      # 补充说明
+            "confidence": float # 0-1
+        }
+    """
+    if motion is None:
+        motion = s.motion or MotionState()
+
+    tendency = motion.phase_tendency or ""
+    label = (s.label or "").lower()
+    flux = motion.conservation_flux or 0.0
+    conf = motion.phase_confidence or 0.0
+
+    # ── 1. 信号优先 ──
+    if signal is not None:
+        sig_kind = getattr(signal, "kind", None)
+        sig_dir = getattr(signal, "direction", "neutral")
+        if sig_kind is not None:
+            kind_val = getattr(sig_kind, "value", str(sig_kind))
+            if kind_val == "fake_breakout":
+                return {
+                    "stage": "假突破反转",
+                    "icon": "⚡",
+                    "detail": f"{'上' if sig_dir == 'short' else '下'}穿后回归，通量反向确认",
+                    "confidence": getattr(signal, "confidence", 0.7),
+                }
+            if kind_val == "structure_expired":
+                return {
+                    "stage": "结构老化",
+                    "icon": "⏳",
+                    "detail": "超时未触发，已失效",
+                    "confidence": 0.9,
+                }
+
+    # ── 2. 规则标签判断 ──
+    if "topreversal" in label or "topdistribution" in label:
+        return {
+            "stage": "顶部反转",
+            "icon": "🔻",
+            "detail": f"规则匹配：{_label_cn(label)}，通量{flux:+.2f}",
+            "confidence": max(conf, 0.6),
+        }
+    if "bottomreversal" in label or "bottombreakout" in label:
+        return {
+            "stage": "底部反转",
+            "icon": "🔺",
+            "detail": f"规则匹配：{_label_cn(label)}，通量{flux:+.2f}",
+            "confidence": max(conf, 0.6),
+        }
+    if "consolidation" in label or "balanced" in label:
+        return {
+            "stage": "震荡整理",
+            "icon": "🔄",
+            "detail": f"规则匹配：{_label_cn(label)}，速度/时间对称",
+            "confidence": max(conf, 0.5),
+        }
+    if "volatility" in label:
+        return {
+            "stage": "高波动",
+            "icon": "🌊",
+            "detail": f"规则匹配：{_label_cn(label)}，速度比极端",
+            "confidence": max(conf, 0.5),
+        }
+
+    # ── 3. 运动态判断 ──
+    if "breakdown" in tendency:
+        # flux 方向决定是上行趋势破坏还是下行趋势破坏
+        if flux > 0:
+            stage = "趋势上行"
+            icon = "📈"
+            detail = f"差异释放中，上行趋势延续"
+        else:
+            stage = "趋势破坏"
+            icon = "📉"
+            detail = f"结构正在瓦解，通量{flux:+.2f}"
+        return {"stage": stage, "icon": icon, "detail": detail, "confidence": conf}
+
+    if "confirmation" in tendency:
+        if flux < -0.3:
+            stage = "趋势确认"
+            icon = "✅"
+            detail = f"差异压缩，方向明确"
+        else:
+            stage = "趋势确认"
+            icon = "✅"
+            detail = f"结构稳固，通量{flux:+.2f}"
+        return {"stage": stage, "icon": icon, "detail": detail, "confidence": conf}
+
+    if "inversion" in tendency:
+        return {
+            "stage": "趋势反转",
+            "icon": "🔀",
+            "detail": f"速度比方向翻转，通量{flux:+.2f}",
+            "confidence": conf,
+        }
+
+    if tendency == "stable":
+        return {
+            "stage": "震荡整理",
+            "icon": "🔄",
+            "detail": f"结构稳定，差异平衡",
+            "confidence": max(conf, 0.4),
+        }
+
+    # forming 或未知
+    return {
+        "stage": "形成中",
+        "icon": "🔵",
+        "detail": f"周期数不足，尚在积累",
+        "confidence": 0.3,
+    }
+
+
+def _label_cn(label: str) -> str:
+    """规则标签 → 中文名"""
+    mapping = {
+        "slowupfastdown_topreversal": "慢涨急跌顶部反转",
+        "fastupslowdown_topdistribution": "急涨慢跌顶部派发",
+        "tripletest_bottombreakout": "底部多次试探突破",
+        "slowdownfastup_bottomreversal": "慢跌急涨底部反转",
+        "balancedconsolidation": "均衡整理",
+        "highvolatilityzone": "高波动区",
+    }
+    return mapping.get(label.lower(), label)
+
+
 def compute_projection(s: Structure, bars: list | None = None) -> ProjectionAwareness:
     """
     D0 章：投影觉知 + v2.5 D0.3 深化

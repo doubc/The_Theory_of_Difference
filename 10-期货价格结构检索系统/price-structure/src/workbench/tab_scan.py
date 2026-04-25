@@ -24,6 +24,22 @@ from src.workbench.shared import (
 from src.workbench.data_layer import load_bars, compile_structures
 
 
+def _judgment_html(j: dict | None) -> str:
+    """定性判断 → HTML 片段"""
+    if not j:
+        return ""
+    icon = j.get("icon", "")
+    stage = j.get("stage", "")
+    detail = j.get("detail", "")
+    conf = j.get("confidence", 0)
+    # 颜色：趋势类绿、反转类红、震荡黄、形成中灰
+    color = "#4caf50" if "趋势确认" in stage or "趋势上行" in stage else \
+            "#ef5350" if "反转" in stage or "破坏" in stage or "假突破" in stage else \
+            "#ff9800" if "震荡" in stage or "高波动" in stage else \
+            "#999"
+    return f'<span style="color:{color};font-weight:600">{icon} {stage}</span> <span style="color:#888;font-size:0.85em">({detail}·{conf:.0%})</span>'
+
+
 def render(ctx: dict):
     """渲染 Tab 0: 今天值得关注什么"""
     selected_symbol = ctx["selected_symbol"]
@@ -134,6 +150,10 @@ def render(ctx: dict):
                 from src.signals import generate_signal
                 signal = generate_signal(s, bars_data, ss, quality_tier_override=qa.tier.value)
 
+                # 定性判断
+                from src.relations import qualitative_judgment
+                judgment = qualitative_judgment(s, m, signal)
+
                 results.append({
                     "symbol": sym,
                     "symbol_name": symbol_name(sym),
@@ -156,6 +176,7 @@ def render(ctx: dict):
                     "recency": recency,
                     "days_since_end": days_since_end,
                     "signal": signal.to_dict() if signal else None,
+                    "judgment": judgment,
                 })
 
         # v3.3: 品种去重 — 每个合约代码只保留得分最高的结构
@@ -317,7 +338,7 @@ def render(ctx: dict):
                         · <span style="color:{risk_color};font-weight:700">⚖️ {r.get('risk_level', '低')}关注度</span>
                         · {fresh_tag}
                         {signal_html}
-                        <div class="meta-text">{price_pos} · 现价 {r.get('last_price', 0):.1f}</div>
+                        <div class="meta-text">{price_pos} · 现价 {r.get('last_price', 0):.1f} · {_judgment_html(r.get('judgment'))}</div>
                         <div class="narrative-text">{r.get('narrative', '')}</div>
                     </div>
                     """, unsafe_allow_html=True)
