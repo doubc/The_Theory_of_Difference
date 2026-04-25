@@ -113,7 +113,7 @@ def render(ctx: dict):
                 score_100 = round(qa.score * 100, 1)
 
                 direction = "unclear"
-                if m and "breakdown" in m.phase_tendency:
+                if m and "breakout" in m.phase_tendency:
                     direction = "down" if m.conservation_flux < 0 else "up"
                 elif m and "confirmation" in m.phase_tendency:
                     direction = "up" if m.conservation_flux > 0 else "down"
@@ -125,7 +125,7 @@ def render(ctx: dict):
                     suggestions.append(f"观察价格跌破 Zone 下沿 {s.zone.price_center - s.zone.bandwidth:.0f} 后的反抽力度")
                 else:
                     suggestions.append("方向不明，等待明确信号再介入研究")
-                if m and "breakdown" in m.phase_tendency:
+                if m and "breakout" in m.phase_tendency:
                     suggestions.append("处于破缺阶段，关注是否能稳住在新价位")
                 if p and p.is_blind:
                     suggestions.append("高压缩结构，突破后波动可能放大，注意节奏")
@@ -410,7 +410,7 @@ def render(ctx: dict):
             st.caption("从 Top 10 中精选三种策略类型 — 激进 / 稳健 / 潜伏")
 
             aggressive = [r for r in scan_results[:20]
-                          if r["motion"] and "breakdown" in r["motion"]]
+                          if r["motion"] and "breakout" in r["motion"]]
             aggressive.sort(key=lambda r: abs(r["flux"]), reverse=True)
 
             stable = [r for r in scan_results[:20]
@@ -422,7 +422,7 @@ def render(ctx: dict):
             latent.sort(key=lambda r: r["score"], reverse=True)
 
             trio = [
-                ("🔴 激进型", "breakdown + 高通量，波动大", aggressive),
+                ("🔴 激进型", "突破 + 高通量，波动大", aggressive),
                 ("🟢 稳健型", "confirmation，方向明确", stable),
                 ("🔵 潜伏型", "forming + 高压缩，等待突破", latent),
             ]
@@ -585,7 +585,7 @@ def render(ctx: dict):
         st.info("当前时间范围内没有显著结构")
     else:
         breaking = [s for s in recent_structures
-                    if s.motion and "breakdown" in s.motion.phase_tendency]
+                    if s.motion and "breakout" in s.motion.phase_tendency]
         confirming = [s for s in recent_structures
                       if s.motion and "confirmation" in s.motion.phase_tendency]
         forming = [s for s in recent_structures

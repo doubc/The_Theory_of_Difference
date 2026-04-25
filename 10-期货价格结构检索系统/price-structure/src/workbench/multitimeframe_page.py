@@ -154,8 +154,8 @@ def _render_structure_card(s, freq_label: str, last_price: float):
     proj_warn = " · ⚠️ 高压缩" if (s.projection and s.projection.is_blind) else ""
 
     # 运动态颜色
-    if "breakdown" in tendency:
-        badge_cls = "badge-breakdown"
+    if "breakout" in tendency:
+        badge_cls = "badge-breakout"
     elif "confirmation" in tendency:
         badge_cls = "badge-confirmation"
     elif tendency in ("stable", "forming"):
@@ -172,7 +172,7 @@ def _render_structure_card(s, freq_label: str, last_price: float):
     else:
         pos = "📊 价格在 Zone 内部"
 
-    card_cls = "danger" if "breakdown" in tendency else "ok" if "confirmation" in tendency else ""
+    card_cls = "danger" if "breakout" in tendency else "ok" if "confirmation" in tendency else ""
 
     st.markdown(f"""
     <div class="structure-card {card_cls}">

@@ -148,7 +148,7 @@ def render(ctx: dict):
 
                 # ── 结构卡片 ──
                 ranked = comp_result.ranked_structures
-                breaking = [s for s in ranked if s.motion and "breakdown" in s.motion.phase_tendency]
+                breaking = [s for s in ranked if s.motion and "breakout" in s.motion.phase_tendency]
                 confirming = [s for s in ranked if s.motion and "confirmation" in s.motion.phase_tendency]
                 forming = [s for s in ranked if s.motion and s.motion.phase_tendency in ("forming", "stable", "")]
 

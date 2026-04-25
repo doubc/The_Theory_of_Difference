@@ -223,9 +223,9 @@ def _generate_comparison_guide(
         
         # 如果当前结构在 breakdown 阶段，强调稳态分析
         phases = [p.value for p in matched.phases]
-        if "breakdown" in phases:
+        if "breakout" in phases:
             guides.append(
-                f"⚠️ 结构处于 breakdown 阶段——"
+                f"⚠️ 结构处于突破阶段——"
                 f"历史上类似结构崩塌后，最先停驻的价位通常是最近稳态，"
                 f"而非最低点或最优反弹位"
             )
@@ -233,9 +233,9 @@ def _generate_comparison_guide(
     # ── V1.6 P0: 运动态分析 ──
     if matched.motion:
         m = matched.motion
-        if m.phase_tendency == "→breakdown":
+        if m.phase_tendency == "→breakout":
             guides.append(
-                f"【运动态】阶段趋势 →breakdown（置信度 {m.phase_confidence:.0%}），"
+                f"【运动态】阶段趋势 →突破（置信度 {m.phase_confidence:.0%}），"
                 f"守恒通量 {m.conservation_flux:+.2f}（{'差异在释放' if m.conservation_flux > 0 else '差异在压缩'}），"
                 f"距最近稳态 {m.stable_distance:.2f}"
             )

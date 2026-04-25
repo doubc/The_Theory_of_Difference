@@ -165,7 +165,7 @@ def infer_narrative_context(s: Structure) -> str:
     if s.motion:
         if s.motion.phase_tendency:
             tendency_map = {
-                "→breakdown": "趋向破坏",
+                "→breakout": "趋向突破",
                 "→confirmation": "趋向确认",
                 "→inversion": "趋向反演",
                 "stable": "稳态运行",
@@ -392,7 +392,7 @@ def compute_motion(s: Structure) -> MotionState:
         recent_srs = [c.speed_ratio for c in s.cycles[-3:]]
         sr_trend = recent_srs[-1] - recent_srs[0]
         if sr_trend > 0.5:
-            votes["→breakdown"] = votes.get("→breakdown", 0) + 0.35 * min(sr_trend / 2.0, 1.0)
+            votes["→breakout"] = votes.get("→breakout", 0) + 0.35 * min(sr_trend / 2.0, 1.0)
         elif sr_trend < -0.3:
             votes["→confirmation"] = votes.get("→confirmation", 0) + 0.35 * min(abs(sr_trend) / 1.0, 1.0)
         elif (recent_srs[0] > 1) != (recent_srs[-1] > 1):
@@ -410,8 +410,8 @@ def compute_motion(s: Structure) -> MotionState:
                 span2 = max((s.t_end - mid).days, 1)
                 density_ratio = (len(second_half) / span2) / max(len(first_half) / span1, 1e-9)
                 if density_ratio > 1.5:
-                    # 密集度加速 → 可能走向 breakdown
-                    votes["→breakdown"] = votes.get("→breakdown", 0) + 0.25 * min(density_ratio / 3.0, 1.0)
+                    # 密集度加速 → 可能走向突破
+                    votes["→breakout"] = votes.get("→breakout", 0) + 0.25 * min(density_ratio / 3.0, 1.0)
                 elif density_ratio < 0.67:
                     # 密集度放缓 → 走向 confirmation
                     votes["→confirmation"] = votes.get("→confirmation", 0) + 0.25 * 0.5
@@ -419,14 +419,14 @@ def compute_motion(s: Structure) -> MotionState:
                     votes["stable"] = votes.get("stable", 0) + 0.25 * 0.4
 
         # 信号 C: Zone 带宽变化趋势（权重 0.20）
-        # 如果最近 cycle 的 exit 段离 zone 越来越远 → breakdown
+        # 如果最近 cycle 的 exit 段离 zone 越来越远 → 突破
         if n >= 3:
             recent_exits = [c.exit for c in s.cycles[-3:]]
             zone = s.zone
             exit_distances = [abs(e.end.x - zone.price_center) / max(zone.bandwidth, 1e-9) for e in recent_exits]
             dist_trend = exit_distances[-1] - exit_distances[0]
             if dist_trend > 1.0:
-                votes["→breakdown"] = votes.get("→breakdown", 0) + 0.20 * min(dist_trend / 3.0, 1.0)
+                votes["→breakout"] = votes.get("→breakout", 0) + 0.20 * min(dist_trend / 3.0, 1.0)
             elif dist_trend < -0.5:
                 votes["→confirmation"] = votes.get("→confirmation", 0) + 0.20 * 0.4
 
@@ -438,8 +438,8 @@ def compute_motion(s: Structure) -> MotionState:
                 # 差异压缩 → 走向 confirmation 或稳定
                 votes["→confirmation"] = votes.get("→confirmation", 0) + 0.20 * min(abs(flux), 1.0)
             elif flux > 0.3:
-                # 差异释放 → 可能走向 breakdown
-                votes["→breakdown"] = votes.get("→breakdown", 0) + 0.20 * min(flux, 1.0)
+                # 差异释放 → 可能走向突破
+                votes["→breakout"] = votes.get("→breakout", 0) + 0.20 * min(flux, 1.0)
         else:
             votes["stable"] = votes.get("stable", 0) + 0.20 * 0.3
 
@@ -589,7 +589,7 @@ def qualitative_judgment(
         }
 
     # ── 3. 运动态判断 ──
-    if "breakdown" in tendency:
+    if "breakout" in tendency:
         # flux 方向决定是上行趋势破坏还是下行趋势破坏
         if flux > 0:
             stage = "趋势上行"

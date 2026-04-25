@@ -31,7 +31,7 @@ CSS_STYLE = """
         font-weight: 700;
         letter-spacing: 0.02em;
     }
-    .badge-breakdown { background: rgba(239,83,80,0.15); color: #ff6b6b; }
+    .badge-breakout { background: rgba(239,83,80,0.15); color: #ff6b6b; }
     .badge-confirmation { background: rgba(38,166,154,0.15); color: #4ecdc4; }
     .badge-stable { background: rgba(255,167,38,0.15); color: #ffb74d; }
     .badge-forming { background: rgba(66,165,245,0.15); color: #64b5f6; }
@@ -120,8 +120,8 @@ SENS_MAP = {
 
 def motion_badge(tendency: str) -> str:
     cls = "badge-forming"
-    if "breakdown" in tendency:
-        cls = "badge-breakdown"
+    if "breakout" in tendency:
+        cls = "badge-breakout"
     elif "confirmation" in tendency:
         cls = "badge-confirmation"
     elif tendency == "stable":

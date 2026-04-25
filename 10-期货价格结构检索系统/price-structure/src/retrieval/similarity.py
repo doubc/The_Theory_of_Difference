@@ -124,7 +124,7 @@ def motion_similarity(s1: Structure, s2: Structure) -> float:
     V1.6 运动相似：阶段趋势、守恒通量、稳态距离的一致性
     
     两个几何相似但运动方向相反的结构，后验行为可能完全不同。
-    运动维度确保我们区分"在走向 breakdown"和"在走向 confirmation"。
+    运动维度确保我们区分"在走向 breakout"和"在走向 confirmation"。
     """
     m1, m2 = s1.motion, s2.motion
 
@@ -141,7 +141,7 @@ def motion_similarity(s1: Structure, s2: Structure) -> float:
     n += 1
     if m1.phase_tendency == m2.phase_tendency:
         score += 1.0
-    elif ("breakdown" in m1.phase_tendency) == ("breakdown" in m2.phase_tendency):
+    elif ("breakout" in m1.phase_tendency) == ("breakout" in m2.phase_tendency):
         score += 0.5  # 都含 breakdown 或都不含
 
     # 2. 守恒通量方向一致性（同为正或同为负）

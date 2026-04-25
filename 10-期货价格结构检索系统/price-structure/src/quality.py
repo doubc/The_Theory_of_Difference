@@ -302,7 +302,7 @@ def _score_maturity(s: Structure) -> tuple[float, list[str]]:
     # 阶段信息
     m = s.motion
     if m:
-        if "breakdown" in m.phase_tendency:
+        if "breakout" in m.phase_tendency:
             score *= 0.7  # 正在破缺的结构质量打折
             flags.append("⚠ 正在破缺")
         elif "confirmation" in m.phase_tendency:

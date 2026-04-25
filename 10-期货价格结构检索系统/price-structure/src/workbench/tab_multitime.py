@@ -145,8 +145,8 @@ def render(ctx: dict):
         tendency = motion.phase_tendency if motion else "unknown"
         proj_warn = " · ⚠️ 高压缩" if (s.projection and s.projection.is_blind) else ""
 
-        if "breakdown" in tendency:
-            badge_cls = "badge-breakdown"
+        if "breakout" in tendency:
+            badge_cls = "badge-breakout"
         elif "confirmation" in tendency:
             badge_cls = "badge-confirmation"
         elif tendency in ("stable", "forming"):
@@ -162,7 +162,7 @@ def render(ctx: dict):
         else:
             pos = "📊 价格在 Zone 内部"
 
-        card_cls = "danger" if "breakdown" in tendency else "ok" if "confirmation" in tendency else ""
+        card_cls = "danger" if "breakout" in tendency else "ok" if "confirmation" in tendency else ""
 
         st.markdown(f"""
         <div class="structure-card {card_cls}">
