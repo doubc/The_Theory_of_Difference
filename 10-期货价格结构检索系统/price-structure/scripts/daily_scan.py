@@ -26,6 +26,7 @@ from src.retrieval.opportunity import (
     TemplateMatch, aggregate_opportunity, FEATURE_SCALES, FEATURES,
 )
 from src.workbench.daily_report import render_daily_report
+from src.relations import compute_motion
 
 MAX_DIST_THRESHOLD = 1.5
 TOP_K = 5
@@ -77,7 +78,10 @@ def _load_templates() -> list[dict]:
 
 def _get_symbols() -> list[str]:
     try:
-        engine = create_engine("mysql+pymysql://root:root@localhost/sina?charset=utf8")
+        import os
+        password = os.getenv('MYSQL_PASSWORD', '')
+        pwd_part = f":{password}" if password else ""
+        engine = create_engine(f"mysql+pymysql://root{pwd_part}@localhost/sina_futures?charset=utf8")
         tables = inspect(engine).get_table_names()
         return [t for t in tables if not t.endswith("m5") and not t.startswith("test")]
     except Exception:
@@ -120,8 +124,8 @@ def daily_scan(scan_window_years: int = 3):
 
     # 2. 扫描全市场
     import os
-    password = os.getenv('MYSQL_PASSWORD', 'root')
-    loader = MySQLLoader(host="localhost", user="root", password=password, db="sina")
+    password = os.getenv('MYSQL_PASSWORD', '')
+    loader = MySQLLoader(host="localhost", user="root", password=password, db="sina_futures")
     config = CompilerConfig(min_amplitude=0.02, min_duration=3, zone_bandwidth=0.01)
     cfg_hash = _config_hash(config)
     symbols = _get_symbols()
@@ -144,6 +148,10 @@ def daily_scan(scan_window_years: int = 3):
             structures_found += 1
 
             current_st = result.structures[-1]
+
+            # V1.6: 计算运动态（含 movement_type）
+            # compile_full 已建 motion（默认 OSCILLATION），强制重新计算真值
+            current_st.motion = compute_motion(current_st)
             current_inv = current_st.invariants or {}
             current_price = bars[-1].close
             confirmed_at = getattr(current_st, "t_end", None) or str(bars[-1].timestamp)
@@ -176,6 +184,7 @@ def daily_scan(scan_window_years: int = 3):
                 current_inv=current_inv,
                 top_matches=top_matches,
                 evidence=evidence,
+                structure=current_st,  # V1.6: 传入结构以提取 movement_type
             )
             if opp is not None:
                 opportunities.append(opp)

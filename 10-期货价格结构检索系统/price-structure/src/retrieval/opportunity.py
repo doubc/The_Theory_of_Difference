@@ -184,7 +184,8 @@ def aggregate_opportunity(
         moves = [m.up_move for m in top_matches if m.direction == "up"]
         days = [m.days_to_peak for m in top_matches if m.direction == "up" and m.days_to_peak > 0]
     elif direction == "down":
-        moves = [m.down_move for m in top_matches if m.direction == "down"]
+        # down_move 模板里存的是跌幅绝对值（正值），取负才是正确的收益方向
+        moves = [-m.down_move for m in top_matches if m.direction == "down"]
         days = [m.days_to_trough for m in top_matches if m.direction == "down" and m.days_to_trough > 0]
     else:
         moves = [max(m.up_move, m.down_move) for m in top_matches]

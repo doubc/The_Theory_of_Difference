@@ -287,13 +287,13 @@ class MySQLLoader:
     适配 sina 数据库结构: {code} (日线), {code}m5 (5分钟线)
     """
 
-    def __init__(self, host=None, user=None, password=None, db='sina'):
+    def __init__(self, host=None, user=None, password=None, db='sina_futures'):
         import os
         from sqlalchemy import create_engine
         _host = host or os.getenv('MYSQL_HOST', 'localhost')
         _user = user or os.getenv('MYSQL_USER', 'root')
         _pwd = password or os.getenv('MYSQL_PASSWORD', '')
-        if not _pwd:
+        if _pwd is None:
             raise ValueError("MySQL 密码未设置，请配置环境变量 MYSQL_PASSWORD")
         self.engine = create_engine(f'mysql+pymysql://{_user}:{_pwd}@{_host}/{db}?charset=utf8')
 
@@ -309,7 +309,7 @@ class MySQLLoader:
         # 根据频率选择表名
         table_name = f"{symbol}m5" if freq == "5m" else symbol
         
-        sql = f"SELECT `date`, `open`, `high`, `low`, `close`, `vol` FROM sina.`{table_name}`"
+        sql = f"SELECT `date`, `open`, `high`, `low`, `close`, `vol` FROM sina_futures.`{table_name}`"
         conditions = []
         params = {}
         

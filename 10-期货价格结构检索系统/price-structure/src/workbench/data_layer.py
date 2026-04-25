@@ -26,7 +26,7 @@ def get_mysql_engine():
         password = os.getenv('MYSQL_PASSWORD', '')
         user = os.getenv('MYSQL_USER', 'root')
         host = os.getenv('MYSQL_HOST', 'localhost')
-        db = os.getenv('MYSQL_DB', 'sina')
+        db = os.getenv('MYSQL_DB', 'sina_futures')
         if not password:
             return None
         engine = create_engine(f"mysql+pymysql://{user}:{password}@{host}/{db}?charset=utf8")
@@ -94,7 +94,7 @@ def load_bars(symbol: str, source: str = "auto") -> list[Bar]:
     if source in ("auto", "mysql"):
         try:
             password = os.getenv('MYSQL_PASSWORD', '')
-            loader = MySQLLoader(password=password, db="sina")
+            loader = MySQLLoader(password=password, db="sina_futures")
             bars = loader.get(symbol=symbol, freq="1d")
             if bars:
                 return bars
