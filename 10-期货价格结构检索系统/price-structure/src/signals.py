@@ -82,11 +82,11 @@ def generate_signal(
     if not bars:
         return None
 
-    # 提取辅助信息
+    # 提取辅助信息（修复：处理 ss 存在但属性为 None 的情况）
     ss = system_state
-    motion = ss.motion if ss else MotionState()
-    projection = ss.projection if ss else ProjectionAwareness()
-    stability = ss.stability if ss else StabilityVerdict()
+    motion = ss.motion if ss and ss.motion else MotionState()
+    projection = ss.projection if ss and ss.projection else ProjectionAwareness()
+    stability = ss.stability if ss and ss.stability else StabilityVerdict()
 
     # 获取质量层
     from src.quality import assess_quality
@@ -298,6 +298,20 @@ def detect_fake_breakout(
     current_vol = last_bar.volume
 
     # ═══════════════════════════════════════════════════════
+    # 模式5: FAKE_GAP (跳空回补) - 优先检查，避免被FAKE_PIN误判
+    # ═══════════════════════════════════════════════════════
+    # 条件: 跳空突破Zone，当日回补，flux反向
+    if len(bars) >= 2:
+        gap_up = prev_bar.close < upper and last_bar.open > upper
+        gap_down = prev_bar.close > lower and last_bar.open < lower
+
+        fill_up = gap_up and last_bar.close < upper
+        fill_down = gap_down and last_bar.close > lower
+
+        if (fill_up and flux < 0) or (fill_down and flux > 0):
+            return True, FakeBreakoutPattern.FAKE_GAP, 0.85
+
+    # ═══════════════════════════════════════════════════════
     # 模式1: FAKE_PIN (探针型)
     # ═══════════════════════════════════════════════════════
     # 条件: 盘中穿透Zone边界，收盘回到Zone内，flux反向
@@ -372,20 +386,6 @@ def detect_fake_breakout(
             flux_weak_now = abs(flux) < FAKE_FLUX_WEAK
             if flux_weak_now:
                 return True, FakeBreakoutPattern.FAKE_BLIND_WHIP, 0.70
-
-    # ═══════════════════════════════════════════════════════
-    # 模式5: FAKE_GAP (跳空回补)
-    # ═══════════════════════════════════════════════════════
-    # 条件: 跳空突破Zone，当日回补，flux反向
-    if len(bars) >= 2:
-        gap_up = prev_bar.close < upper and last_bar.open > upper
-        gap_down = prev_bar.close > lower and last_bar.open < lower
-
-        fill_up = gap_up and last_bar.close < upper
-        fill_down = gap_down and last_bar.close > lower
-
-        if (fill_up and flux < 0) or (fill_down and flux > 0):
-            return True, FakeBreakoutPattern.FAKE_GAP, 0.85
 
     return False, None, 0.0
 
