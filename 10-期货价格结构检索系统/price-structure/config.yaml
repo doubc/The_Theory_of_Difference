@@ -20,7 +20,7 @@ data:
   mysql:
     host: "localhost"
     port: 3306
-    database: "sina_futures"
+    database: "sina"
     user: "root"
     password: "${MYSQL_PASSWORD}"   # 必须设置环境变量，无默认值
 
