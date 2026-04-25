@@ -51,6 +51,50 @@ AGING_DAYS_THRESHOLD = 14
 
 
 # ═══════════════════════════════════════════════════════════
+# 止损/目标/盈亏比计算
+# ═══════════════════════════════════════════════════════════
+
+def _compute_risk_reward(
+    direction: str,
+    entry_price: float,
+    upper: float,
+    lower: float,
+    bandwidth: float,
+) -> tuple[float, float, float]:
+    """
+    计算止损价、目标价、盈亏比。
+
+    Returns:
+        (stop_loss_price, take_profit_price, rr_ratio)
+    """
+    if bandwidth <= 0 or entry_price <= 0:
+        return 0.0, 0.0, 0.0
+
+    if direction == "long":
+        # 止损: Zone 下沿 - 0.3×bandwidth（给一点缓冲）
+        stop_loss = lower - 0.3 * bandwidth
+        # 目标: Zone 上沿 + 1×bandwidth（突破后等幅测量）
+        take_profit = upper + bandwidth
+        risk = entry_price - stop_loss
+        reward = take_profit - entry_price
+    elif direction == "short":
+        # 止损: Zone 上沿 + 0.3×bandwidth
+        stop_loss = upper + 0.3 * bandwidth
+        # 目标: Zone 下沿 - 1×bandwidth
+        take_profit = lower - bandwidth
+        risk = stop_loss - entry_price
+        reward = entry_price - take_profit
+    else:
+        return 0.0, 0.0, 0.0
+
+    if risk <= 0:
+        return stop_loss, take_profit, 0.0
+
+    rr = reward / risk
+    return round(stop_loss, 2), round(take_profit, 2), round(rr, 2)
+
+
+# ═══════════════════════════════════════════════════════════
 # 主入口
 # ═══════════════════════════════════════════════════════════
 
@@ -144,6 +188,8 @@ def generate_signal(
         reverse_direction = "short" if price_position == "above" else "long" if price_position == "below" else "neutral"
         fake_flux_aligned = (flux > 0 and reverse_direction == "long") or (flux < 0 and reverse_direction == "short")
 
+        sl, tp, rr = _compute_risk_reward(reverse_direction, last_close, upper, lower, bandwidth)
+
         sig = Signal(
             kind=SignalKind.FAKE_BREAKOUT,
             direction=reverse_direction,
@@ -155,7 +201,10 @@ def generate_signal(
             quality_tier=quality_tier,
             is_blind=is_blind,
             days_since_formation=motion.structural_age if motion else 0,
-            stop_loss_hint=f"Zone.{'upper' if price_position == 'above' else 'lower'} {'+' if price_position == 'below' else '-'} 0.3×bandwidth",
+            stop_loss_hint=f"止损 {sl:.1f}" if sl else "",
+            stop_loss_price=sl,
+            take_profit_price=tp,
+            rr_ratio=rr,
             position_size_factor=calculate_position_factor(quality_tier, is_blind),
         )
         candidates.append(sig)
@@ -177,6 +226,8 @@ def generate_signal(
         if is_blind:
             conf *= 0.6
 
+        sl, tp, rr = _compute_risk_reward(direction, last_close, upper, lower, bandwidth)
+
         sig = Signal(
             kind=SignalKind.BREAKOUT_CONFIRM,
             direction=direction,
@@ -188,7 +239,10 @@ def generate_signal(
             quality_tier=quality_tier,
             is_blind=is_blind,
             days_since_formation=motion.structural_age if motion else 0,
-            stop_loss_hint=f"Zone.center {'-' if direction == 'long' else '+'} 0.5×bandwidth",
+            stop_loss_hint=f"止损 {sl:.1f}" if sl else "",
+            stop_loss_price=sl,
+            take_profit_price=tp,
+            rr_ratio=rr,
             position_size_factor=calculate_position_factor(quality_tier, is_blind),
         )
         candidates.append(sig)
@@ -202,6 +256,8 @@ def generate_signal(
         if is_blind:
             conf *= 0.6
 
+        sl, tp, rr = _compute_risk_reward(direction, last_close, upper, lower, bandwidth)
+
         sig = Signal(
             kind=SignalKind.PULLBACK_CONFIRM,
             direction=direction,
@@ -212,8 +268,11 @@ def generate_signal(
             quality_tier=quality_tier,
             is_blind=is_blind,
             days_since_formation=motion.structural_age if motion else 0,
-            stop_loss_hint=f"Zone.{'lower' if direction == 'long' else 'upper'}",
-            position_size_factor=calculate_position_factor(quality_tier, is_blind) * 0.9,  # 回踩仓位略低
+            stop_loss_hint=f"止损 {sl:.1f}" if sl else "",
+            stop_loss_price=sl,
+            take_profit_price=tp,
+            rr_ratio=rr,
+            position_size_factor=calculate_position_factor(quality_tier, is_blind) * 0.9,
         )
         candidates.append(sig)
 
@@ -222,6 +281,8 @@ def generate_signal(
         conf = 0.50
         if flux_aligned:
             conf += 0.15
+
+        sl, tp, rr = _compute_risk_reward(direction, last_close, upper, lower, bandwidth)
 
         sig = Signal(
             kind=SignalKind.BLIND_BREAKOUT,
@@ -233,8 +294,11 @@ def generate_signal(
             quality_tier=quality_tier,
             is_blind=True,
             days_since_formation=motion.structural_age if motion else 0,
-            stop_loss_hint="盲区极值 ± 1×ATR(14)",
-            position_size_factor=calculate_position_factor(quality_tier, True) * 0.5,  # 盲区大幅降仓
+            stop_loss_hint=f"止损 {sl:.1f} (盲区·低仓位)" if sl else "",
+            stop_loss_price=sl,
+            take_profit_price=tp,
+            rr_ratio=rr * 0.5,  # 盲区盈亏比打折
+            position_size_factor=calculate_position_factor(quality_tier, True) * 0.5,
         )
         candidates.append(sig)
 

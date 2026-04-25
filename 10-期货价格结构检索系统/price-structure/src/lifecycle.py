@@ -1,7 +1,7 @@
 """
 结构生命周期追踪 — P0-2
 
-追踪结构从 formation → confirmation → breakdown 的完整轨迹。
+追踪结构从 formation → confirmation → breakout 的完整轨迹。
 每日扫描结果 append 到本地 JSONL，构建结构的时间线。
 
 核心思想：

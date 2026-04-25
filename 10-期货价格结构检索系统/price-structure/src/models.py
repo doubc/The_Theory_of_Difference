@@ -761,7 +761,10 @@ class Signal:
     is_blind: bool = False                       # 盲区标记
     days_since_formation: int = 0                # 结构形成后天数
     # ── 风控辅助 ──
-    stop_loss_hint: str = ""                     # 止损位提示
+    stop_loss_hint: str = ""                     # 止损位文字提示
+    stop_loss_price: float = 0.0                 # 止损价（数值）
+    take_profit_price: float = 0.0               # 目标价（数值）
+    rr_ratio: float = 0.0                        # 盈亏比 (reward/risk)
     position_size_factor: float = 1.0            # 仓位系数（A=1.0, B=0.6, C=0.3, D=0）
 
     @property
@@ -815,6 +818,9 @@ class Signal:
             "is_blind": self.is_blind,
             "days_since_formation": self.days_since_formation,
             "stop_loss_hint": self.stop_loss_hint,
+            "stop_loss_price": round(self.stop_loss_price, 2),
+            "take_profit_price": round(self.take_profit_price, 2),
+            "rr_ratio": round(self.rr_ratio, 2),
             "position_size_factor": self.position_size_factor,
             "priority": self.priority,
             "display_label": self.display_label,
@@ -837,13 +843,17 @@ class Signal:
             is_blind=d.get("is_blind", False),
             days_since_formation=d.get("days_since_formation", 0),
             stop_loss_hint=d.get("stop_loss_hint", ""),
+            stop_loss_price=d.get("stop_loss_price", 0.0),
+            take_profit_price=d.get("take_profit_price", 0.0),
+            rr_ratio=d.get("rr_ratio", 0.0),
             position_size_factor=d.get("position_size_factor", 1.0),
         )
 
     def __repr__(self):
         blind_tag = " · ⚠️盲区" if self.is_blind else ""
+        rr_tag = f" · RR={self.rr_ratio:.1f}" if self.rr_ratio > 0 else ""
         return (f"Signal({self.display_label} {self.direction} "
-                f"conf={self.confidence:.0%} {self.traffic_light}{blind_tag})")
+                f"conf={self.confidence:.0%} {self.traffic_light}{rr_tag}{blind_tag})")
 
 
 # ─── 基础算子（保持向后兼容，权威定义在 relations.py）──────

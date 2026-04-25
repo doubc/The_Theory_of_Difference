@@ -25,9 +25,16 @@ _C_MODULE = None
 try:
     from src.fast import _pivots as _C_MODULE
     from src.fast import _dtw as _C_DTW
+    from src.fast import _similarity as _C_SIM
     _C_AVAILABLE = True
 except ImportError:
-    pass
+    try:
+        from src.fast import _pivots as _C_MODULE
+        from src.fast import _dtw as _C_DTW
+        _C_SIM = None
+        _C_AVAILABLE = True
+    except ImportError:
+        _C_SIM = None
 
 if not _C_AVAILABLE:
     # 尝试从同目录加载
@@ -630,3 +637,73 @@ def batch_extract_features_fast(
             out[i] = extract_features(s)
 
     return out
+
+
+# ─── 相似度 C 加速 ──────────────────────────────────────────
+
+def geometric_distance_c(v1: list[float], v2: list[float], scales: list[float]) -> float:
+    """C 加速的归一化欧氏距离"""
+    if _C_SIM is None:
+        # Python fallback
+        import math
+        return math.sqrt(sum(((a/s) - (b/s))**2 for a, b, s in zip(v1, v2, scales) if s > 1e-12))
+    import ctypes
+    n = len(v1)
+    arr1 = (ctypes.c_double * n)(*v1)
+    arr2 = (ctypes.c_double * n)(*v2)
+    sc = (ctypes.c_double * n)(*scales)
+    return _C_SIM.geometric_distance(arr1, arr2, sc, n)
+
+
+def compute_motion_c(speed_ratios: list[float], flux: float = 0.0,
+                     density_ratio: float = 0.0, dist_trend: float = 0.0) -> tuple[int, float]:
+    """
+    C 加速的运动态投票。
+    Returns: (tendency_idx, confidence)
+        tendency_idx: 0=→breakout, 1=→confirmation, 2=stable, 3=→inversion, 4=forming
+    """
+    if _C_SIM is None:
+        # Python fallback
+        n = len(speed_ratios)
+        if n < 1:
+            return 4, 0.3
+        votes = [0.0] * 5
+        if n >= 3:
+            sr_trend = speed_ratios[-1] - speed_ratios[0]
+            if sr_trend > 0.5:
+                votes[0] += 0.35 * min(sr_trend / 2.0, 1.0)
+            elif sr_trend < -0.3:
+                votes[1] += 0.35 * min(abs(sr_trend) / 1.0, 1.0)
+            else:
+                if (speed_ratios[0] > 1) != (speed_ratios[-1] > 1):
+                    votes[3] += 0.35 * 0.7
+                else:
+                    votes[2] += 0.35 * 0.5
+            if density_ratio > 1.5:
+                votes[0] += 0.25 * min(density_ratio / 3.0, 1.0)
+            elif density_ratio > 0 and density_ratio < 0.67:
+                votes[1] += 0.25 * 0.5
+            elif density_ratio > 0:
+                votes[2] += 0.25 * 0.4
+            if dist_trend > 1.0:
+                votes[0] += 0.20 * min(dist_trend / 3.0, 1.0)
+            elif dist_trend < -0.5:
+                votes[1] += 0.20 * 0.4
+            if flux > 0.3:
+                votes[0] += 0.20 * min(flux, 1.0)
+            elif flux < -0.3:
+                votes[1] += 0.20 * min(abs(flux), 1.0)
+            else:
+                votes[2] += 0.20 * 0.3
+            best = max(range(5), key=lambda i: votes[i])
+            return best, min(votes[best], 1.0)
+        return 4, 0.3
+
+    import ctypes
+    n = len(speed_ratios)
+    sr = (ctypes.c_double * n)(*speed_ratios)
+    tendency = ctypes.c_int()
+    confidence = ctypes.c_double()
+    _C_SIM.compute_motion_votes(sr, n, flux, density_ratio, dist_trend,
+                                 ctypes.byref(tendency), ctypes.byref(confidence))
+    return tendency.value, confidence.value

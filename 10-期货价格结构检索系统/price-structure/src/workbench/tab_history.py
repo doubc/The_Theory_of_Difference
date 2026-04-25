@@ -129,7 +129,7 @@ def render(ctx: dict):
                 )
                 search_motion_filter = st.multiselect(
                     "运动状态",
-                    ["🔻 破缺(→breakdown)", "✅ 确认(→confirmation)",
+                    ["🔻 破缺(→breakout)", "✅ 确认(→confirmation)",
                      "⚖️ 稳定(stable)", "🔄 形成中(forming)"],
                     default=[],
                     key="search_motion_filter",

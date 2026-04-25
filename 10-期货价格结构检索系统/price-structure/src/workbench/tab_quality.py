@@ -79,7 +79,7 @@ def render(ctx: dict):
                             tier = QualityTier(tier_val)
                             with st.expander(f"{tier.label} ({len(items)} 个)", expanded=(tier_val == "A")):
                                 for s, qa in items[:8]:
-                                    breakdown = qa.breakdown
+                                    breakdown = qa.dimension_scores
                                     dims = list(breakdown.keys())
                                     vals = list(breakdown.values())
 
@@ -189,7 +189,7 @@ def render(ctx: dict):
 
     with sub_tabs[2]:
         st.markdown("##### 📈 结构生命周期追踪")
-        st.caption("追踪结构从 formation → confirmation → breakdown 的完整轨迹")
+        st.caption("追踪结构从 formation → confirmation → breakout 的完整轨迹")
 
         col_sym, col_days = st.columns([2, 1])
         with col_sym:

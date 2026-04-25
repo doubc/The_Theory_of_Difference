@@ -590,15 +590,15 @@ def qualitative_judgment(
 
     # ── 3. 运动态判断 ──
     if "breakout" in tendency:
-        # flux 方向决定是上行趋势破坏还是下行趋势破坏
+        # flux 方向决定是真突破还是假突破
         if flux > 0:
             stage = "趋势上行"
             icon = "📈"
-            detail = f"差异释放中，上行趋势延续"
+            detail = f"价格突破zone，差异释放中"
         else:
-            stage = "趋势破坏"
+            stage = "突破失败"
             icon = "📉"
-            detail = f"结构正在瓦解，通量{flux:+.2f}"
+            detail = f"突破后通量反向，结构可能瓦解"
         return {"stage": stage, "icon": icon, "detail": detail, "confidence": conf}
 
     if "confirmation" in tendency:

@@ -27,7 +27,7 @@
 
     # 单个结构评估
     qa = assess_quality(structure, system_state)
-    print(qa.tier, qa.score, qa.breakdown)
+    print(qa.tier, qa.score, qa.dimension_scores)
 
     # 批量分层
     tiers = stratify_structures(structures, system_states)
@@ -78,13 +78,13 @@ class QualityAssessment:
     """单个结构的质量评估结果"""
     tier: QualityTier
     score: float                # 综合质量分 [0, 1]
-    breakdown: dict[str, float] # 各维度得分
+    dimension_scores: dict[str, float] # 各维度得分
     flags: list[str]            # 质量标记（问题/亮点）
     recommendations: list[str]  # 改进建议
 
     def summary(self) -> str:
         parts = [f"{self.tier.label} ({self.score:.0%})"]
-        for dim, val in self.breakdown.items():
+        for dim, val in self.dimension_scores.items():
             bar = "█" * int(val * 10) + "░" * (10 - int(val * 10))
             parts.append(f"  {dim}: {bar} {val:.2f}")
         if self.flags:
@@ -378,27 +378,27 @@ def assess_quality(
     """
     all_flags = []
     all_recommendations = []
-    breakdown = {}
+    dimension_scores = {}
 
     # 各维度评分
     c_score, c_flags = _score_completeness(s)
-    breakdown["完整性"] = c_score
+    dimension_scores["完整性"] = c_score
     all_flags.extend(c_flags)
 
     m_score, m_flags = _score_motion_credibility(s, ss)
-    breakdown["运动可信"] = m_score
+    dimension_scores["运动可信"] = m_score
     all_flags.extend(m_flags)
 
     con_score, con_flags = _score_conservation(s, ss)
-    breakdown["守恒一致"] = con_score
+    dimension_scores["守恒一致"] = con_score
     all_flags.extend(con_flags)
 
     t_score, t_flags = _score_maturity(s)
-    breakdown["时间成熟"] = t_score
+    dimension_scores["时间成熟"] = t_score
     all_flags.extend(t_flags)
 
     r_score, r_flags = _score_traceability(s)
-    breakdown["后验可追溯"] = r_score
+    dimension_scores["后验可追溯"] = r_score
     all_flags.extend(r_flags)
 
     # 加权综合分
@@ -435,7 +435,7 @@ def assess_quality(
     return QualityAssessment(
         tier=tier,
         score=total,
-        breakdown=breakdown,
+        dimension_scores=dimension_scores,
         flags=[f for f in all_flags if f.startswith("⚠") or f.startswith("🔴")],
         recommendations=all_recommendations,
     )
@@ -541,11 +541,11 @@ def quality_summary_for_display(s: Structure, ss: SystemState | None = None) -> 
         "tier": qa.tier.value,
         "tier_label": qa.tier.label,
         "quality_score": qa.score,
-        "completeness": qa.breakdown.get("完整性", 0),
-        "motion_cred": qa.breakdown.get("运动可信", 0),
-        "conservation": qa.breakdown.get("守恒一致", 0),
-        "maturity": qa.breakdown.get("时间成熟", 0),
-        "traceability": qa.breakdown.get("后验可追溯", 0),
+        "completeness": qa.dimension_scores.get("完整性", 0),
+        "motion_cred": qa.dimension_scores.get("运动可信", 0),
+        "conservation": qa.dimension_scores.get("守恒一致", 0),
+        "maturity": qa.dimension_scores.get("时间成熟", 0),
+        "traceability": qa.dimension_scores.get("后验可追溯", 0),
         "flags": "; ".join(qa.flags[:3]),
         "recommendations": "; ".join(qa.recommendations[:2]),
         "retrieval_weight": qa.tier.retrieval_weight,

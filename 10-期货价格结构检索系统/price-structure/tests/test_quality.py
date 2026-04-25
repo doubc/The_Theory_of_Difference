@@ -40,16 +40,16 @@ class TestAssessQuality:
         assert isinstance(qa, QualityAssessment)
         assert qa.score > 0
 
-    def test_breakdown_has_5_dims(self, compiled):
-        """breakdown 包含 5 个维度"""
+    def test_dimension_scores_has_5_dims(self, compiled):
+        """dimension_scores 包含 5 个维度"""
         s = compiled.structures[0]
         qa = assess_quality(s)
-        assert len(qa.breakdown) == 5
-        assert "完整性" in qa.breakdown
-        assert "运动可信" in qa.breakdown
-        assert "守恒一致" in qa.breakdown
-        assert "时间成熟" in qa.breakdown
-        assert "后验可追溯" in qa.breakdown
+        assert len(qa.dimension_scores) == 5
+        assert "完整性" in qa.dimension_scores
+        assert "运动可信" in qa.dimension_scores
+        assert "守恒一致" in qa.dimension_scores
+        assert "时间成熟" in qa.dimension_scores
+        assert "后验可追溯" in qa.dimension_scores
 
     def test_tier_thresholds(self, compiled):
         """分层阈值：A>=0.75, B>=0.50, C>=0.25, D<0.25"""
