@@ -18,7 +18,7 @@ from __future__ import annotations
 import math
 from typing import Sequence
 from src.models import (
-    Point, Segment, Zone, Cycle, Structure, ContrastType,
+    Point, Segment, Structure, ContrastType,
     MotionState, Phase, ProjectionAwareness,
     StabilityVerdict, SystemState,
     # 复用 models.py 中定义的基础算子

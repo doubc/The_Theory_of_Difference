@@ -20,11 +20,11 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from collections import defaultdict
 
 from src.models import Structure, SystemState
-from src.quality import assess_quality, stratify_structures, QualityTier
+from src.quality import assess_quality
 
 
 # ─── 板块分类 ─────────────────────────────────────────────

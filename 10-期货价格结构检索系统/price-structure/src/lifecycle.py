@@ -41,7 +41,7 @@ from __future__ import annotations
 import json
 from datetime import datetime, date
 from pathlib import Path
-from dataclasses import dataclass, field, asdict
+from dataclasses import dataclass, asdict
 
 from src.models import Structure, SystemState
 from src.quality import assess_quality

@@ -18,7 +18,7 @@ V1.6 P2 升级（2026-04-24）：
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from src.models import Structure, Zone, ZoneSource
 from src.sample.store import Sample, SampleStore

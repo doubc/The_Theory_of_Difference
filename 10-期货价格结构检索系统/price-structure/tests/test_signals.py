@@ -288,7 +288,6 @@ def test_breakout_score_calculation():
     else:
         print(f"  [WARN] Score >= {BREAKOUT_WEAK}, unexpectedly triggers breakout signal")
     
-    return True
 
 
 # ============================================================
@@ -467,7 +466,6 @@ def test_fake_breakout_patterns():
     else:
         print(f"  [WARN] FAKE_GAP pattern not identified")
     
-    return True
 
 
 # ============================================================
@@ -507,7 +505,7 @@ def test_position_factor_calculation():
     result = calculate_position_factor("X", True)
     print(f"  Unknown tier 'X' blind: {result} (expected default 0.15)")
     
-    return all_passed
+    assert all_passed, "Some position factor tests failed"
 
 
 # ============================================================
@@ -615,7 +613,6 @@ def test_signal_priority():
         status = "[PASS]" if actual_priority == expected_priority else "[FAIL]"
         print(f"  {status} {kind.value}: priority={actual_priority}, expected={expected_priority}")
     
-    return True
 
 
 # ============================================================
@@ -726,7 +723,6 @@ def test_boundary_values():
     if is_fake:
         print(f"  [PASS] Penetration > {threshold} correctly triggers fake breakout")
     
-    return True
 
 
 # ============================================================
@@ -834,7 +830,6 @@ def test_comprehensive_scenarios():
         if signal.kind == SignalKind.BLIND_BREAKOUT:
             print(f"  [PASS] Blind zone generates BLIND_BREAKOUT observation signal")
     
-    return True
 
 
 # ============================================================
@@ -911,7 +906,7 @@ def run_all_tests():
     
     print(f"\n  Total: {passed}/{total} passed")
     
-    return passed == total
+    assert passed == total, f"Only {passed}/{total} comprehensive tests passed"
 
 
 if __name__ == "__main__":

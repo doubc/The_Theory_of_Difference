@@ -186,7 +186,7 @@ def test_empty_bars():
     
     structure = create_structure()
     result = generate_signal(structure, bars=[], system_state=None)
-    return result is None
+    assert result is None, f"Expected None, got {result}"
 
 
 def test_bars_less_than_5():
@@ -201,7 +201,6 @@ def test_bars_less_than_5():
     bars = [create_bar(close=100+i, idx=i) for i in range(3)]
     result = generate_signal(structure, bars=bars, system_state=None)
     # 应该能正常执行，只是假突破检测不会触发
-    return True  # 只要没崩溃就算通过
 
 
 def test_bars_less_than_20():
@@ -215,7 +214,6 @@ def test_bars_less_than_20():
     structure = create_structure()
     bars = [create_bar(close=100+i, volume=1000+i*100, idx=i) for i in range(10)]
     result = generate_signal(structure, bars=bars, system_state=None)
-    return True
 
 
 def test_zero_bandwidth():
@@ -234,7 +232,7 @@ def test_zero_bandwidth():
     score, note = score_breakout_confirmation(structure, bars, None)
     is_pullback, pullback_conf, pullback_note = detect_pullback_confirmation(structure, bars, None)
     
-    return not is_fake and score == 0.0 and not is_pullback
+    assert not is_fake and score == 0.0 and not is_pullback, f"Unexpected: is_fake={is_fake}, score={score}, is_pullback={is_pullback}"
 
 
 def test_none_system_state():
@@ -248,7 +246,6 @@ def test_none_system_state():
     structure = create_structure()
     bars = [create_bar(close=105, idx=i) for i in range(25)]  # 突破Zone
     result = generate_signal(structure, bars=bars, system_state=None)
-    return True  # 只要没崩溃就算通过
 
 
 def test_none_motion_in_system_state():
@@ -264,7 +261,6 @@ def test_none_motion_in_system_state():
     ss.motion = None
     bars = [create_bar(close=105, idx=i) for i in range(25)]
     result = generate_signal(structure, bars=bars, system_state=ss)
-    return True
 
 
 def test_none_projection_in_system_state():
@@ -280,7 +276,6 @@ def test_none_projection_in_system_state():
     ss.projection = None
     bars = [create_bar(close=105, idx=i) for i in range(25)]
     result = generate_signal(structure, bars=bars, system_state=ss)
-    return True
 
 
 def test_none_stability_in_system_state():
@@ -296,7 +291,6 @@ def test_none_stability_in_system_state():
     ss.stability = None
     bars = [create_bar(close=105, idx=i) for i in range(25)]
     result = generate_signal(structure, bars=bars, system_state=ss)
-    return True
 
 
 def test_negative_volume():
@@ -310,7 +304,6 @@ def test_negative_volume():
     structure = create_structure()
     bars = [create_bar(close=105, volume=-1000, idx=i) for i in range(25)]
     result = generate_signal(structure, bars=bars, system_state=None)
-    return True
 
 
 def test_extreme_price():
@@ -324,7 +317,6 @@ def test_extreme_price():
     structure = create_structure(zone_center=1e9, bandwidth=1e8)
     bars = [create_bar(close=1.1e9, volume=1000, idx=i) for i in range(25)]
     result = generate_signal(structure, bars=bars, system_state=None)
-    return True
 
 
 def test_nan_price():
@@ -339,10 +331,9 @@ def test_nan_price():
     bars = [create_bar(close=float('nan'), idx=i) for i in range(25)]
     try:
         result = generate_signal(structure, bars=bars, system_state=None)
-        return True
     except Exception as e:
         # 只要不是段错误级别的崩溃，都算合理处理
-        return isinstance(e, (ValueError, TypeError, ArithmeticError))
+        assert isinstance(e, (ValueError, TypeError, ArithmeticError)), f"Unexpected exception type: {type(e).__name__}: {e}"
 
 
 def test_inf_price():
@@ -357,9 +348,8 @@ def test_inf_price():
     bars = [create_bar(close=float('inf'), idx=i) for i in range(25)]
     try:
         result = generate_signal(structure, bars=bars, system_state=None)
-        return True
     except Exception as e:
-        return isinstance(e, (ValueError, TypeError, ArithmeticError))
+        assert isinstance(e, (ValueError, TypeError, ArithmeticError)), f"Unexpected exception: {e}"
 
 
 def test_quality_tier_d():
@@ -386,7 +376,7 @@ def test_quality_tier_d():
     print(f"    [质量评估] tier={qa.tier.value}, score={qa.score:.2f}")
     
     # 如果score < 0.25应该是D层，但即使不是D层，也要检查是否返回None
-    return result is None
+    assert result is None, f"Expected None, got {result}"
 
 
 def test_zero_volume():
@@ -400,7 +390,6 @@ def test_zero_volume():
     structure = create_structure()
     bars = [create_bar(close=105, volume=0, idx=i) for i in range(25)]
     result = generate_signal(structure, bars=bars, system_state=None)
-    return True
 
 
 def test_single_bar():
@@ -414,7 +403,6 @@ def test_single_bar():
     structure = create_structure()
     bars = [create_bar(close=105, idx=0)]
     result = generate_signal(structure, bars=bars, system_state=None)
-    return True
 
 
 def test_none_zone():
@@ -431,10 +419,9 @@ def test_none_zone():
     
     try:
         result = generate_signal(structure, bars=bars, system_state=None)
-        return True
     except AttributeError as e:
         # 访问None.zone属性会抛出AttributeError，这是预期的
-        return True
+        pass
 
 
 def test_extreme_negative_flux():
@@ -449,7 +436,6 @@ def test_extreme_negative_flux():
     ss = create_system_state(flux=-999.0)
     bars = [create_bar(close=105, idx=i) for i in range(25)]
     result = generate_signal(structure, bars=bars, system_state=ss)
-    return True
 
 
 def test_extreme_positive_flux():
@@ -464,7 +450,6 @@ def test_extreme_positive_flux():
     ss = create_system_state(flux=999.0)
     bars = [create_bar(close=105, idx=i) for i in range(25)]
     result = generate_signal(structure, bars=bars, system_state=ss)
-    return True
 
 
 def test_very_old_structure():
@@ -483,7 +468,6 @@ def test_very_old_structure():
     # 应该返回结构老化信号
     if result:
         print(f"    [信号类型] {result.kind.value}, conf={result.confidence:.2f}")
-    return True
 
 
 def test_blind_projection():
@@ -501,7 +485,6 @@ def test_blind_projection():
     
     if result:
         print(f"    [信号类型] {result.kind.value}, is_blind={result.is_blind}")
-    return True
 
 
 def test_unverified_stability():
@@ -519,7 +502,6 @@ def test_unverified_stability():
     
     if result:
         print(f"    [信号置信度] {result.confidence:.2f}, stability_ok={result.stability_ok}")
-    return True
 
 
 def test_calculate_position_factor_d():
@@ -531,7 +513,7 @@ def test_calculate_position_factor_d():
     )
     
     factor = calculate_position_factor("D", is_blind=False)
-    return factor == 0.0
+    assert factor == 0.0, f"Expected 0.0, got {factor}"
 
 
 def test_calculate_position_factor_blind():
@@ -544,7 +526,7 @@ def test_calculate_position_factor_blind():
     
     factor_normal = calculate_position_factor("A", is_blind=False)
     factor_blind = calculate_position_factor("A", is_blind=True)
-    return factor_normal == 1.0 and factor_blind == 0.5
+    assert factor_normal == 1.0 and factor_blind == 0.5, f"Expected (1.0, 0.5), got ({factor_normal}, {factor_blind})"
 
 
 def test_detect_aging_no_motion():
@@ -557,7 +539,7 @@ def test_detect_aging_no_motion():
     
     structure = create_structure()
     is_aging, conf, note = detect_structure_aging(structure, None)
-    return not is_aging and conf == 0.0 and note == ""
+    assert not is_aging and conf == 0.0 and note == "", f"Unexpected: is_aging={is_aging}, conf={conf}, note={note}"
 
 
 def test_pullback_insufficient_bars():
@@ -571,7 +553,7 @@ def test_pullback_insufficient_bars():
     structure = create_structure()
     bars = [create_bar(close=105, idx=i) for i in range(5)]
     is_pullback, conf, note = detect_pullback_confirmation(structure, bars, None)
-    return not is_pullback and "数据不足" in note
+    assert not is_pullback and "数据不足" in note, f"Unexpected: is_pullback={is_pullback}, note={note}"
 
 
 # ═══════════════════════════════════════════════════════════

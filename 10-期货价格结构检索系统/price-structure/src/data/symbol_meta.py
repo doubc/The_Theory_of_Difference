@@ -1,3 +1,13 @@
+"""
+品种元数据管理
+
+从 symbol_meta.yaml 加载品种信息（名称、交易所、合约类型等），
+提供按品种查询元数据的接口。
+
+用法：
+    meta = get_symbol_meta("cu0")
+    print(meta["name"])  # "铜"
+"""
 from __future__ import annotations
 import os
 import yaml

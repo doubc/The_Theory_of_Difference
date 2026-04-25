@@ -257,6 +257,7 @@ def generate_signal(
         candidates.append(sig)
 
     # 返回最高优先级的信号
+    # 返回最高优先级的信号
     if candidates:
         return min(candidates, key=lambda s: s.priority)
 
