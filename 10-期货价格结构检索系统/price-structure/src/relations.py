@@ -234,15 +234,21 @@ def check_conservation(
     price_compressed = False
 
     # 1a. Zone 带宽压缩
+    # v3.2: 与 compute_projection 阈值对齐 (0.8%/1.5%/3%)
     bw = s.zone.relative_bandwidth
-    if bw < 0.01:
+    if bw < 0.008:        # 0.8% → 极窄
         price_compressed = True
         result["channel_scores"]["zone_bandwidth"] = -1.0
         flux_signals.append(-0.5)
         result["notes"].append(f"Zone 相对带宽极窄 ({bw:.4f})，价格差异被压缩")
-    elif bw < 0.02:
-        result["channel_scores"]["zone_bandwidth"] = -0.3
-        flux_signals.append(-0.2)
+    elif bw < 0.015:     # 1.5% → 窄
+        price_compressed = True
+        result["channel_scores"]["zone_bandwidth"] = -0.5
+        flux_signals.append(-0.3)
+        result["notes"].append(f"Zone 相对带宽窄 ({bw:.4f})，价格差异被压缩")
+    elif bw < 0.03:      # 3% → 轻度
+        result["channel_scores"]["zone_bandwidth"] = -0.2
+        flux_signals.append(-0.1)
     else:
         result["channel_scores"]["zone_bandwidth"] = 0.0
 
@@ -485,22 +491,22 @@ def compute_motion(s: Structure) -> MotionState:
         motion.stable_distance = 1.0  # 未识别到稳态 = 距离最远
 
     # ── 4. 守恒通量 ──
-    if n >= 2:
-        first_half_srs = [c.speed_ratio for c in s.cycles[:n // 2]]
-        second_half_srs = [c.speed_ratio for c in s.cycles[n // 2:]]
-        avg_first = sum(first_half_srs) / len(first_half_srs)
-        avg_second = sum(second_half_srs) / len(second_half_srs)
+    # v3.2: 复用 check_conservation 的 flux_score，避免重复计算导致不一致
+    conservation = s.invariants.get("conservation")
+    if conservation is None:
+        conservation = check_conservation(s)
+    flux_score = conservation.get("flux_score", 0.0)
 
-        # 正通量 = 速度比上升 = 差异在释放
-        # 负通量 = 速度比下降 = 差异在压缩
-        motion.conservation_flux = avg_second - avg_first
+    # flux_score 已综合多信号（带宽压缩+速度比变化+振幅衰减）
+    # 正通量 = 差异在释放，负通量 = 差异在压缩
+    motion.conservation_flux = flux_score
 
-        if motion.conservation_flux > 0.3:
-            motion.flux_detail = f"差异释放中 (sr {avg_first:.2f}→{avg_second:.2f})"
-        elif motion.conservation_flux < -0.3:
-            motion.flux_detail = f"差异压缩中 (sr {avg_first:.2f}→{avg_second:.2f})"
-        else:
-            motion.flux_detail = "差异平衡"
+    if motion.conservation_flux > 0.3:
+        motion.flux_detail = f"差异释放中 (flux={flux_score:+.2f})"
+    elif motion.conservation_flux < -0.3:
+        motion.flux_detail = f"差异压缩中 (flux={flux_score:+.2f})"
+    else:
+        motion.flux_detail = "差异平衡"
 
     return motion
 
@@ -517,12 +523,14 @@ def compute_projection(s: Structure, bars: list | None = None) -> ProjectionAwar
         return proj
 
     # ── 1. 压缩度 ──
+    # v3.2: 放宽阈值，适配期货数据特征
+    # 原阈值过于严格（<0.5%才触发高压缩），期货品种很少达到
     bw = s.zone.relative_bandwidth
-    if bw < 0.005:
+    if bw < 0.008:      # 0.8% → 高压缩
         proj.compression_level = 0.9
-    elif bw < 0.01:
+    elif bw < 0.015:    # 1.5% → 中等压缩
         proj.compression_level = 0.7
-    elif bw < 0.02:
+    elif bw < 0.03:     # 3% → 轻度压缩
         proj.compression_level = 0.4
     else:
         proj.compression_level = 0.1
@@ -814,6 +822,17 @@ def build_system_state(
     V1.6 D9.1: 系统态构建
     System = Structure × Motion
     顶层封装函数，将所有分散的计算统一为一个 SystemState。
+
+    ⚠️ 副作用：此函数会原地修改 Structure 对象的以下字段：
+      - s.motion (如果为 None)
+      - s.projection (如果为 None)
+      - s.invariants["conservation"] (如果为 None)
+      - s.liquidity_stress
+      - s.fear_index
+      - s.time_compression
+      - s.stability_verdict
+    这是设计选择：Structure 作为数据+状态的容器，
+    build_system_state 确保其运动态字段被填充。
     """
     # 确保 motion / projection / conservation 已计算
     if s.motion is None:

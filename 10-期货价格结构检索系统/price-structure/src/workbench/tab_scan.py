@@ -91,7 +91,8 @@ def render(ctx: dict):
 
                 m = s.motion
                 p = s.projection
-                ss = cr.system_states[idx_s] if idx_s < len(cr.system_states) else None
+                # v3.2: 修复索引错位 — 使用结构对象查找对应的 SystemState
+                ss = cr.get_system_state_for(s)
                 qa = assess_quality(s, ss)
                 score_100 = round(qa.score * 100, 1)
 
@@ -129,6 +130,10 @@ def render(ctx: dict):
                 days_since_end = (last_ts - s.t_end).days if s.t_end else recency_cutoff_days
                 recency = max(0, 1.0 - days_since_end / recency_cutoff_days)
 
+                # v4.0: 生成交易信号
+                from src.signals import generate_signal
+                signal = generate_signal(s, bars_data, ss, quality_tier_override=qa.tier.value)
+
                 results.append({
                     "symbol": sym,
                     "symbol_name": symbol_name(sym),
@@ -150,6 +155,7 @@ def render(ctx: dict):
                     "quality_flags": qa.flags[:3],
                     "recency": recency,
                     "days_since_end": days_since_end,
+                    "signal": signal.to_dict() if signal else None,
                 })
 
         # v3.3: 品种去重 — 每个合约代码只保留得分最高的结构
@@ -276,6 +282,30 @@ def render(ctx: dict):
                     else:
                         fresh_tag = '<span style="color:#999">📋 仅作参考</span>'
 
+                    # v4.0: 交易信号显示
+                    signal_html = ""
+                    sig = r.get("signal")
+                    if sig:
+                        sig_conf = sig.get("confidence", 0)
+                        sig_kind = sig.get("kind", "")
+                        sig_dir = sig.get("display_direction", "")
+                        sig_label = sig.get("display_label", "")
+                        sig_flux = sig.get("flux_aligned", False)
+                        sig_stable = sig.get("stability_ok", False)
+
+                        # 信号颜色: 高置信绿/中置信黄/低置信灰
+                        if sig_conf >= 0.80 and sig_stable and sig_flux:
+                            sig_color = "#4caf50"  # 绿
+                        elif sig_conf >= 0.55 and sig_stable:
+                            sig_color = "#ff9800"  # 黄
+                        else:
+                            sig_color = "#999"  # 灰
+
+                        # 信号图标
+                        sig_icon = "🚨" if sig_kind == "fake_breakout" else "✅" if sig_kind == "breakout_confirm" else "📍" if sig_kind == "pullback_confirm" else "⚠️" if sig_kind == "structure_expired" else "👁️"
+
+                        signal_html = f'<div style="margin-top:6px"><span style="color:{sig_color};font-weight:600">{sig_icon} {sig_label} {sig_dir} (置信{sig_conf:.0%})</span></div>'
+
                     st.markdown(f"""
                     <div class="structure-card {card_cls}">
                         <b>#{i+1}</b> {dir_icon}
@@ -286,6 +316,7 @@ def render(ctx: dict):
                         · <b>质量 {r.get('score', 0):.0f}分</b>
                         · <span style="color:{risk_color};font-weight:700">⚖️ {r.get('risk_level', '低')}关注度</span>
                         · {fresh_tag}
+                        {signal_html}
                         <div class="meta-text">{price_pos} · 现价 {r.get('last_price', 0):.1f}</div>
                         <div class="narrative-text">{r.get('narrative', '')}</div>
                     </div>

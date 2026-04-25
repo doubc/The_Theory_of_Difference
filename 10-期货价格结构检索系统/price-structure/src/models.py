@@ -348,8 +348,12 @@ class ProjectionAwareness:
 
     @property
     def is_blind(self) -> bool:
-        """高压缩度 = 系统可能在看假象"""
-        return self.compression_level > 0.7
+        """高压缩度 = 系统可能在看假象
+        
+        v3.2: 阈值从 0.7 降至 0.5，适配期货数据特征
+        期货品种波动较大，原阈值 0.7 导致盲区检测失效
+        """
+        return self.compression_level > 0.5
 
     def to_dict(self) -> dict:
         return {
@@ -705,6 +709,141 @@ class Bundle:
 
     def __repr__(self):
         return f"Bundle({len(self.structures)} structures)"
+
+
+# ─── 交易信号层 ──────────────────────────────────────────
+
+class SignalKind(Enum):
+    """信号类型 — 来自多视角交集分析的5种信号"""
+    BREAKOUT_CONFIRM = "breakout_confirm"    # Zone突破确认
+    FAKE_BREAKOUT = "fake_breakout"          # 假突破反向信号
+    PULLBACK_CONFIRM = "pullback_confirm"    # 回踩确认入场（TA专属）
+    STRUCTURE_EXPIRED = "structure_expired"   # 结构老化失效
+    BLIND_BREAKOUT = "blind_breakout"         # 盲区突破观察
+
+
+class FakeBreakoutPattern(Enum):
+    """假突破5种模式 — 四视角完全一致的判定逻辑"""
+    FAKE_PIN = "fake_pin"                      # 探针型：盘中大幅穿透但收盘回到Zone内
+    FAKE_DSPIKE = "fake_dspike"                # 单K极端：单根K线极端价格+弱通量
+    FAKE_VOLDIV = "fake_voldiv"                # 量能背离：价格突破但量能萎缩
+    FAKE_BLIND_WHIP = "fake_blind_whip"         # 盲区抽鞭：盲区快速突破但无后续
+    FAKE_GAP = "fake_gap"                      # 跳空回补：跳空突破Zone但缺口当日回补
+
+
+@dataclass
+class Signal:
+    """
+    交易信号 — 轻量级信号对象
+
+    来自4视角交集分析（Quant/TA/Risk/MM），核心设计原则：
+    1. conservation_flux 必须参与所有信号过滤（共识3）
+    2. stability_verdict 红灯覆盖方向性判断（共识4）
+    3. 假突破判定关键 = flux方向与价格突破方向相反（共识2）
+    4. 信号优先级：假突破反向 > 突破确认 > 回踩确认 > 结构老化
+
+    用法：
+        from src.signals import generate_signal
+        signal = generate_signal(structure, bars=bars, system_state=ss)
+        if signal:
+            print(f"{signal.kind.value} {signal.direction} conf={signal.confidence:.0%}")
+    """
+    kind: SignalKind                             # 信号类型
+    direction: str                               # 'long' | 'short' | 'neutral'
+    confidence: float                            # 置信度 [0,1]，基于质量层+评分
+    flux_aligned: bool                           # conservation_flux是否与信号方向一致
+    stability_ok: bool                           # stability_verdict != 'red'
+    entry_note: str                              # 入场说明（自然语言）
+    # ── 扩展字段 ──
+    breakout_score: float = 0.0                  # 5维突破评分（仅突破/假突破时有效）
+    fake_pattern: FakeBreakoutPattern | None = None  # 假突破模式（仅假突破时有效）
+    quality_tier: str = ""                       # 产生信号时的质量层
+    is_blind: bool = False                       # 盲区标记
+    days_since_formation: int = 0                # 结构形成后天数
+    # ── 风控辅助 ──
+    stop_loss_hint: str = ""                     # 止损位提示
+    position_size_factor: float = 1.0            # 仓位系数（A=1.0, B=0.6, C=0.3, D=0）
+
+    @property
+    def priority(self) -> int:
+        """信号优先级（数字越小优先级越高）"""
+        return {
+            SignalKind.FAKE_BREAKOUT: 1,
+            SignalKind.BREAKOUT_CONFIRM: 2,
+            SignalKind.PULLBACK_CONFIRM: 3,
+            SignalKind.BLIND_BREAKOUT: 4,
+            SignalKind.STRUCTURE_EXPIRED: 5,
+        }.get(self.kind, 99)
+
+    @property
+    def display_label(self) -> str:
+        """人可读的信号标签"""
+        labels = {
+            SignalKind.BREAKOUT_CONFIRM: "突破确认",
+            SignalKind.FAKE_BREAKOUT: "假突破·反向",
+            SignalKind.PULLBACK_CONFIRM: "回踩确认",
+            SignalKind.STRUCTURE_EXPIRED: "结构老化",
+            SignalKind.BLIND_BREAKOUT: "盲区突破·观察",
+        }
+        return labels.get(self.kind, self.kind.value)
+
+    @property
+    def display_direction(self) -> str:
+        """人可读的方向"""
+        return {"long": "📈做多", "short": "📉做空", "neutral": "➡️观望"}.get(self.direction, self.direction)
+
+    @property
+    def traffic_light(self) -> str:
+        """信号置信度红绿灯"""
+        if self.confidence >= 0.8 and self.stability_ok and self.flux_aligned:
+            return "🟢"
+        elif self.confidence >= 0.55 and self.stability_ok:
+            return "🟡"
+        return "🔴"
+
+    def to_dict(self) -> dict:
+        return {
+            "kind": self.kind.value,
+            "direction": self.direction,
+            "confidence": round(self.confidence, 3),
+            "flux_aligned": self.flux_aligned,
+            "stability_ok": self.stability_ok,
+            "entry_note": self.entry_note,
+            "breakout_score": round(self.breakout_score, 3),
+            "fake_pattern": self.fake_pattern.value if self.fake_pattern else None,
+            "quality_tier": self.quality_tier,
+            "is_blind": self.is_blind,
+            "days_since_formation": self.days_since_formation,
+            "stop_loss_hint": self.stop_loss_hint,
+            "position_size_factor": self.position_size_factor,
+            "priority": self.priority,
+            "display_label": self.display_label,
+            "display_direction": self.display_direction,
+            "traffic_light": self.traffic_light,
+        }
+
+    @classmethod
+    def from_dict(cls, d: dict) -> Signal:
+        return cls(
+            kind=SignalKind(d["kind"]),
+            direction=d["direction"],
+            confidence=d["confidence"],
+            flux_aligned=d["flux_aligned"],
+            stability_ok=d["stability_ok"],
+            entry_note=d["entry_note"],
+            breakout_score=d.get("breakout_score", 0.0),
+            fake_pattern=FakeBreakoutPattern(d["fake_pattern"]) if d.get("fake_pattern") else None,
+            quality_tier=d.get("quality_tier", ""),
+            is_blind=d.get("is_blind", False),
+            days_since_formation=d.get("days_since_formation", 0),
+            stop_loss_hint=d.get("stop_loss_hint", ""),
+            position_size_factor=d.get("position_size_factor", 1.0),
+        )
+
+    def __repr__(self):
+        blind_tag = " · ⚠️盲区" if self.is_blind else ""
+        return (f"Signal({self.display_label} {self.direction} "
+                f"conf={self.confidence:.0%} {self.traffic_light}{blind_tag})")
 
 
 # ─── 基础算子（保持向后兼容，权威定义在 relations.py）──────

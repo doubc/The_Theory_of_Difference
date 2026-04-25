@@ -266,7 +266,7 @@ class LifecycleTracker:
                 speed_ratio=s.avg_speed_ratio,
                 direction=direction,
                 is_blind=s.projection.is_blind if s.projection else False,
-                stability=ss.stability.surface if ss and ss.stability else "unknown",
+                stability=ss.stability.surface if ss and ss.stability else "unstable",
                 lifecycle_id=lifecycle_id,
             )
             records.append(record)

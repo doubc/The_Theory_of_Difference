@@ -16,7 +16,6 @@
 from __future__ import annotations
 
 import statistics
-from dataclasses import dataclass
 from typing import List, Optional, Tuple
 
 from src.data.loader import Bar
@@ -59,6 +58,7 @@ def generate_signal(
     structure: Structure,
     bars: List[Bar],
     system_state: Optional[SystemState] = None,
+    quality_tier_override: Optional[str] = None,
 ) -> Optional[Signal]:
     """
     为给定结构生成交易信号
@@ -75,6 +75,7 @@ def generate_signal(
         structure: 价格结构
         bars: K线序列（至少包含最近20根）
         system_state: 系统状态（可选，用于获取motion/projection等）
+        quality_tier_override: 外部传入的质量层（避免重复计算，优先使用）
 
     Returns:
         Signal对象或None（无有效信号）
@@ -88,10 +89,13 @@ def generate_signal(
     projection = ss.projection if ss and ss.projection else ProjectionAwareness()
     stability = ss.stability if ss and ss.stability else StabilityVerdict()
 
-    # 获取质量层
-    from src.quality import assess_quality
-    qa = assess_quality(structure)
-    quality_tier = qa.tier.value
+    # 获取质量层（v3.2: 优先使用外部传入，避免与 tab_scan.py 重复计算导致不一致）
+    if quality_tier_override:
+        quality_tier = quality_tier_override
+    else:
+        from src.quality import assess_quality
+        qa = assess_quality(structure, ss)
+        quality_tier = qa.tier.value
 
     # 前置过滤：质量层D不生成信号
     if quality_tier == "D":
@@ -121,7 +125,10 @@ def generate_signal(
     flux_aligned = (flux > 0 and direction == "long") or (flux < 0 and direction == "short")
 
     # 检查stability_verdict
-    stability_ok = stability.surface not in ["ILLUSION", "UNSTABLE"]
+    # v3.2 修复: StabilityVerdict.surface 只有 "stable"/"unstable" 两个值
+    # 红灯 = unstable 或 stable 但未验证(黄灯)
+    # 稳定且已验证 = 绿灯，才认为 stability_ok
+    stability_ok = stability.surface == "stable" and stability.verified
     is_blind = projection.is_blind if projection else False
 
     # ═══════════════════════════════════════════════════════

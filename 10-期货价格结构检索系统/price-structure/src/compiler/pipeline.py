@@ -101,6 +101,23 @@ class CompileResult:
             reverse=True,
         )
 
+    def get_system_state_for(self, structure: Structure) -> SystemState | None:
+        """
+        获取指定结构对应的 SystemState。
+        
+        v3.2: 修复索引错位问题。ranked_structures 是排序后的，
+        不能直接用索引访问 system_states。改为按结构对象查找。
+        """
+        if not self.system_states:
+            return None
+        try:
+            idx = self.structures.index(structure)
+            if idx < len(self.system_states):
+                return self.system_states[idx]
+        except ValueError:
+            pass
+        return None
+
     def summary(self) -> dict:
         result = {
             "bars": self.bars_count,
