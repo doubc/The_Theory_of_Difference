@@ -1,7 +1,6 @@
-# 价格结构检索系统 — 完整工作流程手册
+# 工作流程手册
 
 > 一次完整迭代的标准化流程，从需求到上线。
-> 本手册基于 2026-04-24 的实际工作整理。
 
 ---
 
@@ -22,12 +21,6 @@
 
 ### 输出
 - 明确的功能清单 + 优先级排序
-
-### 操作步骤
-1. 阅读现有代码，理解项目架构
-2. 阅读 `下一步有趣的想法.md`，了解已有想法
-3. 与用户确认优先级（P0/P1/P2）
-4. 更新 `下一步有趣的想法.md`，标注 ✅ 已实现 / 🔲 待落地
 
 ### 检查点
 - [ ] 功能是否可拆分为独立模块？
@@ -57,7 +50,6 @@
 | 数据处理脚本 | `scripts/` | `action_target.py` |
 | 交易策略 | `trading/` | `platform_strategy.py` |
 | 文档 | `docs/` | `中文名.md` |
-| 活文档 | 项目根目录 | `下一步有趣的想法.md` |
 
 ### 代码规范
 - 文件头必须有 docstring：模块职责、用法、与现有代码的关系
@@ -83,37 +75,20 @@
 ### 三层测试
 
 **Layer 1: 语法检查**
-```bash
-# Python
-for f in $(find . -name "*.py" -not -path "./__pycache__/*"); do
-    python3 -c "import ast; ast.parse(open('$f').read())" && echo "✓ $f" || echo "✗ $f"
-done
 
-# C
-gcc -fsyntax-only -I$(python3 -c "import numpy; print(numpy.get_include())") file.c
-```
+Python 文件：用 `ast.parse()` 验证语法。
+C 文件：用 `gcc -fsyntax-only` 验证语法。
 
 **Layer 2: 逻辑验证**
-```bash
-python3 -c "
-# 构造 mock 数据，验证核心逻辑
-# - 正常路径：预期输入 → 预期输出
-# - 边界条件：空列表、极端值、单元素
-# - 评分逻辑：高质量→A层，低质量→D层
-"
-```
+
+构造 mock 数据，验证核心逻辑：
+- 正常路径：预期输入 → 预期输出
+- 边界条件：空列表、极端值、单元素
+- 评分逻辑：高质量→A层，低质量→D层
 
 **Layer 3: 集成验证**
-```bash
-# 用真实数据端到端测试（如有网络）
-python3 -c "
-from src.data.sina_fetcher import fetch_bars
-from src.compiler.pipeline import compile_full, CompilerConfig
-bars = fetch_bars('cu0', freq='1d', timeout=15)
-result = compile_full(bars, CompilerConfig())
-print(f'{len(result.structures)} structures')
-"
-```
+
+用真实数据端到端测试：`load_bars()` → `compile_full()` → 检查结构数量。
 
 ### 检查点
 - [ ] 所有文件语法检查通过
@@ -159,35 +134,10 @@ print(f'{len(result.structures)} structures')
 ### 输入
 - 复核后的代码
 
-### 操作
-
-**5.1 未使用导入清理**
-```bash
-# 检查每个 import 是否在文件中被使用
-for f in $(find . -name "*.py"); do
-    grep -n "^import \|^from " "$f" | while IFS= read -r line; do
-        mod=$(echo "$line" | awk '{print $NF}' | sed 's/;//')
-        count=$(grep -c "$mod" "$f" 2>/dev/null || echo 0)
-        if [ "$count" -le 1 ]; then
-            echo "⚠ $f: '$mod' 可能未使用"
-        fi
-    done
-done
-```
-
-**5.2 重复逻辑检查**
-```bash
-# 检查函数名重复
-grep -rn "def function_name" . --include="*.py" | grep -v __pycache__
-```
-
-**5.3 文件大小检查**
-```bash
-find . -name "*.py" | while read f; do
-    lines=$(wc -l < "$f")
-    [ "$lines" -gt 500 ] && echo "⚠ $f: ${lines}行"
-done
-```
+### 检查项
+- 未使用导入清理
+- 重复逻辑检查
+- 文件大小检查（>500 行需拆分）
 
 ### 注意事项
 - PythonGO 策略文件的重复是有意的（自包含，不依赖内部模块）
@@ -205,56 +155,9 @@ done
 ### 输入
 - 清理后的代码
 
-### 操作
-
-**6.1 使用 GitHub API 推送（git clone 不通时）**
-```python
-import base64, requests
-
-TOKEN = "ghp_xxx"
-REPO = "owner/repo"
-H = {"Authorization": f"token {TOKEN}", "Accept": "application/vnd.github.v3+json", "Content-Type": "application/json"}
-
-def push_file(local_path, github_path, message):
-    with open(local_path, "rb") as f:
-        b64 = base64.b64encode(f.read()).decode()
-
-    url = f"https://api.github.com/repos/{REPO}/contents/{github_path}"
-    r = requests.get(url, headers=H, params={"ref": "main"})
-    sha = r.json().get("sha") if r.status_code == 200 else None
-
-    payload = {"message": message, "content": b64, "branch": "main"}
-    if sha:
-        payload["sha"] = sha
-        payload["message"] = message.replace("add", "update")
-
-    r = requests.put(url, headers=H, json=payload)
-    return r.status_code in (200, 201)
-```
-
-**6.2 批量推送**
-```python
-FILES = {
-    "local/path.py": "github/path.py",
-    # ...
-}
-for local, github in FILES.items():
-    push_file(local, github, f"v3.0: add {os.path.basename(local)}")
-```
-
-**6.3 移动文件（先删后建）**
-```python
-# 删除旧位置
-sha = get_sha(old_path)
-requests.delete(f".../contents/{old_path}", json={"message": "move to new/", "sha": sha, "branch": "main"})
-
-# 创建新位置
-push_file(local, new_path, "move from old/")
-```
-
 ### 检查点
 - [ ] 文件路径正确
-- [ ] 提交信息清晰（`v3.0: add XXX` / `v3.0: update XXX`）
+- [ ] 提交信息清晰
 - [ ] 推送后验证文件存在
 
 ---
@@ -265,24 +168,9 @@ push_file(local, new_path, "move from old/")
 - 推送完成
 
 ### 操作
-
-**7.1 更新记忆文件**
-```bash
-cat >> memory/YYYY-MM-DD.md << 'EOF'
-### 第N轮：简要描述
-新增文件：...
-修改文件：...
-EOF
-```
-
-**7.2 更新想法文档**
-- 标记已完成的条目为 ✅
-- 新增发现的改进方向
-- 调整优先级
-
-**7.3 更新变更记录**
-- `docs/CHANGELOG_v3.0.md` 记录所有变更
-- 包含：决策日志、文件清单、测试清单
+- 更新记忆文件（`memory/YYYY-MM-DD.md`）
+- 更新想法文档（标记已完成条目、新增改进方向、调整优先级）
+- 更新变更记录（`docs/CHANGELOG_v3.0.md`）
 
 ### 检查点
 - [ ] 记忆文件已更新
@@ -291,57 +179,4 @@ EOF
 
 ---
 
-## 快速参考
-
-### 一键语法检查
-```bash
-find . -name "*.py" -not -path "./__pycache__/*" -exec python3 -c "import ast; ast.parse(open('{}').read()); print('✓ {}')" \;
-```
-
-### 一键推送
-```bash
-python3 push_to_github.py <token>
-```
-
-### 一键测试
-```bash
-python3 -c "
-import ast, os
-for f in [f for f in os.listdir('.') if f.endswith('.py')]:
-    ast.parse(open(f).read()); print(f'✓ {f}')
-"
-```
-
-### GitHub API 常用操作
-```bash
-# 查看目录
-curl -s "https://api.github.com/repos/OWNER/REPO/contents/PATH" -H "Authorization: token TOKEN"
-
-# 查看文件
-curl -s "https://api.github.com/repos/OWNER/REPO/contents/PATH?ref=main" -H "Authorization: token TOKEN"
-
-# 验证推送
-curl -s "https://api.github.com/repos/OWNER/REPO/contents/PATH" | python3 -c "import json,sys; print(json.load(sys.stdin).get('name','?'))"
-```
-
----
-
-## 本次迭代清单 (2026-04-24)
-
-| 轮次 | 内容 | 文件数 | 状态 |
-|------|------|--------|------|
-| 1 | 数据层+C扩展+多时间维度 | 11 | ✅ |
-| 2 | Streamlit集成+想法+变更记录 | 3 | ✅ |
-| 3 | 质量分层+P0三模块+统一集成 | 6 | ✅ |
-| 4 | 测试+复核+推送 | 19 | ✅ |
-| 5 | 作业流程+PythonGO信号工具 | 2 | ✅ |
-| 6 | 假突破反转信号+跨品种共振 | 1 | ✅ |
-| 7 | 全流程测试+复核+去重+推送 | 4 | ✅ |
-| 8 | v3.1 C扩展优化+扫描修复 | 12 | ✅ |
-| 9 | 品种描述交易导向+时效标签+安全修复 | 9 | ✅ |
-
-**总计：43 个文件推送到 GitHub，~7,800 行代码**
-
----
-
-*手册版本: v1.2 · 2026-04-24*
+*相关文件：`docs/CHANGELOG_v3.0.md` · `下一步有趣的想法.md`*
