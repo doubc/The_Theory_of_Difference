@@ -4,32 +4,112 @@
     {
       "id": "CH_001",
       "name": "钢厂补库链",
-      "triggerEvent": "钢厂库存天数降至低位",
+      "triggerEvent": "钢厂库存天数降至15天以下",
       "steps": [
         {
           "seq": 1,
           "from": "钢厂低库存",
           "to": "集中采购",
-          "confidence": 0.8,
+          "confidence": 0.85,
           "lag": "3-5天"
         },
         {
           "seq": 2,
           "from": "集中采购",
           "to": "港口去库",
-          "confidence": 0.7,
+          "confidence": 0.8,
           "lag": "1周"
         },
         {
           "seq": 3,
           "from": "港口去库",
           "to": "矿价上涨",
+          "confidence": 0.75,
+          "lag": "同步"
+        },
+        {
+          "seq": 4,
+          "from": "矿价上涨",
+          "to": "贸易商囤货",
+          "confidence": 0.6,
+          "lag": "3天"
+        }
+      ],
+      "reversalNode": "钢厂库存天数恢复至30天以上",
+      "reversalCondition": "补库结束+高炉检修增加",
+      "historicalCases": [
+        {
+          "year": "2023Q1",
+          "description": "钢厂集中补库推动矿价从750涨至950"
+        }
+      ]
+    },
+    {
+      "id": "CH_002",
+      "name": "供给冲击链",
+      "triggerEvent": "澳洲飓风/巴西尾矿坝事故",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "供给中断",
+          "to": "发货量骤降",
+          "confidence": 0.9,
+          "lag": "即时"
+        },
+        {
+          "seq": 2,
+          "from": "发货量骤降",
+          "to": "港口去库预期",
+          "confidence": 0.8,
+          "lag": "2周"
+        },
+        {
+          "seq": 3,
+          "from": "去库预期",
+          "to": "矿价急涨",
+          "confidence": 0.85,
+          "lag": "即时"
+        }
+      ],
+      "reversalNode": "发运恢复",
+      "reversalCondition": "天气好转/事故处理完毕"
+    },
+    {
+      "id": "CH_003",
+      "name": "限产压制链",
+      "triggerEvent": "粗钢平控政策出台",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "限产政策",
+          "to": "高炉开工率下降",
           "confidence": 0.7,
+          "lag": "1-2周"
+        },
+        {
+          "seq": 2,
+          "from": "开工率下降",
+          "to": "铁矿需求减少",
+          "confidence": 0.8,
+          "lag": "同步"
+        },
+        {
+          "seq": 3,
+          "from": "需求减少",
+          "to": "港口累库",
+          "confidence": 0.7,
+          "lag": "2-4周"
+        },
+        {
+          "seq": 4,
+          "from": "港口累库",
+          "to": "矿价下跌",
+          "confidence": 0.75,
           "lag": "同步"
         }
       ],
-      "reversalNode": "钢厂库存天数恢复至 30 天以上",
-      "reversalCondition": "补库结束+高炉检修"
+      "reversalNode": "限产政策放松",
+      "reversalCondition": "经济下行压力大时政策微调"
     }
   ]
 }

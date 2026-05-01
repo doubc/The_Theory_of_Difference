@@ -3,12 +3,22 @@
   "entries": {
     "iron_ore_price": {
       "historicalMin": 300,
-      "historicalMax": 1300,
+      "historicalMax": 1350,
       "recentMin": 600,
-      "recentMax": 900,
+      "recentMax": 950,
       "reversalSignalPatterns": [
         "港口库存骤降",
-        "钢厂集中补库"
+        "钢厂集中补库",
+        "澳矿发运中断"
+      ]
+    },
+    "port_inventory": {
+      "historicalMin": 10000,
+      "historicalMax": 16000,
+      "unit": "万吨",
+      "reversalSignalPatterns": [
+        "库存降至1.1亿以下=去库加速",
+        "库存升至1.5亿以上=累库压力"
       ]
     }
   }

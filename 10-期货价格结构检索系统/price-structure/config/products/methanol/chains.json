@@ -1,4 +1,42 @@
 {
   "commodity": "methanol",
-  "chains": []
+  "chains": [
+    {
+      "id": "CH_001",
+      "name": "MTO需求链",
+      "triggerEvent": "MTO利润好转→MTO重启",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "MTO利润好转",
+          "to": "MTO重启",
+          "confidence": 0.8,
+          "lag": "1-2周"
+        },
+        {
+          "seq": 2,
+          "from": "MTO重启",
+          "to": "甲醇需求增加",
+          "confidence": 0.85,
+          "lag": "即时"
+        },
+        {
+          "seq": 3,
+          "from": "需求增加",
+          "to": "港口去库",
+          "confidence": 0.7,
+          "lag": "2-4周"
+        },
+        {
+          "seq": 4,
+          "from": "港口去库",
+          "to": "甲醇价格上涨",
+          "confidence": 0.75,
+          "lag": "同步"
+        }
+      ],
+      "reversalNode": "MTO利润转负",
+      "reversalCondition": "MTO停车检修"
+    }
+  ]
 }

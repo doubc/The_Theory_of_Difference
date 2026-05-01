@@ -1,4 +1,35 @@
 {
   "commodity": "pta",
-  "chains": []
+  "chains": [
+    {
+      "id": "CH_001",
+      "name": "聚酯旺季链",
+      "triggerEvent": "聚酯织造旺季（3-5月/9-11月）",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "织造旺季",
+          "to": "聚酯开工率上升",
+          "confidence": 0.8,
+          "lag": "即时"
+        },
+        {
+          "seq": 2,
+          "from": "聚酯开工上升",
+          "to": "PTA去库",
+          "confidence": 0.75,
+          "lag": "2周"
+        },
+        {
+          "seq": 3,
+          "from": "PTA去库",
+          "to": "PTA加工费扩大",
+          "confidence": 0.7,
+          "lag": "同步"
+        }
+      ],
+      "reversalNode": "旺季结束",
+      "reversalCondition": "织造开机率回落"
+    }
+  ]
 }

@@ -1,4 +1,79 @@
 {
   "commodity": "soybean_meal",
-  "chains": []
+  "chains": [
+    {
+      "id": "CH_001",
+      "name": "天气炒作链",
+      "triggerEvent": "美豆产区出现高温干旱",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "天气干旱",
+          "to": "优良率下降",
+          "confidence": 0.8,
+          "lag": "1-2周"
+        },
+        {
+          "seq": 2,
+          "from": "优良率下降",
+          "to": "USDA下调单产",
+          "confidence": 0.7,
+          "lag": "月度报告"
+        },
+        {
+          "seq": 3,
+          "from": "单产下调",
+          "to": "美豆期货上涨",
+          "confidence": 0.85,
+          "lag": "即时"
+        },
+        {
+          "seq": 4,
+          "from": "美豆上涨",
+          "to": "连粕跟涨",
+          "confidence": 0.9,
+          "lag": "即时"
+        }
+      ],
+      "reversalNode": "降雨改善",
+      "reversalCondition": "天气预报转湿+优良率回升"
+    },
+    {
+      "id": "CH_002",
+      "name": "养殖需求链",
+      "triggerEvent": "生猪存栏回升+养殖利润改善",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "存栏回升",
+          "to": "饲料需求增加",
+          "confidence": 0.8,
+          "lag": "1-2月"
+        },
+        {
+          "seq": 2,
+          "from": "饲料需求增加",
+          "to": "豆粕提货加速",
+          "confidence": 0.75,
+          "lag": "2周"
+        },
+        {
+          "seq": 3,
+          "from": "提货加速",
+          "to": "油厂去库",
+          "confidence": 0.7,
+          "lag": "同步"
+        },
+        {
+          "seq": 4,
+          "from": "油厂去库",
+          "to": "豆粕现货上涨",
+          "confidence": 0.7,
+          "lag": "同步"
+        }
+      ],
+      "reversalNode": "养殖利润转负",
+      "reversalCondition": "猪价下跌+饲料成本上升"
+    }
+  ]
 }

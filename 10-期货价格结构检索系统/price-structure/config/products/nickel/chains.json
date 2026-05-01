@@ -1,4 +1,35 @@
 {
   "commodity": "nickel",
-  "chains": []
+  "chains": [
+    {
+      "id": "CH_001",
+      "name": "印尼政策链",
+      "triggerEvent": "印尼收紧镍矿出口/RKAB审批减少",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "政策收紧",
+          "to": "镍矿供给下降",
+          "confidence": 0.8,
+          "lag": "1-3月"
+        },
+        {
+          "seq": 2,
+          "from": "供给下降",
+          "to": "镍铁价格上涨",
+          "confidence": 0.75,
+          "lag": "即时"
+        },
+        {
+          "seq": 3,
+          "from": "镍铁上涨",
+          "to": "不锈钢成本推升",
+          "confidence": 0.8,
+          "lag": "即时"
+        }
+      ],
+      "reversalNode": "政策放松",
+      "reversalCondition": "印尼增加RKAB配额"
+    }
+  ]
 }

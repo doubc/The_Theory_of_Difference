@@ -3,25 +3,57 @@
   "symbol": "MA",
   "entities": [
     {
-      "id": "VAR_001",
-      "name": "甲醇库存",
-      "type": "variable",
-      "description": "甲醇港口+内地库存",
-      "importance": 7,
-      "trackingVariables": [
-        "港口库存",
-        "内地库存"
-      ]
-    },
-    {
       "id": "POW_001",
       "name": "MTO装置",
       "type": "power",
-      "description": "甲醇制烯烃，核心需求端",
-      "importance": 8,
+      "description": "甲醇制烯烃，是甲醇最大需求增量（占30%+）",
+      "importance": 9,
       "trackingVariables": [
         "MTO开工率",
         "MTO利润"
+      ]
+    },
+    {
+      "id": "POW_002",
+      "name": "传统下游",
+      "type": "power",
+      "description": "甲醛/醋酸/MTBE等传统需求",
+      "importance": 6,
+      "trackingVariables": [
+        "开工率"
+      ]
+    },
+    {
+      "id": "VAR_001",
+      "name": "甲醇港口库存",
+      "type": "variable",
+      "description": "华东+华南港口库存",
+      "importance": 8,
+      "trackingVariables": [
+        "港口库存",
+        "到港量"
+      ]
+    },
+    {
+      "id": "VAR_002",
+      "name": "MTO利润",
+      "type": "variable",
+      "description": "MTO利润决定MTO开工意愿",
+      "importance": 9,
+      "trackingVariables": [
+        "MTO利润",
+        "外购甲醇MTO利润"
+      ]
+    },
+    {
+      "id": "GEO_001",
+      "name": "中东",
+      "type": "geography",
+      "description": "伊朗/沙特甲醇出口到中国",
+      "importance": 7,
+      "trackingVariables": [
+        "中东发运量",
+        "伊朗产量"
       ]
     }
   ]

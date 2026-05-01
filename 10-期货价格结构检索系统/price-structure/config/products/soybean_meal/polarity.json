@@ -1,4 +1,16 @@
 {
   "commodity": "soybean_meal",
-  "entries": {}
+  "entries": {
+    "soybean_meal_price": {
+      "historicalMin": 2400,
+      "historicalMax": 5200,
+      "recentMin": 2800,
+      "recentMax": 4000,
+      "reversalSignalPatterns": [
+        "USDA下调单产",
+        "生猪存栏拐点",
+        "油厂豆粕库存骤降"
+      ]
+    }
+  }
 }

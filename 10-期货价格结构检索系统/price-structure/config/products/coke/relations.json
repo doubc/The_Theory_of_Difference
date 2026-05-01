@@ -9,6 +9,24 @@
       "strength": 0.9,
       "direction": "positive",
       "description": "焦化厂向钢厂供焦"
+    },
+    {
+      "id": "R_002",
+      "from": "POW_002",
+      "to": "POW_001",
+      "type": "demand",
+      "strength": 0.85,
+      "direction": "negative",
+      "description": "钢厂需求决定焦炭消耗"
+    },
+    {
+      "id": "R_003",
+      "from": "RUL_001",
+      "to": "POW_001",
+      "type": "constraint",
+      "strength": 0.7,
+      "direction": "negative",
+      "description": "环保限产约束焦化产能"
     }
   ]
 }

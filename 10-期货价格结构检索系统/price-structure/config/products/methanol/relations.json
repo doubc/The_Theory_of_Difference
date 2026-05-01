@@ -1,4 +1,32 @@
 {
   "commodity": "methanol",
-  "relations": []
+  "relations": [
+    {
+      "id": "R_001",
+      "from": "POW_001",
+      "to": "VAR_001",
+      "type": "demand",
+      "strength": 0.85,
+      "direction": "negative",
+      "description": "MTO消耗港口甲醇"
+    },
+    {
+      "id": "R_002",
+      "from": "GEO_001",
+      "to": "VAR_001",
+      "type": "supply",
+      "strength": 0.7,
+      "direction": "positive",
+      "description": "中东甲醇到港补充"
+    },
+    {
+      "id": "R_003",
+      "from": "VAR_002",
+      "to": "POW_001",
+      "type": "trigger",
+      "strength": 0.8,
+      "direction": "negative",
+      "description": "MTO利润差→MTO停车→需求减少"
+    }
+  ]
 }

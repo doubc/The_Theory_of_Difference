@@ -1,4 +1,15 @@
 {
   "commodity": "nickel",
-  "entries": {}
+  "entries": {
+    "nickel_price": {
+      "historicalMin": 80000,
+      "historicalMax": 280000,
+      "recentMin": 110000,
+      "recentMax": 180000,
+      "reversalSignalPatterns": [
+        "印尼RKAB审批减少",
+        "LME镍库存骤降"
+      ]
+    }
+  }
 }

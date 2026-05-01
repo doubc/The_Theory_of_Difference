@@ -1,4 +1,23 @@
 {
   "commodity": "pta",
-  "relations": []
+  "relations": [
+    {
+      "id": "R_001",
+      "from": "POW_002",
+      "to": "VAR_001",
+      "type": "supply",
+      "strength": 0.85,
+      "direction": "positive",
+      "description": "PTA工厂产出增加库存"
+    },
+    {
+      "id": "R_002",
+      "from": "POW_001",
+      "to": "VAR_001",
+      "type": "demand",
+      "strength": 0.9,
+      "direction": "negative",
+      "description": "聚酯消耗PTA"
+    }
+  ]
 }

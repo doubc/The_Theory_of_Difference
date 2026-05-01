@@ -1,4 +1,23 @@
 {
   "commodity": "hot_coil",
-  "relations": []
+  "relations": [
+    {
+      "id": "R_001",
+      "from": "POW_001",
+      "to": "VAR_001",
+      "type": "demand",
+      "strength": 0.85,
+      "direction": "negative",
+      "description": "制造业消耗热卷库存"
+    },
+    {
+      "id": "R_002",
+      "from": "POW_002",
+      "to": "VAR_001",
+      "type": "supply",
+      "strength": 0.8,
+      "direction": "positive",
+      "description": "钢厂产出热卷"
+    }
+  ]
 }

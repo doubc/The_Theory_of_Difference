@@ -3,26 +3,57 @@
   "symbol": "TA",
   "entities": [
     {
-      "id": "VAR_001",
-      "name": "PTA库存",
-      "type": "variable",
-      "description": "PTA社会库存",
-      "importance": 7,
-      "trackingVariables": [
-        "库存天数",
-        "开工率"
-      ]
-    },
-    {
       "id": "POW_001",
       "name": "聚酯工厂",
       "type": "power",
-      "description": "PTA消费方",
-      "importance": 8,
+      "description": "PTA消费方（占95%+），聚酯开工率决定需求",
+      "importance": 9,
       "trackingVariables": [
         "聚酯开工率",
-        "织造开机率"
+        "织造开机率",
+        "聚酯库存"
       ]
+    },
+    {
+      "id": "POW_002",
+      "name": "PTA工厂",
+      "type": "power",
+      "description": "PTA生产方，逸盛/恒力/荣盛三巨头占60%+",
+      "importance": 8,
+      "trackingVariables": [
+        "开工率",
+        "库存",
+        "加工费"
+      ]
+    },
+    {
+      "id": "VAR_001",
+      "name": "PTA社会库存",
+      "type": "variable",
+      "description": "PTA社会库存天数",
+      "importance": 8,
+      "trackingVariables": [
+        "库存天数",
+        "绝对库存"
+      ]
+    },
+    {
+      "id": "VAR_002",
+      "name": "聚酯开工率",
+      "type": "variable",
+      "description": "聚酯开工率是PTA需求的直接指标",
+      "importance": 9,
+      "trackingVariables": [
+        "日度开工率",
+        "季节性"
+      ]
+    },
+    {
+      "id": "CUL_001",
+      "name": "织造备货",
+      "type": "narrative",
+      "description": "织造厂集中备货→聚酯去库→PTA需求增加",
+      "importance": 6
     }
   ]
 }

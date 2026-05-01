@@ -1,4 +1,15 @@
 {
   "commodity": "pta",
-  "models": []
+  "models": [
+    {
+      "id": "PM_001",
+      "name": "PTA加工费模型",
+      "domain": "PTA",
+      "formula": "PTA价格 ≈ PX价格 × 0.655 + 加工费(300-800元/吨)",
+      "variables": [
+        "PX价格",
+        "加工费"
+      ]
+    }
+  ]
 }

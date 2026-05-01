@@ -1,4 +1,32 @@
 {
   "commodity": "nickel",
-  "relations": []
+  "relations": [
+    {
+      "id": "R_001",
+      "from": "GEO_001",
+      "to": "VAR_001",
+      "type": "supply",
+      "strength": 0.9,
+      "direction": "positive",
+      "description": "印尼镍铁/中间品供给全球"
+    },
+    {
+      "id": "R_002",
+      "from": "POW_001",
+      "to": "VAR_001",
+      "type": "demand",
+      "strength": 0.8,
+      "direction": "negative",
+      "description": "不锈钢消耗镍"
+    },
+    {
+      "id": "R_003",
+      "from": "CUL_001",
+      "to": "GEO_001",
+      "type": "policy",
+      "strength": 0.8,
+      "direction": "positive",
+      "description": "禁矿政策收紧供给"
+    }
+  ]
 }

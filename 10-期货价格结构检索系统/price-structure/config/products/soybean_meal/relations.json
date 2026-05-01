@@ -1,4 +1,50 @@
 {
   "commodity": "soybean_meal",
-  "relations": []
+  "relations": [
+    {
+      "id": "R_001",
+      "from": "GEO_001",
+      "to": "VAR_002",
+      "type": "supply",
+      "strength": 0.85,
+      "direction": "positive",
+      "description": "美豆出口→中国到港"
+    },
+    {
+      "id": "R_002",
+      "from": "GEO_002",
+      "to": "VAR_002",
+      "type": "supply",
+      "strength": 0.8,
+      "direction": "positive",
+      "description": "巴西出口→中国到港"
+    },
+    {
+      "id": "R_003",
+      "from": "POW_002",
+      "to": "VAR_001",
+      "type": "supply",
+      "strength": 0.8,
+      "direction": "positive",
+      "description": "油厂压榨产出豆粕"
+    },
+    {
+      "id": "R_004",
+      "from": "POW_001",
+      "to": "VAR_001",
+      "type": "demand",
+      "strength": 0.85,
+      "direction": "negative",
+      "description": "养殖业消耗豆粕"
+    },
+    {
+      "id": "R_005",
+      "from": "CUL_001",
+      "to": "GEO_001",
+      "type": "narrative",
+      "strength": 0.7,
+      "direction": "positive",
+      "description": "天气炒作推升美豆价格"
+    }
+  ]
 }
