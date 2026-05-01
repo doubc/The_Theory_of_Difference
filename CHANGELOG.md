@@ -1,5 +1,27 @@
 # CHANGELOG
 
+## 2026-05-01 — 仓库清理 & 文档更新
+
+### 删除过期文件
+- `docs/代码审查_20260424.md` — v3 时期审查报告，v4 已重构
+- `debug_analysis_report.md` — 调试报告，问题已修复
+- `signal_analysis_report.json` — 旧版信号分析数据
+- `tests/perf_test_report.md` — v3 性能基准，C 扩展已重写
+- `tests/test_signals_report.md` — v3 信号层测试报告
+- `tests/perf_test_signals.py` — v3 性能测试脚本
+- `tests/test_signals_edge_cases.py` — 边界测试（已整合到 test_signals.py）
+- `tests/run_edge_test.bat` — Windows 批处理脚本
+
+### 文档更新
+- `README.md` 全面重写：新增模块状态说明表（核心/骨架/辅助），项目结构树与实际文件对齐
+- `pyproject.toml` 版本号同步至 4.0.0
+- 测试用例 `TestCase` → `CaseSpec` 消除 pytest 警告
+
+### 测试
+- 143 passed, 0 warnings
+
+---
+
 ## 2026-05-01 — v4.0 系统级升级
 
 ### 🏗️ 系统架构
