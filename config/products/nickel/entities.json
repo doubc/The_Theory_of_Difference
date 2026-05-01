@@ -1,0 +1,70 @@
+{
+  "commodity": "nickel",
+  "symbol": "NI",
+  "entities": [
+    {
+      "id": "GEO_001",
+      "name": "印尼",
+      "type": "geography",
+      "description": "全球最大镍矿供应国，出口政策是最大变量",
+      "importance": 10,
+      "trackingVariables": [
+        "RKAB审批量",
+        "出口政策",
+        "新增冶炼产能"
+      ]
+    },
+    {
+      "id": "GEO_002",
+      "name": "菲律宾",
+      "type": "geography",
+      "description": "第二大镍矿出口国，雨季影响发运",
+      "importance": 7,
+      "trackingVariables": [
+        "出货量",
+        "天气"
+      ]
+    },
+    {
+      "id": "POW_001",
+      "name": "不锈钢厂",
+      "type": "power",
+      "description": "镍最大下游（占65%+），300系不锈钢用镍铁",
+      "importance": 9,
+      "trackingVariables": [
+        "不锈钢产量",
+        "不锈钢库存",
+        "不锈钢利润"
+      ]
+    },
+    {
+      "id": "POW_002",
+      "name": "电池厂",
+      "type": "power",
+      "description": "新能源电池用硫酸镍，需求增速快",
+      "importance": 7,
+      "trackingVariables": [
+        "三元电池产量",
+        "硫酸镍需求"
+      ]
+    },
+    {
+      "id": "VAR_001",
+      "name": "LME镍库存",
+      "type": "variable",
+      "description": "LME镍库存是全球供需平衡指标",
+      "importance": 8,
+      "trackingVariables": [
+        "LME库存",
+        "注销仓单"
+      ]
+    },
+    {
+      "id": "CUL_001",
+      "name": "印尼禁矿",
+      "type": "narrative",
+      "description": "印尼镍矿出口政策反复，禁矿预期推升镍价",
+      "importance": 8
+    }
+  ]
+}
