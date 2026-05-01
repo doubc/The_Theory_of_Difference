@@ -1,0 +1,19 @@
+{
+  "commodity": "黄金",
+  "symbol": "AU",
+  "version": "1.0.0",
+  "entries": {
+    "COMEX黄金": {
+      "historicalMin": 250,
+      "historicalMax": 2800,
+      "recentMin": 1800,
+      "recentMax": 2800,
+      "reversalSignalPatterns": [
+        "美联储降息",
+        "地缘危机",
+        "央行购金",
+        "美元信用危机"
+      ]
+    }
+  }
+}
