@@ -1,18 +1,18 @@
 {
   "commodity": "锌",
   "symbol": "ZN",
-  "version": "1.0.0",
-  "entries": {
-    "LME锌": {
-      "historicalMin": 1500,
-      "historicalMax": 4000,
-      "recentMin": 2200,
-      "recentMax": 3000,
-      "reversalSignalPatterns": [
-        "锌矿紧缺",
-        "冶炼减产",
-        "镀锌需求增加"
-      ]
+  "version": "1.3.0",
+  "polarity_archive": [
+    {
+      "id": "ZN_P001",
+      "variable": "锌价",
+      "poles": {
+        "bull": "矿端紧缺+欧洲停产+低库存",
+        "bear": "需求走弱+NPI替代+矿山复产"
+      },
+      "currentState": "中性",
+      "tension": 0.5,
+      "lastUpdated": "2026-05"
     }
-  }
+  ]
 }
