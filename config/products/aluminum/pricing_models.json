@@ -1,20 +1,174 @@
 {
   "commodity": "铝",
   "symbol": "AL",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "models": [
     {
-      "id": "M_014",
+      "id": "AL_M001",
       "name": "电解铝成本定价模型",
       "domain": "成本定价",
-      "formula": "铝价 = 电力成本(40%) + 氧化铝(30%) + 阳极(15%) + 人工折旧(15%)",
+      "groundBase": "marginal",
+      "formula": "Price_AL = f(PowerCost, AluminaCost, AnodeCost, SmelterMargin)",
       "variables": [
-        "电价",
-        "氧化铝价格",
-        "阳极价格"
+        {
+          "name": "电力成本",
+          "id": "AL_V001",
+          "direction": "正向",
+          "weight": 0.4
+        },
+        {
+          "name": "氧化铝价格",
+          "id": "AL_V002",
+          "direction": "正向",
+          "weight": 0.3
+        },
+        {
+          "name": "阳极/氟化铝成本",
+          "id": "AL_V003",
+          "direction": "正向",
+          "weight": 0.15
+        },
+        {
+          "name": "冶炼利润",
+          "id": "AL_V004",
+          "direction": "正向",
+          "weight": 0.15
+        }
       ],
-      "linkToEntities": [
-        "VAR_042"
+      "description": "电解铝成本结构：电力35-45%、氧化铝30-35%、阳极10-15%、其他5-10%。产能天花板4500万吨限制供给弹性，成本支撑有效。",
+      "dominantPhase": "限电或成本冲击期",
+      "limitation": "忽视需求端波动和废铝替代",
+      "trackingVariables": [
+        "电价",
+        "氧化铝价",
+        "完全成本",
+        "利润"
+      ]
+    },
+    {
+      "id": "AL_M002",
+      "name": "铝库存-价差动力学模型",
+      "domain": "微观结构定价",
+      "groundBase": "marginal",
+      "formula": "Spread(Cash-3M) = f(InventoryRatio, Seasonality, TradeFlow)",
+      "variables": [
+        {
+          "name": "库存消费比",
+          "id": "AL_V005",
+          "direction": "反向",
+          "weight": 0.45
+        },
+        {
+          "name": "现货升贴水",
+          "id": "AL_V006",
+          "direction": "正向",
+          "weight": 0.25
+        },
+        {
+          "name": "季节性因子",
+          "id": "AL_V007",
+          "direction": "正向",
+          "weight": 0.15
+        },
+        {
+          "name": "进口盈亏",
+          "id": "AL_V008",
+          "direction": "正向",
+          "weight": 0.15
+        }
+      ],
+      "description": "库存是铝价最直接的供需指标。当SHFE库存低于30万吨时，现货升水放大，Back结构下空头展期亏损。",
+      "dominantPhase": "库存极端低位时",
+      "limitation": "社会库存数据统计滞后",
+      "trackingVariables": [
+        "SHFE库存",
+        "LME库存",
+        "社会库存",
+        "升贴水"
+      ]
+    },
+    {
+      "id": "AL_M003",
+      "name": "铝材需求-开工率模型",
+      "domain": "需求定价",
+      "groundBase": "marginal",
+      "formula": "Demand_AL = f(ConstructionStart, AutoOutput, HomeAppliance, ExportOrder)",
+      "variables": [
+        {
+          "name": "房地产新开工",
+          "id": "AL_V009",
+          "direction": "正向",
+          "weight": 0.3
+        },
+        {
+          "name": "汽车产量",
+          "id": "AL_V010",
+          "direction": "正向",
+          "weight": 0.25
+        },
+        {
+          "name": "家电产量",
+          "id": "AL_V011",
+          "direction": "正向",
+          "weight": 0.2
+        },
+        {
+          "name": "铝材出口订单",
+          "id": "AL_V012",
+          "direction": "正向",
+          "weight": 0.25
+        }
+      ],
+      "description": "铝消费结构：建筑30%、交通25%、电力15%、包装10%、消费电子10%、其他10%。房地产和汽车是最大变量。",
+      "dominantPhase": "需求拐点期",
+      "limitation": "新能源车和光伏用铝增量未充分反映",
+      "trackingVariables": [
+        "房地产数据",
+        "汽车产量",
+        "家电产量",
+        "出口量"
+      ]
+    },
+    {
+      "id": "AL_M004",
+      "name": "铝内外比价模型",
+      "domain": "跨市场定价",
+      "groundBase": "marginal",
+      "formula": "SHFE/LME_Ratio = f(ImportCost, ExportTax, FXRate, InventoryDiff)",
+      "variables": [
+        {
+          "name": "进口成本",
+          "id": "AL_V013",
+          "direction": "基准",
+          "weight": 0.35
+        },
+        {
+          "name": "出口退税政策",
+          "id": "AL_V014",
+          "direction": "反向",
+          "weight": 0.25
+        },
+        {
+          "name": "人民币汇率",
+          "id": "AL_V015",
+          "direction": "反向",
+          "weight": 0.2
+        },
+        {
+          "name": "内外库存差异",
+          "id": "AL_V016",
+          "direction": "正向",
+          "weight": 0.2
+        }
+      ],
+      "description": "铝内外比价反映中国铝进出口窗口。比价高于进口成本线时进口窗口打开，低于出口成本线时出口窗口打开。",
+      "dominantPhase": "贸易流向变化期",
+      "limitation": "运输时间和政策突变可能导致比价偏离",
+      "trackingVariables": [
+        "进口盈亏",
+        "出口退税",
+        "汇率",
+        "内外库存"
       ]
     }
   ]
