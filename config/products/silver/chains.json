@@ -1,0 +1,58 @@
+{
+  "commodity": "白银",
+  "symbol": "AG",
+  "version": "1.0.0",
+  "chains": [
+    {
+      "id": "C_101",
+      "name": "光伏需求推升银价链",
+      "domain": "贵金属",
+      "triggerEvent": "全球光伏装机超预期增长",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "光伏装机超预期",
+          "to": "银浆用银量增加",
+          "confidence": "高",
+          "lag": "1-3个月",
+          "mechanism": "光伏电池片正面银浆消耗白银"
+        },
+        {
+          "seq": 2,
+          "from": "用银量增加",
+          "to": "白银供需缺口扩大",
+          "confidence": "中",
+          "lag": "季度",
+          "mechanism": "需求增速超过供给增速"
+        },
+        {
+          "seq": 3,
+          "from": "供需缺口",
+          "to": "白银库存下降",
+          "confidence": "中",
+          "lag": "即时",
+          "mechanism": "供给不足消耗库存"
+        },
+        {
+          "seq": 4,
+          "from": "库存下降",
+          "to": "银价上涨",
+          "confidence": "中",
+          "lag": "即时",
+          "mechanism": "供需紧张推升价格"
+        }
+      ],
+      "reversalNode": "光伏技术替代",
+      "reversalCondition": "钙钛矿等技术替代银浆",
+      "polarityTensionThreshold": 0.65,
+      "historicalCases": [
+        {
+          "year": "2024",
+          "description": "光伏装机爆发，白银从22涨至30美元"
+        }
+      ],
+      "reversibility": 0.5,
+      "tail_probability": 0.25
+    }
+  ]
+}
