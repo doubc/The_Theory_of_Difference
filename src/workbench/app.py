@@ -745,6 +745,7 @@ if compare_codes:
 tab_config = [
     ("🏠", "仪表盘"),
     ("📡", "今日扫描"),
+    ("📋", "每日简报"),
     ("🔍", "历史对照"),
     ("📊", "跨品种对比"),
     ("🗺️", "稳态地图"),
@@ -759,7 +760,7 @@ tab_config = [
 active_tab = st.session_state.get("active_tab", None)
 default_idx = 0
 if active_tab:
-    tab_map = {"scan": 1, "history": 2, "compare": 3, "journal": 5}
+    tab_map = {"scan": 1, "briefing": 2, "history": 3, "compare": 4, "journal": 6}
     default_idx = tab_map.get(active_tab, 0)
     st.session_state.pop("active_tab", None)
 
@@ -797,43 +798,48 @@ with tabs[1]:
     from src.workbench import tab_scan
     tab_scan.render(ctx)
 
-# Tab 2: 历史对照
+# Tab 2: 每日简报
 with tabs[2]:
+    from src.workbench.daily_briefing import render_daily_briefing
+    render_daily_briefing(ctx)
+
+# Tab 3: 历史对照
+with tabs[3]:
     from src.workbench import tab_history
     tab_history.render(ctx)
 
-# Tab 3: 跨品种对比
-with tabs[3]:
+# Tab 4: 跨品种对比
+with tabs[4]:
     from src.workbench import tab_compare
     tab_compare.render(ctx)
 
-# Tab 4: 稳态地图
-with tabs[4]:
+# Tab 5: 稳态地图
+with tabs[5]:
     from src.workbench import tab_stability
     tab_stability.render(ctx)
 
-# Tab 5: 复盘日志
-with tabs[5]:
+# Tab 6: 复盘日志
+with tabs[6]:
     from src.workbench import tab_journal
     tab_journal.render(ctx)
 
-# Tab 6: 合约检索
-with tabs[6]:
+# Tab 7: 合约检索
+with tabs[7]:
     from src.workbench import tab_contract
     tab_contract.render(ctx)
 
-# Tab 7: 多时间维度
-with tabs[7]:
+# Tab 8: 多时间维度
+with tabs[8]:
     from src.workbench import tab_multitime
     tab_multitime.render(ctx)
 
-# Tab 8: 质量与共振
-with tabs[8]:
+# Tab 9: 质量与共振
+with tabs[9]:
     from src.workbench import tab_quality
     tab_quality.render(ctx)
 
-# Tab 9: 研究闭环
-with tabs[9]:
+# Tab 10: 研究闭环
+with tabs[10]:
     from src.workbench.pages.research_loop import render as render_loop
     st.session_state["research_loop_ctx"] = {
         "symbol": selected_symbol,

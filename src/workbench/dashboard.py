@@ -134,20 +134,24 @@ def render_dashboard(ctx: dict):
 
     # ── 快速分析入口 ──
     st.markdown("#### ⚡ 快速分析")
-    col1, col2, col3, col4 = st.columns(4)
+    col1, col2, col3, col4, col5 = st.columns(5)
     with col1:
         if st.button("📡 全市场扫描", use_container_width=True, type="primary"):
             st.session_state["active_tab"] = "scan"
             st.rerun()
     with col2:
+        if st.button("📋 每日简报", use_container_width=True):
+            st.session_state["active_tab"] = "briefing"
+            st.rerun()
+    with col3:
         if st.button("🔍 历史对照", use_container_width=True):
             st.session_state["active_tab"] = "history"
             st.rerun()
-    with col3:
+    with col4:
         if st.button("📊 跨品种对比", use_container_width=True):
             st.session_state["active_tab"] = "compare"
             st.rerun()
-    with col4:
+    with col5:
         if st.button("📝 复盘日志", use_container_width=True):
             st.session_state["active_tab"] = "journal"
             st.rerun()
