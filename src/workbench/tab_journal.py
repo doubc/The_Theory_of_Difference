@@ -30,8 +30,8 @@ def render(ctx: dict):
     today = datetime.now().strftime("%Y-%m-%d")
     md_file = log_dir / f"{today}.md"
 
-    # ── 子 Tab：写日志 / 活动日志 / 历史回顾 ──
-    sub_tab_write, sub_tab_activity, sub_tab_history = st.tabs(["✏️ 写日志", "📊 活动日志", "📚 历史回顾"])
+    # ── 子 Tab：写日志 / 知识图谱 / 活动日志 / 历史回顾 ──
+    sub_tab_write, sub_tab_kg, sub_tab_activity, sub_tab_history = st.tabs(["✏️ 写日志", "📚 知识图谱", "📊 活动日志", "📂 历史回顾"])
 
     # ════════════════════════════════════════════════════════
     # 写日志
@@ -126,6 +126,172 @@ def render(ctx: dict):
                         ctx_str += f" [{m.movement_type.value if hasattr(m, 'movement_type') else m.phase_tendency}, 通量{m.conservation_flux:+.2f}]"
                     ctx_str += "\n"
                 st.code(ctx_str, language="text")
+
+    # ════════════════════════════════════════════════════════
+    # 知识图谱分析 — 品种知识图谱 + 跨品种影响
+    # ════════════════════════════════════════════════════════
+    with sub_tab_kg:
+        st.markdown("**📚 知识图谱分析** — 品种知识图谱 + 跨品种影响 + 传导链")
+        st.caption("基于 config/products/ 配置，展示品种的核心实体、关系、传导链和跨品种影响")
+
+        try:
+            from src.workbench.kg_helper import (
+                get_product_knowledge, get_cross_variety_impacts, get_chain_peers_from_kg,
+                get_key_relations, get_key_chains, get_polarity_reference, generate_knowledge_summary
+            )
+
+            # 品种选择
+            kg_col1, kg_col2 = st.columns([2, 1])
+            with kg_col1:
+                kg_symbol = st.selectbox(
+                    "选择品种",
+                    [selected_symbol] + [c for c in ctx.get("compare_codes", [])],
+                    key="kg_symbol_select"
+                )
+            with kg_col2:
+                if st.button("🔄 刷新知识图谱", key="refresh_kg"):
+                    st.rerun()
+
+            # 获取知识图谱数据
+            knowledge = get_product_knowledge(kg_symbol)
+
+            if "error" in knowledge:
+                st.warning(f"⚠️ {knowledge['error']}")
+                st.info("请确认 config/products/ 目录下有该品种的配置文件")
+            else:
+                # 概览
+                st.markdown("---")
+                st.markdown(f"#### 📊 {kg_symbol} 知识图谱概览")
+
+                kg_stat_cols = st.columns(5)
+                kg_stat_cols[0].metric("实体", len(knowledge.get("entities", [])))
+                kg_stat_cols[1].metric("关系", len(knowledge.get("relations", [])))
+                kg_stat_cols[2].metric("传导链", len(knowledge.get("chains", [])))
+                kg_stat_cols[3].metric("极值项", len(knowledge.get("polarity", {})))
+                kg_stat_cols[4].metric("定价模型", len(knowledge.get("pricing_models", [])))
+
+                # 核心关系
+                st.markdown("---")
+                st.markdown("#### 🔗 核心关系")
+                key_relations = get_key_relations(kg_symbol, limit=8)
+                for r in key_relations:
+                    r_from = r.get("from", "")
+                    r_to = r.get("to", "")
+                    r_type = r.get("type", "")
+                    strength = r.get("strength", 0)
+                    direction = r.get("direction", "")
+                    desc = r.get("description", "")[:80]
+
+                    strength_color = "#4caf50" if strength >= 0.7 else "#ff9800" if strength >= 0.5 else "#999"
+                    dir_icon = "→" if direction == "正向" else "←" if direction == "反向" else "↔"
+
+                    st.markdown(f"""
+                    <div style="border-left:3px solid {strength_color};padding:6px 10px;margin:4px 0;
+                                background:#f8f9fa;border-radius:4px">
+                        <b>{r_from}</b> {dir_icon} <b>{r_to}</b>
+                        <span style="color:{strength_color};font-weight:600;margin-left:8px">{strength:.0%}</span>
+                        <span style="color:#6c757d;margin-left:8px">{r_type}</span>
+                        <div style="font-size:0.82em;color:#6c757d;margin-top:2px">{desc}</div>
+                    </div>
+                    """, unsafe_allow_html=True)
+
+                # 传导链
+                st.markdown("---")
+                st.markdown("#### ⛓️ 传导链")
+                chains = get_key_chains(kg_symbol, limit=3)
+                for c in chains:
+                    name = c.get("name", "")
+                    trigger = c.get("triggerEvent", "")
+                    domain = c.get("domain", "")
+                    steps = c.get("steps", [])
+
+                    with st.expander(f"⛓️ {name} ({domain})", expanded=False):
+                        st.markdown(f"**触发条件**: {trigger}")
+                        st.markdown("**传导步骤**:")
+                        for step in steps:
+                            seq = step.get("seq", "")
+                            from_node = step.get("from", "")
+                            to_node = step.get("to", "")
+                            confidence = step.get("confidence", "")
+                            lag = step.get("lag", "")
+                            mechanism = step.get("mechanism", "")
+                            st.markdown(f"  {seq}. **{from_node}** → **{to_node}**")
+                            st.caption(f"     置信度: {confidence} · 时滞: {lag} · 机制: {mechanism}")
+
+                        reversal = c.get("reversalCondition", "")
+                        if reversal:
+                            st.info(f"🔄 反转条件: {reversal}")
+
+                # 跨品种影响
+                st.markdown("---")
+                st.markdown("#### 🌐 跨品种影响")
+                impacts = get_cross_variety_impacts(kg_symbol)
+
+                if impacts:
+                    # 按类型分组
+                    impact_groups = {}
+                    for r in impacts:
+                        r_type = r.get("type", "其他")
+                        impact_groups.setdefault(r_type, []).append(r)
+
+                    for group_name, group_items in impact_groups.items():
+                        st.markdown(f"**{group_name}** ({len(group_items)} 条)")
+                        for r in group_items[:3]:
+                            r_from = r.get("from", "")
+                            r_to = r.get("to", "")
+                            strength = r.get("strength", 0)
+                            desc = r.get("description", "")[:60]
+                            st.markdown(f"  - {r_from} → {r_to} (强度{strength:.0%}): {desc}")
+                else:
+                    st.caption("暂无跨品种影响数据")
+
+                # 产业链同链品种
+                st.markdown("---")
+                st.markdown("#### 🔗 产业链关联品种")
+                peers = get_chain_peers_from_kg(kg_symbol)
+                if peers:
+                    peer_cols = st.columns(min(len(peers), 6))
+                    for i, peer in enumerate(peers[:6]):
+                        with peer_cols[i % len(peer_cols)]:
+                            if st.button(f"📊 {peer}", key=f"kg_peer_{peer}", use_container_width=True):
+                                st.session_state["kg_symbol_select"] = peer
+                                st.rerun()
+                else:
+                    st.caption("暂无产业链关联数据")
+
+                # 极值参考
+                polarity = get_polarity_reference(kg_symbol)
+                if polarity:
+                    st.markdown("---")
+                    st.markdown("#### 📏 极值参考")
+                    for var_name, var_info in polarity.items():
+                        hist_min = var_info.get("historicalMin", "—")
+                        hist_max = var_info.get("historicalMax", "—")
+                        recent_min = var_info.get("recentMin", "—")
+                        recent_max = var_info.get("recentMax", "—")
+                        patterns = var_info.get("reversalSignalPatterns", [])
+
+                        with st.expander(f"📏 {var_name}", expanded=False):
+                            pc1, pc2 = st.columns(2)
+                            with pc1:
+                                st.metric("历史区间", f"{hist_min} ~ {hist_max}")
+                            with pc2:
+                                st.metric("近期区间", f"{recent_min} ~ {recent_max}")
+                            if patterns:
+                                st.markdown("**反转信号模式**:")
+                                for p in patterns:
+                                    st.markdown(f"  - {p}")
+
+                # 生成文字摘要
+                st.markdown("---")
+                st.markdown("#### 📝 知识图谱摘要")
+                summary = generate_knowledge_summary(kg_symbol)
+                st.markdown(summary)
+
+        except Exception as ex:
+            st.error(f"知识图谱加载失败: {ex}")
+            import traceback
+            st.code(traceback.format_exc())
 
     # ════════════════════════════════════════════════════════
     # 活动日志 — 自动沉淀的扫描/检索/对比结果

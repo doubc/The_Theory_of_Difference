@@ -270,6 +270,19 @@ def normalize_current_structure(
 # ============================================================================
 
 def get_sector_safe(symbol: str) -> SectorInfo:
+    # 优先从知识图谱获取
+    try:
+        from src.workbench.kg_helper import get_sector_from_kg
+        kg_info = get_sector_from_kg(symbol)
+        if kg_info.get("sector") != "未知":
+            return SectorInfo(
+                sector=kg_info.get("sector", "未知"),
+                sub_sector=kg_info.get("sub_sector", "未知"),
+                chain_role="midstream",
+            )
+    except Exception:
+        pass
+
     if real_get_sector is not None:
         try:
             info = real_get_sector(symbol)
@@ -282,26 +295,33 @@ def get_sector_safe(symbol: str) -> SectorInfo:
             pass
 
     s = symbol.upper()
-
     if s in {"CU0", "AL0", "ZN0", "NI0", "PB0", "SN0"}:
         return SectorInfo("有色金属", "基础金属", "midstream")
-
-    if s in {"AU0", "AG0"}:
+    if s in {"AU0", "AG0", "PT0"}:
         return SectorInfo("贵金属", "贵金属", "asset")
-
-    if s in {"RB0", "HC0", "I0", "JM0", "J0"}:
+    if s in {"RB0", "HC0", "I0", "JM0", "J0", "SF0", "SM0", "SS0"}:
         return SectorInfo("黑色金属", "钢矿煤焦", "midstream")
-
-    if s in {"M0", "A0", "P0", "RM0", "CF0", "SR0"}:
+    if s in {"M0", "A0", "P0", "RM0", "CF0", "SR0", "Y0", "OI0"}:
         return SectorInfo("农产品", "农产品", "upstream")
-
-    if s in {"TA0", "MA0", "BU0", "V0", "EG0", "L0", "PP0"}:
+    if s in {"TA0", "MA0", "BU0", "V0", "EG0", "L0", "PP0", "EB0", "PG0", "FU0", "SC0"}:
         return SectorInfo("能源化工", "化工", "midstream")
-
+    if s in {"FG0", "SA0", "UR0", "ZC0"}:
+        return SectorInfo("建材", "建材", "midstream")
+    if s in {"LC0", "SI0"}:
+        return SectorInfo("新能源", "新能源", "upstream")
     return SectorInfo()
 
 
 def get_chain_peers_safe(symbol: str) -> List[str]:
+    # 优先从知识图谱获取
+    try:
+        from src.workbench.kg_helper import get_chain_peers_from_kg
+        peers = get_chain_peers_from_kg(symbol)
+        if peers:
+            return peers
+    except Exception:
+        pass
+
     if real_get_chain_peers is not None:
         try:
             peers = real_get_chain_peers(symbol)
@@ -311,18 +331,32 @@ def get_chain_peers_safe(symbol: str) -> List[str]:
             pass
 
     peer_map = {
-        "CU0": ["AL0", "ZN0", "NI0"],
+        "CU0": ["AL0", "ZN0", "NI0", "PB0"],
         "AL0": ["CU0", "ZN0", "NI0"],
-        "ZN0": ["CU0", "AL0", "NI0"],
+        "ZN0": ["CU0", "AL0", "NI0", "PB0"],
         "NI0": ["CU0", "AL0", "ZN0"],
-        "RB0": ["HC0", "I0", "JM0"],
+        "PB0": ["CU0", "ZN0"],
+        "RB0": ["HC0", "I0", "JM0", "SF0"],
         "HC0": ["RB0", "I0", "JM0"],
-        "M0": ["A0", "P0", "RM0"],
+        "I0": ["RB0", "HC0", "J0", "JM0"],
+        "J0": ["I0", "JM0", "RB0"],
+        "JM0": ["J0", "I0", "RB0"],
+        "SF0": ["RB0", "SM0"],
+        "M0": ["A0", "P0", "RM0", "Y0"],
+        "Y0": ["M0", "P0", "OI0"],
+        "P0": ["Y0", "M0"],
+        "CF0": ["SR0"],
         "TA0": ["MA0", "EG0", "PF0"],
-        "AU0": ["AG0"],
-        "AG0": ["AU0"],
+        "MA0": ["TA0", "EG0", "PP0"],
+        "SC0": ["FU0", "BU0", "L0", "PP0"],
+        "AU0": ["AG0", "PT0"],
+        "AG0": ["AU0", "PT0"],
+        "PT0": ["AU0", "AG0"],
+        "FG0": ["SA0"],
+        "SA0": ["FG0"],
+        "LC0": ["SI0"],
+        "SI0": ["LC0", "SA0"],
     }
-
     return peer_map.get(symbol.upper(), [])
 
 
@@ -653,6 +687,56 @@ def render(
     col3.metric("产业链角色", info.chain_role)
 
     st.caption(f"同链共振候选：{', '.join(peers) if peers else '无'}")
+
+    # 1.5 Knowledge graph integration
+    try:
+        from src.workbench.kg_helper import (
+            get_key_relations, get_key_chains, get_cross_variety_impacts
+        )
+
+        with st.expander("📚 知识图谱 — 核心关系 & 传导链", expanded=False):
+            kg_tab1, kg_tab2, kg_tab3 = st.tabs(["🔗 核心关系", "⛓️ 传导链", "🌐 跨品种影响"])
+
+            with kg_tab1:
+                key_rels = get_key_relations(symbol, limit=5)
+                if key_rels:
+                    for r in key_rels:
+                        r_from = r.get("from", "")
+                        r_to = r.get("to", "")
+                        r_type = r.get("type", "")
+                        strength = r.get("strength", 0)
+                        desc = r.get("description", "")[:60]
+                        strength_color = "#4caf50" if strength >= 0.7 else "#ff9800" if strength >= 0.5 else "#999"
+                        st.markdown(f"**{r_from}** → **{r_to}** · {r_type} · "
+                                   f"<span style='color:{strength_color}'>{strength:.0%}</span>",
+                                   unsafe_allow_html=True)
+                        st.caption(desc)
+                else:
+                    st.caption("暂无核心关系数据")
+
+            with kg_tab2:
+                chains = get_key_chains(symbol, limit=3)
+                if chains:
+                    for c in chains:
+                        name = c.get("name", "")
+                        trigger = c.get("triggerEvent", "")
+                        steps = c.get("steps", [])
+                        st.markdown(f"**{name}**")
+                        st.caption(f"触发: {trigger}")
+                        for step in steps[:3]:
+                            st.markdown(f"  {step.get('seq', '')}. {step.get('from', '')} → {step.get('to', '')}")
+                else:
+                    st.caption("暂无传导链数据")
+
+            with kg_tab3:
+                impacts = get_cross_variety_impacts(symbol)
+                if impacts:
+                    for r in impacts[:5]:
+                        st.markdown(f"**{r.get('from', '')}** → **{r.get('to', '')}** · {r.get('type', '')}")
+                else:
+                    st.caption("暂无跨品种影响数据")
+    except Exception:
+        pass
 
     # 2. Current structure overview
     st.markdown("#### 当前结构概览")
