@@ -1,0 +1,103 @@
+{
+  "commodity": "原油",
+  "symbol": "SC",
+  "version": "1.0.0",
+  "chains": [
+    {
+      "id": "C_051",
+      "name": "OPEC减产推升油价链",
+      "domain": "能源",
+      "triggerEvent": "OPEC+宣布超预期减产",
+      "steps": [
+        {"seq": 1, "from": "OPEC+超预期减产", "to": "全球原油供给收紧预期", "confidence": "高", "lag": "即时", "mechanism": "减产配额直接减少供给"},
+        {"seq": 2, "from": "供给收紧预期", "to": "期货曲线backwardation加深", "confidence": "高", "lag": "即时", "mechanism": "近月供需紧张推高近月价格"},
+        {"seq": 3, "from": "Back加深", "to": "浮仓释放+库存下降", "confidence": "中", "lag": "1-4周", "mechanism": "contango消失使浮仓套利不划算"},
+        {"seq": 4, "from": "库存下降", "to": "现货升水走强", "confidence": "高", "lag": "即时", "mechanism": "现货紧张推高升水"},
+        {"seq": 5, "from": "现货升水", "to": "油价上涨", "confidence": "高", "lag": "即时", "mechanism": "现货带动期货价格上涨"},
+        {"seq": 6, "from": "油价高位", "to": "减产执行率下降", "confidence": "中", "lag": "3-6个月", "mechanism": "高油价诱惑成员国超产"}
+      ],
+      "reversalNode": "减产执行率下降",
+      "reversalCondition": "OPEC+成员国实际产量持续超过配额",
+      "polarityTensionThreshold": 0.8,
+      "historicalCases": [{"year": "2020", "description": "OPEC+历史性减产970万桶/日，油价从负值反弹至70美元"}, {"year": "2022", "description": "OPEC+小幅减产200万桶/日，支撑油价在80美元以上"}],
+      "reversibility": 0.6,
+      "tail_probability": 0.2
+    },
+    {
+      "id": "C_052",
+      "name": "中东地缘冲击链",
+      "domain": "能源",
+      "triggerEvent": "中东爆发军事冲突或霍尔木兹海峡受威胁",
+      "steps": [
+        {"seq": 1, "from": "中东地缘冲突升级", "to": "供给中断风险溢价飙升", "confidence": "高", "lag": "即时", "mechanism": "市场定价供给中断概率"},
+        {"seq": 2, "from": "风险溢价飙升", "to": "油价急涨", "confidence": "高", "lag": "即时", "mechanism": "恐慌性买盘推升油价"},
+        {"seq": 3, "from": "油价急涨", "to": "下游成本传导", "confidence": "中", "lag": "1-2周", "mechanism": "高油价传导至化工/运输/航空"},
+        {"seq": 4, "from": "下游承压", "to": "需求负反馈", "confidence": "中", "lag": "1-3个月", "mechanism": "高油价抑制终端需求"},
+        {"seq": 5, "from": "冲突未实质中断供给", "to": "溢价消退", "confidence": "中", "lag": "1-4周", "mechanism": "供给未实际中断则溢价回吐"}
+      ],
+      "reversalNode": "冲突降温或供给恢复",
+      "reversalCondition": "冲突未实质影响原油出口或达成停火",
+      "polarityTensionThreshold": 0.85,
+      "historicalCases": [{"year": "2019", "description": "沙特阿美设施遇袭，油价单日暴涨15%，但很快回落"}, {"year": "2024", "description": "红海胡塞武装袭击油轮，绕行好望角增加运输成本"}],
+      "reversibility": 0.7,
+      "tail_probability": 0.3
+    },
+    {
+      "id": "C_053",
+      "name": "美国库存周期链",
+      "domain": "能源",
+      "triggerEvent": "EIA周报显示美国原油库存大幅变化",
+      "steps": [
+        {"seq": 1, "from": "EIA库存大幅下降", "to": "市场供需紧张信号", "confidence": "高", "lag": "即时", "mechanism": "库存是供需平衡的直接指标"},
+        {"seq": 2, "from": "供需紧张信号", "to": "WTI近月走强", "confidence": "高", "lag": "即时", "mechanism": "近月合约对库存最敏感"},
+        {"seq": 3, "from": "WTI走强", "to": "跨区套利窗口打开", "confidence": "中", "lag": "即时", "mechanism": "WTI-Brent价差变化驱动贸易流"},
+        {"seq": 4, "from": "套利窗口", "to": "进口量调整", "confidence": "中", "lag": "2-4周", "mechanism": "套利利润引导油轮贸易方向"},
+        {"seq": 5, "from": "进口调整", "to": "库存再平衡", "confidence": "中", "lag": "4-8周", "mechanism": "进口增加补充库存"}
+      ],
+      "reversalNode": "库存企稳回升",
+      "reversalCondition": "连续两周库存增加或降幅收窄",
+      "polarityTensionThreshold": 0.65,
+      "historicalCases": [{"year": "2023", "description": "美国SPR大量释放后库存降至低位，支撑油价"}],
+      "reversibility": 0.7,
+      "tail_probability": 0.2
+    },
+    {
+      "id": "C_054",
+      "name": "页岩油供给响应链",
+      "domain": "能源",
+      "triggerEvent": "WTI油价持续高于页岩油盈亏平衡线",
+      "steps": [
+        {"seq": 1, "from": "油价高于盈亏平衡线", "to": "页岩油企业利润增加", "confidence": "高", "lag": "即时", "mechanism": "高油价改善生产商现金流"},
+        {"seq": 2, "from": "利润增加", "to": "钻机数增加", "confidence": "中", "lag": "2-4个月", "mechanism": "利润驱动资本开支增加"},
+        {"seq": 3, "from": "钻机增加", "to": "产量增长预期", "confidence": "中", "lag": "3-6个月", "mechanism": "新井投产增加产量"},
+        {"seq": 4, "from": "产量增长", "to": "供给过剩预期", "confidence": "中", "lag": "6-12个月", "mechanism": "供给增量超过需求增量"},
+        {"seq": 5, "from": "过剩预期", "to": "油价承压", "confidence": "中", "lag": "即时", "mechanism": "远期供给压力压制油价"}
+      ],
+      "reversalNode": "钻机数增速放缓",
+      "reversalCondition": "钻机数连续下降或油价跌破盈亏平衡线",
+      "polarityTensionThreshold": 0.6,
+      "historicalCases": [{"year": "2014-2016", "description": "页岩油革命导致供给过剩，油价从100跌至26"}, {"year": "2022-2023", "description": "ESG约束下页岩油企业资本开支纪律，产量增长温和"}],
+      "reversibility": 0.5,
+      "tail_probability": 0.25
+    },
+    {
+      "id": "C_055",
+      "name": "中国经济复苏拉动原油需求链",
+      "domain": "能源",
+      "triggerEvent": "中国经济数据超预期或政策刺激加码",
+      "steps": [
+        {"seq": 1, "from": "中国经济复苏", "to": "工业/交通用油需求增加", "confidence": "高", "lag": "1-3个月", "mechanism": "经济活动增加拉动成品油消费"},
+        {"seq": 2, "from": "需求增加", "to": "中国原油进口量上升", "confidence": "高", "lag": "即时", "mechanism": "炼厂增加进口满足需求"},
+        {"seq": 3, "from": "进口上升", "to": "中东/西非现货升水走强", "confidence": "中", "lag": "2-4周", "mechanism": "中国买盘推高亚太现货"},
+        {"seq": 4, "from": "现货走强", "to": "Brent/SC价格上涨", "confidence": "高", "lag": "即时", "mechanism": "现货带动期货"},
+        {"seq": 5, "from": "油价上涨", "to": "OPEC+增产空间打开", "confidence": "中", "lag": "3-6个月", "mechanism": "高油价为增产提供条件"}
+      ],
+      "reversalNode": "中国经济动能放缓",
+      "reversalCondition": "PMI回落或政策刺激力度减弱",
+      "polarityTensionThreshold": 0.65,
+      "historicalCases": [{"year": "2020-Q3", "description": "中国率先复苏拉动全球原油需求恢复"}],
+      "reversibility": 0.6,
+      "tail_probability": 0.2
+    }
+  ]
+}
