@@ -1,47 +1,61 @@
 {
   "commodity": "锌",
   "symbol": "ZN",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "relations": [
     {
-      "id": "R_601",
-      "type": "成本传导",
-      "from": "锌精矿TC/RC",
+      "id": "ZN_R001",
+      "from": "锌精矿TC",
       "to": "冶炼利润",
+      "type": "产业链传导",
+      "strength": 0.9,
+      "lag": "即时",
+      "description": "TC下降压缩冶炼利润"
+    },
+    {
+      "id": "ZN_R002",
+      "from": "欧洲天然气价格",
+      "to": "欧洲锌冶炼",
+      "type": "成本冲击",
       "strength": 0.85,
-      "direction": "正向"
+      "lag": "即时",
+      "description": "能源成本占冶炼成本约30%"
     },
     {
-      "id": "R_602",
-      "type": "需求传导",
-      "from": "镀锌板产量",
-      "to": "锌需求",
-      "strength": 0.8,
-      "direction": "正向"
+      "id": "ZN_R003",
+      "from": "镀锌板需求",
+      "to": "锌锭需求",
+      "type": "需求驱动",
+      "strength": 0.85,
+      "lag": "即时",
+      "description": "镀锌占锌消费约50%"
     },
     {
-      "id": "R_603",
-      "type": "需求传导",
-      "from": "基建/汽车",
-      "to": "锌需求",
-      "strength": 0.7,
-      "direction": "正向"
-    },
-    {
-      "id": "R_604",
-      "type": "库存传导",
-      "from": "锌库存",
-      "to": "锌价",
+      "id": "ZN_R004",
+      "from": "基建投资",
+      "to": "镀锌板需求",
+      "type": "需求驱动",
       "strength": 0.75,
-      "direction": "反向"
+      "lag": "季度",
+      "description": "基建是镀锌板最大下游"
     },
     {
-      "id": "R_605",
-      "type": "跨品种联动",
-      "from": "锌铅比",
-      "to": "冶炼产品选择",
-      "strength": 0.6,
-      "direction": "正向"
+      "id": "ZN_R005",
+      "from": "LME锌库存",
+      "to": "锌价",
+      "type": "供需信号",
+      "strength": 0.8,
+      "lag": "即时",
+      "description": "库存是供需平衡直接指标"
+    },
+    {
+      "id": "ZN_R006",
+      "from": "矿山供给",
+      "to": "锌精矿TC",
+      "type": "供需传导",
+      "strength": 0.85,
+      "lag": "季度",
+      "description": "矿山增量决定TC走势"
     }
   ]
 }
