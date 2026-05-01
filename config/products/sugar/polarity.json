@@ -1,0 +1,31 @@
+{
+  "commodity": "白糖",
+  "symbol": "SR",
+  "version": "1.3.0",
+  "entries": {
+    "CZCE白糖期货价格": {
+      "historicalMin": 4000,
+      "historicalMax": 8000,
+      "recentMin": 5500,
+      "recentMax": 7500,
+      "reversalSignalPatterns": [
+        "ICE原糖波动",
+        "巴西分流比变化",
+        "厄尔尼诺形成",
+        "进口政策变化"
+      ]
+    },
+    "ICE原糖价格": {
+      "historicalMin": 8,
+      "historicalMax": 35,
+      "recentMin": 15,
+      "recentMax": 28,
+      "reversalSignalPatterns": [
+        "巴西乙醇分流",
+        "印度出口政策",
+        "厄尔尼诺/拉尼娜",
+        "全球库消比"
+      ]
+    }
+  }
+}
