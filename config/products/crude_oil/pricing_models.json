@@ -1,0 +1,12 @@
+{
+  "commodity": "原油",
+  "symbol": "SC",
+  "version": "1.0.0",
+  "models": [
+    {"id": "M_006", "name": "原油供需平衡表模型", "domain": "基本面定价", "formula": "油价变化 = f(全球供给-全球需求, 库存变化, OPEC+剩余产能)", "variables": ["全球产量", "全球需求", "OECD库存", "OPEC剩余产能"], "linkToEntities": ["VAR_009", "VAR_010", "VAR_006"]},
+    {"id": "M_007", "name": "原油期限结构模型", "domain": "期限定价", "formula": "期货溢价(contango) = 持有成本(仓储+资金) - 便利收益", "variables": ["近月价格", "远月价格", "库存水平", "利率"], "linkToEntities": ["VAR_001", "VAR_006"]},
+    {"id": "M_008", "name": "地缘溢价模型", "domain": "风险定价", "formula": "地缘溢价 = Σ(冲突概率 × 供给中断量 × 持续时间)", "variables": ["中东冲突概率", "霍尔木兹海峡风险", "俄罗斯制裁"], "linkToEntities": ["GEO_006", "VAR_001"]},
+    {"id": "M_009", "name": "原油-美元联动模型", "domain": "宏观定价", "formula": "Δln(Oil) = α + β1*Δln(DXY) + β2*Δln(RealRate) + ε", "variables": ["美元指数", "实际利率", "避险情绪"], "linkToEntities": ["VAR_002"]},
+    {"id": "M_010", "name": "裂解价差炼油利润模型", "domain": "产业链定价", "formula": "炼油利润 = 成品油价格 - 原油成本 - 加工费", "variables": ["汽油价格", "柴油价格", "原油成本", "加工费"], "linkToEntities": ["VAR_007"]}
+  ]
+}
