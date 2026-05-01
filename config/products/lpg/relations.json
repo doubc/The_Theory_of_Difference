@@ -1,0 +1,129 @@
+{
+  "commodity": "液化石油气",
+  "symbol": "PG",
+  "version": "1.3.0",
+  "relations": [
+    {
+      "id": "R_301",
+      "type": "定价基准",
+      "from": "沙特CP丙烷价格",
+      "to": "大商所LPG期货",
+      "strength": 0.9,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "沙特CP是中国LPG进口定价基准，CP变化直接传导至国内期货和现货",
+      "reversalPoint": "国内供需严重失衡时可能短暂脱钩"
+    },
+    {
+      "id": "R_302",
+      "type": "产业链传导",
+      "from": "PDH开工率",
+      "to": "LPG化工需求",
+      "strength": 0.85,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "PDH是中国LPG化工需求最大增量，开工率直接决定丙烷消费强度",
+      "reversalPoint": "PDH利润持续为负时开工率下降"
+    },
+    {
+      "id": "R_303",
+      "type": "库存传导",
+      "from": "美国丙烷库存",
+      "to": "全球LPG价格",
+      "strength": 0.75,
+      "direction": "反向",
+      "groundBase": "marginal",
+      "lag": "1周",
+      "description": "美国丙烷库存是全球供需平衡的领先指标，库存低于五年均值支撑价格",
+      "historicalCase": "2021年库存低位叠加寒冬推升全球LPG价格"
+    },
+    {
+      "id": "R_304",
+      "type": "季节性",
+      "from": "冬季气温",
+      "to": "LPG燃烧需求",
+      "strength": 0.7,
+      "direction": "反向",
+      "groundBase": "natural",
+      "lag": "即时",
+      "description": "气温低于正常水平时取暖需求增加，推升LPG燃烧消费",
+      "reversalPoint": "暖冬年份季节性驱动减弱"
+    },
+    {
+      "id": "R_305",
+      "type": "供给约束",
+      "from": "OPEC+减产",
+      "to": "中东LPG出口",
+      "strength": 0.7,
+      "direction": "反向",
+      "groundBase": "order",
+      "lag": "1-3个月",
+      "description": "OPEC+原油减产减少伴生气产量，间接减少中东LPG出口供应",
+      "reversalPoint": "减产协议放松时伴生气回升"
+    },
+    {
+      "id": "R_306",
+      "type": "成本传导",
+      "from": "PDH加工利润",
+      "to": "PDH开工率",
+      "strength": 0.85,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "1-2周",
+      "description": "PDH利润是开工率的核心驱动，利润改善开工率提升，利润转负则降负停车",
+      "reversalPoint": "PDH利润持续为负超过2周时停车检修增加"
+    },
+    {
+      "id": "R_307",
+      "type": "价差替代",
+      "from": "丙烷-石脑油价差",
+      "to": "裂解原料选择",
+      "strength": 0.65,
+      "direction": "反向",
+      "groundBase": "marginal",
+      "lag": "1-3个月",
+      "description": "丙烷相对石脑油折价越大，PDH路线越有吸引力，化工用丙烷需求增加",
+      "reversalPoint": "丙烷溢价时石脑油裂解路线重新占优"
+    },
+    {
+      "id": "R_308",
+      "type": "汇率传导",
+      "from": "人民币汇率",
+      "to": "LPG进口成本",
+      "strength": 0.7,
+      "direction": "反向",
+      "groundBase": "order",
+      "lag": "即时",
+      "description": "人民币贬值推高以美元计价的LPG进口成本，升值则降低进口成本",
+      "reversalPoint": "汇率大幅波动时对进口成本影响显著"
+    },
+    {
+      "id": "R_309",
+      "type": "供给增量",
+      "from": "美国页岩气产量",
+      "to": "全球LPG供应",
+      "strength": 0.8,
+      "direction": "正向",
+      "groundBase": "natural",
+      "lag": "3-6个月",
+      "description": "美国页岩气伴生NGL是全球LPG供应增量的核心来源",
+      "reversalPoint": "页岩气投资下降可能限制长期供应增长"
+    },
+    {
+      "id": "R_310",
+      "type": "双体博弈",
+      "from": "LPG燃料属性",
+      "to": "LPG化工属性",
+      "strength": 0.75,
+      "direction": "需求竞争",
+      "groundBase": "marginal",
+      "stability": "中",
+      "description": "PDH扩张使LPG从燃料品转向化工品，化工需求优先级提升改变了传统季节性定价逻辑",
+      "dualityType": "燃料vs化工",
+      "currentAlignment": "化工需求占比提升",
+      "divergenceDegree": 0.6
+    }
+  ]
+}
