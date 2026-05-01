@@ -1,0 +1,18 @@
+{
+  "commodity": "白银",
+  "symbol": "AG",
+  "version": "1.0.0",
+  "entries": {
+    "COMEX白银": {
+      "historicalMin": 8,
+      "historicalMax": 50,
+      "recentMin": 20,
+      "recentMax": 35,
+      "reversalSignalPatterns": [
+        "金银比回归",
+        "光伏需求爆发",
+        "美联储降息"
+      ]
+    }
+  }
+}
