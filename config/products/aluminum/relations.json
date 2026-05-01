@@ -1,0 +1,70 @@
+{
+  "commodity": "铝",
+  "symbol": "AL",
+  "version": "1.0.0",
+  "relations": [
+    {
+      "id": "R_501",
+      "type": "成本传导",
+      "from": "电力成本",
+      "to": "电解铝成本",
+      "strength": 0.85,
+      "direction": "正向",
+      "description": "电力占电解铝成本约40%"
+    },
+    {
+      "id": "R_502",
+      "type": "供给约束",
+      "from": "电解铝产能天花板",
+      "to": "铝供给",
+      "strength": 0.9,
+      "direction": "反向",
+      "description": "产能天花板刚性约束"
+    },
+    {
+      "id": "R_503",
+      "type": "需求传导",
+      "from": "新能源汽车/光伏",
+      "to": "铝需求",
+      "strength": 0.75,
+      "direction": "正向",
+      "description": "新能源用铝量增加"
+    },
+    {
+      "id": "R_504",
+      "type": "产业链传导",
+      "from": "房地产竣工",
+      "to": "铝型材需求",
+      "strength": 0.7,
+      "direction": "正向",
+      "description": "竣工端拉动铝消费"
+    },
+    {
+      "id": "R_505",
+      "type": "跨品种联动",
+      "from": "铜铝比",
+      "to": "铝替代需求",
+      "strength": 0.6,
+      "direction": "反向",
+      "description": "铜价过高时部分需求转向铝"
+    },
+    {
+      "id": "R_506",
+      "type": "库存传导",
+      "from": "铝社会库存",
+      "to": "铝价",
+      "strength": 0.75,
+      "direction": "反向",
+      "description": "库存变化反映供需平衡"
+    },
+    {
+      "id": "R_507",
+      "type": "能耗政策",
+      "from": "能耗双控政策",
+      "to": "电解铝产量",
+      "strength": 0.8,
+      "direction": "反向",
+      "description": "限电限产直接影响产量"
+    }
+  ]
+}
