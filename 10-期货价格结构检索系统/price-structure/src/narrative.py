@@ -13,10 +13,43 @@ from __future__ import annotations
 from src.models import SystemState, Structure, ContrastType, StabilityVerdict
 
 
-def generate_diagnostic_report(ss: SystemState) -> str:
+def _section_price_context(st: Structure, bars=None) -> str:
+    """价格上下文：Zone 在历史中的位置"""
+    if bars is None:
+        return ""
+
+    try:
+        from src.data.price_context import compute_price_percentile
+        zone = st.zone
+        if zone is None:
+            return ""
+
+        center = zone.price_center
+        if center <= 0:
+            return ""
+
+        regime = compute_price_percentile(bars, center, lookback_days=252)
+
+        parts = []
+        parts.append("【价格上下文】")
+        parts.append(f"  Zone {center:.0f} 处于{regime.regime_label}（历史分位数 {regime.percentile:.0%}）")
+
+        if regime.is_extreme:
+            parts.append("  ⚠️ 极端位置——该价位的结构研究价值更高，但反转风险也更大")
+
+        return "\n".join(parts)
+    except Exception:
+        return ""
+
+
+def generate_diagnostic_report(ss: SystemState, bars=None) -> str:
     """
     生成完整的自然语言诊断报告。
     适合在工作台页面或每日报告中展示。
+
+    Args:
+        ss: 系统态
+        bars: 历史 Bar 序列（可选，有则附加价格上下文）
     """
     sections = []
     st = ss.structure
@@ -38,6 +71,12 @@ def generate_diagnostic_report(ss: SystemState) -> str:
 
     # ── 6. 最近稳态分析 ──
     sections.append(_section_stable_state(st))
+
+    # ── 7. 价格上下文（可选）──
+    if bars is not None:
+        pc = _section_price_context(st, bars)
+        if pc:
+            sections.append(pc)
 
     return "\n\n".join(s for s in sections if s)
 

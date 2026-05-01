@@ -316,6 +316,44 @@ def _score_maturity(s: Structure) -> tuple[float, list[str]]:
     return min(score, 1.0), flags
 
 
+def _score_price_context(s: Structure, bars=None) -> tuple[float, list[str]]:
+    """
+    价格上下文评分（可选维度）
+
+    基于 price_context.py 的价格分位数：
+    - Zone 处于历史极端位置 → 结构更显著
+    - Zone 处于中位区域 → 结构普通
+    """
+    flags = []
+    if bars is None:
+        return 0.5, flags  # 无数据时给中性分
+
+    try:
+        from src.data.price_context import compute_price_percentile
+        zone = getattr(s, "zone", None)
+        if zone is None:
+            return 0.5, flags
+
+        center = getattr(zone, "price_center", 0)
+        if center <= 0:
+            return 0.5, flags
+
+        regime = compute_price_percentile(bars, center, lookback_days=252)
+
+        # 极端位置加分（结构在历史高位/低位更有研究价值）
+        if regime.is_extreme:
+            score = 0.8
+            flags.append(f"📍 {regime.regime_label}（分位数 {regime.percentile:.0%}）")
+        elif regime.regime in ("elevated", "depressed"):
+            score = 0.65
+        else:
+            score = 0.5
+
+        return score, flags
+    except Exception:
+        return 0.5, flags
+
+
 def _score_traceability(s: Structure) -> tuple[float, list[str]]:
     """
     维度 5: 后验可追溯性
@@ -407,6 +445,7 @@ def assess_quality(
     s: Structure,
     ss: SystemState | None = None,
     knowledge_result: KnowledgeResult | None = None,
+    bars=None,
 ) -> QualityAssessment:
     """
     评估单个结构的质量
@@ -415,6 +454,7 @@ def assess_quality(
         s: 结构对象
         ss: 系统态（可选，有则评估更准确）
         knowledge_result: 知识引擎匹配结果（可选，有则增加知识维度）
+        bars: 历史 Bar 序列（可选，有则计算价格上下文）
 
     Returns:
         QualityAssessment
@@ -443,6 +483,12 @@ def assess_quality(
     r_score, r_flags = _score_traceability(s)
     dimension_scores["后验可追溯"] = r_score
     all_flags.extend(r_flags)
+
+    # 价格上下文（可选，不影响权重，仅附加 flags）
+    if bars is not None:
+        pc_score, pc_flags = _score_price_context(s, bars)
+        if pc_flags:
+            all_flags.extend(pc_flags)
 
     # ── 第 6 维度：知识置信度 ──
     if knowledge_result is not None and knowledge_result.total_matched > 0:
