@@ -1,0 +1,87 @@
+{
+  "commodity": "铅",
+  "symbol": "PB",
+  "version": "1.0.0",
+  "entities": [
+    {
+      "id": "PB_E01",
+      "name": "再生铅供给叙事",
+      "type": "商品供需叙事",
+      "groundBase": "culture",
+      "importance": 8,
+      "description": "再生铅占全球铅供给约60%，废电池回收是核心来源，再生铅成本决定铅价底部",
+      "trackingVariables": [
+        "废电池价格",
+        "再生铅开工率",
+        "环保政策"
+      ]
+    },
+    {
+      "id": "PB_E02",
+      "name": "铅酸电池需求叙事",
+      "type": "商品供需叙事",
+      "groundBase": "culture",
+      "importance": 7,
+      "description": "铅酸电池占铅消费约85%，电动自行车和汽车启停电池是核心需求，锂电池替代是长期压制",
+      "trackingVariables": [
+        "电动自行车产量",
+        "汽车产量",
+        "锂电替代进度"
+      ]
+    },
+    {
+      "id": "PB_E03",
+      "name": "LME铅库存",
+      "type": "库存变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "currentValue": "约20万吨",
+      "historicalRange": {
+        "min": 5,
+        "max": 30
+      },
+      "trackingVariables": [
+        "LME库存",
+        "SHFE库存",
+        "社会库存"
+      ]
+    },
+    {
+      "id": "PB_E04",
+      "name": "再生铅冶炼利润",
+      "type": "加工费变量",
+      "groundBase": "marginal",
+      "importance": 7,
+      "trackingVariables": [
+        "废电池到厂价",
+        "精铅出厂价",
+        "冶炼开工率"
+      ]
+    },
+    {
+      "id": "PB_E05",
+      "name": "豫光金铅",
+      "type": "产业权力机构",
+      "groundBase": "order",
+      "importance": 7,
+      "description": "中国最大铅冶炼企业之一，产能约60万吨",
+      "trackingVariables": [
+        "产量",
+        "开工率"
+      ]
+    },
+    {
+      "id": "PB_E06",
+      "name": "国际铅锌研究小组ILZSG",
+      "type": "国际数据机构",
+      "groundBase": "order",
+      "importance": 8,
+      "description": "全球铅锌供需平衡表权威发布机构",
+      "trackingVariables": [
+        "全球铅产量",
+        "消费量",
+        "供需平衡"
+      ]
+    }
+  ]
+}

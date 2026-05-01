@@ -1,0 +1,69 @@
+{
+  "commodity": "硅铁",
+  "symbol": "SF",
+  "version": "1.0.0",
+  "chains": [
+    {
+      "id": "SF_C01",
+      "name": "钢厂利润-硅铁需求传导链",
+      "domain": "黑色系",
+      "groundBase": "marginal",
+      "triggerEvent": "钢厂利润大幅改善",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "钢厂利润改善",
+          "to": "高炉开工率上升",
+          "confidence": "高",
+          "lag": "1-2周",
+          "mechanism": "利润驱动钢厂增产"
+        },
+        {
+          "seq": 2,
+          "from": "开工率上升",
+          "to": "硅铁采购增加",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "粗钢产量增加带动硅铁需求"
+        },
+        {
+          "seq": 3,
+          "from": "采购增加",
+          "to": "硅铁库存下降",
+          "confidence": "高",
+          "lag": "2-4周",
+          "mechanism": "需求增加消耗库存"
+        },
+        {
+          "seq": 4,
+          "from": "库存下降",
+          "to": "硅铁价格上涨",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "供需紧张推升价格"
+        },
+        {
+          "seq": 5,
+          "from": "硅铁上涨",
+          "to": "钢厂成本上升",
+          "confidence": "中",
+          "lag": "即时",
+          "mechanism": "硅铁价格上涨增加炼钢成本"
+        },
+        {
+          "seq": 6,
+          "from": "成本上升",
+          "to": "利润压缩",
+          "confidence": "中",
+          "lag": "1-2个月",
+          "mechanism": "成本上升压缩钢厂利润，负反馈"
+        }
+      ],
+      "reversalNode": "钢厂利润压缩",
+      "reversalCondition": "钢厂利润转负或粗钢限产政策出台",
+      "reversibility": 0.65,
+      "tail_probability": 0.2,
+      "minority_protected": false
+    }
+  ]
+}

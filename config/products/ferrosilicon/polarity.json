@@ -1,0 +1,30 @@
+{
+  "commodity": "硅铁",
+  "symbol": "SF",
+  "version": "1.0.0",
+  "entries": {
+    "郑商所硅铁价格": {
+      "historicalMin": 4500,
+      "historicalMax": 12000,
+      "recentMin": 6000,
+      "recentMax": 9000,
+      "reversalSignalPatterns": [
+        "粗钢限产",
+        "电价下调",
+        "西北环保放松",
+        "出口增加"
+      ]
+    },
+    "硅铁开工率": {
+      "historicalMin": 30,
+      "historicalMax": 75,
+      "recentMin": 40,
+      "recentMax": 65,
+      "reversalSignalPatterns": [
+        "利润回升",
+        "环保放松",
+        "电力供应改善"
+      ]
+    }
+  }
+}

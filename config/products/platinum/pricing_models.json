@@ -1,0 +1,44 @@
+{
+  "commodity": "铂",
+  "symbol": "PT",
+  "version": "1.0.0",
+  "models": [
+    {
+      "id": "PT_M01",
+      "name": "铂金供需平衡定价模型",
+      "domain": "供需定价",
+      "groundBase": "marginal",
+      "formula": "Δln(PT) = α + β1*Δ(Supply_disruption) + β2*Δ(H2_demand) + β3*Δ(ETF_flow) + β4*Δ(Gold) + ε",
+      "variables": [
+        {
+          "name": "南非供给扰动",
+          "direction": "正向",
+          "weight": 0.3
+        },
+        {
+          "name": "氢能需求增量",
+          "direction": "正向",
+          "weight": 0.25
+        },
+        {
+          "name": "ETF资金流",
+          "direction": "正向",
+          "weight": 0.2
+        },
+        {
+          "name": "黄金价格联动",
+          "direction": "正向",
+          "weight": 0.15
+        },
+        {
+          "name": "回收供给",
+          "direction": "反向",
+          "weight": 0.1
+        }
+      ],
+      "description": "铂金定价由供给扰动（南非电力危机）、新兴需求（氢能）、投资需求和贵金属联动共同决定",
+      "dominantPhase": "供给冲击或氢能叙事主导时，模型解释力最高",
+      "limitation": "忽视铂钯替代节奏和柴油车需求变化"
+    }
+  ]
+}

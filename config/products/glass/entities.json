@@ -1,0 +1,64 @@
+{
+  "commodity": "玻璃",
+  "symbol": "FG",
+  "version": "1.0.0",
+  "entities": [
+    {
+      "id": "FG_E01",
+      "name": "玻璃房地产叙事",
+      "type": "商品供需叙事",
+      "groundBase": "culture",
+      "importance": 9,
+      "description": "玻璃约75%用于房地产竣工端（门窗/幕墙），房地产竣工面积是玻璃需求核心指标",
+      "trackingVariables": [
+        "房地产竣工面积",
+        "商品房销售",
+        "期房交付政策"
+      ]
+    },
+    {
+      "id": "FG_E02",
+      "name": "玻璃产线刚性叙事",
+      "type": "商品供需叙事",
+      "groundBase": "culture",
+      "importance": 8,
+      "description": "浮法玻璃产线点火后连续生产5-8年，冷修成本高，供给端调节滞后于需求",
+      "trackingVariables": [
+        "在产产线数量",
+        "冷修产线",
+        "点火产线",
+        "产能利用率"
+      ]
+    },
+    {
+      "id": "FG_E03",
+      "name": "郑商所玻璃期货",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "currentValue": "约1500元/吨",
+      "historicalRange": {
+        "min": 800,
+        "max": 2800
+      },
+      "trackingVariables": [
+        "期货价格",
+        "持仓量",
+        "仓单"
+      ]
+    },
+    {
+      "id": "FG_E04",
+      "name": "中国建筑玻璃与工业玻璃协会",
+      "type": "行业协会",
+      "groundBase": "order",
+      "importance": 7,
+      "description": "玻璃行业数据来源",
+      "trackingVariables": [
+        "产能",
+        "库存",
+        "价格指数"
+      ]
+    }
+  ]
+}

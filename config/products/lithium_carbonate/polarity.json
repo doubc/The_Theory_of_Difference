@@ -1,0 +1,19 @@
+{
+  "commodity": "碳酸锂",
+  "symbol": "LC",
+  "version": "1.3.0",
+  "entries": {
+    "电池级碳酸锂价格": {
+      "historicalMin": 40000,
+      "historicalMax": 600000,
+      "recentMin": 80000,
+      "recentMax": 600000,
+      "reversalSignalPatterns": [
+        "新能源车销量增速放缓",
+        "锂矿产能集中释放",
+        "下游去库完成",
+        "盐湖季节性减产"
+      ]
+    }
+  }
+}

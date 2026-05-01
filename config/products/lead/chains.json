@@ -1,0 +1,107 @@
+{
+  "commodity": "铅",
+  "symbol": "PB",
+  "version": "1.0.0",
+  "chains": [
+    {
+      "id": "PB_C01",
+      "name": "再生铅成本传导链",
+      "domain": "有色金属",
+      "groundBase": "marginal",
+      "triggerEvent": "废电池价格大幅上涨",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "废电池价格上涨",
+          "to": "再生铅成本上升",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "废电池占再生铅成本约80%"
+        },
+        {
+          "seq": 2,
+          "from": "成本上升",
+          "to": "再生铅冶炼利润压缩",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "精铅价格涨幅不及原料涨幅"
+        },
+        {
+          "seq": 3,
+          "from": "利润压缩",
+          "to": "再生铅减产",
+          "confidence": "中",
+          "lag": "1-2周",
+          "mechanism": "亏损时再生铅企业降低开工率"
+        },
+        {
+          "seq": 4,
+          "from": "再生铅减产",
+          "to": "铅供给收缩",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "再生铅占铅供给60%，减产影响显著"
+        },
+        {
+          "seq": 5,
+          "from": "供给收缩",
+          "to": "铅价上涨",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "供需缺口推动铅价上行"
+        }
+      ],
+      "reversalNode": "废电池价格回落",
+      "reversalCondition": "废电池价格下跌或精铅涨幅覆盖成本",
+      "reversibility": 0.6,
+      "tail_probability": 0.2,
+      "minority_protected": false
+    },
+    {
+      "id": "PB_C02",
+      "name": "铅锌伴生联动链",
+      "domain": "有色金属",
+      "groundBase": "natural",
+      "triggerEvent": "锌矿供应紧张导致锌价大涨",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "锌矿供应紧张",
+          "to": "锌价上涨",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "锌矿供给不足推高锌价"
+        },
+        {
+          "seq": 2,
+          "from": "锌价上涨",
+          "to": "铅锌矿开采增加",
+          "confidence": "中",
+          "lag": "1-3个月",
+          "mechanism": "高锌价激励矿山增产"
+        },
+        {
+          "seq": 3,
+          "from": "矿山增产",
+          "to": "铅副产增加",
+          "confidence": "中",
+          "lag": "即时",
+          "mechanism": "铅锌伴生，锌矿增产同时增加铅供给"
+        },
+        {
+          "seq": 4,
+          "from": "铅供给增加",
+          "to": "铅价承压",
+          "confidence": "中",
+          "lag": "1-2个月",
+          "mechanism": "铅供给增加压制铅价"
+        }
+      ],
+      "reversalNode": "锌价回落",
+      "reversalCondition": "锌价下跌导致矿山减产",
+      "reversibility": 0.5,
+      "tail_probability": 0.15,
+      "minority_protected": false
+    }
+  ]
+}

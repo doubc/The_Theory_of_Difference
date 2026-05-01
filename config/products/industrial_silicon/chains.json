@@ -1,0 +1,61 @@
+{
+  "commodity": "工业硅",
+  "symbol": "SI",
+  "version": "1.0.0",
+  "chains": [
+    {
+      "id": "SI_C01",
+      "name": "光伏扩产-工业硅需求增长链",
+      "domain": "新能源",
+      "groundBase": "marginal",
+      "triggerEvent": "全球光伏装机量超预期增长",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "光伏装机增长",
+          "to": "多晶硅需求增加",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "多晶硅是光伏电池核心原料"
+        },
+        {
+          "seq": 2,
+          "from": "多晶硅需求增加",
+          "to": "多晶硅扩产",
+          "confidence": "高",
+          "lag": "3-6个月",
+          "mechanism": "高利润驱动产能扩张"
+        },
+        {
+          "seq": 3,
+          "from": "多晶硅扩产",
+          "to": "工业硅需求增加",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "工业硅是多晶硅原料"
+        },
+        {
+          "seq": 4,
+          "from": "工业硅需求增加",
+          "to": "工业硅价格上涨",
+          "confidence": "中",
+          "lag": "1-3个月",
+          "mechanism": "需求增量消化供给"
+        },
+        {
+          "seq": 5,
+          "from": "工业硅上涨",
+          "to": "多晶硅成本上升",
+          "confidence": "中",
+          "lag": "即时",
+          "mechanism": "工业硅占多晶硅成本约30%"
+        }
+      ],
+      "reversalNode": "多晶硅产能过剩",
+      "reversalCondition": "多晶硅产能大幅过剩导致价格暴跌减产",
+      "reversibility": 0.6,
+      "tail_probability": 0.25,
+      "minority_protected": false
+    }
+  ]
+}

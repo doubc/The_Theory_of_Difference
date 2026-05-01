@@ -1,0 +1,64 @@
+{
+  "commodity": "工业硅",
+  "symbol": "SI",
+  "version": "1.0.0",
+  "entities": [
+    {
+      "id": "SI_E01",
+      "name": "工业硅光伏需求叙事",
+      "type": "商品供需叙事",
+      "groundBase": "culture",
+      "importance": 9,
+      "description": "多晶硅是工业硅最大下游（约40%），光伏装机量直接决定工业硅需求增长",
+      "trackingVariables": [
+        "光伏装机量",
+        "多晶硅产量",
+        "多晶硅价格"
+      ]
+    },
+    {
+      "id": "SI_E02",
+      "name": "工业硅成本叙事",
+      "type": "商品供需叙事",
+      "groundBase": "culture",
+      "importance": 7,
+      "description": "电力成本占工业硅生产约35%，云南/四川水电季节性影响供给",
+      "trackingVariables": [
+        "西南电价",
+        "丰水期/枯水期",
+        "硅石价格",
+        "碳电极价格"
+      ]
+    },
+    {
+      "id": "SI_E03",
+      "name": "广期所工业硅期货",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "currentValue": "约13000元/吨",
+      "historicalRange": {
+        "min": 10000,
+        "max": 22000
+      },
+      "trackingVariables": [
+        "期货价格",
+        "持仓量",
+        "仓单"
+      ]
+    },
+    {
+      "id": "SI_E04",
+      "name": "合盛硅业",
+      "type": "产业权力机构",
+      "groundBase": "order",
+      "importance": 8,
+      "description": "中国最大工业硅生产企业，产能约120万吨",
+      "trackingVariables": [
+        "产量",
+        "开工率",
+        "定价"
+      ]
+    }
+  ]
+}

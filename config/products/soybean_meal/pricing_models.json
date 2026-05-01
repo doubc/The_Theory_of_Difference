@@ -1,0 +1,44 @@
+{
+  "commodity": "豆粕",
+  "symbol": "M",
+  "version": "1.0.0",
+  "models": [
+    {
+      "id": "M_M01",
+      "name": "豆粕进口成本定价模型",
+      "domain": "成本定价",
+      "groundBase": "marginal",
+      "formula": "M_price ≈ (CBOT + 升贴水) * 汇率 * 关税 * 增值税 + 压榨利润",
+      "variables": [
+        {
+          "name": "CBOT大豆价格",
+          "direction": "正向",
+          "weight": 0.5
+        },
+        {
+          "name": "FOB升贴水",
+          "direction": "正向",
+          "weight": 0.1
+        },
+        {
+          "name": "人民币汇率",
+          "direction": "反向",
+          "weight": 0.15
+        },
+        {
+          "name": "压榨利润",
+          "direction": "正向",
+          "weight": 0.15
+        },
+        {
+          "name": "豆油价格（油粕比）",
+          "direction": "反向",
+          "weight": 0.1
+        }
+      ],
+      "description": "豆粕定价以进口大豆成本为基础，压榨利润和油粕比决定豆粕相对价格",
+      "dominantPhase": "进口依赖度高时成本模型解释力最强",
+      "limitation": "忽视国内大豆收储政策和养殖需求弹性"
+    }
+  ]
+}

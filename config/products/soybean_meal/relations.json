@@ -1,0 +1,67 @@
+{
+  "commodity": "豆粕",
+  "symbol": "M",
+  "version": "1.0.0",
+  "relations": [
+    {
+      "id": "M_R01",
+      "type": "供给驱动",
+      "from": "南美大豆产量",
+      "to": "豆粕价格",
+      "strength": 0.85,
+      "direction": "反向",
+      "groundBase": "natural",
+      "lag": "月度",
+      "description": "南美丰产增加全球大豆供给，压低豆粕价格；减产则推高",
+      "reversalPoint": "南美天气转好或美国大豆补种"
+    },
+    {
+      "id": "M_R02",
+      "type": "需求驱动",
+      "from": "生猪存栏量",
+      "to": "豆粕需求",
+      "strength": 0.8,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "月度",
+      "description": "生猪存栏量高→饲料需求旺盛→豆粕消费增加",
+      "reversalPoint": "猪价暴跌导致存栏量下降"
+    },
+    {
+      "id": "M_R03",
+      "type": "成本传导",
+      "from": "CBOT大豆价格",
+      "to": "国内豆粕成本",
+      "strength": 0.85,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "1-2周",
+      "description": "进口大豆成本=CBOT+升贴水+运费+汇率，CBOT上涨推升国内豆粕成本",
+      "reversalPoint": "人民币升值部分对冲CBOT上涨"
+    },
+    {
+      "id": "M_R04",
+      "type": "替代竞争",
+      "from": "菜粕/DDGS",
+      "to": "豆粕需求",
+      "strength": 0.55,
+      "direction": "反向",
+      "groundBase": "marginal",
+      "lag": "月度",
+      "description": "菜粕和DDGS可部分替代豆粕，价差过大时替代增加",
+      "reversalPoint": "替代品供应紧张时豆粕不可替代性增强"
+    },
+    {
+      "id": "M_R05",
+      "type": "汇率传导",
+      "from": "人民币汇率",
+      "to": "大豆进口成本",
+      "strength": 0.7,
+      "direction": "反向",
+      "groundBase": "order",
+      "lag": "即时",
+      "description": "人民币贬值推高进口大豆成本，支撑国内豆粕价格",
+      "reversalPoint": "人民币升值降低进口成本"
+    }
+  ]
+}

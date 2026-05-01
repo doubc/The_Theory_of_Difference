@@ -1,0 +1,67 @@
+{
+  "commodity": "PTA",
+  "symbol": "TA",
+  "version": "1.0.0",
+  "relations": [
+    {
+      "id": "TA_R01",
+      "type": "成本传导",
+      "from": "原油价格",
+      "to": "PTA成本",
+      "strength": 0.8,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "1-2周",
+      "description": "原油→石脑油→PX→PTA成本传导链，原油占PTA成本约60%",
+      "reversalPoint": "PX产能过剩时成本传导减弱"
+    },
+    {
+      "id": "TA_R02",
+      "type": "需求驱动",
+      "from": "聚酯开工率",
+      "to": "PTA需求",
+      "strength": 0.85,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "聚酯是PTA唯一重要下游，聚酯开工直接决定PTA消费",
+      "reversalPoint": "聚酯库存累积导致降负"
+    },
+    {
+      "id": "TA_R03",
+      "type": "供给博弈",
+      "from": "PTA产能扩张",
+      "to": "PTA加工费",
+      "strength": 0.7,
+      "direction": "反向",
+      "groundBase": "marginal",
+      "lag": "年度",
+      "description": "PTA产能持续扩张压制加工费，行业利润中枢下移",
+      "reversalPoint": "老旧装置退出或需求超预期增长"
+    },
+    {
+      "id": "TA_R04",
+      "type": "出口驱动",
+      "from": "纺织服装出口",
+      "to": "聚酯需求",
+      "strength": 0.65,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "月度",
+      "description": "中国纺织出口是聚酯终端需求核心驱动力之一",
+      "reversalPoint": "海外经济衰退或贸易摩擦"
+    },
+    {
+      "id": "TA_R05",
+      "type": "季节性",
+      "from": "纺织旺季",
+      "to": "PTA需求",
+      "strength": 0.6,
+      "direction": "正向",
+      "groundBase": "natural",
+      "lag": "月度",
+      "description": "春秋两季是纺织传统旺季，聚酯开工率季节性上升",
+      "reversalPoint": "淡季聚酯库存累积"
+    }
+  ]
+}

@@ -1,0 +1,290 @@
+{
+  "commodity": "铜",
+  "symbol": "CU",
+  "version": "1.3.0",
+  "models": [
+    {
+      "id": "M_001",
+      "name": "铜的实际利率定价模型",
+      "domain": "宏观金融定价",
+      "groundBase": "order",
+      "formula": "Δln(Cu) = α + β1*Δln(1/RealRate) + β2*Δln(DXY) + β3*Δln(PMI) + ε",
+      "variables": [
+        {
+          "name": "实际利率（10年期TIPS收益率）",
+          "id": "VAR_004_derived",
+          "direction": "反向",
+          "weight": 0.35
+        },
+        {
+          "name": "美元指数DXY",
+          "id": "VAR_003",
+          "direction": "反向",
+          "weight": 0.25
+        },
+        {
+          "name": "全球制造业PMI",
+          "id": "VAR_007",
+          "direction": "正向",
+          "weight": 0.3
+        },
+        {
+          "name": "残差/供给冲击",
+          "id": "residual",
+          "direction": "不定",
+          "weight": 0.1
+        }
+      ],
+      "description": "铜作为金融属性最强的工业金属，实际利率是其机会成本，美元是其计价货币，PMI是其需求代理变量。该模型在宏观交易中解释力最强（R²约0.6-0.7）。",
+      "dominantPhase": "当铜的金融属性主导时（如美联储政策拐点、全球宏观交易），该模型有效性最高",
+      "limitation": "忽视库存结构、矿山供给中断、废铜替代等微观因素，在供应严重紧张或宽松时解释力下降",
+      "trackingVariables": [
+        "TIPS收益率",
+        "DXY",
+        "全球PMI",
+        "模型残差（作为供给冲击度量）"
+      ],
+      "linkToEntities": [
+        "VAR_004",
+        "VAR_003",
+        "VAR_007"
+      ],
+      "linkToRelations": [
+        "R_205",
+        "R_206"
+      ]
+    },
+    {
+      "id": "M_002",
+      "name": "铜的库存-价差动力学模型",
+      "domain": "微观结构定价",
+      "groundBase": "marginal",
+      "formula": "ΔSpread(Cash-3M) = f(Inventory/Consumption, Seasonality, TradeFlow)",
+      "variables": [
+        {
+          "name": "全球显性库存/周度消费量（库存消费比）",
+          "id": "VAR_069_derived",
+          "direction": "反向",
+          "weight": 0.45
+        },
+        {
+          "name": "LME现货/3月升贴水",
+          "id": "VAR_067_derived",
+          "direction": "正向（自我强化）",
+          "weight": 0.3
+        },
+        {
+          "name": "洋山铜溢价（中国进口需求代理）",
+          "id": "VAR_070",
+          "direction": "正向",
+          "weight": 0.15
+        },
+        {
+          "name": "季节性因子（Q4/Q1消费旺季）",
+          "id": "seasonal",
+          "direction": "正向",
+          "weight": 0.1
+        }
+      ],
+      "description": "库存是供需平衡的最直接指标。当库存降至临界水平（全球消费不足1周），现货升水将加速走强，铜价弹性急剧放大。Backwardation结构下空头展期亏损，形成自我强化的逼仓压力。",
+      "dominantPhase": "当库存处于极端低位（<30万吨）或高位（>60万吨）时，该模型定价权重超过宏观模型",
+      "limitation": "库存数据存在统计滞后，且不能完全覆盖隐性库存和贸易商库存，在融资铜盛行时信号失真",
+      "trackingVariables": [
+        "LME库存",
+        "SHFE库存",
+        "Comex库存",
+        "中国保税区库存",
+        "LME升贴水",
+        "洋山铜溢价"
+      ],
+      "linkToEntities": [
+        "GEO_071",
+        "VAR_069",
+        "VAR_070"
+      ],
+      "linkToRelations": [
+        "R_204",
+        "R_213"
+      ],
+      "linkToConductionChains": [
+        "C_042"
+      ]
+    },
+    {
+      "id": "M_003",
+      "name": "铜的产业链利润分配模型",
+      "domain": "产业链定价",
+      "groundBase": "marginal",
+      "formula": "Price_Cu = f(TC/RC, SmelterMargin, ScrapSpread, DownstreamMargin)",
+      "variables": [
+        {
+          "name": "铜精矿TC/RC加工费",
+          "id": "VAR_068",
+          "direction": "反向（TC低→矿紧→铜价涨）",
+          "weight": 0.35
+        },
+        {
+          "name": "精废价差",
+          "id": "VAR_069_derived",
+          "direction": "反向（价差扩→废铜替代→压精铜价）",
+          "weight": 0.25
+        },
+        {
+          "name": "冶炼利润",
+          "id": "smelter_margin",
+          "direction": "正向（利润高→增产→供过于求压力）",
+          "weight": 0.2
+        },
+        {
+          "name": "下游铜杆/铜管开工率",
+          "id": "downstream_rate",
+          "direction": "正向（反映终端需求强度）",
+          "weight": 0.2
+        }
+      ],
+      "description": "铜价由矿-冶炼-加工-终端全链条利润分配共同决定。TC/RC是矿端相对议价力的核心指标：TC暴跌意味着矿极度紧缺，铜价中枢上移。精废价差是供给的弹性变量：价差拉大时废铜替代精铜，压制精铜需求和价格。",
+      "dominantPhase": "供给驱动行情下（矿山停产、罢工、品位下降），矿端利润（TC/RC）主导定价",
+      "limitation": "冶炼利润受硫酸等副产品价格影响较大，模型需动态调整冶炼盈亏平衡点",
+      "trackingVariables": [
+        "TC/RC周度数据",
+        "精废价差",
+        "中国铜冶炼企业开工率",
+        "铜杆开工率",
+        "硫酸价格"
+      ],
+      "linkToEntities": [
+        "POW_065",
+        "POW_067",
+        "VAR_068"
+      ],
+      "linkToRelations": [
+        "R_203",
+        "R_209"
+      ],
+      "linkToConductionChains": [
+        "C_043"
+      ]
+    },
+    {
+      "id": "M_004",
+      "name": "铜的估值比价模型",
+      "domain": "跨资产比价定价",
+      "groundBase": "marginal",
+      "formula": "FairValue_Cu = α + β1*(Au_Price) + β2*(Oil_Price) + β3*(S&P500)",
+      "variables": [
+        {
+          "name": "黄金价格（避险/通胀基准）",
+          "id": "VAR_005",
+          "direction": "正向（长期通胀预期）",
+          "weight": 0.3
+        },
+        {
+          "name": "铜金比（风险偏好/经济信心）",
+          "id": "VAR_072",
+          "direction": "均值回归锚",
+          "weight": 0.3
+        },
+        {
+          "name": "油铜比（成本/需求结构）",
+          "id": "VAR_052",
+          "direction": "负向偏离后回归",
+          "weight": 0.25
+        },
+        {
+          "name": "标普500指数（全球增长预期）",
+          "id": "SPX",
+          "direction": "正向",
+          "weight": 0.15
+        }
+      ],
+      "description": "铜金比是全球风险偏好和经济信心的核心度量：比率上升意味着市场偏好增长型资产（铜），比率下降意味着市场偏好避险资产（黄金）。铜金比长期均值约4.0-4.5，极端偏离后会均值回归。油铜比反映能源成本与工业需求的相对强弱。",
+      "dominantPhase": "当宏观方向不明、铜供需基本面信号混乱时，比价模型的均值回归交易策略有效",
+      "limitation": "结构性变化（如能源转型）可能永久改变比价中枢，历史均值可能失效",
+      "trackingVariables": [
+        "铜金比",
+        "油铜比",
+        "金银比",
+        "铜/标普500比价"
+      ],
+      "linkToEntities": [
+        "VAR_005",
+        "VAR_072",
+        "VAR_052"
+      ],
+      "linkToRelations": [
+        "R_205"
+      ],
+      "linkToPolarityArchive": [
+        "铜金比"
+      ]
+    },
+    {
+      "id": "M_005",
+      "name": "铜的综合定价决策框架",
+      "domain": "多因子综合定价",
+      "groundBase": "marginal",
+      "formula": "Cu_Score = w1*MacroFactor + w2*InventoryFactor + w3*MarginFactor + w4*ValuationFactor",
+      "variables": [
+        {
+          "name": "宏观因子（实际利率+美元+PMI）",
+          "id": "M_001",
+          "direction": "综合",
+          "weight": 0.3
+        },
+        {
+          "name": "库存因子（库存消费比+升贴水+洋山溢价）",
+          "id": "M_002",
+          "direction": "综合",
+          "weight": 0.3
+        },
+        {
+          "name": "产业链因子（TC/RC+精废价差+冶炼利润+下游开工）",
+          "id": "M_003",
+          "direction": "综合",
+          "weight": 0.25
+        },
+        {
+          "name": "比价因子（铜金比+油铜比）",
+          "id": "M_004",
+          "direction": "综合",
+          "weight": 0.15
+        }
+      ],
+      "description": "综合定价框架根据市场状态动态调整权重：（1）宏观驱动型市场（如美联储政策拐点）：宏观因子升至40%，库存因子降至20%；（2）供给冲击型市场（如矿山大规模停产）：产业链因子升至40%，宏观因子降至20%；（3）极端库存型市场（库存见底或过剩）：库存因子升至50%，其他因子等比例压缩。",
+      "dominantPhase": "任何时候都应同时监测四个维度，根据当前市场核心矛盾进行动态权重调整",
+      "limitation": "权重调整依赖主观判断，建议使用历史回测和机器学习优化动态权重",
+      "trackingVariables": [
+        "各子模型因子值",
+        "因子IC值（滚动12个月）",
+        "市场状态分类标签"
+      ],
+      "linkToEntities": [
+        "VAR_067",
+        "VAR_068",
+        "VAR_069",
+        "VAR_070",
+        "VAR_072"
+      ],
+      "linkToRelations": [
+        "R_203",
+        "R_204",
+        "R_205",
+        "R_206",
+        "R_209"
+      ],
+      "linkToConductionChains": [
+        "C_041",
+        "C_042",
+        "C_043",
+        "C_044",
+        "C_045"
+      ],
+      "linkToPolarityArchive": [
+        "LME铜价",
+        "铜精矿TC/RC",
+        "全球铜显性库存",
+        "铜金比"
+      ]
+    }
+  ]
+}

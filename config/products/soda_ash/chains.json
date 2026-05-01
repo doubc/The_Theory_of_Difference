@@ -1,0 +1,69 @@
+{
+  "commodity": "纯碱",
+  "symbol": "SA",
+  "version": "1.0.0",
+  "chains": [
+    {
+      "id": "SA_C01",
+      "name": "纯碱库存崩塌-价格暴涨链",
+      "domain": "建材",
+      "groundBase": "marginal",
+      "triggerEvent": "纯碱库存降至历史极低水平",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "库存极低",
+          "to": "现货紧张",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "可用天数降至安全线以下"
+        },
+        {
+          "seq": 2,
+          "from": "现货紧张",
+          "to": "下游恐慌补库",
+          "confidence": "高",
+          "lag": "1-2周",
+          "mechanism": "玻璃厂担心断供加大采购"
+        },
+        {
+          "seq": 3,
+          "from": "恐慌补库",
+          "to": "库存进一步下降",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "补库加剧供需紧张"
+        },
+        {
+          "seq": 4,
+          "from": "供需极紧",
+          "to": "纯碱价格暴涨",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "价格弹性在极低库存时放大"
+        },
+        {
+          "seq": 5,
+          "from": "纯碱暴涨",
+          "to": "玻璃成本飙升",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "纯碱占玻璃成本约30%"
+        },
+        {
+          "seq": 6,
+          "from": "玻璃成本飙升",
+          "to": "玻璃被动涨价",
+          "confidence": "中",
+          "lag": "1-2周",
+          "mechanism": "成本推升玻璃价格"
+        }
+      ],
+      "reversalNode": "新产能投放",
+      "reversalCondition": "天然碱产能大量投产或进口纯碱到港",
+      "reversibility": 0.5,
+      "tail_probability": 0.3,
+      "minority_protected": false
+    }
+  ]
+}

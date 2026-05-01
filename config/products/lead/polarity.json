@@ -1,0 +1,41 @@
+{
+  "commodity": "铅",
+  "symbol": "PB",
+  "version": "1.0.0",
+  "entries": {
+    "LME铅价": {
+      "historicalMin": 1500,
+      "historicalMax": 2700,
+      "recentMin": 1900,
+      "recentMax": 2300,
+      "reversalSignalPatterns": [
+        "再生铅减产",
+        "废电池价格飙升",
+        "库存去化加速",
+        "汽车产量回升"
+      ]
+    },
+    "废电池价格": {
+      "historicalMin": 6000,
+      "historicalMax": 12000,
+      "recentMin": 7500,
+      "recentMax": 10500,
+      "reversalSignalPatterns": [
+        "铅价上涨带动",
+        "冬季电池更换旺季",
+        "环保限产"
+      ]
+    },
+    "SHFE铅库存": {
+      "historicalMin": 1,
+      "historicalMax": 20,
+      "recentMin": 3,
+      "recentMax": 15,
+      "reversalSignalPatterns": [
+        "再生铅增产",
+        "进口铅到港",
+        "下游需求走弱"
+      ]
+    }
+  }
+}
