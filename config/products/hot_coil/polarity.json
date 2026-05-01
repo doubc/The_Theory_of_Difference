@@ -1,20 +1,18 @@
 {
-  "commodity": "hot_coil",
-  "entries": {
-    "hot_coil_price": {
-      "historicalMin": 2800,
-      "historicalMax": 6200,
-      "recentMin": 3500,
-      "recentMax": 4500
-    },
-    "coil_rebar_spread": {
-      "historicalMin": -200,
-      "historicalMax": 600,
-      "unit": "元/吨",
-      "reversalSignalPatterns": [
-        "卷螺差>400: 制造业强于建筑业",
-        "卷螺差<0: 建筑业强于制造业"
-      ]
+  "commodity": "热卷",
+  "symbol": "HC",
+  "version": "1.3.0",
+  "polarity_archive": [
+    {
+      "id": "HC_P001",
+      "variable": "热卷价格",
+      "poles": {
+        "bull": "汽车产销强+出口旺盛+粗钢压减",
+        "bear": "出口受阻+需求走弱+库存累积"
+      },
+      "currentState": "中性",
+      "tension": 0.5,
+      "lastUpdated": "2026-05"
     }
-  }
+  ]
 }
