@@ -1,0 +1,52 @@
+{
+  "commodity": "白银",
+  "symbol": "AG",
+  "version": "1.0.0",
+  "relations": [
+    {
+      "id": "R_801",
+      "type": "跨品种联动",
+      "from": "黄金价格",
+      "to": "白银价格",
+      "strength": 0.85,
+      "direction": "正向",
+      "description": "金银同涨同跌，但白银弹性更大"
+    },
+    {
+      "id": "R_802",
+      "type": "跨品种联动",
+      "from": "金银比",
+      "to": "白银补涨/补跌",
+      "strength": 0.7,
+      "direction": "反向",
+      "description": "金银比高位时白银有补涨动力"
+    },
+    {
+      "id": "R_803",
+      "type": "需求传导",
+      "from": "光伏装机量",
+      "to": "白银工业需求",
+      "strength": 0.8,
+      "direction": "正向",
+      "description": "光伏银浆是白银需求增量最大的领域"
+    },
+    {
+      "id": "R_804",
+      "type": "货币传导",
+      "from": "美联储利率",
+      "to": "白银价格",
+      "strength": 0.75,
+      "direction": "反向",
+      "description": "白银兼具贵金属和工业金属属性"
+    },
+    {
+      "id": "R_805",
+      "type": "供给约束",
+      "from": "银矿产量",
+      "to": "白银供给",
+      "strength": 0.7,
+      "direction": "正向",
+      "description": "矿产银是主要供给来源"
+    }
+  ]
+}
