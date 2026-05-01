@@ -1,0 +1,243 @@
+{
+  "commodity": "大豆",
+  "symbol": "A",
+  "version": "1.3.0",
+  "entities": [
+    {
+      "id": "GEO_200",
+      "name": "东北大豆产区",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 10,
+      "description": "中国大豆传统产区，黑龙江占全国产量约40%，但国产大豆以食用为主，与进口转基因大豆用途分化",
+      "trackingVariables": [
+        "种植面积",
+        "产量",
+        "蛋白含量",
+        "食用消费"
+      ]
+    },
+    {
+      "id": "GEO_201",
+      "name": "巴西大豆产区",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 10,
+      "description": "全球最大大豆出口国，Mato Grosso/Goias为核心产区，出口竞争力强（汇率+土地成本）",
+      "controlledBy": [
+        "本地大农场",
+        "中粮巴西",
+        "嘉吉巴西"
+      ],
+      "trackingVariables": [
+        "种植进度",
+        "产量预估",
+        "出口装船",
+        "汇率"
+      ]
+    },
+    {
+      "id": "GEO_202",
+      "name": "美国大豆产区",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "全球第二大大豆出口国，Iowa/Illinois为核心产区，USDA数据是全球定价锚",
+      "trackingVariables": [
+        "种植意向",
+        "优良率",
+        "出口销售",
+        "单产预估"
+      ]
+    },
+    {
+      "id": "GEO_203",
+      "name": "阿根廷大豆产区",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "全球第三大大豆出口国，豆粕/豆油出口量大，汇率和出口税政策是核心变量",
+      "trackingVariables": [
+        "产量",
+        "出口税政策",
+        "汇率",
+        "豆粕出口"
+      ]
+    },
+    {
+      "id": "GEO_204",
+      "name": "中国沿海压榨产业集群",
+      "type": "消费节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "山东/江苏/广东沿海大豆压榨产能集中，进口大豆到港后压榨生产豆粕和豆油",
+      "controlledBy": [
+        "中粮",
+        "益海嘉里",
+        "九三集团"
+      ],
+      "trackingVariables": [
+        "压榨开工率",
+        "压榨利润",
+        "豆粕库存",
+        "豆油库存"
+      ]
+    },
+    {
+      "id": "POW_130",
+      "name": "大连商品交易所DCE",
+      "type": "交易所",
+      "groundBase": "rule",
+      "importance": 10,
+      "description": "中国大豆期货定价中心，A合约（国产豆）和M合约（豆粕）是行业基准",
+      "jurisdiction": "中国",
+      "trackingVariables": [
+        "A期价",
+        "M期价",
+        "持仓量",
+        "成交量"
+      ]
+    },
+    {
+      "id": "POW_131",
+      "name": "美国农业部USDA",
+      "type": "国际数据机构",
+      "groundBase": "order",
+      "importance": 10,
+      "description": "全球大豆供需数据权威，月度WASDE报告引领市场定价",
+      "trackingVariables": [
+        "全球产量",
+        "期末库存",
+        "库消比",
+        "出口销售"
+      ]
+    },
+    {
+      "id": "POW_132",
+      "name": "巴西国家供应公司CONAB",
+      "type": "国际数据机构",
+      "groundBase": "order",
+      "importance": 7,
+      "description": "巴西官方农业数据机构，产量预估与USDA形成对比参考",
+      "trackingVariables": [
+        "产量预估",
+        "种植面积",
+        "出口预测"
+      ]
+    },
+    {
+      "id": "VAR_150",
+      "name": "DCE豆一期货价格",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "currentValue": "约4800元/吨",
+      "historicalRange": {
+        "min": 3200,
+        "max": 6500
+      },
+      "recentRange": {
+        "min": 4000,
+        "max": 6000
+      },
+      "trackingFrequency": "实时"
+    },
+    {
+      "id": "VAR_151",
+      "name": "CBOT大豆期货价格",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 10,
+      "currentValue": "约1100美分/蒲",
+      "historicalRange": {
+        "min": 800,
+        "max": 1750
+      },
+      "recentRange": {
+        "min": 950,
+        "max": 1500
+      },
+      "trackingFrequency": "实时"
+    },
+    {
+      "id": "VAR_152",
+      "name": "大豆进口到港完税价",
+      "type": "进口成本变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "trackingFrequency": "每日",
+      "trackingVariables": [
+        "CBOT价格",
+        "海运费",
+        "汇率",
+        "关税"
+      ]
+    },
+    {
+      "id": "VAR_153",
+      "name": "大豆压榨利润",
+      "type": "产业链利润变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "trackingFrequency": "每日",
+      "trackingVariables": [
+        "豆粕价格",
+        "豆油价格",
+        "大豆成本",
+        "压榨利润"
+      ]
+    },
+    {
+      "id": "VAR_154",
+      "name": "全球大豆库消比",
+      "type": "供需变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "trackingFrequency": "月度",
+      "trackingVariables": [
+        "全球期末库存",
+        "全球消费量",
+        "库消比"
+      ]
+    },
+    {
+      "id": "CUL_130",
+      "name": "中美贸易摩擦影响叙事",
+      "type": "市场共识",
+      "groundBase": "culture",
+      "importance": 8,
+      "description": "中美贸易关系直接影响中国大豆进口来源和CBOT/DCE价差结构",
+      "trackingVariables": [
+        "关税政策",
+        "进口来源",
+        "中美关系"
+      ]
+    },
+    {
+      "id": "CUL_131",
+      "name": "拉尼娜/厄尔尼诺天气叙事",
+      "type": "市场共识",
+      "groundBase": "culture",
+      "importance": 8,
+      "description": "南美大豆生长期（10-2月）天气是年度最大交易主题，拉尼娜干旱/厄尔尼诺洪涝影响产量",
+      "trackingVariables": [
+        "SOI指数",
+        "降水预报",
+        "土壤墒情"
+      ]
+    },
+    {
+      "id": "RUL_130",
+      "name": "中国进口大豆增值税政策",
+      "type": "贸易规则",
+      "groundBase": "rule",
+      "importance": 7,
+      "description": "进口大豆增值税9%，转基因大豆审批管理",
+      "trackingVariables": [
+        "增值税调整",
+        "转基因审批",
+        "进口许可"
+      ]
+    }
+  ]
+}
