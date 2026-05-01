@@ -6,9 +6,37 @@
 from __future__ import annotations
 
 import logging
+import time
 from datetime import datetime, timedelta
 
 log = logging.getLogger(__name__)
+
+# ─── 扫描结果缓存 ──────────────────────────────────────────
+_scan_cache: dict = {}  # key → (timestamp, result)
+_SCAN_CACHE_TTL = 1800  # 30 分钟
+
+
+def _cache_key(symbols: list[str], sens_key: str, min_volume: float) -> str:
+    return f"{len(symbols)}_{sens_key}_{min_volume}"
+
+
+def _get_cached(key: str) -> list[dict] | None:
+    if key in _scan_cache:
+        ts, result = _scan_cache[key]
+        if time.time() - ts < _SCAN_CACHE_TTL:
+            log.debug("命中扫描缓存: %s", key)
+            return result
+        del _scan_cache[key]
+    return None
+
+
+def _set_cached(key: str, result: list[dict]):
+    _scan_cache[key] = (time.time(), result)
+
+
+def invalidate_scan_cache():
+    """手动清除扫描缓存（用户点击重新扫描时调用）"""
+    _scan_cache.clear()
 
 
 def departure_score(r: dict) -> float:
@@ -44,6 +72,7 @@ def build_dashboard_data(
     compile_fn,
     sens_key: str,
     min_volume: float = 20000,
+    use_cache: bool = True,
 ) -> list[dict]:
     """
     成交量驱动的全景仪表盘数据构建。
@@ -53,7 +82,17 @@ def build_dashboard_data(
     - 趋势方向、稳态关系
     - 当前价格相对最近稳态的位置
     - 运动阶段、通量、质量
+
+    Args:
+        use_cache: 是否使用缓存（默认 30 分钟 TTL）
     """
+    # 缓存检查
+    if use_cache:
+        cache_key = _cache_key(ALL_SYMBOLS, sens_key, min_volume)
+        cached = _get_cached(cache_key)
+        if cached is not None:
+            return cached
+
     from src.data.symbol_meta import symbol_name as _symbol_name, get_sector
     from src.quality import assess_quality, QualityTier
 
@@ -271,4 +310,9 @@ def build_dashboard_data(
         })
 
     results.sort(key=lambda x: x["volume"], reverse=True)
+
+    # 写入缓存
+    if use_cache:
+        _set_cached(_cache_key(ALL_SYMBOLS, sens_key, min_volume), results)
+
     return results
