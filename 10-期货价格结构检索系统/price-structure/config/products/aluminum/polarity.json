@@ -1,0 +1,18 @@
+{
+  "commodity": "铝",
+  "symbol": "AL",
+  "version": "1.0.0",
+  "entries": {
+    "LME铝": {
+      "historicalMin": 1400,
+      "historicalMax": 3800,
+      "recentMin": 2100,
+      "recentMax": 2800,
+      "reversalSignalPatterns": [
+        "限电减产",
+        "产能天花板",
+        "新能源需求爆发"
+      ]
+    }
+  }
+}
