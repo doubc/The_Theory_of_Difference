@@ -1,0 +1,188 @@
+{
+  "commodity": "白糖",
+  "symbol": "SR",
+  "version": "1.3.0",
+  "entities": [
+    {
+      "id": "GEO_260",
+      "name": "广西甘蔗产区",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 10,
+      "description": "中国白糖核心产区，广西占全国产量约60%，甘蔗收购价政策直接影响成本",
+      "trackingVariables": [
+        "种植面积",
+        "甘蔗产量",
+        "出糖率",
+        "收购价"
+      ]
+    },
+    {
+      "id": "GEO_261",
+      "name": "巴西中南部甘蔗产区",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 10,
+      "description": "全球最大产糖国，乙醇分流比例是核心变量",
+      "controlledBy": [
+        "Raizen",
+        "Copersucar",
+        "Bunge"
+      ],
+      "trackingVariables": [
+        "甘蔗产量",
+        "乙醇分流比",
+        "出口量",
+        "汇率"
+      ]
+    },
+    {
+      "id": "GEO_262",
+      "name": "印度甘蔗产区",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "全球第二大产糖国，出口政策是核心变量",
+      "trackingVariables": [
+        "产量",
+        "出口政策",
+        "政府补贴"
+      ]
+    },
+    {
+      "id": "GEO_263",
+      "name": "泰国甘蔗产区",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "全球第四大产糖国和第二大出口国",
+      "trackingVariables": [
+        "产量",
+        "出口量"
+      ]
+    },
+    {
+      "id": "POW_190",
+      "name": "郑州商品交易所CZCE",
+      "type": "交易所",
+      "groundBase": "rule",
+      "importance": 10,
+      "description": "中国白糖期货定价中心",
+      "jurisdiction": "中国",
+      "trackingVariables": [
+        "SR期价",
+        "持仓量"
+      ]
+    },
+    {
+      "id": "POW_191",
+      "name": "ICE原糖期货",
+      "type": "交易所",
+      "groundBase": "rule",
+      "importance": 10,
+      "description": "全球原糖定价中心，ICE原糖11号是国际贸易基准",
+      "trackingVariables": [
+        "ICE原糖价",
+        "基金持仓"
+      ]
+    },
+    {
+      "id": "VAR_210",
+      "name": "CZCE白糖期货价格",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 10,
+      "currentValue": "约6500元/吨",
+      "historicalRange": {
+        "min": 4000,
+        "max": 8000
+      },
+      "recentRange": {
+        "min": 5500,
+        "max": 7500
+      },
+      "trackingFrequency": "实时"
+    },
+    {
+      "id": "VAR_211",
+      "name": "ICE原糖价格",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "currentValue": "约20美分/磅",
+      "historicalRange": {
+        "min": 8,
+        "max": 35
+      },
+      "recentRange": {
+        "min": 15,
+        "max": 28
+      },
+      "trackingFrequency": "实时"
+    },
+    {
+      "id": "VAR_212",
+      "name": "巴西乙醇分流比",
+      "type": "产业变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "trackingFrequency": "月度",
+      "trackingVariables": [
+        "乙醇价格",
+        "糖价",
+        "分流比"
+      ]
+    },
+    {
+      "id": "CUL_190",
+      "name": "巴西乙醇分流叙事",
+      "type": "市场共识",
+      "groundBase": "culture",
+      "importance": 8,
+      "description": "巴西甘蔗可制糖或制乙醇，分流比是原糖供给的核心变量",
+      "trackingVariables": [
+        "乙醇价格",
+        "汽油价格",
+        "分流比"
+      ]
+    },
+    {
+      "id": "CUL_191",
+      "name": "厄尔尼诺影响印度产量叙事",
+      "type": "市场共识",
+      "groundBase": "culture",
+      "importance": 7,
+      "description": "厄尔尼诺导致印度干旱减产，是全球糖价上涨的传统驱动",
+      "trackingVariables": [
+        "SOI指数",
+        "印度降水",
+        "产量预估"
+      ]
+    },
+    {
+      "id": "RUL_190",
+      "name": "中国白糖进口关税配额",
+      "type": "贸易规则",
+      "groundBase": "rule",
+      "importance": 9,
+      "description": "白糖进口实行194.5万吨/年关税配额，配额内关税15%，配额外50%",
+      "trackingVariables": [
+        "配额使用",
+        "进口到港",
+        "走私量"
+      ]
+    },
+    {
+      "id": "RUL_191",
+      "name": "广西甘蔗收购价政策",
+      "type": "产业政策",
+      "groundBase": "order",
+      "importance": 8,
+      "description": "广西实行甘蔗收购价与糖价挂钩联动机制",
+      "trackingVariables": [
+        "收购价",
+        "联动系数"
+      ]
+    }
+  ]
+}
