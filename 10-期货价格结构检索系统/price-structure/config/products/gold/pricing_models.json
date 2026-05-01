@@ -1,0 +1,37 @@
+{
+  "commodity": "黄金",
+  "symbol": "AU",
+  "version": "1.0.0",
+  "models": [
+    {
+      "id": "M_016",
+      "name": "黄金实际利率模型",
+      "domain": "宏观定价",
+      "formula": "Δln(Gold) = α + β1*Δ(1/RealRate) + β2*Δln(DXY) + ε",
+      "variables": [
+        "实际利率",
+        "美元指数",
+        "通胀预期"
+      ],
+      "linkToEntities": [
+        "VAR_060",
+        "VAR_063",
+        "VAR_062"
+      ]
+    },
+    {
+      "id": "M_017",
+      "name": "央行购金需求模型",
+      "domain": "供需定价",
+      "formula": "金价 = f(央行购金量, ETF流入, 矿产供给, 回收金)",
+      "variables": [
+        "央行购金",
+        "ETF持仓",
+        "矿产量"
+      ],
+      "linkToEntities": [
+        "VAR_064"
+      ]
+    }
+  ]
+}
