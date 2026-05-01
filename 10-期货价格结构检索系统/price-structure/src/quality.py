@@ -34,6 +34,11 @@
     a_structures = tiers["A"]  # 高质量结构
 """
 
+from __future__ import annotations
+
+from dataclasses import dataclass
+from enum import Enum
+
 from src.knowledge.engine import KnowledgeEngine
 from src.knowledge.result import KnowledgeResult
 
