@@ -1,0 +1,40 @@
+{
+  "commodity": "原油",
+  "symbol": "SC",
+  "version": "1.0.0",
+  "entities": [
+    {"id": "GEO_001", "name": "中东波斯湾产区", "type": "资源节点", "groundBase": "natural", "importance": 10, "description": "全球原油核心产区，沙特/伊拉克/阿联酋/伊朗/科威特五国占全球产量约30%，霍尔木兹海峡是全球石油运输咽喉", "controlledBy": ["OPEC核心产油国"], "vulnerabilities": ["地缘冲突", "霍尔木兹海峡封锁", "OPEC减产博弈"], "trackingVariables": ["OPEC产量", "沙特OSP官价", "波斯湾装船量"]},
+    {"id": "GEO_002", "name": "俄罗斯西西伯利亚产区", "type": "资源节点", "groundBase": "natural", "importance": 9, "description": "全球第二大产油国，乌拉尔原油是欧洲基准，受制裁后贸易流向转向亚洲", "controlledBy": ["俄罗斯石油公司Rosneft", "卢克石油Lukoil"], "vulnerabilities": ["西方制裁", "管道基础设施老化", "北极开发成本"], "trackingVariables": ["乌拉尔原油贴水", "管道输油量", "制裁执行力度"]},
+    {"id": "GEO_003", "name": "美国二叠纪盆地", "type": "资源节点", "groundBase": "natural", "importance": 9, "description": "美国页岩油核心产区，全球原油供给边际增量主要来源，产量增长受钻机数/DUC井/资本开支驱动", "controlledBy": ["先锋自然资源", "康菲石油", "EOG"], "vulnerabilities": ["页岩递减率", "劳动力短缺", "ESG资本约束"], "trackingVariables": ["活跃钻机数", "DUC井数", "周产量", "完井成本"]},
+    {"id": "GEO_004", "name": "尼日利亚/安哥拉西非产区", "type": "资源节点", "groundBase": "natural", "importance": 7, "description": "非洲最大产油区，轻质低硫原油主要供应欧洲和亚洲炼厂", "controlledBy": ["尼日利亚NNPC", "安哥拉Sonangol"], "vulnerabilities": ["管道盗油", "产量递减", "投资不足"], "trackingVariables": ["装船计划", "官价OSP"]},
+    {"id": "GEO_005", "name": "加拿大油砂产区", "type": "资源节点", "groundBase": "natural", "importance": 7, "description": "阿尔伯塔油砂，全球第三大原油储量，WCS贴水是关键指标", "controlledBy": ["加拿大自然资源", "森科能源", "帝国石油"], "vulnerabilities": ["管线瓶颈", "碳排放政策", "极端天气"], "trackingVariables": ["WCS-WTI贴水", "管线运量", "油砂产量"]},
+    {"id": "GEO_006", "name": "霍尔木兹海峡", "type": "物流节点", "groundBase": "natural", "importance": 10, "description": "全球约20%原油运输咽喉，日均约2000万桶通过，任何封锁将引发全球能源危机", "controlledBy": ["伊朗海军", "美国第五舰队"], "vulnerabilities": ["伊朗封锁威胁", "水雷", "军事冲突"], "trackingVariables": ["通行油轮数", "保险费率", "美国海军部署"]},
+    {"id": "GEO_007", "name": "上海保税原油仓库", "type": "物流库存节点", "groundBase": "natural", "importance": 8, "description": "中国原油期货SC的交割库，保税仓单是SC定价的核心指标", "controlledBy": ["上期能源"], "vulnerabilities": ["仓单变化", "进口节奏"], "trackingVariables": ["保税仓单", "SC持仓量", "进口量"]},
+
+    {"id": "POW_001", "name": "OPEC+", "type": "产业权力机构", "groundBase": "order", "importance": 10, "description": "全球原油供给的卡特尔组织，减产/增产决策直接影响全球油价，2020年后俄罗斯加入形成OPEC+", "jurisdiction": "国际", "trackingVariables": ["减产配额", "执行率", "部长级会议时间"]},
+    {"id": "POW_002", "name": "沙特阿美Saudi Aramco", "type": "产业权力机构", "groundBase": "order", "importance": 10, "description": "全球最大石油公司，日产能约1200万桶，OSP官价是亚洲原油定价基准", "jurisdiction": "沙特", "trackingVariables": ["OSP官价", "产量", "产能利用率"]},
+    {"id": "POW_003", "name": "美国能源信息署EIA", "type": "数据机构", "groundBase": "order", "importance": 9, "description": "美国官方能源数据发布机构，周度库存/产量报告是油价短期波动的核心催化剂", "jurisdiction": "美国", "trackingVariables": ["周度库存", "周度产量", "钻机数", "需求预测"]},
+    {"id": "POW_004", "name": "国际能源署IEA", "type": "国际机构", "groundBase": "order", "importance": 8, "description": "OECD能源政策机构，月度石油市场报告影响市场预期，协调战略石油储备释放", "jurisdiction": "国际", "trackingVariables": ["月度报告", "需求预测", "SPR释放"]},
+    {"id": "POW_005", "name": "上海国际能源交易中心INE", "type": "交易所", "groundBase": "rule", "importance": 9, "description": "中国原油期货SC上市交易所，人民币计价，反映亚太原油供需", "jurisdiction": "中国", "trackingVariables": ["SC价格", "持仓量", "仓单量", "成交量"]},
+    {"id": "POW_006", "name": "纽约商品交易所NYMEX", "type": "交易所", "groundBase": "rule", "importance": 10, "description": "WTI原油期货全球定价中心，日均成交量超100万手", "jurisdiction": "美国", "trackingVariables": ["WTI价格", "持仓量", "管理基金净多头"]},
+
+    {"id": "RUL_001", "name": "OPEC+减产协议", "type": "产业规则", "groundBase": "rule", "importance": 9, "description": "OPEC+产量配额制度，减产执行率直接影响全球供需平衡", "trackingVariables": ["配额总量", "各国配额", "执行率", "补偿减产"]},
+    {"id": "RUL_002", "name": "美国战略石油储备SPR政策", "type": "储备管理规则", "groundBase": "rule", "importance": 8, "description": "美国SPR释放/收储政策，影响短期供给预期", "trackingVariables": ["SPR库存", "释放/收储计划"]},
+    {"id": "RUL_003", "name": "中国原油进口配额制", "type": "贸易规则", "groundBase": "rule", "importance": 7, "description": "中国非国营原油进口配额制度，影响地方炼厂进口节奏", "trackingVariables": ["配额发放量", "地方炼厂开工率"]},
+
+    {"id": "VAR_001", "name": "WTI原油价格", "type": "大宗商品变量", "groundBase": "marginal", "importance": 10, "currentValue": "约75美元/桶", "historicalRange": {"min": -37, "max": 147}, "recentRange": {"min": 60, "max": 95}, "dualityOpposite": "全球经济增长预期", "trackingFrequency": "实时", "trackingVariables": ["WTI期货", "WTI现货", "库欣库存"]},
+    {"id": "VAR_002", "name": "布伦特原油价格", "type": "大宗商品变量", "groundBase": "marginal", "importance": 10, "currentValue": "约78美元/桶", "historicalRange": {"min": 16, "max": 147}, "recentRange": {"min": 65, "max": 98}, "dualityOpposite": "全球宏观经济", "trackingFrequency": "实时", "trackingVariables": ["Brent期货", "Brent-WTI价差", "DTD价差"]},
+    {"id": "VAR_003", "name": "上海原油SC价格", "type": "大宗商品变量", "groundBase": "marginal", "importance": 9, "currentValue": "约550元/桶", "historicalRange": {"min": 180, "max": 820}, "recentRange": {"min": 450, "max": 700}, "dualityOpposite": "人民币汇率+中东OSP", "trackingFrequency": "实时", "trackingVariables": ["SC期货", "SC持仓", "保税仓单"]},
+    {"id": "VAR_004", "name": "Brent-WTI价差", "type": "价差变量", "groundBase": "marginal", "importance": 8, "currentValue": "约3美元", "historicalRange": {"min": -5, "max": 30}, "recentRange": {"min": 0, "max": 8}, "trackingFrequency": "实时", "trackingVariables": ["跨大西洋套利", "美国出口量"]},
+    {"id": "VAR_005", "name": "全球原油浮仓", "type": "库存变量", "groundBase": "marginal", "importance": 7, "currentValue": "约8000万桶", "trackingFrequency": "每周", "trackingVariables": ["新加坡浮仓", "欧洲浮仓", "全球总量"]},
+    {"id": "VAR_006", "name": "美国商业原油库存", "type": "库存变量", "groundBase": "marginal", "importance": 9, "currentValue": "约4.3亿桶", "historicalRange": {"min": 3.0, "max": 5.5}, "recentRange": {"min": 4.0, "max": 4.8}, "trackingFrequency": "每周(EIA周报)", "trackingVariables": ["EIA周报", "API周报", "库欣库存"]},
+    {"id": "VAR_007", "name": "裂解价差(汽油/柴油)", "type": "价差变量", "groundBase": "marginal", "importance": 8, "currentValue": "汽油裂解约20美元", "trackingFrequency": "每日", "trackingVariables": ["3-2-1裂解价差", "汽油裂解", "柴油裂解"]},
+    {"id": "VAR_008", "name": "管理基金WTI净多头", "type": "资金变量", "groundBase": "marginal", "importance": 8, "currentValue": "视CFTC报告", "trackingFrequency": "每周", "trackingVariables": ["CFTC持仓报告", "管理基金多头", "管理基金空头"]},
+    {"id": "VAR_009", "name": "全球原油需求", "type": "需求变量", "groundBase": "marginal", "importance": 9, "currentValue": "约1.03亿桶/日", "trackingFrequency": "每月(IEA/EIA/OPEC)", "trackingVariables": ["IEA需求预测", "EIA需求预测", "OPEC需求预测"]},
+    {"id": "VAR_010", "name": "OPEC+产量", "type": "供给变量", "groundBase": "marginal", "importance": 9, "currentValue": "约2700万桶/日", "trackingFrequency": "每月", "trackingVariables": ["OPEC月报", "二手源产量", "沙特产量"]},
+
+    {"id": "CUL_001", "name": "石油峰值论叙事", "type": "市场共识", "groundBase": "culture", "importance": 7, "description": "石油供给即将达到峰值的叙事，与能源转型叙事交织，影响长期油价预期", "trackingVariables": ["新发现油田投资", "替代能源成本"]},
+    {"id": "CUL_002", "name": "能源安全叙事", "type": "市场共识", "groundBase": "culture", "importance": 9, "description": "各国追求能源独立的叙事，推动SPR建设、管道多元化、新能源发展", "trackingVariables": ["SPR规模", "进口依存度"]},
+    {"id": "CUL_003", "name": "石油美元叙事", "type": "市场共识", "groundBase": "culture", "importance": 8, "description": "原油贸易以美元计价的体系，任何去美元化尝试都会冲击油价定价逻辑", "trackingVariables": ["人民币结算比例", "美元指数"]}
+  ]
+}
