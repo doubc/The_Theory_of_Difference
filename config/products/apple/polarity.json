@@ -1,0 +1,19 @@
+{
+  "commodity": "苹果",
+  "symbol": "AP",
+  "version": "1.3.0",
+  "entries": {
+    "CZCE苹果期货价格": {
+      "historicalMin": 5000,
+      "historicalMax": 13000,
+      "recentMin": 6500,
+      "recentMax": 11000,
+      "reversalSignalPatterns": [
+        "花期霜冻",
+        "丰产预期",
+        "库存变化",
+        "消费旺季"
+      ]
+    }
+  }
+}
