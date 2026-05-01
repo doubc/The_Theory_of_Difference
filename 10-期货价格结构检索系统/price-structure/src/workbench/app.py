@@ -506,7 +506,7 @@ if compare_codes:
     compare_names = [f"{c}({symbol_name(c)})" for c in compare_codes]
     st.caption(f"对比品种: {', '.join(compare_names)}")
 
-tab_names = {
+tab_names = [
     "📡 今天值得关注什么",
     "🔍 历史对照（主动拉取）",
     "📊 跨品种对比",
@@ -516,7 +516,8 @@ tab_names = {
     "⏱️ 多时间维度对比",
     "🔬 v3.0 质量与共振",
     "🎯 研究闭环",
-}
+    "🗺️ 知识图谱",
+]
 tabs = st.tabs(tab_names)
 
 # ── 上下文字典，传给各 Tab ──
@@ -542,6 +543,7 @@ ctx = {
 from src.workbench import tab_scan, tab_history, tab_compare
 from src.workbench import tab_stability, tab_journal, tab_contract
 from src.workbench import tab_multitime, tab_quality
+from src.workbench import tab_knowledge_graph
 
 with tabs[0]:
     tab_scan.render(ctx)
@@ -584,3 +586,6 @@ with tabs[8]:
         mtf_snapshots=_load_mtf_snapshots(selected_symbol),
         history_transitions=_load_history_transitions(selected_symbol),
     )
+
+with tabs[9]:
+    tab_knowledge_graph.render(ctx)
