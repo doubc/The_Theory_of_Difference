@@ -1,0 +1,55 @@
+{
+  "commodity": "苹果",
+  "symbol": "AP",
+  "version": "1.3.0",
+  "models": [
+    {
+      "id": "M_095",
+      "name": "苹果的天气定价模型",
+      "domain": "供给定价",
+      "groundBase": "natural",
+      "formula": "AP_Score = w1*WeatherFactor + w2*InventoryFactor + w3*SeasonalFactor",
+      "variables": [
+        {
+          "name": "花期天气因子",
+          "id": "weather",
+          "direction": "不定",
+          "weight": 0.5
+        },
+        {
+          "name": "冷库库存因子",
+          "id": "inventory",
+          "direction": "反向",
+          "weight": 0.3
+        },
+        {
+          "name": "季节性因子",
+          "id": "seasonal",
+          "direction": "正向",
+          "weight": 0.2
+        }
+      ],
+      "description": "苹果是典型的天气炒作品种，花期天气决定年度供给。冷库库存是中短期供需指标。减产年份优果率下降加剧交割紧张。",
+      "dominantPhase": "花期（4月）和收获季（10月）模型最有效",
+      "limitation": "苹果期货上市时间短，历史数据有限",
+      "trackingVariables": [
+        "花期天气",
+        "产量预估",
+        "冷库库存",
+        "优果率"
+      ],
+      "linkToEntities": [
+        "VAR_240",
+        "VAR_242"
+      ],
+      "linkToRelations": [
+        "R_580",
+        "R_581"
+      ],
+      "linkToConductionChains": [
+        "C_240",
+        "C_241"
+      ]
+    }
+  ]
+}
