@@ -1,30 +1,37 @@
 {
   "commodity": "硅铁",
   "symbol": "SF",
-  "version": "1.0.0",
-  "entries": {
-    "郑商所硅铁价格": {
-      "historicalMin": 4500,
-      "historicalMax": 12000,
-      "recentMin": 6000,
-      "recentMax": 9000,
-      "reversalSignalPatterns": [
-        "粗钢限产",
-        "电价下调",
-        "西北环保放松",
-        "出口增加"
+  "version": "1.3.0",
+  "polarity_archive": [
+    {
+      "id": "FS_P001",
+      "variable": "硅铁价格",
+      "poles": {
+        "bull": "限电+钢厂高利润补库",
+        "bear": "粗钢压减+工厂高库存"
+      },
+      "currentState": "中性偏弱",
+      "tension": 0.5,
+      "lastUpdated": "2026-05",
+      "historicalTransitions": [
+        {
+          "from": "极端牛市",
+          "to": "快速回落",
+          "trigger": "限电政策放松",
+          "year": "2021Q4"
+        }
       ]
     },
-    "硅铁开工率": {
-      "historicalMin": 30,
-      "historicalMax": 75,
-      "recentMin": 40,
-      "recentMax": 65,
-      "reversalSignalPatterns": [
-        "利润回升",
-        "环保放松",
-        "电力供应改善"
-      ]
+    {
+      "id": "FS_P002",
+      "variable": "硅铁利润",
+      "poles": {
+        "bull": "高利润刺激满产",
+        "bear": "亏损倒逼减产"
+      },
+      "currentState": "微利",
+      "tension": 0.4,
+      "lastUpdated": "2026-05"
     }
-  }
+  ]
 }
