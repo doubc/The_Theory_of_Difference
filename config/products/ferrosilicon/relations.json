@@ -1,0 +1,67 @@
+{
+  "commodity": "硅铁",
+  "symbol": "SF",
+  "version": "1.0.0",
+  "relations": [
+    {
+      "id": "SF_R01",
+      "type": "需求驱动",
+      "from": "粗钢产量",
+      "to": "硅铁需求",
+      "strength": 0.85,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "硅铁约70%用于钢铁行业，粗钢产量直接决定硅铁消费量",
+      "reversalPoint": "钢厂减产时硅铁需求下降"
+    },
+    {
+      "id": "SF_R02",
+      "type": "成本传导",
+      "from": "电力价格",
+      "to": "硅铁成本",
+      "strength": 0.8,
+      "direction": "正向",
+      "groundBase": "order",
+      "lag": "季度",
+      "description": "电力成本占硅铁生产成本约50%，电价调整直接影响硅铁成本底部",
+      "reversalPoint": "自备电厂或绿电降低用电成本"
+    },
+    {
+      "id": "SF_R03",
+      "type": "黑色联动",
+      "from": "螺纹钢价格",
+      "to": "硅铁价格",
+      "strength": 0.65,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "钢厂利润好→增产→硅铁需求增加，钢厂亏损→减产→硅铁需求下降",
+      "reversalPoint": "硅铁自身供给紧张时可脱离钢价联动"
+    },
+    {
+      "id": "SF_R04",
+      "type": "环保约束",
+      "from": "西北环保限产",
+      "to": "硅铁供给",
+      "strength": 0.7,
+      "direction": "反向",
+      "groundBase": "order",
+      "lag": "即时",
+      "description": "宁夏/内蒙古环保限产直接减少硅铁产量",
+      "reversalPoint": "限产结束后产能恢复"
+    },
+    {
+      "id": "SF_R05",
+      "type": "出口需求",
+      "from": "海外钢材需求",
+      "to": "硅铁出口",
+      "strength": 0.6,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "月度",
+      "description": "硅铁出口日韩等国用于钢铁冶炼，海外钢材需求带动出口",
+      "reversalPoint": "出口关税调整或汇率波动影响出口竞争力"
+    }
+  ]
+}

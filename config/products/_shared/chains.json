@@ -1,0 +1,2893 @@
+{
+  "commodity": "_shared",
+  "description": "跨品种共享传导链",
+  "version": "1.3.0",
+  "chains": [
+    {
+      "id": "C_001",
+      "name": "货币紧缩全球传导链",
+      "domain": "货币宏观",
+      "groundBase": "order",
+      "triggerEvent": "美联储开启加息周期",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "美联储加息",
+          "to": "美元走强",
+          "confidence": "高",
+          "lag": "0-3个月",
+          "mechanism": "利差扩大吸引资本流入美国"
+        },
+        {
+          "seq": 2,
+          "from": "美元走强",
+          "to": "大宗商品承压",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "以美元计价的大宗商品价格下降"
+        },
+        {
+          "seq": 3,
+          "from": "美元走强",
+          "to": "新兴市场资本外流",
+          "confidence": "高",
+          "lag": "1-3个月",
+          "mechanism": "美元融资成本上升，新兴市场债务压力增加"
+        },
+        {
+          "seq": 4,
+          "from": "新兴市场资本外流",
+          "to": "新兴市场货币贬值",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "资本外流直接压低本币汇率"
+        },
+        {
+          "seq": 5,
+          "from": "高利率持续",
+          "to": "美国经济走弱",
+          "confidence": "中",
+          "lag": "6-18个月",
+          "mechanism": "信贷收缩抑制投资和消费"
+        },
+        {
+          "seq": 6,
+          "from": "美国经济走弱",
+          "to": "美联储降息压力",
+          "confidence": "高",
+          "lag": "3-6个月",
+          "mechanism": "就业和通胀数据走弱触发政策转向"
+        }
+      ],
+      "reversalNode": "美联储降息压力",
+      "reversalCondition": "失业率持续上升超过0.5个百分点或通胀连续3个月低于目标",
+      "polarityTensionThreshold": 0.85,
+      "historicalCases": [
+        {
+          "year": "2018",
+          "description": "美联储加息至2.5%后因经济走弱于2019年转向降息"
+        },
+        {
+          "year": "2022",
+          "description": "美联储激进加息11次推动美元指数从89升至114，新兴市场普遍承压"
+        },
+        {
+          "year": "1994",
+          "description": "格林斯潘意外加息触发墨西哥金融危机"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "加息周期后期边际效应递减，每次加息对市场冲击减弱但累积破坏力增强",
+        "dualityStructure": "美联储紧缩与全球流动性扩张需求之间的核心张力",
+        "polarityWarning": "当10年期美债收益率超过5%时极性张力极高，反转概率大幅上升"
+      },
+      "reversibility": 0.7,
+      "tail_probability": 0.3,
+      "minority_protected": false
+    },
+    {
+      "id": "C_002",
+      "name": "地缘能源冲击传导链",
+      "domain": "地缘能源",
+      "groundBase": "natural",
+      "triggerEvent": "中东地缘冲突升级威胁主要能源通道",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "中东冲突升级",
+          "to": "霍尔木兹风险溢价上升",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "市场对供应中断的预期直接推高风险溢价"
+        },
+        {
+          "seq": 2,
+          "from": "风险溢价上升",
+          "to": "原油价格飙升",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "期货市场恐慌性买入推动价格快速上涨"
+        },
+        {
+          "seq": 3,
+          "from": "原油价格飙升",
+          "to": "全球通胀上行",
+          "confidence": "高",
+          "lag": "1-3个月",
+          "mechanism": "能源成本通过供应链传导至全面通胀"
+        },
+        {
+          "seq": 4,
+          "from": "原油价格飙升",
+          "to": "需求破坏启动",
+          "confidence": "中",
+          "lag": "1-3个月",
+          "mechanism": "高油价抑制消费和工业活动，需求自动收缩"
+        },
+        {
+          "seq": 5,
+          "from": "需求破坏启动",
+          "to": "消费国战略储备释放",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "主要消费国通过释放储备增加供给，平抑价格"
+        },
+        {
+          "seq": 6,
+          "from": "需求破坏加储备释放",
+          "to": "油价冲高回落",
+          "confidence": "中",
+          "lag": "1-6个月",
+          "mechanism": "供需再平衡推动风险溢价消退"
+        }
+      ],
+      "reversalNode": "需求破坏启动",
+      "reversalCondition": "油价持续高于100美元超过3个月或G7协同释放储备超过1亿桶",
+      "polarityTensionThreshold": 0.8,
+      "historicalCases": [
+        {
+          "year": "1973",
+          "description": "阿拉伯石油禁运推动油价上涨400%，触发全球经济衰退"
+        },
+        {
+          "year": "1990",
+          "description": "海湾战争初期油价飙升，随战局明朗和沙特增产迅速回落"
+        },
+        {
+          "year": "2022",
+          "description": "俄乌冲突推动布伦特原油突破130美元，IEA协同释储后回落"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "油价冲击初期市场情绪驱动，后期基本面主导，两个阶段边际效应方向相反",
+        "dualityStructure": "能源供给冲击与消费国政策对冲之间的博弈",
+        "polarityWarning": "油价超过历史均值两个标准差时极性张力极高，需警惕需求破坏性反转"
+      },
+      "reversibility": 0.3,
+      "tail_probability": 0.15,
+      "minority_protected": false
+    },
+    {
+      "id": "C_003",
+      "name": "美元霸权侵蚀链",
+      "domain": "货币地缘",
+      "groundBase": "rule",
+      "triggerEvent": "主要产油国开始接受非美元结算",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "产油国接受非美元结算",
+          "to": "石油美元体系动摇",
+          "confidence": "中",
+          "lag": "长期",
+          "mechanism": "原油美元需求下降，美元储备地位受到挑战"
+        },
+        {
+          "seq": 2,
+          "from": "石油美元体系动摇",
+          "to": "全球央行减持美元储备",
+          "confidence": "低",
+          "lag": "长期",
+          "mechanism": "储备多元化需求推动央行增持黄金和其他货币"
+        },
+        {
+          "seq": 3,
+          "from": "美元储备需求下降",
+          "to": "美债需求走弱",
+          "confidence": "低",
+          "lag": "长期",
+          "mechanism": "外国央行减少美债购买，推高美债收益率"
+        },
+        {
+          "seq": 4,
+          "from": "美债需求走弱",
+          "to": "美国融资成本上升",
+          "confidence": "中",
+          "lag": "中长期",
+          "mechanism": "美债供需失衡推高利率，增加财政压力"
+        },
+        {
+          "seq": 5,
+          "from": "美国融资成本上升",
+          "to": "美元信用压力",
+          "confidence": "中",
+          "lag": "长期",
+          "mechanism": "财政赤字货币化风险上升，侵蚀美元信用基础"
+        }
+      ],
+      "reversalNode": "全球央行减持美元储备",
+      "reversalCondition": "美元在全球储备中占比跌破50%或出现大规模抛售美债事件",
+      "polarityTensionThreshold": 0.9,
+      "historicalCases": [
+        {
+          "year": "1971",
+          "description": "布雷顿森林体系崩溃，美元与黄金脱钩，美元霸权重构"
+        },
+        {
+          "year": "2022",
+          "description": "俄罗斯外汇储备被冻结加速全球去美元化讨论，央行购金量创历史新高"
+        },
+        {
+          "year": "2023",
+          "description": "沙特讨论接受人民币结算，石油美元体系出现裂缝"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "美元霸权侵蚀是极慢变量，处于早期积累阶段，边际效应递增但绝对量仍小",
+        "dualityStructure": "美元霸权与去美元化运动之间的长期博弈",
+        "polarityWarning": "美元储备占比跌破55%是重要预警阈值，目前约59%仍处安全区间"
+      },
+      "reversibility": 0.4,
+      "tail_probability": 0.2,
+      "minority_protected": false
+    },
+    {
+      "id": "C_004",
+      "name": "中国房地产危机传导链",
+      "domain": "中国宏观",
+      "groundBase": "culture",
+      "triggerEvent": "大型房地产开发商出现流动性危机",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "开发商流动性危机",
+          "to": "房价预期逆转",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "财富效应逆转，居民推迟购房决策"
+        },
+        {
+          "seq": 2,
+          "from": "房价预期逆转",
+          "to": "居民资产负债表收缩",
+          "confidence": "高",
+          "lag": "1-6个月",
+          "mechanism": "房产作为核心资产缩水，净资产下降"
+        },
+        {
+          "seq": 3,
+          "from": "居民资产负债表收缩",
+          "to": "消费需求下降",
+          "confidence": "高",
+          "lag": "3-12个月",
+          "mechanism": "财富效应消退叠加预防性储蓄上升"
+        },
+        {
+          "seq": 4,
+          "from": "消费需求下降",
+          "to": "中国PPI通缩",
+          "confidence": "高",
+          "lag": "3-6个月",
+          "mechanism": "内需不足导致工业品价格持续下行"
+        },
+        {
+          "seq": 5,
+          "from": "中国PPI通缩",
+          "to": "全球大宗商品承压",
+          "confidence": "中",
+          "lag": "3-6个月",
+          "mechanism": "中国作为最大消费国需求下降传导至全球价格"
+        },
+        {
+          "seq": 6,
+          "from": "经济下行压力",
+          "to": "中国人民银行宽松",
+          "confidence": "高",
+          "lag": "1-3个月",
+          "mechanism": "经济压力迫使央行降准降息"
+        }
+      ],
+      "reversalNode": "政策托底力度",
+      "reversalCondition": "中央政府推出超预期财政刺激或直接收储房产规模超过万亿",
+      "polarityTensionThreshold": 0.75,
+      "historicalCases": [
+        {
+          "year": "2021",
+          "description": "恒大暴雷引发房地产行业系统性危机，至今仍未完全出清"
+        },
+        {
+          "year": "2008",
+          "description": "中国4万亿刺激成功阻断危机传导，但埋下债务隐患"
+        },
+        {
+          "year": "1990",
+          "description": "日本房地产泡沫破裂，失去的三十年教训"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "中国房地产危机处于加速强化阶段，政策对冲与危机传导之间的博弈持续",
+        "dualityStructure": "房地产去杠杆与经济增长目标之间的核心张力",
+        "polarityWarning": "居民杠杆率超过GDP的60%是历史危机的重要预警阈值"
+      },
+      "reversibility": 0.6,
+      "tail_probability": 0.25,
+      "minority_protected": false
+    },
+    {
+      "id": "C_005",
+      "name": "科技脱钩产业传导链",
+      "domain": "科技地缘",
+      "groundBase": "order",
+      "triggerEvent": "美国升级对华半导体出口管制",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "美国升级芯片管制",
+          "to": "中国先进制程芯片获取受阻",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "出口管制直接切断中国获取先进芯片的渠道"
+        },
+        {
+          "seq": 2,
+          "from": "芯片获取受阻",
+          "to": "中国国产替代加速",
+          "confidence": "高",
+          "lag": "1-3年",
+          "mechanism": "被迫自主研发，国家资金大规模投入"
+        },
+        {
+          "seq": 3,
+          "from": "国产替代加速",
+          "to": "中国半导体产能扩张",
+          "confidence": "中",
+          "lag": "3-5年",
+          "mechanism": "大量投资推动产能快速增长"
+        },
+        {
+          "seq": 4,
+          "from": "中国产能扩张",
+          "to": "全球半导体供给过剩风险",
+          "confidence": "低",
+          "lag": "5-10年",
+          "mechanism": "中国产能释放可能冲击全球半导体市场格局"
+        },
+        {
+          "seq": 5,
+          "from": "管制升级",
+          "to": "供应链重组加速",
+          "confidence": "高",
+          "lag": "1-3年",
+          "mechanism": "企业被迫建立去中国化供应链，成本上升"
+        }
+      ],
+      "reversalNode": "中国半导体产能扩张",
+      "reversalCondition": "中国实现7nm以下制程量产或美国盟友出现重大管制豁免",
+      "polarityTensionThreshold": 0.7,
+      "historicalCases": [
+        {
+          "year": "2019",
+          "description": "华为被列入实体清单，加速中国5G芯片自主研发"
+        },
+        {
+          "year": "2022",
+          "description": "美国10月出口管制升级，覆盖AI训练芯片"
+        },
+        {
+          "year": "2023",
+          "description": "华为Mate60 Pro搭载麒麟9000S，显示中国突破部分管制"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "科技脱钩处于加速强化阶段，管制越严中国自主研发动力越强，存在反向强化效应",
+        "dualityStructure": "美国技术封锁与中国技术自主之间的长期博弈",
+        "polarityWarning": "管制范围扩大到成熟制程时将触发全球供应链系统性重组"
+      },
+      "reversibility": 0.5,
+      "tail_probability": 0.2,
+      "minority_protected": false
+    },
+    {
+      "id": "C_006",
+      "name": "通胀滞胀传导链",
+      "domain": "宏观经济",
+      "groundBase": "marginal",
+      "triggerEvent": "供给冲击叠加需求过热推动通胀持续超预期",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "供给冲击加需求过热",
+          "to": "通胀持续超预期",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "供需双向推动价格上涨"
+        },
+        {
+          "seq": 2,
+          "from": "通胀超预期",
+          "to": "央行激进加息",
+          "confidence": "高",
+          "lag": "1-3个月",
+          "mechanism": "通胀目标框架迫使央行行动"
+        },
+        {
+          "seq": 3,
+          "from": "激进加息",
+          "to": "信贷收缩",
+          "confidence": "高",
+          "lag": "3-6个月",
+          "mechanism": "融资成本上升抑制投资和消费"
+        },
+        {
+          "seq": 4,
+          "from": "信贷收缩",
+          "to": "经济增速下滑",
+          "confidence": "高",
+          "lag": "6-12个月",
+          "mechanism": "需求收缩推动经济降温"
+        },
+        {
+          "seq": 5,
+          "from": "供给冲击持续加经济下滑",
+          "to": "滞胀格局形成",
+          "confidence": "中",
+          "lag": "6-18个月",
+          "mechanism": "增长下滑但通胀因供给约束居高不下"
+        },
+        {
+          "seq": 6,
+          "from": "滞胀格局",
+          "to": "央行政策两难",
+          "confidence": "高",
+          "lag": "持续",
+          "mechanism": "加息伤经济，降息推通胀，政策空间极度压缩"
+        }
+      ],
+      "reversalNode": "供给冲击缓解",
+      "reversalCondition": "地缘冲突缓和或供应链修复推动供给侧压力消退",
+      "polarityTensionThreshold": 0.8,
+      "historicalCases": [
+        {
+          "year": "1970s",
+          "description": "石油危机引发美国滞胀，沃尔克激进加息最终打破通胀"
+        },
+        {
+          "year": "2022",
+          "description": "俄乌冲突叠加疫情供应链冲击推动全球通胀，各国央行激进加息"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "滞胀是通胀周期的临界饱和阶段，政策工具失效，极性张力极高",
+        "dualityStructure": "通胀压力与经济增速之间的核心对立",
+        "polarityWarning": "CPI超过8%且GDP增速跌破1%是滞胀确认信号"
+      },
+      "reversibility": 0.4,
+      "tail_probability": 0.1,
+      "minority_protected": true
+    },
+    {
+      "id": "C_007",
+      "name": "新兴市场危机传导链",
+      "domain": "新兴市场",
+      "groundBase": "order",
+      "triggerEvent": "美元强势周期叠加新兴市场外债压力",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "美元走强加美债收益率上升",
+          "to": "新兴市场资本外流",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "套利空间消失，资金回流美国"
+        },
+        {
+          "seq": 2,
+          "from": "资本外流",
+          "to": "新兴市场货币贬值",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "资本外流直接压低本币汇率"
+        },
+        {
+          "seq": 3,
+          "from": "货币贬值",
+          "to": "外债偿还压力上升",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "以美元计价的外债本币成本大幅上升"
+        },
+        {
+          "seq": 4,
+          "from": "外债压力上升",
+          "to": "主权信用评级下调",
+          "confidence": "中",
+          "lag": "3-6个月",
+          "mechanism": "债务可持续性恶化触发评级机构行动"
+        },
+        {
+          "seq": 5,
+          "from": "评级下调",
+          "to": "融资成本螺旋上升",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "评级下调推高借贷成本，形成恶性循环"
+        },
+        {
+          "seq": 6,
+          "from": "融资成本螺旋",
+          "to": "IMF救援或主权违约",
+          "confidence": "中",
+          "lag": "6-18个月",
+          "mechanism": "无法自我修复时寻求外部救援或违约重组"
+        }
+      ],
+      "reversalNode": "美联储政策转向",
+      "reversalCondition": "美联储开始降息或美元趋势性走弱",
+      "polarityTensionThreshold": 0.78,
+      "historicalCases": [
+        {
+          "year": "1994",
+          "description": "美联储加息触发墨西哥比索危机"
+        },
+        {
+          "year": "1997",
+          "description": "亚洲金融危机，泰铢贬值引发区域性危机"
+        },
+        {
+          "year": "2022",
+          "description": "美元走强推动斯里兰卡、巴基斯坦等国陷入债务危机"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "新兴市场危机往往在美元周期顶部附近爆发，是极性反转的典型表现",
+        "dualityStructure": "美元强势与新兴市场资产之间的核心双体博弈",
+        "polarityWarning": "美元指数超过110时新兴市场系统性风险显著上升"
+      },
+      "reversibility": 0.6,
+      "tail_probability": 0.3,
+      "minority_protected": false
+    },
+    {
+      "id": "C_008",
+      "name": "能源转型加速传导链",
+      "domain": "产业转型",
+      "groundBase": "marginal",
+      "triggerEvent": "新能源成本跌破化石能源平价点",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "新能源成本持续下降",
+          "to": "化石能源需求预期下修",
+          "confidence": "中",
+          "lag": "长期",
+          "mechanism": "经济性逆转推动能源结构转变"
+        },
+        {
+          "seq": 2,
+          "from": "需求预期下修",
+          "to": "化石能源资本开支收缩",
+          "confidence": "中",
+          "lag": "1-3年",
+          "mechanism": "投资者预期回报下降，减少上游投资"
+        },
+        {
+          "seq": 3,
+          "from": "资本开支收缩",
+          "to": "化石能源供给中期不足",
+          "confidence": "中",
+          "lag": "3-7年",
+          "mechanism": "投资不足导致未来产能下降"
+        },
+        {
+          "seq": 4,
+          "from": "供给不足",
+          "to": "能源转型期油价高企",
+          "confidence": "中",
+          "lag": "3-10年",
+          "mechanism": "转型过渡期供需错配推高传统能源价格"
+        },
+        {
+          "seq": 5,
+          "from": "油价高企",
+          "to": "新能源加速替代",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "高油价进一步提升新能源竞争力，加速替代"
+        }
+      ],
+      "reversalNode": "地缘危机推迟转型",
+      "reversalCondition": "重大地缘冲突迫使各国优先保障能源安全，推迟碳中和目标",
+      "polarityTensionThreshold": 0.65,
+      "historicalCases": [
+        {
+          "year": "2022",
+          "description": "俄乌冲突推迟欧洲能源转型，德国重启煤电"
+        },
+        {
+          "year": "2023",
+          "description": "光伏组件价格跌破0.1美元每瓦，全球装机量创历史新高"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "能源转型处于加速强化阶段，但地缘冲击可能造成阶段性逆转",
+        "dualityStructure": "化石能源与新能源之间的长期替代博弈",
+        "polarityWarning": "电动车渗透率超过30%是传统能源需求见顶的重要阈值"
+      },
+      "reversibility": 0.7,
+      "tail_probability": 0.35,
+      "minority_protected": false
+    },
+    {
+      "id": "C_009",
+      "name": "金融危机系统性传导链",
+      "domain": "金融系统",
+      "groundBase": "order",
+      "triggerEvent": "系统性重要金融机构出现流动性危机",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "系统性金融机构危机",
+          "to": "银行间流动性冻结",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "恐慌导致银行间市场停止拆借"
+        },
+        {
+          "seq": 2,
+          "from": "流动性冻结",
+          "to": "信贷市场收缩",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "银行收紧信贷标准，实体经济融资困难"
+        },
+        {
+          "seq": 3,
+          "from": "信贷收缩",
+          "to": "资产价格螺旋下跌",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "被迫平仓和去杠杆推动资产价格暴跌"
+        },
+        {
+          "seq": 4,
+          "from": "资产价格暴跌",
+          "to": "实体经济衰退",
+          "confidence": "高",
+          "lag": "3-6个月",
+          "mechanism": "财富效应消退，企业投资和居民消费崩溃"
+        },
+        {
+          "seq": 5,
+          "from": "系统性危机",
+          "to": "央行紧急救援",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "最后贷款人职能激活，央行大规模注入流动性"
+        }
+      ],
+      "reversalNode": "央行紧急救援",
+      "reversalCondition": "央行和财政部联合行动提供无限流动性支持",
+      "polarityTensionThreshold": 0.95,
+      "historicalCases": [
+        {
+          "year": "2008",
+          "description": "雷曼兄弟破产引发全球金融危机，美联储QE救市"
+        },
+        {
+          "year": "2023",
+          "description": "硅谷银行倒闭，美联储紧急救援阻止银行业危机蔓延"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "金融危机是极性反转的极端表现，系统在临界点发生相变",
+        "dualityStructure": "金融系统脆弱性与央行救援能力之间的博弈",
+        "polarityWarning": "银行间利差LIBOR-OIS超过100bp是系统性危机的重要预警信号"
+      },
+      "reversibility": 0.5,
+      "tail_probability": 0.2,
+      "minority_protected": false
+    },
+    {
+      "id": "C_010",
+      "name": "人民币国际化传导链",
+      "domain": "货币地缘",
+      "groundBase": "rule",
+      "triggerEvent": "中国推动大宗商品人民币结算",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "大宗商品人民币结算扩大",
+          "to": "人民币境外需求上升",
+          "confidence": "中",
+          "lag": "长期",
+          "mechanism": "贸易结算需求创造人民币境外持有动机"
+        },
+        {
+          "seq": 2,
+          "from": "人民币境外需求上升",
+          "to": "人民币离岸市场深化",
+          "confidence": "中",
+          "lag": "长期",
+          "mechanism": "境外人民币池扩大推动离岸金融市场发展"
+        },
+        {
+          "seq": 3,
+          "from": "离岸市场深化",
+          "to": "人民币储备货币地位上升",
+          "confidence": "低",
+          "lag": "长期",
+          "mechanism": "流动性提升使央行愿意持有人民币储备"
+        },
+        {
+          "seq": 4,
+          "from": "储备地位上升",
+          "to": "石油美元体系侵蚀",
+          "confidence": "低",
+          "lag": "极长期",
+          "mechanism": "原油人民币结算动摇美元计价垄断地位"
+        }
+      ],
+      "reversalNode": "中国资本账户开放限制",
+      "reversalCondition": "中国维持资本管制，人民币可自由兑换进展停滞",
+      "polarityTensionThreshold": 0.55,
+      "historicalCases": [
+        {
+          "year": "2016",
+          "description": "人民币加入SDR篮子，国际化里程碑"
+        },
+        {
+          "year": "2023",
+          "description": "沙特接受人民币结算部分原油，石油人民币出现"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "人民币国际化处于早期积累阶段，边际效应递增但绝对体量仍小",
+        "dualityStructure": "人民币国际化与美元霸权之间的长期博弈",
+        "polarityWarning": "人民币在全球储备中占比超过5%是重要加速节点"
+      },
+      "reversibility": 0.5,
+      "tail_probability": 0.15,
+      "minority_protected": true
+    },
+    {
+      "id": "C_011",
+      "name": "地缘制裁反噬链",
+      "domain": "地缘经济",
+      "groundBase": "order",
+      "triggerEvent": "西方对主要大国实施全面金融制裁",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "全面金融制裁",
+          "to": "被制裁国寻求替代体系",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "生存压力迫使被制裁国加速去美元化"
+        },
+        {
+          "seq": 2,
+          "from": "替代体系建设",
+          "to": "全球南方国家观望",
+          "confidence": "中",
+          "lag": "1-3年",
+          "mechanism": "制裁示范效应推动其他国家评估美元依赖风险"
+        },
+        {
+          "seq": 3,
+          "from": "全球南方观望",
+          "to": "去美元化运动扩大",
+          "confidence": "中",
+          "lag": "3-5年",
+          "mechanism": "越来越多国家寻求降低美元依赖"
+        },
+        {
+          "seq": 4,
+          "from": "去美元化扩大",
+          "to": "美元制裁工具效力下降",
+          "confidence": "中",
+          "lag": "长期",
+          "mechanism": "美元体系覆盖范围缩小，制裁漏洞增多"
+        },
+        {
+          "seq": 5,
+          "from": "制裁效力下降",
+          "to": "美国全球影响力相对衰减",
+          "confidence": "低",
+          "lag": "极长期",
+          "mechanism": "金融霸权弱化连带削弱政治和军事影响力"
+        }
+      ],
+      "reversalNode": "美元替代体系失败",
+      "reversalCondition": "替代结算体系因流动性不足或信任危机而失败",
+      "polarityTensionThreshold": 0.7,
+      "historicalCases": [
+        {
+          "year": "2022",
+          "description": "冻结俄罗斯外储加速全球央行增持黄金，去美元化讨论空前热烈"
+        },
+        {
+          "year": "2023",
+          "description": "BRICS峰会讨论共同货币，全球南方国家去美元化情绪上升"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "制裁反噬是秩序底层规律的典型表现，过度使用制裁工具会削弱工具本身",
+        "dualityStructure": "美元霸权与去美元化运动的双体博弈",
+        "polarityWarning": "美国对G20成员国使用制裁是重要极性张力信号"
+      },
+      "reversibility": 0.3,
+      "tail_probability": 0.1,
+      "minority_protected": false
+    },
+    {
+      "id": "C_012",
+      "name": "AI产业泡沫传导链",
+      "domain": "科技产业",
+      "groundBase": "culture",
+      "triggerEvent": "AI技术商业化落地速度低于市场预期",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "AI商业化不及预期",
+          "to": "AI相关资本开支预期下修",
+          "confidence": "中",
+          "lag": "1-2个季度",
+          "mechanism": "ROI不达标推动企业削减AI投入"
+        },
+        {
+          "seq": 2,
+          "from": "资本开支下修",
+          "to": "AI基础设施需求下降",
+          "confidence": "中",
+          "lag": "即时",
+          "mechanism": "数据中心、芯片需求预期降低"
+        },
+        {
+          "seq": 3,
+          "from": "需求预期下降",
+          "to": "科技股估值重估",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "DCF折现模型中未来现金流预期下调"
+        },
+        {
+          "seq": 4,
+          "from": "科技股估值重估",
+          "to": "市场情绪逆转",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "估值泡沫破裂触发恐慌性抛售"
+        },
+        {
+          "seq": 5,
+          "from": "市场情绪逆转",
+          "to": "AI投资寒冬",
+          "confidence": "中",
+          "lag": "6-12个月",
+          "mechanism": "融资环境收紧，AI创业公司大量倒闭"
+        }
+      ],
+      "reversalNode": "AI杀手级应用出现",
+      "reversalCondition": "出现大规模商业化的AI应用推动企业生产力可量化提升",
+      "polarityTensionThreshold": 0.75,
+      "historicalCases": [
+        {
+          "year": "2000",
+          "description": "互联网泡沫破裂，纳斯达克下跌80%，但互联网长期改变世界"
+        },
+        {
+          "year": "1996",
+          "description": "格林斯潘非理性繁荣演讲，科技股短暂回调后继续上涨"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "AI共识处于加速强化阶段，估值溢价极高，临界饱和风险积累",
+        "dualityStructure": "AI技术革命叙事与商业化现实之间的张力",
+        "polarityWarning": "科技股市盈率超过历史均值两个标准差是重要预警阈值"
+      },
+      "reversibility": 0.6,
+      "tail_probability": 0.25,
+      "minority_protected": false
+    },
+    {
+      "id": "C_013",
+      "name": "日元套息交易崩溃链",
+      "domain": "汇率金融",
+      "groundBase": "marginal",
+      "triggerEvent": "日本央行意外加息或日元快速升值",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "日本央行加息或日元升值",
+          "to": "日元套息交易成本上升",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "借入日元买入高息资产的套息收益收窄"
+        },
+        {
+          "seq": 2,
+          "from": "套息成本上升",
+          "to": "套息交易平仓",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "投资者被迫平仓，卖出高息资产买回日元"
+        },
+        {
+          "seq": 3,
+          "from": "大规模平仓",
+          "to": "全球风险资产抛售",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "套息平仓波及新兴市场、大宗商品、高收益债"
+        },
+        {
+          "seq": 4,
+          "from": "全球风险资产抛售",
+          "to": "流动性危机",
+          "confidence": "中",
+          "lag": "即时",
+          "mechanism": "多资产同步下跌触发追加保证金和强制平仓"
+        },
+        {
+          "seq": 5,
+          "from": "流动性危机",
+          "to": "央行紧急干预",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "日本央行和美联储协调干预稳定市场"
+        }
+      ],
+      "reversalNode": "日本央行政策逆转",
+      "reversalCondition": "日本央行重新转向宽松或暗示加息节奏放缓",
+      "polarityTensionThreshold": 0.85,
+      "historicalCases": [
+        {
+          "year": "1998",
+          "description": "俄罗斯违约触发日元套息崩溃，LTCM危机"
+        },
+        {
+          "year": "2024",
+          "description": "日本央行加息触发日元套息部分平仓，全球股市短暂暴跌"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "日元套息规模极大，一旦触发平仓极性反转极为剧烈",
+        "dualityStructure": "日元低息与全球高息资产之间的套息双体结构",
+        "polarityWarning": "日元套息仓位估算超过4万亿美元，任何快速升值都是系统性风险"
+      },
+      "reversibility": 0.5,
+      "tail_probability": 0.2,
+      "minority_protected": false
+    },
+    {
+      "id": "C_014",
+      "name": "大国冲突升级传导链",
+      "domain": "地缘政治",
+      "groundBase": "order",
+      "triggerEvent": "大国之间发生直接军事冲突",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "大国直接军事冲突",
+          "to": "全球供应链中断",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "战争直接破坏生产和运输基础设施"
+        },
+        {
+          "seq": 2,
+          "from": "供应链中断",
+          "to": "全球通胀飙升",
+          "confidence": "高",
+          "lag": "1-3个月",
+          "mechanism": "关键物资短缺推动价格全面上涨"
+        },
+        {
+          "seq": 3,
+          "from": "军事冲突",
+          "to": "金融市场恐慌",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "不确定性极端上升触发全球风险资产抛售"
+        },
+        {
+          "seq": 4,
+          "from": "金融恐慌",
+          "to": "美元和黄金飙升",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "极端避险需求推动资金涌入最安全资产"
+        },
+        {
+          "seq": 5,
+          "from": "持续冲突",
+          "to": "全球经济衰退",
+          "confidence": "高",
+          "lag": "3-12个月",
+          "mechanism": "贸易中断、信心崩溃、供应链重组推动经济萎缩"
+        }
+      ],
+      "reversalNode": "停火谈判启动",
+      "reversalCondition": "冲突各方在第三方斡旋下启动停火谈判",
+      "polarityTensionThreshold": 0.95,
+      "historicalCases": [
+        {
+          "year": "1939",
+          "description": "二战爆发推动黄金和美元避险需求飙升"
+        },
+        {
+          "year": "1950",
+          "description": "朝鲜战争推动大宗商品通胀"
+        },
+        {
+          "year": "2022",
+          "description": "俄乌战争触发能源危机和全球通胀"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "大国冲突是系统性相变事件，极性张力在冲突爆发前达到极值后骤然释放",
+        "dualityStructure": "战争破坏力与国际秩序修复力之间的博弈",
+        "polarityWarning": "大国间军事演习频率和规模是冲突风险的重要领先指标"
+      },
+      "reversibility": 0.4,
+      "tail_probability": 0.15,
+      "minority_protected": false
+    },
+    {
+      "id": "C_015",
+      "name": "通缩螺旋传导链",
+      "domain": "宏观经济",
+      "groundBase": "marginal",
+      "triggerEvent": "需求持续不足叠加产能过剩",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "需求不足加产能过剩",
+          "to": "价格持续下行",
+          "confidence": "高",
+          "lag": "3-6个月",
+          "mechanism": "供过于求推动企业降价竞争"
+        },
+        {
+          "seq": 2,
+          "from": "价格下行",
+          "to": "企业利润收缩",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "收入下降但成本刚性，利润率压缩"
+        },
+        {
+          "seq": 3,
+          "from": "利润收缩",
+          "to": "裁员和投资削减",
+          "confidence": "高",
+          "lag": "3-6个月",
+          "mechanism": "企业收缩规模以保护现金流"
+        },
+        {
+          "seq": 4,
+          "from": "裁员",
+          "to": "居民收入下降",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "失业率上升直接压低居民收入"
+        },
+        {
+          "seq": 5,
+          "from": "居民收入下降",
+          "to": "需求进一步萎缩",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "收入下降推动消费减少，形成通缩螺旋"
+        },
+        {
+          "seq": 6,
+          "from": "通缩螺旋",
+          "to": "央行零利率约束",
+          "confidence": "高",
+          "lag": "6-12个月",
+          "mechanism": "名义利率无法降至零以下，货币政策失效"
+        }
+      ],
+      "reversalNode": "财政大规模刺激",
+      "reversalCondition": "政府推出超预期财政刺激直接创造需求打破螺旋",
+      "polarityTensionThreshold": 0.8,
+      "historicalCases": [
+        {
+          "year": "1930s",
+          "description": "大萧条通缩螺旋，罗斯福新政财政刺激打破"
+        },
+        {
+          "year": "1990s",
+          "description": "日本失去的十年，通缩螺旋至今未完全走出"
+        },
+        {
+          "year": "2015",
+          "description": "中国PPI连续54个月负增长，接近通缩螺旋边缘"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "通缩螺旋一旦形成极难打破，是经济系统的极端钝化衰竭状态",
+        "dualityStructure": "通缩压力与财政刺激之间的博弈",
+        "polarityWarning": "PPI连续12个月负增长且CPI接近零是通缩螺旋预警信号"
+      },
+      "reversibility": 0.6,
+      "tail_probability": 0.3,
+      "minority_protected": false
+    },
+    {
+      "id": "C_016",
+      "name": "产业政策补贴竞争链",
+      "domain": "产业竞争",
+      "groundBase": "rule",
+      "triggerEvent": "主要经济体推出大规模产业补贴政策",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "大规模产业补贴",
+          "to": "目标产业产能快速扩张",
+          "confidence": "高",
+          "lag": "1-3年",
+          "mechanism": "补贴降低生产成本推动投资涌入"
+        },
+        {
+          "seq": 2,
+          "from": "产能扩张",
+          "to": "全球供给过剩",
+          "confidence": "中",
+          "lag": "3-5年",
+          "mechanism": "补贴产能释放冲击全球市场价格"
+        },
+        {
+          "seq": 3,
+          "from": "供给过剩",
+          "to": "竞争对手贸易保护",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "受冲击国家推出关税和非关税壁垒"
+        },
+        {
+          "seq": 4,
+          "from": "贸易保护",
+          "to": "全球贸易碎片化",
+          "confidence": "中",
+          "lag": "长期",
+          "mechanism": "贸易壁垒推动供应链区域化重组"
+        },
+        {
+          "seq": 5,
+          "from": "补贴竞争升级",
+          "to": "财政压力累积",
+          "confidence": "中",
+          "lag": "长期",
+          "mechanism": "各国竞相补贴消耗财政资源"
+        }
+      ],
+      "reversalNode": "WTO多边协调",
+      "reversalCondition": "主要经济体在WTO框架内达成补贴约束协议",
+      "polarityTensionThreshold": 0.65,
+      "historicalCases": [
+        {
+          "year": "2022",
+          "description": "美国IRA法案推动欧盟和中国竞相推出产业补贴"
+        },
+        {
+          "year": "2023",
+          "description": "中国光伏补贴推动全球产能过剩，组件价格暴跌70%"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "产业补贴竞争处于加速强化阶段，全球贸易规则体系承受空前压力",
+        "dualityStructure": "产业政策干预与自由贸易规则之间的博弈",
+        "polarityWarning": "全球贸易占GDP比重持续下降是贸易碎片化加速的重要信号"
+      },
+      "reversibility": 0.5,
+      "tail_probability": 0.2,
+      "minority_protected": false
+    },
+    {
+      "id": "C_017",
+      "name": "债务上限危机传导链",
+      "domain": "美国财政",
+      "groundBase": "order",
+      "triggerEvent": "美国债务上限谈判陷入僵局",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "债务上限僵局",
+          "to": "美国技术性违约风险上升",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "财政部非常规措施耗尽后无法偿债"
+        },
+        {
+          "seq": 2,
+          "from": "违约风险上升",
+          "to": "美债信用评级被下调",
+          "confidence": "中",
+          "lag": "即时",
+          "mechanism": "评级机构警告或下调美债评级"
+        },
+        {
+          "seq": 3,
+          "from": "评级下调",
+          "to": "全球金融市场动荡",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "美债作为全球无风险资产基准被质疑"
+        },
+        {
+          "seq": 4,
+          "from": "市场动荡",
+          "to": "美元短期避险需求上升",
+          "confidence": "中",
+          "lag": "即时",
+          "mechanism": "悖论式避险，危机中仍流向美元"
+        },
+        {
+          "seq": 5,
+          "from": "政治压力",
+          "to": "两党达成协议",
+          "confidence": "高",
+          "lag": "最后期限前",
+          "mechanism": "违约代价过高迫使两党妥协"
+        }
+      ],
+      "reversalNode": "两党达成协议",
+      "reversalCondition": "国会通过债务上限提高或暂停法案",
+      "polarityTensionThreshold": 0.7,
+      "historicalCases": [
+        {
+          "year": "2011",
+          "description": "债务上限危机导致标普下调美国信用评级，全球股市暴跌"
+        },
+        {
+          "year": "2023",
+          "description": "债务上限危机最终在最后期限前达成协议"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "债务上限危机是周期性极性张力事件，每次临近极限后必然妥协",
+        "dualityStructure": "财政扩张需求与政治博弈约束之间的张力",
+        "polarityWarning": "财政部现金账户余额低于1000亿美元是危机进入倒计时的信号"
+      },
+      "reversibility": 0.4,
+      "tail_probability": 0.1,
+      "minority_protected": true
+    },
+    {
+      "id": "C_018",
+      "name": "全球供应链重组传导链",
+      "domain": "产业地缘",
+      "groundBase": "order",
+      "triggerEvent": "地缘冲突或疫情冲击暴露供应链脆弱性",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "供应链脆弱性暴露",
+          "to": "企业重新评估供应链风险",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "断供损失推动企业优先考虑韧性而非效率"
+        },
+        {
+          "seq": 2,
+          "from": "风险重新评估",
+          "to": "供应链多元化投资",
+          "confidence": "高",
+          "lag": "1-3年",
+          "mechanism": "企业在中国之外建立备份产能"
+        },
+        {
+          "seq": 3,
+          "from": "多元化投资",
+          "to": "新兴制造业国家崛起",
+          "confidence": "中",
+          "lag": "3-7年",
+          "mechanism": "越南、印度、墨西哥等国承接转移产能"
+        },
+        {
+          "seq": 4,
+          "from": "产能转移",
+          "to": "中国制造业共识动摇",
+          "confidence": "中",
+          "lag": "长期",
+          "mechanism": "中国在全球供应链中的份额逐步下降"
+        },
+        {
+          "seq": 5,
+          "from": "供应链重组",
+          "to": "全球通胀中枢上移",
+          "confidence": "中",
+          "lag": "长期",
+          "mechanism": "效率损失和重复建设推高全球生产成本"
+        }
+      ],
+      "reversalNode": "地缘缓和推动回流",
+      "reversalCondition": "中美关系显著改善推动供应链重新向中国集中",
+      "polarityTensionThreshold": 0.68,
+      "historicalCases": [
+        {
+          "year": "2020",
+          "description": "疫情暴露全球供应链脆弱性，加速多元化讨论"
+        },
+        {
+          "year": "2022",
+          "description": "俄乌冲突和中美脱钩加速供应链重组，友岸外包兴起"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "供应链重组是结构性慢变量，处于加速强化阶段，不可逆性强",
+        "dualityStructure": "供应链效率与供应链韧性之间的博弈",
+        "polarityWarning": "跨国直接投资流向中国占全球比重持续下降是重要信号"
+      },
+      "reversibility": 0.6,
+      "tail_probability": 0.25,
+      "minority_protected": false
+    },
+    {
+      "id": "C_019",
+      "name": "央行数字货币冲击链",
+      "domain": "货币金融",
+      "groundBase": "rule",
+      "triggerEvent": "主要央行大规模推广数字货币",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "央行数字货币推广",
+          "to": "商业银行存款分流",
+          "confidence": "中",
+          "lag": "长期",
+          "mechanism": "居民直接持有央行负债，绕过商业银行"
+        },
+        {
+          "seq": 2,
+          "from": "存款分流",
+          "to": "商业银行信贷能力下降",
+          "confidence": "中",
+          "lag": "长期",
+          "mechanism": "存款减少压缩银行信贷投放基础"
+        },
+        {
+          "seq": 3,
+          "from": "信贷能力下降",
+          "to": "货币政策传导机制改变",
+          "confidence": "中",
+          "lag": "长期",
+          "mechanism": "央行可直接向居民投放货币，绕过银行体系"
+        },
+        {
+          "seq": 4,
+          "from": "传导机制改变",
+          "to": "传统银行商业模式受冲击",
+          "confidence": "高",
+          "lag": "长期",
+          "mechanism": "中介功能削弱，银行盈利模式需要重构"
+        }
+      ],
+      "reversalNode": "商业银行政治阻力",
+      "reversalCondition": "商业银行游说成功推动央行数字货币设计限制存款替代",
+      "polarityTensionThreshold": 0.5,
+      "historicalCases": [
+        {
+          "year": "2020",
+          "description": "中国数字人民币试点启动，成为全球最大规模CBDC实验"
+        },
+        {
+          "year": "2023",
+          "description": "欧洲央行数字欧元进入准备阶段"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "央行数字货币处于早期积累阶段，影响尚未显现但方向明确",
+        "dualityStructure": "央行直接货币权力与商业银行中介功能之间的博弈",
+        "polarityWarning": "数字人民币流通规模超过M0的10%是重要加速节点"
+      },
+      "reversibility": 0.5,
+      "tail_probability": 0.2,
+      "minority_protected": false
+    },
+    {
+      "id": "C_020",
+      "name": "极端气候经济冲击链",
+      "domain": "自然经济",
+      "groundBase": "natural",
+      "triggerEvent": "极端气候事件冲击主要农业或能源产区",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "极端气候事件",
+          "to": "农业或能源产量骤降",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "干旱、洪涝、极寒直接破坏生产"
+        },
+        {
+          "seq": 2,
+          "from": "产量骤降",
+          "to": "粮食或能源价格飙升",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "供给冲击推动价格快速上涨"
+        },
+        {
+          "seq": 3,
+          "from": "价格飙升",
+          "to": "低收入国家社会动荡",
+          "confidence": "中",
+          "lag": "3-6个月",
+          "mechanism": "食品和能源占低收入家庭支出比重高"
+        },
+        {
+          "seq": 4,
+          "from": "社会动荡",
+          "to": "地缘政治不稳定",
+          "confidence": "中",
+          "lag": "6-12个月",
+          "mechanism": "政治危机推动地缘风险上升"
+        },
+        {
+          "seq": 5,
+          "from": "气候冲击持续",
+          "to": "保险和再保险危机",
+          "confidence": "中",
+          "lag": "长期",
+          "mechanism": "极端气候频率上升推高保险赔付，部分地区无法投保"
+        }
+      ],
+      "reversalNode": "气候条件正常化",
+      "reversalCondition": "极端气候事件结束，产量恢复正常",
+      "polarityTensionThreshold": 0.72,
+      "historicalCases": [
+        {
+          "year": "2010",
+          "description": "俄罗斯干旱推动小麦价格飙升，引发中东粮食危机和阿拉伯之春"
+        },
+        {
+          "year": "2022",
+          "description": "欧洲极端干旱冲击水电和核电，加剧能源危机"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "极端气候冲击是自然底层对经济系统的硬约束，频率和强度持续上升",
+        "dualityStructure": "气候变化破坏力与人类适应能力之间的博弈",
+        "polarityWarning": "全球平均温度超过工业化前1.5度是气候冲击频率显著上升的阈值"
+      },
+      "reversibility": 0.2,
+      "tail_probability": 0.05,
+      "minority_protected": false
+    },
+    {
+      "id": "C_021",
+      "name": "黑色系成本坍塌传导链",
+      "domain": "商品期货",
+      "groundBase": "marginal",
+      "triggerEvent": "铁矿石价格大幅下跌",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "铁矿石价格大跌",
+          "to": "螺纹钢成本支撑减弱",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "铁矿占螺纹钢完全成本约40%，成本重心下移"
+        },
+        {
+          "seq": 2,
+          "from": "成本支撑减弱",
+          "to": "螺纹钢价格跟跌",
+          "confidence": "高",
+          "lag": "1-2周",
+          "mechanism": "钢厂降价去库存，市场预期转向悲观"
+        },
+        {
+          "seq": 3,
+          "from": "螺纹钢价格下跌",
+          "to": "钢厂利润恶化",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "产成品价格跌幅超过原料跌幅，利润收缩"
+        },
+        {
+          "seq": 4,
+          "from": "钢厂利润恶化",
+          "to": "钢厂减产检修",
+          "confidence": "高",
+          "lag": "2-4周",
+          "mechanism": "亏损倒逼钢厂主动减产，高炉开工率下降"
+        },
+        {
+          "seq": 5,
+          "from": "钢厂减产",
+          "to": "原料需求下降",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "减产导致焦炭、铁矿需求同步减少"
+        },
+        {
+          "seq": 6,
+          "from": "原料需求下降",
+          "to": "原料价格进一步下跌",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "负反馈循环形成，成本坍塌自我强化"
+        }
+      ],
+      "reversalNode": "需求超预期启动",
+      "reversalCondition": "基建或房地产需求释放推动钢材去库加速，利润修复",
+      "polarityTensionThreshold": 0.75,
+      "historicalCases": [
+        {
+          "year": "2022",
+          "description": "6月黑色系负反馈，铁矿跌超30%，螺纹钢从4800跌至3600"
+        },
+        {
+          "year": "2021",
+          "description": "10月政策打压铁矿，成本坍塌推动螺纹钢价格腰斩"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "黑色系负反馈一旦启动，各环节相互强化，直至需求端承接或供给端出清",
+        "dualityStructure": "钢材利润与原料价格之间的双向博弈",
+        "polarityWarning": "螺纹钢利润跌破盈亏平衡点持续2周以上，负反馈概率显著上升"
+      },
+      "reversibility": 0.7,
+      "tail_probability": 0.25,
+      "minority_protected": false
+    },
+    {
+      "id": "C_022",
+      "name": "生猪周期反转传导链",
+      "domain": "农产品",
+      "groundBase": "biological",
+      "triggerEvent": "能繁母猪存栏持续去化至合理水平以下",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "养殖深度亏损",
+          "to": "能繁母猪加速淘汰",
+          "confidence": "高",
+          "lag": "3-6个月",
+          "mechanism": "现金流压力迫使养殖户淘汰低效母猪"
+        },
+        {
+          "seq": 2,
+          "from": "能繁母猪去化",
+          "to": "仔猪供应减少",
+          "confidence": "高",
+          "lag": "10个月",
+          "mechanism": "母猪存栏决定10个月后的仔猪供应量"
+        },
+        {
+          "seq": 3,
+          "from": "仔猪供应减少",
+          "to": "生猪出栏量下降",
+          "confidence": "高",
+          "lag": "6个月",
+          "mechanism": "仔猪育肥6个月后成为商品猪出栏"
+        },
+        {
+          "seq": 4,
+          "from": "出栏量下降",
+          "to": "生猪价格上涨",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "供给收缩推动价格进入上涨周期"
+        },
+        {
+          "seq": 5,
+          "from": "价格上涨",
+          "to": "养殖利润修复",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "猪价突破成本线，养殖扭亏为盈"
+        },
+        {
+          "seq": 6,
+          "from": "利润修复",
+          "to": "养殖户补栏母猪",
+          "confidence": "高",
+          "lag": "3-6个月",
+          "mechanism": "盈利驱动养殖户扩大再生产"
+        },
+        {
+          "seq": 7,
+          "from": "补栏母猪",
+          "to": "新一轮周期开始",
+          "confidence": "高",
+          "lag": "16个月",
+          "mechanism": "母猪补栏预示着16个月后供给增加，周期见顶"
+        }
+      ],
+      "reversalNode": "价格上涨刺激补栏",
+      "reversalCondition": "生猪养殖利润连续3个月超过300元/头，补栏意愿恢复",
+      "polarityTensionThreshold": 0.8,
+      "historicalCases": [
+        {
+          "year": "2019",
+          "description": "非洲猪瘟去产能推动猪价从10元涨至40元"
+        },
+        {
+          "year": "2022",
+          "description": "7月猪价快速上涨，发改委约谈养殖企业"
+        },
+        {
+          "year": "2023",
+          "description": "能繁母猪去化不足，猪价长期在成本线附近徘徊"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "生猪周期由生物特性决定，一旦反转趋势持续16-18个月，不可逆性强",
+        "dualityStructure": "养殖利润与产能增减之间的自我循环",
+        "polarityWarning": "能繁母猪存栏同比降幅超过5%是周期反转的领先信号"
+      },
+      "reversibility": 0.8,
+      "tail_probability": 0.3,
+      "minority_protected": false
+    },
+    {
+      "id": "C_023",
+      "name": "天气市农产品传导链",
+      "domain": "农产品",
+      "groundBase": "natural",
+      "triggerEvent": "主要产区遭遇极端天气威胁单产",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "极端天气预警",
+          "to": "期货市场天气升水注入",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "交易员提前定价减产预期，远期合约上涨"
+        },
+        {
+          "seq": 2,
+          "from": "天气升水注入",
+          "to": "农户惜售情绪升温",
+          "confidence": "中",
+          "lag": "即时",
+          "mechanism": "价格上涨预期强化持货待涨心理"
+        },
+        {
+          "seq": 3,
+          "from": "惜售情绪",
+          "to": "现货流通收紧",
+          "confidence": "中",
+          "lag": "即时",
+          "mechanism": "农户减少销售，加工企业采购难度上升"
+        },
+        {
+          "seq": 4,
+          "from": "流通收紧",
+          "to": "基差走强",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "现货涨幅大于期货，基差扩大"
+        },
+        {
+          "seq": 5,
+          "from": "USDA确认减产",
+          "to": "天气升水兑现或消退",
+          "confidence": "高",
+          "lag": "1-2个月",
+          "mechanism": "官方数据确认实际减产幅度，市场重新定价"
+        }
+      ],
+      "reversalNode": "天气条件改善",
+      "reversalCondition": "产区迎来有效降雨或温度回归正常，天气模型转向有利",
+      "polarityTensionThreshold": 0.7,
+      "historicalCases": [
+        {
+          "year": "2012",
+          "description": "美国历史性干旱推动玉米大豆价格创历史新高"
+        },
+        {
+          "year": "2023",
+          "description": "阿根廷干旱推动大豆价格反弹"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "天气市初期升水快速注入，后期随确认过程波动加剧",
+        "dualityStructure": "天气不确定性带来的风险溢价与确定性后的价值回归",
+        "polarityWarning": "CFTC管理基金净多单达到历史极值是天气市过热信号"
+      },
+      "reversibility": 0.5,
+      "tail_probability": 0.2,
+      "minority_protected": false
+    },
+    {
+      "id": "C_024",
+      "name": "库存周期拐点传导链",
+      "domain": "宏观经济",
+      "groundBase": "marginal",
+      "triggerEvent": "工业企业产成品库存同比增速见顶回落",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "库存增速见顶",
+          "to": "企业进入去库存阶段",
+          "confidence": "高",
+          "lag": "1-2个月",
+          "mechanism": "需求走弱信号触发企业主动去库存"
+        },
+        {
+          "seq": 2,
+          "from": "主动去库存",
+          "to": "原材料采购放缓",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "企业减少原材料订单，优先消耗现有库存"
+        },
+        {
+          "seq": 3,
+          "from": "采购放缓",
+          "to": "大宗商品需求下降",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "工业品原材料需求同步减弱"
+        },
+        {
+          "seq": 4,
+          "from": "商品需求下降",
+          "to": "商品价格承压",
+          "confidence": "高",
+          "lag": "1-3个月",
+          "mechanism": "需求减弱推动价格中枢下移"
+        },
+        {
+          "seq": 5,
+          "from": "价格承压",
+          "to": "企业利润恶化",
+          "confidence": "中",
+          "lag": "3-6个月",
+          "mechanism": "量价齐跌挤压企业盈利空间"
+        },
+        {
+          "seq": 6,
+          "from": "库存降至低位",
+          "to": "补库存周期启动",
+          "confidence": "中",
+          "lag": "6-12个月",
+          "mechanism": "库存耗尽叠加需求回暖，企业被动补库"
+        }
+      ],
+      "reversalNode": "库存见底",
+      "reversalCondition": "产成品库存同比增速降至历史低位（通常0%以下）",
+      "polarityTensionThreshold": 0.68,
+      "historicalCases": [
+        {
+          "year": "2018",
+          "description": "去库存周期商品普跌，2019年补库推动反弹"
+        },
+        {
+          "year": "2022",
+          "description": "中美同时进入去库存周期，商品承压"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "库存周期约3-4年一轮，去库存阶段商品表现最差",
+        "dualityStructure": "企业库存决策与价格预期之间的自我实现",
+        "polarityWarning": "PMI产成品库存分项单月变化超过3个百分点是拐点信号"
+      },
+      "reversibility": 0.6,
+      "tail_probability": 0.2,
+      "minority_protected": false
+    },
+    {
+      "id": "C_025",
+      "name": "人民币贬值商品传导链",
+      "domain": "汇率商品",
+      "groundBase": "order",
+      "triggerEvent": "人民币汇率快速贬值突破关键位",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "人民币大幅贬值",
+          "to": "进口大宗商品成本上升",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "以人民币计价的进口商品价格直接上涨"
+        },
+        {
+          "seq": 2,
+          "from": "进口成本上升",
+          "to": "国内商品价格获得支撑",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "进口减少预期叠加成本推升国内价格"
+        },
+        {
+          "seq": 3,
+          "from": "内外价差走扩",
+          "to": "套利窗口打开",
+          "confidence": "中",
+          "lag": "即时",
+          "mechanism": "进口亏损抑制进口，出口优势增强"
+        },
+        {
+          "seq": 4,
+          "from": "进口减少预期",
+          "to": "国内去库加速",
+          "confidence": "中",
+          "lag": "1-3个月",
+          "mechanism": "进口到港下降，国内库存消耗"
+        },
+        {
+          "seq": 5,
+          "from": "去库加速",
+          "to": "国内商品价格相对外盘走强",
+          "confidence": "高",
+          "lag": "1-3个月",
+          "mechanism": "内盘强于外盘，内外比价持续修复"
+        }
+      ],
+      "reversalNode": "央行干预升值",
+      "reversalCondition": "央行动用逆周期因子或收紧离岸流动性稳定汇率",
+      "polarityTensionThreshold": 0.72,
+      "historicalCases": [
+        {
+          "year": "2016",
+          "description": "人民币贬值推动国内商品表现强于外盘"
+        },
+        {
+          "year": "2022",
+          "description": "人民币贬值支撑国内工业品价格"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "贬值初期商品受益，但过度贬值引发资本外流时商品承压",
+        "dualityStructure": "进口成本推升与资本外流压制之间的两阶段效应",
+        "polarityWarning": "人民币突破7.3关键心理位时央行干预概率大增"
+      },
+      "reversibility": 0.6,
+      "tail_probability": 0.25,
+      "minority_protected": false
+    },
+    {
+      "id": "C_027",
+      "name": "贵金属避险切换链",
+      "domain": "贵金属",
+      "groundBase": "culture",
+      "triggerEvent": "地缘风险上升或实际利率转负",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "地缘风险上升",
+          "to": "黄金避险需求增加",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "资金涌入黄金对冲地缘不确定性"
+        },
+        {
+          "seq": 2,
+          "from": "实际利率转负",
+          "to": "黄金机会成本下降",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "持有黄金不生息的劣势消失"
+        },
+        {
+          "seq": 3,
+          "from": "黄金上涨",
+          "to": "金银比走阔或收窄",
+          "confidence": "中",
+          "lag": "即时",
+          "mechanism": "地缘主导时金银比走阔，利率主导时收窄"
+        },
+        {
+          "seq": 4,
+          "from": "黄金持续上涨",
+          "to": "央行购金增加",
+          "confidence": "中",
+          "lag": "1-3个月",
+          "mechanism": "价格上涨确认趋势，央行加速配置"
+        },
+        {
+          "seq": 5,
+          "from": "央行购金",
+          "to": "黄金自我强化",
+          "confidence": "中",
+          "lag": "持续",
+          "mechanism": "官方需求提供结构性买盘，支撑价格"
+        }
+      ],
+      "reversalNode": "地缘缓和加息预期",
+      "reversalCondition": "地缘冲突平息或美联储释放鹰派信号推高实际利率",
+      "polarityTensionThreshold": 0.7,
+      "historicalCases": [
+        {
+          "year": "2022",
+          "description": "俄乌冲突黄金冲高，随后美联储加息压制"
+        },
+        {
+          "year": "2024",
+          "description": "地缘紧张加降息预期，黄金突破历史新高"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "黄金定价在利率驱动和避险驱动之间切换，不同阶段主导因素不同",
+        "dualityStructure": "实际利率框架与避险框架的双轮驱动",
+        "polarityWarning": "实际利率与黄金正相关出现时，避险模式主导"
+      },
+      "reversibility": 0.5,
+      "tail_probability": 0.2,
+      "minority_protected": false
+    },
+    {
+      "id": "C_028",
+      "name": "原油期限结构传导链",
+      "domain": "能源期货",
+      "groundBase": "marginal",
+      "triggerEvent": "原油期货从Contango转为Backwardation",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "库存快速去化",
+          "to": "近月合约走强",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "现货紧张推动近月价格涨幅大于远月"
+        },
+        {
+          "seq": 2,
+          "from": "近月强于远月",
+          "to": "期限结构转为Back",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "近远月价差由正转负，结构牛陡"
+        },
+        {
+          "seq": 3,
+          "from": "Back结构形成",
+          "to": "库存进一步下降",
+          "confidence": "中",
+          "lag": "1-3个月",
+          "mechanism": "囤货无利可图，库存加速流出"
+        },
+        {
+          "seq": 4,
+          "from": "库存持续低位",
+          "to": "价格易涨难跌",
+          "confidence": "高",
+          "lag": "持续",
+          "mechanism": "低库存提供价格弹性，任何利多都被放大"
+        },
+        {
+          "seq": 5,
+          "from": "高价格刺激增产",
+          "to": "供需再平衡",
+          "confidence": "中",
+          "lag": "3-6个月",
+          "mechanism": "页岩油增产或OPEC+增产平抑价格"
+        }
+      ],
+      "reversalNode": "增产信号",
+      "reversalCondition": "油价持续高于页岩油盈亏平衡点且钻井数回升",
+      "polarityTensionThreshold": 0.72,
+      "historicalCases": [
+        {
+          "year": "2022",
+          "description": "俄乌冲突后原油深度Back，库存持续下降"
+        },
+        {
+          "year": "2020",
+          "description": "疫情后原油深度Contango，库容紧张"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "期限结构是库存和供需最直观的指标，结构转换领先于价格趋势变化",
+        "dualityStructure": "现货紧张度与远期预期之间的价差博弈",
+        "polarityWarning": "Back结构持续强化时往往是上涨加速期，但也意味着反转风险积累"
+      },
+      "reversibility": 0.6,
+      "tail_probability": 0.25,
+      "minority_protected": false
+    },
+    {
+      "id": "C_029",
+      "name": "养殖饲料成本传导链",
+      "domain": "农产品",
+      "groundBase": "marginal",
+      "triggerEvent": "玉米豆粕价格大幅上涨",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "玉米豆粕大涨",
+          "to": "饲料成本上升",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "饲料原料成本直接推高配合饲料价格"
+        },
+        {
+          "seq": 2,
+          "from": "饲料成本上升",
+          "to": "养殖利润恶化",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "养殖成本增加但产品价格传导滞后"
+        },
+        {
+          "seq": 3,
+          "from": "养殖利润恶化",
+          "to": "养殖户提前出栏",
+          "confidence": "中",
+          "lag": "2-4周",
+          "mechanism": "亏损倒逼养殖户压缩养殖周期"
+        },
+        {
+          "seq": 4,
+          "from": "提前出栏",
+          "to": "短期供给增加",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "出栏体重下降，短期猪肉供应增加"
+        },
+        {
+          "seq": 5,
+          "from": "供给短期增加",
+          "to": "猪价承压",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "供给增加压制猪价，利润进一步恶化"
+        },
+        {
+          "seq": 6,
+          "from": "持续亏损",
+          "to": "能繁母猪去化",
+          "confidence": "高",
+          "lag": "3-6个月",
+          "mechanism": "深度亏损驱动产能去化，周期底部形成"
+        }
+      ],
+      "reversalNode": "产能去化完成",
+      "reversalCondition": "能繁母猪存栏连续3个月下降且降幅超过5%",
+      "polarityTensionThreshold": 0.7,
+      "historicalCases": [
+        {
+          "year": "2022",
+          "description": "豆粕玉米大涨挤压养殖利润，加速猪周期见底"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "饲料成本冲击短期利空养殖利润，但通过去产能中期利多猪价",
+        "dualityStructure": "饲料成本与养殖利润之间的双向挤压",
+        "polarityWarning": "猪粮比跌破5:1是国家收储的触发条件"
+      },
+      "reversibility": 0.6,
+      "tail_probability": 0.2,
+      "minority_protected": false
+    },
+    {
+      "id": "C_030",
+      "name": "化工利润修复传导链",
+      "domain": "化工品",
+      "groundBase": "marginal",
+      "triggerEvent": "化工品价格跌破现金成本",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "价格跌破现金成本",
+          "to": "生产企业亏损",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "售价无法覆盖可变成本，每生产一吨亏损一吨"
+        },
+        {
+          "seq": 2,
+          "from": "持续亏损",
+          "to": "企业检修停产",
+          "confidence": "高",
+          "lag": "2-4周",
+          "mechanism": "亏损倒逼企业主动检修或降负"
+        },
+        {
+          "seq": 3,
+          "from": "停产检修",
+          "to": "供给收缩",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "开工率下降，市场供应减少"
+        },
+        {
+          "seq": 4,
+          "from": "供给收缩",
+          "to": "去库存加速",
+          "confidence": "中",
+          "lag": "2-4周",
+          "mechanism": "供应减少推动库存消耗"
+        },
+        {
+          "seq": 5,
+          "from": "库存下降",
+          "to": "价格企稳反弹",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "供需改善推动价格修复"
+        },
+        {
+          "seq": 6,
+          "from": "价格反弹",
+          "to": "利润修复复产",
+          "confidence": "高",
+          "lag": "2-4周",
+          "mechanism": "利润修复后企业复产，完成循环"
+        }
+      ],
+      "reversalNode": "利润修复复产",
+      "reversalCondition": "生产利润转正且持续2周以上",
+      "polarityTensionThreshold": 0.68,
+      "historicalCases": [
+        {
+          "year": "2023",
+          "description": "甲醇多次跌破成本线后检修推动反弹"
+        },
+        {
+          "year": "2024",
+          "description": "PVC持续亏损推动大规模检修，价格阶段性见底"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "化工品成本支撑是硬约束，跌破现金成本是底部区域的重要信号",
+        "dualityStructure": "成本支撑与需求压制之间的博弈",
+        "polarityWarning": "行业开工率跌破60%是供给出清的确认信号"
+      },
+      "reversibility": 0.7,
+      "tail_probability": 0.3,
+      "minority_protected": false
+    },
+    {
+      "id": "C_031",
+      "name": "新能源金属产能释放链",
+      "domain": "有色金属",
+      "groundBase": "marginal",
+      "triggerEvent": "锂、镍等新能源金属产能集中释放",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "高价格刺激投资",
+          "to": "资本开支大幅增加",
+          "confidence": "高",
+          "lag": "1-2年",
+          "mechanism": "暴利驱动矿山和冶炼厂扩产"
+        },
+        {
+          "seq": 2,
+          "from": "资本开支增加",
+          "to": "产能集中投产",
+          "confidence": "中",
+          "lag": "2-3年",
+          "mechanism": "矿山建设周期结束，产能集中释放"
+        },
+        {
+          "seq": 3,
+          "from": "产能集中释放",
+          "to": "供给增速超过需求",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "新增产能涌入市场，供需逆转"
+        },
+        {
+          "seq": 4,
+          "from": "供需逆转",
+          "to": "价格大幅下跌",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "过剩预期推动价格快速回归"
+        },
+        {
+          "seq": 5,
+          "from": "价格大幅下跌",
+          "to": "高成本产能出清",
+          "confidence": "中",
+          "lag": "6-12个月",
+          "mechanism": "价格跌破现金成本，边际产能停产"
+        },
+        {
+          "seq": 6,
+          "from": "产能出清",
+          "to": "供需再平衡",
+          "confidence": "中",
+          "lag": "1-2年",
+          "mechanism": "供给收缩后价格寻底企稳"
+        }
+      ],
+      "reversalNode": "产能出清",
+      "reversalCondition": "价格跌破90%分位现金成本线且持续3个月",
+      "polarityTensionThreshold": 0.75,
+      "historicalCases": [
+        {
+          "year": "2023",
+          "description": "碳酸锂从60万跌至10万，产能集中释放驱动"
+        },
+        {
+          "year": "2024",
+          "description": "镍产能释放推动价格跌破成本，印尼控制产能"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "新能源金属产能周期特征明显，暴利后必然伴随过剩",
+        "dualityStructure": "长期需求增长叙事与短期供给过剩的博弈",
+        "polarityWarning": "资本开支增速连续两季度超过30%预示未来过剩风险"
+      },
+      "reversibility": 0.5,
+      "tail_probability": 0.2,
+      "minority_protected": false
+    },
+    {
+      "id": "C_032",
+      "name": "天气厄尔尼诺农产品链",
+      "domain": "农产品",
+      "groundBase": "natural",
+      "triggerEvent": "厄尔尼诺现象形成并影响主要产区",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "厄尔尼诺形成",
+          "to": "东南亚干旱棕榈油减产",
+          "confidence": "高",
+          "lag": "6-9个月",
+          "mechanism": "厄尔尼诺通常导致东南亚降水减少，滞后影响棕榈油产量"
+        },
+        {
+          "seq": 2,
+          "from": "厄尔尼诺形成",
+          "to": "南美大豆产区降水分化",
+          "confidence": "高",
+          "lag": "3-6个月",
+          "mechanism": "巴西南部降雨偏多，阿根廷北部干旱"
+        },
+        {
+          "seq": 3,
+          "from": "厄尔尼诺形成",
+          "to": "澳大利亚小麦干旱风险",
+          "confidence": "中",
+          "lag": "3-6个月",
+          "mechanism": "厄尔尼诺通常导致澳大利亚东部干旱"
+        },
+        {
+          "seq": 4,
+          "from": "减产预期",
+          "to": "农产品价格上涨",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "天气升水注入，价格提前反应减产预期"
+        },
+        {
+          "seq": 5,
+          "from": "USDA确认减产",
+          "to": "价格二次冲高或回落",
+          "confidence": "高",
+          "lag": "6-12个月",
+          "mechanism": "实际减产幅度与预期差决定方向"
+        }
+      ],
+      "reversalNode": "天气模式转换",
+      "reversalCondition": "厄尔尼诺结束转为中性或拉尼娜",
+      "polarityTensionThreshold": 0.7,
+      "historicalCases": [
+        {
+          "year": "2015",
+          "description": "强厄尔尼诺推动棕榈油减产，价格大幅上涨"
+        },
+        {
+          "year": "2023",
+          "description": "厄尔尼诺形成初期，市场开始定价减产风险"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "厄尔尼诺对不同品种影响差异巨大，且存在滞后效应",
+        "dualityStructure": "天气不确定性溢价与确定性后的价值回归",
+        "polarityWarning": "南方涛动指数连续3个月低于-1是厄尔尼诺确认信号"
+      },
+      "reversibility": 0.4,
+      "tail_probability": 0.15,
+      "minority_protected": false
+    },
+    {
+      "id": "C_033",
+      "name": "运价飙升商品传导链",
+      "domain": "物流商品",
+      "groundBase": "marginal",
+      "triggerEvent": "集装箱或干散货运价指数大幅飙升",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "地缘冲突或需求脉冲",
+          "to": "运价指数飙升",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "红海危机、港口拥堵等导致有效运力下降"
+        },
+        {
+          "seq": 2,
+          "from": "运价飙升",
+          "to": "进口商品到岸成本上升",
+          "confidence": "高",
+          "lag": "2-4周",
+          "mechanism": "海运费占大宗商品到岸成本10-30%"
+        },
+        {
+          "seq": 3,
+          "from": "成本上升",
+          "to": "国内商品价格获得支撑",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "进口成本推升国内价格底部"
+        },
+        {
+          "seq": 4,
+          "from": "运价持续高位",
+          "to": "贸易流重构",
+          "confidence": "中",
+          "lag": "1-3个月",
+          "mechanism": "进口商寻找替代来源地"
+        },
+        {
+          "seq": 5,
+          "from": "运价回落",
+          "to": "成本支撑减弱",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "运价正常化后商品价格承压"
+        }
+      ],
+      "reversalNode": "物流瓶颈缓解",
+      "reversalCondition": "港口拥堵缓解或地缘冲突缓和，有效运力恢复",
+      "polarityTensionThreshold": 0.68,
+      "historicalCases": [
+        {
+          "year": "2021",
+          "description": "集装箱运价飙升推高进口商品成本"
+        },
+        {
+          "year": "2023",
+          "description": "红海危机推高欧线运价，支撑欧洲天然气价格"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "运价冲击是脉冲式影响，随物流瓶颈缓解而消退",
+        "dualityStructure": "物流瓶颈与贸易重构之间的博弈",
+        "polarityWarning": "BDI指数单月涨幅超过50%是商品短期脉冲信号"
+      },
+      "reversibility": 0.6,
+      "tail_probability": 0.25,
+      "minority_protected": false
+    },
+    {
+      "id": "C_034",
+      "name": "PTA-聚酯负反馈链",
+      "domain": "化工品",
+      "groundBase": "marginal",
+      "triggerEvent": "聚酯需求走弱库存累积",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "终端纺织服装需求走弱",
+          "to": "聚酯库存累积",
+          "confidence": "高",
+          "lag": "1-2个月",
+          "mechanism": "织造厂采购放缓，聚酯产品库存上升"
+        },
+        {
+          "seq": 2,
+          "from": "聚酯库存累积",
+          "to": "聚酯工厂减产降负",
+          "confidence": "高",
+          "lag": "2-4周",
+          "mechanism": "库存压力倒逼聚酯企业检修"
+        },
+        {
+          "seq": 3,
+          "from": "聚酯减产",
+          "to": "PTA需求下降",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "聚酯开工下降直接减少PTA消耗"
+        },
+        {
+          "seq": 4,
+          "from": "PTA需求下降",
+          "to": "PTA库存累积",
+          "confidence": "高",
+          "lag": "2-4周",
+          "mechanism": "供应刚性，需求下降导致累库"
+        },
+        {
+          "seq": 5,
+          "from": "PTA累库",
+          "to": "PTA加工费压缩",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "库存压力倒逼PTA降价，加工费收窄"
+        },
+        {
+          "seq": 6,
+          "from": "加工费亏损",
+          "to": "PTA企业检修",
+          "confidence": "高",
+          "lag": "2-4周",
+          "mechanism": "亏损倒逼PTA企业减产，负反馈完成"
+        }
+      ],
+      "reversalNode": "终端需求回暖",
+      "reversalCondition": "纺织服装出口或内需明显改善，织造补库启动",
+      "polarityTensionThreshold": 0.72,
+      "historicalCases": [
+        {
+          "year": "2022",
+          "description": "疫情导致终端需求崩塌，PTA负反馈深度亏损"
+        },
+        {
+          "year": "2023",
+          "description": "需求弱复苏，PTA加工费长期低位"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "聚酯产业链负反馈从终端向上游逐级传导，库存是核心指标",
+        "dualityStructure": "产业链利润在上中下游的动态分配",
+        "polarityWarning": "聚酯库存超过25天是减产预警阈值"
+      },
+      "reversibility": 0.7,
+      "tail_probability": 0.25,
+      "minority_protected": false
+    },
+    {
+      "id": "C_035",
+      "name": "美国大选商品冲击链",
+      "domain": "地缘商品",
+      "groundBase": "order",
+      "triggerEvent": "美国大选结果揭晓政策方向明确",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "大选结果出炉",
+          "to": "市场计价新政府政策",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "市场迅速反应新政府政策预期"
+        },
+        {
+          "seq": 2,
+          "from": "贸易保护政策预期",
+          "to": "美元阶段性走强",
+          "confidence": "中",
+          "lag": "1-3个月",
+          "mechanism": "关税预期推高通胀预期，支撑美元"
+        },
+        {
+          "seq": 3,
+          "from": "关税政策落地",
+          "to": "中国商品出口受阻",
+          "confidence": "中",
+          "lag": "3-6个月",
+          "mechanism": "对华关税影响中国对美出口商品"
+        },
+        {
+          "seq": 4,
+          "from": "中国出口受阻",
+          "to": "商品内销压力增加",
+          "confidence": "中",
+          "lag": "6-12个月",
+          "mechanism": "出口转内销加大国内供给压力"
+        },
+        {
+          "seq": 5,
+          "from": "能源政策方向",
+          "to": "原油和新能源分化",
+          "confidence": "高",
+          "lag": "3-6个月",
+          "mechanism": "鼓励化石能源或新能源的政策差异"
+        }
+      ],
+      "reversalNode": "政策落地消化",
+      "reversalCondition": "新政策完全计价或实际影响不及预期",
+      "polarityTensionThreshold": 0.65,
+      "historicalCases": [
+        {
+          "year": "2016",
+          "description": "特朗普当选，贸易战预期推升美元"
+        },
+        {
+          "year": "2020",
+          "description": "拜登当选，新能源预期推动光伏锂电"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "大选影响分预期阶段和落地阶段，预期往往过度反应",
+        "dualityStructure": "竞选承诺与现实约束之间的博弈",
+        "polarityWarning": "大选后100天是新政策密集出台期"
+      },
+      "reversibility": 0.5,
+      "tail_probability": 0.2,
+      "minority_protected": false
+    },
+    {
+      "id": "C_036",
+      "name": "原油战略储备释放链",
+      "domain": "能源政策",
+      "groundBase": "order",
+      "triggerEvent": "美国或IEA宣布协同释放战略石油储备",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "战略储备释放宣布",
+          "to": "市场预期供给增加",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "预期新增供应平抑价格"
+        },
+        {
+          "seq": 2,
+          "from": "预期供给增加",
+          "to": "油价短期下跌",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "恐慌情绪和投机平仓推动价格回落"
+        },
+        {
+          "seq": 3,
+          "from": "实际释储操作",
+          "to": "商业库存补充",
+          "confidence": "中",
+          "lag": "1-3个月",
+          "mechanism": "炼厂采购释储原油，商业库存增加"
+        },
+        {
+          "seq": 4,
+          "from": "商业库存增加",
+          "to": "现货贴水扩大",
+          "confidence": "中",
+          "lag": "即时",
+          "mechanism": "现货市场供应宽松"
+        },
+        {
+          "seq": 5,
+          "from": "释储结束",
+          "to": "库存回补预期",
+          "confidence": "中",
+          "lag": "6-12个月",
+          "mechanism": "未来需要回补战略储备，远期利多"
+        }
+      ],
+      "reversalNode": "释储结束",
+      "reversalCondition": "战略储备释放完毕或宣布停止释放",
+      "polarityTensionThreshold": 0.68,
+      "historicalCases": [
+        {
+          "year": "2022",
+          "description": "IEA协同释放2.4亿桶，油价短期见顶"
+        },
+        {
+          "year": "2011",
+          "description": "IEA释储应对利比亚断供"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "战略储备释放短期压制油价，但远期回补需求构成支撑",
+        "dualityStructure": "短期平抑与长期供需再平衡的博弈",
+        "polarityWarning": "美国SPR降至3.5亿桶以下时回补压力增大"
+      },
+      "reversibility": 0.5,
+      "tail_probability": 0.2,
+      "minority_protected": false
+    },
+    {
+      "id": "C_037",
+      "name": "美联储降息预期商品链",
+      "domain": "宏观商品",
+      "groundBase": "order",
+      "triggerEvent": "市场对美联储降息预期升温",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "通胀就业数据走弱",
+          "to": "降息预期升温",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "数据驱动市场调整利率预期"
+        },
+        {
+          "seq": 2,
+          "from": "降息预期升温",
+          "to": "美元指数走弱",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "利差收窄预期压制美元"
+        },
+        {
+          "seq": 3,
+          "from": "美元走弱",
+          "to": "美元计价商品获支撑",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "黄金、铜等美元敏感商品上涨"
+        },
+        {
+          "seq": 4,
+          "from": "降息预期升温",
+          "to": "风险偏好回升",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "流动性宽松预期提振风险资产"
+        },
+        {
+          "seq": 5,
+          "from": "风险偏好回升",
+          "to": "工业品需求预期改善",
+          "confidence": "中",
+          "lag": "1-3个月",
+          "mechanism": "经济软着陆预期支撑商品需求"
+        },
+        {
+          "seq": 6,
+          "from": "降息落地",
+          "to": "预期兑现回调",
+          "confidence": "中",
+          "lag": "即时",
+          "mechanism": "利好出尽，商品可能阶段性回调"
+        }
+      ],
+      "reversalNode": "降息落地",
+      "reversalCondition": "美联储正式宣布降息，预期兑现",
+      "polarityTensionThreshold": 0.7,
+      "historicalCases": [
+        {
+          "year": "2019",
+          "description": "降息预期推动黄金上涨，降息落地后回调"
+        },
+        {
+          "year": "2024",
+          "description": "降息预期波动驱动黄金和铜阶段性行情"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "降息预期阶段商品受益，降息落地后往往回调",
+        "dualityStructure": "预期交易与现实确认之间的博弈",
+        "polarityWarning": "市场定价降息概率超过80%后预期充分消化"
+      },
+      "reversibility": 0.6,
+      "tail_probability": 0.25,
+      "minority_protected": false
+    },
+    {
+      "id": "C_038",
+      "name": "中国PMI商品脉冲链",
+      "domain": "宏观商品",
+      "groundBase": "marginal",
+      "triggerEvent": "中国制造业PMI超预期",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "PMI超预期",
+          "to": "市场上修经济预期",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "数据发布后市场调整增长预期"
+        },
+        {
+          "seq": 2,
+          "from": "经济预期上修",
+          "to": "工业品需求预期改善",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "黑色、有色需求预期上调"
+        },
+        {
+          "seq": 3,
+          "from": "需求预期改善",
+          "to": "商品价格脉冲上涨",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "预期驱动价格快速反应"
+        },
+        {
+          "seq": 4,
+          "from": "价格上涨",
+          "to": "补库意愿增强",
+          "confidence": "中",
+          "lag": "2-4周",
+          "mechanism": "涨价预期刺激下游补库"
+        },
+        {
+          "seq": 5,
+          "from": "补库增强",
+          "to": "现货成交放量",
+          "confidence": "中",
+          "lag": "2-4周",
+          "mechanism": "补库推动现货市场活跃"
+        },
+        {
+          "seq": 6,
+          "from": "价格过快上涨",
+          "to": "监管风险升温",
+          "confidence": "中",
+          "lag": "1-3个月",
+          "mechanism": "发改委等约谈企业，政策风险上升"
+        }
+      ],
+      "reversalNode": "监管干预",
+      "reversalCondition": "发改委等监管部门发声或出台控价措施",
+      "polarityTensionThreshold": 0.65,
+      "historicalCases": [
+        {
+          "year": "2023",
+          "description": "PMI超预期推动黑色系上涨，发改委随后约谈"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "PMI脉冲驱动商品短期行情，但监管风险随之而来",
+        "dualityStructure": "经济预期改善与政策干预之间的博弈",
+        "polarityWarning": "PMI连续3个月在50以上是经济企稳信号"
+      },
+      "reversibility": 0.6,
+      "tail_probability": 0.25,
+      "minority_protected": false
+    },
+    {
+      "id": "C_039",
+      "name": "黄金美元脱钩预警链",
+      "domain": "贵金属",
+      "groundBase": "marginal",
+      "triggerEvent": "黄金与美元指数同时上涨",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "黄金美元同涨",
+          "to": "美元信用溢价显现",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "传统负相关打破，避险需求同时推升两者"
+        },
+        {
+          "seq": 2,
+          "from": "美元信用溢价",
+          "to": "央行购金意愿增强",
+          "confidence": "中",
+          "lag": "1-3个月",
+          "mechanism": "美元信用担忧推动储备多元化"
+        },
+        {
+          "seq": 3,
+          "from": "央行购金",
+          "to": "黄金结构性买盘",
+          "confidence": "高",
+          "lag": "持续",
+          "mechanism": "官方需求提供持续买盘支撑"
+        },
+        {
+          "seq": 4,
+          "from": "黄金强势",
+          "to": "市场关注去美元化",
+          "confidence": "中",
+          "lag": "即时",
+          "mechanism": "叙事强化，吸引更多配置需求"
+        },
+        {
+          "seq": 5,
+          "from": "叙事强化",
+          "to": "黄金自我强化上涨",
+          "confidence": "中",
+          "lag": "持续",
+          "mechanism": "共识形成推动趋势延续"
+        }
+      ],
+      "reversalNode": "实际利率重新主导",
+      "reversalCondition": "美联储释放鹰派信号推动实际利率大幅上升",
+      "polarityTensionThreshold": 0.75,
+      "historicalCases": [
+        {
+          "year": "2022",
+          "description": "黄金美元同涨，地缘避险和加息预期并存"
+        },
+        {
+          "year": "2024",
+          "description": "黄金突破新高，美元同步强势"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "黄金美元脱钩是避险模式和信用担忧的共同结果，往往持续较长时间",
+        "dualityStructure": "利率定价与信用定价的双轮驱动",
+        "polarityWarning": "黄金与美元30天相关系数转正超过0.3是脱钩确认信号"
+      },
+      "reversibility": 0.4,
+      "tail_probability": 0.15,
+      "minority_protected": false
+    },
+    {
+      "id": "C_040",
+      "name": "商品波动率传导链",
+      "domain": "市场微观",
+      "groundBase": "marginal",
+      "triggerEvent": "地缘或宏观事件冲击推高商品波动率",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "冲击事件发生",
+          "to": "商品波动率指数飙升",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "恐慌情绪推升期权隐含波动率"
+        },
+        {
+          "seq": 2,
+          "from": "波动率飙升",
+          "to": "期权权利金暴涨",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "隐含波动率上升推高期权价格"
+        },
+        {
+          "seq": 3,
+          "from": "波动率飙升",
+          "to": "CTA策略减仓",
+          "confidence": "中",
+          "lag": "即时",
+          "mechanism": "波动率控制策略自动降低仓位"
+        },
+        {
+          "seq": 4,
+          "from": "CTA减仓",
+          "to": "价格波动加剧",
+          "confidence": "中",
+          "lag": "即时",
+          "mechanism": "程序化抛售放大价格波动"
+        },
+        {
+          "seq": 5,
+          "from": "波动率高位",
+          "to": "保证金上调",
+          "confidence": "高",
+          "lag": "1-2天",
+          "mechanism": "交易所上调保证金抑制投机"
+        },
+        {
+          "seq": 6,
+          "from": "保证金上调",
+          "to": "流动性下降",
+          "confidence": "中",
+          "lag": "即时",
+          "mechanism": "交易成本上升抑制参与度"
+        },
+        {
+          "seq": 7,
+          "from": "波动率回落",
+          "to": "市场正常化",
+          "confidence": "高",
+          "lag": "2-4周",
+          "mechanism": "事件消化后波动率回归常态"
+        }
+      ],
+      "reversalNode": "波动率均值回归",
+      "reversalCondition": "冲击事件平息，恐慌情绪消退",
+      "polarityTensionThreshold": 0.8,
+      "historicalCases": [
+        {
+          "year": "2020",
+          "description": "疫情冲击原油波动率飙升至历史极值"
+        },
+        {
+          "year": "2022",
+          "description": "俄乌冲突推动农产品波动率飙升"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "波动率飙升是极端事件的必然结果，但均值回归是确定性的",
+        "dualityStructure": "恐慌情绪与市场自我稳定机制之间的博弈",
+        "polarityWarning": "波动率指数超过历史90%分位是短期反转信号"
+      },
+      "reversibility": 0.7,
+      "tail_probability": 0.3,
+      "minority_protected": false
+    }
+  ]
+}

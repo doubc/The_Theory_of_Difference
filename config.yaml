@@ -1,0 +1,114 @@
+# price-structure 项目配置
+
+project:
+  name: "价格结构形式系统"
+  version: "4.0.0"
+
+# ─── UI 设置 ──────────────────────────────────────────────
+
+ui:
+  theme: "dark"                # dark | light
+  language: "zh-CN"            # 界面语言
+  page_title: "价格结构研究工作台 v4"
+  page_icon: "🔬"
+  layout: "wide"               # wide | centered
+  sidebar:
+    default_state: "expanded"  # expanded | collapsed
+    show_favorites: true
+    show_search: true
+    max_favorites: 10
+  dashboard:
+    show_quick_actions: true
+    show_metric_cards: true
+    show_symbol_overview: true
+    quick_scan_min_volume: 20000
+  charts:
+    default_theme: "plotly_dark"  # plotly_dark | plotly_white
+    candlestick_up_color: "#ef5350"
+    candlestick_down_color: "#26a69a"
+    zone_color: "#4a90d9"
+    highlight_color: "#64ffda"
+  export:
+    default_format: "markdown"    # markdown | json | csv
+    auto_save_briefings: true
+    briefing_dir: "data/briefings"
+
+# ─── 数据层 ────────────────────────────────────────────────
+
+data:
+  dir: "data"
+  cache_dir: "data/cache"
+  local_dir: "data/local"        # Parquet 本地存储根目录
+  symbols:
+    - id: "CU000"
+      name: "铜连续合约"
+      file: "cu0.csv"
+      format: "csv"       # csv | mysql | parquet
+
+  # MySQL 连接（通过环境变量读取密码）
+  mysql:
+    host: "localhost"
+    port: 3306
+    database: "sina"
+    user: "root"
+    password: "${MYSQL_PASSWORD}"   # 必须设置环境变量，无默认值
+
+  # Parquet 本地存储（v3.0 新增）
+  parquet:
+    daily_dir: "data/local/daily"
+    min5_dir: "data/local/5min"
+    compression: "snappy"
+    scan_cache_dir: "data/local/scan_cache"
+
+# ─── 编译器参数 ────────────────────────────────────────────
+# 字段名与 CompilerConfig dataclass 一一对应
+
+compiler:
+  # 极值提取（→ pivots.py）
+  min_amplitude: 0.03         # 最小摆动幅度（对数差 or 相对比例）
+  min_duration: 3             # swing 窗口半宽（天数）
+  noise_filter: 0.008         # 噪声过滤阈值（低于此幅度直接丢弃）
+  use_log_price: true         # 幅度计算是否用对数差
+
+  # 段合并（→ segments.py）
+  min_segment_delta_pct: 0.005  # 微段合并阈值（相对价格比例）
+
+  # Zone 识别（→ zones.py）
+  zone_bandwidth: 0.015       # Zone 带宽（相对价格比例）
+  cluster_eps: 0.02           # 聚类距离阈值
+  cluster_min_points: 2       # 最小聚类点数
+
+  # 结构组装（→ cycles.py）
+  min_cycles: 2               # 最小 Cycle 数
+  tolerance: 0.03             # Zone 容差
+
+  # 丛识别（→ bundles.py）
+  bundle_speed_tol: 0.4       # 速度比相似容差
+  bundle_time_tol: 0.5        # 时间比相似容差
+
+  # 多频率编译（v3.0 新增）
+  multi_freq:
+    enabled: false             # 是否同时编译多频率
+    freqs: ["1d", "1h", "5m"]  # 编译频率列表
+    resample_rules:            # 重采样规则
+      "1h": "5m"              # 1h 数据从 5m 重采样
+      "1d": "1h"              # 1d 数据从 1h 重采样
+
+# ─── 规则引擎（阶段4）──────────────────────────────────────
+
+rules:
+  dir: "src/dsl/rules"
+  default_file: "default.yaml"
+
+# ─── 样本库（阶段5）────────────────────────────────────────
+
+samples:
+  dir: "data/samples"
+  library_file: "library.jsonl"
+
+# ─── 输出 ──────────────────────────────────────────────────
+
+output:
+  dir: "output"
+  charts: true                # 是否生成 SVG 图表
+  report: true                # 是否生成 Markdown 报告

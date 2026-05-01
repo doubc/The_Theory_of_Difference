@@ -1,0 +1,67 @@
+{
+  "commodity": "纯碱",
+  "symbol": "SA",
+  "version": "1.0.0",
+  "relations": [
+    {
+      "id": "SA_R01",
+      "type": "需求驱动",
+      "from": "浮法玻璃产量",
+      "to": "纯碱需求",
+      "strength": 0.75,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "浮法玻璃是纯碱最大传统需求（约40%），玻璃产量决定纯碱消费",
+      "reversalPoint": "玻璃冷修减少纯碱需求"
+    },
+    {
+      "id": "SA_R02",
+      "type": "需求增长",
+      "from": "光伏玻璃产能",
+      "to": "纯碱需求",
+      "strength": 0.7,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "季度",
+      "description": "光伏玻璃是纯碱需求增量核心，每GW光伏玻璃约用3万吨纯碱",
+      "reversalPoint": "光伏玻璃产能过剩导致开工率下降"
+    },
+    {
+      "id": "SA_R03",
+      "type": "供给冲击",
+      "from": "天然碱产能投产",
+      "to": "纯碱供给",
+      "strength": 0.75,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "年度",
+      "description": "远兴能源等天然碱项目投产大幅增加供给",
+      "reversalPoint": "投产延迟或环保审批受阻"
+    },
+    {
+      "id": "SA_R04",
+      "type": "库存周期",
+      "from": "纯碱厂家库存",
+      "to": "纯碱价格",
+      "strength": 0.8,
+      "direction": "反向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "库存是纯碱价格最敏感指标，极低库存时价格弹性极大",
+      "reversalPoint": "新产能释放后库存累积"
+    },
+    {
+      "id": "SA_R05",
+      "type": "成本分层",
+      "from": "氨碱法成本",
+      "to": "纯碱价格底部",
+      "strength": 0.65,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "季度",
+      "description": "氨碱法是高成本产能，价格跌破氨碱成本时产能退出支撑价格",
+      "reversalPoint": "天然碱低成本产能成为价格新锚"
+    }
+  ]
+}

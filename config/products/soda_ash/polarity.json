@@ -1,0 +1,19 @@
+{
+  "commodity": "纯碱",
+  "symbol": "SA",
+  "version": "1.0.0",
+  "entries": {
+    "郑商所纯碱价格": {
+      "historicalMin": 1200,
+      "historicalMax": 3200,
+      "recentMin": 1500,
+      "recentMax": 2600,
+      "reversalSignalPatterns": [
+        "天然碱产能投产",
+        "玻璃冷修增加",
+        "库存累积",
+        "光伏装机放缓"
+      ]
+    }
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "commodity": "棉花",
+  "symbol": "CF",
+  "version": "1.0.0",
+  "relations": [
+    {
+      "id": "CF_R01",
+      "type": "供给驱动",
+      "from": "全球棉花产量",
+      "to": "棉花价格",
+      "strength": 0.8,
+      "direction": "反向",
+      "groundBase": "natural",
+      "lag": "月度",
+      "description": "全球棉花丰产推低价格，减产则推高",
+      "reversalPoint": "天气改善或种植面积增加"
+    },
+    {
+      "id": "CF_R02",
+      "type": "需求驱动",
+      "from": "纺织服装消费",
+      "to": "棉花需求",
+      "strength": 0.75,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "月度",
+      "description": "终端纺织消费决定棉花需求强度",
+      "reversalPoint": "经济衰退导致消费下降"
+    },
+    {
+      "id": "CF_R03",
+      "type": "替代竞争",
+      "from": "化学纤维",
+      "to": "棉花需求",
+      "strength": 0.6,
+      "direction": "反向",
+      "groundBase": "marginal",
+      "lag": "年度",
+      "description": "涤纶等化纤替代棉花，棉花-涤纶价差过大时替代加速",
+      "reversalPoint": "消费者偏好天然纤维"
+    },
+    {
+      "id": "CF_R04",
+      "type": "政策驱动",
+      "from": "棉花进口配额",
+      "to": "国内棉花价格",
+      "strength": 0.7,
+      "direction": "不确定",
+      "groundBase": "order",
+      "lag": "即时",
+      "description": "进口配额限制进口量，保护国内价格；配额增加则压制国内价格",
+      "reversalPoint": "配额政策调整"
+    },
+    {
+      "id": "CF_R05",
+      "type": "汇率传导",
+      "from": "人民币汇率",
+      "to": "进口棉成本",
+      "strength": 0.65,
+      "direction": "反向",
+      "groundBase": "order",
+      "lag": "即时",
+      "description": "人民币贬值推高进口棉成本，支撑国内棉价",
+      "reversalPoint": "人民币升值降低进口成本"
+    }
+  ]
+}

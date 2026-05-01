@@ -1,0 +1,64 @@
+{
+  "commodity": "纯碱",
+  "symbol": "SA",
+  "version": "1.0.0",
+  "entities": [
+    {
+      "id": "SA_E01",
+      "name": "纯碱光伏需求叙事",
+      "type": "商品供需叙事",
+      "groundBase": "culture",
+      "importance": 8,
+      "description": "光伏玻璃是纯碱需求增长最快领域，光伏装机量直接拉动纯碱消费",
+      "trackingVariables": [
+        "光伏装机量",
+        "光伏玻璃产能",
+        "纯碱光伏需求占比"
+      ]
+    },
+    {
+      "id": "SA_E02",
+      "name": "纯碱产能扩张叙事",
+      "type": "商品供需叙事",
+      "groundBase": "culture",
+      "importance": 7,
+      "description": "天然碱（内蒙古/青海）产能大规模投放，压制纯碱价格中枢",
+      "trackingVariables": [
+        "新产能投产时间",
+        "天然碱产量",
+        "氨碱法开工率"
+      ]
+    },
+    {
+      "id": "SA_E03",
+      "name": "郑商所纯碱期货",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "currentValue": "约1800元/吨",
+      "historicalRange": {
+        "min": 1200,
+        "max": 3200
+      },
+      "trackingVariables": [
+        "期货价格",
+        "持仓量",
+        "仓单"
+      ]
+    },
+    {
+      "id": "SA_E04",
+      "name": "中国纯碱工业协会",
+      "type": "行业协会",
+      "groundBase": "order",
+      "importance": 7,
+      "description": "纯碱行业数据来源",
+      "trackingVariables": [
+        "产量",
+        "库存",
+        "开工率",
+        "价格指数"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "commodity": "硅铁",
+  "symbol": "SF",
+  "version": "1.0.0",
+  "models": [
+    {
+      "id": "SF_M01",
+      "name": "硅铁成本+需求双驱动模型",
+      "domain": "成本定价",
+      "groundBase": "marginal",
+      "formula": "SF_price ≈ 电力成本/0.5 + 兰炭成本 + 硅石成本 + 钢厂需求溢价",
+      "variables": [
+        {
+          "name": "电力价格",
+          "direction": "正向",
+          "weight": 0.5
+        },
+        {
+          "name": "兰炭价格",
+          "direction": "正向",
+          "weight": 0.15
+        },
+        {
+          "name": "粗钢产量增速",
+          "direction": "正向",
+          "weight": 0.2
+        },
+        {
+          "name": "库存水平",
+          "direction": "反向",
+          "weight": 0.15
+        }
+      ],
+      "description": "硅铁定价由电力成本（底部锚定）和粗钢需求（顶部驱动）共同决定",
+      "dominantPhase": "成本支撑有效且需求稳定时，模型解释力最高",
+      "limitation": "忽视出口需求和环保限产的突发影响"
+    }
+  ]
+}

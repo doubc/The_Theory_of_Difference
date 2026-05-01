@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "price-structure"
+version = "3.1.0"
+description = "基于差异论 V1.6 的期货价格结构研究底座"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+
+dependencies = [
+    "pandas>=2.0",
+    "pyarrow>=10.0",
+    "numpy>=1.24",
+    "plotly>=5.0",
+    "pyyaml>=6.0",
+    "streamlit>=1.30",
+    "networkx>=3.0",
+    "requests>=2.31",
+    "xgboost>=2.0",
+]
+
+[project.optional-dependencies]
+mysql = ["sqlalchemy>=2.0", "pymysql>=1.1"]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "mypy>=1.0",
+    "ruff>=0.1",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+addopts = "-v --tb=short"
+
+[tool.setuptools.packages.find]
+include = ["src*"]

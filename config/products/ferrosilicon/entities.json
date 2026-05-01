@@ -1,0 +1,63 @@
+{
+  "commodity": "硅铁",
+  "symbol": "SF",
+  "version": "1.0.0",
+  "entities": [
+    {
+      "id": "SF_E01",
+      "name": "硅铁钢需叙事",
+      "type": "商品供需叙事",
+      "groundBase": "culture",
+      "importance": 8,
+      "description": "硅铁约70%用于钢铁脱氧合金化，粗钢产量直接决定硅铁需求",
+      "trackingVariables": [
+        "粗钢产量",
+        "钢厂利润",
+        "高炉开工率"
+      ]
+    },
+    {
+      "id": "SF_E02",
+      "name": "硅铁成本叙事",
+      "type": "商品供需叙事",
+      "groundBase": "culture",
+      "importance": 7,
+      "description": "电力成本占硅铁生产成本约50%，宁夏/内蒙古电价政策是核心变量",
+      "trackingVariables": [
+        "西北电价",
+        "兰炭价格",
+        "硅石价格"
+      ]
+    },
+    {
+      "id": "SF_E03",
+      "name": "郑商所硅铁期货",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 7,
+      "currentValue": "约7000元/吨",
+      "historicalRange": {
+        "min": 4500,
+        "max": 12000
+      },
+      "trackingVariables": [
+        "期货价格",
+        "持仓量",
+        "成交量"
+      ]
+    },
+    {
+      "id": "SF_E04",
+      "name": "鄂尔多斯",
+      "type": "产业权力机构",
+      "groundBase": "order",
+      "importance": 7,
+      "description": "中国最大硅铁生产企业之一",
+      "trackingVariables": [
+        "产量",
+        "开工率",
+        "电价"
+      ]
+    }
+  ]
+}

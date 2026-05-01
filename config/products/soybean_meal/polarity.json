@@ -1,0 +1,42 @@
+{
+  "commodity": "豆粕",
+  "symbol": "M",
+  "version": "1.0.0",
+  "entries": {
+    "大商所豆粕价格": {
+      "historicalMin": 2200,
+      "historicalMax": 5000,
+      "recentMin": 2800,
+      "recentMax": 4200,
+      "reversalSignalPatterns": [
+        "南美丰产",
+        "USDA利空报告",
+        "生猪存栏下降",
+        "人民币升值"
+      ]
+    },
+    "CBOT大豆价格": {
+      "historicalMin": 800,
+      "historicalMax": 1800,
+      "recentMin": 1000,
+      "recentMax": 1500,
+      "reversalSignalPatterns": [
+        "南美天气改善",
+        "美国丰产",
+        "中国采购放缓",
+        "巴西雷亚尔贬值"
+      ]
+    },
+    "生猪养殖利润": {
+      "historicalMin": -800,
+      "historicalMax": 1500,
+      "recentMin": -500,
+      "recentMax": 800,
+      "reversalSignalPatterns": [
+        "猪价上涨",
+        "饲料成本下降",
+        "产能去化"
+      ]
+    }
+  }
+}

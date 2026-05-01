@@ -1,0 +1,44 @@
+{
+  "commodity": "工业硅",
+  "symbol": "SI",
+  "version": "1.0.0",
+  "models": [
+    {
+      "id": "SI_M01",
+      "name": "工业硅成本+光伏需求双驱动模型",
+      "domain": "成本定价",
+      "groundBase": "marginal",
+      "formula": "SI_price ≈ 电力成本/0.35 + 硅石成本 + 光伏需求溢价",
+      "variables": [
+        {
+          "name": "电力价格",
+          "direction": "正向",
+          "weight": 0.35
+        },
+        {
+          "name": "硅石价格",
+          "direction": "正向",
+          "weight": 0.1
+        },
+        {
+          "name": "多晶硅产量增速",
+          "direction": "正向",
+          "weight": 0.3
+        },
+        {
+          "name": "有机硅产量",
+          "direction": "正向",
+          "weight": 0.15
+        },
+        {
+          "name": "库存水平",
+          "direction": "反向",
+          "weight": 0.1
+        }
+      ],
+      "description": "工业硅定价由电力成本（底部）和光伏产业链需求（弹性）共同决定",
+      "dominantPhase": "光伏景气周期时需求模型解释力最强，需求低迷时成本模型有效",
+      "limitation": "忽视季节性供给变化和出口需求"
+    }
+  ]
+}

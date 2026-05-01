@@ -1,0 +1,67 @@
+{
+  "commodity": "铂",
+  "symbol": "PT",
+  "version": "1.0.0",
+  "relations": [
+    {
+      "id": "PT_R01",
+      "type": "供给约束",
+      "from": "南非电力危机",
+      "to": "铂金供给",
+      "strength": 0.8,
+      "direction": "反向",
+      "groundBase": "natural",
+      "lag": "即时",
+      "description": "南非频繁限电导致矿山停产，影响全球约70%铂金供给",
+      "reversalPoint": "Eskom发电能力恢复或矿山自备电厂投运"
+    },
+    {
+      "id": "PT_R02",
+      "type": "需求增长",
+      "from": "氢能产业发展",
+      "to": "铂金需求",
+      "strength": 0.7,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "年度",
+      "description": "氢燃料电池催化剂用量随氢能车和加氢站扩张而增加",
+      "reversalPoint": "催化剂技术突破降低铂金用量"
+    },
+    {
+      "id": "PT_R03",
+      "type": "替代竞争",
+      "from": "汽油车三元催化",
+      "to": "铂金需求",
+      "strength": 0.5,
+      "direction": "不确定",
+      "groundBase": "marginal",
+      "lag": "季度",
+      "description": "汽油车用钯金为主，但铂钯替代在进行中，铂金可部分替代钯金",
+      "reversalPoint": "铂钯价差足够大时替代加速"
+    },
+    {
+      "id": "PT_R04",
+      "type": "金银联动",
+      "from": "黄金价格",
+      "to": "铂金价格",
+      "strength": 0.6,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "贵金属板块联动，黄金上涨带动铂金情绪",
+      "reversalPoint": "铂金基本面（供需）主导时脱离金价联动"
+    },
+    {
+      "id": "PT_R05",
+      "type": "投资需求",
+      "from": "铂金ETF持仓",
+      "to": "铂金价格",
+      "strength": 0.7,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "ETF增持反映机构看多，减少反映抛售",
+      "reversalPoint": "ETF持仓变化领先价格1-2周"
+    }
+  ]
+}

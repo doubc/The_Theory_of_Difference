@@ -1,0 +1,39 @@
+{
+  "commodity": "铅",
+  "symbol": "PB",
+  "version": "1.0.0",
+  "models": [
+    {
+      "id": "PB_M01",
+      "name": "铅的再生铅成本定价模型",
+      "domain": "成本定价",
+      "groundBase": "marginal",
+      "formula": "PB_price ≈ 废电池价格 / 回收率 + 冶炼费用 + 合理利润",
+      "variables": [
+        {
+          "name": "废电池到厂价",
+          "direction": "正向",
+          "weight": 0.6
+        },
+        {
+          "name": "冶炼回收率",
+          "direction": "反向",
+          "weight": 0.15
+        },
+        {
+          "name": "冶炼加工费",
+          "direction": "正向",
+          "weight": 0.15
+        },
+        {
+          "name": "副产品收入（硫酸等）",
+          "direction": "反向",
+          "weight": 0.1
+        }
+      ],
+      "description": "铅价约60%由再生铅定价，废电池价格是铅价的核心锚定。当铅价低于再生铅成本时，再生铅减产支撑价格。",
+      "dominantPhase": "铅价在成本区间震荡时，成本模型解释力最强",
+      "limitation": "忽视铅锌伴生关系和锂电替代趋势"
+    }
+  ]
+}

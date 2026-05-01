@@ -1,0 +1,63 @@
+{
+  "commodity": "甲醇",
+  "symbol": "MA",
+  "version": "1.0.0",
+  "entities": [
+    {
+      "id": "MA_E01",
+      "name": "甲醇煤制成本叙事",
+      "type": "商品供需叙事",
+      "groundBase": "culture",
+      "importance": 8,
+      "description": "中国甲醇约80%由煤制生产，煤炭价格是甲醇成本核心，煤化工利润决定开工率",
+      "trackingVariables": [
+        "动力煤价格",
+        "甲醇开工率",
+        "煤制甲醇利润"
+      ]
+    },
+    {
+      "id": "MA_E02",
+      "name": "MTO需求叙事",
+      "type": "商品供需叙事",
+      "groundBase": "culture",
+      "importance": 8,
+      "description": "甲醇制烯烃(MTO)是甲醇最大新兴需求，MTO利润决定甲醇需求弹性",
+      "trackingVariables": [
+        "MTO装置开工率",
+        "MTO利润",
+        "聚烯烃价格"
+      ]
+    },
+    {
+      "id": "MA_E03",
+      "name": "郑商所甲醇期货",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "currentValue": "约2500元/吨",
+      "historicalRange": {
+        "min": 1500,
+        "max": 3800
+      },
+      "trackingVariables": [
+        "期货价格",
+        "持仓量",
+        "仓单"
+      ]
+    },
+    {
+      "id": "MA_E04",
+      "name": "中国氮肥工业协会",
+      "type": "行业协会",
+      "groundBase": "order",
+      "importance": 6,
+      "description": "甲醇行业数据来源",
+      "trackingVariables": [
+        "产量",
+        "开工率",
+        "进出口"
+      ]
+    }
+  ]
+}

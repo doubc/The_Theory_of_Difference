@@ -1,0 +1,67 @@
+{
+  "commodity": "玻璃",
+  "symbol": "FG",
+  "version": "1.0.0",
+  "relations": [
+    {
+      "id": "FG_R01",
+      "type": "需求驱动",
+      "from": "房地产竣工面积",
+      "to": "玻璃需求",
+      "strength": 0.85,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "月度",
+      "description": "竣工面积是玻璃需求最直接指标，竣工回暖带动玻璃消费",
+      "reversalPoint": "竣工面积持续下降"
+    },
+    {
+      "id": "FG_R02",
+      "type": "供给刚性",
+      "from": "浮法产线冷修",
+      "to": "玻璃供给",
+      "strength": 0.8,
+      "direction": "反向",
+      "groundBase": "natural",
+      "lag": "月度",
+      "description": "产线冷修减少供给，但冷修决策取决于利润水平",
+      "reversalPoint": "利润恢复后产线点火复产"
+    },
+    {
+      "id": "FG_R03",
+      "type": "成本传导",
+      "from": "纯碱价格",
+      "to": "玻璃成本",
+      "strength": 0.7,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "纯碱是玻璃核心原料，纯碱涨价推升玻璃成本",
+      "reversalPoint": "纯碱产能释放降低原料成本"
+    },
+    {
+      "id": "FG_R04",
+      "type": "库存周期",
+      "from": "玻璃厂家库存",
+      "to": "玻璃价格",
+      "strength": 0.75,
+      "direction": "反向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "厂家库存累积压制价格，去化支撑价格",
+      "reversalPoint": "库存降至极低时价格弹性放大"
+    },
+    {
+      "id": "FG_R05",
+      "type": "政策驱动",
+      "from": "保交楼政策",
+      "to": "玻璃需求",
+      "strength": 0.7,
+      "direction": "正向",
+      "groundBase": "order",
+      "lag": "3-6个月",
+      "description": "保交楼政策推动竣工端回暖，直接拉动玻璃需求",
+      "reversalPoint": "政策力度减弱或效果边际递减"
+    }
+  ]
+}

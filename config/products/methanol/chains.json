@@ -1,0 +1,69 @@
+{
+  "commodity": "甲醇",
+  "symbol": "MA",
+  "version": "1.0.0",
+  "chains": [
+    {
+      "id": "MA_C01",
+      "name": "煤-MTO甲醇价格传导链",
+      "domain": "能化",
+      "groundBase": "marginal",
+      "triggerEvent": "煤炭价格大幅上涨",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "煤价上涨",
+          "to": "甲醇成本上升",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "煤占甲醇成本60-70%"
+        },
+        {
+          "seq": 2,
+          "from": "成本上升",
+          "to": "甲醇价格跟涨",
+          "confidence": "高",
+          "lag": "1-2周",
+          "mechanism": "成本推升+甲醇工厂转嫁成本"
+        },
+        {
+          "seq": 3,
+          "from": "甲醇上涨",
+          "to": "MTO利润压缩",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "MTO原料成本上升"
+        },
+        {
+          "seq": 4,
+          "from": "MTO利润压缩",
+          "to": "MTO减产停车",
+          "confidence": "中",
+          "lag": "2-4周",
+          "mechanism": "MTO亏损时降负或停车"
+        },
+        {
+          "seq": 5,
+          "from": "MTO停车",
+          "to": "甲醇需求下降",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "MTO是甲醇最大单一需求"
+        },
+        {
+          "seq": 6,
+          "from": "需求下降",
+          "to": "甲醇价格回落",
+          "confidence": "中",
+          "lag": "1-2周",
+          "mechanism": "需求下降压制甲醇价格"
+        }
+      ],
+      "reversalNode": "MTO利润恢复",
+      "reversalCondition": "煤价回落或聚烯烃价格上涨使MTO利润转正",
+      "reversibility": 0.65,
+      "tail_probability": 0.2,
+      "minority_protected": false
+    }
+  ]
+}

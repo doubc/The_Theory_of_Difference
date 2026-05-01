@@ -1,0 +1,39 @@
+{
+  "commodity": "PTA",
+  "symbol": "TA",
+  "version": "1.0.0",
+  "models": [
+    {
+      "id": "TA_M01",
+      "name": "PTA成本加成定价模型",
+      "domain": "成本定价",
+      "groundBase": "marginal",
+      "formula": "TA_price ≈ PX_price * 0.655 + 加工费(300-800) + 合理利润",
+      "variables": [
+        {
+          "name": "PX价格",
+          "direction": "正向",
+          "weight": 0.6
+        },
+        {
+          "name": "PTA加工费",
+          "direction": "正向",
+          "weight": 0.2
+        },
+        {
+          "name": "聚酯开工率",
+          "direction": "正向",
+          "weight": 0.15
+        },
+        {
+          "name": "PTA库存",
+          "direction": "反向",
+          "weight": 0.05
+        }
+      ],
+      "description": "PTA定价以PX成本为基础加成，加工费反映供需松紧",
+      "dominantPhase": "供需平衡时成本加成模型有效，供需失衡时加工费大幅波动",
+      "limitation": "忽视PTA产能过剩对加工费的长期压制"
+    }
+  ]
+}
