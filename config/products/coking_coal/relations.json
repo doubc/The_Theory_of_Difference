@@ -1,0 +1,23 @@
+{
+  "commodity": "coking_coal",
+  "relations": [
+    {
+      "id": "R_001",
+      "from": "GEO_001",
+      "to": "VAR_001",
+      "type": "supply",
+      "strength": 0.75,
+      "direction": "positive",
+      "description": "进口补充焦煤库存"
+    },
+    {
+      "id": "R_002",
+      "from": "POW_001",
+      "to": "VAR_001",
+      "type": "demand",
+      "strength": 0.8,
+      "direction": "negative",
+      "description": "焦化厂消耗焦煤"
+    }
+  ]
+}
