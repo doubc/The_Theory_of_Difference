@@ -1,0 +1,71 @@
+{
+  "commodity": "coke",
+  "symbol": "J",
+  "entities": [
+    {
+      "id": "GEO_001",
+      "name": "山西/河北",
+      "type": "geography",
+      "description": "焦炭主产区，环保限产影响大",
+      "importance": 8,
+      "trackingVariables": [
+        "产能利用率",
+        "环保限产政策"
+      ]
+    },
+    {
+      "id": "POW_001",
+      "name": "焦化厂",
+      "type": "power",
+      "description": "焦炭生产方，利润决定开工意愿",
+      "importance": 8,
+      "trackingVariables": [
+        "焦化利润",
+        "开工率",
+        "焦炭库存"
+      ]
+    },
+    {
+      "id": "POW_002",
+      "name": "钢厂",
+      "type": "power",
+      "description": "焦炭消费方（占85%+），高炉必须用焦炭",
+      "importance": 9,
+      "trackingVariables": [
+        "高炉开工率",
+        "焦炭库存天数",
+        "钢厂利润"
+      ]
+    },
+    {
+      "id": "VAR_001",
+      "name": "焦炭总库存",
+      "type": "variable",
+      "description": "焦化厂+钢厂+港口库存",
+      "importance": 8,
+      "trackingVariables": [
+        "焦化厂库存",
+        "钢厂库存",
+        "港口库存"
+      ]
+    },
+    {
+      "id": "CUL_001",
+      "name": "焦炭提涨/提降",
+      "type": "narrative",
+      "description": "焦化厂与钢厂的博弈：焦化厂利润好时提涨，钢厂利润差时提降",
+      "importance": 8
+    },
+    {
+      "id": "RUL_001",
+      "name": "环保限产",
+      "type": "rule",
+      "description": "秋冬季环保限产影响焦化产能",
+      "importance": 7,
+      "trackingVariables": [
+        "限产文件",
+        "执行力度"
+      ]
+    }
+  ]
+}
