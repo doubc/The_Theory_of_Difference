@@ -1,0 +1,140 @@
+{
+  "commodity": "铝",
+  "symbol": "AL",
+  "version": "1.0.0",
+  "entities": [
+    {
+      "id": "GEO_020",
+      "name": "中国电解铝产业集群",
+      "type": "冶炼加工节点",
+      "groundBase": "natural",
+      "importance": 10,
+      "description": "中国电解铝产量占全球约60%，山东/新疆/云南/内蒙古是主产区，电力成本是核心变量",
+      "controlledBy": [
+        "中国铝业",
+        "魏桥铝电",
+        "信发集团"
+      ],
+      "vulnerabilities": [
+        "能耗双控",
+        "水电不足",
+        "碳排放成本"
+      ],
+      "trackingVariables": [
+        "运行产能",
+        "开工率",
+        "电力成本"
+      ]
+    },
+    {
+      "id": "GEO_021",
+      "name": "澳大利亚/几内亚铝土矿",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "全球铝土矿主要供应国，中国铝土矿进口依存度约50%",
+      "controlledBy": [
+        "力拓",
+        "美铝",
+        "CBG"
+      ],
+      "vulnerabilities": [
+        "出口政策",
+        "运输瓶颈"
+      ],
+      "trackingVariables": [
+        "铝土矿到岸价",
+        "进口量"
+      ]
+    },
+    {
+      "id": "POW_020",
+      "name": "伦敦金属交易所LME铝",
+      "type": "交易所",
+      "groundBase": "rule",
+      "importance": 10,
+      "description": "全球铝定价中心，LME铝期货是国际贸易基准",
+      "jurisdiction": "英国",
+      "trackingVariables": [
+        "LME铝价",
+        "LME库存",
+        "持仓报告"
+      ]
+    },
+    {
+      "id": "VAR_040",
+      "name": "LME铝价",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 10,
+      "currentValue": "约2500美元/吨",
+      "historicalRange": {
+        "min": 1400,
+        "max": 3800
+      },
+      "recentRange": {
+        "min": 2100,
+        "max": 2800
+      },
+      "trackingFrequency": "实时",
+      "trackingVariables": [
+        "LME铝期货",
+        "LME库存"
+      ]
+    },
+    {
+      "id": "VAR_041",
+      "name": "上海铝价SHFE铝",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "currentValue": "约20000元/吨",
+      "trackingFrequency": "实时",
+      "trackingVariables": [
+        "SHFE铝期货",
+        "持仓量"
+      ]
+    },
+    {
+      "id": "VAR_042",
+      "name": "电解铝完全成本",
+      "type": "成本变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "currentValue": "约17000元/吨",
+      "trackingFrequency": "每月",
+      "trackingVariables": [
+        "电力成本",
+        "氧化铝成本",
+        "阳极成本"
+      ]
+    },
+    {
+      "id": "VAR_043",
+      "name": "铝社会库存",
+      "type": "库存变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "currentValue": "约80万吨",
+      "trackingFrequency": "每周",
+      "trackingVariables": [
+        "无锡库存",
+        "佛山库存",
+        "巩义库存"
+      ]
+    },
+    {
+      "id": "CUL_020",
+      "name": "电解铝产能天花板叙事",
+      "type": "市场共识",
+      "groundBase": "culture",
+      "importance": 9,
+      "description": "中国电解铝产能天花板4500万吨政策，供给端刚性约束支撑铝价长期逻辑",
+      "trackingVariables": [
+        "总产能",
+        "运行产能",
+        "产能利用率"
+      ]
+    }
+  ]
+}
