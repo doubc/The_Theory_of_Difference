@@ -2,7 +2,36 @@
 
 project:
   name: "价格结构形式系统"
-  version: "3.1.0"
+  version: "4.0.0"
+
+# ─── UI 设置 ──────────────────────────────────────────────
+
+ui:
+  theme: "dark"                # dark | light
+  language: "zh-CN"            # 界面语言
+  page_title: "价格结构研究工作台 v4"
+  page_icon: "🔬"
+  layout: "wide"               # wide | centered
+  sidebar:
+    default_state: "expanded"  # expanded | collapsed
+    show_favorites: true
+    show_search: true
+    max_favorites: 10
+  dashboard:
+    show_quick_actions: true
+    show_metric_cards: true
+    show_symbol_overview: true
+    quick_scan_min_volume: 20000
+  charts:
+    default_theme: "plotly_dark"  # plotly_dark | plotly_white
+    candlestick_up_color: "#ef5350"
+    candlestick_down_color: "#26a69a"
+    zone_color: "#4a90d9"
+    highlight_color: "#64ffda"
+  export:
+    default_format: "markdown"    # markdown | json | csv
+    auto_save_briefings: true
+    briefing_dir: "data/briefings"
 
 # ─── 数据层 ────────────────────────────────────────────────
 

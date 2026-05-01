@@ -664,12 +664,24 @@ with st.sidebar:
             st.session_state["active_tab"] = "scan"
             st.rerun()
 
+    # ── 快捷操作 ──
+    st.markdown('<div class="nav-group"><span class="nav-group-title">❓ 帮助</span></div>',
+                unsafe_allow_html=True)
+
+    if st.button("📖 使用指南", use_container_width=True):
+        st.session_state["show_help"] = True
+        st.rerun()
+
+    if st.button("📊 系统状态", use_container_width=True):
+        st.session_state["show_status"] = True
+        st.rerun()
+
     # ── 页脚 ──
     st.divider()
     st.markdown("""
     <div style="text-align:center;padding:8px 0">
         <div style="font-size:0.75em;color:#495057">
-            价格结构形式系统<br>
+            价格结构形式系统 v4.0<br>
             系统 = 结构 × 运动
         </div>
     </div>
@@ -854,6 +866,47 @@ with tabs[10]:
         history_transitions=_load_history_transitions(selected_symbol),
     )
 
+
+# ── 帮助模态框 ──
+if st.session_state.get("show_help", False):
+    from src.workbench.help_system import QUICK_START
+    with st.expander("📖 使用指南", expanded=True):
+        st.markdown(QUICK_START)
+        if st.button("关闭帮助"):
+            st.session_state["show_help"] = False
+            st.rerun()
+
+# ── 系统状态模态框 ──
+if st.session_state.get("show_status", False):
+    with st.expander("📊 系统状态", expanded=True):
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric("品种总数", len(ALL_SYMBOLS))
+            st.metric("MySQL 品种", len(MYSQL_SYMBOLS))
+        with col2:
+            st.metric("CSV 品种", len(CSV_SYMBOLS))
+            st.metric("当前品种", selected_symbol)
+        with col3:
+            st.metric("数据范围", data_range)
+            st.metric("灵敏度", sensitivity)
+
+        st.markdown("---")
+        st.markdown("**数据源状态**")
+        if MYSQL_SYMBOLS:
+            st.success(f"✅ MySQL 已连接 · {len(MYSQL_SYMBOLS)} 个品种")
+        else:
+            st.warning("⚠️ MySQL 未连接")
+        if CSV_SYMBOLS:
+            st.info(f"📄 CSV 可用 · {len(CSV_SYMBOLS)} 个品种")
+
+        if st.button("关闭状态"):
+            st.session_state["show_status"] = False
+            st.rerun()
+
+# ── 浮动帮助按钮 ──
+from src.workbench.help_system import render_help_button, render_help_modal
+render_help_button()
+render_help_modal()
 
 # ── 页脚 ──
 st.markdown("""
