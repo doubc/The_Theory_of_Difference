@@ -1,0 +1,112 @@
+{
+  "commodity": "工业硅",
+  "symbol": "SI",
+  "version": "1.3.0",
+  "entities": [
+    {
+      "id": "GEO_270",
+      "name": "云南工业硅产区",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "中国工业硅最大产区，依托廉价水电，枯水期限电是核心风险",
+      "trackingVariables": [
+        "运行产能",
+        "开工率",
+        "电力成本"
+      ]
+    },
+    {
+      "id": "GEO_271",
+      "name": "新疆工业硅产区",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "中国工业硅第二大产区，火电为主",
+      "trackingVariables": [
+        "运行产能",
+        "开工率"
+      ]
+    },
+    {
+      "id": "POW_200",
+      "name": "广州期货交易所GFEX",
+      "type": "交易所",
+      "groundBase": "rule",
+      "importance": 10,
+      "description": "中国工业硅期货定价中心",
+      "jurisdiction": "中国",
+      "trackingVariables": [
+        "SI期价",
+        "持仓量"
+      ]
+    },
+    {
+      "id": "VAR_220",
+      "name": "GFEX工业硅期货价格",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 10,
+      "currentValue": "约13000元/吨",
+      "historicalRange": {
+        "min": 10000,
+        "max": 25000
+      },
+      "recentRange": {
+        "min": 11000,
+        "max": 18000
+      },
+      "trackingFrequency": "实时"
+    },
+    {
+      "id": "VAR_221",
+      "name": "工业硅生产成本",
+      "type": "成本变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "trackingFrequency": "月度",
+      "trackingVariables": [
+        "电力成本",
+        "硅石",
+        "还原剂"
+      ]
+    },
+    {
+      "id": "VAR_222",
+      "name": "多晶硅产量",
+      "type": "需求变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "trackingFrequency": "月度",
+      "trackingVariables": [
+        "多晶硅产量",
+        "光伏装机量"
+      ]
+    },
+    {
+      "id": "CUL_200",
+      "name": "光伏驱动工业硅需求叙事",
+      "type": "市场共识",
+      "groundBase": "culture",
+      "importance": 9,
+      "description": "光伏产业高速增长驱动工业硅需求，多晶硅是工业硅最大下游",
+      "trackingVariables": [
+        "光伏装机",
+        "多晶硅产能",
+        "硅料价格"
+      ]
+    },
+    {
+      "id": "RUL_200",
+      "name": "工业硅期货合约规格",
+      "type": "交易所规则",
+      "groundBase": "rule",
+      "importance": 7,
+      "description": "GFEX工业硅期货交割标准",
+      "trackingVariables": [
+        "交割标准",
+        "仓单量"
+      ]
+    }
+  ]
+}
