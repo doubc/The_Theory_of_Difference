@@ -1,0 +1,62 @@
+{
+  "commodity": "乙二醇",
+  "symbol": "EG",
+  "version": "1.3.0",
+  "models": [
+    {
+      "id": "M_110",
+      "name": "乙二醇的成本-供需定价模型",
+      "domain": "产业链定价",
+      "groundBase": "marginal",
+      "formula": "EG_Score = w1*CrudeFactor + w2*InventoryFactor + w3*DemandFactor + w4*CapacityFactor",
+      "variables": [
+        {
+          "name": "原油成本因子",
+          "id": "crude",
+          "direction": "正向",
+          "weight": 0.35
+        },
+        {
+          "name": "库存因子",
+          "id": "inventory",
+          "direction": "反向",
+          "weight": 0.25
+        },
+        {
+          "name": "聚酯需求因子",
+          "id": "demand",
+          "direction": "正向",
+          "weight": 0.25
+        },
+        {
+          "name": "产能扩张因子",
+          "id": "capacity",
+          "direction": "反向",
+          "weight": 0.15
+        }
+      ],
+      "description": "EG定价以原油为成本锚，聚酯需求为驱动，产能过剩压制利润。煤制路线增加供应弹性。",
+      "dominantPhase": "聚酯旺季+库存低位时弹性最大",
+      "limitation": "煤制路线定价逻辑与油制不同",
+      "trackingVariables": [
+        "原油价格",
+        "港口库存",
+        "聚酯开工率",
+        "新增产能"
+      ],
+      "linkToEntities": [
+        "VAR_270",
+        "VAR_271"
+      ],
+      "linkToRelations": [
+        "R_640",
+        "R_641",
+        "R_642",
+        "R_643"
+      ],
+      "linkToConductionChains": [
+        "C_270"
+      ]
+    }
+  ]
+}
