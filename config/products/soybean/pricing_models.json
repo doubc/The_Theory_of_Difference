@@ -1,0 +1,117 @@
+{
+  "commodity": "大豆",
+  "symbol": "A",
+  "version": "1.3.0",
+  "models": [
+    {
+      "id": "M_050",
+      "name": "大豆的全球供需平衡表定价模型",
+      "domain": "基本面定价",
+      "groundBase": "marginal",
+      "formula": "Δln(Soy) = α + β1*Δln(GlobalStockUse) + β2*Δln(CBOT) + β3*Δln(CrushMargin) + ε",
+      "variables": [
+        {
+          "name": "全球大豆库消比",
+          "id": "stock_use",
+          "direction": "反向",
+          "weight": 0.4
+        },
+        {
+          "name": "CBOT大豆价格",
+          "id": "CBOT",
+          "direction": "正向",
+          "weight": 0.3
+        },
+        {
+          "name": "压榨利润",
+          "id": "crush_margin",
+          "direction": "正向",
+          "weight": 0.2
+        },
+        {
+          "name": "残差/天气冲击",
+          "id": "residual",
+          "direction": "不定",
+          "weight": 0.1
+        }
+      ],
+      "description": "大豆定价核心是全球供需平衡表。库消比低于20%时价格弹性急剧放大。CBOT是国际贸易基准。压榨利润反映下游需求强度。",
+      "dominantPhase": "南美天气炒作期和USDA报告发布期模型最有效",
+      "limitation": "忽略贸易政策和汇率的结构性影响",
+      "trackingVariables": [
+        "全球库消比",
+        "CBOT价格",
+        "压榨利润",
+        "天气预报"
+      ],
+      "linkToEntities": [
+        "VAR_151",
+        "VAR_153",
+        "VAR_154"
+      ],
+      "linkToRelations": [
+        "R_400",
+        "R_401",
+        "R_405"
+      ],
+      "linkToConductionChains": [
+        "C_150",
+        "C_151"
+      ]
+    },
+    {
+      "id": "M_051",
+      "name": "大豆的压榨利润定价模型",
+      "domain": "产业链定价",
+      "groundBase": "marginal",
+      "formula": "DCE_Soy = f(CBOT, Freight, FX, Tariff, CrushDemand)",
+      "variables": [
+        {
+          "name": "CBOT大豆价格",
+          "id": "CBOT",
+          "direction": "正向",
+          "weight": 0.45
+        },
+        {
+          "name": "海运费",
+          "id": "freight",
+          "direction": "正向",
+          "weight": 0.15
+        },
+        {
+          "name": "人民币汇率",
+          "id": "FX",
+          "direction": "正向",
+          "weight": 0.15
+        },
+        {
+          "name": "压榨需求强度",
+          "id": "crush_demand",
+          "direction": "正向",
+          "weight": 0.25
+        }
+      ],
+      "description": "DCE大豆价格由进口成本（CBOT+运费+汇率+关税）和压榨需求共同决定。压榨利润是连接国际和国内价格的核心变量。",
+      "dominantPhase": "进口窗口打开时该模型最有效",
+      "limitation": "国产食用大豆定价逻辑不同",
+      "trackingVariables": [
+        "进口完税价",
+        "压榨利润",
+        "到港量"
+      ],
+      "linkToEntities": [
+        "VAR_150",
+        "VAR_152",
+        "VAR_153"
+      ],
+      "linkToRelations": [
+        "R_400",
+        "R_401",
+        "R_404"
+      ],
+      "linkToPolarityArchive": [
+        "DCE豆一期货价格"
+      ]
+    }
+  ]
+}
