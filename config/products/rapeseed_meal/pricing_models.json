@@ -1,0 +1,54 @@
+{
+  "commodity": "菜粕",
+  "symbol": "RM",
+  "version": "1.3.0",
+  "models": [
+    {
+      "id": "M_070",
+      "name": "菜粕的替代品定价模型",
+      "domain": "跨品种定价",
+      "groundBase": "marginal",
+      "formula": "RM_Price = f(SM_Price, BeanRapeseed_Meal_Spread, Aquaculture_Demand)",
+      "variables": [
+        {
+          "name": "豆粕价格",
+          "id": "SM_price",
+          "direction": "正向",
+          "weight": 0.5
+        },
+        {
+          "name": "豆菜粕价差",
+          "id": "spread",
+          "direction": "反向",
+          "weight": 0.25
+        },
+        {
+          "name": "水产需求强度",
+          "id": "aquaculture",
+          "direction": "正向",
+          "weight": 0.25
+        }
+      ],
+      "description": "菜粕定价以豆粕为锚，价差为替代参考，水产需求为边际驱动。",
+      "dominantPhase": "水产旺季+豆菜粕价差收窄时弹性最大",
+      "limitation": "忽略菜籽进口政策变化",
+      "trackingVariables": [
+        "豆粕价格",
+        "价差",
+        "水产旺季",
+        "库存"
+      ],
+      "linkToEntities": [
+        "VAR_190",
+        "VAR_191"
+      ],
+      "linkToRelations": [
+        "R_480",
+        "R_481"
+      ],
+      "linkToConductionChains": [
+        "C_190"
+      ]
+    }
+  ]
+}
