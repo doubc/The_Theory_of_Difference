@@ -1,0 +1,25 @@
+{
+  "commodity": "棕榈油",
+  "symbol": "P",
+  "version": "1.3.0",
+  "relations": [
+    {"id": "R_720", "type": "国际贸易传导", "from": "BMD棕榈油价格", "to": "DCE棕榈油价格", "strength": 0.85, "direction": "正向", "groundBase": "marginal", "lag": "即时",
+     "description": "BMD通过进口成本渠道传导至国内", "reversalPoint": "国内供需独立时可短暂脱钩"},
+    {"id": "R_721", "type": "跨品种联动", "from": "豆油价格", "to": "棕榈油价格", "strength": 0.8, "direction": "正向", "groundBase": "marginal", "lag": "即时",
+     "description": "棕榈油与豆油替代关系，价格高度相关", "reversalPoint": "价差极端时替代效应改变"},
+    {"id": "R_722", "type": "政策传导", "from": "印尼出口税/生柴政策", "to": "全球棕榈油供应", "strength": 0.8, "direction": "复杂", "groundBase": "order", "lag": "月度",
+     "description": "印尼出口税和生柴政策直接影响全球供应", "reversalPoint": "政策调整"},
+    {"id": "R_723", "type": "库存传导", "from": "马来西亚棕榈油库存", "to": "棕榈油价格", "strength": 0.8, "direction": "反向", "groundBase": "marginal", "lag": "月度",
+     "description": "MPOB库存是全球棕榈油供需核心指标", "reversalPoint": "库存低于150万吨时价格弹性增大"},
+    {"id": "R_724", "type": "季节性规律", "from": "棕榈油产量季节", "to": "棕榈油价格", "strength": 0.7, "direction": "季节性", "groundBase": "natural", "lag": "季节性",
+     "description": "11-2月雨季减产，3-10月增产", "reversalPoint": "厄尔尼诺打破季节性"},
+    {"id": "R_725", "type": "天气传导", "from": "厄尔尼诺/拉尼娜", "to": "棕榈油产量", "strength": 0.7, "direction": "复杂", "groundBase": "natural", "lag": "季度",
+     "description": "厄尔尼诺导致干旱减产，拉尼娜导致洪涝减产", "reversalPoint": "天气恢复正常"},
+    {"id": "R_726", "type": "劳动力传导", "from": "马来西亚外劳政策", "to": "棕榈油产量", "strength": 0.65, "direction": "正向", "groundBase": "order", "lag": "季度",
+     "description": "劳动力短缺限制收割和产量恢复", "reversalPoint": "外劳政策放松"},
+    {"id": "R_727", "type": "汇率传导", "from": "林吉特汇率", "to": "BMD棕榈油价格", "strength": 0.6, "direction": "反向", "groundBase": "order", "lag": "即时",
+     "description": "林吉特走弱推升以林吉特计价的棕榈油价格", "reversalPoint": "供需基本面主导时可脱钩"},
+    {"id": "R_728", "type": "生物柴油传导", "from": "原油价格", "to": "棕榈油生柴需求", "strength": 0.6, "direction": "正向", "groundBase": "marginal", "lag": "季度",
+     "description": "原油价格影响生物柴油经济性，高油价提振棕榈油生柴需求", "reversalPoint": "强制掺混政策下经济性影响减弱"}
+  ]
+}
