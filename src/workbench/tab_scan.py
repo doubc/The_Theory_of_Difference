@@ -38,37 +38,7 @@ from src.workbench.shared import (
     TIER_COLORS, make_candlestick,
 )
 from src.workbench.data_layer import load_bars
-
-
-def _departure_score(r: dict) -> float:
-    """
-    离稳态活跃度评分（0-100），衡量结构正在离开均衡态的程度。
-
-    四维度各25分：
-      - 阶段转换 (25): 是否有 "→" 阶段跳变（如 →confirmation）
-      - 通量强度 (25): 守恒通量绝对值越大越活跃
-      - 离稳态速度 (25): stable_velocity 为负 = 正在远离稳态
-      - 信号质量 (25): 交易信号置信度 + 通量一致性
-    """
-    pts = 0.0
-
-    # 阶段转换
-    if r.get("phase_transition"):
-        pts += 25.0
-
-    # 通量强度: 0→0.5 映射到 0→25
-    flux = r.get("flux_magnitude", 0)
-    pts += min(flux / 0.5, 1.0) * 25.0
-
-    # 离稳态速度: 0→0.5 映射到 0→25
-    dep_vel = r.get("departure_velocity", 0)
-    pts += min(dep_vel / 0.5, 1.0) * 25.0
-
-    # 信号质量: 0→1 映射到 0→25
-    sig_s = r.get("signal_score", 0)
-    pts += sig_s * 25.0
-
-    return pts
+from src.workbench.scan_pipeline import departure_score as _departure_score
 
 
 def _build_dashboard_data(ALL_SYMBOLS, load_bars_fn, compile_fn, sens_key: str,

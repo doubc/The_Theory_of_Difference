@@ -157,13 +157,14 @@ dependencies = [
 
 | 优先级 | 问题 | 状态 |
 |--------|------|------|
-| 🔴 P0 | 删除 `10-期货价格结构检索系统/` 重复目录 | ⬜ |
-| 🔴 P0 | `fast/__init__.py` 的 `Path` 未导入 bug | ✅ 已修复 |
-| 🔴 P0 | `xgboost`/`streamlit` 移到 optional dependencies | ✅ 已修复 |
-| 🟡 P1 | `except Exception: pass` 改为具体异常 + 日志 | ⬜ |
+| 🔴 P0 | `10-期货价格结构检索系统/` 重复目录 | ⬜ 保留，需手动同步 |
+| 🔴 P0 | `fast/__init__.py` 的 `Path` 未导入 bug | ✅ fa206b1 |
+| 🔴 P0 | `xgboost`/`streamlit` 移到 optional dependencies | ✅ fa206b1 |
+| 🟡 P1 | 信号生成静默失败 → logged warning | ✅ a926c3a |
+| 🟡 P1 | 知识图谱加载静默失败 → logged debug | ✅ a926c3a |
 | 🟡 P1 | `build_dashboard_data()` 加缓存 | ⬜ |
 | 🟡 P1 | `generate_signal()` 重构为策略模式 | ⬜ |
 | 🟡 P1 | `tab_scan.py` 拆分计算/展示 | ⬜ |
 | 🟢 P2 | 补充 relations/lifecycle/fast 测试 | ⬜ |
-| 🟢 P2 | `requirements.txt` 拆分依赖 | ✅ 已修复 |
+| 🟢 P2 | `requirements.txt` 拆分依赖 | ✅ fa206b1 |
 | 🟢 P2 | 统一命名规范 | ⬜ |
