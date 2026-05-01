@@ -1,32 +1,61 @@
 {
-  "commodity": "coke",
+  "commodity": "焦炭",
+  "symbol": "J",
+  "version": "1.3.0",
   "relations": [
     {
-      "id": "R_001",
-      "from": "POW_001",
-      "to": "POW_002",
-      "type": "supply",
+      "id": "CK_R001",
+      "from": "焦煤价格",
+      "to": "焦炭成本",
+      "type": "成本传导",
       "strength": 0.9,
-      "direction": "positive",
-      "description": "焦化厂向钢厂供焦"
+      "lag": "即时",
+      "description": "焦煤占焦炭成本约75%"
     },
     {
-      "id": "R_002",
-      "from": "POW_002",
-      "to": "POW_001",
-      "type": "demand",
+      "id": "CK_R002",
+      "from": "高炉开工率",
+      "to": "焦炭需求",
+      "type": "需求驱动",
       "strength": 0.85,
-      "direction": "negative",
-      "description": "钢厂需求决定焦炭消耗"
+      "lag": "即时",
+      "description": "高炉消耗焦炭"
     },
     {
-      "id": "R_003",
-      "from": "RUL_001",
-      "to": "POW_001",
-      "type": "constraint",
+      "id": "CK_R003",
+      "from": "焦化利润",
+      "to": "焦化开工率",
+      "type": "利润驱动",
+      "strength": 0.8,
+      "lag": "1-2周",
+      "description": "利润驱动焦化增减产"
+    },
+    {
+      "id": "CK_R004",
+      "from": "焦炭库存",
+      "to": "焦炭价格",
+      "type": "供需信号",
+      "strength": 0.8,
+      "lag": "即时",
+      "description": "库存反映供需平衡"
+    },
+    {
+      "id": "CK_R005",
+      "from": "环保限产",
+      "to": "焦化开工",
+      "type": "政策冲击",
+      "strength": 0.75,
+      "lag": "即时",
+      "description": "环保限产直接影响焦化开工"
+    },
+    {
+      "id": "CK_R006",
+      "from": "焦炭价格",
+      "to": "钢材成本",
+      "type": "成本传导",
       "strength": 0.7,
-      "direction": "negative",
-      "description": "环保限产约束焦化产能"
+      "lag": "即时",
+      "description": "焦炭占钢材成本约20%"
     }
   ]
 }
