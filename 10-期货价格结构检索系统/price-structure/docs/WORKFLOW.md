@@ -35,7 +35,7 @@
 - 功能清单
 
 ### 输出
-- `.py` / `.c` 源文件
+- `.py` / `.c` / `.yaml` 源文件
 
 ### 文件放置规则
 
@@ -45,11 +45,20 @@
 | C 扩展 | `src/fast/` | `_name.c` |
 | Python 包装器 | `src/fast/` | `__init__.py` |
 | 数据层 | `src/data/` | `xxx.py` |
+| 编译器 | `src/compiler/` | `xxx.py` |
+| 检索引擎 | `src/retrieval/` | `xxx.py` |
+| 知识图谱 | `src/graph/` | `xxx.py` |
+| 知识引擎 | `src/knowledge/` | `xxx.py` |
 | 多时间维度 | `src/multitimeframe/` | `xxx.py` |
-| Streamlit 页面 | `src/workbench/` | `xxx_page.py` |
+| 评分/信号 | `src/signals.py` `src/quality.py` | — |
+| Streamlit Tab | `src/workbench/` | `tab_xxx.py` |
+| Streamlit 页面 | `src/workbench/pages/` | `xxx_page.py` |
 | 数据处理脚本 | `scripts/` | `action_target.py` |
 | 交易策略 | `trading/` | `platform_strategy.py` |
-| 文档 | `docs/` | `中文名.md` |
+| 品种知识配置 | `config/products/` | `{品种}/` 目录 |
+| L1/L2/L3 知识 | `knowledge/` | `L{1,2,3}_xxx.yaml` |
+| 文档 | `docs/` | `中文名.md` 或 `XX_名称.md` |
+| 测试 | `tests/` | `test_xxx.py` |
 
 ### 代码规范
 - 文件头必须有 docstring：模块职责、用法、与现有代码的关系
@@ -76,8 +85,9 @@
 
 **Layer 1: 语法检查**
 
-Python 文件：用 `ast.parse()` 验证语法。
-C 文件：用 `gcc -fsyntax-only` 验证语法。
+```bash
+python3 -c "import ast; ast.parse(open('文件路径').read())"
+```
 
 **Layer 2: 逻辑验证**
 
@@ -138,15 +148,13 @@ C 文件：用 `gcc -fsyntax-only` 验证语法。
 - 未使用导入清理
 - 重复逻辑检查
 - 文件大小检查（>500 行需拆分）
-
-### 注意事项
-- PythonGO 策略文件的重复是有意的（自包含，不依赖内部模块）
-- `__init__.py` 中的重复导入可以合并
+- 孤立模块检查（grep 确认有引用方）
 
 ### 检查点
 - [ ] 无未使用的 import
 - [ ] 无未使用的函数/变量
 - [ ] 重复逻辑已合并或标注原因
+- [ ] 新模块已被至少一个入口文件 import
 
 ---
 
@@ -168,15 +176,34 @@ C 文件：用 `gcc -fsyntax-only` 验证语法。
 - 推送完成
 
 ### 操作
-- 更新记忆文件（`memory/YYYY-MM-DD.md`）
-- 更新想法文档（标记已完成条目、新增改进方向、调整优先级）
-- 更新变更记录（`docs/CHANGELOG_v3.0.md`）
+- 更新 `TASK_INDEX.md`（标记已完成任务）
+- 更新 `CHANGELOG.md`（记录变更）
+- 更新 `docs/待办事项.md`（移除已完成项）
+- 如有新模块 → 更新 `docs/SUMMARY.md` 和 `README.md`
 
 ### 检查点
-- [ ] 记忆文件已更新
-- [ ] 想法文档状态已同步
-- [ ] 变更记录已更新
+- [ ] TASK_INDEX.md 已同步
+- [ ] CHANGELOG.md 已更新
+- [ ] 文档与代码一致
 
 ---
 
-*相关文件：`docs/CHANGELOG_v3.0.md` · `下一步有趣的想法.md`*
+## 模块挂载检查清单
+
+新增模块后，用以下命令确认已正确挂载：
+
+```bash
+# 检查是否有引用
+grep -rn "模块名" src/ --include="*.py" | grep -v __pycache__
+
+# 检查孤立文件（0引用 = 可能需要删除或接入）
+for f in src/workbench/*.py; do
+  name=$(basename "$f" .py)
+  count=$(grep -rl "$name" src/ --include="*.py" 2>/dev/null | wc -l)
+  [ "$count" -eq 0 ] && echo "孤立: $f"
+done
+```
+
+---
+
+*最后更新：2026-05-01*
