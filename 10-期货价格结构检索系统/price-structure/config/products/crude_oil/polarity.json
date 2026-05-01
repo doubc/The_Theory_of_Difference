@@ -1,0 +1,28 @@
+{
+  "commodity": "原油",
+  "symbol": "SC",
+  "version": "1.0.0",
+  "entries": {
+    "WTI原油": {
+      "historicalMin": -37,
+      "historicalMax": 147,
+      "recentMin": 60,
+      "recentMax": 95,
+      "reversalSignalPatterns": ["OPEC+超预期减产", "SPR大规模释放", "全球需求崩塌", "中东战争"]
+    },
+    "布伦特原油": {
+      "historicalMin": 16,
+      "historicalMax": 147,
+      "recentMin": 65,
+      "recentMax": 98,
+      "reversalSignalPatterns": ["地缘溢价消退", "需求预期下修", "美元走强"]
+    },
+    "上海原油SC": {
+      "historicalMin": 180,
+      "historicalMax": 820,
+      "recentMin": 450,
+      "recentMax": 700,
+      "reversalSignalPatterns": ["人民币大幅波动", "中国需求变化", "中东OSP调整"]
+    }
+  }
+}
