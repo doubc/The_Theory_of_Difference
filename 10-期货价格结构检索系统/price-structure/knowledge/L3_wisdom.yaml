@@ -130,3 +130,158 @@ rules:
         value: ["AU", "AG"]
     wisdom: "金银比价>80 时白银相对低估，<50 时白银相对高估；比价极端时关注贵金属板块反转"
     source: "贵金属经验"
+
+  # ── 更多品种特异性 ──
+  - id: "L3-050"
+    name: "螺纹钢需求驱动"
+    symbol: "RB"
+    when:
+      - field: "symbol"
+        op: "=="
+        value: "RB"
+    wisdom: "螺纹钢定价核心在需求端（地产/基建），政策刺激初期通常先涨螺纹再涨原料"
+    source: "产业链分析"
+
+  - id: "L3-051"
+    name: "铝的成本约束"
+    symbol: "AL"
+    when:
+      - field: "symbol"
+        op: "=="
+        value: "AL"
+    wisdom: "铝是高耗能品种，电价政策和产能天花板是价格底部支撑；铝价低于成本线 3 个月以上关注做多机会"
+    source: "品种经验"
+
+  - id: "L3-052"
+    name: "锌的库存信号"
+    symbol: "ZN"
+    when:
+      - field: "symbol"
+        op: "=="
+        value: "ZN"
+    wisdom: "锌的库存变化领先价格 1-2 周，LME 锌库存骤降时关注结构性做多机会"
+    source: "品种经验"
+
+  - id: "L3-053"
+    name: "黄金避险属性"
+    symbol: "AU"
+    when:
+      - field: "symbol"
+        op: "=="
+        value: "AU"
+    wisdom: "黄金与美元指数负相关，地缘冲突/衰退预期时避险买盘驱动；加息末期黄金通常提前见底"
+    source: "品种经验 + 宏观分析"
+
+  - id: "L3-054"
+    name: "白银工业属性"
+    symbol: "AG"
+    when:
+      - field: "symbol"
+        op: "=="
+        value: "AG"
+    wisdom: "白银兼具贵金属和工业属性，光伏需求增长时白银弹性大于黄金；金银比价极端修复时白银波动剧烈"
+    source: "品种经验"
+
+  - id: "L3-055"
+    name: "碳酸锂价格周期"
+    symbol: "LC"
+    when:
+      - field: "symbol"
+        op: "=="
+        value: "LC"
+    wisdom: "碳酸锂价格受新能源车销量和电池厂库存周期影响大，价格波动剧烈（日波动 5-10% 常见），Zone 带宽容忍度需高于传统品种"
+    source: "品种经验"
+
+  - id: "L3-056"
+    name: "原油库存周期"
+    symbol: "SC"
+    when:
+      - field: "symbol"
+        op: "=="
+        value: "SC"
+    wisdom: "原油去库周期价格易涨难跌，累库周期反之；EIA 周三数据发布前后波动率通常放大"
+    source: "品种经验"
+
+  # ── 更多跨品种联动 ──
+  - id: "L3-060"
+    name: "油化工联动"
+    when:
+      - field: "symbol"
+        op: "in"
+        value: ["SC", "BU", "TA", "MA", "PF"]
+    wisdom: "能化板块以原油为锚，原油结构变化通常领先下游品种 3-5 个交易日"
+    source: "产业链分析"
+
+  - id: "L3-061"
+    name: "钢铁产业链联动"
+    when:
+      - field: "symbol"
+        op: "in"
+        value: ["RB", "HC", "I", "J", "JM"]
+    wisdom: "钢铁产业链利润分配：螺纹→热卷→铁矿→焦炭→焦煤，利润压缩到极致时关注做多钢厂利润"
+    source: "产业链分析"
+
+  - id: "L3-062"
+    name: "油脂油料联动"
+    when:
+      - field: "symbol"
+        op: "in"
+        value: ["M", "Y", "P", "OI"]
+    wisdom: "豆油/棕榈油/菜油价差回归是常见策略；豆粕需求受生猪存栏影响，油脂受生物柴油政策影响"
+    source: "农产品经验"
+
+  # ── 更多形态知识 ──
+  - id: "L3-070"
+    name: "缩量突破"
+    when:
+      - field: "volume_pattern"
+        op: "=="
+        value: "shrinking_breakout"
+    wisdom: "缩量突破通常是假突破——突破需要成交量放大确认，无量突破多为诱多/诱空"
+    source: "技术分析经验"
+
+  - id: "L3-071"
+    name: "放量滞涨"
+    when:
+      - field: "volume_pattern"
+        op: "=="
+        value: "high_vol_stagnant"
+    wisdom: "放量滞涨是顶部信号——成交量创新高但价格不创新高，说明分歧加大"
+    source: "技术分析经验"
+
+  - id: "L3-072"
+    name: "底部放量"
+    when:
+      - field: "volume_pattern"
+        op: "=="
+        value: "bottom_volume_surge"
+    wisdom: "底部放量通常是反转信号——恐慌性抛售后的承接盘入场，关注后续 2-3 天确认"
+    source: "技术分析经验"
+
+  # ── 宏观环境知识 ──
+  - id: "L3-080"
+    name: "加息周期商品承压"
+    when:
+      - field: "macro_env"
+        op: "=="
+        value: "rate_hiking"
+    wisdom: "加息周期商品整体承压，但供给受限品种（铜/铝）相对抗跌；加息末期关注贵金属底部"
+    source: "宏观分析"
+
+  - id: "L3-081"
+    name: "衰退预期商品承压"
+    when:
+      - field: "macro_env"
+        op: "=="
+        value: "recession_fear"
+    wisdom: "衰退预期下工业品（铜/铝/螺纹）承压，贵金属避险属性凸显；关注铜金比作为衰退指标"
+    source: "宏观分析"
+
+  - id: "L3-082"
+    name: "通胀预期商品支撑"
+    when:
+      - field: "macro_env"
+        op: "=="
+        value: "inflation_hedge"
+    wisdom: "高通胀环境下商品整体有支撑，贵金属和原油是天然的通胀对冲工具"
+    source: "宏观分析"
