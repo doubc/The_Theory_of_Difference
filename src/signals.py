@@ -213,6 +213,10 @@ def generate_signal(
     # 计算ATR（用于止损）
     atr = compute_atr(bars)
 
+    # 预计算成交量中位数（避免 detect_fake_breakout 和 score_breakout 重复计算）
+    _vols = [b.volume for b in bars[-20:]] if len(bars) >= 20 else [b.volume for b in bars]
+    median_vol = statistics.median(_vols) if _vols else 1.0
+
     # 提取最新价格和Zone信息
     last_bar = bars[-1]
     last_close = last_bar.close
@@ -250,7 +254,7 @@ def generate_signal(
     candidates: List[Signal] = []
 
     # 1. 假突破检测（最高优先级）
-    is_fake, fake_pattern, fake_conf = detect_fake_breakout(structure, bars, ss)
+    is_fake, fake_pattern, fake_conf = detect_fake_breakout(structure, bars, ss, median_vol=median_vol)
     if is_fake and fake_pattern:
         # 假突破反向信号
         reverse_direction = "short" if price_position == "above" else "long" if price_position == "below" else "neutral"
@@ -303,7 +307,7 @@ def generate_signal(
         candidates.append(sig)
 
     # 2. 突破确认检测
-    breakout_score, breakout_note = score_breakout_confirmation(structure, bars, ss)
+    breakout_score, breakout_note = score_breakout_confirmation(structure, bars, ss, median_vol=median_vol)
     if breakout_score >= BREAKOUT_WEAK and price_position != "inside":
         # 根据评分确定置信度
         if breakout_score >= BREAKOUT_STRONG:
@@ -729,6 +733,7 @@ def detect_fake_breakout(
     structure: Structure,
     bars: List[Bar],
     ss: Optional[SystemState],
+    median_vol: float = 0.0,
 ) -> Tuple[bool, Optional[FakeBreakoutPattern], float]:
     """
     检测假突破及模式识别（主函数：准备共享状态，按优先级调用子函数）
@@ -756,7 +761,8 @@ def detect_fake_breakout(
     is_blind = projection.is_blind if projection else False
 
     volumes = [b.volume for b in bars[-20:]] if len(bars) >= 20 else [b.volume for b in bars]
-    median_vol = statistics.median(volumes) if volumes else 1.0
+    if median_vol <= 0:
+        median_vol = statistics.median(volumes) if volumes else 1.0
 
     # 按优先级调用（第一个匹配即返回）
     patterns = [
@@ -785,6 +791,7 @@ def score_breakout_confirmation(
     structure: Structure,
     bars: List[Bar],
     ss: Optional[SystemState],
+    median_vol: float = 0.0,
 ) -> Tuple[float, str]:
     """
     5维突破评分
@@ -828,8 +835,9 @@ def score_breakout_confirmation(
     score_penetration = min(penetration / 0.5, 1.0)  # 0.5带宽为满分
 
     # 2. 量能扩张比 (0.25)
-    volumes = [b.volume for b in bars[-20:]] if len(bars) >= 20 else [b.volume for b in bars]
-    median_vol = statistics.median(volumes) if volumes else 1.0
+    if median_vol <= 0:
+        volumes = [b.volume for b in bars[-20:]] if len(bars) >= 20 else [b.volume for b in bars]
+        median_vol = statistics.median(volumes) if volumes else 1.0
     current_vol = last_bar.volume
     volume_ratio = current_vol / median_vol if median_vol > 0 else 1.0
     score_volume = min(volume_ratio / 2.0, 1.0)  # 2倍量为满分
