@@ -1,0 +1,8 @@
+{
+  "commodity": "螺纹钢", "symbol": "RB", "version": "1.0.0",
+  "models": [
+    {"id": "M_011", "name": "螺纹钢成本定价模型", "domain": "成本定价", "formula": "螺纹钢价格 ≈ 1.6×铁矿石 + 0.5×焦炭 + 加工费(800-1200元)", "variables": ["铁矿石价格", "焦炭价格", "加工费"], "linkToEntities": ["VAR_023", "VAR_024"]},
+    {"id": "M_012", "name": "螺纹钢供需平衡模型", "domain": "基本面定价", "formula": "价格变化 = f(产量-表观消费量, 库存变化, 利润水平)", "variables": ["周度产量", "表观消费量", "社会库存", "吨钢利润"], "linkToEntities": ["VAR_027", "VAR_029", "VAR_028", "VAR_026"]},
+    {"id": "M_013", "name": "卷螺差模型", "domain": "价差定价", "formula": "卷螺差 = 工业需求强度 - 建筑需求强度 + 出口溢价", "variables": ["热卷价格", "螺纹钢价格", "制造业PMI", "房地产投资"], "linkToEntities": ["VAR_021"]}
+  ]
+}
