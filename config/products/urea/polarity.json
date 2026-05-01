@@ -1,0 +1,19 @@
+{
+  "commodity": "尿素",
+  "symbol": "UR",
+  "version": "1.3.0",
+  "entries": {
+    "CZCE尿素期货价格": {
+      "historicalMin": 1400,
+      "historicalMax": 3000,
+      "recentMin": 1600,
+      "recentMax": 2600,
+      "reversalSignalPatterns": [
+        "煤炭价格变化",
+        "春耕旺季启动",
+        "出口政策变化",
+        "库存变化"
+      ]
+    }
+  }
+}
