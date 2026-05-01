@@ -1048,7 +1048,10 @@ def _render_knowledge_injection(ctx: dict, store: GraphStore) -> None:
                                 st.markdown(f"**领域:** {model.get('domain', '')}")
                                 st.code(model.get("formula", ""), language=None)
                                 if model.get("variables"):
-                                    st.markdown(f"**变量:** {', '.join(model['variables'])}")
+                                    vars_ = model["variables"]
+                                    if vars_ and isinstance(vars_[0], dict):
+                                        vars_ = [v.get("name", str(v)) for v in vars_]
+                                    st.markdown(f"**变量:** {', '.join(str(v) for v in vars_)}")
                     else:
                         st.json(data)
                 else:
