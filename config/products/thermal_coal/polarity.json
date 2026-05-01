@@ -1,0 +1,19 @@
+{
+  "commodity": "动力煤",
+  "symbol": "ZC",
+  "version": "1.3.0",
+  "entries": {
+    "秦皇岛5500大卡动力煤价": {
+      "historicalMin": 400,
+      "historicalMax": 2000,
+      "recentMin": 700,
+      "recentMax": 1200,
+      "reversalSignalPatterns": [
+        "发改委政策",
+        "电厂库存",
+        "季节性需求",
+        "进口量"
+      ]
+    }
+  }
+}
