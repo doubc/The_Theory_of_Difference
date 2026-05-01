@@ -1,0 +1,176 @@
+{
+  "commodity": "液化石油气",
+  "symbol": "PG",
+  "version": "1.3.0",
+  "entities": [
+    {
+      "id": "GEO_101",
+      "name": "中东LPG出口区",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "沙特、阿联酋、卡塔尔等中东国家是全球最大的LPG出口区域，主要来自伴生气",
+      "controlledBy": ["沙特阿美", "ADNOC", "卡塔尔能源"],
+      "vulnerabilities": ["OPEC+减产减少伴生气产量", "地缘政治风险", "出口设施检修"],
+      "trackingVariables": ["中东CP价格", "沙特出口量", "OPEC+产量政策"]
+    },
+    {
+      "id": "GEO_102",
+      "name": "美国丙烷出口湾",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "美国页岩气革命使美国成为全球最大LPG出口国，休斯顿航道是主要出口通道",
+      "controlledBy": ["Enterprise Products", "Targa Resources", "Energy Transfer"],
+      "vulnerabilities": ["飓风季停产", "出口码头检修", "管道瓶颈"],
+      "trackingVariables": ["美国丙烷产量", "出口量", "库存", "MB价格"]
+    },
+    {
+      "id": "GEO_103",
+      "name": "中国华东LPG进口港口",
+      "type": "物流库存节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "宁波、张家港、日照等港口是中国LPG进口的核心接卸点，PDH装置集中区域",
+      "vulnerabilities": ["港口拥堵", "进口政策变化", "汇率波动"],
+      "trackingVariables": ["到港量", "港口库存", "进口成本"]
+    },
+    {
+      "id": "GEO_104",
+      "name": "中国PDH装置集中区",
+      "type": "消费加工节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "山东、浙江、江苏集中了中国大部分PDH（丙烷脱氢）装置，是LPG化工需求核心",
+      "controlledBy": ["东华能源", "卫星石化", "万华化学"],
+      "vulnerabilities": ["装置检修集中", "丙烷-丙烯价差收窄", "原料供应中断"],
+      "trackingVariables": ["PDH开工率", "丙烷-丙烯价差", "装置检修计划"]
+    },
+    {
+      "id": "POW_070",
+      "name": "沙特阿美CP定价",
+      "type": "产业权力机构",
+      "groundBase": "order",
+      "importance": 10,
+      "description": "沙特阿美每月公布CP（合同价格）是全球LPG现货贸易的定价基准，影响亚太到岸成本",
+      "jurisdiction": "沙特阿拉伯",
+      "trackingVariables": ["月度CP价格", "丙烷CP", "丁烷CP", "CP与现货价差"]
+    },
+    {
+      "id": "POW_071",
+      "name": "大商所",
+      "type": "交易所",
+      "groundBase": "rule",
+      "importance": 9,
+      "description": "大连商品交易所LPG期货上市于2020年，是国内LPG定价参考",
+      "jurisdiction": "中国",
+      "trackingVariables": ["期货价格", "持仓量", "成交量", "仓单"]
+    },
+    {
+      "id": "POW_072",
+      "name": "EIA美国能源信息署",
+      "type": "国际数据机构",
+      "groundBase": "order",
+      "importance": 8,
+      "description": "每周发布美国丙烷/丙烯库存数据，是全球LPG供需观测的核心指标",
+      "trackingVariables": ["周度丙烷库存", "产量", "出口量", "表观需求"]
+    },
+    {
+      "id": "VAR_101",
+      "name": "大商所LPG期货价格",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "currentValue": "约4200元/吨",
+      "historicalRange": {"min": 2600, "max": 6500},
+      "recentRange": {"min": 3500, "max": 5500},
+      "dualityOpposite": "PDH开工率",
+      "trackingFrequency": "实时",
+      "trackingVariables": ["主力合约", "近远月价差", "持仓量"]
+    },
+    {
+      "id": "VAR_102",
+      "name": "沙特CP丙烷价格",
+      "type": "定价基准变量",
+      "groundBase": "marginal",
+      "importance": 10,
+      "currentValue": "约520美元/吨",
+      "historicalRange": {"min": 200, "max": 900},
+      "recentRange": {"min": 400, "max": 750},
+      "dualityOpposite": "全球LPG供应",
+      "trackingFrequency": "月度",
+      "trackingVariables": ["CP公告", "现货溢价/折价", "到岸升贴水"]
+    },
+    {
+      "id": "VAR_103",
+      "name": "美国丙烷库存",
+      "type": "库存变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "currentValue": "约8000万桶",
+      "historicalRange": {"min": 3000, "max": 12000},
+      "recentRange": {"min": 5000, "max": 10000},
+      "dualityOpposite": "丙烷价格",
+      "trackingFrequency": "每周",
+      "trackingVariables": ["EIA周报", "五年均值偏离", "取暖季库存消耗"]
+    },
+    {
+      "id": "VAR_104",
+      "name": "PDH加工利润",
+      "type": "利润变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "currentValue": "约200元/吨",
+      "historicalRange": {"min": -800, "max": 1500},
+      "recentRange": {"min": -500, "max": 800},
+      "dualityOpposite": "LPG原料价格",
+      "trackingFrequency": "每日",
+      "trackingVariables": ["丙烷进口成本", "丙烯价格", "PDH利润"]
+    },
+    {
+      "id": "VAR_105",
+      "name": "丙烷-丁烷价差",
+      "type": "价差变量",
+      "groundBase": "marginal",
+      "importance": 7,
+      "trackingFrequency": "月度",
+      "trackingVariables": ["CP丙烷", "CP丁烷", "化工需求偏好"]
+    },
+    {
+      "id": "CUL_050",
+      "name": "PDH产能扩张叙事",
+      "type": "商品供需叙事",
+      "groundBase": "culture",
+      "importance": 8,
+      "description": "中国PDH装置大规模投产推动LPG化工需求快速增长，从燃料属性向化工属性转型",
+      "trackingVariables": ["新增PDH产能", "丙烷化工需求占比", "PDH利润"]
+    },
+    {
+      "id": "CUL_051",
+      "name": "冬季取暖需求叙事",
+      "type": "季节性叙事",
+      "groundBase": "culture",
+      "importance": 7,
+      "description": "北半球冬季取暖需求推升LPG燃烧消费，是传统季节性驱动因素",
+      "trackingVariables": ["气温偏离", "取暖油/丙烷价差", "燃烧需求"]
+    },
+    {
+      "id": "RUL_040",
+      "name": "进口关税与增值税",
+      "type": "贸易规则",
+      "groundBase": "rule",
+      "importance": 8,
+      "description": "中国LPG进口零关税政策有利于进口，但增值税和消费政策变化影响终端成本",
+      "trackingVariables": ["关税调整", "增值税变化", "进口配额"]
+    },
+    {
+      "id": "RUL_041",
+      "name": "大商所LPG交割标准",
+      "type": "交易所规则",
+      "groundBase": "rule",
+      "importance": 7,
+      "description": "LPG期货交割品为液化石油气，20吨/手，厂库+仓库交割",
+      "trackingVariables": ["交割品牌", "仓单量", "交割库分布"]
+    }
+  ]
+}
