@@ -1,0 +1,21 @@
+{
+  "commodity": "锌",
+  "symbol": "ZN",
+  "version": "1.0.0",
+  "models": [
+    {
+      "id": "M_015",
+      "name": "锌精矿TC定价模型",
+      "domain": "成本定价",
+      "formula": "锌价 = f(锌矿TC/RC, 冶炼成本, 下游需求)",
+      "variables": [
+        "TC/RC",
+        "冶炼开工率",
+        "镀锌板产量"
+      ],
+      "linkToEntities": [
+        "VAR_052"
+      ]
+    }
+  ]
+}
