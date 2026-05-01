@@ -1,0 +1,22 @@
+{
+  "commodity": "螺纹钢",
+  "symbol": "RB",
+  "version": "1.0.0",
+  "relations": [
+    {"id": "R_401", "type": "成本传导", "from": "铁矿石价格", "to": "螺纹钢成本", "strength": 0.8, "direction": "正向", "description": "铁矿石占螺纹钢成本约30%"},
+    {"id": "R_402", "type": "成本传导", "from": "焦炭价格", "to": "螺纹钢成本", "strength": 0.75, "direction": "正向", "description": "焦炭占螺纹钢成本约20%"},
+    {"id": "R_403", "type": "成本支撑", "from": "废钢价格", "to": "螺纹钢价格底部", "strength": 0.7, "direction": "正向", "description": "电炉钢废钢成本是价格底部支撑"},
+    {"id": "R_404", "type": "供给约束", "from": "唐山环保限产", "to": "螺纹钢供给", "strength": 0.85, "direction": "反向", "description": "唐山限产直接减少螺纹钢产量"},
+    {"id": "R_405", "type": "需求传导", "from": "房地产新开工", "to": "螺纹钢需求", "strength": 0.8, "direction": "正向", "description": "房地产是螺纹钢最大下游（约50%）"},
+    {"id": "R_406", "type": "需求传导", "from": "基建投资增速", "to": "螺纹钢需求", "strength": 0.75, "direction": "正向", "description": "基建是螺纹钢第二大下游（约30%）"},
+    {"id": "R_407", "type": "库存传导", "from": "螺纹钢社会库存", "to": "螺纹钢价格", "strength": 0.75, "direction": "反向", "description": "库存累积利空，去库利多"},
+    {"id": "R_408", "type": "利润传导", "from": "吨钢利润", "to": "钢厂生产积极性", "strength": 0.8, "direction": "正向", "description": "利润高则增产，亏损则减产"},
+    {"id": "R_409", "type": "政策传导", "from": "粗钢压减政策", "to": "螺纹钢供给", "strength": 0.85, "direction": "反向", "description": "政策压减产量直接收紧供给"},
+    {"id": "R_410", "type": "季节性规律", "from": "春季开工旺季", "to": "螺纹钢需求", "strength": 0.7, "direction": "正向", "description": "3-5月开工旺季拉动需求"},
+    {"id": "R_411", "type": "季节性规律", "from": "冬季停工", "to": "螺纹钢需求", "strength": 0.65, "direction": "反向", "description": "12-2月北方停工需求萎缩"},
+    {"id": "R_412", "type": "宏观映射", "from": "社融数据", "to": "螺纹钢需求预期", "strength": 0.7, "direction": "正向", "description": "社融扩张预示基建/地产投资增加"},
+    {"id": "R_413", "type": "跨品种联动", "from": "热卷价格", "to": "螺纹钢价格", "strength": 0.8, "direction": "正向", "description": "卷螺差反映工业/建筑需求差异"},
+    {"id": "R_414", "type": "出口传导", "from": "中国钢材出口", "to": "国内供给", "strength": 0.6, "direction": "反向", "description": "出口增加减少国内供给"},
+    {"id": "R_415", "type": "汇率联动", "from": "人民币汇率", "to": "钢材出口竞争力", "strength": 0.55, "direction": "反向", "description": "人民币贬值增强出口竞争力"}
+  ]
+}
