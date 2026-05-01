@@ -1,0 +1,61 @@
+{
+  "commodity": "白糖",
+  "symbol": "SR",
+  "version": "1.3.0",
+  "models": [
+    {
+      "id": "M_080",
+      "name": "白糖的内外联动定价模型",
+      "domain": "跨市场定价",
+      "groundBase": "marginal",
+      "formula": "SR_Price = f(ICE_Price, ExchangeRate, ImportTariff, DomesticSupply)",
+      "variables": [
+        {
+          "name": "ICE原糖价格",
+          "id": "ICE",
+          "direction": "正向",
+          "weight": 0.45
+        },
+        {
+          "name": "人民币汇率",
+          "id": "FX",
+          "direction": "正向",
+          "weight": 0.2
+        },
+        {
+          "name": "进口关税",
+          "id": "tariff",
+          "direction": "正向",
+          "weight": 0.15
+        },
+        {
+          "name": "国内供应（广西产量）",
+          "id": "domestic",
+          "direction": "反向",
+          "weight": 0.2
+        }
+      ],
+      "description": "白糖定价以ICE为国际锚，进口成本为传导渠道，国内产量为供需调节。配额内外关税差异形成价格双轨制。",
+      "dominantPhase": "ICE趋势明确时内外联动最有效",
+      "limitation": "走私量难以统计，影响传导准确性",
+      "trackingVariables": [
+        "ICE价格",
+        "进口成本",
+        "广西产量",
+        "工业库存"
+      ],
+      "linkToEntities": [
+        "VAR_210",
+        "VAR_211"
+      ],
+      "linkToRelations": [
+        "R_520",
+        "R_521"
+      ],
+      "linkToConductionChains": [
+        "C_210",
+        "C_211"
+      ]
+    }
+  ]
+}
