@@ -1,0 +1,71 @@
+{
+  "commodity": "锌",
+  "symbol": "ZN",
+  "version": "1.0.0",
+  "entities": [
+    {
+      "id": "GEO_030",
+      "name": "中国锌冶炼集群",
+      "type": "冶炼加工节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "中国精炼锌产量占全球约45%，湖南/云南/陕西是主产区",
+      "trackingVariables": [
+        "冶炼开工率",
+        "精炼锌产量"
+      ]
+    },
+    {
+      "id": "VAR_050",
+      "name": "LME锌价",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 10,
+      "currentValue": "约2800美元/吨",
+      "historicalRange": {
+        "min": 1500,
+        "max": 4000
+      },
+      "trackingFrequency": "实时"
+    },
+    {
+      "id": "VAR_051",
+      "name": "SHFE锌价",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "currentValue": "约22000元/吨",
+      "trackingFrequency": "实时"
+    },
+    {
+      "id": "VAR_052",
+      "name": "锌精矿加工费",
+      "type": "加工费变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "currentValue": "约200美元/吨",
+      "trackingFrequency": "每月"
+    },
+    {
+      "id": "VAR_053",
+      "name": "锌社会库存",
+      "type": "库存变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "currentValue": "约15万吨",
+      "trackingFrequency": "每周"
+    },
+    {
+      "id": "CUL_030",
+      "name": "锌矿紧缺叙事",
+      "type": "市场共识",
+      "groundBase": "culture",
+      "importance": 7,
+      "description": "全球锌矿资源品位下降，新矿投产不足，长期供给趋紧",
+      "trackingVariables": [
+        "锌矿产量",
+        "TC/RC"
+      ]
+    }
+  ]
+}
