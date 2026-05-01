@@ -160,9 +160,10 @@ def _render_overview(ctx: dict, store: GraphStore) -> None:
 
     col1, col2, col3, col4 = st.columns(4)
 
-    # 尝试加载图谱
-    try:
-        graph = StructureGraph.load_from_store(store, symbol=selected_symbol)
+    # 优先用编译器已构建的 result.graph
+    graph = getattr(result, "graph", None) if result else None
+
+    if graph and graph.G.number_of_nodes() > 0:
         node_count = graph.G.number_of_nodes()
         edge_count = graph.G.number_of_edges()
         structure_count = sum(
@@ -173,8 +174,23 @@ def _render_overview(ctx: dict, store: GraphStore) -> None:
             1 for n in graph.G.nodes
             if graph.G.nodes[n].get("node_type") == NodeType.ZONE.value
         )
-    except Exception:
-        node_count, edge_count, structure_count, zone_count = 0, 0, 0, 0
+    else:
+        # fallback: 从 JSONL 存储加载
+        try:
+            graph = StructureGraph.load_from_store(store, symbol=selected_symbol)
+            node_count = graph.G.number_of_nodes()
+            edge_count = graph.G.number_of_edges()
+            structure_count = sum(
+                1 for n in graph.G.nodes
+                if graph.G.nodes[n].get("node_type") == NodeType.STRUCTURE.value
+            )
+            zone_count = sum(
+                1 for n in graph.G.nodes
+                if graph.G.nodes[n].get("node_type") == NodeType.ZONE.value
+            )
+        except Exception:
+            node_count, edge_count, structure_count, zone_count = 0, 0, 0, 0
+            graph = None
 
     with col1:
         st.metric("🧩 节点总数", node_count)
@@ -187,27 +203,13 @@ def _render_overview(ctx: dict, store: GraphStore) -> None:
 
     st.divider()
 
-    # 从当前编译结果构建图谱
-    if result and hasattr(result, 'structures') and result.structures:
-        st.markdown("#### 当前编译结果 → 图谱构建")
-
-        if st.button("🔨 从当前结果构建图谱", key="kg_build"):
-            with st.spinner("正在构建知识图谱..."):
-                graph = StructureGraph.from_structures(result.structures)
-                stats = graph.save_to_store(store)
-                st.success(
-                    f"✅ 图谱构建完成：{stats['structures']} 结构, "
-                    f"{stats['zones']} Zone, {stats['narratives']} 叙事, "
-                    f"{stats['edges']} 边"
-                )
-                st.rerun()
-
-    # 可视化图谱
-    if node_count > 0:
-        st.markdown("#### 图谱可视化")
+    # 图谱已在编译时自动构建（pipeline.py 3.6 节）
+    if graph and graph.G.number_of_nodes() > 0:
+        source = "编译器自动构建" if getattr(result, "graph", None) else "JSONL 存储加载"
+        st.success(f"✅ 图谱已就绪（来源: {source}）")
         _render_graph_visualization(graph)
     else:
-        st.info("📭 图谱为空。点击上方按钮从当前编译结果构建。")
+        st.info("📭 图谱为空。运行编译器后图谱会自动构建（pipeline.py 3.6 节）。")
 
 
 def _render_graph_visualization(graph: StructureGraph) -> None:
@@ -308,11 +310,15 @@ def _render_narrative_tracking(ctx: dict, store: GraphStore) -> None:
     st.markdown("#### 📖 叙事递归追踪")
     st.caption("追踪市场叙事如何随时间演化，检测叙事锁定与漂移")
 
+    # 优先用编译器已构建的图谱
+    graph = getattr(result, "graph", None) if result else None
+
     tracker = NarrativeRecursionTracker.from_store(store, symbol=selected_symbol)
 
-    # 从当前结果更新
-    if result and hasattr(result, 'structures') and result.structures:
-        chains = tracker.track_evolution(result.structures, symbol=selected_symbol)
+    # 从编译结果的 structures 更新追踪器
+    structures = getattr(result, "structures", []) if result else []
+    if structures:
+        chains = tracker.track_evolution(structures, symbol=selected_symbol)
 
         # 显示每个 Zone 的叙事演化
         if chains:
@@ -419,16 +425,52 @@ def _render_reflexivity(ctx: dict, store: GraphStore) -> None:
     st.markdown("#### 🔄 反身性分析")
     st.caption("检测规则 → 结构 → 失效 的反身性闭环，追踪模板有效性衰减")
 
+    # 已有的实用反身性追踪器（src/reflexivity.py）
+    from src.reflexivity import ReflexivityTracker
+    practical_tracker = ReflexivityTracker.load()
+
+    # 图谱层反身性检测器（src/graph/reflexivity.py）
     detector = ReflexivityDetector()
 
-    # 尝试从图谱检测
-    try:
-        graph = StructureGraph.load_from_store(store, symbol=selected_symbol)
-        report = detector.generate_report(graph)
-    except Exception:
-        report = None
+    # 优先用编译器已构建的图谱
+    graph = getattr(result, "graph", None) if result else None
+    if graph is None:
+        try:
+            graph = StructureGraph.load_from_store(store, symbol=selected_symbol)
+        except Exception:
+            graph = None
 
-    if report and report.total_rules > 0:
+    # 显示已有追踪器的规则性能
+    if practical_tracker.records:
+        st.markdown("#### 📈 规则性能追踪（已有数据）")
+        rule_names = set(r.rule_name for r in practical_tracker.records)
+        for rule_name in sorted(rule_names):
+            summary = practical_tracker.summarize(rule_name)
+            with st.expander(
+                f"{'⚠️' if summary.decay_detected else '✅'} "
+                f"{rule_name} — 准确率 {summary.accuracy_10d:.1%} "
+                f"{'(衰减)' if summary.decay_detected else ''}",
+                expanded=summary.decay_detected,
+            ):
+                col_a, col_b, col_c = st.columns(3)
+                with col_a:
+                    st.metric("总匹配", summary.total_matches)
+                    st.metric("已验证", summary.verified_matches)
+                with col_b:
+                    st.metric("5日准确率", f"{summary.accuracy_5d:.1%}")
+                    st.metric("10日准确率", f"{summary.accuracy_10d:.1%}")
+                with col_c:
+                    st.metric("20日准确率", f"{summary.accuracy_20d:.1%}")
+                    st.metric("建议权重", f"{summary.recommended_weight:.2f}")
+
+    # 图谱层反身性检测
+    if graph:
+        report = detector.generate_report(graph)
+        if report.total_rules > 0:
+            st.divider()
+            st.markdown("#### 🔄 反身性闭环（图谱层）")
+            for rec in report.recommendations:
+                st.info(rec)
         # 总览指标
         col1, col2, col3 = st.columns(3)
         with col1:
