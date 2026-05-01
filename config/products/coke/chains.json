@@ -1,0 +1,42 @@
+{
+  "commodity": "coke",
+  "chains": [
+    {
+      "id": "CH_001",
+      "name": "焦炭提涨链",
+      "triggerEvent": "钢厂焦炭库存天数低+高炉满产",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "钢厂低库存",
+          "to": "焦化厂提涨",
+          "confidence": 0.8,
+          "lag": "即时"
+        },
+        {
+          "seq": 2,
+          "from": "焦化厂提涨",
+          "to": "焦炭现货上涨",
+          "confidence": 0.85,
+          "lag": "3-5天"
+        },
+        {
+          "seq": 3,
+          "from": "焦炭上涨",
+          "to": "钢厂成本上升",
+          "confidence": 0.9,
+          "lag": "即时"
+        },
+        {
+          "seq": 4,
+          "from": "钢厂成本上升",
+          "to": "钢厂利润压缩",
+          "confidence": 0.7,
+          "lag": "同步"
+        }
+      ],
+      "reversalNode": "钢厂利润转负",
+      "reversalCondition": "钢厂减产+焦炭库存回升"
+    }
+  ]
+}
