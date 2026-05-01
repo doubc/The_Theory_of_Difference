@@ -1,12 +1,14 @@
 # Python
 __pycache__/
 *.py[cod]
+*.pyo
 *.so
 *.egg-info/
 dist/
 build/
 .eggs/
 *.egg
+.pytest_cache/
 
 # Virtual env
 venv/
@@ -16,6 +18,7 @@ env/
 # IDE
 .idea/
 .vscode/
+*.iml
 *.swp
 *.swo
 *~
@@ -25,6 +28,9 @@ data/activity/
 data/library/
 data/lifecycle/
 data/samples/
+data/cache/
+data/logs/
+data/graph/
 *.csv
 !data/symbol_meta*.yaml
 
@@ -44,6 +50,17 @@ Thumbs.db
 *.o
 *.c.bak
 
-# Misc
-*.bak
+# Temp files
 *.tmp
+*.bak
+sync_result.txt
+test_db.py
+test_output.txt
+test_result.txt
+
+# Data backups
+data/symbol_meta_v2_backup.yaml
+data/symbol_meta_v3.yaml
+
+# Output
+output/
