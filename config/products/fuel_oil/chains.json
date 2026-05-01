@@ -1,0 +1,84 @@
+{
+  "commodity": "燃料油",
+  "symbol": "FU",
+  "version": "1.3.0",
+  "chains": [
+    {
+      "id": "C_120",
+      "name": "原油传导燃料油价格链",
+      "domain": "能源",
+      "groundBase": "marginal",
+      "triggerEvent": "国际原油价格大幅波动",
+      "steps": [
+        {"seq": 1, "from": "原油价格变化", "to": "炼厂原料成本变化", "confidence": "高", "lag": "即时",
+         "mechanism": "燃料油是炼厂副产品，原油是原料成本"},
+        {"seq": 2, "from": "原料成本变化", "to": "燃料油生产成本变化", "confidence": "高", "lag": "即时",
+         "mechanism": "成本传导"},
+        {"seq": 3, "from": "生产成本变化", "to": "燃料油价格联动", "confidence": "高", "lag": "即时",
+         "mechanism": "成本推动价格调整"}
+      ],
+      "reversalNode": "裂解价差修复",
+      "reversalCondition": "燃料油裂解价差回归正常",
+      "polarityTensionThreshold": 0.6,
+      "historicalCases": [
+        {"year": "2020", "description": "原油暴跌带动燃料油价格跌至历史低位"},
+        {"year": "2022", "description": "俄乌冲突推升原油和燃料油价格"}
+      ],
+      "reversibility": 0.7,
+      "tail_probability": 0.15,
+      "minority_protected": false
+    },
+    {
+      "id": "C_121",
+      "name": "船用油需求驱动链",
+      "domain": "能源",
+      "groundBase": "marginal",
+      "triggerEvent": "全球航运需求变化（BDI大涨/大跌）",
+      "steps": [
+        {"seq": 1, "from": "全球贸易量变化", "to": "航运需求变化", "confidence": "高", "lag": "即时",
+         "mechanism": "贸易量驱动航运需求"},
+        {"seq": 2, "from": "航运需求变化", "to": "船用燃料油需求变化", "confidence": "高", "lag": "即时",
+         "mechanism": "船舶运营消耗燃料油"},
+        {"seq": 3, "from": "船用油需求变化", "to": "燃料油库存变化", "confidence": "中", "lag": "2-4周",
+         "mechanism": "需求变化影响库存"},
+        {"seq": 4, "from": "库存变化", "to": "燃料油价格变化", "confidence": "中", "lag": "即时",
+         "mechanism": "供需平衡影响价格"}
+      ],
+      "reversalNode": "航运需求回落",
+      "reversalCondition": "全球贸易放缓或航运淡季",
+      "polarityTensionThreshold": 0.6,
+      "historicalCases": [
+        {"year": "2021", "description": "全球航运繁荣推升船用油需求"},
+        {"year": "2023", "description": "航运需求走弱压制船用油消费"}
+      ],
+      "reversibility": 0.6,
+      "tail_probability": 0.15,
+      "minority_protected": false
+    },
+    {
+      "id": "C_122",
+      "name": "高硫/低硫价差驱动链",
+      "domain": "能源",
+      "groundBase": "order",
+      "triggerEvent": "脱硫塔装船量变化或IMO执行力度调整",
+      "steps": [
+        {"seq": 1, "from": "脱硫塔装船增加", "to": "高硫油需求回升", "confidence": "高", "lag": "季度",
+         "mechanism": "装脱硫塔的船舶可使用高硫油"},
+        {"seq": 2, "from": "高硫需求回升", "to": "HSFO-LSFO价差收窄", "confidence": "中", "lag": "即时",
+         "mechanism": "高硫需求增加缩小价差"},
+        {"seq": 3, "from": "价差变化", "to": "炼厂调油策略调整", "confidence": "中", "lag": "1-2周",
+         "mechanism": "炼厂根据价差调整产品结构"}
+      ],
+      "reversalNode": "IMO执行趋严",
+      "reversalCondition": "限硫令执行力度加强或脱硫塔争议",
+      "polarityTensionThreshold": 0.55,
+      "historicalCases": [
+        {"year": "2020", "description": "IMO2020实施初期低硫油溢价飙升"},
+        {"year": "2023", "description": "脱硫塔普及后高硫油需求恢复，价差收窄"}
+      ],
+      "reversibility": 0.6,
+      "tail_probability": 0.15,
+      "minority_protected": false
+    }
+  ]
+}
