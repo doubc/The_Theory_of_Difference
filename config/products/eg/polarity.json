@@ -1,0 +1,19 @@
+{
+  "commodity": "乙二醇",
+  "symbol": "EG",
+  "version": "1.3.0",
+  "entries": {
+    "DCE乙二醇期货价格": {
+      "historicalMin": 3000,
+      "historicalMax": 7000,
+      "recentMin": 3500,
+      "recentMax": 6000,
+      "reversalSignalPatterns": [
+        "原油价格波动",
+        "聚酯需求变化",
+        "库存变化",
+        "新增产能投产"
+      ]
+    }
+  }
+}
