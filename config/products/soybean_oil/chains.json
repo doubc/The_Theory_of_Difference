@@ -1,0 +1,95 @@
+{
+  "commodity": "豆油",
+  "symbol": "Y",
+  "version": "1.3.0",
+  "chains": [
+    {
+      "id": "C_160",
+      "name": "大豆压榨副产豆油链",
+      "domain": "油脂油料",
+      "groundBase": "marginal",
+      "triggerEvent": "大豆到港量变化影响压榨开工率",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "大豆到港量变化",
+          "to": "压榨开工率变化",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "原料供应驱动开工"
+        },
+        {
+          "seq": 2,
+          "from": "开工率变化",
+          "to": "豆油产量变化",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "压榨副产豆油"
+        },
+        {
+          "seq": 3,
+          "from": "产量变化",
+          "to": "豆油库存变化",
+          "confidence": "高",
+          "lag": "2-4周",
+          "mechanism": "供需影响库存"
+        },
+        {
+          "seq": 4,
+          "from": "库存变化",
+          "to": "豆油价格变化",
+          "confidence": "中",
+          "lag": "即时",
+          "mechanism": "库存影响价格"
+        }
+      ],
+      "reversalNode": "开工率调整",
+      "reversalCondition": "压榨利润变化驱动开工率调整",
+      "polarityTensionThreshold": 0.6,
+      "historicalCases": [],
+      "reversibility": 0.7,
+      "tail_probability": 0.15,
+      "minority_protected": false
+    },
+    {
+      "id": "C_161",
+      "name": "油脂板块联动链",
+      "domain": "油脂油料",
+      "groundBase": "marginal",
+      "triggerEvent": "棕榈油或菜油价格大幅波动",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "棕榈油/菜油价格变化",
+          "to": "油脂板块情绪联动",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "三大油脂替代关系"
+        },
+        {
+          "seq": 2,
+          "from": "情绪联动",
+          "to": "豆油期货跟随",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "板块联动交易"
+        },
+        {
+          "seq": 3,
+          "from": "豆油跟随",
+          "to": "豆棕价差变化",
+          "confidence": "中",
+          "lag": "即时",
+          "mechanism": "比价关系调整"
+        }
+      ],
+      "reversalNode": "基本面分化",
+      "reversalCondition": "各品种基本面出现明显分化",
+      "polarityTensionThreshold": 0.55,
+      "historicalCases": [],
+      "reversibility": 0.7,
+      "tail_probability": 0.15,
+      "minority_protected": false
+    }
+  ]
+}
