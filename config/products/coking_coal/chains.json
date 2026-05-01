@@ -1,0 +1,35 @@
+{
+  "commodity": "coking_coal",
+  "chains": [
+    {
+      "id": "CH_001",
+      "name": "蒙煤通关链",
+      "triggerEvent": "蒙煤通关量骤降",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "通关量降",
+          "to": "口岸库存下降",
+          "confidence": 0.8,
+          "lag": "1周"
+        },
+        {
+          "seq": 2,
+          "from": "口岸库存降",
+          "to": "焦煤现货上涨",
+          "confidence": 0.7,
+          "lag": "同步"
+        },
+        {
+          "seq": 3,
+          "from": "焦煤上涨",
+          "to": "焦炭成本推升",
+          "confidence": 0.8,
+          "lag": "即时"
+        }
+      ],
+      "reversalNode": "通关恢复",
+      "reversalCondition": "口岸政策放松"
+    }
+  ]
+}
