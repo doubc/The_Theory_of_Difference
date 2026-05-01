@@ -1,0 +1,6 @@
+# 全部依赖
+-r requirements.txt
+-r requirements-ui.txt
+-r requirements-ml.txt
+sqlalchemy>=2.0
+pymysql>=1.1

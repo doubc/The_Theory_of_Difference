@@ -16,6 +16,7 @@ src/fast/__init__.py — C 扩展 Python 包装器
 from __future__ import annotations
 
 import math
+from pathlib import Path
 
 # ─── 检测 C 扩展 ──────────────────────────────────────────
 

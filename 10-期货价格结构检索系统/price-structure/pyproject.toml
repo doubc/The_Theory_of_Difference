@@ -16,14 +16,15 @@ dependencies = [
     "numpy>=1.24",
     "plotly>=5.0",
     "pyyaml>=6.0",
-    "streamlit>=1.30",
     "networkx>=3.0",
     "requests>=2.31",
-    "xgboost>=2.0",
 ]
 
 [project.optional-dependencies]
+ui = ["streamlit>=1.30"]
+ml = ["xgboost>=2.0"]
 mysql = ["sqlalchemy>=2.0", "pymysql>=1.1"]
+all = ["streamlit>=1.30", "xgboost>=2.0", "sqlalchemy>=2.0", "pymysql>=1.1"]
 dev = [
     "pytest>=7.0",
     "pytest-cov>=4.0",
