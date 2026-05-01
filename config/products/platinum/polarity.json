@@ -1,41 +1,18 @@
 {
-  "commodity": "铂",
+  "commodity": "铂金",
   "symbol": "PT",
-  "version": "1.0.0",
-  "entries": {
-    "LME铂金价格": {
-      "historicalMin": 800,
-      "historicalMax": 2300,
-      "recentMin": 880,
-      "recentMax": 1150,
-      "reversalSignalPatterns": [
-        "南非供给中断",
-        "氢能政策加码",
-        "黄金大涨带动",
-        "柴油车需求超预期"
-      ]
-    },
-    "铂金ETF持仓": {
-      "historicalMin": 2000000,
-      "historicalMax": 4000000,
-      "recentMin": 2500000,
-      "recentMax": 3500000,
-      "reversalSignalPatterns": [
-        "机构配置需求",
-        "铂钯替代预期",
-        "氢能叙事升温"
-      ]
-    },
-    "铂钯价差": {
-      "historicalMin": -1500,
-      "historicalMax": 500,
-      "recentMin": -800,
-      "recentMax": 100,
-      "reversalSignalPatterns": [
-        "铂钯替代加速",
-        "柴油车需求变化",
-        "氢能催化剂需求"
-      ]
+  "version": "1.3.0",
+  "polarity_archive": [
+    {
+      "id": "PT_P001",
+      "variable": "铂金价格",
+      "poles": {
+        "bull": "氢能需求+南非供给冲击",
+        "bear": "柴油车替代+黄金拖累"
+      },
+      "currentState": "中性偏多",
+      "tension": 0.55,
+      "lastUpdated": "2026-05"
     }
-  }
+  ]
 }
