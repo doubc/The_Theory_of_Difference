@@ -1,0 +1,55 @@
+{
+  "commodity": "菜粕",
+  "symbol": "RM",
+  "version": "1.3.0",
+  "chains": [
+    {
+      "id": "C_190",
+      "name": "菜粕水产旺季需求链",
+      "domain": "油脂油料",
+      "groundBase": "natural",
+      "triggerEvent": "夏季水产养殖旺季到来",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "水产旺季到来",
+          "to": "水产饲料需求增加",
+          "confidence": "高",
+          "lag": "季节性",
+          "mechanism": "水产养殖季节性"
+        },
+        {
+          "seq": 2,
+          "from": "饲料需求增加",
+          "to": "菜粕采购增加",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "菜粕是水产料核心原料"
+        },
+        {
+          "seq": 3,
+          "from": "采购增加",
+          "to": "菜粕库存去化",
+          "confidence": "高",
+          "lag": "2-4周",
+          "mechanism": "需求拉动去库"
+        },
+        {
+          "seq": 4,
+          "from": "去库",
+          "to": "菜粕价格上涨",
+          "confidence": "中",
+          "lag": "即时",
+          "mechanism": "供需收紧"
+        }
+      ],
+      "reversalNode": "水产旺季结束",
+      "reversalCondition": "秋季水产需求回落",
+      "polarityTensionThreshold": 0.6,
+      "historicalCases": [],
+      "reversibility": 0.7,
+      "tail_probability": 0.15,
+      "minority_protected": false
+    }
+  ]
+}
