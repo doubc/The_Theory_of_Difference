@@ -10,6 +10,25 @@
 
 技术栈：Python + dataclass + NumPy + Pandas + Plotly + Streamlit，关键路径由 C 扩展加速。
 
+## v4.0 新特性
+
+### 🆕 全新界面
+- **仪表盘首页** — 一屏展示品种概览、快速入口、使用指南
+- **每日简报** — 一键生成今日市场结构摘要，可导出 Markdown
+- **快速帮助** — 浮动帮助按钮、术语工具提示、使用指南
+- **改进的导航** — 品种搜索、收藏、分组显示
+
+### 📊 增强功能
+- **数据质量检查** — 自动检测数据异常和缺失
+- **品种元数据** — 更丰富的品种信息（交易所、板块、描述）
+- **系统状态** — 实时查看数据源和系统状态
+- **移动端友好** — 响应式设计，支持手机/平板访问
+
+### 🔧 技术改进
+- **更好的错误处理** — 优雅降级，不会因单个品种失败而崩溃
+- **改进的缓存** — 更智能的数据缓存策略
+- **配置增强** — 支持 UI 主题、语言、导出格式等配置
+
 ## 快速开始
 
 ```bash
@@ -18,18 +37,6 @@ pip install -r requirements.txt
 
 # 编译 C 扩展（可选，无 C 编译器会自动 fallback 到 Python）
 python3 setup_fast.py build_ext --inplace
-
-# 编译并查看结果
-python3 -c "
-from src.data.loader import load_cu0
-from src.compiler.pipeline import compile_full, CompilerConfig
-loader = load_cu0()
-bars = loader.get(start='2025-01-01', end='2026-04-01')
-result = compile_full(bars, CompilerConfig(min_amplitude=0.03), symbol='CU000')
-for s in result.structures[:3]:
-    m = s.motion
-    print(f'Zone={s.zone.price_center:.0f}  motion={m.phase_tendency}  flux={m.conservation_flux:+.2f}')
-"
 
 # 启动研究工作台
 streamlit run src/workbench/app.py
@@ -53,10 +60,17 @@ price-structure/
 │   │   └── product_ingester.py # 多品种知识导入器
 │   ├── multitimeframe/        # 多时间维度对比
 │   ├── fast/                  # C 扩展（极值提取/DTW/编译器加速）
-│   └── workbench/             # 研究工作台（Streamlit 六页布局）
+│   └── workbench/             # 研究工作台（Streamlit 十一页布局）
+│       ├── app.py             # 主入口
+│       ├── dashboard.py       # 仪表盘首页
+│       ├── daily_briefing.py  # 每日简报
+│       ├── help_system.py     # 帮助系统
+│       ├── tab_scan.py        # 全市场扫描
+│       ├── tab_history.py     # 历史对照
+│       ├── tab_compare.py     # 跨品种对比
+│       ├── tab_journal.py     # 复盘日志
+│       └── ...                # 其他 Tab 模块
 ├── scripts/                   # 批量编译、扫描、检索脚本
-│   ├── daily_pipeline.py      # 日更流水线
-│   └── smoke_test_finance_graph.py  # 金融图谱冒烟测试
 ├── config/                    # 金融知识图谱配置
 │   ├── keywords/              # 全局关键词库
 │   └── products/              # 品种配置（详见 config/README.md）
@@ -97,9 +111,19 @@ python3 config/products/_template/...  # 复制模板
 
 | 品种 | 实体 | 关系 | 传导链 | 极值 | 定价模型 |
 |------|------|------|--------|------|----------|
-| _shared（跨品种） | 211 | 192 | 39 | 30 | — |
+| _shared（跨品种） | 211 | 228 | 39 | 30 | — |
 | copper（铜） | 35 | 23 | 7 | 7 | 5 |
 | lithium_carbonate（碳酸锂） | 5 | 0 | 0 | 1 | — |
+| lead（铅） | 6 | 5 | 2 | 3 | 1 |
+| platinum（铂） | 6 | 5 | 2 | 3 | 1 |
+| ferrosilicon（硅铁） | 4 | 5 | 1 | 2 | 1 |
+| methanol（甲醇） | 4 | 5 | 1 | 2 | 1 |
+| pta（PTA） | 4 | 5 | 1 | 2 | 1 |
+| soybean_meal（豆粕） | 5 | 5 | 1 | 3 | 1 |
+| cotton（棉花） | 4 | 5 | 1 | 2 | 1 |
+| glass（玻璃） | 4 | 5 | 1 | 2 | 1 |
+| soda_ash（纯碱） | 4 | 5 | 1 | 2 | 1 |
+| industrial_silicon（工业硅） | 4 | 5 | 1 | 2 | 1 |
 
 知识图谱通过 `src/graph/product_ingester.py` 导入 `data/graph/`（JSONL 格式），不干扰价格结构相似度计算。
 
