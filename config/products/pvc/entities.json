@@ -1,0 +1,196 @@
+{
+  "commodity": "PVC",
+  "symbol": "V",
+  "version": "1.3.0",
+  "entities": [
+    {
+      "id": "GEO_PVC_001",
+      "name": "内蒙古氯碱化工基地",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "中国PVC产能最集中区域，依托煤炭资源发展电石法PVC，产能约占全国30%",
+      "controlledBy": ["鄂尔多斯集团", "中盐化工", "亿利洁能"],
+      "vulnerabilities": ["能耗双控政策", "碳排放约束", "煤炭价格波动"],
+      "trackingVariables": ["电石产量", "PVC开工率", "能耗指标"]
+    },
+    {
+      "id": "GEO_PVC_002",
+      "name": "新疆氯碱化工基地",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "新疆依托低煤价和低电价发展大规模电石法PVC，成本竞争力全国最强",
+      "controlledBy": ["新疆天业", "中泰化学"],
+      "vulnerabilities": ["运输瓶颈", "环保限产", "政策补贴变化"],
+      "trackingVariables": ["PVC产量", "电石到货价", "铁路运费"]
+    },
+    {
+      "id": "GEO_PVC_003",
+      "name": "山东氯碱化工集群",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "中国PVC消费和加工中心，下游管材管件、型材企业密集，也拥有乙烯法PVC产能",
+      "controlledBy": ["齐鲁石化", "山东信发", "滨州海洋化工"],
+      "vulnerabilities": ["环保限产", "港口进口冲击", "下游需求波动"],
+      "trackingVariables": ["开工率", "库存水平", "下游采购量"]
+    },
+    {
+      "id": "GEO_PVC_004",
+      "name": "美国墨西哥湾PVC产区",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 7,
+      "description": "全球PVC出口核心区域，依托廉价乙烷裂解发展乙烯法PVC，出口至拉美、欧洲、亚洲",
+      "controlledBy": ["信越化学", "Westlake", "Olin"],
+      "vulnerabilities": ["飓风影响", "乙烯价格波动", "贸易壁垒"],
+      "trackingVariables": ["美国PVC出口量", "FOB报价", "开工率"]
+    },
+    {
+      "id": "GEO_PVC_005",
+      "name": "东南亚PVC市场",
+      "type": "物流库存节点",
+      "groundBase": "natural",
+      "importance": 7,
+      "description": "中国PVC出口核心目的地之一，印度、越南、印尼等国需求增长快",
+      "controlledBy": ["当地贸易商", "中国出口商"],
+      "vulnerabilities": ["反倾销调查", "汇率波动", "当地产能扩张"],
+      "trackingVariables": ["中国PVC出口量", "东南亚到岸价", "印度反倾销动态"]
+    },
+    {
+      "id": "POW_PVC_001",
+      "name": "中国氯碱工业协会",
+      "type": "行业协会",
+      "groundBase": "order",
+      "importance": 7,
+      "description": "中国PVC行业组织，行业数据、政策协调、产能规划核心信息来源",
+      "jurisdiction": "中国",
+      "trackingVariables": ["行业开工率", "产能扩张计划", "政策倡议"]
+    },
+    {
+      "id": "POW_PVC_002",
+      "name": "大连商品交易所",
+      "type": "交易所",
+      "groundBase": "rule",
+      "importance": 9,
+      "description": "PVC期货上市交易所，合约单位5吨/手，交割品级为SG5型PVC",
+      "jurisdiction": "中国",
+      "trackingVariables": ["持仓量", "成交量", "库存仓单", "交割规则"]
+    },
+    {
+      "id": "VAR_PVC_001",
+      "name": "PVC期货价格",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 10,
+      "currentValue": "约5500元/吨",
+      "historicalRange": { "min": 4500, "max": 10000 },
+      "recentRange": { "min": 5000, "max": 8000 },
+      "dualityOpposite": "房地产新开工面积",
+      "trackingFrequency": "实时",
+      "trackingVariables": ["DCE主力合约", "现货价格", "基差"]
+    },
+    {
+      "id": "VAR_PVC_002",
+      "name": "电石价格",
+      "type": "原料变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "currentValue": "约2800元/吨",
+      "historicalRange": { "min": 2000, "max": 5500 },
+      "recentRange": { "min": 2500, "max": 4500 },
+      "dualityOpposite": "电石法PVC成本线",
+      "trackingFrequency": "每日",
+      "trackingVariables": ["乌海电石出厂价", "电石到货价", "电石开工率"]
+    },
+    {
+      "id": "VAR_PVC_003",
+      "name": "PVC社会库存",
+      "type": "库存变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "currentValue": "约35万吨",
+      "historicalRange": { "min": 10, "max": 60 },
+      "recentRange": { "min": 15, "max": 50 },
+      "dualityOpposite": "PVC期货价格",
+      "trackingFrequency": "每周",
+      "trackingVariables": ["华东库存", "华南库存", "仓库库存", "在途量"]
+    },
+    {
+      "id": "VAR_PVC_004",
+      "name": "PVC出口价格(FOB中国)",
+      "type": "出口变量",
+      "groundBase": "marginal",
+      "importance": 7,
+      "currentValue": "约700美元/吨",
+      "historicalRange": { "min": 550, "max": 1300 },
+      "recentRange": { "min": 600, "max": 1100 },
+      "dualityOpposite": "国内PVC价格",
+      "trackingFrequency": "每周",
+      "trackingVariables": ["FOB报价", "出口订单", "汇率"]
+    },
+    {
+      "id": "VAR_PVC_005",
+      "name": "PVC开工率",
+      "type": "供给变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "currentValue": "约78%",
+      "historicalRange": { "min": 60, "max": 85 },
+      "recentRange": { "min": 65, "max": 82 },
+      "dualityOpposite": "PVC利润",
+      "trackingFrequency": "每周",
+      "trackingVariables": ["电石法开工率", "乙烯法开工率", "总开工率"]
+    },
+    {
+      "id": "VAR_PVC_006",
+      "name": "房地产新开工面积",
+      "type": "需求变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "currentValue": "同比-20%左右",
+      "historicalRange": { "min": -40, "max": 30 },
+      "recentRange": { "min": -35, "max": 5 },
+      "dualityOpposite": "PVC需求",
+      "trackingFrequency": "每月",
+      "trackingVariables": ["新开工面积", "竣工面积", "商品房销售"]
+    },
+    {
+      "id": "CUL_PVC_001",
+      "name": "PVC管材需求叙事",
+      "type": "商品供需叙事",
+      "groundBase": "culture",
+      "importance": 8,
+      "description": "PVC下游最大需求是管材管件（占比约40%），与房地产和基建投资高度相关，房地产下行周期压制PVC需求预期",
+      "trackingVariables": ["房地产新开工", "基建投资", "管材开工率"]
+    },
+    {
+      "id": "CUL_PVC_002",
+      "name": "电石法成本支撑叙事",
+      "type": "市场共识",
+      "groundBase": "culture",
+      "importance": 7,
+      "description": "电石法PVC占中国产能约80%，电石价格构成PVC成本底部支撑，电石紧缺时PVC价格有硬底",
+      "trackingVariables": ["电石价格", "电石法利润", "电石开工率"]
+    },
+    {
+      "id": "RUL_PVC_001",
+      "name": "PVC期货交割规则",
+      "type": "交易所规则",
+      "groundBase": "rule",
+      "importance": 8,
+      "description": "DCE PVC期货交割品为SG5型聚氯乙烯，标准品25kg/包，交割方式为实物交割",
+      "trackingVariables": ["交割品牌", "交割库容", "仓单有效期"]
+    },
+    {
+      "id": "RUL_PVC_002",
+      "name": "电石行业能耗双控政策",
+      "type": "产业政策规则",
+      "groundBase": "rule",
+      "importance": 8,
+      "description": "电石属于高耗能行业，受能耗双控和碳排放政策约束，限产直接影响PVC原料供应",
+      "trackingVariables": ["电石限产政策", "能耗指标", "碳排放配额"]
+    }
+  ]
+}
