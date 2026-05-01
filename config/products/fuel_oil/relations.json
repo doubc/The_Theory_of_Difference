@@ -1,0 +1,91 @@
+{
+  "commodity": "燃料油",
+  "symbol": "FU",
+  "version": "1.3.0",
+  "relations": [
+    {
+      "id": "R_340",
+      "type": "原油传导",
+      "from": "国际原油价格",
+      "to": "燃料油价格",
+      "strength": 0.9,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "燃料油是炼厂副产品，原油是核心原料成本，价格高度相关",
+      "reversalPoint": "裂解价差极端时可短暂脱钩"
+    },
+    {
+      "id": "R_341",
+      "type": "航运需求",
+      "from": "BDI指数",
+      "to": "船用燃料油需求",
+      "strength": 0.7,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "BDI反映全球航运活跃度，航运繁荣期船用油需求增加",
+      "reversalPoint": "航运淡季或经济下行时BDI与油需求同步下降"
+    },
+    {
+      "id": "R_342",
+      "type": "库存传导",
+      "from": "新加坡燃料油库存",
+      "to": "燃料油价格",
+      "strength": 0.75,
+      "direction": "反向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "新加坡库存是亚太燃料油供需的核心指标",
+      "reversalPoint": "库存极低时价格弹性急剧放大"
+    },
+    {
+      "id": "R_343",
+      "type": "品质价差",
+      "from": "HSFO-LSFO价差",
+      "to": "高硫燃料油需求",
+      "strength": 0.7,
+      "direction": "反向",
+      "groundBase": "order",
+      "lag": "即时",
+      "description": "价差扩大时脱硫塔经济性增强，高硫油需求回升",
+      "reversalPoint": "IMO执行趋严时即使价差大也不装脱硫塔"
+    },
+    {
+      "id": "R_344",
+      "type": "炼厂行为",
+      "from": "炼厂开工率",
+      "to": "燃料油供应",
+      "strength": 0.75,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "炼厂开工率直接影响燃料油产量，开工率高则供应增加",
+      "reversalPoint": "深加工比例提高时燃料油收率下降"
+    },
+    {
+      "id": "R_345",
+      "type": "地缘传导",
+      "from": "中东地缘风险",
+      "to": "燃料油供应",
+      "strength": 0.65,
+      "direction": "复杂",
+      "groundBase": "order",
+      "lag": "即时",
+      "description": "中东是燃料油最大出口区域，地缘冲突影响供应和运费",
+      "reversalPoint": "冲突缓和后供应恢复"
+    },
+    {
+      "id": "R_346",
+      "type": "季节性规律",
+      "from": "夏季电力需求",
+      "to": "燃料油发电需求",
+      "strength": 0.6,
+      "direction": "正向",
+      "groundBase": "natural",
+      "lag": "季节性",
+      "description": "中东/南亚夏季电力需求高峰期，燃料油发电需求增加",
+      "reversalPoint": "天然气/LNG替代燃料油发电"
+    }
+  ]
+}
