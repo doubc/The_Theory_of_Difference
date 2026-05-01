@@ -42,7 +42,7 @@ from src.quality import assess_quality, QualityTier
 
 
 @dataclass
-class TestCase:
+class CaseSpec:
     """测试用例定义"""
     name: str
     description: str
@@ -125,7 +125,7 @@ class EdgeCaseTester:
     def __init__(self):
         self.results = []
         
-    def run_test(self, test_case: TestCase, test_func):
+    def run_test(self, test_case: CaseSpec, test_func):
         """运行单个测试用例"""
         try:
             result = test_func()
@@ -178,7 +178,7 @@ class EdgeCaseTester:
 
 def test_empty_bars():
     """测试1: 空bars列表"""
-    tc = TestCase(
+    tc = CaseSpec(
         name="TC001: 空bars列表",
         description="传入空列表作为bars参数",
         expected_behavior="返回None，不抛出异常"
@@ -191,7 +191,7 @@ def test_empty_bars():
 
 def test_bars_less_than_5():
     """测试2: bars数量少于5根"""
-    tc = TestCase(
+    tc = CaseSpec(
         name="TC002: bars数量<5",
         description="传入3根K线，少于假突破检测所需的5根",
         expected_behavior="假突破检测返回False，其他信号可能生成"
@@ -205,7 +205,7 @@ def test_bars_less_than_5():
 
 def test_bars_less_than_20():
     """测试3: bars数量少于20根（影响成交量统计）"""
-    tc = TestCase(
+    tc = CaseSpec(
         name="TC003: bars数量<20",
         description="传入10根K线，少于成交量中位数计算所需的20根",
         expected_behavior="使用全部可用K线计算成交量中位数"
@@ -218,7 +218,7 @@ def test_bars_less_than_20():
 
 def test_zero_bandwidth():
     """测试4: Zone bandwidth为0"""
-    tc = TestCase(
+    tc = CaseSpec(
         name="TC004: Zone bandwidth=0",
         description="Zone的bandwidth设为0，导致upper=lower",
         expected_behavior="检测函数应返回False/0分，不崩溃"
@@ -237,7 +237,7 @@ def test_zero_bandwidth():
 
 def test_none_system_state():
     """测试5: system_state为None"""
-    tc = TestCase(
+    tc = CaseSpec(
         name="TC005: system_state=None",
         description="system_state参数传入None",
         expected_behavior="使用默认值继续执行，不崩溃"
@@ -250,7 +250,7 @@ def test_none_system_state():
 
 def test_none_motion_in_system_state():
     """测试6: system_state.motion为None"""
-    tc = TestCase(
+    tc = CaseSpec(
         name="TC006: motion为None",
         description="SystemState中的motion字段为None",
         expected_behavior="使用默认MotionState继续执行"
@@ -265,7 +265,7 @@ def test_none_motion_in_system_state():
 
 def test_none_projection_in_system_state():
     """测试7: system_state.projection为None"""
-    tc = TestCase(
+    tc = CaseSpec(
         name="TC007: projection为None",
         description="SystemState中的projection字段为None",
         expected_behavior="使用默认ProjectionAwareness继续执行"
@@ -280,7 +280,7 @@ def test_none_projection_in_system_state():
 
 def test_none_stability_in_system_state():
     """测试8: system_state.stability为None"""
-    tc = TestCase(
+    tc = CaseSpec(
         name="TC008: stability为None",
         description="SystemState中的stability字段为None",
         expected_behavior="使用默认StabilityVerdict继续执行"
@@ -295,7 +295,7 @@ def test_none_stability_in_system_state():
 
 def test_negative_volume():
     """测试9: 负成交量"""
-    tc = TestCase(
+    tc = CaseSpec(
         name="TC009: 负成交量",
         description="K线成交量为负数",
         expected_behavior="正常处理或返回合理结果，不崩溃"
@@ -308,7 +308,7 @@ def test_negative_volume():
 
 def test_extreme_price():
     """测试10: 极大价格值"""
-    tc = TestCase(
+    tc = CaseSpec(
         name="TC010: 极大价格(1e9)",
         description="价格值为10亿",
         expected_behavior="正常处理，不溢出"
@@ -321,7 +321,7 @@ def test_extreme_price():
 
 def test_nan_price():
     """测试11: NaN价格"""
-    tc = TestCase(
+    tc = CaseSpec(
         name="TC011: NaN价格",
         description="K线价格为NaN",
         expected_behavior="可能传播NaN或抛出异常，但不应崩溃"
@@ -338,7 +338,7 @@ def test_nan_price():
 
 def test_inf_price():
     """测试12: Inf价格"""
-    tc = TestCase(
+    tc = CaseSpec(
         name="TC012: Inf价格",
         description="K线价格为无穷大",
         expected_behavior="可能传播Inf或抛出异常，但不应崩溃"
@@ -354,7 +354,7 @@ def test_inf_price():
 
 def test_quality_tier_d():
     """测试13: 质量层D应返回None"""
-    tc = TestCase(
+    tc = CaseSpec(
         name="TC013: 质量层D",
         description="结构质量评估为D层",
         expected_behavior="generate_signal应返回None"
@@ -381,7 +381,7 @@ def test_quality_tier_d():
 
 def test_zero_volume():
     """测试14: 零成交量"""
-    tc = TestCase(
+    tc = CaseSpec(
         name="TC014: 零成交量",
         description="所有K线成交量为0",
         expected_behavior="正常处理，避免除零错误"
@@ -394,7 +394,7 @@ def test_zero_volume():
 
 def test_single_bar():
     """测试15: 只有1根K线"""
-    tc = TestCase(
+    tc = CaseSpec(
         name="TC015: 单根K线",
         description="bars列表只有1个元素",
         expected_behavior="正常处理，不崩溃"
@@ -407,7 +407,7 @@ def test_single_bar():
 
 def test_none_zone():
     """测试16: structure.zone为None"""
-    tc = TestCase(
+    tc = CaseSpec(
         name="TC016: zone为None",
         description="Structure的zone字段为None",
         expected_behavior="使用默认值(upper=lower=bandwidth=0)继续执行"
@@ -426,7 +426,7 @@ def test_none_zone():
 
 def test_extreme_negative_flux():
     """测试17: 极端负通量"""
-    tc = TestCase(
+    tc = CaseSpec(
         name="TC017: 极端负通量(-999)",
         description="conservation_flux为极大的负数",
         expected_behavior="正常处理，不溢出"
@@ -440,7 +440,7 @@ def test_extreme_negative_flux():
 
 def test_extreme_positive_flux():
     """测试18: 极端正通量"""
-    tc = TestCase(
+    tc = CaseSpec(
         name="TC018: 极端正通量(999)",
         description="conservation_flux为极大的正数",
         expected_behavior="正常处理，不溢出"
@@ -454,7 +454,7 @@ def test_extreme_positive_flux():
 
 def test_very_old_structure():
     """测试19: 极老的结构"""
-    tc = TestCase(
+    tc = CaseSpec(
         name="TC019: 极老结构(1000天)",
         description="structural_age为1000天",
         expected_behavior="触发结构老化信号"
@@ -472,7 +472,7 @@ def test_very_old_structure():
 
 def test_blind_projection():
     """测试20: 高压缩投影（盲区）"""
-    tc = TestCase(
+    tc = CaseSpec(
         name="TC020: 盲区投影",
         description="projection.compression_level > 0.7",
         expected_behavior="生成BLIND_BREAKOUT信号或降权处理"
@@ -489,7 +489,7 @@ def test_blind_projection():
 
 def test_unverified_stability():
     """测试21: 未验证的稳定性"""
-    tc = TestCase(
+    tc = CaseSpec(
         name="TC021: 未验证稳定性",
         description="stability.verified=False",
         expected_behavior="信号置信度被限制在0.5以下"
@@ -506,7 +506,7 @@ def test_unverified_stability():
 
 def test_calculate_position_factor_d():
     """测试22: D层仓位系数"""
-    tc = TestCase(
+    tc = CaseSpec(
         name="TC022: D层仓位系数",
         description="质量层D的仓位系数",
         expected_behavior="返回0.0"
@@ -518,7 +518,7 @@ def test_calculate_position_factor_d():
 
 def test_calculate_position_factor_blind():
     """测试23: 盲区额外降仓"""
-    tc = TestCase(
+    tc = CaseSpec(
         name="TC023: 盲区降仓",
         description="is_blind=True时应额外降仓50%",
         expected_behavior="A层从1.0降到0.5"
@@ -531,7 +531,7 @@ def test_calculate_position_factor_blind():
 
 def test_detect_aging_no_motion():
     """测试24: 老化检测无motion"""
-    tc = TestCase(
+    tc = CaseSpec(
         name="TC024: 老化检测无motion",
         description="detect_structure_aging传入ss=None",
         expected_behavior="返回(False, 0.0, '')"
@@ -544,7 +544,7 @@ def test_detect_aging_no_motion():
 
 def test_pullback_insufficient_bars():
     """测试25: 回踩检测数据不足"""
-    tc = TestCase(
+    tc = CaseSpec(
         name="TC025: 回踩检测数据不足",
         description="detect_pullback_confirmation传入bars<10",
         expected_behavior="返回(False, 0.0, '数据不足')"
@@ -593,7 +593,7 @@ if __name__ == "__main__":
     ]
     
     for name, test_func in tests:
-        tc = TestCase(name=name, description="", expected_behavior="")
+        tc = CaseSpec(name=name, description="", expected_behavior="")
         tester.run_test(tc, test_func)
     
     # 打印报告
