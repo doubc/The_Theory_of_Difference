@@ -1,0 +1,209 @@
+{
+  "commodity": "热卷",
+  "symbol": "HC",
+  "version": "1.3.0",
+  "entities": [
+    {
+      "id": "GEO_HC_01",
+      "name": "唐山热卷生产基地",
+      "type": "冶炼加工节点",
+      "groundBase": "natural",
+      "importance": 10,
+      "description": "中国最大热卷生产基地，河钢、首钢等大型钢厂集中，粗钢产量约占全国15%，唐山限产政策直接影响热卷供给",
+      "controlledBy": ["河钢集团", "首钢集团", "德龙钢铁"],
+      "vulnerabilities": ["环保限产", "产能置换", "利润压缩"],
+      "trackingVariables": ["热卷轧线开工率", "唐山限产文件", "粗钢日产量"]
+    },
+    {
+      "id": "GEO_HC_02",
+      "name": "华东热卷加工集群",
+      "type": "冶炼加工节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "江苏、山东热卷加工集中区，沙钢、日照钢铁等产能集中，靠近华东制造业终端需求",
+      "controlledBy": ["沙钢集团", "日照钢铁", "中天钢铁"],
+      "vulnerabilities": ["电力成本", "物流成本", "环保限产"],
+      "trackingVariables": ["华东热卷开工率", "热卷产量", "库存水平"]
+    },
+    {
+      "id": "GEO_HC_03",
+      "name": "东南亚热卷出口市场",
+      "type": "消费市场节点",
+      "groundBase": "natural",
+      "importance": 7,
+      "description": "中国热卷出口主要目的地，越南、菲律宾、泰国等东南亚国家进口中国热卷用于制造业",
+      "controlledBy": ["越南钢铁协会", "东南亚贸易商"],
+      "vulnerabilities": ["反倾销调查", "贸易壁垒", "汇率波动"],
+      "trackingVariables": ["出口报价", "出口量", "反倾销政策"]
+    },
+    {
+      "id": "POW_HC_01",
+      "name": "汽车制造业",
+      "type": "产业权力机构",
+      "groundBase": "order",
+      "importance": 9,
+      "description": "热卷最大终端需求领域，汽车板约占热卷消费25%，新能源汽车带动高端热卷需求增长",
+      "jurisdiction": "中国",
+      "trackingVariables": ["汽车月产量", "新能源车渗透率", "汽车板订单"]
+    },
+    {
+      "id": "POW_HC_02",
+      "name": "家电制造业",
+      "type": "产业权力机构",
+      "groundBase": "order",
+      "importance": 7,
+      "description": "热卷重要终端需求，冷轧基板需求来自家电外壳和内胆，约占热卷消费15%",
+      "jurisdiction": "中国",
+      "trackingVariables": ["空调产量", "冰箱产量", "家电出口量"]
+    },
+    {
+      "id": "POW_HC_03",
+      "name": "上海期货交易所",
+      "type": "交易所",
+      "groundBase": "rule",
+      "importance": 9,
+      "description": "热卷期货HC上市交易所，2014年上市，是热卷价格发现的核心平台",
+      "jurisdiction": "中国",
+      "trackingVariables": ["HC主力合约", "持仓量", "仓单量", "成交量"]
+    },
+    {
+      "id": "POW_HC_04",
+      "name": "中国钢铁工业协会",
+      "type": "行业协会",
+      "groundBase": "order",
+      "importance": 8,
+      "description": "中国钢铁行业自律组织，发布旬度产量数据和行业倡议，协调钢厂定价",
+      "jurisdiction": "中国",
+      "trackingVariables": ["旬度产量", "行业自律倡议", "出口协调"]
+    },
+    {
+      "id": "VAR_HC_01",
+      "name": "热卷期货价格",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 10,
+      "currentValue": "约3800元/吨",
+      "historicalRange": {"min": 2800, "max": 6500},
+      "recentRange": {"min": 3400, "max": 5000},
+      "dualityOpposite": "制造业PMI",
+      "trackingFrequency": "实时",
+      "trackingVariables": ["HC主力合约", "成交量", "持仓量"]
+    },
+    {
+      "id": "VAR_HC_02",
+      "name": "热卷社会库存",
+      "type": "库存变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "currentValue": "约300万吨",
+      "historicalRange": {"min": 150, "max": 500},
+      "recentRange": {"min": 200, "max": 450},
+      "dualityOpposite": "热卷价格",
+      "trackingFrequency": "每周",
+      "trackingVariables": ["社会库存", "钢厂库存", "总库存"]
+    },
+    {
+      "id": "VAR_HC_03",
+      "name": "卷螺差",
+      "type": "价差变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "currentValue": "约200元/吨",
+      "historicalRange": {"min": -300, "max": 800},
+      "recentRange": {"min": -100, "max": 600},
+      "dualityOpposite": "制造业vs建筑业景气度",
+      "trackingFrequency": "实时",
+      "trackingVariables": ["HC-RB价差", "HC/RB比值", "制造业PMI", "房地产投资"]
+    },
+    {
+      "id": "VAR_HC_04",
+      "name": "热卷吨钢利润",
+      "type": "利润变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "currentValue": "约150元/吨",
+      "historicalRange": {"min": -300, "max": 800},
+      "recentRange": {"min": -200, "max": 500},
+      "dualityOpposite": "高炉开工率",
+      "trackingFrequency": "每日",
+      "trackingVariables": ["长流程热卷利润", "短流程利润", "热卷成本"]
+    },
+    {
+      "id": "VAR_HC_05",
+      "name": "热卷出口FOB价格",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 7,
+      "currentValue": "约520美元/吨",
+      "historicalRange": {"min": 400, "max": 900},
+      "recentRange": {"min": 480, "max": 750},
+      "dualityOpposite": "出口竞争力",
+      "trackingFrequency": "每周",
+      "trackingVariables": ["FOB报价", "出口退税政策", "汇率"]
+    },
+    {
+      "id": "VAR_HC_06",
+      "name": "热卷表观消费量",
+      "type": "需求变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "currentValue": "约320万吨/周",
+      "trackingFrequency": "每周",
+      "trackingVariables": ["周度表观消费", "成交量", "出库量"]
+    },
+    {
+      "id": "CUL_HC_01",
+      "name": "汽车下乡政策叙事",
+      "type": "市场共识",
+      "groundBase": "culture",
+      "importance": 7,
+      "description": "汽车消费刺激政策（如汽车下乡、购置税减免）直接拉动热卷需求的市场共识",
+      "trackingVariables": ["汽车下乡政策", "购置税减免", "汽车月销量"]
+    },
+    {
+      "id": "CUL_HC_02",
+      "name": "制造业PMI荣枯线叙事",
+      "type": "市场共识",
+      "groundBase": "culture",
+      "importance": 8,
+      "description": "PMI高于50制造业扩张热卷强，PMI低于50制造业收缩热卷弱的市场共识，卷螺差是工业/建筑景气度的晴雨表",
+      "trackingVariables": ["制造业PMI", "新订单指数", "卷螺差走势"]
+    },
+    {
+      "id": "CUL_HC_03",
+      "name": "出口替代叙事",
+      "type": "商品供需叙事",
+      "groundBase": "culture",
+      "importance": 7,
+      "description": "中国钢材出口替代效应，内需不足时出口成为化解过剩产能的途径",
+      "trackingVariables": ["月度出口量", "出口退税政策", "海外需求"]
+    },
+    {
+      "id": "RUL_HC_01",
+      "name": "热卷期货交割标准",
+      "type": "交易所规则",
+      "groundBase": "rule",
+      "importance": 7,
+      "description": "SHFE热卷期货交割标准，Q235B/SS400牌号，厚度5.75mm，宽度1500mm",
+      "trackingVariables": ["交割品牌", "仓单注册", "交割库容"]
+    },
+    {
+      "id": "RUL_HC_02",
+      "name": "粗钢产量压减政策",
+      "type": "资源税收规则",
+      "groundBase": "rule",
+      "importance": 9,
+      "description": "国家发改委年度粗钢产量压减政策，直接约束钢铁总产量，是价格核心政策变量",
+      "trackingVariables": ["年度压减目标", "各省执行进度", "产量数据"]
+    },
+    {
+      "id": "RUL_HC_03",
+      "name": "钢材出口退税政策",
+      "type": "贸易规则",
+      "groundBase": "rule",
+      "importance": 8,
+      "description": "钢材出口退税取消或恢复直接影响出口竞争力，退税取消时出口量下降增加国内供给",
+      "trackingVariables": ["出口退税率", "出口量变化", "海外价差"]
+    }
+  ]
+}
