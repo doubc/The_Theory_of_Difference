@@ -425,6 +425,7 @@ def _render_narrative_tracking(ctx: dict, store: GraphStore) -> None:
 def _render_reflexivity(ctx: dict, store: GraphStore) -> None:
     """反身性闭环分析"""
     selected_symbol = ctx["selected_symbol"]
+    result = ctx.get("result")
 
     st.markdown("#### 🔄 反身性分析")
     st.caption("检测规则 → 结构 → 失效 的反身性闭环，追踪模板有效性衰减")
