@@ -1,0 +1,157 @@
+{
+  "commodity": "玉米",
+  "symbol": "C",
+  "version": "1.3.0",
+  "chains": [
+    {
+      "id": "C_100",
+      "name": "生猪周期驱动玉米需求链",
+      "domain": "农产品",
+      "groundBase": "marginal",
+      "triggerEvent": "生猪养殖利润持续丰厚，能繁母猪存栏扩张",
+      "steps": [
+        {"seq": 1, "from": "猪价上涨养殖利润丰厚", "to": "养殖户扩产补栏", "confidence": "高", "lag": "1-3个月",
+         "mechanism": "利润驱动产能扩张，能繁母猪存栏增加"},
+        {"seq": 2, "from": "能繁母猪增加", "to": "饲料需求上升", "confidence": "高", "lag": "4-10个月",
+         "mechanism": "母猪补栏到商品猪出栏约10个月，期间饲料需求持续增加"},
+        {"seq": 3, "from": "饲料需求上升", "to": "玉米采购增加", "confidence": "高", "lag": "即时",
+         "mechanism": "玉米占猪饲料配方约55-65%，需求直接传导"},
+        {"seq": 4, "from": "玉米采购增加", "to": "玉米库存去化", "confidence": "高", "lag": "2-4周",
+         "mechanism": "下游补库消耗贸易商和港口库存"},
+        {"seq": 5, "from": "库存去化", "to": "玉米价格上涨", "confidence": "高", "lag": "即时",
+         "mechanism": "供需收紧推升现货和期货价格"}
+      ],
+      "reversalNode": "猪周期见顶去化",
+      "reversalCondition": "猪价跌破成本线，养殖户亏损去产能",
+      "polarityTensionThreshold": 0.7,
+      "historicalCases": [
+        {"year": "2019-2020", "description": "非洲猪瘟后产能恢复，猪价高位，玉米需求大增，玉米从1800涨至2900"},
+        {"year": "2022-2023", "description": "猪周期下行，饲料需求偏弱，玉米价格承压"}
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "能繁母猪补栏到饲料需求传导有4-10个月滞后期",
+        "dualityStructure": "养殖利润驱动的产能扩张与猪价下跌后的去化博弈",
+        "polarityWarning": "能繁母猪同比变化转正是需求拐点信号"
+      },
+      "reversibility": 0.6,
+      "tail_probability": 0.2,
+      "minority_protected": false
+    },
+    {
+      "id": "C_101",
+      "name": "USDA报告冲击链",
+      "domain": "农产品",
+      "groundBase": "marginal",
+      "triggerEvent": "USDA月度WASDE报告数据大幅偏离市场预期",
+      "steps": [
+        {"seq": 1, "from": "USDA报告数据超预期", "to": "CBOT玉米价格跳空", "confidence": "高", "lag": "即时",
+         "mechanism": "报告发布后市场重新定价供需平衡表"},
+        {"seq": 2, "from": "CBOT价格跳空", "to": "DCE玉米开盘联动", "confidence": "高", "lag": "次日开盘",
+         "mechanism": "进口成本传导和市场情绪联动"},
+        {"seq": 3, "from": "DCE联动", "to": "国内现货调价", "confidence": "中", "lag": "1-3天",
+         "mechanism": "期货引导现货定价"},
+        {"seq": 4, "from": "价格调整", "to": "下游采购节奏变化", "confidence": "中", "lag": "1-2周",
+         "mechanism": "价格上涨抑制采购，下跌刺激补库"},
+        {"seq": 5, "from": "采购节奏变化", "to": "库存重新分配", "confidence": "中", "lag": "2-4周",
+         "mechanism": "库存从上游转移至下游或反之"}
+      ],
+      "reversalNode": "数据修正或下月报告",
+      "reversalCondition": "后续报告修正数据或市场消化预期",
+      "polarityTensionThreshold": 0.65,
+      "historicalCases": [
+        {"year": "2023", "description": "USDA意外下调美国玉米单产预估，CBOT单日涨停"},
+        {"year": "2022", "description": "俄乌冲突导致乌克兰玉米出口受阻，USDA大幅下调全球供应"}
+      ],
+      "reversibility": 0.7,
+      "tail_probability": 0.15,
+      "minority_protected": false
+    },
+    {
+      "id": "C_102",
+      "name": "华北小麦替代玉米链",
+      "domain": "农产品",
+      "groundBase": "marginal",
+      "triggerEvent": "小麦-玉米价差收窄至替代临界点",
+      "steps": [
+        {"seq": 1, "from": "小麦丰产/玉米偏紧", "to": "小麦-玉米价差收窄", "confidence": "高", "lag": "季节性",
+         "mechanism": "小麦上市季供应充裕压制小麦价，玉米青黄不接价格坚挺"},
+        {"seq": 2, "from": "价差收窄至负值", "to": "饲料企业用小麦替代玉米", "confidence": "高", "lag": "即时",
+         "mechanism": "小麦价格低于玉米时配方替代经济性显现"},
+        {"seq": 3, "from": "替代增加", "to": "玉米饲料需求下降", "confidence": "高", "lag": "1-2个月",
+         "mechanism": "配方调整减少玉米用量"},
+        {"seq": 4, "from": "玉米需求下降", "to": "玉米价格承压", "confidence": "中", "lag": "即时",
+         "mechanism": "需求减少压制价格"},
+        {"seq": 5, "from": "玉米价格回落", "to": "价差修复替代减少", "confidence": "中", "lag": "1-3个月",
+         "mechanism": "价差回归正常，替代效应消退"}
+      ],
+      "reversalNode": "价差回归正常",
+      "reversalCondition": "小麦-玉米价差扩大至100元以上",
+      "polarityTensionThreshold": 0.6,
+      "historicalCases": [
+        {"year": "2023", "description": "小麦大量替代玉米，压制玉米饲用消费约1500万吨"},
+        {"year": "2021", "description": "玉米价格暴涨，小麦替代量创新高"}
+      ],
+      "reversibility": 0.7,
+      "tail_probability": 0.15,
+      "minority_protected": false
+    },
+    {
+      "id": "C_103",
+      "name": "东北售粮节奏冲击链",
+      "domain": "农产品",
+      "groundBase": "natural",
+      "triggerEvent": "东北新粮集中上市期（11月-次年3月）售粮节奏变化",
+      "steps": [
+        {"seq": 1, "from": "农户集中售粮", "to": "市场供应压力增大", "confidence": "高", "lag": "即时",
+         "mechanism": "秋收后农户变现还贷需求集中出粮"},
+        {"seq": 2, "from": "供应压力增大", "to": "港口到货量激增", "confidence": "高", "lag": "1-2周",
+         "mechanism": "地趴粮集中上量"},
+        {"seq": 3, "from": "港口到货激增", "to": "现货价格下行", "confidence": "高", "lag": "即时",
+         "mechanism": "供应压制价格"},
+        {"seq": 4, "from": "价格下行", "to": "贸易商建库意愿增强", "confidence": "中", "lag": "2-4周",
+         "mechanism": "低价吸引抄底建库"},
+        {"seq": 5, "from": "贸易商建库", "to": "价格企稳回升", "confidence": "中", "lag": "1-2个月",
+         "mechanism": "卖压缓解+建库需求支撑价格"}
+      ],
+      "reversalNode": "售粮高峰结束",
+      "reversalCondition": "农户售粮进度达70%以上，卖压减弱",
+      "polarityTensionThreshold": 0.65,
+      "historicalCases": [
+        {"year": "2023", "description": "丰产+售粮偏慢，玉米价格持续下跌至2300元"},
+        {"year": "2022", "description": "惜售+建库积极，价格在售粮季获得支撑"}
+      ],
+      "reversibility": 0.7,
+      "tail_probability": 0.2,
+      "minority_protected": false
+    },
+    {
+      "id": "C_104",
+      "name": "干旱减产推升玉米价链",
+      "domain": "农产品",
+      "groundBase": "natural",
+      "triggerEvent": "主产区遭遇严重干旱（东北春旱或美国中西部干旱）",
+      "steps": [
+        {"seq": 1, "from": "主产区持续干旱", "to": "作物优良率下降", "confidence": "高", "lag": "1-2周",
+         "mechanism": "水分胁迫影响玉米授粉和灌浆"},
+        {"seq": 2, "from": "优良率下降", "to": "单产预估下调", "confidence": "高", "lag": "持续观测",
+         "mechanism": "USDA/市场机构下调单产预期"},
+        {"seq": 3, "from": "单产下调", "to": "供需平衡收紧", "confidence": "高", "lag": "即时",
+         "mechanism": "产量下降直接收紧供需"},
+        {"seq": 4, "from": "供需收紧", "to": "期货价格飙升", "confidence": "高", "lag": "即时",
+         "mechanism": "天气溢价推升期货价格"},
+        {"seq": 5, "from": "价格飙升", "to": "需求配给（饲料替代+出口下降）", "confidence": "中", "lag": "1-3个月",
+         "mechanism": "高价抑制部分需求"}
+      ],
+      "reversalNode": "降雨改善或产量明朗",
+      "reversalCondition": "关键生长期降雨恢复或最终产量高于预期",
+      "polarityTensionThreshold": 0.75,
+      "historicalCases": [
+        {"year": "2012", "description": "美国中西部大旱，CBOT玉米从500涨至800+"},
+        {"year": "2023", "description": "东北局地旱情引发短暂天气炒作"}
+      ],
+      "reversibility": 0.5,
+      "tail_probability": 0.2,
+      "minority_protected": false
+    }
+  ]
+}
