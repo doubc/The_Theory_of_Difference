@@ -35,6 +35,7 @@ from src.graph import StructureGraph, NodeType, EdgeType
 from src.graph.narrative_tracker import NarrativeRecursionTracker
 from src.graph.reflexivity import ReflexivityDetector
 from src.graph.transfer_network import TransferNetwork
+from src.graph.product_ingester import ProductKnowledgeIngester
 
 
 # ─── 样式 ────────────────────────────────────────────────
@@ -125,6 +126,7 @@ def render(ctx: dict) -> None:
         "🔄 反身性分析",
         "🔀 跨品种传导",
         "📊 图谱统计",
+        "💉 知识注入",
     ])
 
     # 初始化图谱存储
@@ -144,6 +146,9 @@ def render(ctx: dict) -> None:
 
     with sub_tabs[4]:
         _render_statistics(ctx, graph_store)
+
+    with sub_tabs[5]:
+        _render_knowledge_injection(ctx, graph_store)
 
 
 # ─── Tab 1: 图谱总览 ──────────────────────────────────────
@@ -776,3 +781,228 @@ def _render_statistics(ctx: dict, store: GraphStore) -> None:
             st.info("暂无快照")
     else:
         st.info("快照目录不存在")
+
+
+# ─── Tab 6: 知识注入 ──────────────────────────────────────
+
+def _render_knowledge_injection(ctx: dict, store: GraphStore) -> None:
+    """知识注入 — 从 config/products/ 导入品种知识"""
+    st.markdown("#### 💉 知识注入")
+    st.caption("从 config/products/ 导入品种实体、关系、传导链、定价模型到知识图谱")
+
+    # 加载 registry
+    import yaml
+    registry_path = "config/products/registry.yaml"
+    if not os.path.exists(registry_path):
+        st.error("❌ config/products/registry.yaml 不存在")
+        return
+
+    with open(registry_path, encoding="utf-8") as f:
+        registry = yaml.safe_load(f)
+
+    products = registry.get("products", {})
+
+    # 品种总览
+    st.markdown("#### 📋 品种注册表")
+
+    prod_data = []
+    for key, prod in products.items():
+        prod_data.append({
+            "品种": key,
+            "代号": prod.get("symbol", ""),
+            "名称": prod.get("name", ""),
+            "状态": prod.get("status", ""),
+            "标签": ", ".join(prod.get("tags", [])),
+            "文件数": len(prod.get("files", {})),
+        })
+
+    if prod_data:
+        st.dataframe(pd.DataFrame(prod_data), use_container_width=True)
+
+    # 导入操作
+    st.divider()
+    st.markdown("#### 🚀 导入操作")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        selected_product = st.selectbox(
+            "选择品种",
+            list(products.keys()),
+            format_func=lambda k: f"{k} — {products[k].get('name', k)}",
+        )
+
+    with col2:
+        force_refresh = st.checkbox("强制刷新（忽略 hash 缓存）", value=False)
+
+    if st.button("💉 导入到图谱", key="kg_ingest"):
+        with st.spinner(f"正在导入 {selected_product}..."):
+            try:
+                ingester = ProductKnowledgeIngester(store, registry_path=registry_path)
+
+                if selected_product == "_shared":
+                    stats = ingester.ingest_product("_shared", force=force_refresh)
+                    results = {"_shared": stats}
+                else:
+                    # 先导入 shared，再导入目标品种
+                    ingester.ingest_product("_shared", force=False)
+                    stats = ingester.ingest_product(selected_product, force=force_refresh)
+                    results = {selected_product: stats}
+
+                # 显示结果
+                for key, stat in results.items():
+                    if stat.skipped:
+                        st.info(f"⏭️ {key}: {stat.reason}")
+                    else:
+                        st.success(
+                            f"✅ {key}: "
+                            f"{stat.entities} 实体, "
+                            f"{stat.relations} 关系, "
+                            f"{stat.chains} 传导链, "
+                            f"{stat.polarity_rules} 极值, "
+                            f"{stat.pricing_models} 定价模型, "
+                            f"{stat.edges} 边"
+                        )
+            except Exception as e:
+                st.error(f"❌ 导入失败: {e}")
+
+    # 全量导入
+    if st.button("🔄 全量导入所有品种", key="kg_ingest_all"):
+        with st.spinner("正在导入所有 active 品种..."):
+            try:
+                ingester = ProductKnowledgeIngester(store, registry_path=registry_path)
+                results = ingester.ingest_all_active_products(force=force_refresh)
+
+                for key, stat in results.items():
+                    if stat.skipped:
+                        st.info(f"⏭️ {key}: {stat.reason}")
+                    else:
+                        st.success(
+                            f"✅ {key}: "
+                            f"{stat.entities} 实体, "
+                            f"{stat.relations} 关系, "
+                            f"{stat.chains} 传导链"
+                        )
+            except Exception as e:
+                st.error(f"❌ 全量导入失败: {e}")
+
+    # 品种知识详情
+    st.divider()
+    st.markdown("#### 📖 品种知识详情")
+
+    detail_product = st.selectbox(
+        "查看品种详情",
+        list(products.keys()),
+        format_func=lambda k: f"{k} — {products[k].get('name', k)}",
+        key="kg_detail_product",
+    )
+
+    prod_config = products.get(detail_product, {})
+    files = prod_config.get("files", {})
+
+    if files:
+        detail_tabs = st.tabs(list(files.keys()))
+
+        for i, (file_type, rel_path) in enumerate(files.items()):
+            with detail_tabs[i]:
+                full_path = os.path.join("config/products", rel_path)
+                if os.path.exists(full_path):
+                    import json
+                    with open(full_path, encoding="utf-8") as f:
+                        data = json.load(f)
+
+                    # 根据文件类型展示
+                    if file_type == "entities":
+                        entities = data.get("entities", [])
+                        st.caption(f"共 {len(entities)} 个实体")
+                        for ent in entities[:20]:  # 只显示前20个
+                            importance = ent.get("importance", 5)
+                            icon = "🔴" if importance >= 9 else "🟡" if importance >= 7 else "🟢"
+                            with st.expander(
+                                f"{icon} {ent.get('id', '')} — {ent.get('name', '')} "
+                                f"(重要度 {importance})",
+                                expanded=False,
+                            ):
+                                st.markdown(f"**类型:** {ent.get('type', '')}")
+                                st.markdown(f"**描述:** {ent.get('description', '')}")
+                                if ent.get("controlledBy"):
+                                    st.markdown(f"**控制方:** {', '.join(ent['controlledBy'])}")
+                                if ent.get("vulnerabilities"):
+                                    st.markdown(f"**脆弱性:** {', '.join(ent['vulnerabilities'])}")
+                                if ent.get("trackingVariables"):
+                                    st.markdown(f"**跟踪变量:** {', '.join(ent['trackingVariables'])}")
+
+                    elif file_type == "relations":
+                        relations = data.get("relations", [])
+                        st.caption(f"共 {len(relations)} 个关系")
+                        for rel in relations[:20]:
+                            st.markdown(
+                                f"- **{rel.get('id', '')}** {rel.get('from', '')} "
+                                f"→ {rel.get('to', '')} "
+                                f"(强度 {rel.get('strength', 0):.1%}, {rel.get('direction', '')})"
+                            )
+
+                    elif file_type == "chains":
+                        chains = data.get("chains", [])
+                        st.caption(f"共 {len(chains)} 条传导链")
+                        for chain in chains:
+                            with st.expander(
+                                f"🔗 {chain.get('id', '')} — {chain.get('name', '')} "
+                                f"({len(chain.get('steps', []))} 步)",
+                                expanded=False,
+                            ):
+                                st.markdown(f"**触发事件:** {chain.get('triggerEvent', '')}")
+                                st.markdown(f"**反转节点:** {chain.get('reversalNode', '')}")
+                                st.markdown(f"**反转条件:** {chain.get('reversalCondition', '')}")
+
+                                # 步骤
+                                for step in chain.get("steps", []):
+                                    st.markdown(
+                                        f"  {step.get('seq', '')}. "
+                                        f"{step.get('from', '')} → {step.get('to', '')} "
+                                        f"(置信度 {step.get('confidence', '')}, "
+                                        f"滞后 {step.get('lag', '')})"
+                                    )
+
+                                # 历史案例
+                                cases = chain.get("historicalCases", [])
+                                if cases:
+                                    st.markdown("**历史案例:**")
+                                    for case in cases:
+                                        st.markdown(
+                                            f"  - {case.get('year', '')}: {case.get('description', '')}"
+                                        )
+
+                    elif file_type == "polarity":
+                        entries = data.get("entries", {})
+                        st.caption(f"共 {len(entries)} 个极值变量")
+                        for var_name, var_info in entries.items():
+                            with st.expander(f"📊 {var_name}", expanded=False):
+                                st.markdown(
+                                    f"**历史范围:** {var_info.get('historicalMin', 'N/A')} ~ "
+                                    f"{var_info.get('historicalMax', 'N/A')}"
+                                )
+                                st.markdown(
+                                    f"**近期范围:** {var_info.get('recentMin', 'N/A')} ~ "
+                                    f"{var_info.get('recentMax', 'N/A')}"
+                                )
+                                signals = var_info.get("reversalSignalPatterns", [])
+                                if signals:
+                                    st.markdown(f"**反转信号:** {', '.join(signals)}")
+
+                    elif file_type == "pricing_models":
+                        models = data.get("models", [])
+                        st.caption(f"共 {len(models)} 个定价模型")
+                        for model in models:
+                            with st.expander(
+                                f"📐 {model.get('id', '')} — {model.get('name', '')}",
+                                expanded=False,
+                            ):
+                                st.markdown(f"**领域:** {model.get('domain', '')}")
+                                st.code(model.get("formula", ""), language=None)
+                                if model.get("variables"):
+                                    st.markdown(f"**变量:** {', '.join(model['variables'])}")
+                    else:
+                        st.json(data)
+                else:
+                    st.warning(f"文件不存在: {full_path}")
