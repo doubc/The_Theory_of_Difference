@@ -1,0 +1,18 @@
+{
+  "commodity": "锌",
+  "symbol": "ZN",
+  "version": "1.0.0",
+  "entries": {
+    "LME锌": {
+      "historicalMin": 1500,
+      "historicalMax": 4000,
+      "recentMin": 2200,
+      "recentMax": 3000,
+      "reversalSignalPatterns": [
+        "锌矿紧缺",
+        "冶炼减产",
+        "镀锌需求增加"
+      ]
+    }
+  }
+}
