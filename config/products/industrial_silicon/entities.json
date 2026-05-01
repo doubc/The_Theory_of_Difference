@@ -1,63 +1,101 @@
 {
   "commodity": "工业硅",
   "symbol": "SI",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "entities": [
     {
-      "id": "SI_E01",
-      "name": "工业硅光伏需求叙事",
-      "type": "商品供需叙事",
-      "groundBase": "culture",
+      "id": "SI_GEO_001",
+      "name": "云南工业硅产区",
+      "type": "冶炼加工节点",
+      "groundBase": "natural",
       "importance": 9,
-      "description": "多晶硅是工业硅最大下游（约40%），光伏装机量直接决定工业硅需求增长",
+      "description": "中国最大工业硅产区，产能约占全国30%，水电为主，丰枯水期影响显著",
+      "controlledBy": [
+        "合盛硅业",
+        "云南当地企业"
+      ],
+      "vulnerabilities": [
+        "枯水期限电",
+        "水电不足",
+        "环保政策"
+      ],
       "trackingVariables": [
-        "光伏装机量",
-        "多晶硅产量",
-        "多晶硅价格"
+        "开工率",
+        "产量",
+        "水电发电量",
+        "电价"
       ]
     },
     {
-      "id": "SI_E02",
-      "name": "工业硅成本叙事",
-      "type": "商品供需叙事",
-      "groundBase": "culture",
-      "importance": 7,
-      "description": "电力成本占工业硅生产约35%，云南/四川水电季节性影响供给",
+      "id": "SI_GEO_002",
+      "name": "新疆工业硅产区",
+      "type": "冶炼加工节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "中国第二大工业硅产区，火电为主，成本相对稳定",
+      "controlledBy": [
+        "合盛硅业",
+        "特变电工"
+      ],
+      "vulnerabilities": [
+        "碳排放政策",
+        "运输成本"
+      ],
       "trackingVariables": [
-        "西南电价",
-        "丰水期/枯水期",
-        "硅石价格",
-        "碳电极价格"
+        "开工率",
+        "产量",
+        "火电电价"
       ]
     },
     {
-      "id": "SI_E03",
-      "name": "广期所工业硅期货",
+      "id": "SI_VAR_001",
+      "name": "工业硅期货价格",
       "type": "大宗商品变量",
       "groundBase": "marginal",
-      "importance": 8,
+      "importance": 9,
       "currentValue": "约13000元/吨",
       "historicalRange": {
         "min": 10000,
-        "max": 22000
+        "max": 60000
       },
+      "recentRange": {
+        "min": 11000,
+        "max": 20000
+      },
+      "dualityOpposite": "光伏装机量",
+      "trackingFrequency": "实时",
       "trackingVariables": [
-        "期货价格",
-        "持仓量",
-        "仓单"
+        "广期所期价",
+        "现货价",
+        "各牌号价差"
       ]
     },
     {
-      "id": "SI_E04",
-      "name": "合盛硅业",
-      "type": "产业权力机构",
-      "groundBase": "order",
-      "importance": 8,
-      "description": "中国最大工业硅生产企业，产能约120万吨",
+      "id": "SI_VAR_002",
+      "name": "多晶硅产量",
+      "type": "需求变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "currentValue": "约150万吨/年",
+      "trackingFrequency": "每月",
       "trackingVariables": [
-        "产量",
-        "开工率",
-        "定价"
+        "月度产量",
+        "新增产能",
+        "开工率"
+      ]
+    },
+    {
+      "id": "SI_POW_001",
+      "name": "广州期货交易所",
+      "type": "交易所",
+      "groundBase": "rule",
+      "importance": 9,
+      "description": "工业硅期货上市交易所",
+      "jurisdiction": "中国",
+      "trackingVariables": [
+        "持仓量",
+        "成交量",
+        "交割规则"
       ]
     }
   ]
