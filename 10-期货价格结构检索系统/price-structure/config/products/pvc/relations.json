@@ -1,4 +1,127 @@
 {
-  "commodity": "pvc",
-  "relations": []
+  "commodity": "PVC",
+  "symbol": "V",
+  "version": "1.3.0",
+  "relations": [
+    {
+      "id": "R_PVC_001",
+      "type": "成本传导",
+      "from": "电石价格",
+      "to": "PVC成本",
+      "strength": 0.9,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "电石占电石法PVC生产成本60-70%，电石价格变动直接决定PVC成本底部",
+      "reversalPoint": "电石价格低于2500元时成本支撑效应减弱"
+    },
+    {
+      "id": "R_PVC_002",
+      "type": "需求映射",
+      "from": "房地产新开工面积",
+      "to": "PVC管材需求",
+      "strength": 0.85,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "1-3个月",
+      "description": "PVC管材占PVC消费约40%，房地产新开工直接决定管材需求强度",
+      "reversalPoint": "基建投资大幅加码可部分对冲房地产下行"
+    },
+    {
+      "id": "R_PVC_003",
+      "type": "库存传导",
+      "from": "PVC社会库存",
+      "to": "PVC期货价格",
+      "strength": 0.8,
+      "direction": "反向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "库存高于40万吨时PVC价格承压，低于20万吨时价格有支撑",
+      "historicalCase": "2022年库存累积至50万吨以上，PVC价格跌破6000"
+    },
+    {
+      "id": "R_PVC_004",
+      "type": "出口传导",
+      "from": "PVC出口窗口",
+      "to": "国内PVC库存",
+      "strength": 0.7,
+      "direction": "反向",
+      "groundBase": "marginal",
+      "lag": "2-4周",
+      "description": "出口窗口打开分流国内供应，缓解库存压力",
+      "reversalPoint": "反倾销调查或汇率大幅波动可能关闭出口窗口"
+    },
+    {
+      "id": "R_PVC_005",
+      "type": "能源传导",
+      "from": "煤炭价格",
+      "to": "电石成本",
+      "strength": 0.75,
+      "direction": "正向",
+      "groundBase": "natural",
+      "lag": "1-2周",
+      "description": "电石生产耗电量大，煤炭是电力主要来源，煤价上涨推高电石成本",
+      "reversalPoint": "电力市场化改革后煤价传导可能更直接"
+    },
+    {
+      "id": "R_PVC_006",
+      "type": "政策传导",
+      "from": "能耗双控政策",
+      "to": "电石供应",
+      "strength": 0.8,
+      "direction": "反向",
+      "groundBase": "order",
+      "lag": "即时",
+      "description": "电石属于高耗能行业，能耗双控政策直接限制电石开工和新增产能",
+      "reversalPoint": "政策放松或碳排放配额增加时限制减弱"
+    },
+    {
+      "id": "R_PVC_007",
+      "type": "基建传导",
+      "from": "基建投资增速",
+      "to": "PVC需求",
+      "strength": 0.7,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "1-3个月",
+      "description": "基建（给排水管道、电缆护套）是PVC第二大需求来源，基建投资增长拉动PVC消费",
+      "reversalPoint": "地方财政紧张时基建投资增速放缓"
+    },
+    {
+      "id": "R_PVC_008",
+      "type": "价格联动",
+      "from": "烧碱价格",
+      "to": "PVC供给",
+      "strength": 0.65,
+      "direction": "反向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "氯碱联产，烧碱利润好时氯碱企业维持高开工，副产氯气增多压制PVC价格",
+      "reversalPoint": "烧碱需求下降导致氯碱开工率回落，PVC供给减少"
+    },
+    {
+      "id": "R_PVC_009",
+      "type": "进口替代",
+      "from": "美国PVC出口",
+      "to": "全球PVC供应",
+      "strength": 0.6,
+      "direction": "正向",
+      "groundBase": "natural",
+      "lag": "1-2个月",
+      "description": "美国是全球最大PVC出口国，墨西哥湾产能集中，出口价格影响全球PVC定价",
+      "reversalPoint": "飓风停产或贸易壁垒导致出口减少"
+    },
+    {
+      "id": "R_PVC_010",
+      "type": "季节性规律",
+      "from": "春季开工旺季",
+      "to": "PVC需求",
+      "strength": 0.65,
+      "direction": "正向",
+      "groundBase": "culture",
+      "lag": "季节性",
+      "description": "每年3-5月是建筑施工旺季，PVC管材需求集中释放，推动价格季节性上涨",
+      "reversalPoint": "旺季不旺时季节性规律失效"
+    }
+  ]
 }

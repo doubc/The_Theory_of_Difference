@@ -1,4 +1,54 @@
 {
-  "commodity": "tin",
-  "models": []
+  "commodity": "沪锡",
+  "symbol": "SN",
+  "version": "1.3.0",
+  "models": [
+    {
+      "id": "M_090",
+      "name": "锡的供给约束定价模型",
+      "domain": "供给定价",
+      "groundBase": "order",
+      "formula": "SN_Score = w1*SupplyFactor + w2*TechDemandFactor + w3*InventoryFactor",
+      "variables": [
+        {
+          "name": "供给因子（缅甸+印尼）",
+          "id": "supply",
+          "direction": "反向",
+          "weight": 0.45
+        },
+        {
+          "name": "半导体需求因子",
+          "id": "tech_demand",
+          "direction": "正向",
+          "weight": 0.35
+        },
+        {
+          "name": "库存因子",
+          "id": "inventory",
+          "direction": "反向",
+          "weight": 0.2
+        }
+      ],
+      "description": "锡是稀缺有色金属，供给约束（缅甸停矿）是定价核心。下游以电子焊料为主，半导体景气度驱动需求。",
+      "dominantPhase": "供给中断+需求旺盛时价格弹性最大",
+      "limitation": "缅甸政策不确定性高",
+      "trackingVariables": [
+        "缅甸进口量",
+        "半导体景气",
+        "SHFE库存"
+      ],
+      "linkToEntities": [
+        "VAR_230",
+        "VAR_232"
+      ],
+      "linkToRelations": [
+        "R_560",
+        "R_561",
+        "R_562"
+      ],
+      "linkToConductionChains": [
+        "C_230"
+      ]
+    }
+  ]
 }

@@ -1,50 +1,79 @@
 {
-  "commodity": "soybean_meal",
+  "commodity": "豆粕",
+  "symbol": "M",
+  "version": "1.3.0",
   "relations": [
     {
-      "id": "R_001",
-      "from": "GEO_001",
-      "to": "VAR_002",
-      "type": "supply",
+      "id": "R_440",
+      "type": "产业链传导",
+      "from": "大豆压榨开工率",
+      "to": "豆粕供应",
       "strength": 0.85,
-      "direction": "positive",
-      "description": "美豆出口→中国到港"
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "豆粕是压榨主产品，开工率直接决定产量",
+      "reversalPoint": "豆粕胀库时被迫降负"
     },
     {
-      "id": "R_002",
-      "from": "GEO_002",
-      "to": "VAR_002",
-      "type": "supply",
-      "strength": 0.8,
-      "direction": "positive",
-      "description": "巴西出口→中国到港"
-    },
-    {
-      "id": "R_003",
-      "from": "POW_002",
-      "to": "VAR_001",
-      "type": "supply",
-      "strength": 0.8,
-      "direction": "positive",
-      "description": "油厂压榨产出豆粕"
-    },
-    {
-      "id": "R_004",
-      "from": "POW_001",
-      "to": "VAR_001",
-      "type": "demand",
+      "id": "R_441",
+      "type": "需求传导",
+      "from": "生猪存栏量",
+      "to": "豆粕需求",
       "strength": 0.85,
-      "direction": "negative",
-      "description": "养殖业消耗豆粕"
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "生猪是豆粕最大下游，存栏直接决定需求",
+      "reversalPoint": "低蛋白日粮替代"
     },
     {
-      "id": "R_005",
-      "from": "CUL_001",
-      "to": "GEO_001",
-      "type": "narrative",
+      "id": "R_442",
+      "type": "替代品传导",
+      "from": "豆粕-菜粕价差",
+      "to": "豆粕需求",
       "strength": 0.7,
-      "direction": "positive",
-      "description": "天气炒作推升美豆价格"
+      "direction": "反向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "价差扩大时饲料企业用菜粕替代豆粕",
+      "reversalPoint": "蛋白含量差异限制替代"
+    },
+    {
+      "id": "R_443",
+      "type": "原料传导",
+      "from": "CBOT大豆价格",
+      "to": "豆粕成本",
+      "strength": 0.85,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "大豆是豆粕原料，成本传导",
+      "reversalPoint": "压榨利润变化可缓冲传导"
+    },
+    {
+      "id": "R_444",
+      "type": "库存传导",
+      "from": "豆粕库存",
+      "to": "豆粕价格",
+      "strength": 0.75,
+      "direction": "反向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "库存是供需平衡直接指标",
+      "reversalPoint": "库存低于30万吨时价格弹性增大"
+    },
+    {
+      "id": "R_445",
+      "type": "季节性规律",
+      "from": "饲料消费旺季",
+      "to": "豆粕需求",
+      "strength": 0.65,
+      "direction": "正向",
+      "groundBase": "natural",
+      "lag": "季节性",
+      "description": "春季补栏和秋季育肥是饲料消费旺季",
+      "reversalPoint": "养殖亏损时旺季不旺"
     }
   ]
 }

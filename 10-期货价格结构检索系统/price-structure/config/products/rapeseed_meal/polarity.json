@@ -1,4 +1,19 @@
 {
-  "commodity": "rapeseed_meal",
-  "entries": {}
+  "commodity": "菜粕",
+  "symbol": "RM",
+  "version": "1.3.0",
+  "entries": {
+    "CZCE菜粕期货价格": {
+      "historicalMin": 1800,
+      "historicalMax": 3800,
+      "recentMin": 2200,
+      "recentMax": 3500,
+      "reversalSignalPatterns": [
+        "豆粕联动",
+        "水产旺季启动",
+        "加拿大进口变化",
+        "菜籽产量"
+      ]
+    }
+  }
 }

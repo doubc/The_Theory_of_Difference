@@ -1,4 +1,19 @@
 {
-  "commodity": "tin",
-  "entries": {}
+  "commodity": "沪锡",
+  "symbol": "SN",
+  "version": "1.3.0",
+  "entries": {
+    "SHFE锡期货价格": {
+      "historicalMin": 100000,
+      "historicalMax": 350000,
+      "recentMin": 180000,
+      "recentMax": 320000,
+      "reversalSignalPatterns": [
+        "佤邦停矿/复产",
+        "半导体景气变化",
+        "缅甸进口量",
+        "库存变化"
+      ]
+    }
+  }
 }

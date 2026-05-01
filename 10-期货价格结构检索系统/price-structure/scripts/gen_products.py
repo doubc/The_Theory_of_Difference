@@ -1,0 +1,770 @@
+#!/usr/bin/env python3
+"""
+商品期货价格结构知识图谱 - 全品种配置生成器
+品质向铜(CU)对齐
+"""
+import json, os
+
+VERSION = "1.3.0"
+BASE = "/root/.openclaw/workspace/The_Theory_of_Difference/10-期货价格结构检索系统/price-structure/config/products"
+
+def w(name, data):
+    p = os.path.join(BASE, name)
+    os.makedirs(p, exist_ok=True)
+    for fname, key in [("entities.json","entities"),("chains.json","chains"),
+                        ("relations.json","relations"),("polarity.json","polarity"),
+                        ("pricing_models.json","models")]:
+        obj = {"commodity":data["c"],"symbol":data["s"],"version":VERSION}
+        if fname == "polarity.json":
+            obj["entries"] = data.get(key,{})
+        else:
+            obj[key] = data.get(key,[])
+        with open(os.path.join(p,fname),"w",encoding="utf-8") as f:
+            json.dump(obj,f,ensure_ascii=False,indent=2)
+    ne=len(data.get("entities",[])); nc=len(data.get("chains",[]))
+    nr=len(data.get("relations",[])); np_=len(data.get("polarity",{}))
+    nm=len(data.get("models",[]))
+    print(f"  {name}: {ne}e {nc}c {nr}r {np_}p {nm}m")
+
+# ==================== 大豆 ====================
+soybean = {
+    "c":"大豆","s":"A",
+    "entities":[
+        {"id":"GEO_200","name":"东北大豆产区","type":"资源节点","groundBase":"natural","importance":10,
+         "description":"中国大豆传统产区，黑龙江占全国产量约40%，但国产大豆以食用为主，与进口转基因大豆用途分化",
+         "trackingVariables":["种植面积","产量","蛋白含量","食用消费"]},
+        {"id":"GEO_201","name":"巴西大豆产区","type":"资源节点","groundBase":"natural","importance":10,
+         "description":"全球最大大豆出口国，Mato Grosso/Goias为核心产区，出口竞争力强（汇率+土地成本）",
+         "controlledBy":["本地大农场","中粮巴西","嘉吉巴西"],
+         "trackingVariables":["种植进度","产量预估","出口装船","汇率"]},
+        {"id":"GEO_202","name":"美国大豆产区","type":"资源节点","groundBase":"natural","importance":9,
+         "description":"全球第二大大豆出口国，Iowa/Illinois为核心产区，USDA数据是全球定价锚",
+         "trackingVariables":["种植意向","优良率","出口销售","单产预估"]},
+        {"id":"GEO_203","name":"阿根廷大豆产区","type":"资源节点","groundBase":"natural","importance":8,
+         "description":"全球第三大大豆出口国，豆粕/豆油出口量大，汇率和出口税政策是核心变量",
+         "trackingVariables":["产量","出口税政策","汇率","豆粕出口"]},
+        {"id":"GEO_204","name":"中国沿海压榨产业集群","type":"消费节点","groundBase":"natural","importance":9,
+         "description":"山东/江苏/广东沿海大豆压榨产能集中，进口大豆到港后压榨生产豆粕和豆油",
+         "controlledBy":["中粮","益海嘉里","九三集团"],
+         "trackingVariables":["压榨开工率","压榨利润","豆粕库存","豆油库存"]},
+        {"id":"POW_130","name":"大连商品交易所DCE","type":"交易所","groundBase":"rule","importance":10,
+         "description":"中国大豆期货定价中心，A合约（国产豆）和M合约（豆粕）是行业基准",
+         "jurisdiction":"中国","trackingVariables":["A期价","M期价","持仓量","成交量"]},
+        {"id":"POW_131","name":"美国农业部USDA","type":"国际数据机构","groundBase":"order","importance":10,
+         "description":"全球大豆供需数据权威，月度WASDE报告引领市场定价",
+         "trackingVariables":["全球产量","期末库存","库消比","出口销售"]},
+        {"id":"POW_132","name":"巴西国家供应公司CONAB","type":"国际数据机构","groundBase":"order","importance":7,
+         "description":"巴西官方农业数据机构，产量预估与USDA形成对比参考",
+         "trackingVariables":["产量预估","种植面积","出口预测"]},
+        {"id":"VAR_150","name":"DCE豆一期货价格","type":"大宗商品变量","groundBase":"marginal","importance":9,
+         "currentValue":"约4800元/吨","historicalRange":{"min":3200,"max":6500},"recentRange":{"min":4000,"max":6000},
+         "trackingFrequency":"实时"},
+        {"id":"VAR_151","name":"CBOT大豆期货价格","type":"大宗商品变量","groundBase":"marginal","importance":10,
+         "currentValue":"约1100美分/蒲","historicalRange":{"min":800,"max":1750},"recentRange":{"min":950,"max":1500},
+         "trackingFrequency":"实时"},
+        {"id":"VAR_152","name":"大豆进口到港完税价","type":"进口成本变量","groundBase":"marginal","importance":9,
+         "trackingFrequency":"每日","trackingVariables":["CBOT价格","海运费","汇率","关税"]},
+        {"id":"VAR_153","name":"大豆压榨利润","type":"产业链利润变量","groundBase":"marginal","importance":9,
+         "trackingFrequency":"每日","trackingVariables":["豆粕价格","豆油价格","大豆成本","压榨利润"]},
+        {"id":"VAR_154","name":"全球大豆库消比","type":"供需变量","groundBase":"marginal","importance":9,
+         "trackingFrequency":"月度","trackingVariables":["全球期末库存","全球消费量","库消比"]},
+        {"id":"CUL_130","name":"中美贸易摩擦影响叙事","type":"市场共识","groundBase":"culture","importance":8,
+         "description":"中美贸易关系直接影响中国大豆进口来源和CBOT/DCE价差结构",
+         "trackingVariables":["关税政策","进口来源","中美关系"]},
+        {"id":"CUL_131","name":"拉尼娜/厄尔尼诺天气叙事","type":"市场共识","groundBase":"culture","importance":8,
+         "description":"南美大豆生长期（10-2月）天气是年度最大交易主题，拉尼娜干旱/厄尔尼诺洪涝影响产量",
+         "trackingVariables":["SOI指数","降水预报","土壤墒情"]},
+        {"id":"RUL_130","name":"中国进口大豆增值税政策","type":"贸易规则","groundBase":"rule","importance":7,
+         "description":"进口大豆增值税9%，转基因大豆审批管理",
+         "trackingVariables":["增值税调整","转基因审批","进口许可"]}
+    ],
+    "chains":[
+        {"id":"C_150","name":"USDA报告冲击大豆链","domain":"农产品","groundBase":"marginal",
+         "triggerEvent":"USDA月度WASDE报告大幅调整全球大豆供需",
+         "steps":[
+             {"seq":1,"from":"USDA数据超预期","to":"CBOT大豆跳空","confidence":"高","lag":"即时","mechanism":"全球供需平衡表重新定价"},
+             {"seq":2,"from":"CBOT跳空","to":"DCE豆一/豆粕联动","confidence":"高","lag":"次日开盘","mechanism":"进口成本传导"},
+             {"seq":3,"from":"DCE联动","to":"压榨利润变化","confidence":"高","lag":"即时","mechanism":"原料成本变化影响压榨利润"},
+             {"seq":4,"from":"压榨利润变化","to":"开工率调整","confidence":"中","lag":"1-2周","mechanism":"利润驱动开工率"},
+             {"seq":5,"from":"开工率调整","to":"豆粕/豆油供应变化","confidence":"中","lag":"即时","mechanism":"开工影响成品供应"}
+         ],"reversalNode":"数据修正","reversalCondition":"后续报告修正或市场消化",
+         "polarityTensionThreshold":0.7,
+         "historicalCases":[{"year":"2022","description":"USDA大幅下调美豆单产，CBOT突破1500美分"}],
+         "reversibility":0.7,"tail_probability":0.15,"minority_protected":False},
+        {"id":"C_151","name":"南美天气炒作大豆链","domain":"农产品","groundBase":"natural",
+         "triggerEvent":"南美大豆生长期遭遇严重干旱或洪涝",
+         "steps":[
+             {"seq":1,"from":"南美极端天气","to":"大豆生长受损","confidence":"高","lag":"即时","mechanism":"干旱/洪涝影响开花结荚"},
+             {"seq":2,"from":"生长受损","to":"产量预估下调","confidence":"高","lag":"1-2周","mechanism":"CONAB/USDA下调单产"},
+             {"seq":3,"from":"产量下调","to":"CBOT价格飙升","confidence":"高","lag":"即时","mechanism":"供给收紧推升价格"},
+             {"seq":4,"from":"CBOT飙升","to":"国内进口成本上升","confidence":"高","lag":"即时","mechanism":"成本传导"},
+             {"seq":5,"from":"进口成本上升","to":"国内豆粕/豆油涨价","confidence":"中","lag":"1-2周","mechanism":"成本推动下游涨价"}
+         ],"reversalNode":"降雨改善","reversalCondition":"关键生长期降雨恢复",
+         "polarityTensionThreshold":0.75,
+         "historicalCases":[{"year":"2012","description":"美国大旱+南美减产，CBOT大豆从1200涨至1750美分"},
+                            {"year":"2024","description":"巴西南部干旱，CONAB大幅下调产量"}],
+         "reversibility":0.5,"tail_probability":0.2,"minority_protected":False},
+        {"id":"C_152","name":"大豆压榨利润驱动链","domain":"农产品","groundBase":"marginal",
+         "triggerEvent":"大豆压榨利润持续丰厚或亏损",
+         "steps":[
+             {"seq":1,"from":"压榨利润丰厚","to":"油厂积极采购大豆","confidence":"高","lag":"即时","mechanism":"利润驱动原料采购"},
+             {"seq":2,"from":"采购增加","to":"大豆到港量增加","confidence":"高","lag":"1-2个月","mechanism":"船期采购"},
+             {"seq":3,"from":"到港增加","to":"压榨开工率上升","confidence":"高","lag":"即时","mechanism":"原料充裕驱动开工"},
+             {"seq":4,"from":"开工率上升","to":"豆粕/豆油供应增加","confidence":"高","lag":"即时","mechanism":"成品产量增加"},
+             {"seq":5,"from":"供应增加","to":"豆粕/豆油价格承压","confidence":"中","lag":"2-4周","mechanism":"供应压制价格"}
+         ],"reversalNode":"压榨利润转负","reversalCondition":"大豆成本上升或成品价格下跌导致亏损",
+         "polarityTensionThreshold":0.6,
+         "historicalCases":[{"year":"2023","description":"压榨利润丰厚驱动大豆进口创纪录"}],
+         "reversibility":0.6,"tail_probability":0.15,"minority_protected":False}
+    ],
+    "relations":[
+        {"id":"R_400","type":"国际贸易传导","from":"CBOT大豆价格","to":"DCE豆一价格","strength":0.85,"direction":"正向","groundBase":"marginal","lag":"即时",
+         "description":"CBOT通过进口成本渠道传导至国内，是DCE价格的核心锚","reversalPoint":"国产食用大豆与进口转基因大豆用途分化可脱钩"},
+        {"id":"R_401","type":"产业链传导","from":"大豆压榨利润","to":"压榨开工率","strength":0.85,"direction":"正向","groundBase":"marginal","lag":"即时",
+         "description":"压榨利润是开工率的核心驱动，利润丰厚时积极开工","reversalPoint":"豆粕胀库时即使利润好也被迫降负"},
+        {"id":"R_402","type":"替代品传导","from":"豆粕-菜粕价差","to":"豆粕需求","strength":0.7,"direction":"反向","groundBase":"marginal","lag":"即时",
+         "description":"豆粕与菜粕可替代，价差扩大时饲料企业用菜粕替代豆粕","reversalPoint":"蛋白含量差异限制完全替代"},
+        {"id":"R_403","type":"天气传导","from":"南美/美国天气","to":"大豆单产预期","strength":0.8,"direction":"直接","groundBase":"natural","lag":"即时",
+         "description":"大豆关键生长期天气直接影响单产","reversalPoint":"生长期结束后天气影响消失"},
+        {"id":"R_404","type":"汇率传导","from":"人民币汇率","to":"大豆进口成本","strength":0.7,"direction":"正向","groundBase":"order","lag":"即时",
+         "description":"人民币贬值推高进口成本","reversalPoint":"国内供需独立时可短暂脱钩"},
+        {"id":"R_405","type":"库存传导","from":"全球大豆库消比","to":"CBOT大豆价格","strength":0.85,"direction":"反向","groundBase":"marginal","lag":"季度",
+         "description":"库消比是最核心供需指标，低于20%支撑高价","reversalPoint":"库消比趋势性变化改变价格中枢"},
+        {"id":"R_406","type":"政策传导","from":"中美贸易政策","to":"大豆进口来源","strength":0.75,"direction":"复杂","groundBase":"order","lag":"即时",
+         "description":"中美贸易摩擦影响进口来源和关税成本","reversalPoint":"贸易协议达成后恢复正常"},
+        {"id":"R_407","type":"产业链传导","from":"生猪存栏","to":"豆粕饲料需求","strength":0.75,"direction":"正向","groundBase":"marginal","lag":"季度",
+         "description":"生猪存栏是豆粕需求核心驱动力","reversalPoint":"低蛋白日粮推广降低豆粕需求"},
+        {"id":"R_408","type":"季节性规律","from":"大豆进口季节","to":"价格波动","strength":0.65,"direction":"季节性","groundBase":"natural","lag":"季节性",
+         "description":"每年4-6月和10-12月是大豆进口旺季","reversalPoint":"丰产年份季节性减弱"}
+    ],
+    "polarity":{
+        "DCE豆一期货价格":{"historicalMin":3200,"historicalMax":6500,"recentMin":4000,"recentMax":6000,
+                           "reversalSignalPatterns":["USDA报告意外","南美天气异常","中美贸易变化","压榨利润变化"]},
+        "CBOT大豆价格":{"historicalMin":800,"historicalMax":1750,"recentMin":950,"recentMax":1500,
+                        "reversalSignalPatterns":["美国/南美天气","种植面积变化","出口需求","库消比变化"]},
+        "大豆压榨利润":{"historicalMin":-200,"historicalMax":500,"recentMin":-100,"recentMax":400,
+                        "reversalSignalPatterns":["大豆到港量","豆粕需求","豆油需求","原料成本变化"]}
+    },
+    "models":[
+        {"id":"M_050","name":"大豆的全球供需平衡表定价模型","domain":"基本面定价","groundBase":"marginal",
+         "formula":"Δln(Soy) = α + β1*Δln(GlobalStockUse) + β2*Δln(CBOT) + β3*Δln(CrushMargin) + ε",
+         "variables":[
+             {"name":"全球大豆库消比","id":"stock_use","direction":"反向","weight":0.4},
+             {"name":"CBOT大豆价格","id":"CBOT","direction":"正向","weight":0.3},
+             {"name":"压榨利润","id":"crush_margin","direction":"正向","weight":0.2},
+             {"name":"残差/天气冲击","id":"residual","direction":"不定","weight":0.1}
+         ],
+         "description":"大豆定价核心是全球供需平衡表。库消比低于20%时价格弹性急剧放大。CBOT是国际贸易基准。压榨利润反映下游需求强度。",
+         "dominantPhase":"南美天气炒作期和USDA报告发布期模型最有效",
+         "limitation":"忽略贸易政策和汇率的结构性影响",
+         "trackingVariables":["全球库消比","CBOT价格","压榨利润","天气预报"],
+         "linkToEntities":["VAR_151","VAR_153","VAR_154"],
+         "linkToRelations":["R_400","R_401","R_405"],
+         "linkToConductionChains":["C_150","C_151"]},
+        {"id":"M_051","name":"大豆的压榨利润定价模型","domain":"产业链定价","groundBase":"marginal",
+         "formula":"DCE_Soy = f(CBOT, Freight, FX, Tariff, CrushDemand)",
+         "variables":[
+             {"name":"CBOT大豆价格","id":"CBOT","direction":"正向","weight":0.45},
+             {"name":"海运费","id":"freight","direction":"正向","weight":0.15},
+             {"name":"人民币汇率","id":"FX","direction":"正向","weight":0.15},
+             {"name":"压榨需求强度","id":"crush_demand","direction":"正向","weight":0.25}
+         ],
+         "description":"DCE大豆价格由进口成本（CBOT+运费+汇率+关税）和压榨需求共同决定。压榨利润是连接国际和国内价格的核心变量。",
+         "dominantPhase":"进口窗口打开时该模型最有效",
+         "limitation":"国产食用大豆定价逻辑不同",
+         "trackingVariables":["进口完税价","压榨利润","到港量"],
+         "linkToEntities":["VAR_150","VAR_152","VAR_153"],
+         "linkToRelations":["R_400","R_401","R_404"],
+         "linkToPolarityArchive":["DCE豆一期货价格"]}
+    ]
+}
+
+# ==================== 豆油 ====================
+soybean_oil = {
+    "c":"豆油","s":"Y",
+    "entities":[
+        {"id":"GEO_210","name":"中国沿海压榨厂","type":"消费节点","groundBase":"natural","importance":9,
+         "description":"中国豆油主要由沿海大豆压榨厂副产，山东/江苏/广东为核心产区","trackingVariables":["压榨开工率","豆油库存","压榨利润"]},
+        {"id":"POW_140","name":"大连商品交易所DCE","type":"交易所","groundBase":"rule","importance":10,
+         "description":"中国豆油期货定价中心","jurisdiction":"中国","trackingVariables":["Y期价","持仓量"]},
+        {"id":"POW_141","name":"美国农业部USDA","type":"国际数据机构","groundBase":"order","importance":9,
+         "description":"全球油脂油料供需数据权威","trackingVariables":["全球豆油产量","消费量","库存"]},
+        {"id":"VAR_160","name":"DCE豆油期货价格","type":"大宗商品变量","groundBase":"marginal","importance":10,
+         "currentValue":"约7800元/吨","historicalRange":{"min":5000,"max":12000},"recentRange":{"min":6500,"max":10000},"trackingFrequency":"实时"},
+        {"id":"VAR_161","name":"豆油商业库存","type":"库存变量","groundBase":"marginal","importance":8,
+         "trackingFrequency":"每周","trackingVariables":["沿海豆油库存","内陆库存"]},
+        {"id":"VAR_162","name":"豆棕价差","type":"比价变量","groundBase":"marginal","importance":8,
+         "trackingFrequency":"每日","trackingVariables":["豆油价格","棕榈油价","价差"]},
+        {"id":"CUL_140","name":"油脂板块联动叙事","type":"市场共识","groundBase":"culture","importance":7,
+         "description":"豆油/棕榈油/菜油三大油脂高度联动，形成油脂板块交易逻辑","trackingVariables":["三大油脂价差","油脂板块整体走势"]},
+        {"id":"RUL_140","name":"DCE豆油期货交割标准","type":"交易所规则","groundBase":"rule","importance":7,
+         "description":"一级大豆原油","trackingVariables":["交割标准","仓单量"]}
+    ],
+    "chains":[
+        {"id":"C_160","name":"大豆压榨副产豆油链","domain":"油脂油料","groundBase":"marginal",
+         "triggerEvent":"大豆到港量变化影响压榨开工率",
+         "steps":[
+             {"seq":1,"from":"大豆到港量变化","to":"压榨开工率变化","confidence":"高","lag":"即时","mechanism":"原料供应驱动开工"},
+             {"seq":2,"from":"开工率变化","to":"豆油产量变化","confidence":"高","lag":"即时","mechanism":"压榨副产豆油"},
+             {"seq":3,"from":"产量变化","to":"豆油库存变化","confidence":"高","lag":"2-4周","mechanism":"供需影响库存"},
+             {"seq":4,"from":"库存变化","to":"豆油价格变化","confidence":"中","lag":"即时","mechanism":"库存影响价格"}
+         ],"reversalNode":"开工率调整","reversalCondition":"压榨利润变化驱动开工率调整",
+         "polarityTensionThreshold":0.6,"historicalCases":[],"reversibility":0.7,"tail_probability":0.15,"minority_protected":False},
+        {"id":"C_161","name":"油脂板块联动链","domain":"油脂油料","groundBase":"marginal",
+         "triggerEvent":"棕榈油或菜油价格大幅波动",
+         "steps":[
+             {"seq":1,"from":"棕榈油/菜油价格变化","to":"油脂板块情绪联动","confidence":"高","lag":"即时","mechanism":"三大油脂替代关系"},
+             {"seq":2,"from":"情绪联动","to":"豆油期货跟随","confidence":"高","lag":"即时","mechanism":"板块联动交易"},
+             {"seq":3,"from":"豆油跟随","to":"豆棕价差变化","confidence":"中","lag":"即时","mechanism":"比价关系调整"}
+         ],"reversalNode":"基本面分化","reversalCondition":"各品种基本面出现明显分化",
+         "polarityTensionThreshold":0.55,"historicalCases":[],"reversibility":0.7,"tail_probability":0.15,"minority_protected":False}
+    ],
+    "relations":[
+        {"id":"R_420","type":"产业链传导","from":"大豆压榨开工率","to":"豆油供应","strength":0.85,"direction":"正向","groundBase":"marginal","lag":"即时",
+         "description":"豆油是大豆压榨副产品，开工率直接决定产量","reversalPoint":"豆油胀库时可能被迫降负"},
+        {"id":"R_421","type":"跨品种联动","from":"棕榈油价格","to":"豆油价格","strength":0.8,"direction":"正向","groundBase":"marginal","lag":"即时",
+         "description":"豆油与棕榈油替代关系，价格高度相关","reversalPoint":"价差极端时替代效应减弱"},
+        {"id":"R_422","type":"库存传导","from":"豆油商业库存","to":"豆油价格","strength":0.75,"direction":"反向","groundBase":"marginal","lag":"即时",
+         "description":"库存是供需平衡直接指标","reversalPoint":"库存低于60万吨时价格弹性增大"},
+        {"id":"R_423","type":"替代品传导","from":"豆棕价差","to":"豆油需求","strength":0.65,"direction":"反向","groundBase":"marginal","lag":"即时",
+         "description":"豆棕价差扩大时棕榈油替代豆油","reversalPoint":"冬季低温棕榈油凝固无法替代"},
+        {"id":"R_424","type":"季节性规律","from":"消费旺季","to":"豆油价格","strength":0.6,"direction":"正向","groundBase":"natural","lag":"季节性",
+         "description":"中秋/国庆/春节前是油脂消费旺季","reversalPoint":"旺季不旺时季节性落空"}
+    ],
+    "polarity":{
+        "DCE豆油期货价格":{"historicalMin":5000,"historicalMax":12000,"recentMin":6500,"recentMax":10000,
+                           "reversalSignalPatterns":["大豆到港量变化","油脂板块联动","消费旺季启动","库存变化"]}
+    },
+    "models":[
+        {"id":"M_055","name":"豆油的油脂板块定价模型","domain":"跨品种定价","groundBase":"marginal",
+         "formula":"YO_Score = w1*SoyFactor + w2*PalmFactor + w3*InventoryFactor + w4*SeasonalFactor",
+         "variables":[
+             {"name":"大豆成本因子","id":"soy","direction":"正向","weight":0.35},
+             {"name":"棕榈油联动因子","id":"palm","direction":"正向","weight":0.3},
+             {"name":"库存因子","id":"inventory","direction":"反向","weight":0.2},
+             {"name":"季节性因子","id":"seasonal","direction":"正向","weight":0.15}
+         ],
+         "description":"豆油定价以大豆成本为锚，棕榈油为联动参考，库存为供需指标。消费旺季推升价格。",
+         "dominantPhase":"油脂板块整体趋势明确时模型最有效",
+         "limitation":"忽略生物柴油政策对豆油需求的影响",
+         "trackingVariables":["大豆成本","棕榈油价","豆油库存","消费季节"],
+         "linkToEntities":["VAR_160","VAR_161","VAR_162"],
+         "linkToRelations":["R_420","R_421","R_422"],
+         "linkToConductionChains":["C_160","C_161"]}
+    ]
+}
+
+# ==================== 豆粕 ====================
+soybean_meal = {
+    "c":"豆粕","s":"M",
+    "entities":[
+        {"id":"GEO_220","name":"中国沿海压榨厂","type":"消费节点","groundBase":"natural","importance":9,
+         "description":"豆粕是大豆压榨主产品，沿海压榨厂集中产区","trackingVariables":["压榨开工率","豆粕库存","豆粕成交量"]},
+        {"id":"POW_150","name":"大连商品交易所DCE","type":"交易所","groundBase":"rule","importance":10,
+         "description":"中国豆粕期货定价中心，M合约是国内最活跃农产品期货之一",
+         "jurisdiction":"中国","trackingVariables":["M期价","持仓量","成交量"]},
+        {"id":"VAR_170","name":"DCE豆粕期货价格","type":"大宗商品变量","groundBase":"marginal","importance":10,
+         "currentValue":"约3200元/吨","historicalRange":{"min":2200,"max":5000},"recentRange":{"min":2800,"max":4500},"trackingFrequency":"实时"},
+        {"id":"VAR_171","name":"豆粕现货价格","type":"现货变量","groundBase":"marginal","importance":9,
+         "trackingFrequency":"每日","trackingVariables":["沿海豆粕价","内陆豆粕价","期现基差"]},
+        {"id":"VAR_172","name":"豆粕库存","type":"库存变量","groundBase":"marginal","importance":8,
+         "trackingFrequency":"每周","trackingVariables":["沿海豆粕库存","油厂库存","饲料厂库存"]},
+        {"id":"VAR_173","name":"生猪存栏量","type":"需求变量","groundBase":"marginal","importance":9,
+         "trackingFrequency":"月度","trackingVariables":["能繁母猪存栏","生猪存栏","猪粮比"]},
+        {"id":"CUL_150","name":"豆粕需求刚性叙事","type":"市场共识","groundBase":"culture","importance":7,
+         "description":"豆粕是蛋白饲料核心原料，需求相对刚性，价格弹性主要来自供给端","trackingVariables":["饲料配方比例","低蛋白日粮推广"]},
+        {"id":"RUL_150","name":"DCE豆粕期货交割标准","type":"交易所规则","groundBase":"rule","importance":7,
+         "description":"豆粕期货交割品级标准","trackingVariables":["交割标准","仓单量"]}
+    ],
+    "chains":[
+        {"id":"C_170","name":"生猪周期驱动豆粕需求链","domain":"油脂油料","groundBase":"marginal",
+         "triggerEvent":"生猪产能扩张/去化周期",
+         "steps":[
+             {"seq":1,"from":"猪价上涨养殖利润好","to":"养殖户扩产","confidence":"高","lag":"1-3个月","mechanism":"利润驱动产能扩张"},
+             {"seq":2,"from":"扩产","to":"饲料需求增加","confidence":"高","lag":"即时","mechanism":"存栏增加饲料消耗"},
+             {"seq":3,"from":"饲料需求增加","to":"豆粕采购增加","confidence":"高","lag":"即时","mechanism":"豆粕占饲料约15-20%"},
+             {"seq":4,"from":"采购增加","to":"豆粕库存去化","confidence":"高","lag":"2-4周","mechanism":"需求拉动去库"},
+             {"seq":5,"from":"去库","to":"豆粕价格上涨","confidence":"高","lag":"即时","mechanism":"供需收紧推升价格"}
+         ],"reversalNode":"猪周期见顶","reversalCondition":"猪价跌破成本线去产能",
+         "polarityTensionThreshold":0.7,
+         "historicalCases":[{"year":"2019-2020","description":"非洲猪瘟后产能恢复，豆粕需求大增"}],
+         "reversibility":0.6,"tail_probability":0.2,"minority_protected":False},
+        {"id":"C_171","name":"大豆供应冲击豆粕链","domain":"油脂油料","groundBase":"marginal",
+         "triggerEvent":"大豆供应紧张（南美减产/中美贸易摩擦）",
+         "steps":[
+             {"seq":1,"from":"大豆供应减少","to":"大豆价格上涨","confidence":"高","lag":"即时","mechanism":"供给收紧推升原料价格"},
+             {"seq":2,"from":"大豆涨价","to":"压榨利润压缩","confidence":"高","lag":"即时","mechanism":"原料成本上升"},
+             {"seq":3,"from":"利润压缩","to":"压榨开工率下降","confidence":"中","lag":"1-2周","mechanism":"亏损降负"},
+             {"seq":4,"from":"开工下降","to":"豆粕供应减少","confidence":"高","lag":"即时","mechanism":"产量下降"},
+             {"seq":5,"from":"供应减少","to":"豆粕价格上涨","confidence":"高","lag":"即时","mechanism":"供给推升价格"}
+         ],"reversalNode":"大豆供应恢复","reversalCondition":"南美丰产或贸易恢复",
+         "polarityTensionThreshold":0.7,"historicalCases":[],"reversibility":0.6,"tail_probability":0.15,"minority_protected":False}
+    ],
+    "relations":[
+        {"id":"R_440","type":"产业链传导","from":"大豆压榨开工率","to":"豆粕供应","strength":0.85,"direction":"正向","groundBase":"marginal","lag":"即时",
+         "description":"豆粕是压榨主产品，开工率直接决定产量","reversalPoint":"豆粕胀库时被迫降负"},
+        {"id":"R_441","type":"需求传导","from":"生猪存栏量","to":"豆粕需求","strength":0.85,"direction":"正向","groundBase":"marginal","lag":"即时",
+         "description":"生猪是豆粕最大下游，存栏直接决定需求","reversalPoint":"低蛋白日粮替代"},
+        {"id":"R_442","type":"替代品传导","from":"豆粕-菜粕价差","to":"豆粕需求","strength":0.7,"direction":"反向","groundBase":"marginal","lag":"即时",
+         "description":"价差扩大时饲料企业用菜粕替代豆粕","reversalPoint":"蛋白含量差异限制替代"},
+        {"id":"R_443","type":"原料传导","from":"CBOT大豆价格","to":"豆粕成本","strength":0.85,"direction":"正向","groundBase":"marginal","lag":"即时",
+         "description":"大豆是豆粕原料，成本传导","reversalPoint":"压榨利润变化可缓冲传导"},
+        {"id":"R_444","type":"库存传导","from":"豆粕库存","to":"豆粕价格","strength":0.75,"direction":"反向","groundBase":"marginal","lag":"即时",
+         "description":"库存是供需平衡直接指标","reversalPoint":"库存低于30万吨时价格弹性增大"},
+        {"id":"R_445","type":"季节性规律","from":"饲料消费旺季","to":"豆粕需求","strength":0.65,"direction":"正向","groundBase":"natural","lag":"季节性",
+         "description":"春季补栏和秋季育肥是饲料消费旺季","reversalPoint":"养殖亏损时旺季不旺"}
+    ],
+    "polarity":{
+        "DCE豆粕期货价格":{"historicalMin":2200,"historicalMax":5000,"recentMin":2800,"recentMax":4500,
+                           "reversalSignalPatterns":["大豆供应变化","生猪周期拐点","压榨利润变化","USDA报告"]},
+        "豆粕库存":{"historicalMin":20,"historicalMax":120,"recentMin":30,"recentMax":90,
+                    "reversalSignalPatterns":["压榨开工变化","饲料需求变化","大豆到港量"]}
+    },
+    "models":[
+        {"id":"M_060","name":"豆粕的成本-需求定价模型","domain":"产业链定价","groundBase":"marginal",
+         "formula":"SM_Score = w1*SoyCostFactor + w2*FeedDemandFactor + w3*InventoryFactor + w4*SubstituteFactor",
+         "variables":[
+             {"name":"大豆成本因子","id":"soy_cost","direction":"正向","weight":0.4},
+             {"name":"饲料需求因子（生猪存栏）","id":"feed_demand","direction":"正向","weight":0.3},
+             {"name":"库存因子","id":"inventory","direction":"反向","weight":0.2},
+             {"name":"替代品因子（菜粕）","id":"substitute","direction":"反向","weight":0.1}
+         ],
+         "description":"豆粕定价以大豆成本为锚，生猪存栏为需求驱动。需求刚性使价格弹性主要来自供给端。",
+         "dominantPhase":"生猪扩张期+大豆减产时价格弹性最大",
+         "limitation":"忽略低蛋白日粮推广对需求的长期影响",
+         "trackingVariables":["大豆成本","生猪存栏","豆粕库存","豆菜粕价差"],
+         "linkToEntities":["VAR_170","VAR_172","VAR_173"],
+         "linkToRelations":["R_440","R_441","R_443"],
+         "linkToConductionChains":["C_170","C_171"]}
+    ]
+}
+
+# ==================== 淀粉 ====================
+starch = {
+    "c":"淀粉","s":"CS",
+    "entities":[
+        {"id":"GEO_230","name":"山东淀粉加工集群","type":"消费节点","groundBase":"natural","importance":9,
+         "description":"中国玉米淀粉最大产区，山东占全国产量约60%","trackingVariables":["开工率","淀粉库存","加工利润"]},
+        {"id":"POW_160","name":"大连商品交易所DCE","type":"交易所","groundBase":"rule","importance":10,
+         "description":"中国淀粉期货定价中心","jurisdiction":"中国","trackingVariables":["CS期价","持仓量"]},
+        {"id":"VAR_180","name":"DCE淀粉期货价格","type":"大宗商品变量","groundBase":"marginal","importance":10,
+         "currentValue":"约2800元/吨","historicalRange":{"min":2000,"max":3500},"recentRange":{"min":2500,"max":3300},"trackingFrequency":"实时"},
+        {"id":"VAR_181","name":"淀粉-玉米价差","type":"产业链价差变量","groundBase":"marginal","importance":8,
+         "trackingFrequency":"每日","trackingVariables":["淀粉价格","玉米价格","加工利润"]},
+        {"id":"VAR_182","name":"淀粉开工率","type":"供给变量","groundBase":"marginal","importance":8,
+         "trackingFrequency":"每周","trackingVariables":["深加工企业开工率","淀粉产量"]},
+        {"id":"CUL_160","name":"淀粉跟随玉米叙事","type":"市场共识","groundBase":"culture","importance":7,
+         "description":"淀粉是玉米深加工产品，成本端高度跟随玉米，淀粉-玉米价差反映加工利润","trackingVariables":["玉米价格","加工利润","副产品价格"]}
+    ],
+    "chains":[
+        {"id":"C_180","name":"玉米成本推升淀粉链","domain":"农产品","groundBase":"marginal",
+         "triggerEvent":"玉米价格大幅上涨",
+         "steps":[
+             {"seq":1,"from":"玉米价格上涨","to":"淀粉生产成本上升","confidence":"高","lag":"即时","mechanism":"玉米占淀粉成本约85%"},
+             {"seq":2,"from":"成本上升","to":"淀粉加工利润压缩","confidence":"高","lag":"即时","mechanism":"成本推升但下游接受度有限"},
+             {"seq":3,"from":"利润压缩","to":"开工率下降","confidence":"中","lag":"1-2周","mechanism":"亏损降负"},
+             {"seq":4,"from":"开工下降","to":"淀粉供应减少","confidence":"中","lag":"即时","mechanism":"产量下降"},
+             {"seq":5,"from":"供应减少","to":"淀粉价格受成本支撑","confidence":"中","lag":"即时","mechanism":"成本+供给双重支撑"}
+         ],"reversalNode":"玉米价格回落","reversalCondition":"玉米价格回落改善加工利润",
+         "polarityTensionThreshold":0.6,"historicalCases":[],"reversibility":0.7,"tail_probability":0.15,"minority_protected":False}
+    ],
+    "relations":[
+        {"id":"R_460","type":"成本传导","from":"玉米价格","to":"淀粉价格","strength":0.9,"direction":"正向","groundBase":"marginal","lag":"即时",
+         "description":"玉米占淀粉成本约85%，成本高度相关","reversalPoint":"副产品价格变化可缓冲"},
+        {"id":"R_461","type":"库存传导","from":"淀粉库存","to":"淀粉价格","strength":0.7,"direction":"反向","groundBase":"marginal","lag":"即时",
+         "description":"库存是供需平衡指标","reversalPoint":"库存极低时价格弹性增大"},
+        {"id":"R_462","type":"季节性规律","from":"淀粉消费旺季","to":"淀粉需求","strength":0.6,"direction":"正向","groundBase":"natural","lag":"季节性",
+         "description":"夏季冷饮和秋季食品加工是淀粉消费旺季","reversalPoint":"旺季不旺时季节性落空"}
+    ],
+    "polarity":{
+        "DCE淀粉期货价格":{"historicalMin":2000,"historicalMax":3500,"recentMin":2500,"recentMax":3300,
+                           "reversalSignalPatterns":["玉米价格变化","加工利润变化","消费旺季启动","库存变化"]}
+    },
+    "models":[
+        {"id":"M_065","name":"淀粉的成本定价模型","domain":"产业链定价","groundBase":"marginal",
+         "formula":"CS_Price = Corn_Cost + Processing_Margin + Byproduct_Credit",
+         "variables":[
+             {"name":"玉米成本","id":"corn_cost","direction":"正向","weight":0.85},
+             {"name":"加工利润","id":"margin","direction":"正向","weight":0.1},
+             {"name":"副产品收益","id":"byproduct","direction":"负向","weight":0.05}
+         ],
+         "description":"淀粉定价几乎完全由玉米成本决定。加工利润通常在100-300元/吨波动。副产品（蛋白粉/纤维）收益可部分抵消成本。",
+         "dominantPhase":"玉米价格趋势明确时模型最有效",
+         "limitation":"忽略下游需求独立波动",
+         "trackingVariables":["玉米成本","加工利润","副产品价格","开工率"],
+         "linkToEntities":["VAR_180","VAR_181"],
+         "linkToRelations":["R_460"],
+         "linkToConductionChains":["C_180"]}
+    ]
+}
+
+# ==================== 菜粕 ====================
+rapeseed_meal = {
+    "c":"菜粕","s":"RM",
+    "entities":[
+        {"id":"GEO_240","name":"长江流域油菜产区","type":"资源节点","groundBase":"natural","importance":8,
+         "description":"中国油菜主产区，湖北/安徽/江苏为核心，菜粕是油菜籽压榨副产品","trackingVariables":["种植面积","产量","进口量"]},
+        {"id":"GEO_241","name":"加拿大油菜产区","type":"资源节点","groundBase":"natural","importance":9,
+         "description":"全球最大油菜籽出口国，中国菜粕进口核心来源","trackingVariables":["产量","出口量","对华出口"]},
+        {"id":"POW_170","name":"郑州商品交易所CZCE","type":"交易所","groundBase":"rule","importance":10,
+         "description":"中国菜粕期货定价中心","jurisdiction":"中国","trackingVariables":["RM期价","持仓量"]},
+        {"id":"VAR_190","name":"CZCE菜粕期货价格","type":"大宗商品变量","groundBase":"marginal","importance":10,
+         "currentValue":"约2600元/吨","historicalRange":{"min":1800,"max":3800},"recentRange":{"min":2200,"max":3500},"trackingFrequency":"实时"},
+        {"id":"VAR_191","name":"豆粕-菜粕价差","type":"比价变量","groundBase":"marginal","importance":8,
+         "trackingFrequency":"每日","trackingVariables":["豆粕价","菜粕价","价差"]},
+        {"id":"CUL_170","name":"菜粕水产需求叙事","type":"市场共识","groundBase":"culture","importance":7,
+         "description":"菜粕主要用于水产饲料，夏季水产旺季是需求峰值","trackingVariables":["水产养殖量","菜粕添加比例"]}
+    ],
+    "chains":[
+        {"id":"C_190","name":"菜粕水产旺季需求链","domain":"油脂油料","groundBase":"natural",
+         "triggerEvent":"夏季水产养殖旺季到来",
+         "steps":[
+             {"seq":1,"from":"水产旺季到来","to":"水产饲料需求增加","confidence":"高","lag":"季节性","mechanism":"水产养殖季节性"},
+             {"seq":2,"from":"饲料需求增加","to":"菜粕采购增加","confidence":"高","lag":"即时","mechanism":"菜粕是水产料核心原料"},
+             {"seq":3,"from":"采购增加","to":"菜粕库存去化","confidence":"高","lag":"2-4周","mechanism":"需求拉动去库"},
+             {"seq":4,"from":"去库","to":"菜粕价格上涨","confidence":"中","lag":"即时","mechanism":"供需收紧"}
+         ],"reversalNode":"水产旺季结束","reversalCondition":"秋季水产需求回落",
+         "polarityTensionThreshold":0.6,"historicalCases":[],"reversibility":0.7,"tail_probability":0.15,"minority_protected":False}
+    ],
+    "relations":[
+        {"id":"R_480","type":"跨品种联动","from":"豆粕价格","to":"菜粕价格","strength":0.8,"direction":"正向","groundBase":"marginal","lag":"即时",
+         "description":"豆粕与菜粕替代关系，价格高度相关","reversalPoint":"价差极端时替代效应改变"},
+        {"id":"R_481","type":"季节性规律","from":"水产旺季","to":"菜粕需求","strength":0.7,"direction":"正向","groundBase":"natural","lag":"季节性",
+         "description":"夏季水产旺季是菜粕需求峰值","reversalPoint":"水产养殖萎缩时季节性减弱"},
+        {"id":"R_482","type":"进口传导","from":"加拿大油菜籽出口","to":"国内菜粕供应","strength":0.7,"direction":"正向","groundBase":"marginal","lag":"月度",
+         "description":"中国菜粕进口依赖加拿大","reversalPoint":"中加关系变化影响进口"}
+    ],
+    "polarity":{
+        "CZCE菜粕期货价格":{"historicalMin":1800,"historicalMax":3800,"recentMin":2200,"recentMax":3500,
+                            "reversalSignalPatterns":["豆粕联动","水产旺季启动","加拿大进口变化","菜籽产量"]}
+    },
+    "models":[
+        {"id":"M_070","name":"菜粕的替代品定价模型","domain":"跨品种定价","groundBase":"marginal",
+         "formula":"RM_Price = f(SM_Price, BeanRapeseed_Meal_Spread, Aquaculture_Demand)",
+         "variables":[
+             {"name":"豆粕价格","id":"SM_price","direction":"正向","weight":0.5},
+             {"name":"豆菜粕价差","id":"spread","direction":"反向","weight":0.25},
+             {"name":"水产需求强度","id":"aquaculture","direction":"正向","weight":0.25}
+         ],
+         "description":"菜粕定价以豆粕为锚，价差为替代参考，水产需求为边际驱动。",
+         "dominantPhase":"水产旺季+豆菜粕价差收窄时弹性最大",
+         "limitation":"忽略菜籽进口政策变化",
+         "trackingVariables":["豆粕价格","价差","水产旺季","库存"],
+         "linkToEntities":["VAR_190","VAR_191"],
+         "linkToRelations":["R_480","R_481"],
+         "linkToConductionChains":["C_190"]}
+    ]
+}
+
+# ==================== 菜油 ====================
+rapeseed_oil = {
+    "c":"菜油","s":"OI",
+    "entities":[
+        {"id":"GEO_250","name":"长江流域油菜产区","type":"资源节点","groundBase":"natural","importance":8,
+         "description":"中国油菜主产区，菜油是油菜籽压榨主产品","trackingVariables":["种植面积","产量"]},
+        {"id":"POW_180","name":"郑州商品交易所CZCE","type":"交易所","groundBase":"rule","importance":10,
+         "description":"中国菜油期货定价中心","jurisdiction":"中国","trackingVariables":["OI期价","持仓量"]},
+        {"id":"VAR_200","name":"CZCE菜油期货价格","type":"大宗商品变量","groundBase":"marginal","importance":10,
+         "currentValue":"约8200元/吨","historicalRange":{"min":5500,"max":14000},"recentRange":{"min":7000,"max":12000},"trackingFrequency":"实时"},
+        {"id":"VAR_201","name":"菜豆油价差","type":"比价变量","groundBase":"marginal","importance":7,
+         "trackingFrequency":"每日","trackingVariables":["菜油价","豆油价","价差"]},
+        {"id":"CUL_180","name":"菜油高端消费叙事","type":"市场共识","groundBase":"culture","importance":6,
+         "description":"菜油在中餐烹饪中被视为高端食用油，消费相对刚性","trackingVariables":["消费量","进口量"]}
+    ],
+    "chains":[
+        {"id":"C_200","name":"菜籽减产推升菜油价链","domain":"油脂油料","groundBase":"natural",
+         "triggerEvent":"长江流域油菜遭遇恶劣天气或种植面积下降",
+         "steps":[
+             {"seq":1,"from":"油菜减产","to":"菜籽供应减少","confidence":"高","lag":"季节性","mechanism":"天气/面积影响产量"},
+             {"seq":2,"from":"菜籽供应减少","to":"菜油产量下降","confidence":"高","lag":"即时","mechanism":"压榨原料不足"},
+             {"seq":3,"from":"产量下降","to":"菜油库存去化","confidence":"中","lag":"月度","mechanism":"供给收紧"},
+             {"seq":4,"from":"去库","to":"菜油价格上涨","confidence":"中","lag":"即时","mechanism":"供需推升价格"}
+         ],"reversalNode":"进口补充","reversalCondition":"进口菜籽/菜油补充供应",
+         "polarityTensionThreshold":0.6,"historicalCases":[],"reversibility":0.6,"tail_probability":0.15,"minority_protected":False}
+    ],
+    "relations":[
+        {"id":"R_500","type":"跨品种联动","from":"豆油价格","to":"菜油价格","strength":0.8,"direction":"正向","groundBase":"marginal","lag":"即时",
+         "description":"菜油与豆油替代关系，价格联动","reversalPoint":"价差极端时替代效应改变"},
+        {"id":"R_501","type":"进口传导","from":"加拿大菜籽出口","to":"国内菜油供应","strength":0.7,"direction":"正向","groundBase":"marginal","lag":"月度",
+         "description":"中国菜籽/菜油进口依赖加拿大","reversalPoint":"中加关系变化"},
+        {"id":"R_502","type":"季节性规律","from":"油菜收获季","to":"菜油价格","strength":0.6,"direction":"季节性","groundBase":"natural","lag":"季节性",
+         "description":"5-7月油菜收获季供应增加压制价格","reversalPoint":"减产年份季节性卖压减弱"}
+    ],
+    "polarity":{
+        "CZCE菜油期货价格":{"historicalMin":5500,"historicalMax":14000,"recentMin":7000,"recentMax":12000,
+                            "reversalSignalPatterns":["油菜产量变化","油脂板块联动","进口政策变化","消费旺季"]}
+    },
+    "models":[
+        {"id":"M_075","name":"菜油的油脂板块定价模型","domain":"跨品种定价","groundBase":"marginal",
+         "formula":"OI_Price = f(BeanOil_Price, RapeseedSupply, ImportPolicy)",
+         "variables":[
+             {"name":"豆油价格","id":"BO_price","direction":"正向","weight":0.45},
+             {"name":"菜籽供应","id":"rapeseed_supply","direction":"正向","weight":0.3},
+             {"name":"进口政策","id":"import_policy","direction":"复杂","weight":0.25}
+         ],
+         "description":"菜油定价以豆油为联动锚，菜籽供应为成本端，进口政策为结构性变量。",
+         "dominantPhase":"油脂板块趋势明确时模型最有效",
+         "limitation":"忽略菜油消费的区域差异",
+         "trackingVariables":["豆油价","菜籽供应","进口量","库存"],
+         "linkToEntities":["VAR_200"],
+         "linkToRelations":["R_500","R_501"],
+         "linkToConductionChains":["C_200"]}
+    ]
+}
+
+# ==================== 白糖 ====================
+sugar = {
+    "c":"白糖","s":"SR",
+    "entities":[
+        {"id":"GEO_260","name":"广西甘蔗产区","type":"资源节点","groundBase":"natural","importance":10,
+         "description":"中国白糖核心产区，广西占全国产量约60%，甘蔗收购价政策直接影响成本","trackingVariables":["种植面积","甘蔗产量","出糖率","收购价"]},
+        {"id":"GEO_261","name":"巴西中南部甘蔗产区","type":"资源节点","groundBase":"natural","importance":10,
+         "description":"全球最大产糖国，乙醇分流比例是核心变量","controlledBy":["Raizen","Copersucar","Bunge"],
+         "trackingVariables":["甘蔗产量","乙醇分流比","出口量","汇率"]},
+        {"id":"GEO_262","name":"印度甘蔗产区","type":"资源节点","groundBase":"natural","importance":9,
+         "description":"全球第二大产糖国，出口政策是核心变量","trackingVariables":["产量","出口政策","政府补贴"]},
+        {"id":"GEO_263","name":"泰国甘蔗产区","type":"资源节点","groundBase":"natural","importance":8,
+         "description":"全球第四大产糖国和第二大出口国","trackingVariables":["产量","出口量"]},
+        {"id":"POW_190","name":"郑州商品交易所CZCE","type":"交易所","groundBase":"rule","importance":10,
+         "description":"中国白糖期货定价中心","jurisdiction":"中国","trackingVariables":["SR期价","持仓量"]},
+        {"id":"POW_191","name":"ICE原糖期货","type":"交易所","groundBase":"rule","importance":10,
+         "description":"全球原糖定价中心，ICE原糖11号是国际贸易基准","trackingVariables":["ICE原糖价","基金持仓"]},
+        {"id":"VAR_210","name":"CZCE白糖期货价格","type":"大宗商品变量","groundBase":"marginal","importance":10,
+         "currentValue":"约6500元/吨","historicalRange":{"min":4000,"max":8000},"recentRange":{"min":5500,"max":7500},"trackingFrequency":"实时"},
+        {"id":"VAR_211","name":"ICE原糖价格","type":"大宗商品变量","groundBase":"marginal","importance":9,
+         "currentValue":"约20美分/磅","historicalRange":{"min":8,"max":35},"recentRange":{"min":15,"max":28},"trackingFrequency":"实时"},
+        {"id":"VAR_212","name":"巴西乙醇分流比","type":"产业变量","groundBase":"marginal","importance":8,
+         "trackingFrequency":"月度","trackingVariables":["乙醇价格","糖价","分流比"]},
+        {"id":"CUL_190","name":"巴西乙醇分流叙事","type":"市场共识","groundBase":"culture","importance":8,
+         "description":"巴西甘蔗可制糖或制乙醇，分流比是原糖供给的核心变量","trackingVariables":["乙醇价格","汽油价格","分流比"]},
+        {"id":"CUL_191","name":"厄尔尼诺影响印度产量叙事","type":"市场共识","groundBase":"culture","importance":7,
+         "description":"厄尔尼诺导致印度干旱减产，是全球糖价上涨的传统驱动","trackingVariables":["SOI指数","印度降水","产量预估"]},
+        {"id":"RUL_190","name":"中国白糖进口关税配额","type":"贸易规则","groundBase":"rule","importance":9,
+         "description":"白糖进口实行194.5万吨/年关税配额，配额内关税15%，配额外50%",
+         "trackingVariables":["配额使用","进口到港","走私量"]},
+        {"id":"RUL_191","name":"广西甘蔗收购价政策","type":"产业政策","groundBase":"order","importance":8,
+         "description":"广西实行甘蔗收购价与糖价挂钩联动机制","trackingVariables":["收购价","联动系数"]}
+    ],
+    "chains":[
+        {"id":"C_210","name":"巴西乙醇分流推升糖价链","domain":"农产品","groundBase":"marginal",
+         "triggerEvent":"巴西乙醇价格高于糖价，分流比上升",
+         "steps":[
+             {"seq":1,"from":"乙醇价格高于糖价","to":"甘蔗分流至乙醇","confidence":"高","lag":"即时","mechanism":"利润驱动分流"},
+             {"seq":2,"from":"分流比上升","to":"原糖产量下降","confidence":"高","lag":"季度","mechanism":"制糖原料减少"},
+             {"seq":3,"from":"原糖产量下降","to":"全球糖供应收紧","confidence":"中","lag":"季度","mechanism":"巴西是最大出口国"},
+             {"seq":4,"from":"供应收紧","to":"ICE原糖上涨","confidence":"中","lag":"即时","mechanism":"供需推升价格"},
+             {"seq":5,"from":"ICE上涨","to":"国内进口成本上升","confidence":"高","lag":"即时","mechanism":"成本传导"}
+         ],"reversalNode":"乙醇分流逆转","reversalCondition":"乙醇价格低于糖价",
+         "polarityTensionThreshold":0.7,"historicalCases":[{"year":"2021","description":"巴西干旱+高乙醇价格，ICE原糖从15涨至20美分"}],
+         "reversibility":0.6,"tail_probability":0.2,"minority_protected":False},
+        {"id":"C_211","name":"厄尔尼诺减产推升糖价链","domain":"农产品","groundBase":"natural",
+         "triggerEvent":"厄尔尼诺导致印度/泰国甘蔗减产",
+         "steps":[
+             {"seq":1,"from":"厄尔尼诺形成","to":"印度/泰国干旱","confidence":"中","lag":"季度","mechanism":"厄尔尼诺导致东南亚干旱"},
+             {"seq":2,"from":"干旱","to":"甘蔗减产","confidence":"中","lag":"半年","mechanism":"水分不足影响甘蔗生长"},
+             {"seq":3,"from":"减产","to":"全球糖供应收紧","confidence":"中","lag":"季度","mechanism":"印度/泰国是主要产糖国"},
+             {"seq":4,"from":"供应收紧","to":"ICE原糖飙升","confidence":"中","lag":"即时","mechanism":"供需推升价格"}
+         ],"reversalNode":"降雨恢复","reversalCondition":"季风降雨恢复正常",
+         "polarityTensionThreshold":0.7,"historicalCases":[{"year":"2016","description":"强厄尔尼诺后印度大减产，ICE原糖从13涨至23美分"}],
+         "reversibility":0.5,"tail_probability":0.2,"minority_protected":False}
+    ],
+    "relations":[
+        {"id":"R_520","type":"国际贸易传导","from":"ICE原糖价格","to":"CZCE白糖价格","strength":0.8,"direction":"正向","groundBase":"marginal","lag":"即时",
+         "description":"ICE通过进口成本传导至国内","reversalPoint":"配额政策和走私量影响传导"},
+        {"id":"R_521","type":"产业分流","from":"巴西乙醇分流比","to":"原糖供应","strength":0.8,"direction":"反向","groundBase":"marginal","lag":"季度",
+         "description":"分流比上升减少原糖产量","reversalPoint":"乙醇价格低于糖价时分流逆转"},
+        {"id":"R_522","type":"天气传导","from":"厄尔尼诺/拉尼娜","to":"印度/巴西甘蔗产量","strength":0.75,"direction":"复杂","groundBase":"natural","lag":"季度",
+         "description":"厄尔尼诺导致印度干旱减产，拉尼娜导致巴西过湿","reversalPoint":"天气恢复正常"},
+        {"id":"R_523","type":"政策传导","from":"印度出口政策","to":"全球糖供应","strength":0.7,"direction":"复杂","groundBase":"order","lag":"月度",
+         "description":"印度出口配额和补贴政策影响全球供应","reversalPoint":"政策调整"},
+        {"id":"R_524","type":"库存传导","from":"中国白糖工业库存","to":"CZCE白糖价格","strength":0.7,"direction":"反向","groundBase":"marginal","lag":"即时",
+         "description":"工业库存是供需平衡指标","reversalPoint":"库存极低时价格弹性增大"}
+    ],
+    "polarity":{
+        "CZCE白糖期货价格":{"historicalMin":4000,"historicalMax":8000,"recentMin":5500,"recentMax":7500,
+                            "reversalSignalPatterns":["ICE原糖波动","巴西分流比变化","厄尔尼诺形成","进口政策变化"]},
+        "ICE原糖价格":{"historicalMin":8,"historicalMax":35,"recentMin":15,"recentMax":28,
+                       "reversalSignalPatterns":["巴西乙醇分流","印度出口政策","厄尔尼诺/拉尼娜","全球库消比"]}
+    },
+    "models":[
+        {"id":"M_080","name":"白糖的内外联动定价模型","domain":"跨市场定价","groundBase":"marginal",
+         "formula":"SR_Price = f(ICE_Price, ExchangeRate, ImportTariff, DomesticSupply)",
+         "variables":[
+             {"name":"ICE原糖价格","id":"ICE","direction":"正向","weight":0.45},
+             {"name":"人民币汇率","id":"FX","direction":"正向","weight":0.2},
+             {"name":"进口关税","id":"tariff","direction":"正向","weight":0.15},
+             {"name":"国内供应（广西产量）","id":"domestic","direction":"反向","weight":0.2}
+         ],
+         "description":"白糖定价以ICE为国际锚，进口成本为传导渠道，国内产量为供需调节。配额内外关税差异形成价格双轨制。",
+         "dominantPhase":"ICE趋势明确时内外联动最有效",
+         "limitation":"走私量难以统计，影响传导准确性",
+         "trackingVariables":["ICE价格","进口成本","广西产量","工业库存"],
+         "linkToEntities":["VAR_210","VAR_211"],
+         "linkToRelations":["R_520","R_521"],
+         "linkToConductionChains":["C_210","C_211"]}
+    ]
+}
+
+# ==================== 工业硅 ====================
+silicon = {
+    "c":"工业硅","s":"SI",
+    "entities":[
+        {"id":"GEO_270","name":"云南工业硅产区","type":"资源节点","groundBase":"natural","importance":9,
+         "description":"中国工业硅最大产区，依托廉价水电，枯水期限电是核心风险","trackingVariables":["运行产能","开工率","电力成本"]},
+        {"id":"GEO_271","name":"新疆工业硅产区","type":"资源节点","groundBase":"natural","importance":8,
+         "description":"中国工业硅第二大产区，火电为主","trackingVariables":["运行产能","开工率"]},
+        {"id":"POW_200","name":"广州期货交易所GFEX","type":"交易所","groundBase":"rule","importance":10,
+         "description":"中国工业硅期货定价中心","jurisdiction":"中国","trackingVariables":["SI期价","持仓量"]},
+        {"id":"VAR_220","name":"GFEX工业硅期货价格","type":"大宗商品变量","groundBase":"marginal","importance":10,
+         "currentValue":"约13000元/吨","historicalRange":{"min":10000,"max":25000},"recentRange":{"min":11000,"max":18000},"trackingFrequency":"实时"},
+        {"id":"VAR_221","name":"工业硅生产成本","type":"成本变量","groundBase":"marginal","importance":8,
+         "trackingFrequency":"月度","trackingVariables":["电力成本","硅石","还原剂"]},
+        {"id":"VAR_222","name":"多晶硅产量","type":"需求变量","groundBase":"marginal","importance":9,
+         "trackingFrequency":"月度","trackingVariables":["多晶硅产量","光伏装机量"]},
+        {"id":"CUL_200","name":"光伏驱动工业硅需求叙事","type":"市场共识","groundBase":"culture","importance":9,
+         "description":"光伏产业高速增长驱动工业硅需求，多晶硅是工业硅最大下游","trackingVariables":["光伏装机","多晶硅产能","硅料价格"]},
+        {"id":"RUL_200","name":"工业硅期货合约规格","type":"交易所规则","groundBase":"rule","importance":7,
+         "description":"GFEX工业硅期货交割标准","trackingVariables":["交割标准","仓单量"]}
+    ],
+    "chains":[
+        {"id":"C_220","name":"光伏驱动工业硅需求链","domain":"新能源","groundBase":"marginal",
+         "triggerEvent":"全球光伏装机量超预期增长",
+         "steps":[
+             {"seq":1,"from":"光伏装机加速","to":"多晶硅需求激增","confidence":"高","lag":"季度","mechanism":"光伏组件需要多晶硅"},
+             {"seq":2,"from":"多晶硅需求激增","to":"多晶硅产能扩张","confidence":"高","lag":"季度","mechanism":"利润驱动扩产"},
+             {"seq":3,"from":"多晶硅扩产","to":"工业硅需求增加","confidence":"高","lag":"即时","mechanism":"多晶硅是工业硅最大下游"},
+             {"seq":4,"from":"需求增加","to":"工业硅库存去化","confidence":"中","lag":"月度","mechanism":"需求拉动去库"},
+             {"seq":5,"from":"去库","to":"工业硅价格上涨","confidence":"中","lag":"即时","mechanism":"供需收紧"}
+         ],"reversalNode":"光伏增速放缓","reversalCondition":"光伏补贴退坡或产能过剩",
+         "polarityTensionThreshold":0.7,"historicalCases":[{"year":"2022","description":"光伏装机大增，工业硅从15000涨至25000"}],
+         "reversibility":0.5,"tail_probability":0.2,"minority_protected":False},
+        {"id":"C_221","name":"限电减产推升工业硅链","domain":"新能源","groundBase":"natural",
+         "triggerEvent":"云南枯水期水电出力不足",
+         "steps":[
+             {"seq":1,"from":"水电出力下降","to":"工业硅限电减产","confidence":"高","lag":"即时","mechanism":"工业硅高耗能"},
+             {"seq":2,"from":"减产","to":"供应减少","confidence":"高","lag":"即时","mechanism":"产量下降"},
+             {"seq":3,"from":"供应减少","to":"工业硅价格上涨","confidence":"中","lag":"1-2周","mechanism":"供给推升价格"}
+         ],"reversalNode":"丰水期复产","reversalCondition":"5-10月丰水期电力恢复",
+         "polarityTensionThreshold":0.65,"historicalCases":[],"reversibility":0.7,"tail_probability":0.15,"minority_protected":False}
+    ],
+    "relations":[
+        {"id":"R_540","type":"需求传导","from":"光伏装机量","to":"工业硅需求","strength":0.85,"direction":"正向","groundBase":"marginal","lag":"季度",
+         "description":"多晶硅是工业硅最大下游，光伏驱动需求","reversalPoint":"光伏增速放缓"},
+        {"id":"R_541","type":"成本传导","from":"电力成本","to":"工业硅成本","strength":0.8,"direction":"正向","groundBase":"marginal","lag":"月度",
+         "description":"电力占工业硅成本约40%","reversalPoint":"电价政策调整"},
+        {"id":"R_542","type":"供给约束","from":"云南限电","to":"工业硅供应","strength":0.75,"direction":"反向","groundBase":"natural","lag":"即时",
+         "description":"枯水期限电直接影响产量","reversalPoint":"丰水期复产"},
+        {"id":"R_543","type":"产业链传导","from":"多晶硅价格","to":"工业硅需求","strength":0.7,"direction":"正向","groundBase":"marginal","lag":"月度",
+         "description":"多晶硅利润好时扩产增加工业硅需求","reversalPoint":"多晶硅过剩利润压缩"}
+    ],
+    "polarity":{
+        "GFEX工业硅期货价格":{"historicalMin":10000,"historicalMax":25000,"recentMin":11000,"recentMax":18000,
+                              "reversalSignalPatterns":["光伏装机加速","云南限电","多晶硅扩产","成本变化"]}
+    },
+    "models":[
+        {"id":"M_085","name":"工业硅的新能源需求定价模型","domain":"需求定价","groundBase":"marginal",
+         "formula":"SI_Score = w1*PV_DemandFactor + w2*CostFactor + w3*InventoryFactor + w4*PolicyFactor",
+         "variables":[
+             {"name":"光伏需求因子","id":"PV_demand","direction":"正向","weight":0.4},
+             {"name":"成本因子（电力+硅石）","id":"cost","direction":"正向","weight":0.3},
+             {"name":"库存因子","id":"inventory","direction":"反向","weight":0.2},
+             {"name":"政策因子（限电/环保）","id":"policy","direction":"复杂","weight":0.1}
+         ],
+         "description":"工业硅定价以光伏需求为核心驱动，成本为底部支撑。云南限电是供给端最大扰动。",
+         "dominantPhase":"光伏装机加速+限电减产时价格弹性最大",
+         "limitation":"工业硅期货上市时间短，历史数据有限",
+         "trackingVariables":["光伏装机","多晶硅产量","电力成本","库存"],
+         "linkToEntities":["VAR_220","VAR_221","VAR_222"],
+         "linkToRelations":["R_540","R_541","R_542"],
+         "linkToConductionChains":["C_220","C_221"]}
+    ]
+}
+
+# ==================== 沪锡 ====================
+tin = {
+    "c":"沪锡","s":"SN",
+    "entities":[
+        {"id":"GEO_280","name":"云南锡产区","type":"资源节点","groundBase":"natural","importance":9,
+         "description":"中国最大锡产区，云南锡业集团主导全球锡供应","controlledBy":["云南锡业"],
+         "trackingVariables":["产量","开工率","库存"]},
+        {"id":"GEO_281","name":"印尼锡产区","type":"资源节点","groundBase":"natural","importance":9,
+         "description":"全球第二大锡生产国，出口政策是核心变量","trackingVariables":["产量","出口量","出口政策"]},
+        {"id":"GEO_282","name":"缅甸锡矿区","type":"资源节点","groundBase":"natural","importance":8,
+         "description":"中国锡精矿进口核心来源，佤邦地区政策是最大不确定性","trackingVariables":["产量","出口政策","中国进口量"]},
+        {"id":"POW_210","name":"上海期货交易所SHFE","type":"交易所","groundBase":"rule","importance":10,
+         "description":"中国锡期货定价中心","jurisdiction":"中国","trackingVariables":["SN期价","持仓量","库存"]},
+        {"id":"POW_211","name":"LME锡","type":"交易所","groundBase":"rule","importance":9,
+         "description":"全球锡定价中心","jurisdiction":"英国","trackingVariables":["LME锡价","库存"]},
+        {"id":"VAR_230","name":"SHFE锡期货价格","type":"大宗商品变量","groundBase":"marginal","importance":10,
+         "currentValue":"约25万元/吨","historicalRange":{"min":10,"max":35},"recentRange":{"min":18,"max":32},"trackingFrequency":"实时"},
+        {"id":"VAR_231","name":"LME锡价格","type":"大宗商品变量","groundBase":"marginal","importance":9,
+         "currentValue":"约30000美元/吨","trackingFrequency":"实时"},
+        {"id":"VAR_232","name":"SHFE锡库存","type":"库存变量","groundBase":"marginal","importance":8,
+         "trackingFrequency":"每周","trackingVariables":["SHFE库存","LME库存"]},
+        {"id":"CUL_210","name":"缅甸佤邦停矿叙事","type":"市场共识","groundBase":"culture","importance":8,
+         "description":"缅甸佤邦2023年宣布停矿，锡精矿供应收紧是锡价核心支撑","trackingVariables":["佤邦政策","中国进口量","锡精矿加工费"]},
+        {"id":"RUL_210","name":"SHFE锡期货交割标准","type":"交易所规则","groundBase":"rule","importance":7,
+         "description":"1号锡锭交割标准","trackingVariables":["交割标准","仓单量"]}
+    ],
+    "chains":[
+        {"id":"C_230","name":"缅甸停矿推升锡价链","domain":"有色金属","groundBase":"order",
+         "triggerEvent":"缅甸佤邦宣布停矿或限制锡精矿出口",
+         "steps":[
+             {"seq":1,"from":"佤邦停矿","to":"中国锡精矿进口减少","confidence":"高","lag":"月度","mechanism":"缅甸是中国锡精矿核心来源"},
+             {"seq":2,"from":"进口减少","to":"国内锡矿供应紧张","confidence":"高","lag":"即时","mechanism":"原料短缺"},
+             {"seq":3,"from":"供应紧张","to":"冶炼厂减产","confidence":"中","lag":"月度","mechanism":"原料不足被迫降负"},
+             {"seq":4,"from":"减产","to":"精锡供应减少","confidence":"中","lag":"即时","mechanism":"产量下降"},
+             {"seq":5,"from":"供应减少","to":"锡价上涨","confidence":"中","lag":"即时","mechanism":"供给推升价格"}
+         ],"reversalNode":"佤邦复产","reversalCondition":"佤邦恢复锡矿开采和出口",
+         "polarityTensionThreshold":0.7,"historicalCases":[{"year":"2023","description":"佤邦停矿，锡价从20万涨至28万"}],
+         "reversibility":0.5,"tail_probability":0.2,"minority_protected":False}
+    ],
+    "relations":[
+        {"id":"R_560","type":"供给约束","from":"缅甸佤邦停矿","to":"锡精矿供应","strength":0.85,"direction":"反向","groundBase":"order","stability":"中",
+         "description":"佤邦停矿直接收紧全球锡精矿供应","reversalPoint":"佤邦复产"},
+        {"id":"R_561","type":"库存传导","from":"SHFE锡库存","to":"锡价","strength":0.75,"direction":"反向","groundBase":"marginal","lag":"即时",
+         "description":"库存是供需平衡直接指标","reversalPoint":"库存极低时价格弹性增大"},
+        {"id":"R_562","type":"宏观映射","from":"全球半导体景气度","to":"锡需求","strength":0.7,"direction":"正向","groundBase":"marginal","lag":"季度",
+         "description":"锡焊料是锡最大下游，半导体景气度驱动需求","reversalPoint":"半导体下行周期"},
+        {"id":"R_563","type":"国际贸易传导","from":"LME锡价格","to":"SHFE锡价格","strength":0.8,"direction":"正向","groundBase":"marginal","lag":"即时",
+         "description":"LME通过进口成本传导","reversalPoint":"国内供需独立时可脱钩"}
+    ],
+    "polarity":{
+        "SHFE锡期货价格":{"historicalMin":100000,"historicalMax":350000,"recentMin":180000,"recentMax":320000,
+                          "reversalSignalPatterns":["佤邦停矿/复产","半导体景气变化","缅甸进口量","库存变化"]}
+    },
+    "models":[
+        {"id":"M_090","name":"锡的供给约束定价模型","domain":"供给定价","groundBase":"order",
+         "formula":"SN_Score = w1*SupplyFactor + w2*TechDemandFactor + w3*InventoryFactor",
+         "variables":[
+             {"name":"供给因子（缅甸+印尼）","id":"supply","direction":"反向","weight":0.45},
+             {"name":"半导体需求因子","id":"tech_demand","direction":"正向","weight":0.35},
+             {"name":"库存因子","id":"inventory","direction":"反向","weight":0.2}
+         ],
+         "description":"锡是稀缺有色金属，供给约束（缅甸停矿）是定价核心。下游以电子焊料为主，半导体景气度驱动需求。",
+         "dominantPhase":"供给中断+需求旺盛时价格弹性最大",
+         "limitation":"缅甸政策不确定性高",
+         "trackingVariables":["缅甸进口量","半导体景气","SHFE库存"],
+         "linkToEntities":["VAR_230","VAR_232"],
+         "linkToRelations":["R_560","R_561","R_562"],
+         "linkToConductionChains":["C_230"]}
+    ]
+}
+
+# ==================== 运行生成 ====================
+if __name__ == "__main__":
+    products = {
+        "soybean": soybean,
+        "soybean_oil": soybean_oil,
+        "soybean_meal": soybean_meal,
+        "starch": starch,
+        "rapeseed_meal": rapeseed_meal,
+        "rapeseed_oil": rapeseed_oil,
+        "sugar": sugar,
+        "silicon": silicon,
+        "tin": tin,
+    }
+    print(f"Generating {len(products)} products...")
+    for name, data in products.items():
+        w(name, data)
+    print("Done!")

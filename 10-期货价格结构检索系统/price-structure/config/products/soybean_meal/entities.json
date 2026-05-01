@@ -1,104 +1,114 @@
 {
-  "commodity": "soybean_meal",
+  "commodity": "豆粕",
   "symbol": "M",
+  "version": "1.3.0",
   "entities": [
     {
-      "id": "GEO_001",
-      "name": "美国中西部",
-      "type": "geography",
-      "description": "全球大豆主产区，USDA报告是价格风向标",
+      "id": "GEO_220",
+      "name": "中国沿海压榨厂",
+      "type": "消费节点",
+      "groundBase": "natural",
       "importance": 9,
+      "description": "豆粕是大豆压榨主产品，沿海压榨厂集中产区",
       "trackingVariables": [
-        "种植面积",
-        "优良率",
-        "天气",
-        "出口检验量"
+        "压榨开工率",
+        "豆粕库存",
+        "豆粕成交量"
       ]
     },
     {
-      "id": "GEO_002",
-      "name": "巴西马托格罗索",
-      "type": "geography",
-      "description": "全球最大大豆产区，播种/收割进度影响全球供给",
+      "id": "POW_150",
+      "name": "大连商品交易所DCE",
+      "type": "交易所",
+      "groundBase": "rule",
+      "importance": 10,
+      "description": "中国豆粕期货定价中心，M合约是国内最活跃农产品期货之一",
+      "jurisdiction": "中国",
+      "trackingVariables": [
+        "M期价",
+        "持仓量",
+        "成交量"
+      ]
+    },
+    {
+      "id": "VAR_170",
+      "name": "DCE豆粕期货价格",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 10,
+      "currentValue": "约3200元/吨",
+      "historicalRange": {
+        "min": 2200,
+        "max": 5000
+      },
+      "recentRange": {
+        "min": 2800,
+        "max": 4500
+      },
+      "trackingFrequency": "实时"
+    },
+    {
+      "id": "VAR_171",
+      "name": "豆粕现货价格",
+      "type": "现货变量",
+      "groundBase": "marginal",
       "importance": 9,
+      "trackingFrequency": "每日",
       "trackingVariables": [
-        "播种进度",
-        "收割进度",
-        "产量预估"
+        "沿海豆粕价",
+        "内陆豆粕价",
+        "期现基差"
       ]
     },
     {
-      "id": "GEO_003",
-      "name": "阿根廷",
-      "type": "geography",
-      "description": "豆粕出口大国，汇率和出口税政策影响大",
-      "importance": 7,
-      "trackingVariables": [
-        "产量",
-        "出口税",
-        "汇率"
-      ]
-    },
-    {
-      "id": "POW_001",
-      "name": "养殖业",
-      "type": "power",
-      "description": "豆粕终端需求方（饲料），生猪存栏是核心",
-      "importance": 9,
-      "trackingVariables": [
-        "生猪存栏",
-        "能繁母猪存栏",
-        "禽类存栏",
-        "养殖利润"
-      ]
-    },
-    {
-      "id": "POW_002",
-      "name": "油厂",
-      "type": "power",
-      "description": "大豆压榨方，开机率决定豆粕供给",
-      "importance": 8,
-      "trackingVariables": [
-        "压榨利润",
-        "开机率",
-        "豆粕库存"
-      ]
-    },
-    {
-      "id": "VAR_001",
+      "id": "VAR_172",
       "name": "豆粕库存",
-      "type": "variable",
-      "description": "油厂豆粕库存+渠道库存",
+      "type": "库存变量",
+      "groundBase": "marginal",
       "importance": 8,
+      "trackingFrequency": "每周",
       "trackingVariables": [
+        "沿海豆粕库存",
         "油厂库存",
-        "未执行合同量"
+        "饲料厂库存"
       ]
     },
     {
-      "id": "VAR_002",
-      "name": "大豆到港量",
-      "type": "variable",
-      "description": "进口大豆到港量决定压榨原料供给",
-      "importance": 8,
+      "id": "VAR_173",
+      "name": "生猪存栏量",
+      "type": "需求变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "trackingFrequency": "月度",
       "trackingVariables": [
-        "月度到港量",
-        "港口大豆库存"
+        "能繁母猪存栏",
+        "生猪存栏",
+        "猪粮比"
       ]
     },
     {
-      "id": "CUL_001",
-      "name": "天气炒作",
-      "type": "narrative",
-      "description": "美豆生长期（6-8月）天气干旱→减产预期→豆粕上涨",
-      "importance": 8
+      "id": "CUL_150",
+      "name": "豆粕需求刚性叙事",
+      "type": "市场共识",
+      "groundBase": "culture",
+      "importance": 7,
+      "description": "豆粕是蛋白饲料核心原料，需求相对刚性，价格弹性主要来自供给端",
+      "trackingVariables": [
+        "饲料配方比例",
+        "低蛋白日粮推广"
+      ]
     },
     {
-      "id": "CUL_002",
-      "name": "非洲猪瘟",
-      "type": "narrative",
-      "description": "疫病→存栏大降→饲料需求暴跌→豆粕下跌",
-      "importance": 7
+      "id": "RUL_150",
+      "name": "DCE豆粕期货交割标准",
+      "type": "交易所规则",
+      "groundBase": "rule",
+      "importance": 7,
+      "description": "豆粕期货交割品级标准",
+      "trackingVariables": [
+        "交割标准",
+        "仓单量"
+      ]
     }
   ]
 }

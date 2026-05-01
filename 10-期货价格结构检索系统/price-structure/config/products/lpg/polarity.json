@@ -1,4 +1,67 @@
 {
-  "commodity": "lpg",
-  "entries": {}
+  "commodity": "液化石油气",
+  "symbol": "PG",
+  "version": "1.3.0",
+  "entries": {
+    "大商所LPG期货价格": {
+      "historicalMin": 2600,
+      "historicalMax": 6500,
+      "recentMin": 3500,
+      "recentMax": 5500,
+      "reversalSignalPatterns": [
+        "PDH利润改善推动采购增加",
+        "冬季取暖需求季节性启动",
+        "沙特CP上调推升进口成本",
+        "美国丙烷出口受阻供应收紧"
+      ]
+    },
+    "沙特CP丙烷价格": {
+      "historicalMin": 200,
+      "historicalMax": 900,
+      "recentMin": 400,
+      "recentMax": 750,
+      "reversalSignalPatterns": [
+        "OPEC+减产力度放松增加伴生气供应",
+        "美国出口增加竞争中东份额",
+        "全球需求回暖",
+        "冬季取暖旺季结束"
+      ]
+    },
+    "美国丙烷库存": {
+      "historicalMin": 3000,
+      "historicalMax": 12000,
+      "recentMin": 5000,
+      "recentMax": 10000,
+      "reversalSignalPatterns": [
+        "冬季取暖消耗库存",
+        "出口增加导致去库",
+        "产量增长补充库存",
+        "PDH需求下降释放库存"
+      ]
+    },
+    "PDH加工利润": {
+      "historicalMin": -800,
+      "historicalMax": 1500,
+      "recentMin": -500,
+      "recentMax": 800,
+      "reversalSignalPatterns": [
+        "丙烷原料价格回落",
+        "丙烯下游需求回暖",
+        "新PDH装置投产增加竞争",
+        "丙烷-石脑油价差收窄"
+      ]
+    },
+    "丙烷-丁烷价差": {
+      "historicalMin": -100,
+      "historicalMax": 200,
+      "recentMin": -50,
+      "recentMax": 150,
+      "reversalSignalPatterns": [
+        "冬季取暖需求偏好丙烷",
+        "化工需求偏好丁烷",
+        "汽油调和需求推升丁烷",
+        "PDH需求推升丙烷"
+      ]
+    }
+  }
 }

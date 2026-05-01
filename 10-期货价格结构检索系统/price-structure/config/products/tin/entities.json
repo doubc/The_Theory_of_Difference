@@ -1,5 +1,139 @@
 {
-  "commodity": "tin",
+  "commodity": "沪锡",
   "symbol": "SN",
-  "entities": []
+  "version": "1.3.0",
+  "entities": [
+    {
+      "id": "GEO_280",
+      "name": "云南锡产区",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "中国最大锡产区，云南锡业集团主导全球锡供应",
+      "controlledBy": [
+        "云南锡业"
+      ],
+      "trackingVariables": [
+        "产量",
+        "开工率",
+        "库存"
+      ]
+    },
+    {
+      "id": "GEO_281",
+      "name": "印尼锡产区",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "全球第二大锡生产国，出口政策是核心变量",
+      "trackingVariables": [
+        "产量",
+        "出口量",
+        "出口政策"
+      ]
+    },
+    {
+      "id": "GEO_282",
+      "name": "缅甸锡矿区",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "中国锡精矿进口核心来源，佤邦地区政策是最大不确定性",
+      "trackingVariables": [
+        "产量",
+        "出口政策",
+        "中国进口量"
+      ]
+    },
+    {
+      "id": "POW_210",
+      "name": "上海期货交易所SHFE",
+      "type": "交易所",
+      "groundBase": "rule",
+      "importance": 10,
+      "description": "中国锡期货定价中心",
+      "jurisdiction": "中国",
+      "trackingVariables": [
+        "SN期价",
+        "持仓量",
+        "库存"
+      ]
+    },
+    {
+      "id": "POW_211",
+      "name": "LME锡",
+      "type": "交易所",
+      "groundBase": "rule",
+      "importance": 9,
+      "description": "全球锡定价中心",
+      "jurisdiction": "英国",
+      "trackingVariables": [
+        "LME锡价",
+        "库存"
+      ]
+    },
+    {
+      "id": "VAR_230",
+      "name": "SHFE锡期货价格",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 10,
+      "currentValue": "约25万元/吨",
+      "historicalRange": {
+        "min": 10,
+        "max": 35
+      },
+      "recentRange": {
+        "min": 18,
+        "max": 32
+      },
+      "trackingFrequency": "实时"
+    },
+    {
+      "id": "VAR_231",
+      "name": "LME锡价格",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "currentValue": "约30000美元/吨",
+      "trackingFrequency": "实时"
+    },
+    {
+      "id": "VAR_232",
+      "name": "SHFE锡库存",
+      "type": "库存变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "trackingFrequency": "每周",
+      "trackingVariables": [
+        "SHFE库存",
+        "LME库存"
+      ]
+    },
+    {
+      "id": "CUL_210",
+      "name": "缅甸佤邦停矿叙事",
+      "type": "市场共识",
+      "groundBase": "culture",
+      "importance": 8,
+      "description": "缅甸佤邦2023年宣布停矿，锡精矿供应收紧是锡价核心支撑",
+      "trackingVariables": [
+        "佤邦政策",
+        "中国进口量",
+        "锡精矿加工费"
+      ]
+    },
+    {
+      "id": "RUL_210",
+      "name": "SHFE锡期货交割标准",
+      "type": "交易所规则",
+      "groundBase": "rule",
+      "importance": 7,
+      "description": "1号锡锭交割标准",
+      "trackingVariables": [
+        "交割标准",
+        "仓单量"
+      ]
+    }
+  ]
 }

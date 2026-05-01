@@ -1,4 +1,121 @@
 {
-  "commodity": "sugar",
-  "chains": []
+  "commodity": "白糖",
+  "symbol": "SR",
+  "version": "1.3.0",
+  "chains": [
+    {
+      "id": "C_210",
+      "name": "巴西乙醇分流推升糖价链",
+      "domain": "农产品",
+      "groundBase": "marginal",
+      "triggerEvent": "巴西乙醇价格高于糖价，分流比上升",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "乙醇价格高于糖价",
+          "to": "甘蔗分流至乙醇",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "利润驱动分流"
+        },
+        {
+          "seq": 2,
+          "from": "分流比上升",
+          "to": "原糖产量下降",
+          "confidence": "高",
+          "lag": "季度",
+          "mechanism": "制糖原料减少"
+        },
+        {
+          "seq": 3,
+          "from": "原糖产量下降",
+          "to": "全球糖供应收紧",
+          "confidence": "中",
+          "lag": "季度",
+          "mechanism": "巴西是最大出口国"
+        },
+        {
+          "seq": 4,
+          "from": "供应收紧",
+          "to": "ICE原糖上涨",
+          "confidence": "中",
+          "lag": "即时",
+          "mechanism": "供需推升价格"
+        },
+        {
+          "seq": 5,
+          "from": "ICE上涨",
+          "to": "国内进口成本上升",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "成本传导"
+        }
+      ],
+      "reversalNode": "乙醇分流逆转",
+      "reversalCondition": "乙醇价格低于糖价",
+      "polarityTensionThreshold": 0.7,
+      "historicalCases": [
+        {
+          "year": "2021",
+          "description": "巴西干旱+高乙醇价格，ICE原糖从15涨至20美分"
+        }
+      ],
+      "reversibility": 0.6,
+      "tail_probability": 0.2,
+      "minority_protected": false
+    },
+    {
+      "id": "C_211",
+      "name": "厄尔尼诺减产推升糖价链",
+      "domain": "农产品",
+      "groundBase": "natural",
+      "triggerEvent": "厄尔尼诺导致印度/泰国甘蔗减产",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "厄尔尼诺形成",
+          "to": "印度/泰国干旱",
+          "confidence": "中",
+          "lag": "季度",
+          "mechanism": "厄尔尼诺导致东南亚干旱"
+        },
+        {
+          "seq": 2,
+          "from": "干旱",
+          "to": "甘蔗减产",
+          "confidence": "中",
+          "lag": "半年",
+          "mechanism": "水分不足影响甘蔗生长"
+        },
+        {
+          "seq": 3,
+          "from": "减产",
+          "to": "全球糖供应收紧",
+          "confidence": "中",
+          "lag": "季度",
+          "mechanism": "印度/泰国是主要产糖国"
+        },
+        {
+          "seq": 4,
+          "from": "供应收紧",
+          "to": "ICE原糖飙升",
+          "confidence": "中",
+          "lag": "即时",
+          "mechanism": "供需推升价格"
+        }
+      ],
+      "reversalNode": "降雨恢复",
+      "reversalCondition": "季风降雨恢复正常",
+      "polarityTensionThreshold": 0.7,
+      "historicalCases": [
+        {
+          "year": "2016",
+          "description": "强厄尔尼诺后印度大减产，ICE原糖从13涨至23美分"
+        }
+      ],
+      "reversibility": 0.5,
+      "tail_probability": 0.2,
+      "minority_protected": false
+    }
+  ]
 }

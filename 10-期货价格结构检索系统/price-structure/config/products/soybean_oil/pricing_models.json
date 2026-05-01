@@ -1,4 +1,63 @@
 {
-  "commodity": "soybean_oil",
-  "models": []
+  "commodity": "豆油",
+  "symbol": "Y",
+  "version": "1.3.0",
+  "models": [
+    {
+      "id": "M_055",
+      "name": "豆油的油脂板块定价模型",
+      "domain": "跨品种定价",
+      "groundBase": "marginal",
+      "formula": "YO_Score = w1*SoyFactor + w2*PalmFactor + w3*InventoryFactor + w4*SeasonalFactor",
+      "variables": [
+        {
+          "name": "大豆成本因子",
+          "id": "soy",
+          "direction": "正向",
+          "weight": 0.35
+        },
+        {
+          "name": "棕榈油联动因子",
+          "id": "palm",
+          "direction": "正向",
+          "weight": 0.3
+        },
+        {
+          "name": "库存因子",
+          "id": "inventory",
+          "direction": "反向",
+          "weight": 0.2
+        },
+        {
+          "name": "季节性因子",
+          "id": "seasonal",
+          "direction": "正向",
+          "weight": 0.15
+        }
+      ],
+      "description": "豆油定价以大豆成本为锚，棕榈油为联动参考，库存为供需指标。消费旺季推升价格。",
+      "dominantPhase": "油脂板块整体趋势明确时模型最有效",
+      "limitation": "忽略生物柴油政策对豆油需求的影响",
+      "trackingVariables": [
+        "大豆成本",
+        "棕榈油价",
+        "豆油库存",
+        "消费季节"
+      ],
+      "linkToEntities": [
+        "VAR_160",
+        "VAR_161",
+        "VAR_162"
+      ],
+      "linkToRelations": [
+        "R_420",
+        "R_421",
+        "R_422"
+      ],
+      "linkToConductionChains": [
+        "C_160",
+        "C_161"
+      ]
+    }
+  ]
 }

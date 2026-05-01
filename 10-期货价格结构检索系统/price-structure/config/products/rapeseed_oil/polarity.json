@@ -1,4 +1,19 @@
 {
-  "commodity": "rapeseed_oil",
-  "entries": {}
+  "commodity": "菜油",
+  "symbol": "OI",
+  "version": "1.3.0",
+  "entries": {
+    "CZCE菜油期货价格": {
+      "historicalMin": 5500,
+      "historicalMax": 14000,
+      "recentMin": 7000,
+      "recentMax": 12000,
+      "reversalSignalPatterns": [
+        "油菜产量变化",
+        "油脂板块联动",
+        "进口政策变化",
+        "消费旺季"
+      ]
+    }
+  }
 }

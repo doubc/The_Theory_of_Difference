@@ -1,5 +1,88 @@
 {
-  "commodity": "starch",
+  "commodity": "淀粉",
   "symbol": "CS",
-  "entities": []
+  "version": "1.3.0",
+  "entities": [
+    {
+      "id": "GEO_230",
+      "name": "山东淀粉加工集群",
+      "type": "消费节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "中国玉米淀粉最大产区，山东占全国产量约60%",
+      "trackingVariables": [
+        "开工率",
+        "淀粉库存",
+        "加工利润"
+      ]
+    },
+    {
+      "id": "POW_160",
+      "name": "大连商品交易所DCE",
+      "type": "交易所",
+      "groundBase": "rule",
+      "importance": 10,
+      "description": "中国淀粉期货定价中心",
+      "jurisdiction": "中国",
+      "trackingVariables": [
+        "CS期价",
+        "持仓量"
+      ]
+    },
+    {
+      "id": "VAR_180",
+      "name": "DCE淀粉期货价格",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 10,
+      "currentValue": "约2800元/吨",
+      "historicalRange": {
+        "min": 2000,
+        "max": 3500
+      },
+      "recentRange": {
+        "min": 2500,
+        "max": 3300
+      },
+      "trackingFrequency": "实时"
+    },
+    {
+      "id": "VAR_181",
+      "name": "淀粉-玉米价差",
+      "type": "产业链价差变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "trackingFrequency": "每日",
+      "trackingVariables": [
+        "淀粉价格",
+        "玉米价格",
+        "加工利润"
+      ]
+    },
+    {
+      "id": "VAR_182",
+      "name": "淀粉开工率",
+      "type": "供给变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "trackingFrequency": "每周",
+      "trackingVariables": [
+        "深加工企业开工率",
+        "淀粉产量"
+      ]
+    },
+    {
+      "id": "CUL_160",
+      "name": "淀粉跟随玉米叙事",
+      "type": "市场共识",
+      "groundBase": "culture",
+      "importance": 7,
+      "description": "淀粉是玉米深加工产品，成本端高度跟随玉米，淀粉-玉米价差反映加工利润",
+      "trackingVariables": [
+        "玉米价格",
+        "加工利润",
+        "副产品价格"
+      ]
+    }
+  ]
 }

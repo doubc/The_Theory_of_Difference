@@ -1,15 +1,29 @@
 {
-  "commodity": "soybean_meal",
+  "commodity": "豆粕",
+  "symbol": "M",
+  "version": "1.3.0",
   "entries": {
-    "soybean_meal_price": {
-      "historicalMin": 2400,
-      "historicalMax": 5200,
+    "DCE豆粕期货价格": {
+      "historicalMin": 2200,
+      "historicalMax": 5000,
       "recentMin": 2800,
-      "recentMax": 4000,
+      "recentMax": 4500,
       "reversalSignalPatterns": [
-        "USDA下调单产",
-        "生猪存栏拐点",
-        "油厂豆粕库存骤降"
+        "大豆供应变化",
+        "生猪周期拐点",
+        "压榨利润变化",
+        "USDA报告"
+      ]
+    },
+    "豆粕库存": {
+      "historicalMin": 20,
+      "historicalMax": 120,
+      "recentMin": 30,
+      "recentMax": 90,
+      "reversalSignalPatterns": [
+        "压榨开工变化",
+        "饲料需求变化",
+        "大豆到港量"
       ]
     }
   }

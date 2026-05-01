@@ -1,4 +1,173 @@
 {
-  "commodity": "pvc",
-  "models": []
+  "commodity": "PVC",
+  "symbol": "V",
+  "version": "1.3.0",
+  "models": [
+    {
+      "id": "M_PVC_001",
+      "name": "PVC电石法成本定价模型",
+      "domain": "产业链定价",
+      "groundBase": "marginal",
+      "formula": "PVC_Price = α + β1*CaC2_Price + β2*Coal_Price + β3*Power_Cost + ε",
+      "variables": [
+        {
+          "name": "电石价格",
+          "id": "VAR_PVC_002",
+          "direction": "正向",
+          "weight": 0.5
+        },
+        {
+          "name": "煤炭价格",
+          "id": "coal_price",
+          "direction": "正向",
+          "weight": 0.2
+        },
+        {
+          "name": "电力成本",
+          "id": "power_cost",
+          "direction": "正向",
+          "weight": 0.15
+        },
+        {
+          "name": "残差/需求冲击",
+          "id": "residual",
+          "direction": "不定",
+          "weight": 0.15
+        }
+      ],
+      "description": "电石法PVC占中国产能约80%，电石是最大成本项（60-70%）。电石价格变动直接决定PVC成本底部。当PVC价格接近电石法完全成本（电石价×1.4+加工费约1500元），工厂减产概率大增。",
+      "dominantPhase": "当供给驱动行情时（电石紧缺、能耗限产），成本模型主导定价",
+      "limitation": "乙烯法PVC（约20%产能）受乙烯价格影响，不适用此模型；需求极度低迷时成本支撑可能被击穿",
+      "trackingVariables": [
+        "电石出厂价",
+        "电石到货价",
+        "煤炭坑口价",
+        "电价",
+        "PVC工厂利润"
+      ],
+      "linkToEntities": [
+        "GEO_PVC_001",
+        "GEO_PVC_002",
+        "VAR_PVC_002"
+      ],
+      "linkToRelations": [
+        "R_PVC_001",
+        "R_PVC_005"
+      ],
+      "linkToConductionChains": [
+        "C_PVC_001"
+      ]
+    },
+    {
+      "id": "M_PVC_002",
+      "name": "PVC需求-库存定价模型",
+      "domain": "微观结构定价",
+      "groundBase": "marginal",
+      "formula": "ΔPVC_Price = f(Inventory, RealEstate_Start, Infra_Investment, Seasonality)",
+      "variables": [
+        {
+          "name": "PVC社会库存/周度消费量",
+          "id": "VAR_PVC_003",
+          "direction": "反向",
+          "weight": 0.35
+        },
+        {
+          "name": "房地产新开工面积同比",
+          "id": "VAR_PVC_006",
+          "direction": "正向",
+          "weight": 0.3
+        },
+        {
+          "name": "基建投资增速",
+          "id": "infra_investment",
+          "direction": "正向",
+          "weight": 0.2
+        },
+        {
+          "name": "季节性因子（3-5月旺季）",
+          "id": "seasonal",
+          "direction": "正向",
+          "weight": 0.15
+        }
+      ],
+      "description": "PVC需求高度依赖房地产（管材40%）和基建（20%），库存是供需平衡的直接指标。房地产新开工面积是PVC需求的核心领先指标，库存消费比是价格方向的可靠信号。",
+      "dominantPhase": "当需求驱动行情时（房地产周期、基建投资），需求模型主导定价",
+      "limitation": "房地产数据存在滞后，隐性库存难以统计；出口需求波动未完全纳入",
+      "trackingVariables": [
+        "PVC社会库存",
+        "房地产新开工面积",
+        "基建投资增速",
+        "管材开工率",
+        "型材开工率"
+      ],
+      "linkToEntities": [
+        "VAR_PVC_003",
+        "VAR_PVC_006",
+        "GEO_PVC_003"
+      ],
+      "linkToRelations": [
+        "R_PVC_002",
+        "R_PVC_003",
+        "R_PVC_007"
+      ],
+      "linkToConductionChains": [
+        "C_PVC_002"
+      ]
+    },
+    {
+      "id": "M_PVC_003",
+      "name": "PVC跨市场套利定价模型",
+      "domain": "跨市场定价",
+      "groundBase": "marginal",
+      "formula": "Export_Window = FOB_China - (Domestic_Price + Freight + Insurance); Import_Window = CFR_China - Domestic_Price",
+      "variables": [
+        {
+          "name": "中国PVC出口FOB价",
+          "id": "VAR_PVC_004",
+          "direction": "正向",
+          "weight": 0.35
+        },
+        {
+          "name": "国内PVC现货价",
+          "id": "domestic_price",
+          "direction": "反向",
+          "weight": 0.3
+        },
+        {
+          "name": "汇率（人民币/美元）",
+          "id": "fx_rate",
+          "direction": "反向",
+          "weight": 0.2
+        },
+        {
+          "name": "国际PVC竞争报价（美国/日本/韩国）",
+          "id": "intl_price",
+          "direction": "正向",
+          "weight": 0.15
+        }
+      ],
+      "description": "中国是PVC净出口国，出口窗口的开关是国内价格的重要边际调节器。当国内价格远低于国际市场时，出口放量分流国内供应，支撑价格底部；反之出口萎缩，国内供应过剩加剧。",
+      "dominantPhase": "当国内PVC价格处于低位、出口成为边际变量时，该模型有效",
+      "limitation": "反倾销调查、贸易壁垒可能突然关闭窗口；出口目的地集中度高时风险增大",
+      "trackingVariables": [
+        "FOB中国报价",
+        "CFR东南亚报价",
+        "中国PVC月出口量",
+        "汇率",
+        "反倾销动态"
+      ],
+      "linkToEntities": [
+        "GEO_PVC_004",
+        "GEO_PVC_005",
+        "VAR_PVC_004"
+      ],
+      "linkToRelations": [
+        "R_PVC_004",
+        "R_PVC_009"
+      ],
+      "linkToConductionChains": [
+        "C_PVC_003"
+      ]
+    }
+  ]
 }

@@ -1,4 +1,100 @@
 {
-  "commodity": "lpg",
-  "chains": []
+  "commodity": "液化石油气",
+  "symbol": "PG",
+  "version": "1.3.0",
+  "chains": [
+    {
+      "id": "C_071",
+      "name": "PDH利润驱动LPG采购链",
+      "domain": "能源化工",
+      "groundBase": "marginal",
+      "triggerEvent": "PDH加工利润大幅改善，装置集中投产或重启",
+      "steps": [
+        {"seq": 1, "from": "PDH利润改善", "to": "PDH开工率提升", "confidence": "高", "lag": "1-2周", "mechanism": "利润驱动PDH装置提高负荷"},
+        {"seq": 2, "from": "PDH开工提升", "to": "丙烷采购增加", "confidence": "高", "lag": "即时", "mechanism": "PDH装置加大丙烷原料采购"},
+        {"seq": 3, "from": "丙烷采购增加", "to": "进口量上升", "confidence": "高", "lag": "2-4周", "mechanism": "国内丙烷不足需依赖进口补充"},
+        {"seq": 4, "from": "进口量上升", "to": "CP价格推升", "confidence": "中", "lag": "1个月", "mechanism": "中国进口需求推升中东CP定价"},
+        {"seq": 5, "from": "CP上涨", "to": "进口成本增加", "confidence": "高", "lag": "即时", "mechanism": "CP上涨直接推高国内LPG到岸成本"},
+        {"seq": 6, "from": "成本增加", "to": "PDH利润压缩", "confidence": "中", "lag": "1-2个月", "mechanism": "原料成本上升挤压PDH利润，抑制进一步采购"}
+      ],
+      "reversalNode": "PDH利润转负",
+      "reversalCondition": "PDH利润持续为负且超过1个月",
+      "polarityTensionThreshold": 0.7,
+      "historicalCases": [
+        {"year": "2021", "description": "PDH集中投产推升LPG进口需求，CP价格大幅上涨"},
+        {"year": "2023", "description": "PDH利润改善带动LPG进口创新高"}
+      ],
+      "reversibility": 0.65,
+      "tail_probability": 0.2,
+      "minority_protected": false
+    },
+    {
+      "id": "C_072",
+      "name": "冬季取暖季节性脉冲链",
+      "domain": "能源",
+      "groundBase": "marginal",
+      "triggerEvent": "北半球冬季气温骤降，取暖需求激增",
+      "steps": [
+        {"seq": 1, "from": "气温骤降", "to": "取暖需求激增", "confidence": "高", "lag": "即时", "mechanism": "寒冷天气直接推升LPG燃烧消费"},
+        {"seq": 2, "from": "取暖需求增加", "to": "丙烷库存快速消耗", "confidence": "高", "lag": "1-2周", "mechanism": "需求大于供给导致库存下降"},
+        {"seq": 3, "from": "库存下降", "to": "现货价格走强", "confidence": "高", "lag": "即时", "mechanism": "库存紧张推升现货溢价"},
+        {"seq": 4, "from": "现货走强", "to": "期现联动上涨", "confidence": "高", "lag": "即时", "mechanism": "现货带动期货价格上行"}
+      ],
+      "reversalNode": "冬季结束需求回落",
+      "reversalCondition": "气温回升至正常水平，取暖需求回落",
+      "polarityTensionThreshold": 0.65,
+      "historicalCases": [
+        {"year": "2021", "description": "寒冬叠加能源危机，LPG价格暴涨"},
+        {"year": "2018", "description": "极寒天气推升丙烷价格"}
+      ],
+      "reversibility": 0.8,
+      "tail_probability": 0.15,
+      "minority_protected": false
+    },
+    {
+      "id": "C_073",
+      "name": "美国丙烷出口供应冲击链",
+      "domain": "能源",
+      "groundBase": "natural",
+      "triggerEvent": "飓风袭击墨西哥湾或出口码头故障",
+      "steps": [
+        {"seq": 1, "from": "墨西哥湾飓风/设施故障", "to": "美国丙烷出口受阻", "confidence": "高", "lag": "即时", "mechanism": "飓风迫使炼厂和出口码头关闭"},
+        {"seq": 2, "from": "出口受阻", "to": "全球LPG供应收紧", "confidence": "高", "lag": "1-2周", "mechanism": "美国是全球最大LPG出口国，出口中断影响全球供应"},
+        {"seq": 3, "from": "供应收紧", "to": "中东CP上涨", "confidence": "中", "lag": "2-4周", "mechanism": "买家转向中东现货推升CP"},
+        {"seq": 4, "from": "CP上涨", "to": "国内LPG期货上涨", "confidence": "高", "lag": "即时", "mechanism": "进口成本推升传导至国内期货"}
+      ],
+      "reversalNode": "出口恢复",
+      "reversalCondition": "飓风过后设施修复，出口恢复正常",
+      "polarityTensionThreshold": 0.7,
+      "historicalCases": [
+        {"year": "2020", "description": "飓风季多次袭击墨西哥湾，LPG出口中断"},
+        {"year": "2017", "description": "哈维飓风重创美国石化设施"}
+      ],
+      "reversibility": 0.7,
+      "tail_probability": 0.15,
+      "minority_protected": false
+    },
+    {
+      "id": "C_074",
+      "name": "化工-燃料需求替代链",
+      "domain": "能源化工",
+      "groundBase": "marginal",
+      "triggerEvent": "丙烷相对于石脑油价差扩大",
+      "steps": [
+        {"seq": 1, "from": "丙烷-石脑油价差扩大", "to": "PDH路线成本优势凸显", "confidence": "高", "lag": "即时", "mechanism": "丙烷脱氢比石脑油裂解更具成本优势"},
+        {"seq": 2, "from": "PDH成本优势", "to": "PDH装置提高负荷", "confidence": "高", "lag": "1-2周", "mechanism": "利润驱动PDH开工率提升"},
+        {"seq": 3, "from": "PDH负荷提升", "to": "丙烷化工需求增加", "confidence": "高", "lag": "即时", "mechanism": "化工用丙烷消费增加"},
+        {"seq": 4, "from": "化工需求增加", "to": "燃烧用LPG供应被挤出", "confidence": "中", "lag": "1-3个月", "mechanism": "化工需求优先级高于燃烧需求"}
+      ],
+      "reversalNode": "价差收窄",
+      "reversalCondition": "丙烷-石脑油价差回归正常区间",
+      "polarityTensionThreshold": 0.6,
+      "historicalCases": [
+        {"year": "2022", "description": "丙烷价格相对石脑油大幅折价，PDH需求爆发"}
+      ],
+      "reversibility": 0.7,
+      "tail_probability": 0.2,
+      "minority_protected": false
+    }
+  ]
 }
