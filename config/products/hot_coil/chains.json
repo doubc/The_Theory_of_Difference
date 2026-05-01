@@ -1,0 +1,35 @@
+{
+  "commodity": "hot_coil",
+  "chains": [
+    {
+      "id": "CH_001",
+      "name": "制造业景气链",
+      "triggerEvent": "PMI连续回升",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "PMI回升",
+          "to": "制造业补库",
+          "confidence": 0.7,
+          "lag": "1月"
+        },
+        {
+          "seq": 2,
+          "from": "制造业补库",
+          "to": "热卷去库",
+          "confidence": 0.75,
+          "lag": "2-4周"
+        },
+        {
+          "seq": 3,
+          "from": "热卷去库",
+          "to": "热卷价格上涨",
+          "confidence": 0.7,
+          "lag": "同步"
+        }
+      ],
+      "reversalNode": "PMI回落",
+      "reversalCondition": "外需走弱+内需不及预期"
+    }
+  ]
+}
