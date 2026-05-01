@@ -1,0 +1,66 @@
+{
+  "commodity": "锌",
+  "symbol": "ZN",
+  "version": "1.0.0",
+  "chains": [
+    {
+      "id": "C_081",
+      "name": "锌矿紧缺推升锌价链",
+      "domain": "有色金属",
+      "triggerEvent": "全球锌矿TC/RC大幅下跌",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "锌矿供应紧张",
+          "to": "TC/RC下跌",
+          "confidence": "高",
+          "lag": "季度",
+          "mechanism": "矿供应不足压低加工费"
+        },
+        {
+          "seq": 2,
+          "from": "TC/RC下跌",
+          "to": "冶炼利润压缩",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "加工费收入下降"
+        },
+        {
+          "seq": 3,
+          "from": "利润压缩",
+          "to": "冶炼厂减产",
+          "confidence": "中",
+          "lag": "1-3个月",
+          "mechanism": "亏损减产"
+        },
+        {
+          "seq": 4,
+          "from": "减产",
+          "to": "精炼锌供给收紧",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "减产直接减少供给"
+        },
+        {
+          "seq": 5,
+          "from": "供给收紧",
+          "to": "锌价上涨",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "供需紧张推升价格"
+        }
+      ],
+      "reversalNode": "TC/RC反弹",
+      "reversalCondition": "TC/RC回升至冶炼盈亏平衡以上",
+      "polarityTensionThreshold": 0.7,
+      "historicalCases": [
+        {
+          "year": "2023",
+          "description": "锌矿紧缺，TC跌至低位，锌价从2000反弹至2700美元"
+        }
+      ],
+      "reversibility": 0.6,
+      "tail_probability": 0.2
+    }
+  ]
+}
