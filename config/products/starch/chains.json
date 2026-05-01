@@ -1,0 +1,63 @@
+{
+  "commodity": "淀粉",
+  "symbol": "CS",
+  "version": "1.3.0",
+  "chains": [
+    {
+      "id": "C_180",
+      "name": "玉米成本推升淀粉链",
+      "domain": "农产品",
+      "groundBase": "marginal",
+      "triggerEvent": "玉米价格大幅上涨",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "玉米价格上涨",
+          "to": "淀粉生产成本上升",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "玉米占淀粉成本约85%"
+        },
+        {
+          "seq": 2,
+          "from": "成本上升",
+          "to": "淀粉加工利润压缩",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "成本推升但下游接受度有限"
+        },
+        {
+          "seq": 3,
+          "from": "利润压缩",
+          "to": "开工率下降",
+          "confidence": "中",
+          "lag": "1-2周",
+          "mechanism": "亏损降负"
+        },
+        {
+          "seq": 4,
+          "from": "开工下降",
+          "to": "淀粉供应减少",
+          "confidence": "中",
+          "lag": "即时",
+          "mechanism": "产量下降"
+        },
+        {
+          "seq": 5,
+          "from": "供应减少",
+          "to": "淀粉价格受成本支撑",
+          "confidence": "中",
+          "lag": "即时",
+          "mechanism": "成本+供给双重支撑"
+        }
+      ],
+      "reversalNode": "玉米价格回落",
+      "reversalCondition": "玉米价格回落改善加工利润",
+      "polarityTensionThreshold": 0.6,
+      "historicalCases": [],
+      "reversibility": 0.7,
+      "tail_probability": 0.15,
+      "minority_protected": false
+    }
+  ]
+}
