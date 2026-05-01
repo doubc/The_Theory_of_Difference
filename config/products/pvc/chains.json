@@ -1,0 +1,267 @@
+{
+  "commodity": "PVC",
+  "symbol": "V",
+  "version": "1.3.0",
+  "chains": [
+    {
+      "id": "C_PVC_001",
+      "name": "电石紧缺推涨PVC链",
+      "domain": "化工",
+      "groundBase": "marginal",
+      "triggerEvent": "电石限产或运输受阻导致电石价格暴涨",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "电石限产/运输受阻",
+          "to": "电石供应紧张",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "能耗双控限产或冬季运输受限减少电石供应"
+        },
+        {
+          "seq": 2,
+          "from": "电石供应紧张",
+          "to": "电石价格飙升",
+          "confidence": "高",
+          "lag": "1-2周",
+          "mechanism": "供应短缺推动电石现货价格快速上涨"
+        },
+        {
+          "seq": 3,
+          "from": "电石价格上涨",
+          "to": "PVC成本抬升",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "电石占电石法PVC成本约60-70%，成本推涨PVC"
+        },
+        {
+          "seq": 4,
+          "from": "PVC成本抬升",
+          "to": "PVC工厂亏损减产",
+          "confidence": "中",
+          "lag": "1-4周",
+          "mechanism": "PVC价格传导滞后，工厂亏损被迫降低负荷"
+        },
+        {
+          "seq": 5,
+          "from": "PVC减产",
+          "to": "PVC供给收紧价格上涨",
+          "confidence": "高",
+          "lag": "2-4周",
+          "mechanism": "减产减少供给，PVC价格向下游传导"
+        }
+      ],
+      "reversalNode": "电石供应恢复",
+      "reversalCondition": "电石限产政策放松或运输恢复正常，电石价格回落至3000元以下",
+      "polarityTensionThreshold": 0.72,
+      "historicalCases": [
+        {
+          "year": "2021",
+          "description": "能耗双控导致电石限产，电石价格从3000涨至5500，PVC价格从7000涨至10000"
+        },
+        {
+          "year": "2022",
+          "description": "冬季运输受限叠加电石限产，PVC价格阶段性上涨"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "电石紧缺初期PVC成本推涨最剧烈，后期减产落地后供给收缩接力",
+        "dualityStructure": "电石供应弹性不足与PVC需求刚性之间的矛盾",
+        "polarityWarning": "电石法PVC占比高达80%，电石供给冲击对PVC影响远大于乙烯法"
+      },
+      "reversibility": 0.65,
+      "tail_probability": 0.25,
+      "minority_protected": false
+    },
+    {
+      "id": "C_PVC_002",
+      "name": "房地产下行压制PVC需求链",
+      "domain": "化工",
+      "groundBase": "marginal",
+      "triggerEvent": "房地产新开工面积持续大幅下降",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "房地产新开工下降",
+          "to": "管材管件需求萎缩",
+          "confidence": "高",
+          "lag": "1-3个月",
+          "mechanism": "新开工减少直接降低PVC管材需求"
+        },
+        {
+          "seq": 2,
+          "from": "管材需求萎缩",
+          "to": "PVC下游开工率下降",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "管材厂订单减少降低PVC采购"
+        },
+        {
+          "seq": 3,
+          "from": "下游采购减少",
+          "to": "PVC库存累积",
+          "confidence": "高",
+          "lag": "2-4周",
+          "mechanism": "需求萎缩导致PVC社会库存上升"
+        },
+        {
+          "seq": 4,
+          "from": "库存累积",
+          "to": "PVC价格承压下跌",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "库存压力压低现货和期货价格"
+        },
+        {
+          "seq": 5,
+          "from": "PVC价格下跌",
+          "to": "PVC工厂减产",
+          "confidence": "中",
+          "lag": "1-3个月",
+          "mechanism": "价格跌至成本线附近，高成本产能退出"
+        }
+      ],
+      "reversalNode": "房地产政策刺激",
+      "reversalCondition": "房地产政策大幅放松（降息降准、限购放开），新开工面积企稳回升",
+      "polarityTensionThreshold": 0.7,
+      "historicalCases": [
+        {
+          "year": "2022",
+          "description": "房地产暴雷导致PVC需求断崖式下降，价格从9000跌至5500"
+        },
+        {
+          "year": "2023",
+          "description": "房地产持续低迷，PVC价格在5000-6000区间低位震荡"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "房地产下行初期PVC需求冲击最大，后期基数效应减缓",
+        "dualityStructure": "房地产需求萎缩与PVC供给弹性之间的博弈",
+        "polarityWarning": "PVC对房地产依赖度约40%，地产周期是PVC定价核心变量"
+      },
+      "reversibility": 0.5,
+      "tail_probability": 0.3,
+      "minority_protected": false
+    },
+    {
+      "id": "C_PVC_003",
+      "name": "PVC出口放量对冲链",
+      "domain": "化工",
+      "groundBase": "marginal",
+      "triggerEvent": "国内PVC价格大幅低于国际市场，出口窗口打开",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "国内PVC价格低迷",
+          "to": "出口窗口打开",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "国内价格低于FOB出口价，出口利润改善"
+        },
+        {
+          "seq": 2,
+          "from": "出口窗口打开",
+          "to": "PVC出口订单增加",
+          "confidence": "高",
+          "lag": "1-2周",
+          "mechanism": "贸易商增加出口接单"
+        },
+        {
+          "seq": 3,
+          "from": "出口增加",
+          "to": "国内PVC库存去化",
+          "confidence": "中",
+          "lag": "2-4周",
+          "mechanism": "出口分流减轻国内供应压力"
+        },
+        {
+          "seq": 4,
+          "from": "库存去化",
+          "to": "PVC价格企稳反弹",
+          "confidence": "中",
+          "lag": "1-2个月",
+          "mechanism": "库存下降支撑价格底部"
+        }
+      ],
+      "reversalNode": "出口窗口关闭",
+      "reversalCondition": "国内价格回升或国际市场下跌，出口利润消失",
+      "polarityTensionThreshold": 0.6,
+      "historicalCases": [
+        {
+          "year": "2023",
+          "description": "国内PVC低价吸引大量出口，月出口量创历史新高，支撑价格底部"
+        },
+        {
+          "year": "2020",
+          "description": "海外疫情停产，中国PVC出口激增，价格快速反弹"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "出口放量初期对价格支撑最明显，后期国际市场竞争加剧",
+        "dualityStructure": "国内过剩与国际需求之间的平衡",
+        "polarityWarning": "反倾销调查可能突然关闭出口窗口"
+      },
+      "reversibility": 0.7,
+      "tail_probability": 0.2,
+      "minority_protected": false
+    },
+    {
+      "id": "C_PVC_004",
+      "name": "乙烯法PVC成本联动链",
+      "domain": "化工",
+      "groundBase": "marginal",
+      "triggerEvent": "国际乙烯或VCM价格大幅波动",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "国际乙烯价格上涨",
+          "to": "乙烯法PVC成本抬升",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "乙烯是乙烯法PVC核心原料"
+        },
+        {
+          "seq": 2,
+          "from": "乙烯法成本抬升",
+          "to": "乙烯法PVC报价上调",
+          "confidence": "中",
+          "lag": "1-2周",
+          "mechanism": "成本推涨乙烯法PVC价格"
+        },
+        {
+          "seq": 3,
+          "from": "乙烯法PVC涨价",
+          "to": "电石法PVC跟涨",
+          "confidence": "中",
+          "lag": "1-2周",
+          "mechanism": "同品种不同工艺价格联动"
+        },
+        {
+          "seq": 4,
+          "from": "PVC整体涨价",
+          "to": "下游需求抑制",
+          "confidence": "中",
+          "lag": "1-3个月",
+          "mechanism": "高价抑制管材型材需求"
+        }
+      ],
+      "reversalNode": "乙烯价格回落",
+      "reversalCondition": "国际油价下跌或乙烯供应恢复，乙烯法成本下降",
+      "polarityTensionThreshold": 0.6,
+      "historicalCases": [
+        {
+          "year": "2021",
+          "description": "国际油价上涨推高乙烯成本，乙烯法PVC价格走强带动电石法"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "乙烯价格上涨初期传导最快，后期需求抑制反向压制价格",
+        "dualityStructure": "成本推涨与需求抑制之间的博弈",
+        "polarityWarning": "电石法占比80%时乙烯法成本传导效应有限"
+      },
+      "reversibility": 0.7,
+      "tail_probability": 0.2,
+      "minority_protected": false
+    }
+  ]
+}
