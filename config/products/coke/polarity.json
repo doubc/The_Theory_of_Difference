@@ -1,0 +1,15 @@
+{
+  "commodity": "coke",
+  "entries": {
+    "coke_price": {
+      "historicalMin": 1200,
+      "historicalMax": 4000,
+      "recentMin": 1800,
+      "recentMax": 2800,
+      "reversalSignalPatterns": [
+        "焦化厂库存累积",
+        "钢厂利润转负提降"
+      ]
+    }
+  }
+}
