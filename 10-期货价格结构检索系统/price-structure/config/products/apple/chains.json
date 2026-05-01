@@ -1,4 +1,112 @@
 {
-  "commodity": "apple",
-  "chains": []
+  "commodity": "苹果",
+  "symbol": "AP",
+  "version": "1.3.0",
+  "chains": [
+    {
+      "id": "C_240",
+      "name": "花期霜冻减产推升苹果链",
+      "domain": "农产品",
+      "groundBase": "natural",
+      "triggerEvent": "4月苹果花期遭遇严重霜冻或冰雹",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "花期霜冻",
+          "to": "坐果率下降",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "冻花直接影响坐果"
+        },
+        {
+          "seq": 2,
+          "from": "坐果率下降",
+          "to": "产量预估下调",
+          "confidence": "高",
+          "lag": "1-2周",
+          "mechanism": "市场评估减产幅度"
+        },
+        {
+          "seq": 3,
+          "from": "产量下调",
+          "to": "期货价格飙升",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "供给收紧推升价格"
+        },
+        {
+          "seq": 4,
+          "from": "价格飙升",
+          "to": "优果率下降加剧交割紧张",
+          "confidence": "中",
+          "lag": "收获季",
+          "mechanism": "减产年份优果率通常下降"
+        }
+      ],
+      "reversalNode": "天气恢复",
+      "reversalCondition": "花期天气正常或后期坐果恢复",
+      "polarityTensionThreshold": 0.75,
+      "historicalCases": [
+        {
+          "year": "2018",
+          "description": "清明霜冻大减产，苹果从6000涨至12000"
+        },
+        {
+          "year": "2021",
+          "description": "局部霜冻，价格短暂冲高后回落"
+        }
+      ],
+      "reversibility": 0.4,
+      "tail_probability": 0.2,
+      "minority_protected": false
+    },
+    {
+      "id": "C_241",
+      "name": "丰产压制苹果价链",
+      "domain": "农产品",
+      "groundBase": "natural",
+      "triggerEvent": "苹果生长季天气良好，丰产预期",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "天气良好",
+          "to": "坐果率高",
+          "confidence": "高",
+          "lag": "季节性",
+          "mechanism": "花期天气正常"
+        },
+        {
+          "seq": 2,
+          "from": "坐果率高",
+          "to": "丰产预期",
+          "confidence": "高",
+          "lag": "月度",
+          "mechanism": "产量预估上调"
+        },
+        {
+          "seq": 3,
+          "from": "丰产预期",
+          "to": "期货价格下跌",
+          "confidence": "中",
+          "lag": "即时",
+          "mechanism": "供应增加压制价格"
+        },
+        {
+          "seq": 4,
+          "from": "价格下跌",
+          "to": "入库意愿增强",
+          "confidence": "中",
+          "lag": "收获季",
+          "mechanism": "低价刺激冷库入库"
+        }
+      ],
+      "reversalNode": "减产证伪",
+      "reversalCondition": "实际产量低于预期",
+      "polarityTensionThreshold": 0.6,
+      "historicalCases": [],
+      "reversibility": 0.6,
+      "tail_probability": 0.15,
+      "minority_protected": false
+    }
+  ]
 }

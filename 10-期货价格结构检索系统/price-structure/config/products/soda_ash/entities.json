@@ -1,16 +1,110 @@
 {
-  "commodity": "soda_ash",
+  "commodity": "纯碱",
   "symbol": "SA",
+  "version": "1.3.0",
   "entities": [
     {
-      "id": "POW_001",
-      "name": "玻璃厂",
-      "type": "power",
-      "description": "纯碱最大下游（占 30%+）",
-      "importance": 8,
+      "id": "GEO_360",
+      "name": "中国纯碱产能",
+      "type": "供给节点",
+      "groundBase": "natural",
+      "importance": 10,
+      "description": "全球最大纯碱生产国，氨碱法/联碱法/天然碱法并存",
       "trackingVariables": [
-        "玻璃产能",
-        "浮法开工率"
+        "总产能",
+        "开工率",
+        "各工艺利润"
+      ]
+    },
+    {
+      "id": "GEO_361",
+      "name": "河南天然碱矿区",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "中国天然碱核心产区，桐柏碱矿为代表",
+      "trackingVariables": [
+        "产量",
+        "成本"
+      ]
+    },
+    {
+      "id": "POW_280",
+      "name": "郑州商品交易所CZCE",
+      "type": "交易所",
+      "groundBase": "rule",
+      "importance": 10,
+      "description": "中国纯碱期货定价中心",
+      "jurisdiction": "中国",
+      "trackingVariables": [
+        "SA期价",
+        "持仓量"
+      ]
+    },
+    {
+      "id": "VAR_300",
+      "name": "CZCE纯碱期货价格",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 10,
+      "currentValue": "约1800元/吨",
+      "historicalRange": {
+        "min": 1200,
+        "max": 3500
+      },
+      "recentRange": {
+        "min": 1400,
+        "max": 2800
+      },
+      "trackingFrequency": "实时"
+    },
+    {
+      "id": "VAR_301",
+      "name": "纯碱企业库存",
+      "type": "库存变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "trackingFrequency": "每周",
+      "trackingVariables": [
+        "企业库存",
+        "社会库存"
+      ]
+    },
+    {
+      "id": "VAR_302",
+      "name": "浮法玻璃产能",
+      "type": "需求变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "trackingFrequency": "每周",
+      "trackingVariables": [
+        "浮法在产产能",
+        "日熔量"
+      ]
+    },
+    {
+      "id": "VAR_303",
+      "name": "光伏玻璃产能",
+      "type": "需求变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "trackingFrequency": "月度",
+      "trackingVariables": [
+        "光伏玻璃产能",
+        "投产进度"
+      ]
+    },
+    {
+      "id": "CUL_280",
+      "name": "光伏玻璃拉动纯碱需求叙事",
+      "type": "市场共识",
+      "groundBase": "culture",
+      "importance": 8,
+      "description": "光伏玻璃是纯碱需求最大增量，每GW光伏玻璃消耗约1万吨纯碱",
+      "trackingVariables": [
+        "光伏装机",
+        "光伏玻璃投产",
+        "纯碱需求增量"
       ]
     }
   ]

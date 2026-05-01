@@ -1,5 +1,128 @@
 {
-  "commodity": "apple",
+  "commodity": "苹果",
   "symbol": "AP",
-  "entities": []
+  "version": "1.3.0",
+  "entities": [
+    {
+      "id": "GEO_300",
+      "name": "陕西苹果产区",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 10,
+      "description": "中国苹果最大产区，陕西占全国产量约25%，洛川苹果是交割品质标杆",
+      "trackingVariables": [
+        "种植面积",
+        "产量",
+        "优果率",
+        "天气"
+      ]
+    },
+    {
+      "id": "GEO_301",
+      "name": "山东苹果产区",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "中国苹果第二大产区，烟台苹果品质优良",
+      "trackingVariables": [
+        "产量",
+        "优果率",
+        "出口量"
+      ]
+    },
+    {
+      "id": "GEO_302",
+      "name": "甘肃/新疆苹果产区",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 7,
+      "description": "西北新兴苹果产区，面积持续扩大",
+      "trackingVariables": [
+        "种植面积",
+        "产量"
+      ]
+    },
+    {
+      "id": "POW_220",
+      "name": "郑州商品交易所CZCE",
+      "type": "交易所",
+      "groundBase": "rule",
+      "importance": 10,
+      "description": "中国苹果期货定价中心，AP合约是全球首个鲜果期货",
+      "jurisdiction": "中国",
+      "trackingVariables": [
+        "AP期价",
+        "持仓量",
+        "仓单量"
+      ]
+    },
+    {
+      "id": "VAR_240",
+      "name": "CZCE苹果期货价格",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 10,
+      "currentValue": "约8000元/吨",
+      "historicalRange": {
+        "min": 5000,
+        "max": 13000
+      },
+      "recentRange": {
+        "min": 6500,
+        "max": 11000
+      },
+      "trackingFrequency": "实时"
+    },
+    {
+      "id": "VAR_241",
+      "name": "苹果现货价格",
+      "type": "现货变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "trackingFrequency": "每日",
+      "trackingVariables": [
+        "栖霞价",
+        "洛川价",
+        "期现基差"
+      ]
+    },
+    {
+      "id": "VAR_242",
+      "name": "苹果优果率",
+      "type": "质量变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "trackingFrequency": "收获季",
+      "trackingVariables": [
+        "优果率",
+        "交割品占比"
+      ]
+    },
+    {
+      "id": "CUL_220",
+      "name": "苹果天气炒作叙事",
+      "type": "市场共识",
+      "groundBase": "culture",
+      "importance": 8,
+      "description": "苹果花期（4月）霜冻和冰雹是年度最大交易主题",
+      "trackingVariables": [
+        "花期天气",
+        "霜冻预警",
+        "冰雹"
+      ]
+    },
+    {
+      "id": "RUL_220",
+      "name": "苹果期货交割标准",
+      "type": "交易所规则",
+      "groundBase": "rule",
+      "importance": 8,
+      "description": "果径≥80mm，果面着色≥70%，硬度等指标",
+      "trackingVariables": [
+        "交割标准",
+        "仓单注册量",
+        "弃仓率"
+      ]
+    }
+  ]
 }

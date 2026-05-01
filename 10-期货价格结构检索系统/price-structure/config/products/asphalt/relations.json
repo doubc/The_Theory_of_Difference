@@ -1,4 +1,55 @@
 {
-  "commodity": "asphalt",
-  "relations": []
+  "commodity": "沥青",
+  "symbol": "BU",
+  "version": "1.3.0",
+  "relations": [
+    {
+      "id": "R_660",
+      "type": "原油传导",
+      "from": "原油价格",
+      "to": "沥青价格",
+      "strength": 0.85,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "沥青是炼厂副产品，原油是核心成本",
+      "reversalPoint": "沥青自身供需紧张时可脱钩"
+    },
+    {
+      "id": "R_661",
+      "type": "季节性规律",
+      "from": "道路施工旺季",
+      "to": "沥青需求",
+      "strength": 0.75,
+      "direction": "正向",
+      "groundBase": "natural",
+      "lag": "季节性",
+      "description": "4-10月是道路施工旺季",
+      "reversalPoint": "雨季/寒冬施工减少"
+    },
+    {
+      "id": "R_662",
+      "type": "政策传导",
+      "from": "基建投资",
+      "to": "沥青需求",
+      "strength": 0.7,
+      "direction": "正向",
+      "groundBase": "order",
+      "lag": "季度",
+      "description": "基建投资是沥青需求核心驱动",
+      "reversalPoint": "投资增速放缓"
+    },
+    {
+      "id": "R_663",
+      "type": "库存传导",
+      "from": "沥青社会库存",
+      "to": "沥青价格",
+      "strength": 0.7,
+      "direction": "反向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "库存是供需平衡指标",
+      "reversalPoint": "库存极低时价格弹性增大"
+    }
+  ]
 }

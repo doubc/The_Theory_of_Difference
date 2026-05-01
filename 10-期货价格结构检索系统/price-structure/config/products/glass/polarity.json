@@ -1,4 +1,19 @@
 {
-  "commodity": "glass",
-  "entries": {}
+  "commodity": "玻璃",
+  "symbol": "FG",
+  "version": "1.3.0",
+  "entries": {
+    "CZCE玻璃期货价格": {
+      "historicalMin": 800,
+      "historicalMax": 3000,
+      "recentMin": 1100,
+      "recentMax": 2500,
+      "reversalSignalPatterns": [
+        "房地产竣工数据",
+        "库存变化",
+        "冷修/复产",
+        "纯碱价格"
+      ]
+    }
+  }
 }

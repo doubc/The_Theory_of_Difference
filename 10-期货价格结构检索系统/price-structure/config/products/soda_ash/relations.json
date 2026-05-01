@@ -1,4 +1,55 @@
 {
-  "commodity": "soda_ash",
-  "relations": []
+  "commodity": "纯碱",
+  "symbol": "SA",
+  "version": "1.3.0",
+  "relations": [
+    {
+      "id": "R_700",
+      "type": "需求传导",
+      "from": "浮法玻璃产能",
+      "to": "纯碱需求",
+      "strength": 0.8,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "浮法玻璃是纯碱最大传统下游",
+      "reversalPoint": "玻璃冷修减少需求"
+    },
+    {
+      "id": "R_701",
+      "type": "需求增量",
+      "from": "光伏玻璃投产",
+      "to": "纯碱需求",
+      "strength": 0.75,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "季度",
+      "description": "光伏玻璃是纯碱最大需求增量",
+      "reversalPoint": "光伏玻璃产能过剩"
+    },
+    {
+      "id": "R_702",
+      "type": "库存传导",
+      "from": "纯碱企业库存",
+      "to": "纯碱价格",
+      "strength": 0.8,
+      "direction": "反向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "库存是供需平衡核心指标",
+      "reversalPoint": "库存极低时价格弹性急剧放大"
+    },
+    {
+      "id": "R_703",
+      "type": "产能周期",
+      "from": "纯碱新增产能",
+      "to": "纯碱价格",
+      "strength": 0.7,
+      "direction": "反向",
+      "groundBase": "marginal",
+      "lag": "季度",
+      "description": "天然碱等新增产能压制价格",
+      "reversalPoint": "需求增速超产能增速"
+    }
+  ]
 }

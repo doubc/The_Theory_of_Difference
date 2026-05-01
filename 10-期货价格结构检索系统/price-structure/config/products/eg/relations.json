@@ -1,4 +1,55 @@
 {
-  "commodity": "eg",
-  "relations": []
+  "commodity": "乙二醇",
+  "symbol": "EG",
+  "version": "1.3.0",
+  "relations": [
+    {
+      "id": "R_640",
+      "type": "原油传导",
+      "from": "原油价格",
+      "to": "EG价格",
+      "strength": 0.75,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "油制EG路线成本传导",
+      "reversalPoint": "煤制占比提升后传导减弱"
+    },
+    {
+      "id": "R_641",
+      "type": "库存传导",
+      "from": "EG港口库存",
+      "to": "EG价格",
+      "strength": 0.7,
+      "direction": "反向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "库存是供需平衡指标",
+      "reversalPoint": "库存极低时价格弹性增大"
+    },
+    {
+      "id": "R_642",
+      "type": "产能周期",
+      "from": "EG新增产能",
+      "to": "EG价格中枢",
+      "strength": 0.7,
+      "direction": "反向",
+      "groundBase": "marginal",
+      "lag": "季度",
+      "description": "产能扩张压制利润中枢",
+      "reversalPoint": "需求增速超产能增速"
+    },
+    {
+      "id": "R_643",
+      "type": "下游需求",
+      "from": "聚酯开工率",
+      "to": "EG需求",
+      "strength": 0.75,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "聚酯是EG最大下游，开工率反映需求强度",
+      "reversalPoint": "聚酯利润压缩时降负"
+    }
+  ]
 }

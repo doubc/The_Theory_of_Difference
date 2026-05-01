@@ -1,4 +1,52 @@
 {
-  "commodity": "soda_ash",
-  "chains": []
+  "commodity": "纯碱",
+  "symbol": "SA",
+  "version": "1.3.0",
+  "chains": [
+    {
+      "id": "C_300",
+      "name": "光伏玻璃扩产拉动纯碱链",
+      "domain": "化工",
+      "groundBase": "marginal",
+      "triggerEvent": "光伏玻璃产能集中投产",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "光伏玻璃投产",
+          "to": "纯碱需求增加",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "每GW光伏玻璃消耗约1万吨纯碱"
+        },
+        {
+          "seq": 2,
+          "from": "需求增加",
+          "to": "纯碱库存去化",
+          "confidence": "高",
+          "lag": "月度",
+          "mechanism": "需求拉动去库"
+        },
+        {
+          "seq": 3,
+          "from": "去库",
+          "to": "纯碱价格上涨",
+          "confidence": "中",
+          "lag": "即时",
+          "mechanism": "供需收紧"
+        }
+      ],
+      "reversalNode": "光伏玻璃投产放缓",
+      "reversalCondition": "光伏玻璃产能过剩",
+      "polarityTensionThreshold": 0.65,
+      "historicalCases": [
+        {
+          "year": "2022",
+          "description": "光伏玻璃大投产，纯碱从2000涨至3000"
+        }
+      ],
+      "reversibility": 0.6,
+      "tail_probability": 0.15,
+      "minority_protected": false
+    }
+  ]
 }

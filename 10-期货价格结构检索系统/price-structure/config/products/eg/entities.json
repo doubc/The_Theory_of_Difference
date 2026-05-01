@@ -1,16 +1,98 @@
 {
-  "commodity": "eg",
+  "commodity": "乙二醇",
   "symbol": "EG",
+  "version": "1.3.0",
   "entities": [
     {
-      "id": "VAR_001",
-      "name": "乙二醇库存",
-      "type": "variable",
-      "description": "乙二醇港口库存",
-      "importance": 7,
+      "id": "GEO_330",
+      "name": "中国乙二醇产能",
+      "type": "供给节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "中国乙二醇产能约2500万吨/年，煤制乙二醇是重要补充路线",
+      "trackingVariables": [
+        "总产能",
+        "开工率",
+        "煤制利润"
+      ]
+    },
+    {
+      "id": "GEO_331",
+      "name": "中东乙二醇产能",
+      "type": "供给节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "沙特/科威特等中东国家，乙烷裂解副产乙二醇成本低",
+      "trackingVariables": [
+        "出口量",
+        "报价"
+      ]
+    },
+    {
+      "id": "POW_250",
+      "name": "大连商品交易所DCE",
+      "type": "交易所",
+      "groundBase": "rule",
+      "importance": 10,
+      "description": "中国乙二醇期货定价中心",
+      "jurisdiction": "中国",
+      "trackingVariables": [
+        "EG期价",
+        "持仓量"
+      ]
+    },
+    {
+      "id": "VAR_270",
+      "name": "DCE乙二醇期货价格",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 10,
+      "currentValue": "约4500元/吨",
+      "historicalRange": {
+        "min": 3000,
+        "max": 7000
+      },
+      "recentRange": {
+        "min": 3500,
+        "max": 6000
+      },
+      "trackingFrequency": "实时"
+    },
+    {
+      "id": "VAR_271",
+      "name": "乙二醇港口库存",
+      "type": "库存变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "trackingFrequency": "每周",
       "trackingVariables": [
         "港口库存",
-        "到港量"
+        "企业库存"
+      ]
+    },
+    {
+      "id": "VAR_272",
+      "name": "乙二醇进口量",
+      "type": "贸易变量",
+      "groundBase": "marginal",
+      "importance": 7,
+      "trackingFrequency": "月度",
+      "trackingVariables": [
+        "进口到港量",
+        "进口利润"
+      ]
+    },
+    {
+      "id": "CUL_250",
+      "name": "EG产能过剩叙事",
+      "type": "市场共识",
+      "groundBase": "culture",
+      "importance": 7,
+      "description": "乙二醇产能持续扩张，煤制路线增加供应弹性，行业利润中枢下移",
+      "trackingVariables": [
+        "新增产能",
+        "开工率",
+        "利润"
       ]
     }
   ]
