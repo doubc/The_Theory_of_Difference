@@ -1,0 +1,120 @@
+{
+  "commodity": "iron_ore",
+  "symbol": "I",
+  "entities": [
+    {
+      "id": "GEO_001",
+      "name": "澳大利亚皮尔巴拉",
+      "type": "geography",
+      "description": "全球最大铁矿石产区，BHP/Rio Tinto/FMG三大矿商集中",
+      "importance": 9,
+      "controlledBy": [
+        "BHP",
+        "Rio Tinto",
+        "FMG"
+      ],
+      "trackingVariables": [
+        "发货量",
+        "天气",
+        "矿区检修"
+      ]
+    },
+    {
+      "id": "GEO_002",
+      "name": "巴西帕拉州",
+      "type": "geography",
+      "description": "淡水河谷主产区，尾矿坝安全是黑天鹅风险",
+      "importance": 8,
+      "controlledBy": [
+        "Vale"
+      ],
+      "trackingVariables": [
+        "发货量",
+        "尾矿坝安全评级"
+      ]
+    },
+    {
+      "id": "GEO_003",
+      "name": "印度",
+      "type": "geography",
+      "description": "铁矿石出口国，出口政策波动大",
+      "importance": 6,
+      "trackingVariables": [
+        "出口关税",
+        "出口量"
+      ]
+    },
+    {
+      "id": "POW_001",
+      "name": "钢厂",
+      "type": "power",
+      "description": "铁矿石终端需求方，高炉开工率决定需求",
+      "importance": 9,
+      "trackingVariables": [
+        "高炉开工率",
+        "钢厂利润",
+        "焦炭库存天数"
+      ]
+    },
+    {
+      "id": "POW_002",
+      "name": "贸易商",
+      "type": "power",
+      "description": "铁矿石中间环节，投机需求放大波动",
+      "importance": 7,
+      "trackingVariables": [
+        "贸易商库存",
+        "期现基差"
+      ]
+    },
+    {
+      "id": "VAR_001",
+      "name": "港口库存",
+      "type": "variable",
+      "description": "铁矿石港口库存是核心观测指标，去库/累库决定价格方向",
+      "importance": 10,
+      "trackingVariables": [
+        "库存总量",
+        "澳矿占比",
+        "巴西矿占比",
+        "压港天数"
+      ]
+    },
+    {
+      "id": "VAR_002",
+      "name": "钢厂库存天数",
+      "type": "variable",
+      "description": "钢厂铁矿石可用天数，低于15天触发补库",
+      "importance": 9,
+      "trackingVariables": [
+        "库存天数",
+        "补库节奏"
+      ]
+    },
+    {
+      "id": "CUL_001",
+      "name": "钢厂补库预期",
+      "type": "narrative",
+      "description": "钢厂库存天数低位→集中补库→矿价上涨的正反馈",
+      "importance": 8
+    },
+    {
+      "id": "CUL_002",
+      "name": "粗钢限产预期",
+      "type": "narrative",
+      "description": "政策限产→铁矿需求下降→矿价承压",
+      "importance": 7
+    },
+    {
+      "id": "RUL_001",
+      "name": "粗钢平控政策",
+      "type": "rule",
+      "description": "年度粗钢产量平控或压减政策",
+      "importance": 8,
+      "trackingVariables": [
+        "政策文件",
+        "各省执行力度"
+      ]
+    }
+  ]
+}
