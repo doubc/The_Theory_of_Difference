@@ -1,0 +1,47 @@
+{
+  "commodity": "锌",
+  "symbol": "ZN",
+  "version": "1.0.0",
+  "relations": [
+    {
+      "id": "R_601",
+      "type": "成本传导",
+      "from": "锌精矿TC/RC",
+      "to": "冶炼利润",
+      "strength": 0.85,
+      "direction": "正向"
+    },
+    {
+      "id": "R_602",
+      "type": "需求传导",
+      "from": "镀锌板产量",
+      "to": "锌需求",
+      "strength": 0.8,
+      "direction": "正向"
+    },
+    {
+      "id": "R_603",
+      "type": "需求传导",
+      "from": "基建/汽车",
+      "to": "锌需求",
+      "strength": 0.7,
+      "direction": "正向"
+    },
+    {
+      "id": "R_604",
+      "type": "库存传导",
+      "from": "锌库存",
+      "to": "锌价",
+      "strength": 0.75,
+      "direction": "反向"
+    },
+    {
+      "id": "R_605",
+      "type": "跨品种联动",
+      "from": "锌铅比",
+      "to": "冶炼产品选择",
+      "strength": 0.6,
+      "direction": "正向"
+    }
+  ]
+}
