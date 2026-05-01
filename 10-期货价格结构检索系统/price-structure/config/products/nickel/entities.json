@@ -1,0 +1,28 @@
+{
+  "commodity": "nickel",
+  "symbol": "NI",
+  "entities": [
+    {
+      "id": "GEO_001",
+      "name": "印尼",
+      "type": "geography",
+      "description": "全球最大镍矿供应国",
+      "importance": 9,
+      "trackingVariables": [
+        "出口政策",
+        "RKAB审批"
+      ]
+    },
+    {
+      "id": "POW_001",
+      "name": "不锈钢厂",
+      "type": "power",
+      "description": "镍最大下游（占 65%+）",
+      "importance": 8,
+      "trackingVariables": [
+        "不锈钢产量",
+        "库存"
+      ]
+    }
+  ]
+}

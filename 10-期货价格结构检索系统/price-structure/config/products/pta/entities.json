@@ -1,0 +1,28 @@
+{
+  "commodity": "pta",
+  "symbol": "TA",
+  "entities": [
+    {
+      "id": "VAR_001",
+      "name": "PTA库存",
+      "type": "variable",
+      "description": "PTA社会库存",
+      "importance": 7,
+      "trackingVariables": [
+        "库存天数",
+        "开工率"
+      ]
+    },
+    {
+      "id": "POW_001",
+      "name": "聚酯工厂",
+      "type": "power",
+      "description": "PTA消费方",
+      "importance": 8,
+      "trackingVariables": [
+        "聚酯开工率",
+        "织造开机率"
+      ]
+    }
+  ]
+}

@@ -131,3 +131,462 @@ products:
       chains: lithium_carbonate/chains.json
       polarity: lithium_carbonate/polarity.json
       pricing_models: lithium_carbonate/pricing_models.json
+  iron_ore:
+    symbol: I
+    name: 铁矿石
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - ferrous
+    - raw_material
+    - australia_supply
+    files:
+      entities: iron_ore/entities.json
+      relations: iron_ore/relations.json
+      chains: iron_ore/chains.json
+      polarity: iron_ore/polarity.json
+      pricing_models: iron_ore/pricing_models.json
+  coke:
+    symbol: J
+    name: 焦炭
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - ferrous
+    - coking
+    - energy_intensive
+    files:
+      entities: coke/entities.json
+      relations: coke/relations.json
+      chains: coke/chains.json
+      polarity: coke/polarity.json
+      pricing_models: coke/pricing_models.json
+  coking_coal:
+    symbol: JM
+    name: 焦煤
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - ferrous
+    - coal
+    - import_dependent
+    files:
+      entities: coking_coal/entities.json
+      relations: coking_coal/relations.json
+      chains: coking_coal/chains.json
+      polarity: coking_coal/polarity.json
+      pricing_models: coking_coal/pricing_models.json
+  hot_coil:
+    symbol: HC
+    name: 热卷
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - ferrous
+    - flat_steel
+    - manufacturing
+    files:
+      entities: hot_coil/entities.json
+      relations: hot_coil/relations.json
+      chains: hot_coil/chains.json
+      polarity: hot_coil/polarity.json
+      pricing_models: hot_coil/pricing_models.json
+  asphalt:
+    symbol: BU
+    name: 沥青
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - energy
+    - petrochemical
+    - infrastructure
+    files:
+      entities: asphalt/entities.json
+      relations: asphalt/relations.json
+      chains: asphalt/chains.json
+      polarity: asphalt/polarity.json
+      pricing_models: asphalt/pricing_models.json
+  pta:
+    symbol: TA
+    name: PTA
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - petrochemical
+    - polyester
+    - crude_derivative
+    files:
+      entities: pta/entities.json
+      relations: pta/relations.json
+      chains: pta/chains.json
+      polarity: pta/polarity.json
+      pricing_models: pta/pricing_models.json
+  methanol:
+    symbol: MA
+    name: 甲醇
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - petrochemical
+    - coal_chemical
+    - clean_energy
+    files:
+      entities: methanol/entities.json
+      relations: methanol/relations.json
+      chains: methanol/chains.json
+      polarity: methanol/polarity.json
+      pricing_models: methanol/pricing_models.json
+  eg:
+    symbol: EG
+    name: 乙二醇
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - petrochemical
+    - polyester
+    - oversupply
+    files:
+      entities: eg/entities.json
+      relations: eg/relations.json
+      chains: eg/chains.json
+      polarity: eg/polarity.json
+      pricing_models: eg/pricing_models.json
+  plastic:
+    symbol: L
+    name: 塑料(PE)
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - petrochemical
+    - plastic
+    - crude_derivative
+    files:
+      entities: plastic/entities.json
+      relations: plastic/relations.json
+      chains: plastic/chains.json
+      polarity: plastic/polarity.json
+      pricing_models: plastic/pricing_models.json
+  pp:
+    symbol: PP
+    name: 聚丙烯
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - petrochemical
+    - plastic
+    files:
+      entities: pp/entities.json
+      relations: pp/relations.json
+      chains: pp/chains.json
+      polarity: pp/polarity.json
+      pricing_models: pp/pricing_models.json
+  lpg:
+    symbol: PG
+    name: LPG
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - energy
+    - petrochemical
+    - seasonal
+    files:
+      entities: lpg/entities.json
+      relations: lpg/relations.json
+      chains: lpg/chains.json
+      polarity: lpg/polarity.json
+      pricing_models: lpg/pricing_models.json
+  fuel_oil:
+    symbol: FU
+    name: 燃料油
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - energy
+    - shipping
+    - crude_derivative
+    files:
+      entities: fuel_oil/entities.json
+      relations: fuel_oil/relations.json
+      chains: fuel_oil/chains.json
+      polarity: fuel_oil/polarity.json
+      pricing_models: fuel_oil/pricing_models.json
+  soda_ash:
+    symbol: SA
+    name: 纯碱
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - chemical
+    - glass_raw_material
+    files:
+      entities: soda_ash/entities.json
+      relations: soda_ash/relations.json
+      chains: soda_ash/chains.json
+      polarity: soda_ash/polarity.json
+      pricing_models: soda_ash/pricing_models.json
+  glass:
+    symbol: FG
+    name: 玻璃
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - building_material
+    - real_estate
+    files:
+      entities: glass/entities.json
+      relations: glass/relations.json
+      chains: glass/chains.json
+      polarity: glass/polarity.json
+      pricing_models: glass/pricing_models.json
+  urea:
+    symbol: UR
+    name: 尿素
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - chemical
+    - fertilizer
+    - seasonal
+    files:
+      entities: urea/entities.json
+      relations: urea/relations.json
+      chains: urea/chains.json
+      polarity: urea/polarity.json
+      pricing_models: urea/pricing_models.json
+  pvc:
+    symbol: V
+    name: PVC
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - petrochemical
+    - building_material
+    files:
+      entities: pvc/entities.json
+      relations: pvc/relations.json
+      chains: pvc/chains.json
+      polarity: pvc/polarity.json
+      pricing_models: pvc/pricing_models.json
+  soybean_meal:
+    symbol: M
+    name: 豆粕
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - agriculture
+    - oilseed
+    - feed
+    files:
+      entities: soybean_meal/entities.json
+      relations: soybean_meal/relations.json
+      chains: soybean_meal/chains.json
+      polarity: soybean_meal/polarity.json
+      pricing_models: soybean_meal/pricing_models.json
+  soybean_oil:
+    symbol: Y
+    name: 豆油
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - agriculture
+    - oilseed
+    - edible_oil
+    files:
+      entities: soybean_oil/entities.json
+      relations: soybean_oil/relations.json
+      chains: soybean_oil/chains.json
+      polarity: soybean_oil/polarity.json
+      pricing_models: soybean_oil/pricing_models.json
+  palm_oil:
+    symbol: P
+    name: 棕榈油
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - agriculture
+    - oilseed
+    - tropical
+    files:
+      entities: palm_oil/entities.json
+      relations: palm_oil/relations.json
+      chains: palm_oil/chains.json
+      polarity: palm_oil/polarity.json
+      pricing_models: palm_oil/pricing_models.json
+  corn:
+    symbol: C
+    name: 玉米
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - agriculture
+    - grain
+    - feed
+    files:
+      entities: corn/entities.json
+      relations: corn/relations.json
+      chains: corn/chains.json
+      polarity: corn/polarity.json
+      pricing_models: corn/pricing_models.json
+  cotton:
+    symbol: CF
+    name: 棉花
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - agriculture
+    - textile
+    - soft_commodity
+    files:
+      entities: cotton/entities.json
+      relations: cotton/relations.json
+      chains: cotton/chains.json
+      polarity: cotton/polarity.json
+      pricing_models: cotton/pricing_models.json
+  sugar:
+    symbol: SR
+    name: 白糖
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - agriculture
+    - soft_commodity
+    - seasonal
+    files:
+      entities: sugar/entities.json
+      relations: sugar/relations.json
+      chains: sugar/chains.json
+      polarity: sugar/polarity.json
+      pricing_models: sugar/pricing_models.json
+  rapeseed_oil:
+    symbol: OI
+    name: 菜油
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - agriculture
+    - oilseed
+    - edible_oil
+    files:
+      entities: rapeseed_oil/entities.json
+      relations: rapeseed_oil/relations.json
+      chains: rapeseed_oil/chains.json
+      polarity: rapeseed_oil/polarity.json
+      pricing_models: rapeseed_oil/pricing_models.json
+  rapeseed_meal:
+    symbol: RM
+    name: 菜粕
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - agriculture
+    - oilseed
+    - feed
+    files:
+      entities: rapeseed_meal/entities.json
+      relations: rapeseed_meal/relations.json
+      chains: rapeseed_meal/chains.json
+      polarity: rapeseed_meal/polarity.json
+      pricing_models: rapeseed_meal/pricing_models.json
+  apple:
+    symbol: AP
+    name: 苹果
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - agriculture
+    - fruit
+    - soft_commodity
+    files:
+      entities: apple/entities.json
+      relations: apple/relations.json
+      chains: apple/chains.json
+      polarity: apple/polarity.json
+      pricing_models: apple/pricing_models.json
+  soybean:
+    symbol: A
+    name: 豆一
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - agriculture
+    - oilseed
+    files:
+      entities: soybean/entities.json
+      relations: soybean/relations.json
+      chains: soybean/chains.json
+      polarity: soybean/polarity.json
+      pricing_models: soybean/pricing_models.json
+  starch:
+    symbol: CS
+    name: 淀粉
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - agriculture
+    - corn_derivative
+    files:
+      entities: starch/entities.json
+      relations: starch/relations.json
+      chains: starch/chains.json
+      polarity: starch/polarity.json
+      pricing_models: starch/pricing_models.json
+  nickel:
+    symbol: NI
+    name: 镍
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - base_metal
+    - stainless_steel
+    - ev_battery
+    files:
+      entities: nickel/entities.json
+      relations: nickel/relations.json
+      chains: nickel/chains.json
+      polarity: nickel/polarity.json
+      pricing_models: nickel/pricing_models.json
+  tin:
+    symbol: SN
+    name: 锡
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - base_metal
+    - solder
+    - small_market
+    files:
+      entities: tin/entities.json
+      relations: tin/relations.json
+      chains: tin/chains.json
+      polarity: tin/polarity.json
+      pricing_models: tin/pricing_models.json
+  silicon:
+    symbol: SI
+    name: 工业硅
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - new_energy
+    - solar_pv
+    - organic_silicon
+    files:
+      entities: silicon/entities.json
+      relations: silicon/relations.json
+      chains: silicon/chains.json
+      polarity: silicon/polarity.json
+      pricing_models: silicon/pricing_models.json
+  thermal_coal:
+    symbol: ZC
+    name: 动力煤
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - energy
+    - power_generation
+    - policy_controlled
+    files:
+      entities: thermal_coal/entities.json
+      relations: thermal_coal/relations.json
+      chains: thermal_coal/chains.json
+      polarity: thermal_coal/polarity.json
+      pricing_models: thermal_coal/pricing_models.json

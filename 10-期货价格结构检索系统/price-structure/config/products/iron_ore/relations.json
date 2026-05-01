@@ -1,0 +1,23 @@
+{
+  "commodity": "iron_ore",
+  "relations": [
+    {
+      "id": "R_001",
+      "from": "GEO_001",
+      "to": "VAR_001",
+      "type": "supply",
+      "strength": 0.9,
+      "direction": "positive",
+      "description": "澳矿发货量直接影响港口库存"
+    },
+    {
+      "id": "R_002",
+      "from": "POW_001",
+      "to": "VAR_001",
+      "type": "demand",
+      "strength": 0.8,
+      "direction": "negative",
+      "description": "钢厂消耗港口库存"
+    }
+  ]
+}

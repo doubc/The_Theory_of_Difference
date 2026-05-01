@@ -1,0 +1,18 @@
+{
+  "commodity": "palm_oil",
+  "symbol": "P",
+  "entities": [
+    {
+      "id": "GEO_001",
+      "name": "马来西亚/印尼",
+      "type": "geography",
+      "description": "全球棕榈油主产国（占 85%+）",
+      "importance": 9,
+      "trackingVariables": [
+        "产量",
+        "库存",
+        "出口税"
+      ]
+    }
+  ]
+}

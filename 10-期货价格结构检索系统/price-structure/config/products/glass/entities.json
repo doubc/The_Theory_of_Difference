@@ -1,0 +1,17 @@
+{
+  "commodity": "glass",
+  "symbol": "FG",
+  "entities": [
+    {
+      "id": "POW_001",
+      "name": "房地产",
+      "type": "power",
+      "description": "玻璃终端需求（占 75%+）",
+      "importance": 9,
+      "trackingVariables": [
+        "商品房销售",
+        "竣工面积"
+      ]
+    }
+  ]
+}

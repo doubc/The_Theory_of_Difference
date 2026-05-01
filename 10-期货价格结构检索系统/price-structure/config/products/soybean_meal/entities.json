@@ -1,0 +1,29 @@
+{
+  "commodity": "soybean_meal",
+  "symbol": "M",
+  "entities": [
+    {
+      "id": "GEO_001",
+      "name": "美国/巴西/阿根廷",
+      "type": "geography",
+      "description": "全球大豆主产国",
+      "importance": 9,
+      "trackingVariables": [
+        "种植面积",
+        "天气",
+        "出口量"
+      ]
+    },
+    {
+      "id": "POW_001",
+      "name": "养殖业",
+      "type": "power",
+      "description": "豆粕终端需求（饲料）",
+      "importance": 8,
+      "trackingVariables": [
+        "生猪存栏",
+        "禽类存栏"
+      ]
+    }
+  ]
+}

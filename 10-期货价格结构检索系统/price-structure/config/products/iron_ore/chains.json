@@ -1,0 +1,35 @@
+{
+  "commodity": "iron_ore",
+  "chains": [
+    {
+      "id": "CH_001",
+      "name": "钢厂补库链",
+      "triggerEvent": "钢厂库存天数降至低位",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "钢厂低库存",
+          "to": "集中采购",
+          "confidence": 0.8,
+          "lag": "3-5天"
+        },
+        {
+          "seq": 2,
+          "from": "集中采购",
+          "to": "港口去库",
+          "confidence": 0.7,
+          "lag": "1周"
+        },
+        {
+          "seq": 3,
+          "from": "港口去库",
+          "to": "矿价上涨",
+          "confidence": 0.7,
+          "lag": "同步"
+        }
+      ],
+      "reversalNode": "钢厂库存天数恢复至 30 天以上",
+      "reversalCondition": "补库结束+高炉检修"
+    }
+  ]
+}

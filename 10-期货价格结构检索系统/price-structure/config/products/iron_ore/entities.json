@@ -1,0 +1,67 @@
+{
+  "commodity": "iron_ore",
+  "symbol": "I",
+  "entities": [
+    {
+      "id": "GEO_001",
+      "name": "澳大利亚",
+      "type": "geography",
+      "description": "全球最大铁矿石出口国（占 60%+）",
+      "importance": 9,
+      "controlledBy": [
+        "BHP",
+        "Rio Tinto",
+        "FMG"
+      ],
+      "trackingVariables": [
+        "发货量",
+        "天气"
+      ]
+    },
+    {
+      "id": "GEO_002",
+      "name": "巴西",
+      "type": "geography",
+      "description": "第二大出口国（淡水河谷）",
+      "importance": 8,
+      "controlledBy": [
+        "Vale"
+      ],
+      "trackingVariables": [
+        "发货量",
+        "尾矿坝安全"
+      ]
+    },
+    {
+      "id": "POW_001",
+      "name": "钢厂",
+      "type": "power",
+      "description": "铁矿石终端需求方",
+      "importance": 9,
+      "trackingVariables": [
+        "高炉开工率",
+        "利润",
+        "库存天数"
+      ]
+    },
+    {
+      "id": "VAR_001",
+      "name": "港口库存",
+      "type": "variable",
+      "description": "铁矿石港口库存是核心观测指标",
+      "importance": 9,
+      "trackingVariables": [
+        "库存总量",
+        "澳矿占比",
+        "压港天数"
+      ]
+    },
+    {
+      "id": "CUL_001",
+      "name": "钢厂补库预期",
+      "type": "narrative",
+      "description": "钢厂集中补库推动矿价上涨",
+      "importance": 7
+    }
+  ]
+}

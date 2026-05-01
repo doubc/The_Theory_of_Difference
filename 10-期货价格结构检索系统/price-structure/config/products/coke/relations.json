@@ -1,0 +1,14 @@
+{
+  "commodity": "coke",
+  "relations": [
+    {
+      "id": "R_001",
+      "from": "POW_001",
+      "to": "POW_002",
+      "type": "supply",
+      "strength": 0.9,
+      "direction": "positive",
+      "description": "焦化厂向钢厂供焦"
+    }
+  ]
+}

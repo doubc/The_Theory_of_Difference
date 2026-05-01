@@ -1,0 +1,28 @@
+{
+  "commodity": "asphalt",
+  "symbol": "BU",
+  "entities": [
+    {
+      "id": "VAR_001",
+      "name": "沥青库存",
+      "type": "variable",
+      "description": "沥青社会库存",
+      "importance": 7,
+      "trackingVariables": [
+        "库存总量",
+        "炼厂库存"
+      ]
+    },
+    {
+      "id": "POW_001",
+      "name": "道路施工",
+      "type": "power",
+      "description": "沥青终端需求",
+      "importance": 7,
+      "trackingVariables": [
+        "基建投资",
+        "道路开工率"
+      ]
+    }
+  ]
+}

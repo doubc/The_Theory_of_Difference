@@ -1,0 +1,28 @@
+{
+  "commodity": "coking_coal",
+  "symbol": "JM",
+  "entities": [
+    {
+      "id": "GEO_001",
+      "name": "蒙古/澳洲",
+      "type": "geography",
+      "description": "焦煤进口来源",
+      "importance": 7,
+      "trackingVariables": [
+        "通关量",
+        "口岸库存"
+      ]
+    },
+    {
+      "id": "VAR_001",
+      "name": "焦煤库存",
+      "type": "variable",
+      "description": "焦煤矿+港口+焦化厂总库存",
+      "importance": 8,
+      "trackingVariables": [
+        "总库存",
+        "可用天数"
+      ]
+    }
+  ]
+}

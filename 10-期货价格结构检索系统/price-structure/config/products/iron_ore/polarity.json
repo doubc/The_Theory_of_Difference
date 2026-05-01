@@ -1,0 +1,15 @@
+{
+  "commodity": "iron_ore",
+  "entries": {
+    "iron_ore_price": {
+      "historicalMin": 300,
+      "historicalMax": 1300,
+      "recentMin": 600,
+      "recentMax": 900,
+      "reversalSignalPatterns": [
+        "港口库存骤降",
+        "钢厂集中补库"
+      ]
+    }
+  }
+}

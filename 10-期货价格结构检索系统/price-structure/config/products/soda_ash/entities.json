@@ -1,0 +1,17 @@
+{
+  "commodity": "soda_ash",
+  "symbol": "SA",
+  "entities": [
+    {
+      "id": "POW_001",
+      "name": "玻璃厂",
+      "type": "power",
+      "description": "纯碱最大下游（占 30%+）",
+      "importance": 8,
+      "trackingVariables": [
+        "玻璃产能",
+        "浮法开工率"
+      ]
+    }
+  ]
+}
