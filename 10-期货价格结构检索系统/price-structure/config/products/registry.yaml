@@ -28,6 +28,95 @@ products:
       chains: copper/chains.json
       polarity: copper/polarity.json
       pricing_models: copper/pricing_models.json
+  crude_oil:
+    symbol: SC
+    name: 原油
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - energy
+    - macro_anchor
+    - king_of_commodities
+    files:
+      entities: crude_oil/entities.json
+      relations: crude_oil/relations.json
+      chains: crude_oil/chains.json
+      polarity: crude_oil/polarity.json
+      pricing_models: crude_oil/pricing_models.json
+  rebar:
+    symbol: RB
+    name: 螺纹钢
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - ferrous
+    - china_domestic
+    - highest_volume
+    files:
+      entities: rebar/entities.json
+      relations: rebar/relations.json
+      chains: rebar/chains.json
+      polarity: rebar/polarity.json
+      pricing_models: rebar/pricing_models.json
+  aluminum:
+    symbol: AL
+    name: 铝
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - base_metal
+    - energy_intensive
+    - capacity_cap
+    files:
+      entities: aluminum/entities.json
+      relations: aluminum/relations.json
+      chains: aluminum/chains.json
+      polarity: aluminum/polarity.json
+      pricing_models: aluminum/pricing_models.json
+  zinc:
+    symbol: ZN
+    name: 锌
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - base_metal
+    - galvanizing
+    files:
+      entities: zinc/entities.json
+      relations: zinc/relations.json
+      chains: zinc/chains.json
+      polarity: zinc/polarity.json
+      pricing_models: zinc/pricing_models.json
+  gold:
+    symbol: AU
+    name: 黄金
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - precious_metal
+    - safe_haven
+    - dollar_inverse
+    files:
+      entities: gold/entities.json
+      relations: gold/relations.json
+      chains: gold/chains.json
+      polarity: gold/polarity.json
+      pricing_models: gold/pricing_models.json
+  silver:
+    symbol: AG
+    name: 白银
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - precious_metal
+    - industrial
+    - solar_pv
+    files:
+      entities: silver/entities.json
+      relations: silver/relations.json
+      chains: silver/chains.json
+      polarity: silver/polarity.json
+      pricing_models: silver/pricing_models.json
   lithium_carbonate:
     symbol: LC
     name: 碳酸锂
