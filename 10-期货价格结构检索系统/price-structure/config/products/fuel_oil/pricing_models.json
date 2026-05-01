@@ -1,4 +1,46 @@
 {
-  "commodity": "fuel_oil",
-  "models": []
+  "commodity": "燃料油",
+  "symbol": "FU",
+  "version": "1.3.0",
+  "models": [
+    {
+      "id": "M_030",
+      "name": "燃料油的裂解价差定价模型",
+      "domain": "产业链定价",
+      "groundBase": "marginal",
+      "formula": "FU_Price = CrudeOil_Price + Crack_Spread + Quality_Premium",
+      "variables": [
+        {"name": "原油价格", "id": "crude_price", "direction": "正向", "weight": 0.6},
+        {"name": "裂解价差（供需基本面）", "id": "crack_spread", "direction": "正向", "weight": 0.25},
+        {"name": "品质溢价（高硫vs低硫）", "id": "quality_premium", "direction": "复杂", "weight": 0.15}
+      ],
+      "description": "燃料油价格=原油成本+裂解价差+品质溢价。裂解价差反映燃料油自身的供需基本面。IMO2020后高硫油裂解价差长期为负（贴水），低硫油为正。",
+      "dominantPhase": "裂解价差极端时模型最有效",
+      "limitation": "炼厂行为和政策干预可改变裂解价差",
+      "trackingVariables": ["原油价格", "裂解价差", "HSFO-LSFO价差", "炼厂利润"],
+      "linkToEntities": ["VAR_120", "VAR_121", "VAR_122"],
+      "linkToRelations": ["R_340", "R_343"],
+      "linkToConductionChains": ["C_120"]
+    },
+    {
+      "id": "M_031",
+      "name": "燃料油的航运需求定价模型",
+      "domain": "需求定价",
+      "groundBase": "marginal",
+      "formula": "FU_Score = w1*CrudeFactor + w2*ShippingFactor + w3*InventoryFactor + w4*SeasonalFactor",
+      "variables": [
+        {"name": "原油因子", "id": "crude", "direction": "正向", "weight": 0.5},
+        {"name": "航运需求因子（BDI）", "id": "BDI", "direction": "正向", "weight": 0.2},
+        {"name": "新加坡库存因子", "id": "inventory", "direction": "反向", "weight": 0.2},
+        {"name": "季节性因子（中东夏季发电）", "id": "seasonal", "direction": "正向", "weight": 0.1}
+      ],
+      "description": "燃料油定价以原油为锚，航运需求为边际驱动，库存为缓冲。夏季中东发电需求是季节性峰值。",
+      "dominantPhase": "航运旺季和中东夏季发电期模型最有效",
+      "limitation": "地缘政治冲击可瞬间改变定价逻辑",
+      "trackingVariables": ["原油价格", "BDI指数", "新加坡库存", "中东气温"],
+      "linkToEntities": ["VAR_120", "VAR_123", "VAR_124"],
+      "linkToRelations": ["R_340", "R_341", "R_342"],
+      "linkToConductionChains": ["C_120", "C_121"]
+    }
+  ]
 }

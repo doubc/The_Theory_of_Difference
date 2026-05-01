@@ -1,5 +1,28 @@
 {
-  "commodity": "pp",
+  "commodity": "聚丙烯",
   "symbol": "PP",
-  "entities": []
+  "version": "1.3.0",
+  "entities": [
+    {"id": "GEO_140", "name": "中国PP产能", "type": "供给节点", "groundBase": "natural", "importance": 9,
+     "description": "中国PP产能约4000万吨/年，油制/煤制/PDH多路线并存", "controlledBy": ["中石化", "中石油", "东华能源", "卫星化学"],
+     "trackingVariables": ["总产能", "开工率", "各路线利润"]},
+    {"id": "GEO_141", "name": "中东PP产能", "type": "供给节点", "groundBase": "natural", "importance": 7,
+     "description": "中东低成本PP产能，出口至亚太市场", "trackingVariables": ["出口量", "报价"]},
+    {"id": "POW_120", "name": "大连商品交易所DCE", "type": "交易所", "groundBase": "rule", "importance": 10,
+     "description": "中国PP期货定价中心", "jurisdiction": "中国", "trackingVariables": ["PP期价", "持仓量"]},
+    {"id": "VAR_140", "name": "DCE PP期货价格", "type": "大宗商品变量", "groundBase": "marginal", "importance": 10,
+     "currentValue": "约7500元/吨", "historicalRange": {"min": 5500, "max": 11000}, "recentRange": {"min": 6500, "max": 9500},
+     "trackingFrequency": "实时"},
+    {"id": "VAR_141", "name": "PP社会库存", "type": "库存变量", "groundBase": "marginal", "importance": 8,
+     "trackingFrequency": "每周", "trackingVariables": ["两油库存", "港口库存"]},
+    {"id": "VAR_142", "name": "PDH制PP利润", "type": "成本变量", "groundBase": "marginal", "importance": 7,
+     "trackingFrequency": "每周", "trackingVariables": ["丙烷价格", "PP价格", "PDH利润"]},
+    {"id": "VAR_143", "name": "塑编开工率", "type": "需求变量", "groundBase": "marginal", "importance": 7,
+     "trackingFrequency": "每周", "trackingVariables": ["塑编袋开工率", "BOPP开工率"]},
+    {"id": "CUL_120", "name": "PP产能过剩叙事", "type": "市场共识", "groundBase": "culture", "importance": 7,
+     "description": "PP产能持续扩张，多路线竞争加剧，行业利润中枢下移",
+     "trackingVariables": ["新增产能", "开工率", "各路线利润"]},
+    {"id": "RUL_120", "name": "DCE PP期货交割标准", "type": "交易所规则", "groundBase": "rule", "importance": 7,
+     "description": "均聚聚丙烯，熔融指数等技术指标", "trackingVariables": ["交割标准", "仓单量"]}
+  ]
 }

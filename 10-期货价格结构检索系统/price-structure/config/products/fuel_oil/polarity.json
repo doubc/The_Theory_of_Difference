@@ -1,4 +1,30 @@
 {
-  "commodity": "fuel_oil",
-  "entries": {}
+  "commodity": "燃料油",
+  "symbol": "FU",
+  "version": "1.3.0",
+  "entries": {
+    "FU燃料油期货价格": {
+      "historicalMin": 1500,
+      "historicalMax": 5000,
+      "recentMin": 2500,
+      "recentMax": 4500,
+      "reversalSignalPatterns": [
+        "原油价格大幅波动",
+        "船用油需求变化",
+        "新加坡库存变化",
+        "IMO政策调整"
+      ]
+    },
+    "HSFO-LSFO价差": {
+      "historicalMin": -50,
+      "historicalMax": 350,
+      "recentMin": 50,
+      "recentMax": 250,
+      "reversalSignalPatterns": [
+        "脱硫塔装船量变化",
+        "IMO执行力度调整",
+        "低硫油供应变化"
+      ]
+    }
+  }
 }

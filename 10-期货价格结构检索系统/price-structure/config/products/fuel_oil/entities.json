@@ -1,5 +1,150 @@
 {
-  "commodity": "fuel_oil",
+  "commodity": "燃料油",
   "symbol": "FU",
-  "entities": []
+  "version": "1.3.0",
+  "entities": [
+    {
+      "id": "GEO_120",
+      "name": "新加坡燃料油市场",
+      "type": "贸易枢纽",
+      "groundBase": "natural",
+      "importance": 10,
+      "description": "全球燃料油定价中心和最大贸易枢纽，新加坡燃料油价格是亚太地区基准",
+      "controlledBy": ["兴隆贸易", "维多", "托克"],
+      "vulnerabilities": ["库存波动", "船用需求变化"],
+      "trackingVariables": ["新加坡380CST价格", "库存量", "贴水变化"]
+    },
+    {
+      "id": "GEO_121",
+      "name": "中东炼油中心",
+      "type": "供给节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "沙特/阿联酋/伊拉克大型炼厂，全球燃料油最大出口区域",
+      "controlledBy": ["沙特阿美", "ADNOC", "伊拉克SOMO"],
+      "trackingVariables": ["炼厂开工率", "出口量", "OSP定价"]
+    },
+    {
+      "id": "GEO_122",
+      "name": "中国地方炼厂",
+      "type": "消费节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "山东地炼是中国燃料油核心消费区，进口燃料油加工需求大",
+      "controlledBy": ["山东地炼集群"],
+      "trackingVariables": ["开工率", "进口量", "加工利润"]
+    },
+    {
+      "id": "GEO_123",
+      "name": "舟山船供油市场",
+      "type": "消费节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "中国最大船用燃料油加注港口，舟山保税燃料油价格是国内船供油基准",
+      "trackingVariables": ["加注量", "价格", "保税库存"]
+    },
+    {
+      "id": "POW_100",
+      "name": "上海国际能源交易中心INE",
+      "type": "交易所",
+      "groundBase": "rule",
+      "importance": 9,
+      "description": "中国燃料油期货定价中心，FU合约以180CST为标的",
+      "jurisdiction": "中国",
+      "trackingVariables": ["FU期价", "持仓量", "成交量"]
+    },
+    {
+      "id": "POW_101",
+      "name": "新加坡交易所SGX",
+      "type": "交易所",
+      "groundBase": "rule",
+      "importance": 9,
+      "description": "全球燃料油掉期和期货定价中心，380CST燃料油期货是国际贸易基准",
+      "jurisdiction": "新加坡",
+      "trackingVariables": ["380CST期货", "掉期价格", "库存"]
+    },
+    {
+      "id": "POW_102",
+      "name": "国际海事组织IMO",
+      "type": "国际规则机构",
+      "groundBase": "order",
+      "importance": 8,
+      "description": "IMO2020限硫令改变船用燃料油需求结构，推动低硫燃料油需求",
+      "trackingVariables": ["限硫令执行", "脱硫塔装船量", "低硫油需求"]
+    },
+    {
+      "id": "VAR_120",
+      "name": "FU燃料油期货价格",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 10,
+      "currentValue": "约3000元/吨",
+      "historicalRange": {"min": 1500, "max": 5000},
+      "recentRange": {"min": 2500, "max": 4500},
+      "trackingFrequency": "实时"
+    },
+    {
+      "id": "VAR_121",
+      "name": "新加坡380CST燃料油价格",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "trackingFrequency": "实时",
+      "trackingVariables": ["380CST现货价", "贴水", "月间价差"]
+    },
+    {
+      "id": "VAR_122",
+      "name": "高硫/低硫燃料油价差",
+      "type": "品质价差变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "trackingFrequency": "每日",
+      "trackingVariables": ["HSFO-LSFO价差", "脱硫塔经济性"]
+    },
+    {
+      "id": "VAR_123",
+      "name": "新加坡燃料油库存",
+      "type": "库存变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "trackingFrequency": "每周",
+      "trackingVariables": ["新加坡库存", "富查伊拉库存"]
+    },
+    {
+      "id": "VAR_124",
+      "name": "BDI波罗的海干散货指数",
+      "type": "航运变量",
+      "groundBase": "marginal",
+      "importance": 7,
+      "trackingFrequency": "每日",
+      "trackingVariables": ["BDI指数", "好望角型运费", "船用油需求"]
+    },
+    {
+      "id": "CUL_100",
+      "name": "IMO限硫令影响叙事",
+      "type": "政策共识",
+      "groundBase": "culture",
+      "importance": 8,
+      "description": "IMO2020限硫令重塑船用燃料油需求结构，高硫油需求下降低硫油需求上升",
+      "trackingVariables": ["脱硫塔装船进度", "低硫油溢价", "合规油供应"]
+    },
+    {
+      "id": "RUL_100",
+      "name": "IMO2020限硫令",
+      "type": "国际规则",
+      "groundBase": "rule",
+      "importance": 9,
+      "description": "全球船用燃料含硫量上限从3.5%降至0.5%，深刻改变燃料油供需结构",
+      "trackingVariables": ["执行力度", "脱硫塔使用", "合规油供应"]
+    },
+    {
+      "id": "RUL_101",
+      "name": "中国燃料油进口政策",
+      "type": "贸易规则",
+      "groundBase": "rule",
+      "importance": 7,
+      "description": "保税燃料油进口免关税，用于国际航行船舶加注",
+      "trackingVariables": ["进口量", "保税库存", "加注量"]
+    }
+  ]
 }

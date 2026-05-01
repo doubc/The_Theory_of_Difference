@@ -1,4 +1,117 @@
 {
-  "commodity": "cotton",
-  "chains": []
+  "commodity": "棉花",
+  "symbol": "CF",
+  "version": "1.3.0",
+  "chains": [
+    {
+      "id": "C_110",
+      "name": "USDA报告冲击棉花链",
+      "domain": "农产品",
+      "groundBase": "marginal",
+      "triggerEvent": "USDA月度WASDE报告大幅调整全球棉花供需",
+      "steps": [
+        {"seq": 1, "from": "USDA数据超预期", "to": "ICE棉花跳空", "confidence": "高", "lag": "即时",
+         "mechanism": "全球供需平衡表重新定价"},
+        {"seq": 2, "from": "ICE跳空", "to": "CF开盘联动", "confidence": "高", "lag": "次日开盘",
+         "mechanism": "进口成本传导+情绪联动"},
+        {"seq": 3, "from": "CF联动", "to": "现货报价调整", "confidence": "中", "lag": "1-3天",
+         "mechanism": "期货引导现货"},
+        {"seq": 4, "from": "价格调整", "to": "纺织企业采购节奏变化", "confidence": "中", "lag": "1-2周",
+         "mechanism": "价格上涨抑制采购，下跌刺激补库"}
+      ],
+      "reversalNode": "数据修正",
+      "reversalCondition": "后续报告修正或市场消化预期",
+      "polarityTensionThreshold": 0.65,
+      "historicalCases": [
+        {"year": "2022", "description": "USDA大幅下调全球棉花消费预估，ICE棉花暴跌"},
+        {"year": "2021", "description": "全球棉花库消比降至低位，ICE突破120美分"}
+      ],
+      "reversibility": 0.7,
+      "tail_probability": 0.15,
+      "minority_protected": false
+    },
+    {
+      "id": "C_111",
+      "name": "天气炒作推升棉花链",
+      "domain": "农产品",
+      "groundBase": "natural",
+      "triggerEvent": "主产区遭遇极端天气（干旱/洪涝/霜冻）",
+      "steps": [
+        {"seq": 1, "from": "主产区极端天气", "to": "作物生长受损", "confidence": "高", "lag": "即时",
+         "mechanism": "干旱/洪涝直接影响棉花生长和产量"},
+        {"seq": 2, "from": "生长受损", "to": "产量预估下调", "confidence": "高", "lag": "1-2周",
+         "mechanism": "USDA/市场机构下调单产和产量预期"},
+        {"seq": 3, "from": "产量下调", "to": "期货价格飙升", "confidence": "高", "lag": "即时",
+         "mechanism": "供给收紧推升价格"},
+        {"seq": 4, "from": "价格飙升", "to": "纺织企业恐慌采购", "confidence": "中", "lag": "1-2周",
+         "mechanism": "担心价格继续上涨而抢购"},
+        {"seq": 5, "from": "恐慌采购", "to": "价格自我强化", "confidence": "中", "lag": "即时",
+         "mechanism": "下游抢购进一步推升价格"}
+      ],
+      "reversalNode": "降雨改善或产量明朗",
+      "reversalCondition": "天气改善或最终产量高于预期",
+      "polarityTensionThreshold": 0.7,
+      "historicalCases": [
+        {"year": "2010", "description": "巴基斯坦洪涝+中国干旱，ICE棉花从60涨至150美分"},
+        {"year": "2023", "description": "美国德州干旱弃耕率高企，ICE棉花获得支撑"}
+      ],
+      "reversibility": 0.5,
+      "tail_probability": 0.2,
+      "minority_protected": false
+    },
+    {
+      "id": "C_112",
+      "name": "纺织需求驱动棉花消费链",
+      "domain": "农产品",
+      "groundBase": "marginal",
+      "triggerEvent": "下游纺织订单回暖或出口需求增加",
+      "steps": [
+        {"seq": 1, "from": "纺织订单增加", "to": "纺纱开机率上升", "confidence": "高", "lag": "即时",
+         "mechanism": "订单驱动产能利用率提升"},
+        {"seq": 2, "from": "开机率上升", "to": "棉花采购增加", "confidence": "高", "lag": "即时",
+         "mechanism": "纺纱厂增加原料采购"},
+        {"seq": 3, "from": "采购增加", "to": "棉花库存去化", "confidence": "高", "lag": "2-4周",
+         "mechanism": "下游补库消耗商业库存"},
+        {"seq": 4, "from": "库存去化", "to": "棉花价格上涨", "confidence": "高", "lag": "即时",
+         "mechanism": "供需收紧推升价格"}
+      ],
+      "reversalNode": "订单回落",
+      "reversalCondition": "海外订单减少或内需走弱",
+      "polarityTensionThreshold": 0.6,
+      "historicalCases": [
+        {"year": "2021", "description": "后疫情纺织订单大增，棉花消费恢复推升价格"},
+        {"year": "2023", "description": "海外需求走弱，纺织开机率下降，棉花承压"}
+      ],
+      "reversibility": 0.6,
+      "tail_probability": 0.15,
+      "minority_protected": false
+    },
+    {
+      "id": "C_113",
+      "name": "棉花收储/抛储政策链",
+      "domain": "农产品",
+      "groundBase": "order",
+      "triggerEvent": "中储棉启动棉花收储或抛储操作",
+      "steps": [
+        {"seq": 1, "from": "中储棉收储启动", "to": "市场增加需求方", "confidence": "高", "lag": "即时",
+         "mechanism": "收储增加市场需求"},
+        {"seq": 2, "from": "需求增加", "to": "现货价格企稳/上涨", "confidence": "高", "lag": "1-2周",
+         "mechanism": "收储托底价格"},
+        {"seq": 3, "from": "抛储启动", "to": "市场增加供应方", "confidence": "高", "lag": "即时",
+         "mechanism": "抛储增加市场供应"},
+        {"seq": 4, "from": "供应增加", "to": "现货价格承压", "confidence": "高", "lag": "1-2周",
+         "mechanism": "供应增加压制价格"}
+      ],
+      "reversalNode": "政策结束",
+      "reversalCondition": "收储/抛储计划完成或政策调整",
+      "polarityTensionThreshold": 0.65,
+      "historicalCases": [
+        {"year": "2011-2013", "description": "大规模棉花收储，国内棉价远高于国际，进口大增"},
+        {"year": "2024", "description": "抛储增加供应，压制棉花价格"}
+      ],
+      "reversibility": 0.7,
+      "tail_probability": 0.15,
+      "minority_protected": false
+    }
+  ]
 }

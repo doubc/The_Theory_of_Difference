@@ -1,5 +1,111 @@
 {
-  "commodity": "plastic",
+  "commodity": "塑料",
   "symbol": "L",
-  "entities": []
+  "version": "1.3.0",
+  "entities": [
+    {
+      "id": "GEO_130",
+      "name": "中东PE产能",
+      "type": "供给节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "沙特/阿联酋/科威特等中东国家拥有全球最大PE产能，低成本乙烷原料优势",
+      "controlledBy": ["沙特SABIC", "博禄Borouge", "科威特EQUATE"],
+      "trackingVariables": ["产能利用率", "出口量", "报价"]
+    },
+    {
+      "id": "GEO_131",
+      "name": "中国PE产能",
+      "type": "供给节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "中国PE产能约3000万吨/年，煤制烯烃（CTO/MTO）是重要补充路线",
+      "controlledBy": ["中石化", "中石油", "宝丰能源", "久泰能源"],
+      "trackingVariables": ["总产能", "开工率", "煤制烯烃利润"]
+    },
+    {
+      "id": "GEO_132",
+      "name": "中国塑料加工产业集群",
+      "type": "消费节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "广东/浙江/江苏为核心塑料加工消费区，农膜/包装膜/管材为主要下游",
+      "trackingVariables": ["加工开工率", "订单量", "成品库存"]
+    },
+    {
+      "id": "POW_110",
+      "name": "大连商品交易所DCE",
+      "type": "交易所",
+      "groundBase": "rule",
+      "importance": 10,
+      "description": "中国LLDPE期货定价中心，L合约是塑料行业基准价",
+      "jurisdiction": "中国",
+      "trackingVariables": ["L期价", "持仓量", "成交量"]
+    },
+    {
+      "id": "VAR_130",
+      "name": "DCE塑料期货价格",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 10,
+      "currentValue": "约8000元/吨",
+      "historicalRange": {"min": 5500, "max": 12000},
+      "recentRange": {"min": 7000, "max": 10000},
+      "trackingFrequency": "实时"
+    },
+    {
+      "id": "VAR_131",
+      "name": "PE现货价格（LLDPE）",
+      "type": "现货变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "trackingFrequency": "每日",
+      "trackingVariables": ["华东LLDPE价", "华南LLDPE价", "期现基差"]
+    },
+    {
+      "id": "VAR_132",
+      "name": "PE社会库存",
+      "type": "库存变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "trackingFrequency": "每周",
+      "trackingVariables": ["两油库存", "港口库存", "社会总库存"]
+    },
+    {
+      "id": "VAR_133",
+      "name": "PE进口量",
+      "type": "贸易变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "trackingFrequency": "月度",
+      "trackingVariables": ["进口到港量", "进口利润", "来源国"]
+    },
+    {
+      "id": "VAR_134",
+      "name": "煤制烯烃利润",
+      "type": "成本变量",
+      "groundBase": "marginal",
+      "importance": 7,
+      "trackingFrequency": "每周",
+      "trackingVariables": ["CTO/MTO利润", "煤价", "PE价格"]
+    },
+    {
+      "id": "CUL_110",
+      "name": "PE产能过剩叙事",
+      "type": "市场共识",
+      "groundBase": "culture",
+      "importance": 8,
+      "description": "全球PE产能持续扩张，中国煤制烯烃+中东低成本产能双重冲击，行业利润中枢下移",
+      "trackingVariables": ["新增产能", "开工率", "行业利润"]
+    },
+    {
+      "id": "RUL_110",
+      "name": "DCE塑料期货交割标准",
+      "type": "交易所规则",
+      "groundBase": "rule",
+      "importance": 7,
+      "description": "LLDPE期货交割品级标准，熔融指数/密度等技术指标",
+      "trackingVariables": ["交割标准", "仓单量"]
+    }
+  ]
 }

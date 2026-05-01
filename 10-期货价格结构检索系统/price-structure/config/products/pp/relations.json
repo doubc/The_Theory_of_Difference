@@ -1,4 +1,17 @@
 {
-  "commodity": "pp",
-  "relations": []
+  "commodity": "聚丙烯",
+  "symbol": "PP",
+  "version": "1.3.0",
+  "relations": [
+    {"id": "R_380", "type": "原油传导", "from": "国际原油价格", "to": "PP价格", "strength": 0.8, "direction": "正向", "groundBase": "marginal", "lag": "即时",
+     "description": "油制PP路线原料成本传导", "reversalPoint": "煤制/PDH占比提升后传导减弱"},
+    {"id": "R_381", "type": "库存传导", "from": "PP社会库存", "to": "PP价格", "strength": 0.75, "direction": "反向", "groundBase": "marginal", "lag": "即时",
+     "description": "库存是供需平衡直接指标", "reversalPoint": "库存极低时价格弹性增大"},
+    {"id": "R_382", "type": "替代路线", "from": "PDH利润", "to": "PP供给", "strength": 0.65, "direction": "正向", "groundBase": "marginal", "lag": "月度",
+     "description": "PDH是PP边际供给，利润驱动开工", "reversalPoint": "丙烷价格大幅波动"},
+    {"id": "R_383", "type": "产能周期", "from": "PP新增产能", "to": "PP价格中枢", "strength": 0.7, "direction": "反向", "groundBase": "marginal", "lag": "季度",
+     "description": "产能扩张压制利润中枢", "reversalPoint": "需求增速超产能增速"},
+    {"id": "R_384", "type": "下游需求", "from": "塑编/BOPP开工率", "to": "PP消费", "strength": 0.75, "direction": "正向", "groundBase": "marginal", "lag": "即时",
+     "description": "塑编和BOPP是PP主要下游", "reversalPoint": "下游利润压缩时开工率下降"}
+  ]
 }

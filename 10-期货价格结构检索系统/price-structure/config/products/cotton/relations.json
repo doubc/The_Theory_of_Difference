@@ -1,4 +1,127 @@
 {
-  "commodity": "cotton",
-  "relations": []
+  "commodity": "棉花",
+  "symbol": "CF",
+  "version": "1.3.0",
+  "relations": [
+    {
+      "id": "R_320",
+      "type": "国际贸易传导",
+      "from": "ICE棉花价格",
+      "to": "CF棉花价格",
+      "strength": 0.8,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "ICE棉花通过进口成本渠道传导至国内，进口棉到港价是国内价格的重要参考",
+      "reversalPoint": "进口配额政策变化可打断传导"
+    },
+    {
+      "id": "R_321",
+      "type": "产业链传导",
+      "from": "纺织企业开机率",
+      "to": "棉花消费量",
+      "strength": 0.85,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "纺纱开机率是棉花下游需求的直接指标，开机率高说明纺织消费旺盛",
+      "reversalPoint": "纺织产业转移至东南亚时国内开机率结构性下降"
+    },
+    {
+      "id": "R_322",
+      "type": "库存传导",
+      "from": "棉花商业库存",
+      "to": "CF棉花价格",
+      "strength": 0.75,
+      "direction": "反向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "商业库存是供需平衡的直接指标，库存高企压制价格，去化支撑价格",
+      "reversalPoint": "库存降至消费2个月以下时价格弹性增大"
+    },
+    {
+      "id": "R_323",
+      "type": "政策传导",
+      "from": "中储棉收储/抛储",
+      "to": "棉花价格",
+      "strength": 0.85,
+      "direction": "双向",
+      "groundBase": "order",
+      "lag": "即时",
+      "description": "中储棉政策是国内棉花供需的调节器，收储托底价是市场底部锚",
+      "reversalPoint": "政策从计划向市场化转型时影响减弱"
+    },
+    {
+      "id": "R_324",
+      "type": "天气传导",
+      "from": "新疆/美国天气",
+      "to": "棉花产量预期",
+      "strength": 0.8,
+      "direction": "直接",
+      "groundBase": "natural",
+      "lag": "即时",
+      "description": "棉花生长关键期（7-9月）天气直接影响产量，干旱/霜冻是最大风险",
+      "reversalPoint": "采收期后天气影响消失"
+    },
+    {
+      "id": "R_325",
+      "type": "汇率传导",
+      "from": "人民币汇率",
+      "to": "进口棉成本",
+      "strength": 0.65,
+      "direction": "正向",
+      "groundBase": "order",
+      "lag": "即时",
+      "description": "人民币贬值推高进口棉成本，支撑国内价格",
+      "reversalPoint": "进口配额用尽时汇率影响减弱"
+    },
+    {
+      "id": "R_326",
+      "type": "跨品种联动",
+      "from": "涤纶短纤价格",
+      "to": "棉花需求",
+      "strength": 0.6,
+      "direction": "反向",
+      "groundBase": "marginal",
+      "lag": "季度",
+      "description": "涤纶是棉花的化学纤维替代品，涤纶价格低于棉花时抑制棉花消费",
+      "reversalPoint": "高端纺织无法使用涤纶替代"
+    },
+    {
+      "id": "R_327",
+      "type": "贸易政策",
+      "from": "新疆棉出口禁令",
+      "to": "国际棉花供需",
+      "strength": 0.7,
+      "direction": "复杂",
+      "groundBase": "order",
+      "stability": "中",
+      "description": "西方国家限制新疆棉进口重塑国际棉花贸易格局，中国出口棉制品受限但进口需求不变",
+      "reversalPoint": "制裁取消将恢复贸易格局"
+    },
+    {
+      "id": "R_328",
+      "type": "季节性规律",
+      "from": "棉花采摘季",
+      "to": "棉花价格",
+      "strength": 0.65,
+      "direction": "季节性",
+      "groundBase": "natural",
+      "lag": "季节性",
+      "description": "新棉上市季（10-12月）供应增加压制价格，春季（3-5月）青黄不接支撑价格",
+      "reversalPoint": "减产年份季节性卖压减弱"
+    },
+    {
+      "id": "R_329",
+      "type": "全球供需",
+      "from": "全球棉花库消比",
+      "to": "ICE棉花价格",
+      "strength": 0.85,
+      "direction": "反向",
+      "groundBase": "marginal",
+      "lag": "季度",
+      "description": "全球库消比是棉花定价最核心指标，低于50%支撑高价，高于70%压制价格",
+      "reversalPoint": "库消比趋势性变化改变价格中枢"
+    }
+  ]
 }

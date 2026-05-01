@@ -1,5 +1,198 @@
 {
-  "commodity": "cotton",
+  "commodity": "棉花",
   "symbol": "CF",
-  "entities": []
+  "version": "1.3.0",
+  "entities": [
+    {
+      "id": "GEO_110",
+      "name": "新疆棉区",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 10,
+      "description": "中国棉花核心产区，占全国产量约90%以上，南疆（阿克苏/喀什）和北疆（昌吉/石河子）为主产区",
+      "controlledBy": ["新疆生产建设兵团", "地方棉农"],
+      "vulnerabilities": ["采棉期天气", "运输瓶颈", "劳动力成本"],
+      "trackingVariables": ["种植面积", "单产", "采收进度", "机采棉比例"]
+    },
+    {
+      "id": "GEO_111",
+      "name": "美国棉花带",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "全球第二大棉花出口国，Texas/Southeast为核心产区，天气是最大变量",
+      "controlledBy": ["各农场主"],
+      "vulnerabilities": ["干旱（德州）", "飓风（东南部）", "种植面积竞争"],
+      "trackingVariables": ["USDA种植意向", "优良率", "弃耕率", "出口销售"]
+    },
+    {
+      "id": "GEO_112",
+      "name": "印度棉花产区",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "全球最大棉花生产国，Gujarat/Maharashtra为核心产区，单产低但面积大",
+      "vulnerabilities": ["季风降雨", "虫害", "单产偏低"],
+      "trackingVariables": ["CAB产量预估", "出口政策", "MSP收购价"]
+    },
+    {
+      "id": "GEO_113",
+      "name": "巴西棉花产区",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "全球第四大产棉国，Mato Grosso为核心产区，出口竞争力强（汇率+物流优势）",
+      "trackingVariables": ["种植面积", "产量预估", "出口量"]
+    },
+    {
+      "id": "GEO_114",
+      "name": "中国纺织产业集群",
+      "type": "消费节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "山东/江苏/浙江/广东为核心纺织消费区，棉花消费量约800万吨/年",
+      "trackingVariables": ["纺纱开工率", "棉花库存天数", "棉纱价格"]
+    },
+    {
+      "id": "POW_090",
+      "name": "郑州商品交易所CZCE",
+      "type": "交易所",
+      "groundBase": "rule",
+      "importance": 10,
+      "description": "中国棉花期货定价中心，CF合约是国内棉花现货贸易基准",
+      "jurisdiction": "中国",
+      "trackingVariables": ["CF期价", "持仓量", "成交量", "注册仓单"]
+    },
+    {
+      "id": "POW_091",
+      "name": "美国农业部USDA",
+      "type": "国际数据机构",
+      "groundBase": "order",
+      "importance": 10,
+      "description": "全球棉花供需数据权威，月度WASDE报告是棉花定价核心事件",
+      "trackingVariables": ["全球产量", "消费量", "期末库存", "库消比"]
+    },
+    {
+      "id": "POW_092",
+      "name": "中国棉花协会CCA",
+      "type": "行业协会",
+      "groundBase": "order",
+      "importance": 7,
+      "description": "中国棉花行业协调组织，发布国内供需数据和行业政策建议",
+      "trackingVariables": ["产量预估", "进口配额建议", "行业利润"]
+    },
+    {
+      "id": "POW_093",
+      "name": "国际棉花咨询委员会ICAC",
+      "type": "国际数据机构",
+      "groundBase": "order",
+      "importance": 7,
+      "description": "全球棉花供需预测机构，月度报告提供独立于USDA的数据参考",
+      "trackingVariables": ["全球供需预测", "A指数", "库存预测"]
+    },
+    {
+      "id": "VAR_110",
+      "name": "CF棉花期货价格",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 10,
+      "currentValue": "约15000元/吨",
+      "historicalRange": {"min": 10000, "max": 34000},
+      "recentRange": {"min": 12000, "max": 22000},
+      "dualityOpposite": "下游纺织需求",
+      "trackingFrequency": "实时"
+    },
+    {
+      "id": "VAR_111",
+      "name": "ICE棉花期货价格",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "currentValue": "约80美分/磅",
+      "historicalRange": {"min": 30, "max": 215},
+      "recentRange": {"min": 60, "max": 120},
+      "trackingFrequency": "实时"
+    },
+    {
+      "id": "VAR_112",
+      "name": "棉花商业库存",
+      "type": "库存变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "trackingFrequency": "每月",
+      "trackingVariables": ["商业库存", "工业库存", "港口进口棉库存"]
+    },
+    {
+      "id": "VAR_113",
+      "name": "棉纱价格",
+      "type": "下游变量",
+      "groundBase": "marginal",
+      "importance": 7,
+      "trackingFrequency": "每日",
+      "trackingVariables": ["32支棉纱价", "40支棉纱价", "纺纱利润"]
+    },
+    {
+      "id": "VAR_114",
+      "name": "棉花进口量",
+      "type": "贸易变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "trackingFrequency": "月度",
+      "trackingVariables": ["进口配额使用", "进口到港量", "进口来源"]
+    },
+    {
+      "id": "VAR_115",
+      "name": "纺织企业开机率",
+      "type": "需求变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "trackingFrequency": "每周",
+      "trackingVariables": ["纺纱开机率", "织造开机率", "订单量"]
+    },
+    {
+      "id": "CUL_090",
+      "name": "新疆棉政策叙事",
+      "type": "政策共识",
+      "groundBase": "culture",
+      "importance": 8,
+      "description": "新疆棉花产量占中国90%+，新疆棉政策（种植补贴/运输补贴/出口禁令）直接影响国内供需格局",
+      "trackingVariables": ["补贴政策", "运输政策", "国际贸易制裁"]
+    },
+    {
+      "id": "CUL_091",
+      "name": "纺织产业转移叙事",
+      "type": "产业趋势",
+      "groundBase": "culture",
+      "importance": 7,
+      "description": "中国纺织产能向东南亚转移趋势，降低国内棉花消费增速，但高端棉需求仍强",
+      "trackingVariables": ["纺纱产能变化", "进口棉纱量", "东南亚开工率"]
+    },
+    {
+      "id": "RUL_090",
+      "name": "棉花进口关税配额制度",
+      "type": "贸易规则",
+      "groundBase": "rule",
+      "importance": 9,
+      "description": "中国棉花进口实行89.4万吨/年关税配额，配额内关税1%，配额外滑准税",
+      "trackingVariables": ["配额发放", "配额使用", "滑准税调整"]
+    },
+    {
+      "id": "RUL_091",
+      "name": "新疆棉花目标价格补贴政策",
+      "type": "产业政策",
+      "groundBase": "order",
+      "importance": 8,
+      "description": "新疆棉花实行目标价格补贴，补贴标准与市场价格挂钩，保障棉农收入",
+      "trackingVariables": ["目标价格", "补贴标准", "补贴发放"]
+    },
+    {
+      "id": "RUL_092",
+      "name": "CZCE棉花期货交割标准",
+      "type": "交易所规则",
+      "groundBase": "rule",
+      "importance": 7,
+      "description": "锯齿加工细绒棉，长度28mm及以上，马克隆值A级或B级",
+      "trackingVariables": ["交割标准调整", "仓单注册量"]
+    }
+  ]
 }

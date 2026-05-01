@@ -1,4 +1,41 @@
 {
-  "commodity": "cotton",
-  "entries": {}
+  "commodity": "棉花",
+  "symbol": "CF",
+  "version": "1.3.0",
+  "entries": {
+    "CF棉花期货价格": {
+      "historicalMin": 10000,
+      "historicalMax": 34000,
+      "recentMin": 12000,
+      "recentMax": 22000,
+      "reversalSignalPatterns": [
+        "USDA报告意外调整",
+        "主产区天气异常",
+        "纺织订单回暖",
+        "中储棉政策变化"
+      ]
+    },
+    "ICE棉花价格": {
+      "historicalMin": 30,
+      "historicalMax": 215,
+      "recentMin": 60,
+      "recentMax": 120,
+      "reversalSignalPatterns": [
+        "全球库消比变化",
+        "美国/印度天气",
+        "全球消费预期调整"
+      ]
+    },
+    "全球棉花库消比": {
+      "historicalMin": 40,
+      "historicalMax": 90,
+      "recentMin": 50,
+      "recentMax": 75,
+      "reversalSignalPatterns": [
+        "消费超预期增长",
+        "主产区大减产",
+        "库存重建"
+      ]
+    }
+  }
 }

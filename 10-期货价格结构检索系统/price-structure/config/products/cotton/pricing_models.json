@@ -1,4 +1,46 @@
 {
-  "commodity": "cotton",
-  "models": []
+  "commodity": "棉花",
+  "symbol": "CF",
+  "version": "1.3.0",
+  "models": [
+    {
+      "id": "M_025",
+      "name": "棉花的全球供需平衡表定价模型",
+      "domain": "基本面定价",
+      "groundBase": "marginal",
+      "formula": "Δln(CF) = α + β1*Δln(GlobalStockUse) + β2*Δln(ICE) + β3*Δln(TextilePMI) + ε",
+      "variables": [
+        {"name": "全球棉花库消比", "id": "global_stock_use", "direction": "反向", "weight": 0.4},
+        {"name": "ICE棉花价格", "id": "ICE_price", "direction": "正向", "weight": 0.3},
+        {"name": "纺织业PMI", "id": "textile_pmi", "direction": "正向", "weight": 0.2},
+        {"name": "残差/政策冲击", "id": "residual", "direction": "不定", "weight": 0.1}
+      ],
+      "description": "棉花定价核心是全球供需平衡表。库消比低于50%时价格弹性急剧放大（2010-2011年行情）。ICE通过进口成本传导。纺织PMI代表下游需求强度。",
+      "dominantPhase": "库消比处于极端水平时模型最有效",
+      "limitation": "忽略中国收储/抛储政策对国内价格的独立影响",
+      "trackingVariables": ["全球库消比", "ICE价格", "纺织开机率", "进口量"],
+      "linkToEntities": ["VAR_110", "VAR_111", "VAR_115"],
+      "linkToRelations": ["R_320", "R_321", "R_329"]
+    },
+    {
+      "id": "M_026",
+      "name": "棉花的内外价差套利模型",
+      "domain": "跨市场定价",
+      "groundBase": "marginal",
+      "formula": "CF_FairValue = f(ICE_Price, ExchangeRate, ImportTariff, Quota)",
+      "variables": [
+        {"name": "ICE棉花价格", "id": "ICE", "direction": "正向", "weight": 0.45},
+        {"name": "人民币汇率", "id": "exchange_rate", "direction": "正向", "weight": 0.25},
+        {"name": "进口关税+滑准税", "id": "tariff", "direction": "正向", "weight": 0.2},
+        {"name": "进口配额政策", "id": "quota", "direction": "复杂", "weight": 0.1}
+      ],
+      "description": "CF与ICE之间存在进口成本传导关系。配额内进口成本是CF价格上限参考。内外价差扩大时贸易商增加进口。配额政策变化可打破传导关系。",
+      "dominantPhase": "进口窗口打开时内外价差套利最有效",
+      "limitation": "配额限制和滑准税使传导不完全",
+      "trackingVariables": ["内外价差", "进口利润", "配额使用进度"],
+      "linkToEntities": ["VAR_110", "VAR_111", "VAR_114"],
+      "linkToRelations": ["R_320", "R_325"],
+      "linkToPolarityArchive": ["CF棉花期货价格"]
+    }
+  ]
 }

@@ -1,4 +1,64 @@
 {
-  "commodity": "corn",
-  "models": []
+  "commodity": "玉米",
+  "symbol": "C",
+  "version": "1.3.0",
+  "models": [
+    {
+      "id": "M_020",
+      "name": "玉米的供需平衡表定价模型",
+      "domain": "基本面定价",
+      "groundBase": "marginal",
+      "formula": "Δln(Cu_Corn) = α + β1*Δln(StockUseRatio) + β2*Δln(CBOT) + β3*Δln(PigInventory) + ε",
+      "variables": [
+        {"name": "国内玉米库存消费比", "id": "stock_use_ratio", "direction": "反向", "weight": 0.35},
+        {"name": "CBOT玉米价格（进口成本锚）", "id": "CBOT", "direction": "正向", "weight": 0.3},
+        {"name": "生猪存栏量（饲料需求代理）", "id": "pig_inventory", "direction": "正向", "weight": 0.25},
+        {"name": "残差/政策冲击", "id": "residual", "direction": "不定", "weight": 0.1}
+      ],
+      "description": "玉米定价的核心是供需平衡表。库存消费比是最关键指标：低于30%价格弹性急剧放大。CBOT通过进口成本传导。生猪存栏代表约65%的饲料需求。",
+      "dominantPhase": "供需平衡紧张时（库存消费比<25%），价格弹性最大",
+      "limitation": "忽略政策干预（收储/抛储）和替代谷物的影响",
+      "trackingVariables": ["库存消费比", "CBOT价格", "能繁母猪存栏", "进口量"],
+      "linkToEntities": ["VAR_100", "VAR_101", "VAR_105"],
+      "linkToRelations": ["R_300", "R_302", "R_303"]
+    },
+    {
+      "id": "M_021",
+      "name": "玉米的成本-替代定价模型",
+      "domain": "产业链定价",
+      "groundBase": "marginal",
+      "formula": "FairValue_Corn = f(ImportParity, WheatSubstitute, ProductionCost)",
+      "variables": [
+        {"name": "进口到港完税价", "id": "import_parity", "direction": "上限锚", "weight": 0.4},
+        {"name": "小麦替代临界价", "id": "wheat_sub", "direction": "下限锚", "weight": 0.35},
+        {"name": "东北种植成本+运费", "id": "production_cost", "direction": "底部支撑", "weight": 0.25}
+      ],
+      "description": "玉米价格运行区间由三重锚决定：（1）进口到港完税价是价格上限（超过则进口增加）；（2）小麦替代临界价是价格下限（低于则替代减少）；（3）种植成本是绝对底部。",
+      "dominantPhase": "价格接近区间边界时该模型最有效",
+      "limitation": "配额政策变化可能改变进口成本传导机制",
+      "trackingVariables": ["进口完税价", "小麦现货价", "东北玉米成本", "运费"],
+      "linkToEntities": ["VAR_102", "VAR_103", "VAR_104"],
+      "linkToRelations": ["R_301", "R_302", "R_305"],
+      "linkToConductionChains": ["C_102"]
+    },
+    {
+      "id": "M_022",
+      "name": "玉米的季节性定价模型",
+      "domain": "季节性定价",
+      "groundBase": "natural",
+      "formula": "SeasonalFactor(t) = AvgPrice(month)/AvgPrice(year)",
+      "variables": [
+        {"name": "售粮季节（10-12月）", "id": "harvest_season", "direction": "下行压力", "weight": 0.4},
+        {"name": "青黄不接期（3-5月）", "id": "gap_season", "direction": "上行支撑", "weight": 0.35},
+        {"name": "消费旺季（8-10月）", "id": "consumption_peak", "direction": "上行支撑", "weight": 0.25}
+      ],
+      "description": "玉米价格有明显季节性规律：秋收后（10-12月）农户集中售粮压低价格；春季（3-5月）余粮减少价格回升；夏季（7-8月）天气炒作期波动最大。丰产年份季节性更明显，减产年份可被打破。",
+      "dominantPhase": "供需平衡年份季节性规律最可靠",
+      "limitation": "极端供需失衡（大减产或大丰产）可打破季节性",
+      "trackingVariables": ["售粮进度", "港口库存变化", "深加工采购节奏"],
+      "linkToEntities": ["VAR_100", "VAR_102"],
+      "linkToRelations": ["R_310"],
+      "linkToConductionChains": ["C_103"]
+    }
+  ]
 }
