@@ -1,0 +1,55 @@
+{
+  "commodity": "沪锡",
+  "symbol": "SN",
+  "version": "1.3.0",
+  "relations": [
+    {
+      "id": "R_560",
+      "type": "供给约束",
+      "from": "缅甸佤邦停矿",
+      "to": "锡精矿供应",
+      "strength": 0.85,
+      "direction": "反向",
+      "groundBase": "order",
+      "stability": "中",
+      "description": "佤邦停矿直接收紧全球锡精矿供应",
+      "reversalPoint": "佤邦复产"
+    },
+    {
+      "id": "R_561",
+      "type": "库存传导",
+      "from": "SHFE锡库存",
+      "to": "锡价",
+      "strength": 0.75,
+      "direction": "反向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "库存是供需平衡直接指标",
+      "reversalPoint": "库存极低时价格弹性增大"
+    },
+    {
+      "id": "R_562",
+      "type": "宏观映射",
+      "from": "全球半导体景气度",
+      "to": "锡需求",
+      "strength": 0.7,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "季度",
+      "description": "锡焊料是锡最大下游，半导体景气度驱动需求",
+      "reversalPoint": "半导体下行周期"
+    },
+    {
+      "id": "R_563",
+      "type": "国际贸易传导",
+      "from": "LME锡价格",
+      "to": "SHFE锡价格",
+      "strength": 0.8,
+      "direction": "正向",
+      "groundBase": "marginal",
+      "lag": "即时",
+      "description": "LME通过进口成本传导",
+      "reversalPoint": "国内供需独立时可脱钩"
+    }
+  ]
+}
