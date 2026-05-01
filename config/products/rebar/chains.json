@@ -1,85 +1,205 @@
 {
   "commodity": "螺纹钢",
   "symbol": "RB",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "chains": [
     {
-      "id": "C_061",
-      "name": "春季复工需求脉冲链",
+      "id": "RB_C001",
+      "name": "粗钢限产供给收缩链",
       "domain": "黑色系",
-      "triggerEvent": "春节后工地集中复工",
+      "groundBase": "order",
+      "triggerEvent": "粗钢产量平控/压减政策出台",
       "steps": [
-        {"seq": 1, "from": "春节后复工", "to": "螺纹钢需求脉冲式上升", "confidence": "高", "lag": "2-4周", "mechanism": "工地集中开工拉动采购"},
-        {"seq": 2, "from": "需求脉冲", "to": "社会库存快速去化", "confidence": "高", "lag": "即时", "mechanism": "需求超过供给，库存下降"},
-        {"seq": 3, "from": "库存快速去化", "to": "现货升水走强", "confidence": "高", "lag": "即时", "mechanism": "现货紧张推高升水"},
-        {"seq": 4, "from": "现货走强", "to": "期货价格上涨", "confidence": "高", "lag": "即时", "mechanism": "现货带动期货"},
-        {"seq": 5, "from": "价格上涨", "to": "钢厂利润改善增产", "confidence": "中", "lag": "2-4周", "mechanism": "高利润驱动钢厂提高产量"},
-        {"seq": 6, "from": "增产", "to": "供给压力回升", "confidence": "中", "lag": "4-8周", "mechanism": "产量增加后供需再平衡"}
+        {
+          "seq": 1,
+          "from": "粗钢压减政策",
+          "to": "高炉开工率下降",
+          "confidence": "高",
+          "lag": "1-2月",
+          "mechanism": "政策驱动钢铁企业减产"
+        },
+        {
+          "seq": 2,
+          "from": "开工率下降",
+          "to": "螺纹钢供给减少",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "减产直接减少螺纹钢产量"
+        },
+        {
+          "seq": 3,
+          "from": "供给减少",
+          "to": "钢厂库存下降",
+          "confidence": "高",
+          "lag": "2-4周",
+          "mechanism": "供给端收缩消耗库存"
+        },
+        {
+          "seq": 4,
+          "from": "库存下降",
+          "to": "螺纹钢价格上涨",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "供需趋紧推升价格"
+        },
+        {
+          "seq": 5,
+          "from": "价格上涨",
+          "to": "钢厂利润恢复",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "利润改善驱动复产"
+        }
       ],
-      "reversalNode": "供给压力回升",
-      "reversalCondition": "产量持续增加且库存降幅收窄",
-      "polarityTensionThreshold": 0.7,
-      "historicalCases": [{"year": "2023", "description": "春节后复工拉动螺纹钢从3800涨至4300"}, {"year": "2021", "description": "春季需求超预期叠加碳中和限产，螺纹钢突破6000"}],
-      "reversibility": 0.7,
-      "tail_probability": 0.2
-    },
-    {
-      "id": "C_062",
-      "name": "粗钢压减供给收缩链",
-      "domain": "黑色系",
-      "triggerEvent": "发改委下达粗钢压减目标",
-      "steps": [
-        {"seq": 1, "from": "粗钢压减政策出台", "to": "钢厂减产预期形成", "confidence": "高", "lag": "即时", "mechanism": "政策强制性压减产量"},
-        {"seq": 2, "from": "减产预期", "to": "钢材供给收紧", "confidence": "中", "lag": "1-3个月", "mechanism": "各省逐步落实压减任务"},
-        {"seq": 3, "from": "供给收紧", "to": "库存加速去化", "confidence": "中", "lag": "即时", "mechanism": "供给小于需求"},
-        {"seq": 4, "from": "去库加速", "to": "钢材价格上涨", "confidence": "高", "lag": "即时", "mechanism": "供需紧张推升价格"},
-        {"seq": 5, "from": "钢材涨价", "to": "原料端让利", "confidence": "中", "lag": "1-2个月", "mechanism": "钢厂利润向上游传导受阻"}
-      ],
-      "reversalNode": "压减目标完成",
-      "reversalCondition": "年度压减目标完成或政策放松",
-      "polarityTensionThreshold": 0.75,
-      "historicalCases": [{"year": "2021", "description": "粗钢压减+碳中和，上半年螺纹钢暴涨至6200"}, {"year": "2022", "description": "压减力度减弱，需求走弱，钢价回落"}],
-      "reversibility": 0.5,
-      "tail_probability": 0.25
-    },
-    {
-      "id": "C_063",
-      "name": "房地产下行拖累链",
-      "domain": "黑色系",
-      "triggerEvent": "房地产销售/新开工持续低迷",
-      "steps": [
-        {"seq": 1, "from": "房地产销售低迷", "to": "房企资金紧张", "confidence": "高", "lag": "即时", "mechanism": "回款困难影响现金流"},
-        {"seq": 2, "from": "资金紧张", "to": "新开工面积下降", "confidence": "高", "lag": "1-3个月", "mechanism": "房企减少拿地和新开工"},
-        {"seq": 3, "from": "新开工下降", "to": "螺纹钢需求萎缩", "confidence": "高", "lag": "即时", "mechanism": "房地产用钢需求下降"},
-        {"seq": 4, "from": "需求萎缩", "to": "库存累积", "confidence": "中", "lag": "2-4周", "mechanism": "需求弱于供给"},
-        {"seq": 5, "from": "库存累积", "to": "钢材价格下跌", "confidence": "高", "lag": "即时", "mechanism": "供给过剩压制价格"},
-        {"seq": 6, "from": "价格下跌", "to": "钢厂亏损减产", "confidence": "中", "lag": "1-2个月", "mechanism": "亏损迫使钢厂检修减产"}
-      ],
-      "reversalNode": "房地产政策托底",
-      "reversalCondition": "房地产政策大幅放松或销售企稳",
-      "polarityTensionThreshold": 0.7,
-      "historicalCases": [{"year": "2022", "description": "房地产危机，螺纹钢从5000跌至3500"}, {"year": "2023-2024", "description": "房地产持续低迷，螺纹钢重心下移"}],
-      "reversibility": 0.4,
-      "tail_probability": 0.3
-    },
-    {
-      "id": "C_064",
-      "name": "原料成本坍塌传导链",
-      "domain": "黑色系",
-      "triggerEvent": "铁矿石/焦炭价格大幅下跌",
-      "steps": [
-        {"seq": 1, "from": "铁矿石大跌", "to": "螺纹钢成本线下移", "confidence": "高", "lag": "即时", "mechanism": "原料占成本50%以上"},
-        {"seq": 2, "from": "成本线下移", "to": "螺纹钢价格中枢下移", "confidence": "中", "lag": "1-2周", "mechanism": "成本支撑下移拖累钢价"},
-        {"seq": 3, "from": "价格中枢下移", "to": "前期高价库存亏损", "confidence": "中", "lag": "即时", "mechanism": "贸易商亏损出货"},
-        {"seq": 4, "from": "贸易商亏损", "to": "抛售去库", "confidence": "中", "lag": "1-2周", "mechanism": "止损抛售加速下跌"},
-        {"seq": 5, "from": "抛售去库", "to": "价格企稳", "confidence": "中", "lag": "2-4周", "mechanism": "库存出清后供需再平衡"}
-      ],
-      "reversalNode": "原料企稳",
-      "reversalCondition": "铁矿石/焦炭价格止跌回升",
+      "reversalNode": "产量恢复",
+      "reversalCondition": "政策放松或需求驱动复产",
       "polarityTensionThreshold": 0.65,
-      "historicalCases": [{"year": "2024", "description": "铁矿石大跌拖累螺纹钢价格"}],
+      "historicalCases": [
+        {
+          "year": "2021",
+          "description": "粗钢压减+限电，螺纹钢价格突破6000元/吨"
+        },
+        {
+          "year": "2022",
+          "description": "需求走弱叠加压减，价格大幅回落"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "政策拐点是关键",
+        "dualityStructure": "供给政策刚性vs需求弹性",
+        "polarityWarning": "粗钢产量政策直接决定螺纹钢供给天花板"
+      },
       "reversibility": 0.6,
-      "tail_probability": 0.25
+      "tail_probability": 0.2,
+      "minority_protected": false
+    },
+    {
+      "id": "RB_C002",
+      "name": "基建/地产需求脉冲链",
+      "domain": "黑色系",
+      "groundBase": "marginal",
+      "triggerEvent": "基建投资加码或房地产政策放松",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "基建投资加码/地产放松",
+          "to": "钢材需求预期改善",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "政策驱动需求预期"
+        },
+        {
+          "seq": 2,
+          "from": "需求预期改善",
+          "to": "贸易商补库",
+          "confidence": "中",
+          "lag": "1-2周",
+          "mechanism": "预期驱动投机性补库"
+        },
+        {
+          "seq": 3,
+          "from": "补库",
+          "to": "螺纹钢表观消费增加",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "补库推升表观消费"
+        },
+        {
+          "seq": 4,
+          "from": "消费增加",
+          "to": "库存去化加速",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "需求增量消耗库存"
+        },
+        {
+          "seq": 5,
+          "from": "去库加速",
+          "to": "螺纹钢价格上涨",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "供需趋紧推升价格"
+        }
+      ],
+      "reversalNode": "需求证伪",
+      "reversalCondition": "实际需求不及预期或政策力度减弱",
+      "polarityTensionThreshold": 0.6,
+      "historicalCases": [
+        {
+          "year": "2020",
+          "description": "基建刺激推动螺纹钢需求V型反弹"
+        },
+        {
+          "year": "2023",
+          "description": "地产持续低迷，基建独木难支"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "预期交易持续性取决于实际需求兑现",
+        "dualityStructure": "基建稳增长vs地产下行",
+        "polarityWarning": "关注房地产新开工和基建资金落地"
+      },
+      "reversibility": 0.6,
+      "tail_probability": 0.2,
+      "minority_protected": false
+    },
+    {
+      "id": "RB_C003",
+      "name": "铁矿-焦炭成本推升链",
+      "domain": "黑色系",
+      "groundBase": "marginal",
+      "triggerEvent": "铁矿石或焦炭价格大幅上涨推升螺纹钢成本",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "铁矿/焦炭价格上涨",
+          "to": "螺纹钢生产成本上升",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "铁矿+焦炭占螺纹钢成本约70%"
+        },
+        {
+          "seq": 2,
+          "from": "成本上升",
+          "to": "钢厂利润压缩",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "价格传导滞后"
+        },
+        {
+          "seq": 3,
+          "from": "利润压缩",
+          "to": "钢厂挺价/减产",
+          "confidence": "中",
+          "lag": "1-2周",
+          "mechanism": "亏损驱动减产或挺价"
+        },
+        {
+          "seq": 4,
+          "from": "挺价/减产",
+          "to": "螺纹钢价格支撑",
+          "confidence": "中",
+          "lag": "即时",
+          "mechanism": "成本推升+供给收缩"
+        }
+      ],
+      "reversalNode": "原料价格回落",
+      "reversalCondition": "铁矿/焦炭供给恢复或需求减弱",
+      "polarityTensionThreshold": 0.6,
+      "historicalCases": [
+        {
+          "year": "2021",
+          "description": "铁矿石暴涨推升螺纹钢成本，但终端需求弱导致利润极度压缩"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "成本推升型涨价持续性取决于下游接受度",
+        "dualityStructure": "原料成本刚性vs终端需求弹性",
+        "polarityWarning": "关注铁矿石发货量和焦炭库存"
+      },
+      "reversibility": 0.7,
+      "tail_probability": 0.15,
+      "minority_protected": false
     }
   ]
 }
