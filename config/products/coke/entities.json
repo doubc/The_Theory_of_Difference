@@ -1,70 +1,77 @@
 {
-  "commodity": "coke",
+  "commodity": "焦炭",
   "symbol": "J",
+  "version": "1.3.0",
   "entities": [
     {
-      "id": "GEO_001",
-      "name": "山西/河北",
-      "type": "geography",
-      "description": "焦炭主产区，环保限产影响大",
-      "importance": 8,
-      "trackingVariables": [
-        "产能利用率",
-        "环保限产政策"
-      ]
-    },
-    {
-      "id": "POW_001",
-      "name": "焦化厂",
-      "type": "power",
-      "description": "焦炭生产方，利润决定开工意愿",
-      "importance": 8,
-      "trackingVariables": [
-        "焦化利润",
-        "开工率",
-        "焦炭库存"
-      ]
-    },
-    {
-      "id": "POW_002",
-      "name": "钢厂",
-      "type": "power",
-      "description": "焦炭消费方（占85%+），高炉必须用焦炭",
+      "id": "CK_GEO_001",
+      "name": "山西焦化产区",
+      "type": "冶炼加工节点",
+      "groundBase": "natural",
       "importance": 9,
+      "description": "中国最大焦炭产区，产能约占全国40%，环保政策影响大",
+      "controlledBy": [
+        "美锦能源",
+        "山西焦化",
+        "旭阳集团"
+      ],
+      "vulnerabilities": [
+        "环保限产",
+        "安全生产",
+        "焦煤供应"
+      ],
       "trackingVariables": [
-        "高炉开工率",
-        "焦炭库存天数",
-        "钢厂利润"
+        "开工率",
+        "产量",
+        "焦化利润"
       ]
     },
     {
-      "id": "VAR_001",
-      "name": "焦炭总库存",
-      "type": "variable",
-      "description": "焦化厂+钢厂+港口库存",
+      "id": "CK_VAR_001",
+      "name": "焦炭期货价格",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "currentValue": "约2000元/吨",
+      "historicalRange": {
+        "min": 1200,
+        "max": 4000
+      },
+      "recentRange": {
+        "min": 1600,
+        "max": 2800
+      },
+      "trackingFrequency": "实时",
+      "trackingVariables": [
+        "期价",
+        "现货价",
+        "钢厂采购价"
+      ]
+    },
+    {
+      "id": "CK_VAR_002",
+      "name": "焦化利润",
+      "type": "利润变量",
+      "groundBase": "marginal",
       "importance": 8,
+      "trackingFrequency": "每日",
       "trackingVariables": [
-        "焦化厂库存",
-        "钢厂库存",
-        "港口库存"
+        "即期利润",
+        "盘面利润",
+        "焦煤-焦炭价差"
       ]
     },
     {
-      "id": "CUL_001",
-      "name": "焦炭提涨/提降",
-      "type": "narrative",
-      "description": "焦化厂与钢厂的博弈：焦化厂利润好时提涨，钢厂利润差时提降",
-      "importance": 8
-    },
-    {
-      "id": "RUL_001",
-      "name": "环保限产",
-      "type": "rule",
-      "description": "秋冬季环保限产影响焦化产能",
-      "importance": 7,
+      "id": "CK_VAR_003",
+      "name": "焦炭库存",
+      "type": "库存变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "trackingFrequency": "每周",
       "trackingVariables": [
-        "限产文件",
-        "执行力度"
+        "钢厂焦炭库存",
+        "焦化厂库存",
+        "港口库存"
       ]
     }
   ]
