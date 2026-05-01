@@ -1,30 +1,18 @@
 {
   "commodity": "工业硅",
   "symbol": "SI",
-  "version": "1.0.0",
-  "entries": {
-    "广期所工业硅价格": {
-      "historicalMin": 10000,
-      "historicalMax": 22000,
-      "recentMin": 11000,
-      "recentMax": 17000,
-      "reversalSignalPatterns": [
-        "多晶硅减产",
-        "丰水期供给增加",
-        "光伏装机放缓",
-        "库存累积"
-      ]
-    },
-    "多晶硅价格": {
-      "historicalMin": 40000,
-      "historicalMax": 300000,
-      "recentMin": 50000,
-      "recentMax": 120000,
-      "reversalSignalPatterns": [
-        "光伏装机超预期",
-        "多晶硅产能投产",
-        "技术进步降本"
-      ]
+  "version": "1.3.0",
+  "polarity_archive": [
+    {
+      "id": "SI_P001",
+      "variable": "工业硅价格",
+      "poles": {
+        "bull": "光伏装机高增长+枯水期减产",
+        "bear": "产能过剩+有机硅需求疲软"
+      },
+      "currentState": "偏弱",
+      "tension": 0.45,
+      "lastUpdated": "2026-05"
     }
-  }
+  ]
 }
