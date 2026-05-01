@@ -1,0 +1,59 @@
+{
+  "commodity": "iron_ore",
+  "relations": [
+    {
+      "id": "R_001",
+      "from": "GEO_001",
+      "to": "VAR_001",
+      "type": "supply",
+      "strength": 0.9,
+      "direction": "positive",
+      "description": "澳矿发货量直接影响港口库存"
+    },
+    {
+      "id": "R_002",
+      "from": "GEO_002",
+      "to": "VAR_001",
+      "type": "supply",
+      "strength": 0.7,
+      "direction": "positive",
+      "description": "巴西矿到港补充库存"
+    },
+    {
+      "id": "R_003",
+      "from": "POW_001",
+      "to": "VAR_001",
+      "type": "demand",
+      "strength": 0.85,
+      "direction": "negative",
+      "description": "钢厂消耗港口库存"
+    },
+    {
+      "id": "R_004",
+      "from": "VAR_002",
+      "to": "CUL_001",
+      "type": "trigger",
+      "strength": 0.8,
+      "direction": "positive",
+      "description": "库存天数低触发补库叙事"
+    },
+    {
+      "id": "R_005",
+      "from": "RUL_001",
+      "to": "POW_001",
+      "type": "constraint",
+      "strength": 0.7,
+      "direction": "negative",
+      "description": "限产政策约束钢厂开工"
+    },
+    {
+      "id": "R_006",
+      "from": "POW_001",
+      "to": "GEO_001",
+      "type": "demand",
+      "strength": 0.6,
+      "direction": "positive",
+      "description": "中国钢厂需求驱动澳矿发货"
+    }
+  ]
+}
