@@ -1,13 +1,15 @@
 """
-Research Loop Page
+研究闭环页 — 从结构到决策的完整研究流程
 
-This file can work in two modes:
-
-1. Imported by app.py:
-   render(symbol, current_structure, mtf_snapshots, history_transitions)
-
-2. Opened directly as a Streamlit page:
-   streamlit runs this file and calls _run_standalone_page()
+子模块：
+  1. 板块 & 产业链定位
+  2. 知识图谱增强
+  3. 当前结构概览（卡片 + Zone 位置图）
+  4. 优先级打分（可视化分项）
+  5. 条件转移分布
+  6. 多时间维度一致性
+  7. 证伪卡片登记
+  8. 历史命中率
 """
 
 from __future__ import annotations
@@ -19,873 +21,532 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 import streamlit as st
-
-# ============================================================================
-# Path setup
-# ============================================================================
+import plotly.graph_objects as go
 
 _THIS_FILE = Path(__file__).resolve()
 _PROJECT_ROOT = _THIS_FILE.parents[3]
-
 if str(_PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(_PROJECT_ROOT))
 
-# ============================================================================
-# Optional real business modules
-# ============================================================================
 
-try:
-    from src.sector.mapping import get_sector as real_get_sector
-except Exception:
-    real_get_sector = None
+# ═══════════════════════════════════════════════════════════
+# 安全转换
+# ═══════════════════════════════════════════════════════════
 
-try:
-    from src.sector.mapping import get_chain_peers as real_get_chain_peers
-except Exception:
-    real_get_chain_peers = None
+def _f(v, d=0.0):
+    try: return float(v) if v is not None else float(d)
+    except: return float(d)
 
-try:
-    from src.scoring.priority import compute_priority as real_compute_priority
-except Exception:
-    real_compute_priority = None
+def _i(v, d=0):
+    try: return int(v) if v is not None else int(d)
+    except: return int(d)
 
-try:
-    from src.scoring.priority import compute_amplitude_convergence as real_compute_amplitude_convergence
-except Exception:
-    real_compute_amplitude_convergence = None
-
-try:
-    from src.retrieval.transition import build_transition_distribution as real_build_transition_distribution
-except Exception:
-    real_build_transition_distribution = None
-
-try:
-    from src.retrieval.transition import format_transition_report as real_format_transition_report
-except Exception:
-    real_format_transition_report = None
-
-try:
-    from src.multitimeframe.consistency import compute_mci as real_compute_mci
-except Exception:
-    real_compute_mci = None
-
-try:
-    from src.validation.falsification_card import create_card as real_create_card
-except Exception:
-    real_create_card = None
-
-try:
-    from src.validation.falsification_card import append_to_ledger as real_append_to_ledger
-except Exception:
-    real_append_to_ledger = None
-
-try:
-    from src.validation.falsification_card import compute_hit_rate as real_compute_hit_rate
-except Exception:
-    real_compute_hit_rate = None
+def _s(v, d=""):
+    try: return str(v) if v is not None else d
+    except: return d
 
 
-# ============================================================================
-# Data classes
-# ============================================================================
+# ═══════════════════════════════════════════════════════════
+# 板块 & 产业链
+# ═══════════════════════════════════════════════════════════
 
-@dataclass
-class SectorInfo:
-    sector: str = "未知"
-    sub_sector: str = "未知"
-    chain_role: str = "未知"
+_SECTOR_MAP = {
+    "CU": ("有色金属", "🔩"), "AL": ("有色金属", "🔩"), "ZN": ("有色金属", "🔩"),
+    "NI": ("有色金属", "🔩"), "PB": ("有色金属", "🔩"), "SN": ("有色金属", "🔩"),
+    "AU": ("贵金属", "🥇"), "AG": ("贵金属", "🥇"), "PT": ("贵金属", "🥇"),
+    "RB": ("黑色系", "⚫"), "HC": ("黑色系", "⚫"), "I": ("黑色系", "⚫"),
+    "J": ("黑色系", "⚫"), "JM": ("黑色系", "⚫"), "SF": ("黑色系", "⚫"),
+    "M": ("农产品", "🌾"), "A": ("农产品", "🌾"), "P": ("农产品", "🌾"),
+    "RM": ("农产品", "🌾"), "CF": ("农产品", "🌾"), "SR": ("农产品", "🌾"),
+    "Y": ("农产品", "🌾"), "OI": ("农产品", "🌾"),
+    "TA": ("能化", "⛽"), "MA": ("能化", "⛽"), "BU": ("能化", "⛽"),
+    "V": ("能化", "⛽"), "EG": ("能化", "⛽"), "L": ("能化", "⛽"),
+    "PP": ("能化", "⛽"), "SC": ("能化", "⛽"), "FU": ("能化", "⛽"),
+    "FG": ("建材", "🏗️"), "SA": ("建材", "🏗️"), "UR": ("建材", "🏗️"),
+    "LC": ("新能源", "🔋"), "SI": ("新能源", "🔋"),
+}
 
-
-@dataclass
-class PriorityResult:
-    total: int
-    breakdown: Dict[str, Any]
-
-
-@dataclass
-class MCIReport:
-    mci: float
-    verdict: str
-    details: str
-
-
-# ============================================================================
-# Safe converters
-# ============================================================================
-
-def safe_float(value: Any, default: float = 0.0) -> float:
-    try:
-        if value is None:
-            return float(default)
-        return float(value)
-    except Exception:
-        return float(default)
+_PEER_MAP = {
+    "CU": ["AL", "ZN", "NI", "PB"], "AL": ["CU", "ZN", "NI"],
+    "ZN": ["CU", "AL", "NI", "PB"], "NI": ["CU", "AL", "ZN"],
+    "RB": ["HC", "I", "JM", "SF"], "I": ["RB", "HC", "J", "JM"],
+    "M": ["A", "P", "RM", "Y"], "Y": ["M", "P", "OI"],
+    "TA": ["MA", "EG"], "MA": ["TA", "EG", "PP"],
+    "AU": ["AG", "PT"], "AG": ["AU", "PT"],
+    "FG": ["SA"], "SA": ["FG"], "LC": ["SI"], "SI": ["LC"],
+}
 
 
-def safe_int(value: Any, default: int = 0) -> int:
-    try:
-        if value is None:
-            return int(default)
-        return int(value)
-    except Exception:
-        return int(default)
-
-
-def safe_str(value: Any, default: str = "") -> str:
-    try:
-        if value is None:
-            return default
-        return str(value)
-    except Exception:
-        return default
-
-
-def to_jsonable(obj: Any) -> Any:
-    if obj is None:
-        return None
-
-    if isinstance(obj, dict):
-        return obj
-
-    if isinstance(obj, list):
-        return [to_jsonable(x) for x in obj]
-
-    try:
-        return asdict(obj)
-    except Exception:
-        pass
-
-    try:
-        return obj.__dict__
-    except Exception:
-        return str(obj)
-
-
-# ============================================================================
-# Current structure normalization
-# ============================================================================
-
-def default_current_structure(symbol: str = "CU0") -> Dict[str, Any]:
-    return {
-        "symbol": symbol,
-        "has_data": False,
-
-        "phase": "unknown",
-        "activity": 0,
-        "quality": 0,
-        "quality_tier": "D",
-        "position_tag": "unknown",
-
-        "test_count": 0,
-        "duration_days": 0,
-        "time_since_last_test": 0,
-        "test_amplitudes": [],
-
-        "flux": 0.0,
-        "current_price": 0.0,
-        "zone_center": 0.0,
-        "zone_half_width": 0.0,
-
-        "movement_type": "unknown",
-
-        "deviation_activity": 0,
-        "quality_score": 0,
-        "center": 0.0,
-        "half_width": 0.0,
-        "tests": 0,
-        "tier": "D",
-        "score": 0,
-    }
-
-
-def normalize_current_structure(
-        symbol: str,
-        current_structure: Optional[Dict[str, Any]],
-) -> Dict[str, Any]:
-    base = default_current_structure(symbol)
-
-    if not isinstance(current_structure, dict):
-        return base
-
-    merged = dict(base)
-    merged.update(current_structure)
-
-    merged["symbol"] = safe_str(merged.get("symbol") or symbol, symbol)
-
-    merged["zone_center"] = safe_float(
-        merged.get("zone_center", merged.get("center", 0.0)),
-        0.0,
-    )
-    merged["center"] = merged["zone_center"]
-
-    merged["zone_half_width"] = safe_float(
-        merged.get("zone_half_width", merged.get("half_width", 0.0)),
-        0.0,
-    )
-    merged["half_width"] = merged["zone_half_width"]
-
-    merged["test_count"] = safe_int(
-        merged.get("test_count", merged.get("tests", 0)),
-        0,
-    )
-    merged["tests"] = merged["test_count"]
-
-    merged["quality"] = safe_int(
-        merged.get("quality", merged.get("quality_score", merged.get("score", 0))),
-        0,
-    )
-    merged["quality_score"] = merged["quality"]
-    merged["score"] = merged["quality"]
-
-    merged["quality_tier"] = safe_str(
-        merged.get("quality_tier", merged.get("tier", "D")),
-        "D",
-    )
-    merged["tier"] = merged["quality_tier"]
-
-    merged["activity"] = safe_int(
-        merged.get("activity", merged.get("deviation_activity", 0)),
-        0,
-    )
-    merged["deviation_activity"] = merged["activity"]
-
-    merged["phase"] = safe_str(merged.get("phase", "unknown"), "unknown")
-    merged["position_tag"] = safe_str(merged.get("position_tag", "unknown"), "unknown")
-    merged["duration_days"] = safe_int(merged.get("duration_days", 0), 0)
-    merged["time_since_last_test"] = safe_int(merged.get("time_since_last_test", 0), 0)
-    merged["flux"] = safe_float(merged.get("flux", 0.0), 0.0)
-    merged["current_price"] = safe_float(merged.get("current_price", 0.0), 0.0)
-    merged["movement_type"] = safe_str(merged.get("movement_type", "unknown"), "unknown")
-
-    test_amplitudes = merged.get("test_amplitudes", [])
-    if not isinstance(test_amplitudes, list):
-        test_amplitudes = []
-    merged["test_amplitudes"] = test_amplitudes
-
-    return merged
-
-
-# ============================================================================
-# Sector helpers
-# ============================================================================
-
-def get_sector_safe(symbol: str) -> SectorInfo:
-    # 优先从知识图谱获取
+def _get_sector(symbol: str) -> tuple:
+    """返回 (板块名, emoji)"""
+    # 先从知识图谱查
     try:
         from src.workbench.kg_helper import get_sector_from_kg
-        kg_info = get_sector_from_kg(symbol)
-        if kg_info.get("sector") != "未知":
-            return SectorInfo(
-                sector=kg_info.get("sector", "未知"),
-                sub_sector=kg_info.get("sub_sector", "未知"),
-                chain_role="midstream",
-            )
-    except Exception:
+        kg = get_sector_from_kg(symbol)
+        sec = kg.get("sector", "未知")
+        if sec != "未知":
+            return (sec, "📊")
+    except:
         pass
-
-    if real_get_sector is not None:
-        try:
-            info = real_get_sector(symbol)
-            return SectorInfo(
-                sector=safe_str(getattr(info, "sector", "未知"), "未知"),
-                sub_sector=safe_str(getattr(info, "sub_sector", "未知"), "未知"),
-                chain_role=safe_str(getattr(info, "chain_role", "未知"), "未知"),
-            )
-        except Exception:
-            pass
-
-    s = symbol.upper()
-    if s in {"CU0", "AL0", "ZN0", "NI0", "PB0", "SN0"}:
-        return SectorInfo("有色金属", "基础金属", "midstream")
-    if s in {"AU0", "AG0", "PT0"}:
-        return SectorInfo("贵金属", "贵金属", "asset")
-    if s in {"RB0", "HC0", "I0", "JM0", "J0", "SF0", "SM0", "SS0"}:
-        return SectorInfo("黑色金属", "钢矿煤焦", "midstream")
-    if s in {"M0", "A0", "P0", "RM0", "CF0", "SR0", "Y0", "OI0"}:
-        return SectorInfo("农产品", "农产品", "upstream")
-    if s in {"TA0", "MA0", "BU0", "V0", "EG0", "L0", "PP0", "EB0", "PG0", "FU0", "SC0"}:
-        return SectorInfo("能源化工", "化工", "midstream")
-    if s in {"FG0", "SA0", "UR0", "ZC0"}:
-        return SectorInfo("建材", "建材", "midstream")
-    if s in {"LC0", "SI0"}:
-        return SectorInfo("新能源", "新能源", "upstream")
-    return SectorInfo()
+    code = symbol.upper().rstrip("0123456789")
+    return _SECTOR_MAP.get(code, ("未知", "❓"))
 
 
-def get_chain_peers_safe(symbol: str) -> List[str]:
-    # 优先从知识图谱获取
+def _get_peers(symbol: str) -> List[str]:
     try:
         from src.workbench.kg_helper import get_chain_peers_from_kg
         peers = get_chain_peers_from_kg(symbol)
         if peers:
             return peers
-    except Exception:
+    except:
         pass
+    code = symbol.upper().rstrip("0123456789")
+    return _PEER_MAP.get(code, [])
 
-    if real_get_chain_peers is not None:
-        try:
-            peers = real_get_chain_peers(symbol)
-            if isinstance(peers, list):
-                return peers
-        except Exception:
-            pass
 
-    peer_map = {
-        "CU0": ["AL0", "ZN0", "NI0", "PB0"],
-        "AL0": ["CU0", "ZN0", "NI0"],
-        "ZN0": ["CU0", "AL0", "NI0", "PB0"],
-        "NI0": ["CU0", "AL0", "ZN0"],
-        "PB0": ["CU0", "ZN0"],
-        "RB0": ["HC0", "I0", "JM0", "SF0"],
-        "HC0": ["RB0", "I0", "JM0"],
-        "I0": ["RB0", "HC0", "J0", "JM0"],
-        "J0": ["I0", "JM0", "RB0"],
-        "JM0": ["J0", "I0", "RB0"],
-        "SF0": ["RB0", "SM0"],
-        "M0": ["A0", "P0", "RM0", "Y0"],
-        "Y0": ["M0", "P0", "OI0"],
-        "P0": ["Y0", "M0"],
-        "CF0": ["SR0"],
-        "TA0": ["MA0", "EG0", "PF0"],
-        "MA0": ["TA0", "EG0", "PP0"],
-        "SC0": ["FU0", "BU0", "L0", "PP0"],
-        "AU0": ["AG0", "PT0"],
-        "AG0": ["AU0", "PT0"],
-        "PT0": ["AU0", "AG0"],
-        "FG0": ["SA0"],
-        "SA0": ["FG0"],
-        "LC0": ["SI0"],
-        "SI0": ["LC0", "SA0"],
+# ═══════════════════════════════════════════════════════════
+# 数据标准化
+# ═══════════════════════════════════════════════════════════
+
+def _normalize(symbol: str, cs: Optional[Dict]) -> Dict:
+    base = {
+        "symbol": symbol, "has_data": False,
+        "phase": "unknown", "activity": 0, "quality": 0, "quality_tier": "D",
+        "position_tag": "unknown", "test_count": 0, "duration_days": 0,
+        "time_since_last_test": 0, "flux": 0.0, "current_price": 0.0,
+        "zone_center": 0.0, "zone_half_width": 0.0, "movement_type": "unknown",
+        "test_amplitudes": [],
     }
-    return peer_map.get(symbol.upper(), [])
+    if not isinstance(cs, dict):
+        return base
+    m = {**base, **cs}
+    m["symbol"] = _s(m.get("symbol") or symbol, symbol)
+    m["zone_center"] = _f(m.get("zone_center", m.get("center", 0)))
+    m["zone_half_width"] = _f(m.get("zone_half_width", m.get("half_width", 0)))
+    m["test_count"] = _i(m.get("test_count", m.get("tests", 0)))
+    m["quality"] = _i(m.get("quality", m.get("quality_score", m.get("score", 0))))
+    m["quality_tier"] = _s(m.get("quality_tier", m.get("tier", "D")), "D")
+    m["activity"] = _i(m.get("activity", m.get("deviation_activity", 0)))
+    m["flux"] = _f(m.get("flux", 0))
+    m["current_price"] = _f(m.get("current_price", 0))
+    m["phase"] = _s(m.get("phase", "unknown"), "unknown")
+    m["movement_type"] = _s(m.get("movement_type", "unknown"), "unknown")
+    m["position_tag"] = _s(m.get("position_tag", "unknown"), "unknown")
+    m["duration_days"] = _i(m.get("duration_days", 0))
+    m["time_since_last_test"] = _i(m.get("time_since_last_test", 0))
+    amps = m.get("test_amplitudes", [])
+    m["test_amplitudes"] = amps if isinstance(amps, list) else []
+    return m
 
 
-# ============================================================================
-# Priority helpers
-# ============================================================================
+# ═══════════════════════════════════════════════════════════
+# 优先级计算
+# ═══════════════════════════════════════════════════════════
 
-def compute_amplitude_convergence_safe(test_amplitudes: List[float]) -> float:
-    if real_compute_amplitude_convergence is not None:
+def _compute_priority(cs: Dict) -> Dict:
+    """返回 {"total": int, "breakdown": {维度: 分数}}"""
+    phase = cs.get("phase", "unknown")
+    activity = _i(cs.get("activity", 0))
+    quality = _i(cs.get("quality", 0))
+    test_count = _i(cs.get("test_count", 0))
+    pos = cs.get("position_tag", "unknown")
+    recency = _i(cs.get("time_since_last_test", 0))
+    amps = cs.get("test_amplitudes", [])
+
+    # 振幅收敛
+    if amps and len(amps) >= 2:
         try:
-            return safe_float(real_compute_amplitude_convergence(test_amplitudes), 0.0)
-        except Exception:
-            pass
-
-    if not test_amplitudes or len(test_amplitudes) < 2:
-        return 0.0
-
-    try:
-        first = abs(float(test_amplitudes[0]))
-        last = abs(float(test_amplitudes[-1]))
-        if first <= 0:
-            return 0.0
-        value = 1.0 - last / first
-        return max(0.0, min(1.0, value))
-    except Exception:
-        return 0.0
-
-
-def compute_priority_safe(
-        current_structure: Dict[str, Any],
-        amplitude_convergence: float,
-) -> PriorityResult:
-    if real_compute_priority is not None:
-        try:
-            score = real_compute_priority(
-                phase=current_structure["phase"],
-                activity=current_structure["activity"],
-                quality=current_structure["quality"],
-                position_tag=current_structure["position_tag"],
-                test_count=current_structure["test_count"],
-                duration_days=current_structure["duration_days"],
-                amplitude_convergence=amplitude_convergence,
-                time_since_last_test=current_structure["time_since_last_test"],
-            )
-
-            total = safe_int(getattr(score, "total", 0), 0)
-            breakdown = getattr(score, "breakdown", {})
-
-            if not isinstance(breakdown, dict):
-                breakdown = {"detail": str(breakdown)}
-
-            return PriorityResult(total=total, breakdown=breakdown)
-        except Exception:
-            pass
-
-    phase = current_structure.get("phase", "unknown")
-    activity = safe_int(current_structure.get("activity", 0), 0)
-    quality = safe_int(current_structure.get("quality", 0), 0)
-    test_count = safe_int(current_structure.get("test_count", 0), 0)
-    position_tag = current_structure.get("position_tag", "unknown")
-    time_since_last_test = safe_int(current_structure.get("time_since_last_test", 0), 0)
-
-    phase_score_map = {
-        "forming": 10,
-        "formation": 10,
-        "stable": 8,
-        "confirmation": 16,
-        "->confirmation": 16,
-        "→confirmation": 16,
-        "breakout": 20,
-        "->breakout": 20,
-        "→breakout": 20,
-        "inversion": 12,
-        "->inversion": 12,
-        "→inversion": 12,
-        "unknown": 0,
-    }
-
-    phase_score = phase_score_map.get(phase, 8)
-    activity_score = min(25, int(activity * 0.3))
-    quality_score = min(20, int(quality * 0.25))
-    test_score = min(15, test_count * 3)
-    convergence_score = int(max(0.0, min(1.0, amplitude_convergence)) * 10)
-
-    if position_tag in {"above", "below", "far_above", "far_below"}:
-        position_score = 10
-    elif position_tag == "inside":
-        position_score = 6
+            convergence = max(0, min(1, 1 - abs(float(amps[-1])) / max(abs(float(amps[0])), 1e-9)))
+        except:
+            convergence = 0
     else:
-        position_score = 3
+        convergence = 0
 
-    recency_score = max(0, 10 - min(time_since_last_test, 10))
+    phase_map = {
+        "breakout": 20, "→breakout": 20, "->breakout": 20,
+        "confirmation": 16, "→confirmation": 16, "->confirmation": 16,
+        "inversion": 12, "→inversion": 12,
+        "forming": 10, "formation": 10,
+        "stable": 8, "unknown": 0,
+    }
+    bd = {
+        "阶段": min(20, phase_map.get(phase, 8)),
+        "活跃度": min(25, int(activity * 0.3)),
+        "质量": min(20, int(quality * 0.25)),
+        "试探次数": min(15, test_count * 3),
+        "振幅收敛": int(convergence * 10),
+        "位置": 10 if pos in ("above", "below", "far_above", "far_below") else 6 if pos == "inside" else 3,
+        "新鲜度": max(0, 10 - min(recency, 10)),
+    }
+    return {"total": min(100, sum(bd.values())), "breakdown": bd, "convergence": convergence}
 
-    total = min(
-        100,
-        phase_score
-        + activity_score
-        + quality_score
-        + test_score
-        + convergence_score
-        + position_score
-        + recency_score,
+
+# ═══════════════════════════════════════════════════════════
+# 渲染子模块
+# ═══════════════════════════════════════════════════════════
+
+def _render_sector_bar(symbol: str, cs: Dict):
+    """板块定位 + 产业链 + 同链品种"""
+    sector, emoji = _get_sector(symbol)
+    peers = _get_peers(symbol)
+
+    st.markdown(f"""
+    <div style="background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);
+                border-radius:12px;padding:16px 24px;margin-bottom:16px;
+                border-left:4px solid #64ffda">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+                <span style="font-size:1.4em;font-weight:700;color:#ccd6f6">{symbol}</span>
+                <span style="font-size:1.1em;color:#8892b0;margin-left:12px">{emoji} {sector}</span>
+            </div>
+            <div style="text-align:right">
+                <span style="font-size:0.85em;color:#64ffda">研究闭环</span>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    if peers:
+        peer_chips = " ".join(
+            f'<span style="background:#112240;color:#8892b0;padding:3px 10px;'
+            f'border-radius:12px;font-size:0.82em;margin-right:4px;border:1px solid #233554">{p}</span>'
+            for p in peers
+        )
+        st.markdown(f"**同链共振** {peer_chips}", unsafe_allow_html=True)
+
+
+def _render_kg_section(symbol: str):
+    """知识图谱：核心关系 + 传导链 + 跨品种影响"""
+    try:
+        from src.workbench.kg_helper import get_key_relations, get_key_chains, get_cross_variety_impacts
+    except:
+        return
+
+    rels = get_key_relations(symbol, limit=5)
+    chains = get_key_chains(symbol, limit=3)
+    impacts = get_cross_variety_impacts(symbol)
+
+    if not rels and not chains and not impacts:
+        return
+
+    with st.expander("📚 知识图谱增强", expanded=False):
+        t1, t2, t3 = st.tabs(["🔗 核心关系", "⛓️ 传导链", "🌐 跨品种影响"])
+
+        with t1:
+            if rels:
+                for r in rels:
+                    fr = r.get("from", "")
+                    to = r.get("to", "")
+                    tp = r.get("type", "")
+                    strength = _f(r.get("strength", 0))
+                    desc = r.get("description", "")[:80]
+                    bar_w = int(strength * 100)
+                    color = "#4caf50" if strength >= 0.7 else "#ff9800" if strength >= 0.5 else "#999"
+                    st.markdown(f"""
+                    <div style="display:flex;align-items:center;gap:8px;margin:6px 0">
+                        <span style="font-weight:600;color:#ccd6f6;min-width:60px">{fr}</span>
+                        <span style="color:#64ffda">→</span>
+                        <span style="font-weight:600;color:#ccd6f6;min-width:60px">{to}</span>
+                        <span style="color:#8892b0;font-size:0.85em">{tp}</span>
+                        <div style="flex:1;background:#233554;border-radius:4px;height:8px;margin:0 8px">
+                            <div style="width:{bar_w}%;background:{color};height:100%;border-radius:4px"></div>
+                        </div>
+                        <span style="color:{color};font-weight:600;font-size:0.85em">{strength:.0%}</span>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    if desc:
+                        st.caption(f"  {desc}")
+            else:
+                st.caption("暂无核心关系数据")
+
+        with t2:
+            if chains:
+                for c in chains:
+                    name = c.get("name", "")
+                    trigger = c.get("triggerEvent", "")
+                    steps = c.get("steps", [])
+                    st.markdown(f"**{name}**")
+                    if trigger:
+                        st.caption(f"触发事件: {trigger}")
+                    for step in steps[:5]:
+                        seq = step.get("seq", "")
+                        fr = step.get("from", "")
+                        to = step.get("to", "")
+                        st.markdown(f"  <span style='color:#64ffda'>{seq}.</span> {fr} → {to}", unsafe_allow_html=True)
+            else:
+                st.caption("暂无传导链数据")
+
+        with t3:
+            if impacts:
+                for r in impacts[:5]:
+                    fr = r.get("from", "")
+                    to = r.get("to", "")
+                    tp = r.get("type", "")
+                    st.markdown(f"**{fr}** → **{to}** · {tp}")
+            else:
+                st.caption("暂无跨品种影响数据")
+
+
+def _render_structure_card(cs: Dict):
+    """当前结构概览 — 卡片 + Zone 位置可视化"""
+    st.markdown("#### 📊 当前结构概览")
+
+    # 状态色彩
+    phase = cs.get("phase", "unknown")
+    mt = cs.get("movement_type", "unknown")
+    tier = cs.get("quality_tier", "D")
+
+    phase_label = {
+        "breakout": "🔴 突破中", "→breakout": "🔴 突破中",
+        "confirmation": "🟢 确认中", "→confirmation": "🟢 确认中",
+        "stable": "🔵 稳态运行", "forming": "🟡 形成中",
+        "inversion": "🟠 反演中", "unknown": "⚪ 未知",
+    }.get(phase, phase)
+
+    mt_label = {
+        "trend_up": "📈 上涨趋势", "trend_down": "📉 下跌趋势",
+        "oscillation": "🔄 震荡", "reversal": "🔀 反转", "unknown": "—",
+    }.get(mt, mt)
+
+    tier_colors = {"A": "#1b5e20", "B": "#0d47a1", "C": "#e65100", "D": "#b71c1c"}
+    tier_bg = {"A": "#e8f5e9", "B": "#e3f2fd", "C": "#fff3e0", "D": "#ffebee"}
+
+    flux = _f(cs.get("flux", 0))
+    flux_arrow = "↑" if flux > 0 else "↓" if flux < 0 else "→"
+    flux_color = "#ef5350" if flux > 0 else "#26a69a" if flux < 0 else "#ffc107"
+
+    # 指标卡片行
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("运动阶段", phase_label)
+    c2.metric("运动类型", mt_label)
+    c3.metric("质量层", f"{tier} 层")
+    c4.metric("通量", f"{flux:+.3f} {flux_arrow}")
+
+    c5, c6, c7, c8 = st.columns(4)
+    c5.metric("当前价格", f"{_f(cs.get('current_price', 0)):.1f}")
+    c6.metric("Zone 中心", f"{_f(cs.get('zone_center', 0)):.1f}")
+    c7.metric("试探次数", str(_i(cs.get("test_count", 0))))
+    c8.metric("活跃度", str(_i(cs.get("activity", 0))))
+
+    # Zone 位置可视化
+    zc = _f(cs.get("zone_center", 0))
+    zw = _f(cs.get("zone_half_width", 0))
+    cp = _f(cs.get("current_price", 0))
+
+    if zc > 0 and zw > 0 and cp > 0:
+        upper = zc + zw
+        lower = zc - zw
+        fig = go.Figure()
+
+        # Zone 区域
+        fig.add_hrect(y0=lower, y1=upper, fillcolor="#4a90d9", opacity=0.15, line_width=0)
+        fig.add_hline(y=zc, line_dash="dot", line_color="#4a90d9", opacity=0.6,
+                      annotation_text=f"Zone {zc:.0f}", annotation_position="top left")
+
+        # Zone 边界
+        fig.add_hline(y=upper, line_dash="dash", line_color="#8892b0", opacity=0.3)
+        fig.add_hline(y=lower, line_dash="dash", line_color="#8892b0", opacity=0.3)
+
+        # 当前价格
+        price_color = "#ef5350" if cp > upper else "#26a69a" if cp < lower else "#ffc107"
+        fig.add_hline(y=cp, line_color=price_color, line_width=2,
+                      annotation_text=f"现价 {cp:.0f}", annotation_position="top right")
+
+        fig.update_layout(
+            height=200, template="plotly_dark",
+            margin=dict(l=60, r=60, t=30, b=10),
+            yaxis_title="价格", xaxis_visible=False,
+            showlegend=False,
+        )
+        st.plotly_chart(fig, use_container_width=True)
+
+        # 位置文字描述
+        if lower <= cp <= upper:
+            pct = (cp - zc) / zw * 100
+            st.info(f"📍 价格在 Zone 内部，偏{'上' if pct > 0 else '下'} {abs(pct):.0f}%")
+        elif cp > upper:
+            pct = (cp - zc) / zc * 100
+            st.warning(f"📍 价格在 Zone 上方 +{pct:.1f}%，可能正在突破")
+        else:
+            pct = (zc - cp) / zc * 100
+            st.warning(f"📍 价格在 Zone 下方 -{pct:.1f}%，可能正在破位")
+
+
+def _render_priority(cs: Dict):
+    """优先级打分 — 分项条形图"""
+    st.markdown("#### 🎯 优先级打分")
+
+    pri = _compute_priority(cs)
+    total = pri["total"]
+    bd = pri["breakdown"]
+    convergence = pri["convergence"]
+
+    # 总分
+    color = "#4caf50" if total >= 70 else "#ff9800" if total >= 40 else "#ef5350"
+    st.markdown(f"""
+    <div style="text-align:center;padding:12px;margin-bottom:12px">
+        <span style="font-size:3em;font-weight:800;color:{color}">P{total}</span>
+        <span style="font-size:1em;color:#8892b0;margin-left:12px">振幅收敛 {convergence:.2f}</span>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # 分项条形图
+    labels = list(bd.keys())
+    values = list(bd.values())
+    max_vals = [20, 25, 20, 15, 10, 10, 10]
+    colors = ["#4caf50" if v / mx >= 0.7 else "#ff9800" if v / mx >= 0.4 else "#ef5350"
+              for v, mx in zip(values, max_vals)]
+
+    fig = go.Figure()
+    fig.add_trace(go.Bar(
+        y=labels, x=values, orientation="h",
+        marker_color=colors,
+        text=[f"{v}/{mx}" for v, mx in zip(values, max_vals)],
+        textposition="auto",
+    ))
+    fig.update_layout(
+        height=250, template="plotly_dark",
+        margin=dict(l=10, r=10, t=10, b=10),
+        xaxis_title="分数", xaxis_range=[0, 25],
+        showlegend=False,
     )
-
-    breakdown = {
-        "phase": phase_score,
-        "activity": activity_score,
-        "quality": quality_score,
-        "test_count": test_score,
-        "amplitude_convergence": convergence_score,
-        "position": position_score,
-        "recency": recency_score,
-    }
-
-    return PriorityResult(total=total, breakdown=breakdown)
+    st.plotly_chart(fig, use_container_width=True)
 
 
-# ============================================================================
-# Transition helpers
-# ============================================================================
-
-def build_transition_distribution_safe(
-        history_transitions: List[Any],
-        current_structure: Dict[str, Any],
-) -> Any:
-    context = {
-        "phase": current_structure.get("phase", "unknown"),
-        "quality": current_structure.get("quality_tier", "D"),
-        "flux_sign": "+" if safe_float(current_structure.get("flux", 0.0), 0.0) >= 0 else "-",
-    }
-
-    if real_build_transition_distribution is not None:
-        try:
-            return real_build_transition_distribution(
-                history_transitions=history_transitions or [],
-                current_context=context,
-            )
-        except Exception:
-            pass
+def _render_transition(cs: Dict, history_transitions: List):
+    """条件转移分布"""
+    st.markdown("#### 🔄 条件转移分布")
 
     if not history_transitions:
-        return {
-            "sample_size": 0,
-            "context": context,
-            "items": [],
-            "message": "暂无历史转移样本。需要先运行历史扫描或转移提取脚本。",
+        st.info("暂无历史转移样本。需要先运行历史扫描或转移提取脚本。")
+        st.caption("接口已保留，后续接入 history_transitions 后会自动显示结果。")
+        return
+
+    st.caption(f"匹配样本: {len(history_transitions)} 条")
+    st.json(history_transitions[:3])
+
+
+def _render_mtf(mtf_snapshots: Dict):
+    """多时间维度一致性"""
+    st.markdown("#### ⏱️ 多时间维度一致性")
+
+    required = {"5m", "1h", "D"}
+    current = set(mtf_snapshots.keys())
+
+    if not mtf_snapshots or not required.issubset(current):
+        missing = required - current
+        st.info(f"需要提供 5m / 1h / D 三个尺度的快照。当前缺少: {', '.join(missing) if missing else '无'}")
+        st.caption("从主工作台 Tab 进入时会自动传入。独立打开时需手动提供。")
+        return
+
+    # 有真实数据时计算 MCI
+    try:
+        from src.multitimeframe.consistency import compute_mci
+        report = compute_mci(mtf_snapshots)
+        mci = _f(getattr(report, "mci", 0))
+        verdict = _s(getattr(report, "verdict", ""))
+        details = _s(getattr(report, "details", ""))
+
+        color = "#4caf50" if mci >= 0.7 else "#ff9800" if mci >= 0.4 else "#ef5350"
+        st.markdown(f"""
+        <div style="text-align:center;padding:12px">
+            <span style="font-size:2.5em;font-weight:800;color:{color}">{mci:.2f}</span>
+            <span style="font-size:1.1em;color:#8892b0;margin-left:12px">{verdict}</span>
+        </div>
+        """, unsafe_allow_html=True)
+        if details:
+            st.caption(details)
+    except:
+        st.caption("compute_mci 不可用")
+
+
+def _render_falsification(symbol: str, cs: Dict):
+    """证伪卡片登记"""
+    st.markdown("#### 🔬 证伪研究卡片")
+
+    st.caption("记录一个可验证的预测，到期后回填结果，追踪命中率。")
+
+    col1, col2 = st.columns(2)
+    with col1:
+        holding = st.slider("评估窗口（交易日）", 3, 30, 10, key="rl_holding")
+    with col2:
+        prediction = st.selectbox("预测方向", ["看涨", "看跌", "中性"], key="rl_pred")
+
+    note = st.text_area("研究笔记", placeholder="记录你的判断依据...", key="rl_note",
+                       height=80, label_visibility="collapsed")
+
+    if st.button("📝 登记卡片", type="primary", use_container_width=True):
+        card = {
+            "card_id": f"{symbol}-{cs.get('phase', 'x')}-{holding}",
+            "symbol": symbol,
+            "zone_center": _f(cs.get("zone_center")),
+            "current_price": _f(cs.get("current_price")),
+            "phase": cs.get("phase", ""),
+            "quality_tier": cs.get("quality_tier", "D"),
+            "prediction": prediction,
+            "holding_days": holding,
+            "note": note,
+            "status": "open",
         }
 
-    return {
-        "sample_size": len(history_transitions),
-        "context": context,
-        "items": history_transitions,
-    }
-
-
-def format_transition_report_safe(
-        dist: Any,
-        current_price: float,
-        zone_center: float,
-) -> str:
-    if real_format_transition_report is not None:
+        # 写入 ledger
         try:
-            return real_format_transition_report(dist, current_price, zone_center)
-        except Exception:
-            pass
+            log_dir = _PROJECT_ROOT / "data" / "logs"
+            log_dir.mkdir(parents=True, exist_ok=True)
+            path = log_dir / "falsification_cards.jsonl"
+            with path.open("a", encoding="utf-8") as f:
+                f.write(json.dumps(card, ensure_ascii=False) + "\n")
+            st.success(f"✅ 已登记 · ID: {card['card_id']} · {holding}个交易日后回填")
+        except Exception as e:
+            st.error(f"写入失败: {e}")
 
-    if isinstance(dist, dict):
-        sample_size = dist.get("sample_size", 0)
-        context = dist.get("context", {})
-        message = dist.get("message", "")
-
-        lines = [
-            f"当前价格：{current_price:.2f}",
-            f"Zone 中心：{zone_center:.2f}",
-            f"样本数量：{sample_size}",
-            f"匹配上下文：`{context}`",
-        ]
-
-        if message:
-            lines.append("")
-            lines.append(message)
-
-        if sample_size == 0:
-            lines.append("")
-            lines.append("当前没有可统计的条件转移分布。页面接口已保留，后续接入 history_transitions 后会自动显示结果。")
-
-        return "\n\n".join(lines)
-
-    return str(dist)
-
-
-# ============================================================================
-# MTF helpers
-# ============================================================================
-
-def compute_mci_safe(mtf_snapshots: Dict[str, Any]) -> MCIReport:
-    if real_compute_mci is not None:
-        try:
-            report = real_compute_mci(mtf_snapshots)
-            return MCIReport(
-                mci=safe_float(getattr(report, "mci", 0.0), 0.0),
-                verdict=safe_str(getattr(report, "verdict", "未知"), "未知"),
-                details=safe_str(getattr(report, "details", ""), ""),
-            )
-        except Exception:
-            pass
-
-    return MCIReport(
-        mci=0.0,
-        verdict="未计算",
-        details="缺少真实 MTF 快照或 compute_mci 不可用。",
-    )
-
-
-# ============================================================================
-# Falsification card helpers
-# ============================================================================
-
-def create_card_safe(
-        symbol: str,
-        current_structure: Dict[str, Any],
-        transition_dist: Any,
-        holding_days: int,
-) -> Dict[str, Any]:
-    if real_create_card is not None:
-        try:
-            card = real_create_card(
-                symbol=symbol,
-                zone_center=current_structure["zone_center"],
-                current_price=current_structure["current_price"],
-                phase=current_structure["phase"],
-                quality_tier=current_structure["quality_tier"],
-                transition_dist=transition_dist,
-                holding_days=holding_days,
-            )
-            card_data = to_jsonable(card)
-            if isinstance(card_data, dict):
-                return card_data
-            return {"card": card_data}
-        except Exception:
-            pass
-
-    return {
-        "card_id": f"{symbol}-{current_structure.get('phase', 'unknown')}-{holding_days}",
-        "symbol": symbol,
-        "zone_center": current_structure["zone_center"],
-        "current_price": current_structure["current_price"],
-        "phase": current_structure["phase"],
-        "quality_tier": current_structure["quality_tier"],
-        "holding_days": holding_days,
-        "status": "open",
-        "note": "fallback card",
-    }
-
-
-def append_to_ledger_safe(card: Dict[str, Any]) -> bool:
-    if real_append_to_ledger is not None:
-        try:
-            real_append_to_ledger(card)
-            return True
-        except Exception:
-            pass
-
+    # 历史命中率
     try:
-        log_dir = _PROJECT_ROOT / "data" / "logs"
-        log_dir.mkdir(parents=True, exist_ok=True)
-        path = log_dir / "falsification_cards.jsonl"
-
-        with path.open("a", encoding="utf-8") as f:
-            f.write(json.dumps(card, ensure_ascii=False) + "\n")
-
-        return True
-    except Exception:
-        return False
-
-
-def compute_hit_rate_safe() -> Dict[str, Any]:
-    if real_compute_hit_rate is not None:
-        try:
-            stats = real_compute_hit_rate()
-            if isinstance(stats, dict):
-                return stats
-
-            stats_json = to_jsonable(stats)
-            if isinstance(stats_json, dict):
-                return stats_json
-
-            return {"stats": stats_json}
-        except Exception:
-            pass
-
-    return {
-        "closed": 0,
-        "hit_rate": None,
-        "message": "暂无已结算卡片，或真实 compute_hit_rate 不可用。",
-    }
+        path = _PROJECT_ROOT / "data" / "logs" / "falsification_cards.jsonl"
+        if path.exists():
+            cards = [json.loads(l) for l in path.read_text().strip().split("\n") if l.strip()]
+            closed = [c for c in cards if c.get("status") == "closed"]
+            if closed:
+                hits = sum(1 for c in closed if c.get("hit"))
+                rate = hits / len(closed) * 100
+                st.metric("历史命中率", f"{rate:.0f}% ({hits}/{len(closed)})")
+    except:
+        pass
 
 
-# ============================================================================
-# Main render function
-# ============================================================================
+# ═══════════════════════════════════════════════════════════
+# 主入口
+# ═══════════════════════════════════════════════════════════
 
 def render(
-        symbol: str = "CU0",
-        current_structure: Optional[Dict[str, Any]] = None,
-        mtf_snapshots: Optional[Dict[str, Any]] = None,
-        history_transitions: Optional[List[Any]] = None,
-) -> None:
-    symbol = safe_str(symbol, "CU0").upper()
-    current_structure = normalize_current_structure(symbol, current_structure)
-    mtf_snapshots = mtf_snapshots or {}
-    history_transitions = history_transitions or []
+    symbol: str = "CU0",
+    current_structure: Optional[Dict] = None,
+    mtf_snapshots: Optional[Dict] = None,
+    history_transitions: Optional[List] = None,
+):
+    symbol = _s(symbol, "CU0").upper()
+    cs = _normalize(symbol, current_structure)
+    mtf = mtf_snapshots or {}
+    transitions = history_transitions or []
 
-    st.markdown(f"### {symbol} 研究闭环")
+    # 1. 板块定位
+    _render_sector_bar(symbol, cs)
 
-    if not current_structure.get("has_data", False):
-        st.warning("当前页面没有收到真实结构上下文，正在使用占位数据渲染界面。")
-        st.caption(
-            "如果你是直接打开 /research_loop 页面，这是正常现象。若要显示真实结构，请从主工作台 Tab 进入，或在 app.py 中传入 current_structure。")
+    # 2. 知识图谱
+    _render_kg_section(symbol)
 
-    # 1. Sector and chain
-    info = get_sector_safe(symbol)
-    peers = get_chain_peers_safe(symbol)
+    # 3. 结构概览
+    _render_structure_card(cs)
 
-    col1, col2, col3 = st.columns(3)
-    col1.metric("板块", info.sector)
-    col2.metric("细分", info.sub_sector)
-    col3.metric("产业链角色", info.chain_role)
+    # 4. 优先级
+    _render_priority(cs)
 
-    st.caption(f"同链共振候选：{', '.join(peers) if peers else '无'}")
+    # 5-6. 转移 & MTF（双列）
+    col_left, col_right = st.columns(2)
+    with col_left:
+        _render_transition(cs, transitions)
+    with col_right:
+        _render_mtf(mtf)
 
-    # 1.5 Knowledge graph integration
-    try:
-        from src.workbench.kg_helper import (
-            get_key_relations, get_key_chains, get_cross_variety_impacts
-        )
-
-        with st.expander("📚 知识图谱 — 核心关系 & 传导链", expanded=False):
-            kg_tab1, kg_tab2, kg_tab3 = st.tabs(["🔗 核心关系", "⛓️ 传导链", "🌐 跨品种影响"])
-
-            with kg_tab1:
-                key_rels = get_key_relations(symbol, limit=5)
-                if key_rels:
-                    for r in key_rels:
-                        r_from = r.get("from", "")
-                        r_to = r.get("to", "")
-                        r_type = r.get("type", "")
-                        strength = r.get("strength", 0)
-                        desc = r.get("description", "")[:60]
-                        strength_color = "#4caf50" if strength >= 0.7 else "#ff9800" if strength >= 0.5 else "#999"
-                        st.markdown(f"**{r_from}** → **{r_to}** · {r_type} · "
-                                   f"<span style='color:{strength_color}'>{strength:.0%}</span>",
-                                   unsafe_allow_html=True)
-                        st.caption(desc)
-                else:
-                    st.caption("暂无核心关系数据")
-
-            with kg_tab2:
-                chains = get_key_chains(symbol, limit=3)
-                if chains:
-                    for c in chains:
-                        name = c.get("name", "")
-                        trigger = c.get("triggerEvent", "")
-                        steps = c.get("steps", [])
-                        st.markdown(f"**{name}**")
-                        st.caption(f"触发: {trigger}")
-                        for step in steps[:3]:
-                            st.markdown(f"  {step.get('seq', '')}. {step.get('from', '')} → {step.get('to', '')}")
-                else:
-                    st.caption("暂无传导链数据")
-
-            with kg_tab3:
-                impacts = get_cross_variety_impacts(symbol)
-                if impacts:
-                    for r in impacts[:5]:
-                        st.markdown(f"**{r.get('from', '')}** → **{r.get('to', '')}** · {r.get('type', '')}")
-                else:
-                    st.caption("暂无跨品种影响数据")
-    except Exception:
-        pass
-
-    # 2. Current structure overview
-    st.markdown("#### 当前结构概览")
-
-    a1, a2, a3, a4 = st.columns(4)
-    a1.metric("运动阶段", current_structure["phase"])
-    a2.metric("质量层", current_structure["quality_tier"])
-    a3.metric("质量分", current_structure["quality"])
-    a4.metric("离稳态活跃度", current_structure["activity"])
-
-    b1, b2, b3, b4 = st.columns(4)
-    b1.metric("当前价格", f"{current_structure['current_price']:.2f}")
-    b2.metric("Zone 中心", f"{current_structure['zone_center']:.2f}")
-    b3.metric("试探次数", current_structure["test_count"])
-    b4.metric("通量", f"{current_structure['flux']:+.2f}")
-
-    with st.expander("查看标准化后的 current_structure"):
-        st.json(current_structure)
-
-    # 3. Priority score
-    st.markdown("#### 优先级打分")
-
-    convergence = compute_amplitude_convergence_safe(
-        current_structure.get("test_amplitudes", [])
-    )
-    priority = compute_priority_safe(current_structure, convergence)
-
-    p1, p2, p3 = st.columns([1, 1, 2])
-    p1.metric("优先级", f"P{priority.total}")
-    p2.metric("振幅收敛", f"{convergence:.2f}")
-    p3.progress(min(max(priority.total / 100.0, 0.0), 1.0))
-
-    st.code(f"P{priority.total} = {priority.breakdown}", language="python")
-
-    # 4. Transition distribution
-    st.markdown("#### 条件转移分布")
-
-    dist = build_transition_distribution_safe(
-        history_transitions,
-        current_structure,
-    )
-    report = format_transition_report_safe(
-        dist,
-        current_structure["current_price"],
-        current_structure["zone_center"],
-    )
-
-    st.markdown(report)
-
-    with st.expander("查看原始 transition distribution"):
-        st.json(to_jsonable(dist))
-
-    # 5. MTF consistency
-    st.markdown("#### 多时间维度一致性指数")
-
-    required_keys = {"5m", "1h", "D"}
-    current_keys = set(mtf_snapshots.keys())
-
-    if mtf_snapshots and required_keys.issubset(current_keys):
-        mci_report = compute_mci_safe(mtf_snapshots)
-
-        m1, m2 = st.columns([1, 3])
-        m1.metric("MCI", f"{mci_report.mci:.2f}")
-        m2.markdown(f"**​{mci_report.verdict}​**\n\n{mci_report.details}")
-    else:
-        st.info("需要提供 5m / 1h / D 三个尺度的快照后，才能计算多时间维度一致性。")
-        st.caption(f"当前已提供尺度：{', '.join(sorted(current_keys)) if current_keys else '无'}")
-
-    with st.expander("查看 mtf_snapshots"):
-        st.json(to_jsonable(mtf_snapshots))
-
-    # 6. Falsification card
-    st.markdown("#### 登记可证伪研究卡片")
-
-    holding_days = st.slider("评估时间窗（交易日）", 3, 30, 10)
-
-    if st.button("生成并入库", type="primary"):
-        card = create_card_safe(
-            symbol=symbol,
-            current_structure=current_structure,
-            transition_dist=dist,
-            holding_days=holding_days,
-        )
-
-        ok = append_to_ledger_safe(card)
-
-        card_id = (
-                card.get("card_id")
-                or card.get("id")
-                or f"{symbol}-{current_structure['phase']}-{holding_days}"
-        )
-
-        if ok:
-            st.success(f"已入库，卡片 ID: {card_id}")
-        else:
-            st.warning(f"卡片已生成，但写入 ledger 失败。卡片 ID: {card_id}")
-
-        st.json(card)
-
-    # 7. Hit rate
-    st.markdown("#### 历史卡片命中率")
-
-    stats = compute_hit_rate_safe()
-
-    if isinstance(stats, dict) and stats.get("closed", 0) > 0:
-        st.json(stats)
-    else:
-        st.caption("尚无已结算卡片，等到期自动回填。")
-        with st.expander("查看命中率统计状态"):
-            st.json(stats)
-
-
-# ============================================================================
-# Standalone page entry
-# ============================================================================
-
-def _run_standalone_page() -> None:
-    try:
-        st.set_page_config(
-            page_title="研究闭环",
-            page_icon="🔬",
-            layout="wide",
-            initial_sidebar_state="expanded",
-        )
-    except Exception:
-        pass
-
-    st.sidebar.markdown("## 研究闭环")
-    st.sidebar.caption("独立页面模式")
-
-    default_symbol = st.sidebar.text_input("品种代码", value="CU0").upper()
-
-    st.sidebar.divider()
-    st.sidebar.caption("从主工作台 Tab 进入时，会使用真实结构上下文；直接打开本页时，会使用占位上下文。")
-
-    ctx = st.session_state.get("research_loop_ctx", {})
-
-    symbol = ctx.get("symbol", default_symbol)
-    current_structure = ctx.get("current_structure")
-    mtf_snapshots = ctx.get("mtf_snapshots", {})
-    history_transitions = ctx.get("history_transitions", [])
-
-    render(
-        symbol=symbol,
-        current_structure=current_structure,
-        mtf_snapshots=mtf_snapshots,
-        history_transitions=history_transitions,
-    )
-
-
-if __name__ == "__main__":
-    _run_standalone_page()
+    # 7. 证伪卡片
+    _render_falsification(symbol, cs)
