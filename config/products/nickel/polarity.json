@@ -1,15 +1,32 @@
 {
-  "commodity": "nickel",
-  "entries": {
-    "nickel_price": {
-      "historicalMin": 80000,
-      "historicalMax": 280000,
-      "recentMin": 110000,
-      "recentMax": 180000,
-      "reversalSignalPatterns": [
-        "印尼RKAB审批减少",
-        "LME镍库存骤降"
+  "commodity": "镍",
+  "symbol": "NI",
+  "version": "1.3.0",
+  "polarity_archive": [
+    {
+      "id": "NI_P001",
+      "variable": "镍价",
+      "poles": {
+        "bull": "印尼禁矿+新能源需求+低库存",
+        "bear": "NPI过剩+LFP替代+不锈钢需求弱"
+      },
+      "currentState": "偏弱",
+      "tension": 0.45,
+      "lastUpdated": "2026-05",
+      "historicalTransitions": [
+        {
+          "from": "极端牛市(逼仓)",
+          "to": "暴跌",
+          "trigger": "LME取消交易+保证金上调",
+          "year": "2022Q1"
+        },
+        {
+          "from": "弱势",
+          "to": "反弹",
+          "trigger": "印尼出口政策收紧",
+          "year": "2023Q1"
+        }
       ]
     }
-  }
+  ]
 }
