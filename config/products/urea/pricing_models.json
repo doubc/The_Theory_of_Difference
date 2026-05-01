@@ -1,0 +1,63 @@
+{
+  "commodity": "尿素",
+  "symbol": "UR",
+  "version": "1.3.0",
+  "models": [
+    {
+      "id": "M_105",
+      "name": "尿素的成本-季节性定价模型",
+      "domain": "产业链定价",
+      "groundBase": "marginal",
+      "formula": "UR_Score = w1*CoalCostFactor + w2*SeasonalFactor + w3*ExportFactor + w4*InventoryFactor",
+      "variables": [
+        {
+          "name": "煤炭成本因子",
+          "id": "coal_cost",
+          "direction": "正向",
+          "weight": 0.35
+        },
+        {
+          "name": "季节性需求因子",
+          "id": "seasonal",
+          "direction": "正向",
+          "weight": 0.3
+        },
+        {
+          "name": "出口因子",
+          "id": "export",
+          "direction": "正向",
+          "weight": 0.2
+        },
+        {
+          "name": "库存因子",
+          "id": "inventory",
+          "direction": "反向",
+          "weight": 0.15
+        }
+      ],
+      "description": "尿素定价以煤炭成本为锚，春耕需求为季节性峰值，出口为边际增量。限价政策约束价格上限。",
+      "dominantPhase": "春耕旺季+煤价上涨时价格弹性最大",
+      "limitation": "出口检验政策变化难以预测",
+      "trackingVariables": [
+        "煤炭成本",
+        "春耕需求",
+        "出口量",
+        "库存"
+      ],
+      "linkToEntities": [
+        "VAR_260",
+        "VAR_262",
+        "VAR_263"
+      ],
+      "linkToRelations": [
+        "R_620",
+        "R_621",
+        "R_622"
+      ],
+      "linkToConductionChains": [
+        "C_260",
+        "C_261"
+      ]
+    }
+  ]
+}
