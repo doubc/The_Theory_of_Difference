@@ -4,8 +4,8 @@ build-backend = "setuptools.backends._legacy:_Backend"
 
 [project]
 name = "price-structure"
-version = "3.1.0"
-description = "基于差异论 V1.6 的期货价格结构研究底座"
+version = "4.0.0"
+description = "期货价格结构研究底座 — 从价格序列中提取结构不变量，四层相似度检索历史先例"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
