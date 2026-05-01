@@ -5,7 +5,10 @@
 """
 from __future__ import annotations
 
+import logging
 from datetime import datetime, timedelta
+
+log = logging.getLogger(__name__)
 
 
 def departure_score(r: dict) -> float:
@@ -220,7 +223,7 @@ def build_dashboard_data(
                     "display_label": sig.display_label,
                 }
         except Exception:
-            pass
+            log.warning("信号生成失败: %s", sym, exc_info=True)
 
         # Phase 1: 新增字段
         phase_code = phase_str.split("→")[-1].strip() if "→" in phase_str else phase_str
