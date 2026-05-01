@@ -1,0 +1,132 @@
+# ─────────────────────────────────────────────────────────────
+# L3 市场知识 — Context → Wisdom
+# 回答「结合品种特征和市场环境，有什么值得注意的」
+# ─────────────────────────────────────────────────────────────
+
+rules:
+  # ── 品种特异性知识 ──
+  - id: "L3-001"
+    name: "铜 Zone 带宽常识"
+    symbol: "CU"
+    when:
+      - field: "symbol"
+        op: "=="
+        value: "CU"
+    wisdom: "铜的 Zone 带宽通常 1-2%，超过 3% 说明市场状态异常"
+    normal_bandwidth: [0.01, 0.02]
+    alert_bandwidth: 0.03
+    source: "品种经验"
+
+  - id: "L3-002"
+    name: "螺纹钢高波动特征"
+    symbol: "RB"
+    when:
+      - field: "symbol"
+        op: "=="
+        value: "RB"
+    wisdom: "螺纹钢日均波动大，Zone 带宽容忍度高于有色品种"
+    source: "品种经验"
+
+  - id: "L3-003"
+    name: "原油宏观锚定"
+    symbol: "SC"
+    when:
+      - field: "symbol"
+        op: "=="
+        value: "SC"
+    wisdom: "原油是宏观情绪的风向标，其结构变化常领先于其他能化品种"
+    source: "品种经验 + 宏观分析"
+
+  # ── 反差类型知识 ──
+  - id: "L3-010"
+    name: "政策驱动结构特征"
+    when:
+      - field: "contrast_type"
+        op: "=="
+        value: "POLICY"
+    wisdom: "政策驱动型结构试探间隔均匀，反弹快但持续性差，适合短线不适合趋势跟踪"
+    source: "ContrastType 定义 + 经验"
+
+  - id: "L3-011"
+    name: "恐慌性结构特征"
+    when:
+      - field: "contrast_type"
+        op: "=="
+        value: "PANIC"
+    wisdom: "恐慌性结构 30 天内密集试探，反弹猛烈但不稳定，等待二次确认"
+    source: "ContrastType 定义"
+
+  - id: "L3-012"
+    name: "过剩型结构特征"
+    when:
+      - field: "contrast_type"
+        op: "=="
+        value: "OVERSUPPLY"
+    wisdom: "过剩型结构底部试探次数多，突破需要外部催化剂（减产/政策）"
+    source: "ContrastType 定义"
+
+  # ── 形态知识 ──
+  - id: "L3-020"
+    name: "慢涨急跌·顶部反转"
+    when:
+      - field: "speed_pattern"
+        op: "=="
+        value: "slow_rise_fast_drop"
+    wisdom: "慢涨急跌是顶部反转的经典形态——上涨犹豫、下跌果断"
+    source: "DSL规则 + 经验"
+
+  - id: "L3-021"
+    name: "急涨慢跌·派发特征"
+    when:
+      - field: "speed_pattern"
+        op: "=="
+        value: "fast_rise_slow_drop"
+    wisdom: "急涨慢跌是顶部派发的典型特征——拉高出货，缓慢阴跌"
+    source: "DSL规则 + 经验"
+
+  # ── 阶段知识 ──
+  - id: "L3-030"
+    name: "突破阶段关注量"
+    when:
+      - field: "phase_tendency"
+        op: "=="
+        value: "breakout"
+    wisdom: "突破阶段需要成交量配合确认，无量突破多为假突破"
+    source: "技术分析经验"
+
+  - id: "L3-031"
+    name: "确认阶段耐心"
+    when:
+      - field: "phase_tendency"
+        op: "=="
+        value: "confirmation"
+    wisdom: "确认阶段需要耐心等待，过早入场可能遭遇二次回测"
+    source: "交易经验"
+
+  # ── 跨品种联动知识 ──
+  - id: "L3-040"
+    name: "铜铝联动"
+    when:
+      - field: "symbol"
+        op: "in"
+        value: ["CU", "AL"]
+    wisdom: "铜铝同属有色板块，铜通常领先铝 1-2 周见顶/见底"
+    source: "跨品种经验"
+
+  - id: "L3-041"
+    name: "黑色板块联动"
+    when:
+      - field: "symbol"
+        op: "in"
+        value: ["RB", "HC", "I", "J"]
+    wisdom: "黑色板块高度联动，螺纹钢定价核心在需求端（地产/基建），铁矿石在供给端"
+    source: "产业链分析"
+
+  - id: "L3-042"
+    name: "金银比价"
+    when:
+      - field: "symbol"
+        op: "in"
+        value: ["AU", "AG"]
+    wisdom: "金银比价>80 时白银相对低估，<50 时白银相对高估；比价极端时关注贵金属板块反转"
+    source: "贵金属经验"

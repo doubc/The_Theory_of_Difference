@@ -1,0 +1,92 @@
+# ─────────────────────────────────────────────────────────────
+# L2 失效知识 — Condition → Invalidate
+# 回答「什么条件下当前判断作废」
+# ─────────────────────────────────────────────────────────────
+
+rules:
+  - id: "L2-001"
+    name: "趋势通量背离"
+    description: "通量方向与趋势方向背离，趋势可能中断"
+    when:
+      - field: "movement_type"
+        op: "in"
+        value: ["trend_up", "trend_down"]
+      - field: "flux_direction_contradiction"
+        op: "=="
+        value: true
+    invalidate: "通量方向与趋势方向背离，趋势可能中断"
+    severity: high
+    action: "降低关注度，等待通量方向确认"
+    source: "公理A8（守恒）"
+
+  - id: "L2-002"
+    name: "结构老化"
+    description: "结构存续时间过长，破缺概率上升"
+    when:
+      - field: "structural_age"
+        op: ">"
+        value: 12
+    invalidate: "结构老化——存续超过12个周期，破缺概率上升"
+    severity: medium
+    action: "减少权重，关注破缺信号"
+    source: "经验 + 破缺机制"
+
+  - id: "L2-003"
+    name: "投影高压缩·不可信"
+    description: "投影压缩度过高，结构描述可能为假象"
+    when:
+      - field: "compression_level"
+        op: ">"
+        value: 0.5
+    invalidate: "投影高压缩——结构描述可能为假象"
+    severity: high
+    action: "标记为'待验证'，不纳入后验统计"
+    source: "公理A0（投影觉知）"
+
+  - id: "L2-004"
+    name: "D层结构"
+    description: "质量评估为D层，结构不可用"
+    when:
+      - field: "tier"
+        op: "=="
+        value: "D"
+    invalidate: "D层结构——质量不可用，视为噪声"
+    severity: high
+    action: "丢弃，不进入任何统计"
+    source: "质量评估体系"
+
+  - id: "L2-005"
+    name: "跨Zone反向运动"
+    description: "运动类型在不同Zone间反向，前一趋势作废"
+    when:
+      - field: "cross_zone_reversal"
+        op: "=="
+        value: true
+    invalidate: "跨Zone反向运动——前一趋势作废"
+    severity: high
+    action: "重新评估结构，等待新稳态确认"
+    source: "稳态跃迁定义"
+
+  - id: "L2-006"
+    name: "低试探次数"
+    description: "Cycle数不足2次，统计基础薄弱"
+    when:
+      - field: "cycle_count"
+        op: "<"
+        value: 2
+    invalidate: "试探次数不足——统计基础薄弱"
+    severity: medium
+    action: "仅作参考，不纳入后验统计"
+    source: "经验"
+
+  - id: "L2-007"
+    name: "通量极端异常"
+    description: "通量绝对值超出合理范围"
+    when:
+      - field: "flux_abs"
+        op: ">"
+        value: 2.0
+    invalidate: "通量极端异常——可能为数据错误或极端事件"
+    severity: high
+    action: "人工复核，排除数据质量问题"
+    source: "守恒一致性检查"

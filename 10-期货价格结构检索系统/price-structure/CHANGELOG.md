@@ -1,5 +1,33 @@
 # CHANGELOG
 
+## 2026-05-01 — 知识层（L1/L2/L3）+ 文档同步
+
+### 新增
+
+- **`knowledge/` 目录**：三层知识体系 YAML 规则库
+  - `L1_conditions.yaml`：8 条判定知识（趋势可靠性、震荡充分、反转确认、高质量结构等）
+  - `L2_invalidation.yaml`：7 条失效知识（通量背离、结构老化、投影不可信等）
+  - `L3_wisdom.yaml`：12 条市场知识（品种特征、反差类型、形态模式、跨品种联动等）
+- **`src/knowledge/` 模块**：知识引擎
+  - `engine.py`：KnowledgeEngine — YAML 加载 + 条件匹配 + 三层评估
+  - `result.py`：KnowledgeResult + MatchedRule — 匹配结果封装
+- **`src/quality.py` 增强**：第 6 维度「知识置信度」
+  - `assess_quality_with_knowledge()`：知识增强质量评估
+  - 知识维度占总分 10%，L1 正向/L2 负向/L3 参考
+- **`src/workbench/tab_knowledge_graph.py` 增强**：新增「🧠 知识层」子 Tab
+  - 知识库总览（L1/L2/L3 规则数统计）
+  - 当前结构知识匹配（实时评估 + 可视化）
+  - 知识库详情浏览（按层分类展示规则）
+
+### 文档同步
+
+- **TASK_INDEX.md**：更新进度总览，Phase 0-8 全部标记完成
+- **docs/待办事项.md**：移除已完成项，仅保留实际待办
+- **docs/SUMMARY.md**：更新核心能力描述 + 技术架构图
+- **README.md**：更新品种配置表 + 新增知识层章节
+
+---
+
 ## 2026-05-01 — 金融知识图谱多品种配置系统
 
 ### 新增

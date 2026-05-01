@@ -99,11 +99,48 @@ python3 config/products/_template/...  # 复制模板
 |------|------|------|--------|------|----------|
 | _shared（跨品种） | 211 | 192 | 39 | 30 | — |
 | copper（铜） | 35 | 23 | 7 | 7 | 5 |
+| crude_oil（原油） | ✅ | ✅ | ✅ | ✅ | ✅ |
+| rebar（螺纹钢） | ✅ | ✅ | ✅ | ✅ | ✅ |
+| aluminum（铝） | ✅ | ✅ | ✅ | ✅ | ✅ |
+| zinc（锌） | ✅ | ✅ | ✅ | ✅ | ✅ |
+| gold（黄金） | ✅ | ✅ | ✅ | ✅ | ✅ |
+| silver（白银） | ✅ | ✅ | ✅ | ✅ | ✅ |
 | lithium_carbonate（碳酸锂） | 5 | 0 | 0 | 1 | — |
 
 知识图谱通过 `src/graph/product_ingester.py` 导入 `data/graph/`（JSONL 格式），不干扰价格结构相似度计算。
 
 详见 [`config/README.md`](config/README.md) 和 [`docs/16_知识注入系统.md`](docs/16_知识注入系统.md)。
+
+## 知识层（L1/L2/L3）
+
+系统内置三层知识体系，通过 YAML 规则驱动，增强质量评估和叙事生成。
+
+```bash
+# 知识库目录
+knowledge/
+├── L1_conditions.yaml      # 判定知识（8条）：该信多少
+├── L2_invalidation.yaml    # 失效知识（7条）：什么条件下作废
+├── L3_wisdom.yaml          # 市场知识（12条）：有什么值得注意的
+└── README.md
+```
+
+```python
+# 使用方式
+from src.knowledge import KnowledgeEngine
+
+engine = KnowledgeEngine("knowledge")
+result = engine.evaluate(structure=s, motion=m, symbol="CU")
+
+# 知识增强质量评估
+from src.quality import assess_quality_with_knowledge
+
+qa, kr = assess_quality_with_knowledge(structure, system_state)
+```
+
+知识层通过 `src/quality.py` 的第 6 维度（知识置信度）影响质量评分：
+- L1 判定知识：正向加权（每条 +0.10，上限 0.30）
+- L2 失效知识：负向减权（高严重度 -0.20）
+- L3 市场知识：参考加成（每条 +0.03，上限 0.15）
 
 ## 文档索引
 

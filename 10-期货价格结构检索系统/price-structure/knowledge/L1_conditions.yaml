@@ -1,0 +1,126 @@
+# ─────────────────────────────────────────────────────────────
+# L1 判定知识 — Condition → Verdict
+# 回答「这个结构现在处于什么状态，我该信多少」
+# ─────────────────────────────────────────────────────────────
+
+rules:
+  - id: "L1-001"
+    name: "趋势可靠性递增"
+    description: "连续多个稳态递增的趋势更可靠"
+    when:
+      - field: "movement_type"
+        op: "in"
+        value: ["trend_up", "trend_down"]
+      - field: "stable_count"
+        op: ">="
+        value: 3
+      - field: "flux"
+        op: ">"
+        value: 0
+    verdict: "趋势可靠性高——连续稳态递增且通量释放，统计基础扎实"
+    confidence: 0.85
+    weight_adjust: 0.15
+    source: "历史回测 + 公理A9（最近稳态）"
+    note: "稳态越多，趋势的统计基础越扎实"
+
+  - id: "L1-002"
+    name: "趋势下行可靠性"
+    description: "连续多个稳态递减的下行趋势更可靠"
+    when:
+      - field: "movement_type"
+        op: "=="
+        value: "trend_down"
+      - field: "stable_count"
+        op: ">="
+        value: 3
+      - field: "flux"
+        op: "<"
+        value: 0
+    verdict: "下行趋势可靠——通量方向一致，稳态递减"
+    confidence: 0.85
+    weight_adjust: 0.15
+    source: "历史回测 + 公理A9"
+
+  - id: "L1-003"
+    name: "震荡充分·突破在即"
+    description: "震荡周期数足够多时，突破概率上升"
+    when:
+      - field: "movement_type"
+        op: "=="
+        value: "oscillation"
+      - field: "cycle_count"
+        op: ">="
+        value: 5
+    verdict: "震荡充分，突破在即——5次以上试探后能量积蓄到位"
+    confidence: 0.70
+    weight_adjust: 0.10
+    source: "经验 + DSL规则"
+
+  - id: "L1-004"
+    name: "反转确认"
+    description: "通量反向且运动类型为反转时，反转确认"
+    when:
+      - field: "movement_type"
+        op: "=="
+        value: "reversal"
+      - field: "flux"
+        op: "!="
+        value: 0
+    verdict: "反转确认——通量方向与前趋势背离，方向已变"
+    confidence: 0.80
+    weight_adjust: 0.12
+    source: "公理A8（守恒）"
+
+  - id: "L1-005"
+    name: "高质量结构"
+    description: "A层结构且典型性高，可信度强"
+    when:
+      - field: "tier"
+        op: "=="
+        value: "A"
+      - field: "typicality"
+        op: ">"
+        value: 0.7
+    verdict: "高质量结构——典型性高，可直接用于检索和统计"
+    confidence: 0.90
+    weight_adjust: 0.20
+    source: "质量评估体系"
+
+  - id: "L1-006"
+    name: "可信稳定态"
+    description: "投影压缩度低且稳定性已验证"
+    when:
+      - field: "compression_level"
+        op: "<"
+        value: 0.3
+      - field: "stable_verified"
+        op: "=="
+        value: true
+    verdict: "可信稳定——投影非盲，稳定性已验证"
+    confidence: 0.88
+    weight_adjust: 0.18
+    source: "公理A0（投影觉知）"
+
+  - id: "L1-007"
+    name: "高通量释放"
+    description: "通量绝对值大，说明差异剧烈转移"
+    when:
+      - field: "flux_abs"
+        op: ">"
+        value: 0.7
+    verdict: "高通量释放——差异正在剧烈转移，关注后续方向确认"
+    confidence: 0.75
+    weight_adjust: 0.08
+    source: "公理A8（守恒）"
+
+  - id: "L1-008"
+    name: "Zone带宽收敛"
+    description: "Zone相对带宽小，说明价格聚集度高"
+    when:
+      - field: "zone_rel_bw"
+        op: "<"
+        value: 0.02
+    verdict: "Zone带宽收敛——价格高度聚集，蓄势待发"
+    confidence: 0.72
+    weight_adjust: 0.10
+    source: "聚簇机制"

@@ -127,6 +127,7 @@ def render(ctx: dict) -> None:
         "🔀 跨品种传导",
         "📊 图谱统计",
         "💉 知识注入",
+        "🧠 知识层",
     ])
 
     # 初始化图谱存储
@@ -149,6 +150,9 @@ def render(ctx: dict) -> None:
 
     with sub_tabs[5]:
         _render_knowledge_injection(ctx, graph_store)
+
+    with sub_tabs[6]:
+        _render_knowledge_layers(ctx)
 
 
 # ─── Tab 1: 图谱总览 ──────────────────────────────────────
@@ -1048,3 +1052,176 @@ def _render_knowledge_injection(ctx: dict, store: GraphStore) -> None:
                         st.json(data)
                 else:
                     st.warning(f"文件不存在: {full_path}")
+
+
+# ─── Tab 7: 知识层（L1/L2/L3） ────────────────────────────
+
+def _render_knowledge_layers(ctx: dict) -> None:
+    """L1/L2/L3 三层知识可视化"""
+    st.markdown("#### 🧠 知识层 — L1/L2/L3 三层知识体系")
+    st.caption("判定知识 · 失效知识 · 市场智慧 — 知识图谱的语义层")
+
+    from src.knowledge import KnowledgeEngine
+
+    engine = KnowledgeEngine("knowledge")
+    stats = engine.stats
+
+    # 知识库总览
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        st.metric("📋 L1 判定知识", stats["L1_conditions"])
+    with col2:
+        st.metric("⚠️ L2 失效知识", stats["L2_invalidation"])
+    with col3:
+        st.metric("💡 L3 市场知识", stats["L3_wisdom"])
+    with col4:
+        st.metric("📊 总规则数", stats["total"])
+
+    if stats["total"] == 0:
+        st.warning("📭 知识库为空。请在 `knowledge/` 目录下创建 YAML 文件。")
+        st.info("详见 `knowledge/README.md`")
+        return
+
+    st.divider()
+
+    # 当前结构知识匹配
+    result = ctx.get("result")
+    structures = getattr(result, "structures", []) if result else []
+
+    if structures:
+        st.markdown("#### 🔍 当前结构知识匹配")
+
+        selected_idx = st.selectbox(
+            "选择结构",
+            range(len(structures)),
+            format_func=lambda i: (
+                f"结构 {i+1} — Zone {getattr(structures[i].zone, 'price_center', 0):.0f} "
+                f"({getattr(structures[i].motion, 'movement_type', 'unknown')})"
+            ),
+            key="kg_kl_struct_select",
+        )
+
+        s = structures[selected_idx]
+        kr = engine.evaluate(
+            structure=s,
+            motion=getattr(s, "motion", None),
+            symbol=getattr(s, "symbol", ""),
+        )
+
+        # 匹配结果展示
+        if kr.total_matched > 0:
+            # L1 判定知识
+            if kr.conditions:
+                st.markdown("**📋 判定知识（该信多少）：**")
+                for r in kr.conditions:
+                    with st.expander(
+                        f"✅ [{r.id}] {r.name} — 置信度 {r.confidence:.0%} | 权重 {r.weight_adjust:+.2f}",
+                        expanded=True,
+                    ):
+                        st.markdown(f"**判定:** {r.verdict}")
+                        st.markdown(f"**来源:** {r.source}")
+                        if r.confidence:
+                            st.progress(r.confidence, text=f"置信度 {r.confidence:.0%}")
+
+            # L2 失效知识
+            if kr.invalidations:
+                st.markdown("**⚠️ 失效警告（什么条件下作废）：**")
+                for r in kr.invalidations:
+                    severity_icon = "🔴" if r.severity == "high" else "🟡"
+                    with st.expander(
+                        f"{severity_icon} [{r.id}] {r.name} — {r.severity}",
+                        expanded=r.severity == "high",
+                    ):
+                        st.markdown(f"**失效判定:** {r.invalidate}")
+                        st.markdown(f"**建议动作:** {r.action}")
+                        st.markdown(f"**来源:** {r.source}")
+
+            # L3 市场知识
+            if kr.wisdoms:
+                st.markdown("**💡 市场智慧（有什么值得注意的）：**")
+                for r in kr.wisdoms:
+                    st.info(f"💡 [{r.id}] {r.wisdom}")
+
+            # 综合评估
+            st.divider()
+            confidence_boost = kr.confidence_boost
+            color = "green" if confidence_boost > 0 else "red" if confidence_boost < 0 else "gray"
+            st.markdown(
+                f"**综合置信度调整:** :{color}[{confidence_boost:+.2f}] "
+                f"| 匹配 {kr.total_matched} 条规则"
+            )
+
+            # 知识摘要
+            with st.expander("📝 完整知识摘要", expanded=False):
+                st.code(kr.summary(), language=None)
+        else:
+            st.info("当前结构未匹配到任何知识规则")
+
+    st.divider()
+
+    # 知识库详情浏览
+    st.markdown("#### 📖 知识库详情")
+
+    detail_tabs = st.tabs(["📋 L1 判定", "⚠️ L2 失效", "💡 L3 智慧"])
+
+    with detail_tabs[0]:
+        _render_yaml_rules(engine, "L1", "conditions")
+
+    with detail_tabs[1]:
+        _render_yaml_rules(engine, "L2", "invalidations")
+
+    with detail_tabs[2]:
+        _render_yaml_rules(engine, "L3", "wisdoms")
+
+
+def _render_yaml_rules(engine, level: str, attr: str) -> None:
+    """渲染 YAML 规则列表"""
+    rules = getattr(engine, f"_{attr}", [])
+    if not rules:
+        st.info(f"📭 {level} 知识库为空")
+        return
+
+    for rule in rules:
+        rule_id = rule.get("id", "")
+        name = rule.get("name", "")
+        desc = rule.get("description", "")
+
+        icon = {"L1": "✅", "L2": "⚠️", "L3": "💡"}.get(level, "📋")
+
+        with st.expander(f"{icon} {rule_id} — {name}", expanded=False):
+            if desc:
+                st.markdown(f"*{desc}*")
+
+            # 条件
+            conditions = rule.get("when", [])
+            if conditions:
+                st.markdown("**条件:**")
+                for cond in conditions:
+                    field = cond.get("field", "")
+                    op = cond.get("op", "")
+                    value = cond.get("value", "")
+                    st.code(f"{field} {op} {value}", language=None)
+
+            # 输出
+            if rule.get("verdict"):
+                st.markdown(f"**判定:** {rule['verdict']}")
+            if rule.get("invalidate"):
+                st.markdown(f"**失效:** {rule['invalidate']}")
+            if rule.get("wisdom"):
+                st.markdown(f"**智慧:** {rule['wisdom']}")
+
+            # 元数据
+            meta_cols = st.columns(3)
+            with meta_cols[0]:
+                if rule.get("confidence"):
+                    st.caption(f"置信度: {rule['confidence']}")
+                if rule.get("weight_adjust"):
+                    st.caption(f"权重调整: {rule['weight_adjust']:+.2f}")
+            with meta_cols[1]:
+                if rule.get("severity"):
+                    st.caption(f"严重度: {rule['severity']}")
+                if rule.get("action"):
+                    st.caption(f"建议: {rule['action']}")
+            with meta_cols[2]:
+                if rule.get("source"):
+                    st.caption(f"来源: {rule['source']}")

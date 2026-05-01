@@ -34,11 +34,8 @@
     a_structures = tiers["A"]  # 高质量结构
 """
 
-from __future__ import annotations
-
-from dataclasses import dataclass
-from enum import Enum
-
+from src.knowledge.engine import KnowledgeEngine
+from src.knowledge.result import KnowledgeResult
 
 
 # ─── 质量等级 ─────────────────────────────────────────────
@@ -358,6 +355,42 @@ def _score_traceability(s: Structure) -> tuple[float, list[str]]:
     return min(score, 1.0), flags
 
 
+def _score_knowledge(kr: KnowledgeResult) -> tuple[float, list[str]]:
+    """
+    维度 6: 知识置信度
+
+    基于 L1/L2/L3 三层知识匹配结果评估：
+    - L1 判定知识：正向加权
+    - L2 失效知识：负向减权（高严重度直接降层）
+    - L3 市场知识：参考加成
+    """
+    flags = []
+    score = 0.5  # 基准分
+
+    # L1 判定知识：每条 +0.10，上限 0.30
+    l1_boost = min(len(kr.conditions) * 0.10, 0.30)
+    score += l1_boost
+    for r in kr.conditions:
+        flags.append(f"✅ [{r.id}] {r.name}")
+
+    # L2 失效知识：高严重度 -0.20，中严重度 -0.10
+    for r in kr.invalidations:
+        if r.severity == "high":
+            score -= 0.20
+            flags.append(f"🔴 [{r.id}] {r.name}")
+        elif r.severity == "medium":
+            score -= 0.10
+            flags.append(f"⚠️ [{r.id}] {r.name}")
+        else:
+            score -= 0.05
+
+    # L3 市场知识：每条 +0.03，上限 0.15
+    l3_boost = min(len(kr.wisdoms) * 0.03, 0.15)
+    score += l3_boost
+
+    return max(0.0, min(score, 1.0)), flags
+
+
 # ─── 综合质量评估 ─────────────────────────────────────────
 
 # 维度权重
@@ -373,6 +406,7 @@ DIMENSION_WEIGHTS = {
 def assess_quality(
     s: Structure,
     ss: SystemState | None = None,
+    knowledge_result: KnowledgeResult | None = None,
 ) -> QualityAssessment:
     """
     评估单个结构的质量
@@ -380,6 +414,7 @@ def assess_quality(
     Args:
         s: 结构对象
         ss: 系统态（可选，有则评估更准确）
+        knowledge_result: 知识引擎匹配结果（可选，有则增加知识维度）
 
     Returns:
         QualityAssessment
@@ -409,14 +444,29 @@ def assess_quality(
     dimension_scores["后验可追溯"] = r_score
     all_flags.extend(r_flags)
 
-    # 加权综合分
-    total = (
-        DIMENSION_WEIGHTS["完整性"] * c_score +
-        DIMENSION_WEIGHTS["运动可信"] * m_score +
-        DIMENSION_WEIGHTS["守恒一致"] * con_score +
-        DIMENSION_WEIGHTS["时间成熟"] * t_score +
-        DIMENSION_WEIGHTS["后验可追溯"] * r_score
-    )
+    # ── 第 6 维度：知识置信度 ──
+    if knowledge_result is not None and knowledge_result.total_matched > 0:
+        k_score, k_flags = _score_knowledge(knowledge_result)
+        dimension_scores["知识置信"] = k_score
+        all_flags.extend(k_flags)
+        # 加权综合分（知识维度占 10%，其他维度按比例缩减）
+        base_total = (
+            0.225 * c_score +  # 原 0.25 × 0.9
+            0.225 * m_score +
+            0.18 * con_score +  # 原 0.20 × 0.9
+            0.135 * t_score +  # 原 0.15 × 0.9
+            0.135 * r_score    # 原 0.15 × 0.9
+        )
+        total = base_total + 0.10 * k_score
+    else:
+        # 无知识：原始 5 维度
+        total = (
+            DIMENSION_WEIGHTS["完整性"] * c_score +
+            DIMENSION_WEIGHTS["运动可信"] * m_score +
+            DIMENSION_WEIGHTS["守恒一致"] * con_score +
+            DIMENSION_WEIGHTS["时间成熟"] * t_score +
+            DIMENSION_WEIGHTS["后验可追溯"] * r_score
+        )
 
     # 分层
     if total >= 0.75:
@@ -559,3 +609,34 @@ def quality_summary_for_display(s: Structure, ss: SystemState | None = None) -> 
         "retrieval_weight": qa.tier.retrieval_weight,
         "include_in_posterior": qa.tier.include_in_posterior,
     }
+
+
+# ─── 知识增强评估 ─────────────────────────────────────────
+
+# 全局知识引擎实例（惰性初始化）
+_global_knowledge_engine: KnowledgeEngine | None = None
+
+
+def get_knowledge_engine(knowledge_dir: str = "knowledge") -> KnowledgeEngine:
+    """获取全局知识引擎实例"""
+    global _global_knowledge_engine
+    if _global_knowledge_engine is None:
+        _global_knowledge_engine = KnowledgeEngine(knowledge_dir)
+    return _global_knowledge_engine
+
+
+def assess_quality_with_knowledge(
+    s: Structure,
+    ss: SystemState | None = None,
+    knowledge_dir: str = "knowledge",
+) -> tuple[QualityAssessment, KnowledgeResult]:
+    """
+    评估单个结构的质量（含知识引擎）
+
+    Returns:
+        (QualityAssessment, KnowledgeResult)
+    """
+    engine = get_knowledge_engine(knowledge_dir)
+    kr = engine.evaluate(structure=s, motion=getattr(s, "motion", None))
+    qa = assess_quality(s, ss, knowledge_result=kr)
+    return qa, kr
