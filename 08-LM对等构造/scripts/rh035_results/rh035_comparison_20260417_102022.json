@@ -1,0 +1,134 @@
+{
+  "experiment": "RH-035 三组对照",
+  "timestamp": "20260417_102022",
+  "main_results": {
+    "A_mobius": {
+      "label": "A_mobius",
+      "n_range": [
+        10000,
+        78498
+      ],
+      "num_samples": 1370,
+      "num_zeros_used": 100,
+      "mean_rel_error_%": 0.1808976291548848,
+      "median_rel_error_%": 0.15929212454359587,
+      "std_rel_error_%": 0.07580050166727229,
+      "max_rel_error_%": 0.46770070825875276,
+      "main_term_only_mean_%": 0.1808986911184977,
+      "oscillation_improvement_%": 1.0619636129083343e-06,
+      "within_0.1%": 7.2992700729927,
+      "within_0.5%": 100.0,
+      "within_1.0%": 100.0
+    },
+    "B_riemann": {
+      "label": "B_riemann",
+      "n_range": [
+        10000,
+        78498
+      ],
+      "num_samples": 1370,
+      "num_zeros_used": 100,
+      "mean_rel_error_%": 0.18089839391578685,
+      "median_rel_error_%": 0.15929334822557978,
+      "std_rel_error_%": 0.07580196569533086,
+      "max_rel_error_%": 0.4676951073441727,
+      "main_term_only_mean_%": 0.1808986911184977,
+      "oscillation_improvement_%": 2.9720271085831307e-07,
+      "within_0.1%": 7.2992700729927,
+      "within_0.5%": 100.0,
+      "within_1.0%": 100.0
+    },
+    "C_random": {
+      "label": "C_random",
+      "n_range": [
+        10000,
+        78498
+      ],
+      "num_samples": 1370,
+      "num_zeros_used": 100,
+      "mean_rel_error_%": 0.18089797244135386,
+      "median_rel_error_%": 0.1592918299153242,
+      "std_rel_error_%": 0.07580104112839207,
+      "max_rel_error_%": 0.46769330547810706,
+      "main_term_only_mean_%": 0.1808986911184977,
+      "oscillation_improvement_%": 7.186771438516537e-07,
+      "within_0.1%": 7.2992700729927,
+      "within_0.5%": 100.0,
+      "within_1.0%": 100.0
+    }
+  },
+  "sensitivity_analysis": {
+    "A_mobius": [
+      {
+        "num_zeros": 10,
+        "rel_error_%": 0.12188643481511785
+      },
+      {
+        "num_zeros": 50,
+        "rel_error_%": 0.12188652970146281
+      },
+      {
+        "num_zeros": 100,
+        "rel_error_%": 0.12188655316656374
+      },
+      {
+        "num_zeros": 200,
+        "rel_error_%": 0.12188654188978955
+      },
+      {
+        "num_zeros": 500,
+        "rel_error_%": 0.12188653994972759
+      }
+    ],
+    "B_riemann": [
+      {
+        "num_zeros": 10,
+        "rel_error_%": 0.12188812393987157
+      },
+      {
+        "num_zeros": 50,
+        "rel_error_%": 0.12188816015765251
+      },
+      {
+        "num_zeros": 100,
+        "rel_error_%": 0.12188816819263877
+      },
+      {
+        "num_zeros": 200,
+        "rel_error_%": 0.12188817083149363
+      },
+      {
+        "num_zeros": 500,
+        "rel_error_%": 0.12188813134999055
+      }
+    ],
+    "C_random": [
+      {
+        "num_zeros": 10,
+        "rel_error_%": 0.12188540141774193
+      },
+      {
+        "num_zeros": 50,
+        "rel_error_%": 0.12188538438009736
+      },
+      {
+        "num_zeros": 100,
+        "rel_error_%": 0.12188547421290642
+      },
+      {
+        "num_zeros": 200,
+        "rel_error_%": 0.121885482742848
+      },
+      {
+        "num_zeros": 500,
+        "rel_error_%": 0.12188550764021466
+      }
+    ]
+  },
+  "interpretation_guide": {
+    "A≈B>>C": "莫比乌斯谱捕捉到黎曼零点结构，P0 有推进价值",
+    "A≈B≈C": "振荡项无结构性贡献，精度来自主项，P0 需重新定向",
+    "A>>B,C": "莫比乌斯谱有独立贡献，与黎曼零点不同但有效",
+    "B>>A≈C": "黎曼零点有效，莫比乌斯谱未捕捉到正确结构"
+  }
+}

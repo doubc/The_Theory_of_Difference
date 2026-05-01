@@ -1,0 +1,54 @@
+name: Signal Layer Tests
+
+on:
+  push:
+    paths:
+      - '10-期货价格结构检索系统/price-structure/src/signals.py'
+      - '10-期货价格结构检索系统/price-structure/src/models.py'
+      - '10-期货价格结构检索系统/price-structure/src/config/**'
+      - '10-期货价格结构检索系统/price-structure/tests/**'
+  pull_request:
+    paths:
+      - '10-期货价格结构检索系统/price-structure/src/signals.py'
+      - '10-期货价格结构检索系统/price-structure/src/models.py'
+      - '10-期货价格结构检索系统/price-structure/src/config/**'
+      - '10-期货价格结构检索系统/price-structure/tests/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 10-期货价格结构检索系统/price-structure
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install pandas pyarrow numpy plotly networkx
+
+      - name: Run signal tests
+        run: python tests/test_signals.py
+
+      - name: Run edge case tests
+        run: |
+          python -c "
+          import sys; sys.path.insert(0, '.')
+          import tests.test_signals_edge_cases as tc
+          fns = [getattr(tc, n) for n in dir(tc) if n.startswith('test_')]
+          passed = 0
+          for fn in fns:
+              try:
+                  fn()
+                  passed += 1
+              except Exception as e:
+                  print(f'FAIL {fn.__name__}: {e}')
+                  sys.exit(1)
+          print(f'All {passed}/{len(fns)} edge case tests passed')
+          "

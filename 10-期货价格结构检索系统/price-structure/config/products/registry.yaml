@@ -1,0 +1,44 @@
+products:
+  _shared:
+    symbol: '*'
+    name: 跨品种共享
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - global
+    - macro
+    - cross_commodity
+    files:
+      entities: _shared/entities.json
+      relations: _shared/relations.json
+      chains: _shared/chains.json
+      polarity: _shared/polarity.json
+  copper:
+    symbol: CU
+    name: 电解铜
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - base_metal
+    - macro_sensitive
+    - leading_indicator
+    files:
+      entities: copper/entities.json
+      relations: copper/relations.json
+      chains: copper/chains.json
+      polarity: copper/polarity.json
+      pricing_models: copper/pricing_models.json
+  lithium_carbonate:
+    symbol: LC
+    name: 碳酸锂
+    status: active
+    last_updated: '2026-05-01'
+    tags:
+    - new_energy
+    - battery_material
+    files:
+      entities: lithium_carbonate/entities.json
+      relations: lithium_carbonate/relations.json
+      chains: lithium_carbonate/chains.json
+      polarity: lithium_carbonate/polarity.json
+      pricing_models: lithium_carbonate/pricing_models.json

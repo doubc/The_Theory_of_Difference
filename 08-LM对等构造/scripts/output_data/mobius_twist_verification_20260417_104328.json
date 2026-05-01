@@ -1,0 +1,21 @@
+{
+  "experiment": "Mobius Twist Algebra Verification",
+  "timestamp": "20260417_104328",
+  "example_2x3": {
+    "theta_final": 5.235987755982988,
+    "y_final": -1.0,
+    "position_index": 5
+  },
+  "critical_line_test": {
+    "sigma_min": 0.7,
+    "magnitude_min": 4.945008846257758,
+    "deviation_from_half": 0.19999999999999996
+  },
+  "resonance_points_count": 21,
+  "interpretation": {
+    "mu_phase_correspondence": "μ(n) = (-1)^{Ω(n)} 与莫比乌斯相位 φ=π·Ω(n) 精确对应",
+    "prime_as_twist_source": "素数对应单次扭转（φ=π），合数对应多次扭转叠加",
+    "resonance_condition": "ζ(s)=0 对应相位相消干涉最强的位置",
+    "critical_line_origin": "如果最小值始终在 σ=0.5，说明临界线来自拓扑约束"
+  }
+}

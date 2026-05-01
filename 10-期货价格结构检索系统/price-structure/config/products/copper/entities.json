@@ -1,0 +1,665 @@
+{
+  "commodity": "铜",
+  "symbol": "CU",
+  "version": "1.3.0",
+  "entities": [
+    {
+      "id": "CUL_021",
+      "name": "铜供给缺口叙事",
+      "type": "商品供需叙事",
+      "groundBase": "culture",
+      "importance": 7,
+      "description": "能源转型将导致铜长期供不应求的叙事",
+      "trackingVariables": [
+        "矿山投资",
+        "库存水平"
+      ]
+    },
+    {
+      "id": "CUL_031",
+      "name": "铜博士叙事",
+      "type": "市场共识",
+      "groundBase": "culture",
+      "importance": 9,
+      "description": "铜作为全球经济晴雨表的市场共识，铜价走势被视为领先经济指标，强化了铜价的宏观交易属性",
+      "trackingVariables": [
+        "铜价与PMI相关性",
+        "市场叙事演变",
+        "铜金比走势"
+      ]
+    },
+    {
+      "id": "CUL_032",
+      "name": "铜长期供给缺口叙事",
+      "type": "商品供需叙事",
+      "groundBase": "culture",
+      "importance": 8,
+      "description": "能源转型（电动车、电网、光伏风电）将导致铜长期供不应求的共识，支撑铜价结构性牛市预期",
+      "trackingVariables": [
+        "矿山资本开支",
+        "新项目FID数量",
+        "需求增长预期",
+        "库存水平"
+      ]
+    },
+    {
+      "id": "GEO_007",
+      "name": "刚果盆地",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 7,
+      "description": "全球第二大热带雨林，重要碳汇，铜钴锂等关键矿产富集区",
+      "controlledBy": [
+        "刚果民主共和国",
+        "刚果共和国"
+      ],
+      "vulnerabilities": [
+        "政治不稳定",
+        "基础设施缺失",
+        "中西方资源博弈"
+      ],
+      "trackingVariables": [
+        "钴产量",
+        "中国投资规模",
+        "政治稳定指数"
+      ]
+    },
+    {
+      "id": "GEO_021",
+      "name": "智利北部矿区",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "全球最大铜矿产区，阿塔卡马沙漠Escondida等矿山占全球铜产量约10%",
+      "controlledBy": [
+        "BHP必和必拓",
+        "力拓",
+        "安托法加斯塔"
+      ],
+      "vulnerabilities": [
+        "水资源短缺",
+        "工会罢工",
+        "矿石品位下降"
+      ],
+      "trackingVariables": [
+        "月度产量",
+        "罢工风险",
+        "海水淡化进度"
+      ]
+    },
+    {
+      "id": "GEO_022",
+      "name": "秘鲁安第斯矿区",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "全球第二大铜生产国核心产区，Las Bambas、Antamina等矿山，社区抗议频发",
+      "controlledBy": [
+        "五矿资源",
+        "嘉能可",
+        "自由港"
+      ],
+      "vulnerabilities": [
+        "社区封锁道路",
+        "政治左翼化",
+        "运输受阻"
+      ],
+      "trackingVariables": [
+        "社区抗议事件",
+        "运输道路状态",
+        "政府调解进展"
+      ]
+    },
+    {
+      "id": "GEO_029",
+      "name": "刚果金加丹加铜钴带",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "全球最大钴矿产区，铜储量丰富，中资企业主导开发，占全球钴供应约70%",
+      "controlledBy": [
+        "洛阳钼业",
+        "华友钴业",
+        "嘉能可"
+      ],
+      "vulnerabilities": [
+        "政治不稳定",
+        "手工采矿人权问题",
+        "出口政策变化"
+      ],
+      "trackingVariables": [
+        "钴产量",
+        "出口税政策",
+        "中资投资规模"
+      ]
+    },
+    {
+      "id": "GEO_030",
+      "name": "蒙古奥尤陶勒盖铜金矿",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 7,
+      "description": "世界级铜金矿，力拓开发，中蒙边境附近，地下矿扩建中，未来铜供给增量",
+      "controlledBy": [
+        "力拓",
+        "蒙古政府"
+      ],
+      "vulnerabilities": [
+        "投资协议纠纷",
+        "蒙古政治波动",
+        "电力供应"
+      ],
+      "trackingVariables": [
+        "扩建进度",
+        "税收协议",
+        "中蒙关系"
+      ]
+    },
+    {
+      "id": "GEO_066",
+      "name": "智利Escondida铜矿",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 10,
+      "description": "全球最大单体铜矿，年产量约100-120万吨，占全球铜产量约5%，由BHP主导运营",
+      "controlledBy": [
+        "BHP必和必拓",
+        "力拓",
+        "JECO"
+      ],
+      "vulnerabilities": [
+        "工会罢工风险",
+        "矿石品位持续下降",
+        "水资源极度短缺",
+        "社区关系紧张"
+      ],
+      "trackingVariables": [
+        "年度产量",
+        "罢工预警",
+        "品位变化",
+        "扩建计划",
+        "成本曲线"
+      ]
+    },
+    {
+      "id": "GEO_067",
+      "name": "秘鲁Las Bambas铜矿",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "中国五矿资源旗下大型铜矿，年产量约30-40万吨，社区封锁是最大的供给扰动来源",
+      "controlledBy": [
+        "五矿资源MMG"
+      ],
+      "vulnerabilities": [
+        "社区道路封锁频发",
+        "运输通道被切断",
+        "政治左翼化风险"
+      ],
+      "trackingVariables": [
+        "月度产量",
+        "封锁天数",
+        "运输状态",
+        "政府调解进展"
+      ]
+    },
+    {
+      "id": "GEO_068",
+      "name": "刚果金Kamoa-Kakula铜矿",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "非洲最大铜矿，紫金矿业与艾芬豪联合开发，品位极高（约5-6%），全球铜供给核心增量来源",
+      "controlledBy": [
+        "紫金矿业",
+        "艾芬豪矿业",
+        "刚果金政府"
+      ],
+      "vulnerabilities": [
+        "政治不稳定",
+        "电力供应不足",
+        "物流基础设施薄弱",
+        "出口税政策变化"
+      ],
+      "trackingVariables": [
+        "产量爬坡进度",
+        "二期/三期投产时间",
+        "出口量",
+        "铜精矿品位"
+      ]
+    },
+    {
+      "id": "GEO_069",
+      "name": "蒙古奥尤陶勒盖铜金矿",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "力拓主导开发的世界级铜金矿，地下矿扩建完成后将成为全球第三大铜矿",
+      "controlledBy": [
+        "力拓",
+        "蒙古政府"
+      ],
+      "vulnerabilities": [
+        "投资协议纠纷",
+        "蒙古政治波动",
+        "电力供应紧张",
+        "中蒙边境运输"
+      ],
+      "trackingVariables": [
+        "地下矿建设进度",
+        "产量指引",
+        "税收谈判",
+        "电力供应方案"
+      ]
+    },
+    {
+      "id": "GEO_070",
+      "name": "中国铜陵有色金属基地",
+      "type": "冶炼加工节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "中国最大铜冶炼基地之一，铜陵有色全球最大单体铜冶炼厂，阳极铜和阴极铜核心产区",
+      "controlledBy": [
+        "铜陵有色",
+        "中国有色矿业"
+      ],
+      "vulnerabilities": [
+        "环保限产",
+        "电力紧张",
+        "铜精矿供应依赖进口"
+      ],
+      "trackingVariables": [
+        "阴极铜产量",
+        "冶炼开工率",
+        "TC/RC利润",
+        "硫酸副产价格"
+      ]
+    },
+    {
+      "id": "GEO_071",
+      "name": "上海保税区铜库存仓库",
+      "type": "物流库存节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "全球铜库存核心观测节点，SHFE与LME之间套利贸易流转关键节点，铜贸易融资核心区域",
+      "vulnerabilities": [
+        "进口盈亏窗口波动",
+        "汇率变化影响",
+        "信贷政策收紧"
+      ],
+      "trackingVariables": [
+        "保税区库存",
+        "升贴水变化",
+        "进口盈亏",
+        "融资铜规模"
+      ]
+    },
+    {
+      "id": "GEO_072",
+      "name": "巴拿马Cobre Panama铜矿",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "第一量子矿业旗下大型铜矿，占全球铜产量约1.5%，2023年被巴拿马政府关闭，复产不确定性极高",
+      "controlledBy": [
+        "第一量子矿业",
+        "巴拿马政府"
+      ],
+      "vulnerabilities": [
+        "政府关闭令",
+        "环境争议",
+        "国际仲裁",
+        "永久关闭风险"
+      ],
+      "trackingVariables": [
+        "复产谈判进展",
+        "仲裁裁决",
+        "库存铜精矿处理"
+      ]
+    },
+    {
+      "id": "POW_017",
+      "name": "智利铜业委员会",
+      "type": "产业权力机构",
+      "groundBase": "order",
+      "importance": 7,
+      "description": "智利铜产业监管机构，产量数据、成本数据官方来源",
+      "jurisdiction": "智利",
+      "trackingVariables": [
+        "月度产量",
+        "铜价预测",
+        "投资展望"
+      ]
+    },
+    {
+      "id": "POW_033",
+      "name": "中国有色金属工业协会",
+      "type": "行业协会",
+      "groundBase": "order",
+      "importance": 7,
+      "description": "中国有色金属行业组织，铜铝铅锌等行业数据来源",
+      "jurisdiction": "中国",
+      "trackingVariables": [
+        "产量数据",
+        "加工费谈判",
+        "行业倡议"
+      ]
+    },
+    {
+      "id": "POW_040",
+      "name": "上海期货交易所",
+      "type": "交易所",
+      "groundBase": "rule",
+      "importance": 9,
+      "description": "中国商品期货核心交易所，铜、铝、锌、黄金、螺纹钢等品种定价中心",
+      "jurisdiction": "中国",
+      "trackingVariables": [
+        "持仓量",
+        "成交量",
+        "库存仓单",
+        "交割规则"
+      ]
+    },
+    {
+      "id": "POW_043",
+      "name": "伦敦金属交易所",
+      "type": "交易所",
+      "groundBase": "rule",
+      "importance": 10,
+      "description": "全球基础金属定价中心，铜铝铅锌镍锡的全球基准价格来源",
+      "jurisdiction": "英国",
+      "trackingVariables": [
+        "LME价格",
+        "库存",
+        "持仓报告",
+        "交割规则"
+      ]
+    },
+    {
+      "id": "POW_060",
+      "name": "哈萨克斯坦政府",
+      "type": "政治权力机构",
+      "groundBase": "order",
+      "importance": 6,
+      "description": "铀、铜、锌重要生产国，里海石油出口国",
+      "jurisdiction": "哈萨克斯坦",
+      "trackingVariables": [
+        "铀产量",
+        "石油出口",
+        "中哈关系"
+      ]
+    },
+    {
+      "id": "POW_065",
+      "name": "智利铜业委员会Cochilco",
+      "type": "产业权力机构",
+      "groundBase": "order",
+      "importance": 9,
+      "description": "智利铜产业监管和研究核心机构，发布官方产量数据和铜价预测，投资者核心信息来源",
+      "jurisdiction": "智利",
+      "trackingVariables": [
+        "月度产量报告",
+        "年度铜价预测",
+        "投资展望",
+        "成本分析"
+      ]
+    },
+    {
+      "id": "POW_066",
+      "name": "国际铜研究小组ICSG",
+      "type": "国际数据机构",
+      "groundBase": "order",
+      "importance": 9,
+      "description": "全球铜供需平衡表权威发布机构，月度报告是铜市供需分析的核心基准",
+      "trackingVariables": [
+        "全球铜精矿产量",
+        "精铜产量",
+        "精铜消费量",
+        "供需平衡",
+        "月度报告发布时间"
+      ]
+    },
+    {
+      "id": "POW_067",
+      "name": "中国有色金属工业协会铜业分会",
+      "type": "行业协会",
+      "groundBase": "order",
+      "importance": 7,
+      "description": "中国铜冶炼企业协调平台，TC/RC年度谈判、产能调控政策沟通渠道",
+      "jurisdiction": "中国",
+      "trackingVariables": [
+        "冶炼厂联合减产倡议",
+        "TC/RC谈判指导",
+        "行业自律协议"
+      ]
+    },
+    {
+      "id": "RUL_022",
+      "name": "智利矿业特许权使用费改革",
+      "type": "资源税收规则",
+      "groundBase": "rule",
+      "importance": 7,
+      "description": "智利铜矿税收调整法案，影响矿山投资回报",
+      "trackingVariables": [
+        "立法进展",
+        "税率调整",
+        "企业反应"
+      ]
+    },
+    {
+      "id": "RUL_031",
+      "name": "LME铜交割规则",
+      "type": "交易所规则",
+      "groundBase": "rule",
+      "importance": 9,
+      "description": "伦敦金属交易所铜期货交割标准，A级电解铜规格，注册品牌制度，全球铜现货贸易基准",
+      "trackingVariables": [
+        "注册品牌变更",
+        "升贴水调整",
+        "交割库批准",
+        "仓储规则变更"
+      ]
+    },
+    {
+      "id": "RUL_032",
+      "name": "智利矿业特许权使用费法",
+      "type": "资源税收规则",
+      "groundBase": "rule",
+      "importance": 8,
+      "description": "智利新的矿业税制度，对大型矿企征收更高税率，直接影响铜矿投资回报率和新项目经济性",
+      "trackingVariables": [
+        "有效税率",
+        "企业诉讼",
+        "投资影响评估"
+      ]
+    },
+    {
+      "id": "VAR_016",
+      "name": "LME铜价",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "currentValue": "约9000美元/吨",
+      "historicalRange": {
+        "min": "2800美元",
+        "max": "10800美元"
+      },
+      "recentRange": {
+        "min": "7000美元",
+        "max": "10800美元"
+      },
+      "dualityOpposite": "全球制造业PMI",
+      "trackingFrequency": "每日",
+      "trackingVariables": [
+        "LME库存",
+        "Comex持仓",
+        "洋山港溢价"
+      ]
+    },
+    {
+      "id": "VAR_030",
+      "name": "TC/RC铜精矿加工费",
+      "type": "加工费变量",
+      "groundBase": "marginal",
+      "importance": 7,
+      "currentValue": "约20美元/吨",
+      "historicalRange": {
+        "min": "0美元",
+        "max": "120美元"
+      },
+      "recentRange": {
+        "min": "10美元",
+        "max": "90美元"
+      },
+      "dualityOpposite": "铜矿供应紧张度",
+      "trackingFrequency": "每周",
+      "trackingVariables": [
+        "冶炼厂谈判",
+        "矿山供应",
+        "冶炼利润"
+      ]
+    },
+    {
+      "id": "VAR_052",
+      "name": "油铜比",
+      "type": "比价变量",
+      "groundBase": "marginal",
+      "importance": 7,
+      "currentValue": "约25",
+      "trackingFrequency": "每日",
+      "trackingVariables": [
+        "布伦特原油",
+        "LME铜",
+        "经济预期"
+      ]
+    },
+    {
+      "id": "VAR_067",
+      "name": "LME铜价",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 10,
+      "currentValue": "约9000美元/吨",
+      "historicalRange": {
+        "min": 2800,
+        "max": 10800
+      },
+      "recentRange": {
+        "min": 7000,
+        "max": 10800
+      },
+      "dualityOpposite": "全球制造业PMI",
+      "trackingFrequency": "实时",
+      "trackingVariables": [
+        "LME三月期货",
+        "现货升贴水",
+        "成交量",
+        "持仓量"
+      ]
+    },
+    {
+      "id": "VAR_068",
+      "name": "铜精矿TC/RC",
+      "type": "加工费变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "currentValue": "约20美元/吨",
+      "historicalRange": {
+        "min": 0,
+        "max": 120
+      },
+      "recentRange": {
+        "min": 5,
+        "max": 90
+      },
+      "dualityOpposite": "铜精矿供应紧张度",
+      "trackingFrequency": "每周",
+      "trackingVariables": [
+        "年度长单TC",
+        "现货TC",
+        "冶炼厂盈亏线",
+        "矿山产量"
+      ]
+    },
+    {
+      "id": "VAR_069",
+      "name": "全球铜显性库存",
+      "type": "库存变量",
+      "groundBase": "marginal",
+      "importance": 10,
+      "currentValue": "约25万吨",
+      "historicalRange": {
+        "min": 5,
+        "max": 80
+      },
+      "recentRange": {
+        "min": 8,
+        "max": 60
+      },
+      "dualityOpposite": "LME铜价",
+      "trackingFrequency": "每日",
+      "trackingVariables": [
+        "LME库存",
+        "SHFE库存",
+        "Comex库存",
+        "中国保税区库存",
+        "全球总库存"
+      ]
+    },
+    {
+      "id": "VAR_070",
+      "name": "洋山铜溢价",
+      "type": "升贴水变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "currentValue": "约50美元/吨",
+      "historicalRange": {
+        "min": -10,
+        "max": 150
+      },
+      "recentRange": {
+        "min": 20,
+        "max": 120
+      },
+      "dualityOpposite": "中国进口需求",
+      "trackingFrequency": "每日",
+      "trackingVariables": [
+        "洋山铜溢价",
+        "进口盈亏",
+        "融资铜需求",
+        "人民币汇率"
+      ]
+    },
+    {
+      "id": "VAR_071",
+      "name": "CFTC铜期货净多头",
+      "type": "资金变量",
+      "groundBase": "marginal",
+      "importance": 7,
+      "currentValue": "视报告而定",
+      "trackingFrequency": "每周",
+      "trackingVariables": [
+        "管理基金净多单",
+        "商业净空单",
+        "总持仓量",
+        "净多单变化"
+      ]
+    },
+    {
+      "id": "VAR_072",
+      "name": "全球铜精矿产量",
+      "type": "供给变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "currentValue": "约1800万吨/年",
+      "trackingFrequency": "每月",
+      "trackingVariables": [
+        "智利产量",
+        "秘鲁产量",
+        "刚果金产量",
+        "中国产量",
+        "全球总产量"
+      ]
+    }
+  ]
+}

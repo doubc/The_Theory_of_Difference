@@ -1,0 +1,3726 @@
+{
+  "commodity": "_shared",
+  "description": "跨品种共享实体",
+  "version": "1.3.0",
+  "entities": [
+    {
+      "id": "CUL_001",
+      "name": "美元霸权共识",
+      "type": "全球金融共识",
+      "groundBase": "culture",
+      "importance": 10,
+      "description": "美元作为全球储备货币、结算货币的市场共识，是美国金融霸权的认知基础",
+      "supportingFactors": [
+        "美国经济体量",
+        "军事力量背书",
+        "深度流动性",
+        "历史惯性"
+      ],
+      "threateningFactors": [
+        "去美元化运动",
+        "BRICS扩张",
+        "美国财政赤字",
+        "地缘分裂"
+      ],
+      "trackingVariables": [
+        "美元在全球储备占比",
+        "非美元贸易结算增长",
+        "黄金储备增持趋势"
+      ]
+    },
+    {
+      "id": "CUL_002",
+      "name": "中国制造业共识",
+      "type": "产业竞争共识",
+      "groundBase": "culture",
+      "importance": 9,
+      "description": "中国作为全球制造业中心的市场共识，正面临供应链重组和竞争对手崛起的挑战",
+      "trackingVariables": [
+        "制造业PMI",
+        "出口市场份额",
+        "越南印度制造业崛起速度",
+        "外资撤离规模"
+      ]
+    },
+    {
+      "id": "CUL_003",
+      "name": "AI技术革命共识",
+      "type": "技术变革共识",
+      "groundBase": "culture",
+      "importance": 10,
+      "description": "AI将重塑经济结构和生产力的市场共识，驱动科技股估值和资本配置",
+      "trackingVariables": [
+        "AI相关资本开支",
+        "科技股估值溢价",
+        "AI应用商业化进展",
+        "监管政策"
+      ]
+    },
+    {
+      "id": "CUL_004",
+      "name": "能源转型共识",
+      "type": "产业变革共识",
+      "groundBase": "culture",
+      "importance": 9,
+      "description": "化石能源向可再生能源转型的长期共识，影响传统能源估值和新能源投资",
+      "trackingVariables": [
+        "光伏风电装机量",
+        "电动车渗透率",
+        "化石能源资本开支",
+        "碳价格"
+      ]
+    },
+    {
+      "id": "CUL_005",
+      "name": "西方民主叙事",
+      "type": "政治文化共识",
+      "groundBase": "culture",
+      "importance": 8,
+      "description": "西方国家政治合法性的核心叙事，影响地缘政治联盟构建和制裁决策",
+      "trackingVariables": [
+        "西方内部民粹主义",
+        "对华俄叙事一致性",
+        "全球南方国家立场"
+      ]
+    },
+    {
+      "id": "CUL_006",
+      "name": "市场恐惧贪婪周期",
+      "type": "市场情绪共识",
+      "groundBase": "culture",
+      "importance": 9,
+      "description": "金融市场情绪在恐惧与贪婪之间的周期性摆动，是短期价格波动的核心驱动",
+      "trackingVariables": [
+        "VIX恐惧指数",
+        "CNN恐惧贪婪指数",
+        "期权PutCall比率",
+        "散户情绪调查"
+      ]
+    },
+    {
+      "id": "CUL_007",
+      "name": "中国房地产财富共识",
+      "type": "财富积累共识",
+      "groundBase": "culture",
+      "importance": 8,
+      "description": "中国居民将房地产作为核心财富储存手段的文化共识，正在经历根本性动摇",
+      "trackingVariables": [
+        "房价指数",
+        "居民杠杆率",
+        "开发商违约",
+        "政策托底力度"
+      ]
+    },
+    {
+      "id": "CUL_008",
+      "name": "通胀暂时论",
+      "type": "市场叙事共识",
+      "groundBase": "culture",
+      "importance": 7,
+      "description": "2021年市场普遍认为通胀是暂时的，后证伪，影响资产定价和央行决策",
+      "trackingVariables": [
+        "叙事演变",
+        "实际数据验证"
+      ]
+    },
+    {
+      "id": "CUL_009",
+      "name": "美国例外论",
+      "type": "投资叙事共识",
+      "groundBase": "culture",
+      "importance": 8,
+      "description": "美国经济和企业优于其他市场的信念，支撑美元和美股权重",
+      "trackingVariables": [
+        "美股相对表现",
+        "美元地位"
+      ]
+    },
+    {
+      "id": "CUL_010",
+      "name": "中国崩溃论",
+      "type": "市场叙事共识",
+      "groundBase": "culture",
+      "importance": 6,
+      "description": "长期存在的看空中国叙事，屡次被证伪，但持续影响投资者情绪",
+      "trackingVariables": [
+        "叙事频率",
+        "实际表现"
+      ]
+    },
+    {
+      "id": "CUL_011",
+      "name": "金砖国家崛起叙事",
+      "type": "地缘经济共识",
+      "groundBase": "culture",
+      "importance": 7,
+      "description": "新兴市场国家群体性崛起的叙事，影响资源国投资预期",
+      "trackingVariables": [
+        "扩员进展",
+        "去美元化"
+      ]
+    },
+    {
+      "id": "CUL_012",
+      "name": "ESG投资共识",
+      "type": "投资理念共识",
+      "groundBase": "culture",
+      "importance": 8,
+      "description": "环境、社会和治理因素纳入投资决策的共识，影响化石能源估值",
+      "trackingVariables": [
+        "ESG基金规模",
+        "撤资运动",
+        "反ESG浪潮"
+      ]
+    },
+    {
+      "id": "CUL_013",
+      "name": "被动投资崛起共识",
+      "type": "投资方式共识",
+      "groundBase": "culture",
+      "importance": 7,
+      "description": "指数基金和ETF规模超过主动基金的共识，影响市场波动性",
+      "trackingVariables": [
+        "ETF规模",
+        "被动投资占比"
+      ]
+    },
+    {
+      "id": "CUL_014",
+      "name": "量化宽松永续论",
+      "type": "货币政策叙事",
+      "groundBase": "culture",
+      "importance": 7,
+      "description": "央行将永远维持宽松的叙事，2022年被证伪",
+      "trackingVariables": [
+        "央行资产负债表",
+        "通胀数据"
+      ]
+    },
+    {
+      "id": "CUL_015",
+      "name": "中国消费升级叙事",
+      "type": "消费趋势共识",
+      "groundBase": "culture",
+      "importance": 7,
+      "description": "中国消费者追求品质和品牌的长期趋势，近年受经济放缓挑战",
+      "trackingVariables": [
+        "消费数据",
+        "高端品牌销售"
+      ]
+    },
+    {
+      "id": "CUL_016",
+      "name": "印度人口红利叙事",
+      "type": "经济增长共识",
+      "groundBase": "culture",
+      "importance": 7,
+      "description": "印度年轻人口结构带来长期增长潜力的叙事",
+      "trackingVariables": [
+        "劳动力数据",
+        "制造业投资"
+      ]
+    },
+    {
+      "id": "CUL_017",
+      "name": "越南制造崛起叙事",
+      "type": "产业转移共识",
+      "groundBase": "culture",
+      "importance": 6,
+      "description": "越南承接中国产业转移成为新世界工厂的叙事",
+      "trackingVariables": [
+        "FDI流入",
+        "出口数据"
+      ]
+    },
+    {
+      "id": "CUL_018",
+      "name": "墨西哥近岸外包叙事",
+      "type": "产业转移共识",
+      "groundBase": "culture",
+      "importance": 6,
+      "description": "墨西哥受益于美中脱钩和近岸外包的叙事",
+      "trackingVariables": [
+        "对美出口",
+        "制造业投资"
+      ]
+    },
+    {
+      "id": "CUL_019",
+      "name": "大宗商品超级周期叙事",
+      "type": "商品周期共识",
+      "groundBase": "culture",
+      "importance": 8,
+      "description": "能源转型和供给约束将推动长期商品牛市的共识",
+      "trackingVariables": [
+        "资本开支",
+        "价格表现"
+      ]
+    },
+    {
+      "id": "CUL_020",
+      "name": "石油需求见顶叙事",
+      "type": "能源转型共识",
+      "groundBase": "culture",
+      "importance": 7,
+      "description": "电动车普及将导致石油需求达峰并下降的叙事",
+      "trackingVariables": [
+        "电动车渗透率",
+        "石油消费量"
+      ]
+    },
+    {
+      "id": "CUL_023",
+      "name": "中国房地产新周期叙事",
+      "type": "资产周期共识",
+      "groundBase": "culture",
+      "importance": 7,
+      "description": "中国房地产行业调整后将进入新发展模式的叙事",
+      "trackingVariables": [
+        "政策支持",
+        "销售数据"
+      ]
+    },
+    {
+      "id": "CUL_024",
+      "name": "美联储转向交易叙事",
+      "type": "市场预期共识",
+      "groundBase": "culture",
+      "importance": 8,
+      "description": "市场反复交易的'美联储即将降息'叙事，多次被证伪",
+      "trackingVariables": [
+        "利率期货",
+        "点阵图"
+      ]
+    },
+    {
+      "id": "CUL_025",
+      "name": "全球供应链去风险化",
+      "type": "产业政策叙事",
+      "groundBase": "culture",
+      "importance": 8,
+      "description": "各国推动供应链多元化和减少对单一来源依赖的共识",
+      "trackingVariables": [
+        "政策文件",
+        "企业行动"
+      ]
+    },
+    {
+      "id": "CUL_026",
+      "name": "数字人民币革命叙事",
+      "type": "货币技术叙事",
+      "groundBase": "culture",
+      "importance": 6,
+      "description": "数字人民币将重塑支付体系和国际货币秩序的叙事",
+      "trackingVariables": [
+        "应用场景",
+        "跨境试点"
+      ]
+    },
+    {
+      "id": "CUL_027",
+      "name": "加密货币取代黄金叙事",
+      "type": "资产替代叙事",
+      "groundBase": "culture",
+      "importance": 6,
+      "description": "比特币等加密货币将取代黄金成为主要避险资产的叙事",
+      "trackingVariables": [
+        "相关性",
+        "机构配置"
+      ]
+    },
+    {
+      "id": "CUL_028",
+      "name": "全球衰退不可避免论",
+      "type": "经济周期叙事",
+      "groundBase": "culture",
+      "importance": 7,
+      "description": "每次加息周期必然导致衰退的叙事，实际软着陆可能证伪",
+      "trackingVariables": [
+        "GDP数据",
+        "就业市场"
+      ]
+    },
+    {
+      "id": "CUL_029",
+      "name": "中美脱钩不可逆论",
+      "type": "地缘政治叙事",
+      "groundBase": "culture",
+      "importance": 8,
+      "description": "中美经济联系将持续减弱的共识，影响全球供应链布局",
+      "trackingVariables": [
+        "贸易数据",
+        "投资流动"
+      ]
+    },
+    {
+      "id": "CUL_030",
+      "name": "多极世界秩序共识",
+      "type": "国际关系叙事",
+      "groundBase": "culture",
+      "importance": 7,
+      "description": "世界从单极向多极演变的共识，影响地缘风险评估",
+      "trackingVariables": [
+        "BRICS扩员",
+        "G7协调"
+      ]
+    },
+    {
+      "id": "GEO_001",
+      "name": "霍尔木兹海峡",
+      "type": "地理节点",
+      "groundBase": "natural",
+      "importance": 10,
+      "description": "全球最重要的石油运输通道，日均通过原油约2000万桶，占全球海运石油约20%",
+      "controlledBy": [
+        "伊朗",
+        "阿曼"
+      ],
+      "vulnerabilities": [
+        "伊朗封锁威胁",
+        "水雷布设风险",
+        "无替代海路"
+      ],
+      "alternativeRoutes": [
+        "阿布扎比原油管道（部分替代）"
+      ],
+      "trackingVariables": [
+        "日均通过量",
+        "保险费率",
+        "航运预警等级"
+      ]
+    },
+    {
+      "id": "GEO_002",
+      "name": "苏伊士运河",
+      "type": "地理节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "连接地中海与红海，欧亚贸易核心通道，日均通过船只约50艘",
+      "controlledBy": [
+        "埃及"
+      ],
+      "vulnerabilities": [
+        "埃及政治不稳定",
+        "胡塞武装威胁",
+        "超大型船只通行限制"
+      ],
+      "alternativeRoutes": [
+        "好望角（绕行增加2-3周）"
+      ],
+      "trackingVariables": [
+        "日均通过量",
+        "通行费率",
+        "等待时间"
+      ]
+    },
+    {
+      "id": "GEO_003",
+      "name": "马六甲海峡",
+      "type": "地理节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "亚太地区最重要能源通道，日均通过原油约1600万桶，中国80%进口原油经此",
+      "controlledBy": [
+        "马来西亚",
+        "新加坡",
+        "印度尼西亚"
+      ],
+      "vulnerabilities": [
+        "海盗威胁",
+        "浅水区限制超大型油轮"
+      ],
+      "alternativeRoutes": [
+        "龙目海峡",
+        "望加锡海峡"
+      ],
+      "trackingVariables": [
+        "日均通过量",
+        "海盗事件频率",
+        "中国原油进口依赖度"
+      ]
+    },
+    {
+      "id": "GEO_004",
+      "name": "波斯湾",
+      "type": "地理节点",
+      "groundBase": "natural",
+      "importance": 10,
+      "description": "全球最大石油储量区域，沙特、伊朗、伊拉克、科威特、阿联酋均在此",
+      "controlledBy": [
+        "沙特",
+        "伊朗",
+        "伊拉克",
+        "科威特",
+        "阿联酋",
+        "卡塔尔"
+      ],
+      "vulnerabilities": [
+        "地缘政治高度复杂",
+        "什叶派-逊尼派冲突",
+        "伊朗-美国对抗"
+      ],
+      "trackingVariables": [
+        "区域冲突等级",
+        "各国产量",
+        "美军部署规模"
+      ]
+    },
+    {
+      "id": "GEO_005",
+      "name": "西伯利亚油气田",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "俄罗斯主要油气产区，占俄罗斯总产量约70%，极端气候制约开采成本",
+      "controlledBy": [
+        "俄罗斯"
+      ],
+      "vulnerabilities": [
+        "西方制裁",
+        "技术封锁",
+        "极端气候",
+        "基础设施老化"
+      ],
+      "trackingVariables": [
+        "俄罗斯原油产量",
+        "制裁执行力度",
+        "亚洲买家折扣幅度"
+      ]
+    },
+    {
+      "id": "GEO_006",
+      "name": "美国页岩油产区",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "二叠纪盆地为核心，美国成为全球最大产油国，产量弹性是全球供给调节器",
+      "controlledBy": [
+        "美国私人企业"
+      ],
+      "vulnerabilities": [
+        "高盈亏平衡点约50-60美元每桶",
+        "资本开支周期",
+        "水资源约束"
+      ],
+      "trackingVariables": [
+        "钻机数量",
+        "产量周报EIA",
+        "完井数量"
+      ]
+    },
+    {
+      "id": "GEO_008",
+      "name": "台湾海峡",
+      "type": "地理节点",
+      "groundBase": "natural",
+      "importance": 10,
+      "description": "全球半导体供应链核心节点，台积电等关键产能集中，地缘风险极高",
+      "controlledBy": [
+        "台湾",
+        "中国大陆声索"
+      ],
+      "vulnerabilities": [
+        "两岸政治紧张",
+        "美中博弈核心场域",
+        "半导体供应链脆弱性"
+      ],
+      "trackingVariables": [
+        "两岸关系指数",
+        "美国对台军售",
+        "台积电产能利用率"
+      ]
+    },
+    {
+      "id": "GEO_009",
+      "name": "北极航道",
+      "type": "地理节点",
+      "groundBase": "natural",
+      "importance": 7,
+      "description": "气候变暖开放的新航道，连接欧亚，比苏伊士运河缩短约40%航程",
+      "controlledBy": [
+        "俄罗斯北方海路",
+        "加拿大西北航道"
+      ],
+      "vulnerabilities": [
+        "季节性通航限制",
+        "破冰船需求",
+        "俄罗斯地缘控制"
+      ],
+      "trackingVariables": [
+        "年通航天数",
+        "通过船只数量",
+        "俄罗斯收费政策"
+      ]
+    },
+    {
+      "id": "GEO_010",
+      "name": "南海",
+      "type": "地理节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "全球最繁忙航运通道之一，中国主权声索与周边国家及美国存在根本冲突",
+      "controlledBy": [
+        "争议中国越南菲律宾马来西亚等"
+      ],
+      "vulnerabilities": [
+        "主权争议激烈",
+        "军事化岛礁",
+        "美中直接对峙风险"
+      ],
+      "trackingVariables": [
+        "军事演习频率",
+        "岛礁建设动态",
+        "美国航行自由行动次数"
+      ]
+    },
+    {
+      "id": "GEO_011",
+      "name": "巴拿马运河",
+      "type": "地理节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "连接太平洋与大西洋，美国LPG和农产品出口亚洲的关键通道，低水位制约通行能力",
+      "controlledBy": [
+        "巴拿马"
+      ],
+      "vulnerabilities": [
+        "干旱导致水位下降",
+        "通行限制",
+        "排期拍卖推高成本"
+      ],
+      "alternativeRoutes": [
+        "苏伊士运河",
+        "好望角"
+      ],
+      "trackingVariables": [
+        "加通湖水位",
+        "每日通过船只",
+        "通行费拍卖溢价"
+      ]
+    },
+    {
+      "id": "GEO_012",
+      "name": "黑海粮食走廊",
+      "type": "地理节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "乌克兰粮食出口核心通道，俄乌冲突后协议中断反复，全球小麦供应的关键变量",
+      "controlledBy": [
+        "俄罗斯海军",
+        "土耳其海峡"
+      ],
+      "vulnerabilities": [
+        "俄乌战争",
+        "协议续签博弈",
+        "水雷风险"
+      ],
+      "alternativeRoutes": [
+        "多瑙河港口",
+        "欧洲陆路通道"
+      ],
+      "trackingVariables": [
+        "协议状态",
+        "每日出口量",
+        "保险公司承保意愿"
+      ]
+    },
+    {
+      "id": "GEO_013",
+      "name": "波罗的海管道",
+      "type": "地理节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "俄罗斯天然气出口欧洲的核心通道，北溪爆炸后重要性下降，但仍有部分管道运营",
+      "controlledBy": [
+        "俄罗斯天然气工业股份公司"
+      ],
+      "vulnerabilities": [
+        "地缘制裁",
+        "基础设施老化",
+        "蓄意破坏风险"
+      ],
+      "alternativeRoutes": [
+        "土耳其溪",
+        "LNG进口"
+      ],
+      "trackingVariables": [
+        "输气量",
+        "维修停运",
+        "政治摩擦事件"
+      ]
+    },
+    {
+      "id": "GEO_014",
+      "name": "土耳其海峡",
+      "type": "地理节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "连接黑海与地中海，俄罗斯、乌克兰、中亚原油和粮食出口必经之路",
+      "controlledBy": [
+        "土耳其"
+      ],
+      "vulnerabilities": [
+        "土耳其政治波动",
+        "航运拥堵",
+        "地缘博弈筹码"
+      ],
+      "trackingVariables": [
+        "每日通过量",
+        "通行费调整",
+        "军事演习封锁"
+      ]
+    },
+    {
+      "id": "GEO_015",
+      "name": "好望角",
+      "type": "地理节点",
+      "groundBase": "natural",
+      "importance": 7,
+      "description": "苏伊士运河/红海危机时的替代通道，绕行增加10-15天航程，干散货和原油主要备用路线",
+      "controlledBy": [
+        "南非海域国际水域"
+      ],
+      "vulnerabilities": [
+        "风暴天气",
+        "海盗风险",
+        "航程成本大幅上升"
+      ],
+      "trackingVariables": [
+        "绕行船舶数量",
+        "燃油消耗溢价",
+        "好望角型船运价"
+      ]
+    },
+    {
+      "id": "GEO_016",
+      "name": "苏伊士湾",
+      "type": "地理节点",
+      "groundBase": "natural",
+      "importance": 7,
+      "description": "苏伊士运河入口，埃及重要的油气产区，也是红海航运的起点",
+      "controlledBy": [
+        "埃及"
+      ],
+      "vulnerabilities": [
+        "地区安全局势",
+        "与苏伊士运河联动"
+      ],
+      "trackingVariables": [
+        "油气产量",
+        "地缘事件"
+      ]
+    },
+    {
+      "id": "GEO_017",
+      "name": "亚丁湾",
+      "type": "地理节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "连接红海与印度洋，索马里海盗和胡塞武装威胁区域，航运保险费用核心敏感区",
+      "controlledBy": [
+        "国际护航舰队",
+        "也门胡塞武装威胁"
+      ],
+      "vulnerabilities": [
+        "胡塞武装袭击商船",
+        "海盗活动",
+        "护航成本"
+      ],
+      "alternativeRoutes": [
+        "好望角绕行"
+      ],
+      "trackingVariables": [
+        "袭击事件频率",
+        "战争险费率",
+        "护航编队规模"
+      ]
+    },
+    {
+      "id": "GEO_018",
+      "name": "红海",
+      "type": "地理节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "苏伊士运河-亚丁湾连接段，全球10%以上贸易经过，2023-24年胡塞武装袭击核心区域",
+      "controlledBy": [
+        "沿岸国家",
+        "国际海军"
+      ],
+      "vulnerabilities": [
+        "胡塞武装导弹/无人机",
+        "地缘冲突外溢"
+      ],
+      "trackingVariables": [
+        "商船遇袭次数",
+        "绕行比例",
+        "保险附加费"
+      ]
+    },
+    {
+      "id": "GEO_019",
+      "name": "北海",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 7,
+      "description": "欧洲传统油气产区，布伦特原油定价基准产地，产量持续下降但仍具基准意义",
+      "controlledBy": [
+        "英国",
+        "挪威"
+      ],
+      "vulnerabilities": [
+        "资源枯竭",
+        "高开采成本",
+        "能源转型淘汰"
+      ],
+      "trackingVariables": [
+        "布伦特产量",
+        "平台检修计划",
+        "新项目投资"
+      ]
+    },
+    {
+      "id": "GEO_020",
+      "name": "墨西哥湾",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "美国重要油气产区，飓风高发区，炼化产能集中，是美国能源基础设施核心区",
+      "controlledBy": [
+        "美国",
+        "墨西哥"
+      ],
+      "vulnerabilities": [
+        "飓风季节影响",
+        "海上平台安全",
+        "漏油风险"
+      ],
+      "trackingVariables": [
+        "飓风路径预警",
+        "平台关停比例",
+        "炼厂开工率"
+      ]
+    },
+    {
+      "id": "GEO_023",
+      "name": "印尼苏拉威西镍矿区",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "全球最大镍矿产区，镍储量占全球20%以上，不锈钢和电池镍核心来源",
+      "controlledBy": [
+        "青山控股",
+        "淡水河谷印尼",
+        "印尼国企"
+      ],
+      "vulnerabilities": [
+        "出口政策变化",
+        "冶炼投资政策",
+        "环境问题"
+      ],
+      "trackingVariables": [
+        "镍矿出口禁令状态",
+        "冶炼厂投产进度",
+        "印尼政策动向"
+      ]
+    },
+    {
+      "id": "GEO_024",
+      "name": "西澳皮尔巴拉矿区",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 10,
+      "description": "全球最大铁矿石产区，必和必拓、力拓、FMG核心矿山，占全球海运铁矿约60%",
+      "controlledBy": [
+        "必和必拓",
+        "力拓",
+        "FMG"
+      ],
+      "vulnerabilities": [
+        "飓风影响发运",
+        "铁路事故",
+        "劳资纠纷"
+      ],
+      "trackingVariables": [
+        "周度发运量",
+        "飓风预警",
+        "港口库存"
+      ]
+    },
+    {
+      "id": "GEO_025",
+      "name": "巴西米纳斯吉拉斯",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "VALE核心铁矿区，高品质铁矿石产地，尾矿坝安全问题突出",
+      "controlledBy": [
+        "淡水河谷VALE"
+      ],
+      "vulnerabilities": [
+        "尾矿坝溃坝风险",
+        "雨季影响开采",
+        "法院禁令"
+      ],
+      "trackingVariables": [
+        "尾矿坝安全评级",
+        "雨季降雨量",
+        "法院判决"
+      ]
+    },
+    {
+      "id": "GEO_026",
+      "name": "几内亚西芒杜",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "全球最大未开发铁矿，高品质铁矿，中资和力拓联合开发，未来铁矿供给变量",
+      "controlledBy": [
+        "力拓",
+        "中铝联合体",
+        "赢联盟"
+      ],
+      "vulnerabilities": [
+        "基础设施缺失",
+        "政局不稳",
+        "投资纠纷"
+      ],
+      "trackingVariables": [
+        "开发进度",
+        "铁路建设",
+        "投产时间表"
+      ]
+    },
+    {
+      "id": "GEO_031",
+      "name": "南非铂金带",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "全球最大铂族金属产区，Bushveld杂岩体，占全球铂金产量约75%",
+      "controlledBy": [
+        "英美铂业",
+        "斯班耶"
+      ],
+      "vulnerabilities": [
+        "深井开采成本高",
+        "电力短缺",
+        "劳资冲突"
+      ],
+      "trackingVariables": [
+        "矿山罢工",
+        "电价上涨",
+        "铂族金属价格"
+      ]
+    },
+    {
+      "id": "GEO_032",
+      "name": "俄罗斯诺里尔斯克",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "全球最大镍钯金产区，诺里尔斯克镍业核心矿区，占全球钯金产量约40%",
+      "controlledBy": [
+        "诺里尔斯克镍业"
+      ],
+      "vulnerabilities": [
+        "西方制裁",
+        "极地开采环境",
+        "事故风险"
+      ],
+      "trackingVariables": [
+        "制裁影响",
+        "产量目标",
+        "事故报告"
+      ]
+    },
+    {
+      "id": "GEO_033",
+      "name": "美国二叠纪盆地",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "全球最重要页岩油产区，美国页岩油产量核心，占美国原油产量约45%",
+      "controlledBy": [
+        "先锋自然资源",
+        "雪佛龙",
+        "埃克森美孚"
+      ],
+      "vulnerabilities": [
+        "盈亏平衡成本",
+        "水资源压力",
+        "管道瓶颈"
+      ],
+      "trackingVariables": [
+        "钻机数",
+        "完井数",
+        "DUC井数量",
+        "单井产量"
+      ]
+    },
+    {
+      "id": "GEO_034",
+      "name": "加拿大油砂产区",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 7,
+      "description": "全球第三大石油储量，开采成本高，环境压力大，主要出口美国",
+      "controlledBy": [
+        "森科尔",
+        "加拿大自然资源"
+      ],
+      "vulnerabilities": [
+        "高碳排放",
+        "管道运力限制",
+        "环保法规"
+      ],
+      "trackingVariables": [
+        "Keystone管道状态",
+        "开采成本",
+        "碳税影响"
+      ]
+    },
+    {
+      "id": "GEO_035",
+      "name": "巴西盐下油田",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 7,
+      "description": "深海盐层下油田，巴西石油公司核心产区，深水开采技术密集",
+      "controlledBy": [
+        "巴西石油"
+      ],
+      "vulnerabilities": [
+        "深海钻探风险",
+        "成本高昂",
+        "腐败问题"
+      ],
+      "trackingVariables": [
+        "产量目标",
+        "投资计划",
+        "技术突破"
+      ]
+    },
+    {
+      "id": "GEO_036",
+      "name": "美国中西部玉米带",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "全球最大玉米和大豆产区，爱荷华、伊利诺伊等州，决定全球农产品供给",
+      "controlledBy": [
+        "美国农户",
+        "嘉吉",
+        "ADM"
+      ],
+      "vulnerabilities": [
+        "干旱",
+        "洪水",
+        "贸易战"
+      ],
+      "trackingVariables": [
+        "种植面积",
+        "优良率",
+        "单产预测"
+      ]
+    },
+    {
+      "id": "GEO_037",
+      "name": "巴西马托格罗索",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "巴西大豆核心产区，占巴西大豆产量约30%，决定巴西大豆出口潜力",
+      "controlledBy": [
+        "巴西农户",
+        "邦吉",
+        "嘉吉"
+      ],
+      "vulnerabilities": [
+        "物流瓶颈",
+        "亚马逊雨林保护",
+        "气候风险"
+      ],
+      "trackingVariables": [
+        "播种进度",
+        "产量预测",
+        "出口运力"
+      ]
+    },
+    {
+      "id": "GEO_038",
+      "name": "阿根廷潘帕斯草原",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "全球重要大豆和玉米产区，大豆压榨和豆粕出口核心区",
+      "controlledBy": [
+        "阿根廷农户"
+      ],
+      "vulnerabilities": [
+        "干旱",
+        "出口税政策",
+        "汇率波动"
+      ],
+      "trackingVariables": [
+        "土壤湿度",
+        "农户惜售程度",
+        "比索汇率"
+      ]
+    },
+    {
+      "id": "GEO_039",
+      "name": "黑海小麦产区",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "俄罗斯和乌克兰小麦核心产区，占全球小麦出口约30%",
+      "controlledBy": [
+        "俄罗斯农户",
+        "乌克兰农户"
+      ],
+      "vulnerabilities": [
+        "战争冲突",
+        "出口限制政策",
+        "基础设施破坏"
+      ],
+      "trackingVariables": [
+        "冬小麦面积",
+        "出口配额",
+        "港口可用性"
+      ]
+    },
+    {
+      "id": "GEO_040",
+      "name": "东南亚棕榈油产区",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "印尼和马来西亚棕榈油主产区，占全球棕榈油产量约85%",
+      "controlledBy": [
+        "印尼农户",
+        "马来西亚农户",
+        "丰益国际",
+        "森那美"
+      ],
+      "vulnerabilities": [
+        "厄尔尼诺干旱",
+        "劳动力短缺",
+        "环保政策"
+      ],
+      "trackingVariables": [
+        "月度产量",
+        "库存水平",
+        "出口政策"
+      ]
+    },
+    {
+      "id": "GEO_041",
+      "name": "中国长三角工业区",
+      "type": "消费节点",
+      "groundBase": "natural",
+      "importance": 10,
+      "description": "中国制造业核心区，占中国GDP约20%，金属、化工、能源消费核心区域",
+      "controlledBy": [
+        "中国"
+      ],
+      "vulnerabilities": [
+        "电力紧张",
+        "环保限产",
+        "出口订单波动"
+      ],
+      "trackingVariables": [
+        "工业用电量",
+        "PMI",
+        "港口吞吐量"
+      ]
+    },
+    {
+      "id": "GEO_042",
+      "name": "中国珠三角工业区",
+      "type": "消费节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "全球制造业中心，电子、家电、轻工产业聚集区，出口导向型",
+      "controlledBy": [
+        "中国"
+      ],
+      "vulnerabilities": [
+        "外需波动",
+        "劳动力成本",
+        "产业链转移"
+      ],
+      "trackingVariables": [
+        "出口数据",
+        "集装箱吞吐量",
+        "工业增加值"
+      ]
+    },
+    {
+      "id": "GEO_043",
+      "name": "京津冀工业区",
+      "type": "消费节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "中国钢铁核心产区，唐山钢铁产能集中，环保限产核心区域",
+      "controlledBy": [
+        "中国"
+      ],
+      "vulnerabilities": [
+        "环保限产常态化",
+        "去产能政策",
+        "冬奥会等重大活动"
+      ],
+      "trackingVariables": [
+        "高炉开工率",
+        "环保限产文件",
+        "空气质量指数"
+      ]
+    },
+    {
+      "id": "GEO_044",
+      "name": "德国鲁尔工业区",
+      "type": "消费节点",
+      "groundBase": "natural",
+      "importance": 7,
+      "description": "欧洲传统工业核心，钢铁、化工、汽车产业聚集，欧洲工业景气度晴雨表",
+      "controlledBy": [
+        "德国"
+      ],
+      "vulnerabilities": [
+        "能源成本高企",
+        "去工业化风险",
+        "制造业外迁"
+      ],
+      "trackingVariables": [
+        "工业产出",
+        "天然气消耗",
+        "PMI"
+      ]
+    },
+    {
+      "id": "GEO_045",
+      "name": "美国墨西哥湾炼化区",
+      "type": "消费节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "美国炼油产能核心区，占美国炼油能力约45%，化工品出口基地",
+      "controlledBy": [
+        "埃克森美孚",
+        "雪佛龙",
+        "马拉松"
+      ],
+      "vulnerabilities": [
+        "飓风影响",
+        "炼厂意外停工",
+        "原油供应"
+      ],
+      "trackingVariables": [
+        "炼厂开工率",
+        "飓风预警",
+        "裂解价差"
+      ]
+    },
+    {
+      "id": "GEO_046",
+      "name": "新加坡炼化中心",
+      "type": "消费节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "亚洲石油贸易和炼化中心，成品油定价基准，全球第三大炼油中心",
+      "controlledBy": [
+        "新加坡",
+        "埃克森美孚",
+        "壳牌"
+      ],
+      "vulnerabilities": [
+        "地缘政治中立性",
+        "竞争加剧",
+        "能源转型"
+      ],
+      "trackingVariables": [
+        "库存数据",
+        "燃料油溢价",
+        "船用燃料销量"
+      ]
+    },
+    {
+      "id": "GEO_047",
+      "name": "韩国蔚山工业区",
+      "type": "消费节点",
+      "groundBase": "natural",
+      "importance": 7,
+      "description": "韩国炼化和汽车产业核心，全球最大炼油厂之一，对亚洲化工价格影响显著",
+      "controlledBy": [
+        "SK创新",
+        "现代"
+      ],
+      "vulnerabilities": [
+        "东北亚地缘",
+        "出口竞争"
+      ],
+      "trackingVariables": [
+        "出口数据",
+        "裂解装置开工率"
+      ]
+    },
+    {
+      "id": "GEO_048",
+      "name": "印度古吉拉特邦",
+      "type": "消费节点",
+      "groundBase": "natural",
+      "importance": 7,
+      "description": "印度最大炼化和港口区域，信实工业核心基地，印度制造业崛起前沿",
+      "controlledBy": [
+        "信实工业",
+        "阿达尼"
+      ],
+      "vulnerabilities": [
+        "基础设施压力",
+        "水资源紧张"
+      ],
+      "trackingVariables": [
+        "原油加工量",
+        "成品油出口"
+      ]
+    },
+    {
+      "id": "GEO_049",
+      "name": "中国曹妃甸港",
+      "type": "物流节点",
+      "groundBase": "natural",
+      "importance": 8,
+      "description": "中国北方重要铁矿石接卸港，唐山钢铁企业原料门户，铁矿石库存风向标",
+      "controlledBy": [
+        "中国"
+      ],
+      "vulnerabilities": [
+        "雾霾封航",
+        "港口拥堵"
+      ],
+      "trackingVariables": [
+        "铁矿石库存",
+        "压港天数",
+        "疏港量"
+      ]
+    },
+    {
+      "id": "GEO_050",
+      "name": "中国宁波舟山港",
+      "type": "物流节点",
+      "groundBase": "natural",
+      "importance": 9,
+      "description": "全球最大港口，原油、铁矿石、煤炭接卸核心，大宗商品进口门户",
+      "controlledBy": [
+        "中国"
+      ],
+      "vulnerabilities": [
+        "台风影响",
+        "疫情封控",
+        "拥堵"
+      ],
+      "trackingVariables": [
+        "吞吐量",
+        "库存",
+        "等待时间"
+      ]
+    },
+    {
+      "id": "POW_001",
+      "name": "美联储",
+      "type": "货币权力机构",
+      "groundBase": "order",
+      "importance": 10,
+      "description": "全球最重要央行，美元利率决策影响全球资本流动、汇率和大宗商品定价",
+      "jurisdiction": "美国",
+      "decisionMechanism": "FOMC每6-8周开会，利率决策需多数票通过",
+      "trackingVariables": [
+        "基准利率",
+        "点阵图预期",
+        "资产负债表规模",
+        "通胀目标偏离度"
+      ]
+    },
+    {
+      "id": "POW_002",
+      "name": "中国人民银行",
+      "type": "货币权力机构",
+      "groundBase": "order",
+      "importance": 9,
+      "description": "中国货币政策核心机构，人民币汇率管理者，外汇储备最大持有方之一",
+      "jurisdiction": "中国",
+      "trackingVariables": [
+        "LPR利率",
+        "存款准备金率",
+        "人民币中间价",
+        "外汇储备规模"
+      ]
+    },
+    {
+      "id": "POW_003",
+      "name": "欧洲央行",
+      "type": "货币权力机构",
+      "groundBase": "order",
+      "importance": 8,
+      "description": "欧元区货币政策制定者，欧元汇率核心影响因素",
+      "jurisdiction": "欧元区",
+      "trackingVariables": [
+        "存款利率",
+        "TLTRO操作",
+        "欧元汇率",
+        "欧元区通胀"
+      ]
+    },
+    {
+      "id": "POW_004",
+      "name": "美国财政部",
+      "type": "财政权力机构",
+      "groundBase": "order",
+      "importance": 10,
+      "description": "美国财政政策制定者，制裁执行机构OFAC，美债发行管理者",
+      "jurisdiction": "美国",
+      "trackingVariables": [
+        "美债发行规模",
+        "制裁名单更新",
+        "财政赤字",
+        "债务上限谈判"
+      ]
+    },
+    {
+      "id": "POW_005",
+      "name": "OPEC+",
+      "type": "产业权力机构",
+      "groundBase": "order",
+      "importance": 10,
+      "description": "控制全球约40%原油产量，产量决议是最重要的供给边际变量",
+      "members": [
+        "沙特",
+        "俄罗斯",
+        "伊拉克",
+        "阿联酋",
+        "科威特",
+        "尼日利亚等"
+      ],
+      "decisionMechanism": "部长级会议，沙特和俄罗斯实际主导",
+      "trackingVariables": [
+        "产量配额决议",
+        "实际产量合规率",
+        "闲置产能规模",
+        "下次会议时间"
+      ]
+    },
+    {
+      "id": "POW_006",
+      "name": "美国白宫",
+      "type": "政治权力机构",
+      "groundBase": "order",
+      "importance": 10,
+      "description": "美国最高行政权力中心，全球地缘政治最重要的单一决策节点",
+      "jurisdiction": "美国",
+      "trackingVariables": [
+        "对华政策",
+        "中东政策",
+        "制裁决策",
+        "战略石油储备释放指令"
+      ]
+    },
+    {
+      "id": "POW_007",
+      "name": "中国国务院",
+      "type": "政治权力机构",
+      "groundBase": "order",
+      "importance": 9,
+      "description": "中国最高行政机构，产业政策、财政政策、外交政策核心决策者",
+      "jurisdiction": "中国",
+      "trackingVariables": [
+        "GDP增长目标",
+        "产业政策方向",
+        "财政刺激规模",
+        "对美外交立场"
+      ]
+    },
+    {
+      "id": "POW_008",
+      "name": "G7集团",
+      "type": "多边权力机构",
+      "groundBase": "order",
+      "importance": 9,
+      "description": "西方主要经济体协调机制，制裁协调、储备释放、金融规则制定的核心平台",
+      "members": [
+        "美国",
+        "英国",
+        "德国",
+        "法国",
+        "日本",
+        "意大利",
+        "加拿大"
+      ],
+      "trackingVariables": [
+        "峰会声明",
+        "联合制裁行动",
+        "战略储备协调释放",
+        "对华政策协调"
+      ]
+    },
+    {
+      "id": "POW_009",
+      "name": "国际货币基金组织",
+      "type": "多边金融机构",
+      "groundBase": "order",
+      "importance": 8,
+      "description": "全球金融稳定守护者，危机救援贷款方，全球经济预测权威来源",
+      "trackingVariables": [
+        "全球GDP预测",
+        "成员国评级",
+        "SDR分配",
+        "危机救援条款"
+      ]
+    },
+    {
+      "id": "POW_010",
+      "name": "美国国会",
+      "type": "立法权力机构",
+      "groundBase": "order",
+      "importance": 8,
+      "description": "美国立法机构，制裁法案、债务上限、贸易政策的最终授权方",
+      "jurisdiction": "美国",
+      "trackingVariables": [
+        "制裁立法进展",
+        "债务上限谈判",
+        "对华贸易法案",
+        "军事授权法案"
+      ]
+    },
+    {
+      "id": "POW_011",
+      "name": "沙特阿美",
+      "type": "产业权力机构",
+      "groundBase": "order",
+      "importance": 9,
+      "description": "全球最大石油公司，沙特国家石油公司，全球原油供给的核心调节阀",
+      "controlledBy": [
+        "沙特政府98%"
+      ],
+      "trackingVariables": [
+        "产量与产能",
+        "OSP定价",
+        "资本开支",
+        "股价地缘晴雨表"
+      ]
+    },
+    {
+      "id": "POW_012",
+      "name": "俄罗斯政府",
+      "type": "政治权力机构",
+      "groundBase": "order",
+      "importance": 9,
+      "description": "全球第二大产油国和最大天然气出口国，地缘政治核心博弈方",
+      "jurisdiction": "俄罗斯",
+      "trackingVariables": [
+        "乌克兰战争进展",
+        "能源出口收入",
+        "卢布汇率",
+        "制裁规避能力"
+      ]
+    },
+    {
+      "id": "POW_013",
+      "name": "伊朗政府",
+      "type": "政治权力机构",
+      "groundBase": "order",
+      "importance": 8,
+      "description": "霍尔木兹海峡北岸控制方，中东地缘博弈核心行为体，核问题核心当事方",
+      "jurisdiction": "伊朗",
+      "trackingVariables": [
+        "核协议谈判进展",
+        "石油出口量",
+        "与美关系",
+        "革命卫队行动"
+      ]
+    },
+    {
+      "id": "POW_014",
+      "name": "美国证券交易委员会",
+      "type": "监管权力机构",
+      "groundBase": "order",
+      "importance": 7,
+      "description": "美国资本市场监管核心机构，对全球资本市场规则制定有重要影响",
+      "jurisdiction": "美国",
+      "trackingVariables": [
+        "加密货币监管",
+        "中概股审计",
+        "ETF审批",
+        "内幕交易执法"
+      ]
+    },
+    {
+      "id": "POW_015",
+      "name": "国际能源署",
+      "type": "多边能源机构",
+      "groundBase": "order",
+      "importance": 8,
+      "description": "西方国家能源安全协调机构，战略石油储备释放的协调平台",
+      "members": [
+        "31个成员国主要为OECD国家"
+      ],
+      "trackingVariables": [
+        "成员国战略储备总量",
+        "协调释放决议",
+        "全球能源展望报告"
+      ]
+    },
+    {
+      "id": "POW_016",
+      "name": "印尼能矿部",
+      "type": "产业权力机构",
+      "groundBase": "order",
+      "importance": 8,
+      "description": "印尼矿产能源政策制定者，镍矿出口禁令、配额政策的核心决策机构",
+      "jurisdiction": "印尼",
+      "trackingVariables": [
+        "镍矿出口政策",
+        "配额发放",
+        "冶炼厂建设要求"
+      ]
+    },
+    {
+      "id": "POW_018",
+      "name": "巴西国家石油公司",
+      "type": "产业权力机构",
+      "groundBase": "order",
+      "importance": 7,
+      "description": "巴西国有石油巨头，定价政策影响国内燃料市场",
+      "jurisdiction": "巴西",
+      "trackingVariables": [
+        "燃料定价",
+        "投资计划",
+        "产量目标"
+      ]
+    },
+    {
+      "id": "POW_019",
+      "name": "俄罗斯天然气工业股份公司",
+      "type": "产业权力机构",
+      "groundBase": "order",
+      "importance": 8,
+      "description": "俄罗斯天然气出口垄断企业，欧洲天然气供应的关键行为体",
+      "jurisdiction": "俄罗斯",
+      "trackingVariables": [
+        "输气量",
+        "对欧供气",
+        "制裁影响"
+      ]
+    },
+    {
+      "id": "POW_020",
+      "name": "中国国家发改委",
+      "type": "政策权力机构",
+      "groundBase": "order",
+      "importance": 10,
+      "description": "中国宏观经济和产业政策核心机构，煤价调控、钢铁去产能、电价调整决策者",
+      "jurisdiction": "中国",
+      "trackingVariables": [
+        "煤炭保供政策",
+        "钢铁产能置换",
+        "价格干预"
+      ]
+    },
+    {
+      "id": "POW_021",
+      "name": "中国国家粮食和物资储备局",
+      "type": "储备管理机构",
+      "groundBase": "order",
+      "importance": 8,
+      "description": "中国战略物资储备管理者，猪肉收储、粮食储备、金属抛储执行机构",
+      "jurisdiction": "中国",
+      "trackingVariables": [
+        "猪肉收储",
+        "金属抛储",
+        "粮食库存"
+      ]
+    },
+    {
+      "id": "POW_022",
+      "name": "印度政府",
+      "type": "政治权力机构",
+      "groundBase": "order",
+      "importance": 8,
+      "description": "全球重要经济体，农产品出口政策、钢铁产能扩张、能源进口关键行为体",
+      "jurisdiction": "印度",
+      "trackingVariables": [
+        "食糖出口政策",
+        "小麦出口禁令",
+        "钢铁产能"
+      ]
+    },
+    {
+      "id": "POW_023",
+      "name": "巴西政府",
+      "type": "政治权力机构",
+      "groundBase": "order",
+      "importance": 8,
+      "description": "全球农业和矿产大国，大豆、铁矿石出口政策核心决策者",
+      "jurisdiction": "巴西",
+      "trackingVariables": [
+        "大豆出口税",
+        "矿产政策",
+        "环境执法"
+      ]
+    },
+    {
+      "id": "POW_024",
+      "name": "澳大利亚政府",
+      "type": "政治权力机构",
+      "groundBase": "order",
+      "importance": 8,
+      "description": "全球最大铁矿石和煤炭出口国，资源税、矿业政策影响全球供给",
+      "jurisdiction": "澳大利亚",
+      "trackingVariables": [
+        "资源税",
+        "中澳关系",
+        "矿业投资审批"
+      ]
+    },
+    {
+      "id": "POW_025",
+      "name": "加拿大政府",
+      "type": "政治权力机构",
+      "groundBase": "order",
+      "importance": 7,
+      "description": "油砂、钾肥、木材重要出口国，碳税政策影响能源成本",
+      "jurisdiction": "加拿大",
+      "trackingVariables": [
+        "碳税",
+        "管道项目",
+        "中加关系"
+      ]
+    },
+    {
+      "id": "POW_026",
+      "name": "沙特政府",
+      "type": "政治权力机构",
+      "groundBase": "order",
+      "importance": 9,
+      "description": "OPEC+核心成员，石油政策关键决策者，2030愿景推动经济转型",
+      "jurisdiction": "沙特",
+      "trackingVariables": [
+        "石油政策",
+        "对美关系",
+        "对华合作"
+      ]
+    },
+    {
+      "id": "POW_027",
+      "name": "阿联酋政府",
+      "type": "政治权力机构",
+      "groundBase": "order",
+      "importance": 8,
+      "description": "OPEC+重要成员，迪拜作为贸易中心，能源和金融双轮驱动",
+      "jurisdiction": "阿联酋",
+      "trackingVariables": [
+        "石油产能扩张",
+        "迪拜原油价格",
+        "能源转型"
+      ]
+    },
+    {
+      "id": "POW_028",
+      "name": "卡塔尔能源",
+      "type": "产业权力机构",
+      "groundBase": "order",
+      "importance": 8,
+      "description": "全球最大LNG出口商，北方气田扩建决定全球LNG供给",
+      "jurisdiction": "卡塔尔",
+      "trackingVariables": [
+        "LNG出口",
+        "长协合同",
+        "扩产进度"
+      ]
+    },
+    {
+      "id": "POW_029",
+      "name": "美国能源信息署",
+      "type": "数据机构",
+      "groundBase": "order",
+      "importance": 9,
+      "description": "美国官方能源数据发布机构，EIA周报是全球能源市场最重要数据源",
+      "jurisdiction": "美国",
+      "trackingVariables": [
+        "原油库存",
+        "汽油库存",
+        "产量周报",
+        "钻井报告"
+      ]
+    },
+    {
+      "id": "POW_030",
+      "name": "美国农业部",
+      "type": "数据机构",
+      "groundBase": "order",
+      "importance": 9,
+      "description": "全球农产品最重要数据发布机构，月度供需报告决定价格方向",
+      "jurisdiction": "美国",
+      "trackingVariables": [
+        "WASDE报告",
+        "种植意向",
+        "优良率",
+        "出口销售"
+      ]
+    },
+    {
+      "id": "POW_031",
+      "name": "中国海关总署",
+      "type": "数据机构",
+      "groundBase": "order",
+      "importance": 8,
+      "description": "中国进出口数据官方来源，大宗商品进口量关键数据",
+      "jurisdiction": "中国",
+      "trackingVariables": [
+        "原油进口",
+        "铁矿进口",
+        "大豆进口",
+        "铜进口"
+      ]
+    },
+    {
+      "id": "POW_032",
+      "name": "中国钢铁工业协会",
+      "type": "行业协会",
+      "groundBase": "order",
+      "importance": 7,
+      "description": "中国钢铁行业自律组织，产量数据、价格协调、去产能政策沟通平台",
+      "jurisdiction": "中国",
+      "trackingVariables": [
+        "粗钢产量",
+        "钢材库存",
+        "行业自律"
+      ]
+    },
+    {
+      "id": "POW_034",
+      "name": "马来西亚棕榈油局",
+      "type": "数据机构",
+      "groundBase": "order",
+      "importance": 8,
+      "description": "马来西亚棕榈油官方数据发布机构，MPOB月度报告影响全球棕榈油价格",
+      "jurisdiction": "马来西亚",
+      "trackingVariables": [
+        "产量",
+        "库存",
+        "出口",
+        "种植面积"
+      ]
+    },
+    {
+      "id": "POW_035",
+      "name": "印尼棕榈油协会",
+      "type": "行业协会",
+      "groundBase": "order",
+      "importance": 7,
+      "description": "印尼棕榈油行业组织，产量和出口数据主要来源",
+      "jurisdiction": "印尼",
+      "trackingVariables": [
+        "产量",
+        "出口",
+        "国内市场义务"
+      ]
+    },
+    {
+      "id": "POW_036",
+      "name": "国际谷物理事会",
+      "type": "国际机构",
+      "groundBase": "order",
+      "importance": 7,
+      "description": "全球谷物供需预测权威机构，月度报告影响市场预期",
+      "trackingVariables": [
+        "谷物供需",
+        "产量预测",
+        "贸易流"
+      ]
+    },
+    {
+      "id": "POW_037",
+      "name": "国际锡业协会",
+      "type": "行业协会",
+      "groundBase": "order",
+      "importance": 6,
+      "description": "锡行业研究组织，产量和库存数据来源",
+      "trackingVariables": [
+        "锡产量",
+        "库存",
+        "供需平衡"
+      ]
+    },
+    {
+      "id": "POW_038",
+      "name": "世界金属统计局",
+      "type": "数据机构",
+      "groundBase": "order",
+      "importance": 7,
+      "description": "全球金属供需平衡数据发布机构，月度报告",
+      "trackingVariables": [
+        "铜铝铅锌镍供需",
+        "产量",
+        "消费量"
+      ]
+    },
+    {
+      "id": "POW_039",
+      "name": "国际铅锌研究小组",
+      "type": "国际机构",
+      "groundBase": "order",
+      "importance": 6,
+      "description": "铅锌行业权威数据来源，月度供需报告",
+      "trackingVariables": [
+        "铅锌供需",
+        "产量",
+        "消费量"
+      ]
+    },
+    {
+      "id": "POW_041",
+      "name": "大连商品交易所",
+      "type": "交易所",
+      "groundBase": "rule",
+      "importance": 9,
+      "description": "中国农产品和化工品期货核心交易所，豆粕、豆油、棕榈油、塑料等定价中心",
+      "jurisdiction": "中国",
+      "trackingVariables": [
+        "持仓量",
+        "成交量",
+        "库存仓单",
+        "交割规则"
+      ]
+    },
+    {
+      "id": "POW_042",
+      "name": "郑州商品交易所",
+      "type": "交易所",
+      "groundBase": "rule",
+      "importance": 8,
+      "description": "中国农产品和化工品期货重要交易所，PTA、白糖、棉花、玻璃等定价中心",
+      "jurisdiction": "中国",
+      "trackingVariables": [
+        "持仓量",
+        "成交量",
+        "仓单数量",
+        "交割规则"
+      ]
+    },
+    {
+      "id": "POW_044",
+      "name": "芝加哥期货交易所",
+      "type": "交易所",
+      "groundBase": "rule",
+      "importance": 10,
+      "description": "全球农产品定价中心，大豆、玉米、小麦等全球基准价格来源",
+      "jurisdiction": "美国",
+      "trackingVariables": [
+        "CBOT价格",
+        "CFTC持仓",
+        "库存报告"
+      ]
+    },
+    {
+      "id": "POW_045",
+      "name": "纽约商业交易所",
+      "type": "交易所",
+      "groundBase": "rule",
+      "importance": 10,
+      "description": "全球能源定价中心，WTI原油、天然气、黄金等基准价格来源",
+      "jurisdiction": "美国",
+      "trackingVariables": [
+        "WTI价格",
+        "天然气价格",
+        "持仓报告"
+      ]
+    },
+    {
+      "id": "POW_046",
+      "name": "洲际交易所",
+      "type": "交易所",
+      "groundBase": "rule",
+      "importance": 9,
+      "description": "全球能源和软商品交易所，布伦特原油、可可、咖啡等定价中心",
+      "jurisdiction": "美国/英国",
+      "trackingVariables": [
+        "布伦特价格",
+        "持仓报告",
+        "交割规则"
+      ]
+    },
+    {
+      "id": "POW_047",
+      "name": "东京工业品交易所",
+      "type": "交易所",
+      "groundBase": "rule",
+      "importance": 7,
+      "description": "日本商品期货交易所，橡胶、贵金属等品种重要参考",
+      "jurisdiction": "日本",
+      "trackingVariables": [
+        "橡胶价格",
+        "持仓量"
+      ]
+    },
+    {
+      "id": "POW_048",
+      "name": "印度多种商品交易所",
+      "type": "交易所",
+      "groundBase": "rule",
+      "importance": 6,
+      "description": "印度商品期货交易所，本地农产品定价参考",
+      "jurisdiction": "印度",
+      "trackingVariables": [
+        "本地价格",
+        "持仓"
+      ]
+    },
+    {
+      "id": "POW_049",
+      "name": "俄罗斯中央银行",
+      "type": "货币权力机构",
+      "groundBase": "order",
+      "importance": 7,
+      "description": "俄罗斯货币政策制定者，卢布汇率、黄金储备管理关键机构",
+      "jurisdiction": "俄罗斯",
+      "trackingVariables": [
+        "关键利率",
+        "黄金储备",
+        "汇率干预"
+      ]
+    },
+    {
+      "id": "POW_050",
+      "name": "日本银行",
+      "type": "货币权力机构",
+      "groundBase": "order",
+      "importance": 8,
+      "description": "日本央行，YCC政策、负利率政策影响全球套息交易",
+      "jurisdiction": "日本",
+      "trackingVariables": [
+        "政策利率",
+        "YCC目标",
+        "日元汇率"
+      ]
+    },
+    {
+      "id": "POW_051",
+      "name": "英国央行",
+      "type": "货币权力机构",
+      "groundBase": "order",
+      "importance": 7,
+      "description": "英国货币政策制定者，英镑汇率、利率决策",
+      "jurisdiction": "英国",
+      "trackingVariables": [
+        "基准利率",
+        "通胀报告",
+        "量化宽松"
+      ]
+    },
+    {
+      "id": "POW_052",
+      "name": "瑞士央行",
+      "type": "货币权力机构",
+      "groundBase": "order",
+      "importance": 6,
+      "description": "瑞士法郎汇率管理，瑞郎避险属性重要",
+      "jurisdiction": "瑞士",
+      "trackingVariables": [
+        "政策利率",
+        "汇率干预"
+      ]
+    },
+    {
+      "id": "POW_053",
+      "name": "世界银行",
+      "type": "国际金融机构",
+      "groundBase": "order",
+      "importance": 7,
+      "description": "全球发展援助机构，大宗商品价格预测、发展中国家经济分析",
+      "trackingVariables": [
+        "全球经济展望",
+        "商品价格预测"
+      ]
+    },
+    {
+      "id": "POW_054",
+      "name": "国际清算银行",
+      "type": "国际金融机构",
+      "groundBase": "order",
+      "importance": 7,
+      "description": "央行间合作平台，全球流动性、外汇储备数据权威来源",
+      "trackingVariables": [
+        "实际有效汇率",
+        "银行信贷数据"
+      ]
+    },
+    {
+      "id": "POW_055",
+      "name": "国际金融协会",
+      "type": "行业协会",
+      "groundBase": "order",
+      "importance": 6,
+      "description": "全球金融机构协会，资本流动数据、新兴市场分析",
+      "trackingVariables": [
+        "资本流动数据",
+        "新兴市场预测"
+      ]
+    },
+    {
+      "id": "POW_056",
+      "name": "国际商会",
+      "type": "国际组织",
+      "groundBase": "order",
+      "importance": 6,
+      "description": "全球商业规则制定者，信用证、贸易术语标准化",
+      "trackingVariables": [
+        "贸易规则",
+        "争议解决"
+      ]
+    },
+    {
+      "id": "POW_057",
+      "name": "欧盟委员会",
+      "type": "政治权力机构",
+      "groundBase": "order",
+      "importance": 8,
+      "description": "欧盟行政机构，碳边境调节机制、反补贴调查、贸易政策执行者",
+      "jurisdiction": "欧盟",
+      "trackingVariables": [
+        "CBAM实施",
+        "反补贴调查",
+        "贸易救济措施"
+      ]
+    },
+    {
+      "id": "POW_058",
+      "name": "英国政府",
+      "type": "政治权力机构",
+      "groundBase": "order",
+      "importance": 7,
+      "description": "北海油气政策、脱欧后贸易政策、金融监管决策者",
+      "jurisdiction": "英国",
+      "trackingVariables": [
+        "能源政策",
+        "金融监管改革"
+      ]
+    },
+    {
+      "id": "POW_059",
+      "name": "南非政府",
+      "type": "政治权力机构",
+      "groundBase": "order",
+      "importance": 6,
+      "description": "铂金、锰、铬等重要矿产生产国，矿业政策关键",
+      "jurisdiction": "南非",
+      "trackingVariables": [
+        "矿业宪章",
+        "电力供应",
+        "罢工调解"
+      ]
+    },
+    {
+      "id": "RUL_001",
+      "name": "SWIFT系统",
+      "type": "金融规则基础设施",
+      "groundBase": "rule",
+      "importance": 10,
+      "description": "全球银行间金融通信系统，被排除意味着与美元体系隔离，是最强力的金融制裁工具",
+      "controlledBy": [
+        "西方主导的SWIFT协会"
+      ],
+      "vulnerabilities": [
+        "中国CIPS替代",
+        "俄罗斯SPFS",
+        "去美元化压力"
+      ],
+      "trackingVariables": [
+        "成员国数量",
+        "被排除国家",
+        "CIPS交易量增长",
+        "数字货币替代进展"
+      ]
+    },
+    {
+      "id": "RUL_002",
+      "name": "石油美元体系",
+      "type": "金融规则框架",
+      "groundBase": "rule",
+      "importance": 10,
+      "description": "原油以美元计价结算的全球体系，是美元霸权的核心支柱之一",
+      "establishedBy": [
+        "美国-沙特1974年协议"
+      ],
+      "vulnerabilities": [
+        "沙特接受人民币结算",
+        "BRICS去美元化",
+        "数字货币冲击"
+      ],
+      "trackingVariables": [
+        "非美元原油结算比例",
+        "沙特对华原油人民币结算量",
+        "美元在全球储备占比"
+      ]
+    },
+    {
+      "id": "RUL_003",
+      "name": "WTO规则体系",
+      "type": "贸易规则框架",
+      "groundBase": "rule",
+      "importance": 8,
+      "description": "全球多边贸易规则框架，但实际执行力持续弱化，大国贸易战绕过WTO",
+      "trackingVariables": [
+        "争端解决案件",
+        "上诉机构运作状态",
+        "美中贸易摩擦WTO诉讼"
+      ]
+    },
+    {
+      "id": "RUL_004",
+      "name": "巴塞尔协议III",
+      "type": "金融监管规则",
+      "groundBase": "rule",
+      "importance": 8,
+      "description": "全球银行业资本充足率监管框架，影响银行信贷投放能力和金融系统稳定性",
+      "trackingVariables": [
+        "各国实施进度",
+        "资本充足率达标情况",
+        "系统性重要银行名单"
+      ]
+    },
+    {
+      "id": "RUL_005",
+      "name": "NPT核不扩散条约",
+      "type": "地缘安全规则",
+      "groundBase": "rule",
+      "importance": 9,
+      "description": "核武器扩散的国际法律框架，伊朗、朝鲜核问题的规则依据",
+      "trackingVariables": [
+        "伊朗核协议JCPOA进展",
+        "朝鲜核试验",
+        "IAEA核查报告"
+      ]
+    },
+    {
+      "id": "RUL_006",
+      "name": "碳排放交易体系",
+      "type": "环境规则框架",
+      "groundBase": "rule",
+      "importance": 7,
+      "description": "欧盟ETS为核心，全球碳定价机制，影响高碳行业长期竞争力",
+      "trackingVariables": [
+        "碳价格",
+        "碳边境调节机制CBAM进展",
+        "各国碳中和目标"
+      ]
+    },
+    {
+      "id": "RUL_007",
+      "name": "美国出口管制规则",
+      "type": "贸易管制规则",
+      "groundBase": "rule",
+      "importance": 9,
+      "description": "EAR和ITAR体系，半导体、AI、军事技术出口管制核心规则，对华科技脱钩的法律工具",
+      "trackingVariables": [
+        "实体清单更新",
+        "芯片出口限制升级",
+        "盟友跟随情况",
+        "中国反制措施"
+      ]
+    },
+    {
+      "id": "RUL_008",
+      "name": "OPEC+产量协议",
+      "type": "产业规则框架",
+      "groundBase": "rule",
+      "importance": 9,
+      "description": "OPEC+成员国产量配额协议，全球原油供给管理的核心规则框架",
+      "trackingVariables": [
+        "配额执行合规率",
+        "自愿减产协议",
+        "下次会议决议",
+        "退出威胁"
+      ]
+    },
+    {
+      "id": "RUL_009",
+      "name": "反倾销反补贴规则",
+      "type": "贸易救济规则",
+      "groundBase": "rule",
+      "importance": 8,
+      "description": "WTO框架下的贸易救济工具，各国对进口商品征收反倾销反补贴税的法律依据",
+      "trackingVariables": [
+        "立案调查",
+        "初裁税率",
+        "终裁结果"
+      ]
+    },
+    {
+      "id": "RUL_010",
+      "name": "欧盟碳边境调节机制",
+      "type": "环境贸易规则",
+      "groundBase": "rule",
+      "importance": 8,
+      "description": "欧盟对进口商品碳含量的调节机制，影响钢铁、铝、水泥等出口欧盟成本",
+      "trackingVariables": [
+        "过渡期",
+        "免费配额",
+        "碳价"
+      ]
+    },
+    {
+      "id": "RUL_011",
+      "name": "美国通胀削减法案",
+      "type": "产业补贴规则",
+      "groundBase": "rule",
+      "importance": 9,
+      "description": "美国大规模气候和产业补贴法案，推动新能源产业链投资",
+      "trackingVariables": [
+        "税收抵免细则",
+        "本土化要求",
+        "补贴规模"
+      ]
+    },
+    {
+      "id": "RUL_012",
+      "name": "欧盟芯片法案",
+      "type": "产业政策规则",
+      "groundBase": "rule",
+      "importance": 7,
+      "description": "欧盟半导体产业扶持政策，影响全球芯片产能分布",
+      "trackingVariables": [
+        "补贴分配",
+        "产能目标"
+      ]
+    },
+    {
+      "id": "RUL_013",
+      "name": "中美第一阶段贸易协议",
+      "type": "双边贸易规则",
+      "groundBase": "rule",
+      "importance": 8,
+      "description": "中美贸易关系的重要协议，涉及农产品采购、知识产权等",
+      "trackingVariables": [
+        "采购执行",
+        "协议续签"
+      ]
+    },
+    {
+      "id": "RUL_014",
+      "name": "RCEP区域全面经济伙伴关系",
+      "type": "区域贸易规则",
+      "groundBase": "rule",
+      "importance": 8,
+      "description": "亚太区域自贸协定，关税减让和原产地规则影响区域内贸易",
+      "trackingVariables": [
+        "降税安排",
+        "利用率"
+      ]
+    },
+    {
+      "id": "RUL_015",
+      "name": "USMCA美墨加协定",
+      "type": "区域贸易规则",
+      "groundBase": "rule",
+      "importance": 7,
+      "description": "北美自贸区新规则，汽车原产地要求严格",
+      "trackingVariables": [
+        "争端解决",
+        "原产地审核"
+      ]
+    },
+    {
+      "id": "RUL_016",
+      "name": "欧洲绿色协议",
+      "type": "环境政策框架",
+      "groundBase": "rule",
+      "importance": 7,
+      "description": "欧盟碳中和政策框架，影响欧洲产业结构和能源转型",
+      "trackingVariables": [
+        "Fit for 55",
+        "可再生能源目标"
+      ]
+    },
+    {
+      "id": "RUL_017",
+      "name": "中国双碳目标",
+      "type": "环境政策框架",
+      "groundBase": "rule",
+      "importance": 8,
+      "description": "中国2030碳达峰、2060碳中和目标，影响高耗能产业政策",
+      "trackingVariables": [
+        "能耗双控",
+        "碳市场建设",
+        "能源结构"
+      ]
+    },
+    {
+      "id": "RUL_018",
+      "name": "中国钢铁产能置换办法",
+      "type": "产业政策规则",
+      "groundBase": "rule",
+      "importance": 8,
+      "description": "中国钢铁产能减量置换政策，控制钢铁总产能的核心工具",
+      "trackingVariables": [
+        "置换比例",
+        "新项目审批",
+        "产能退出"
+      ]
+    },
+    {
+      "id": "RUL_019",
+      "name": "中国煤炭中长期合同制度",
+      "type": "价格管制规则",
+      "groundBase": "rule",
+      "importance": 7,
+      "description": "煤炭保供稳价政策，电煤中长期合同履约要求",
+      "trackingVariables": [
+        "合同履约率",
+        "价格区间",
+        "监管力度"
+      ]
+    },
+    {
+      "id": "RUL_020",
+      "name": "中国化肥出口法检制度",
+      "type": "出口管制规则",
+      "groundBase": "rule",
+      "importance": 7,
+      "description": "尿素等化肥出口需检验，实际出口限制工具",
+      "trackingVariables": [
+        "法检周期",
+        "通关速度",
+        "出口量"
+      ]
+    },
+    {
+      "id": "RUL_021",
+      "name": "印尼镍矿出口禁令",
+      "type": "资源出口管制",
+      "groundBase": "rule",
+      "importance": 9,
+      "description": "印尼禁止原矿出口，强制国内加工的政策工具",
+      "trackingVariables": [
+        "政策稳定性",
+        "投资进展",
+        "WTO诉讼"
+      ]
+    },
+    {
+      "id": "RUL_023",
+      "name": "秘鲁矿业税收稳定协议",
+      "type": "投资保护规则",
+      "groundBase": "rule",
+      "importance": 6,
+      "description": "秘鲁与矿业公司的税收稳定协议，投资保障机制",
+      "trackingVariables": [
+        "协议期限",
+        "违约风险"
+      ]
+    },
+    {
+      "id": "RUL_024",
+      "name": "俄罗斯矿产税调整",
+      "type": "资源税收规则",
+      "groundBase": "rule",
+      "importance": 6,
+      "description": "俄罗斯金属矿产税调整机制，影响企业盈利能力",
+      "trackingVariables": [
+        "税率变化",
+        "出口关税"
+      ]
+    },
+    {
+      "id": "RUL_025",
+      "name": "美国琼斯法案",
+      "type": "航运管制规则",
+      "groundBase": "rule",
+      "importance": 7,
+      "description": "要求美国境内航运由美国船运公司承运，影响能源和农产品运输",
+      "trackingVariables": [
+        "豁免条款",
+        "运力限制"
+      ]
+    },
+    {
+      "id": "RUL_026",
+      "name": "国际海事组织硫限令",
+      "type": "航运环保规则",
+      "groundBase": "rule",
+      "importance": 8,
+      "description": "船舶燃料硫含量限制，影响高硫燃料油需求和低硫油溢价",
+      "trackingVariables": [
+        "合规率",
+        "高低硫价差"
+      ]
+    },
+    {
+      "id": "RUL_027",
+      "name": "巴塞尔公约",
+      "type": "环境规则",
+      "groundBase": "rule",
+      "importance": 6,
+      "description": "危险废物跨境转移管制，影响废金属、废塑料贸易",
+      "trackingVariables": [
+        "附件修订",
+        "履约情况"
+      ]
+    },
+    {
+      "id": "RUL_028",
+      "name": "鹿特丹公约",
+      "type": "化学品规则",
+      "groundBase": "rule",
+      "importance": 6,
+      "description": "危险化学品进出口事先知情同意程序",
+      "trackingVariables": [
+        "新增化学品",
+        "贸易影响"
+      ]
+    },
+    {
+      "id": "RUL_029",
+      "name": "ISO国际标准化组织规则",
+      "type": "技术标准规则",
+      "groundBase": "rule",
+      "importance": 6,
+      "description": "国际技术标准制定，影响商品质量规格",
+      "trackingVariables": [
+        "标准修订",
+        "采用率"
+      ]
+    },
+    {
+      "id": "RUL_030",
+      "name": "伦敦金银市场协会交割规则",
+      "type": "行业自律规则",
+      "groundBase": "rule",
+      "importance": 7,
+      "description": "黄金白银合格交割名单和标准，影响贵金属贸易",
+      "trackingVariables": [
+        "精炼厂认证",
+        "交割标准"
+      ]
+    },
+    {
+      "id": "VAR_001",
+      "name": "美联储基准利率",
+      "type": "货币政策变量",
+      "groundBase": "marginal",
+      "importance": 10,
+      "currentValue": "5.25-5.50%",
+      "historicalRange": {
+        "min": "0%",
+        "max": "20%"
+      },
+      "recentRange": {
+        "min": "0%",
+        "max": "5.50%"
+      },
+      "dualityOpposite": "全球流动性",
+      "trackingFrequency": "每6-8周FOMC会议",
+      "trackingVariables": [
+        "利率决议",
+        "点阵图",
+        "会议纪要措辞",
+        "CME利率期货定价"
+      ]
+    },
+    {
+      "id": "VAR_002",
+      "name": "原油价格布伦特",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 10,
+      "currentValue": "约100美元每桶",
+      "historicalRange": {
+        "min": "10美元",
+        "max": "147美元"
+      },
+      "recentRange": {
+        "min": "20美元",
+        "max": "130美元"
+      },
+      "dualityOpposite": "全球经济增速",
+      "trackingFrequency": "实时",
+      "trackingVariables": [
+        "现货价格",
+        "期货曲线形态",
+        "OPEC+会议",
+        "EIA库存数据"
+      ]
+    },
+    {
+      "id": "VAR_003",
+      "name": "美元指数DXY",
+      "type": "汇率变量",
+      "groundBase": "marginal",
+      "importance": 10,
+      "currentValue": "约104",
+      "historicalRange": {
+        "min": "70",
+        "max": "165"
+      },
+      "recentRange": {
+        "min": "89",
+        "max": "114"
+      },
+      "dualityOpposite": "新兴市场资产",
+      "trackingFrequency": "实时",
+      "trackingVariables": [
+        "DXY指数",
+        "美元兑人民币",
+        "美元兑日元",
+        "非农就业数据"
+      ]
+    },
+    {
+      "id": "VAR_004",
+      "name": "10年期美债收益率",
+      "type": "利率变量",
+      "groundBase": "marginal",
+      "importance": 10,
+      "currentValue": "约4.5%",
+      "historicalRange": {
+        "min": "0.5%",
+        "max": "15%"
+      },
+      "recentRange": {
+        "min": "0.5%",
+        "max": "5%"
+      },
+      "dualityOpposite": "风险资产估值",
+      "trackingFrequency": "实时",
+      "trackingVariables": [
+        "收益率绝对水平",
+        "2年10年期利差",
+        "实际利率",
+        "期限溢价"
+      ]
+    },
+    {
+      "id": "VAR_005",
+      "name": "黄金价格",
+      "type": "避险资产变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "currentValue": "约2100美元每盎司",
+      "historicalRange": {
+        "min": "35美元",
+        "max": "2500美元"
+      },
+      "recentRange": {
+        "min": "1600美元",
+        "max": "2500美元"
+      },
+      "dualityOpposite": "美元信用",
+      "trackingFrequency": "实时",
+      "trackingVariables": [
+        "现货价格",
+        "央行购金量",
+        "COMEX持仓",
+        "实际利率相关性"
+      ]
+    },
+    {
+      "id": "VAR_006",
+      "name": "人民币汇率USDCNY",
+      "type": "汇率变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "currentValue": "约7.2",
+      "historicalRange": {
+        "min": "6.0",
+        "max": "8.3"
+      },
+      "recentRange": {
+        "min": "6.3",
+        "max": "7.35"
+      },
+      "dualityOpposite": "美元指数",
+      "trackingFrequency": "每日",
+      "trackingVariables": [
+        "中间价",
+        "离岸价CNH",
+        "外汇储备",
+        "资本流动数据"
+      ]
+    },
+    {
+      "id": "VAR_007",
+      "name": "全球制造业PMI",
+      "type": "经济景气变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "currentValue": "约49",
+      "historicalRange": {
+        "min": "35",
+        "max": "58"
+      },
+      "recentRange": {
+        "min": "42",
+        "max": "58"
+      },
+      "dualityOpposite": "通胀压力",
+      "trackingFrequency": "每月",
+      "trackingVariables": [
+        "全球PMI综合",
+        "中国财新PMI",
+        "美国ISM PMI",
+        "欧元区PMI"
+      ]
+    },
+    {
+      "id": "VAR_008",
+      "name": "VIX恐惧指数",
+      "type": "市场情绪变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "currentValue": "约18",
+      "historicalRange": {
+        "min": "9",
+        "max": "89"
+      },
+      "recentRange": {
+        "min": "12",
+        "max": "65"
+      },
+      "dualityOpposite": "市场贪婪情绪",
+      "trackingFrequency": "实时",
+      "trackingVariables": [
+        "VIX绝对水平",
+        "VIX期限结构",
+        "PutCall比率",
+        "信用利差"
+      ]
+    },
+    {
+      "id": "VAR_009",
+      "name": "中国CPI与PPI",
+      "type": "通胀变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "currentValue": "CPI约0.5% PPI约-1%",
+      "historicalRange": {
+        "min": "-2%",
+        "max": "8%"
+      },
+      "recentRange": {
+        "min": "-1%",
+        "max": "6%"
+      },
+      "dualityOpposite": "中国内需强度",
+      "trackingFrequency": "每月",
+      "trackingVariables": [
+        "CPI同比",
+        "PPI同比",
+        "核心CPI",
+        "猪肉价格周期"
+      ]
+    },
+    {
+      "id": "VAR_010",
+      "name": "美国非农就业数据",
+      "type": "就业变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "currentValue": "月均新增约20万",
+      "historicalRange": {
+        "min": "-2000万疫情",
+        "max": "+150万"
+      },
+      "recentRange": {
+        "min": "-100万",
+        "max": "+80万"
+      },
+      "dualityOpposite": "美联储降息空间",
+      "trackingFrequency": "每月第一个周五",
+      "trackingVariables": [
+        "新增就业人数",
+        "失业率",
+        "劳动参与率",
+        "时薪增速"
+      ]
+    },
+    {
+      "id": "VAR_011",
+      "name": "铁矿石普氏62指数",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "currentValue": "约120美元/吨",
+      "historicalRange": {
+        "min": "39美元",
+        "max": "237美元"
+      },
+      "recentRange": {
+        "min": "80美元",
+        "max": "230美元"
+      },
+      "dualityOpposite": "中国钢铁产量",
+      "trackingFrequency": "每日",
+      "trackingVariables": [
+        "普氏指数",
+        "港口库存",
+        "钢厂补库节奏",
+        "发运量数据"
+      ]
+    },
+    {
+      "id": "VAR_012",
+      "name": "螺纹钢价格",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "currentValue": "约3800元/吨",
+      "historicalRange": {
+        "min": "1600元",
+        "max": "6000元"
+      },
+      "recentRange": {
+        "min": "3400元",
+        "max": "5200元"
+      },
+      "dualityOpposite": "房地产新开工",
+      "trackingFrequency": "每日",
+      "trackingVariables": [
+        "现货价格",
+        "期货主力",
+        "社会库存",
+        "表观消费量"
+      ]
+    },
+    {
+      "id": "VAR_013",
+      "name": "焦煤价格",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "currentValue": "约1800元/吨",
+      "historicalRange": {
+        "min": "500元",
+        "max": "4000元"
+      },
+      "recentRange": {
+        "min": "1200元",
+        "max": "3500元"
+      },
+      "dualityOpposite": "焦化利润",
+      "trackingFrequency": "每日",
+      "trackingVariables": [
+        "主焦煤价格",
+        "蒙煤通关量",
+        "澳煤进口"
+      ]
+    },
+    {
+      "id": "VAR_014",
+      "name": "焦炭价格",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "currentValue": "约2200元/吨",
+      "historicalRange": {
+        "min": "800元",
+        "max": "4500元"
+      },
+      "recentRange": {
+        "min": "1800元",
+        "max": "4000元"
+      },
+      "dualityOpposite": "钢厂利润",
+      "trackingFrequency": "每日",
+      "trackingVariables": [
+        "焦化厂库存",
+        "钢厂库存",
+        "提涨提降轮数"
+      ]
+    },
+    {
+      "id": "VAR_015",
+      "name": "动力煤价格",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "currentValue": "约850元/吨",
+      "historicalRange": {
+        "min": "300元",
+        "max": "2600元"
+      },
+      "recentRange": {
+        "min": "500元",
+        "max": "1800元"
+      },
+      "dualityOpposite": "电厂库存",
+      "trackingFrequency": "每日",
+      "trackingVariables": [
+        "秦港5500K",
+        "电厂日耗",
+        "库存天数",
+        "保供政策"
+      ]
+    },
+    {
+      "id": "VAR_017",
+      "name": "LME铝价",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "currentValue": "约2400美元/吨",
+      "historicalRange": {
+        "min": "1200美元",
+        "max": "4000美元"
+      },
+      "recentRange": {
+        "min": "2000美元",
+        "max": "3800美元"
+      },
+      "dualityOpposite": "云南电力供应",
+      "trackingFrequency": "每日",
+      "trackingVariables": [
+        "LME库存",
+        "云南开工率",
+        "氧化铝价格"
+      ]
+    },
+    {
+      "id": "VAR_019",
+      "name": "沪镍价格",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "currentValue": "约13万元/吨",
+      "historicalRange": {
+        "min": "8万元",
+        "max": "30万元"
+      },
+      "recentRange": {
+        "min": "12万元",
+        "max": "28万元"
+      },
+      "dualityOpposite": "印尼政策",
+      "trackingFrequency": "每日",
+      "trackingVariables": [
+        "LME镍价",
+        "沪镍库存",
+        "镍铁价格"
+      ]
+    },
+    {
+      "id": "VAR_020",
+      "name": "CBOT大豆价格",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "currentValue": "约1200美分/蒲",
+      "historicalRange": {
+        "min": "600美分",
+        "max": "1800美分"
+      },
+      "recentRange": {
+        "min": "1100美分",
+        "max": "1750美分"
+      },
+      "dualityOpposite": "南美天气",
+      "trackingFrequency": "每日",
+      "trackingVariables": [
+        "USDA月度报告",
+        "巴西收割进度",
+        "优良率"
+      ]
+    },
+    {
+      "id": "VAR_021",
+      "name": "DCE豆粕价格",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "currentValue": "约3200元/吨",
+      "historicalRange": {
+        "min": "2300元",
+        "max": "4500元"
+      },
+      "recentRange": {
+        "min": "2800元",
+        "max": "4300元"
+      },
+      "dualityOpposite": "生猪存栏",
+      "trackingFrequency": "每日",
+      "trackingVariables": [
+        "现货基差",
+        "油厂开机率",
+        "豆粕库存"
+      ]
+    },
+    {
+      "id": "VAR_022",
+      "name": "DCE豆油价格",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 7,
+      "currentValue": "约7500元/吨",
+      "historicalRange": {
+        "min": "5000元",
+        "max": "14000元"
+      },
+      "recurlyRange": {
+        "min": "7000元",
+        "max": "11000元"
+      },
+      "dualityOpposite": "棕榈油价格",
+      "trackingFrequency": "每日",
+      "trackingVariables": [
+        "库存",
+        "豆棕价差",
+        "压榨量"
+      ]
+    },
+    {
+      "id": "VAR_023",
+      "name": "BMD棕榈油价格",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "currentValue": "约4000林吉特/吨",
+      "historicalRange": {
+        "min": "1800林吉特",
+        "max": "7500林吉特"
+      },
+      "recentRange": {
+        "min": "3500林吉特",
+        "max": "6800林吉特"
+      },
+      "dualityOpposite": "印尼出口政策",
+      "trackingFrequency": "每日",
+      "trackingVariables": [
+        "MPOB月度报告",
+        "出口数据",
+        "产地天气"
+      ]
+    },
+    {
+      "id": "VAR_024",
+      "name": "DCE玉米价格",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "currentValue": "约2400元/吨",
+      "historicalRange": {
+        "min": "1600元",
+        "max": "3100元"
+      },
+      "recentRange": {
+        "min": "2300元",
+        "max": "2900元"
+      },
+      "dualityOpposite": "生猪存栏",
+      "trackingFrequency": "每日",
+      "trackingVariables": [
+        "北港库存",
+        "深加工消费",
+        "进口到港"
+      ]
+    },
+    {
+      "id": "VAR_025",
+      "name": "CZCE白糖价格",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 7,
+      "currentValue": "约6300元/吨",
+      "historicalRange": {
+        "min": "4500元",
+        "max": "8000元"
+      },
+      "recentRange": {
+        "min": "5800元",
+        "max": "7500元"
+      },
+      "dualityOpposite": "巴西糖醇比",
+      "trackingFrequency": "每日",
+      "trackingVariables": [
+        "巴西压榨数据",
+        "印度出口政策",
+        "国内库存"
+      ]
+    },
+    {
+      "id": "VAR_026",
+      "name": "ICE棉花价格",
+      "type": "大宗商品变量",
+      "groundBase": "marginal",
+      "importance": 7,
+      "currentValue": "约85美分/磅",
+      "historicalRange": {
+        "min": "45美分",
+        "max": "150美分"
+      },
+      "recentRange": {
+        "min": "70美分",
+        "max": "140美分"
+      },
+      "dualityOpposite": "纺织服装出口",
+      "trackingFrequency": "每日",
+      "trackingVariables": [
+        "USDA报告",
+        "美棉出口",
+        "中国抛储"
+      ]
+    },
+    {
+      "id": "VAR_027",
+      "name": "生猪出栏均价",
+      "type": "农产品变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "currentValue": "约15元/公斤",
+      "historicalRange": {
+        "min": "10元",
+        "max": "40元"
+      },
+      "recentRange": {
+        "min": "13元",
+        "max": "28元"
+      },
+      "dualityOpposite": "能繁母猪存栏",
+      "trackingFrequency": "每日",
+      "trackingVariables": [
+        "仔猪价格",
+        "猪粮比",
+        "屠宰量",
+        "冻肉库存"
+      ]
+    },
+    {
+      "id": "VAR_028",
+      "name": "BDI波罗的海干散货指数",
+      "type": "运价变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "currentValue": "约1500",
+      "historicalRange": {
+        "min": "290",
+        "max": "11000"
+      },
+      "recentRange": {
+        "min": "900",
+        "max": "5600"
+      },
+      "dualityOpposite": "全球贸易需求",
+      "trackingFrequency": "每日",
+      "trackingVariables": [
+        "BCI海岬型",
+        "BPI巴拿马型",
+        "燃油价格"
+      ]
+    },
+    {
+      "id": "VAR_029",
+      "name": "CCFI中国出口集装箱运价指数",
+      "type": "运价变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "currentValue": "约1200",
+      "historicalRange": {
+        "min": "700",
+        "max": "3500"
+      },
+      "recentRange": {
+        "min": "850",
+        "max": "3300"
+      },
+      "dualityOpposite": "出口景气度",
+      "trackingFrequency": "每周",
+      "trackingVariables": [
+        "美西航线",
+        "欧洲航线",
+        "东南亚航线"
+      ]
+    },
+    {
+      "id": "VAR_031",
+      "name": "PTA加工费",
+      "type": "加工费变量",
+      "groundBase": "marginal",
+      "importance": 7,
+      "currentValue": "约300元/吨",
+      "historicalRange": {
+        "min": "0元",
+        "max": "2000元"
+      },
+      "recentRange": {
+        "min": "100元",
+        "max": "800元"
+      },
+      "dualityOpposite": "PTA开工率",
+      "trackingFrequency": "每日",
+      "trackingVariables": [
+        "PX价格",
+        "PTA库存",
+        "检修计划"
+      ]
+    },
+    {
+      "id": "VAR_032",
+      "name": "焦化利润",
+      "type": "利润变量",
+      "groundBase": "marginal",
+      "importance": 7,
+      "currentValue": "约50元/吨",
+      "historicalRange": {
+        "min": "-500元",
+        "max": "+800元"
+      },
+      "recentRange": {
+        "min": "-300元",
+        "max": "+500元"
+      },
+      "dualityOpposite": "焦炭产量",
+      "trackingFrequency": "每周",
+      "trackingVariables": [
+        "焦煤成本",
+        "焦炭价格",
+        "化产利润"
+      ]
+    },
+    {
+      "id": "VAR_033",
+      "name": "炼钢利润",
+      "type": "利润变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "currentValue": "约100元/吨",
+      "historicalRange": {
+        "min": "-800元",
+        "max": "+2000元"
+      },
+      "recentRange": {
+        "min": "-300元",
+        "max": "+800元"
+      },
+      "dualityOpposite": "高炉开工率",
+      "trackingFrequency": "每日",
+      "trackingVariables": [
+        "铁矿成本",
+        "焦炭成本",
+        "成材价格"
+      ]
+    },
+    {
+      "id": "VAR_034",
+      "name": "山东地炼开工率",
+      "type": "产业变量",
+      "groundBase": "marginal",
+      "importance": 7,
+      "currentValue": "约60%",
+      "historicalRange": {
+        "min": "30%",
+        "max": "80%"
+      },
+      "recentRange": {
+        "min": "50%",
+        "max": "75%"
+      },
+      "dualityOpposite": "原油进口配额",
+      "trackingFrequency": "每周",
+      "trackingVariables": [
+        "裂解价差",
+        "成品油库存",
+        "配额使用"
+      ]
+    },
+    {
+      "id": "VAR_035",
+      "name": "PVC社会库存",
+      "type": "库存变量",
+      "groundBase": "marginal",
+      "importance": 7,
+      "currentValue": "约50万吨",
+      "historicalRange": {
+        "min": "20万吨",
+        "max": "90万吨"
+      },
+      "recentRange": {
+        "min": "30万吨",
+        "max": "80万吨"
+      },
+      "dualityOpposite": "PVC价格",
+      "trackingFrequency": "每周",
+      "trackingVariables": [
+        "华东库存",
+        "华南库存",
+        "去库速度"
+      ]
+    },
+    {
+      "id": "VAR_036",
+      "name": "玻璃企业库存",
+      "type": "库存变量",
+      "groundBase": "marginal",
+      "importance": 7,
+      "currentValue": "约4000万重量箱",
+      "historicalRange": {
+        "min": "2000万",
+        "max": "8000万"
+      },
+      "recentRange": {
+        "min": "3000万",
+        "max": "7500万"
+      },
+      "dualityOpposite": "玻璃价格",
+      "trackingFrequency": "每周",
+      "trackingVariables": [
+        "深加工订单",
+        "地产竣工",
+        "冷修计划"
+      ]
+    },
+    {
+      "id": "VAR_037",
+      "name": "纯碱企业库存",
+      "type": "库存变量",
+      "groundBase": "marginal",
+      "importance": 7,
+      "currentValue": "约40万吨",
+      "historicalRange": {
+        "min": "10万吨",
+        "max": "120万吨"
+      },
+      "recentRange": {
+        "min": "15万吨",
+        "max": "100万吨"
+      },
+      "dualityOpposite": "光伏玻璃点火",
+      "trackingFrequency": "每周",
+      "trackingVariables": [
+        "轻碱需求",
+        "重碱需求",
+        "开工率"
+      ]
+    },
+    {
+      "id": "VAR_038",
+      "name": "尿素企业库存",
+      "type": "库存变量",
+      "groundBase": "marginal",
+      "importance": 7,
+      "currentValue": "约30万吨",
+      "historicalRange": {
+        "min": "10万吨",
+        "max": "120万吨"
+      },
+      "recentRange": {
+        "min": "15万吨",
+        "max": "100万吨"
+      },
+      "dualityOpposite": "农业需求",
+      "trackingFrequency": "每周",
+      "trackingVariables": [
+        "复合肥开工",
+        "出口政策",
+        "日产量"
+      ]
+    },
+    {
+      "id": "VAR_039",
+      "name": "沥青开工率",
+      "type": "产业变量",
+      "groundBase": "marginal",
+      "importance": 6,
+      "currentValue": "约30%",
+      "historicalRange": {
+        "min": "20%",
+        "max": "50%"
+      },
+      "recentRange": {
+        "min": "25%",
+        "max": "45%"
+      },
+      "dualityOpposite": "道路施工需求",
+      "trackingFrequency": "每周",
+      "trackingVariables": [
+        "炼厂库存",
+        "社会库存",
+        "专项债发行"
+      ]
+    },
+    {
+      "id": "VAR_040",
+      "name": "甲醇港口库存",
+      "type": "库存变量",
+      "groundBase": "marginal",
+      "importance": 7,
+      "currentValue": "约80万吨",
+      "historicalRange": {
+        "min": "40万吨",
+        "max": "120万吨"
+      },
+      "recentRange": {
+        "min": "50万吨",
+        "max": "110万吨"
+      },
+      "dualityOpposite": "MTO开工率",
+      "trackingFrequency": "每周",
+      "trackingVariables": [
+        "进口到港",
+        "烯烃需求",
+        "内地库存"
+      ]
+    },
+    {
+      "id": "VAR_041",
+      "name": "乙二醇港口库存",
+      "type": "库存变量",
+      "groundBase": "marginal",
+      "importance": 7,
+      "currentValue": "约70万吨",
+      "historicalRange": {
+        "min": "30万吨",
+        "max": "120万吨"
+      },
+      "recentRange": {
+        "min": "40万吨",
+        "max": "110万吨"
+      },
+      "dualityOpposite": "聚酯开工率",
+      "trackingFrequency": "每周",
+      "trackingVariables": [
+        "煤制开工",
+        "油制开工",
+        "到港预报"
+      ]
+    },
+    {
+      "id": "VAR_042",
+      "name": "苯乙烯华东库存",
+      "type": "库存变量",
+      "groundBase": "marginal",
+      "importance": 6,
+      "currentValue": "约8万吨",
+      "historicalRange": {
+        "min": "3万吨",
+        "max": "25万吨"
+      },
+      "recentRange": {
+        "min": "4万吨",
+        "max": "20万吨"
+      },
+      "dualityOpposite": "EPS开工率",
+      "trackingFrequency": "每周",
+      "trackingVariables": [
+        "纯苯价格",
+        "下游需求",
+        "进口量"
+      ]
+    },
+    {
+      "id": "VAR_043",
+      "name": "LPG华南库存",
+      "type": "库存变量",
+      "groundBase": "marginal",
+      "importance": 6,
+      "currentValue": "约30万吨",
+      "historicalRange": {
+        "min": "15万吨",
+        "max": "50万吨"
+      },
+      "recentRange": {
+        "min": "20万吨",
+        "max": "45万吨"
+      },
+      "dualityOpposite": "燃烧需求",
+      "trackingFrequency": "每周",
+      "trackingVariables": [
+        "进口到港",
+        "PDH开工率",
+        "CP价格"
+      ]
+    },
+    {
+      "id": "VAR_044",
+      "name": "天然橡胶库存",
+      "type": "库存变量",
+      "groundBase": "marginal",
+      "importance": 7,
+      "currentValue": "约20万吨",
+      "historicalRange": {
+        "min": "10万吨",
+        "max": "40万吨"
+      },
+      "recentRange": {
+        "min": "15万吨",
+        "max": "35万吨"
+      },
+      "dualityOpposite": "轮胎开工率",
+      "trackingFrequency": "每周",
+      "trackingVariables": [
+        "产区天气",
+        "轮胎出口",
+        "全钢胎开工"
+      ]
+    },
+    {
+      "id": "VAR_045",
+      "name": "纸浆港口库存",
+      "type": "库存变量",
+      "groundBase": "marginal",
+      "importance": 7,
+      "currentValue": "约180万吨",
+      "historicalRange": {
+        "min": "100万吨",
+        "max": "250万吨"
+      },
+      "recentRange": {
+        "min": "150万吨",
+        "max": "230万吨"
+      },
+      "dualityOpposite": "文化纸需求",
+      "trackingFrequency": "每月",
+      "trackingVariables": [
+        "外盘报价",
+        "纸厂开工",
+        "人民币汇率"
+      ]
+    },
+    {
+      "id": "VAR_046",
+      "name": "生猪屠宰量",
+      "type": "产业变量",
+      "groundBase": "marginal",
+      "importance": 7,
+      "currentValue": "约150万头/日",
+      "historicalRange": {
+        "min": "80万",
+        "max": "200万"
+      },
+      "recentRange": {
+        "min": "100万",
+        "max": "180万"
+      },
+      "dualityOpposite": "猪价",
+      "trackingFrequency": "每周",
+      "trackingVariables": [
+        "屠宰开工率",
+        "鲜销率",
+        "冻品入库"
+      ]
+    },
+    {
+      "id": "VAR_047",
+      "name": "能繁母猪存栏",
+      "type": "产能变量",
+      "groundBase": "biological",
+      "importance": 9,
+      "currentValue": "约4100万头",
+      "historicalRange": {
+        "min": "3500万",
+        "max": "5000万"
+      },
+      "recentRange": {
+        "min": "3800万",
+        "max": "4500万"
+      },
+      "dualityOpposite": "猪周期",
+      "trackingFrequency": "每月",
+      "trackingVariables": [
+        "农业农村部数据",
+        "涌益咨询",
+        "淘汰量"
+      ]
+    },
+    {
+      "id": "VAR_048",
+      "name": "进口大豆到港量",
+      "type": "供给变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "currentValue": "约900万吨/月",
+      "historicalRange": {
+        "min": "400万吨",
+        "max": "1100万吨"
+      },
+      "recentRange": {
+        "min": "500万吨",
+        "max": "1000万吨"
+      },
+      "dualityOpposite": "豆粕库存",
+      "trackingFrequency": "每月",
+      "trackingVariables": [
+        "船期数据",
+        "压榨量",
+        "进口利润"
+      ]
+    },
+    {
+      "id": "VAR_049",
+      "name": "油厂大豆压榨量",
+      "type": "产业变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "currentValue": "约180万吨/周",
+      "historicalRange": {
+        "min": "100万吨",
+        "max": "220万吨"
+      },
+      "recentRange": {
+        "min": "120万吨",
+        "max": "210万吨"
+      },
+      "dualityOpposite": "豆粕豆油库存",
+      "trackingFrequency": "每周",
+      "trackingVariables": [
+        "豆粕提货量",
+        "豆油成交",
+        "压榨利润"
+      ]
+    },
+    {
+      "id": "VAR_050",
+      "name": "CFTC持仓净多头",
+      "type": "资金变量",
+      "groundBase": "marginal",
+      "importance": 7,
+      "currentValue": "视品种而定",
+      "trackingFrequency": "每周",
+      "trackingVariables": [
+        "管理基金净多",
+        "商业持仓",
+        "投机情绪指数"
+      ]
+    },
+    {
+      "id": "VAR_051",
+      "name": "金银比",
+      "type": "比价变量",
+      "groundBase": "marginal",
+      "importance": 6,
+      "currentValue": "约85",
+      "historicalRange": {
+        "min": "35",
+        "max": "120"
+      },
+      "recentRange": {
+        "min": "70",
+        "max": "95"
+      },
+      "dualityOpposite": "工业需求",
+      "trackingFrequency": "每日",
+      "trackingVariables": [
+        "黄金价格",
+        "白银价格",
+        "经济周期"
+      ]
+    },
+    {
+      "id": "VAR_053",
+      "name": "中国社会融资规模",
+      "type": "宏观变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "currentValue": "约30万亿/年增量",
+      "trackingFrequency": "每月",
+      "trackingVariables": [
+        "新增人民币贷款",
+        "政府债券",
+        "表外融资"
+      ]
+    },
+    {
+      "id": "VAR_054",
+      "name": "中国M1同比",
+      "type": "货币变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "currentValue": "约2%",
+      "trackingFrequency": "每月",
+      "trackingVariables": [
+        "企业活期存款",
+        "M1-M2剪刀差",
+        "经济活性"
+      ]
+    },
+    {
+      "id": "VAR_055",
+      "name": "美国初请失业金",
+      "type": "就业变量",
+      "groundBase": "marginal",
+      "importance": 7,
+      "currentValue": "约22万人",
+      "trackingFrequency": "每周",
+      "trackingVariables": [
+        "续请失业金",
+        "失业率领先指标",
+        "劳动力市场"
+      ]
+    },
+    {
+      "id": "VAR_056",
+      "name": "美国核心PCE",
+      "type": "通胀变量",
+      "groundBase": "marginal",
+      "importance": 9,
+      "currentValue": "约2.8%",
+      "trackingFrequency": "每月",
+      "trackingVariables": [
+        "PCE物价指数",
+        "核心PCE",
+        "美联储目标"
+      ]
+    },
+    {
+      "id": "VAR_057",
+      "name": "欧元区CPI",
+      "type": "通胀变量",
+      "groundBase": "marginal",
+      "importance": 7,
+      "currentValue": "约2.5%",
+      "trackingFrequency": "每月",
+      "trackingVariables": [
+        "核心CPI",
+        "能源分项",
+        "欧央行政策"
+      ]
+    },
+    {
+      "id": "VAR_058",
+      "name": "日本CPI",
+      "type": "通胀变量",
+      "groundBase": "marginal",
+      "importance": 7,
+      "currentValue": "约2.5%",
+      "trackingFrequency": "每月",
+      "trackingVariables": [
+        "核心CPI",
+        "日央行政策",
+        "通胀目标"
+      ]
+    },
+    {
+      "id": "VAR_059",
+      "name": "中国工业增加值",
+      "type": "经济变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "currentValue": "约6%",
+      "trackingFrequency": "每月",
+      "trackingVariables": [
+        "制造业",
+        "采矿业",
+        "电力"
+      ]
+    },
+    {
+      "id": "VAR_060",
+      "name": "中国固定资产投资",
+      "type": "经济变量",
+      "groundBase": "marginal",
+      "importance": 8,
+      "currentValue": "约4%",
+      "trackingFrequency": "每月",
+      "trackingVariables": [
+        "基建投资",
+        "房地产投资",
+        "制造业投资"
+      ]
+    }
+  ]
+}
