@@ -1,106 +1,142 @@
 {
   "commodity": "铅",
   "symbol": "PB",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "chains": [
     {
-      "id": "PB_C01",
-      "name": "再生铅成本传导链",
+      "id": "PB_C001",
+      "name": "再生铅供给冲击链",
       "domain": "有色金属",
       "groundBase": "marginal",
-      "triggerEvent": "废电池价格大幅上涨",
+      "triggerEvent": "环保督察关闭再生铅产能",
       "steps": [
         {
           "seq": 1,
-          "from": "废电池价格上涨",
-          "to": "再生铅成本上升",
+          "from": "环保督察加严",
+          "to": "再生铅小厂关闭",
           "confidence": "高",
           "lag": "即时",
-          "mechanism": "废电池占再生铅成本约80%"
+          "mechanism": "再生铅行业环保门槛低，小厂易被关停"
         },
         {
           "seq": 2,
-          "from": "成本上升",
-          "to": "再生铅冶炼利润压缩",
+          "from": "再生铅产能减少",
+          "to": "铅供给收紧",
           "confidence": "高",
-          "lag": "即时",
-          "mechanism": "精铅价格涨幅不及原料涨幅"
+          "lag": "1-2月",
+          "mechanism": "再生铅占中国铅供给约45%"
         },
         {
           "seq": 3,
-          "from": "利润压缩",
-          "to": "再生铅减产",
-          "confidence": "中",
-          "lag": "1-2周",
-          "mechanism": "亏损时再生铅企业降低开工率"
-        },
-        {
-          "seq": 4,
-          "from": "再生铅减产",
-          "to": "铅供给收缩",
-          "confidence": "高",
-          "lag": "即时",
-          "mechanism": "再生铅占铅供给60%，减产影响显著"
-        },
-        {
-          "seq": 5,
-          "from": "供给收缩",
+          "from": "供给收紧",
           "to": "铅价上涨",
           "confidence": "高",
           "lag": "即时",
-          "mechanism": "供需缺口推动铅价上行"
+          "mechanism": "供需失衡推高价格"
+        },
+        {
+          "seq": 4,
+          "from": "铅价上涨",
+          "to": "再生铅利润恢复",
+          "confidence": "中",
+          "lag": "2-4周",
+          "mechanism": "高利润吸引合规产能复产"
+        },
+        {
+          "seq": 5,
+          "from": "利润恢复",
+          "to": "供给恢复",
+          "confidence": "中",
+          "lag": "1-3月",
+          "mechanism": "利润驱动产能重新投放"
         }
       ],
-      "reversalNode": "废电池价格回落",
-      "reversalCondition": "废电池价格下跌或精铅涨幅覆盖成本",
-      "reversibility": 0.6,
+      "reversalNode": "合规产能复产",
+      "reversalCondition": "再生铅利润回升至合理水平",
+      "polarityTensionThreshold": 0.65,
+      "historicalCases": [
+        {
+          "year": "2017",
+          "description": "环保督察力度加大，再生铅产能大幅收缩，铅价上涨"
+        },
+        {
+          "year": "2021",
+          "description": "再生铅产能过剩，铅价持续低迷"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "环保政策是再生铅最核心变量",
+        "dualityStructure": "原生铅稳定vs再生铅弹性大",
+        "polarityWarning": "再生铅占比持续提升，对铅价影响力增强"
+      },
+      "reversibility": 0.7,
       "tail_probability": 0.2,
       "minority_protected": false
     },
     {
-      "id": "PB_C02",
-      "name": "铅锌伴生联动链",
+      "id": "PB_C002",
+      "name": "铅酸电池替换需求链",
       "domain": "有色金属",
-      "groundBase": "natural",
-      "triggerEvent": "锌矿供应紧张导致锌价大涨",
+      "groundBase": "culture",
+      "triggerEvent": "冬季低温导致电池更换需求增加",
       "steps": [
         {
           "seq": 1,
-          "from": "锌矿供应紧张",
-          "to": "锌价上涨",
+          "from": "冬季低温",
+          "to": "电池亏电增多",
           "confidence": "高",
           "lag": "即时",
-          "mechanism": "锌矿供给不足推高锌价"
+          "mechanism": "低温降低铅酸电池性能"
         },
         {
           "seq": 2,
-          "from": "锌价上涨",
-          "to": "铅锌矿开采增加",
-          "confidence": "中",
-          "lag": "1-3个月",
-          "mechanism": "高锌价激励矿山增产"
+          "from": "电池亏电",
+          "to": "替换需求增加",
+          "confidence": "高",
+          "lag": "1-2周",
+          "mechanism": "汽车和电动车电池更换频率上升"
         },
         {
           "seq": 3,
-          "from": "矿山增产",
-          "to": "铅副产增加",
-          "confidence": "中",
+          "from": "替换需求增加",
+          "to": "铅酸电池产量增加",
+          "confidence": "高",
           "lag": "即时",
-          "mechanism": "铅锌伴生，锌矿增产同时增加铅供给"
+          "mechanism": "电池厂增加排产"
         },
         {
           "seq": 4,
-          "from": "铅供给增加",
-          "to": "铅价承压",
+          "from": "电池产量增加",
+          "to": "精铅需求增加",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "铅酸电池消耗精铅"
+        },
+        {
+          "seq": 5,
+          "from": "需求增加",
+          "to": "铅价季节性走强",
           "confidence": "中",
-          "lag": "1-2个月",
-          "mechanism": "铅供给增加压制铅价"
+          "lag": "2-4周",
+          "mechanism": "需求旺季推升铅价"
         }
       ],
-      "reversalNode": "锌价回落",
-      "reversalCondition": "锌价下跌导致矿山减产",
-      "reversibility": 0.5,
-      "tail_probability": 0.15,
+      "reversalNode": "旺季结束",
+      "reversalCondition": "气温回升后电池替换需求回落",
+      "polarityTensionThreshold": 0.55,
+      "historicalCases": [
+        {
+          "year": "每年冬季",
+          "description": "铅价通常在Q4-Q1呈现季节性走强"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "季节性需求脉冲持续性有限",
+        "dualityStructure": "季节性需求vs再生铅弹性供给",
+        "polarityWarning": "关注新能源替代对铅酸电池的长期冲击"
+      },
+      "reversibility": 0.8,
+      "tail_probability": 0.1,
       "minority_protected": false
     }
   ]
