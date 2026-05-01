@@ -1,42 +1,131 @@
 {
-  "commodity": "coke",
+  "commodity": "焦炭",
+  "symbol": "J",
+  "version": "1.3.0",
   "chains": [
     {
-      "id": "CH_001",
-      "name": "焦炭提涨链",
-      "triggerEvent": "钢厂焦炭库存天数低+高炉满产",
+      "id": "CK_C001",
+      "name": "焦化利润驱动焦炭供给链",
+      "domain": "黑色系",
+      "groundBase": "marginal",
+      "triggerEvent": "焦化利润大幅波动导致焦炭供给变化",
       "steps": [
         {
           "seq": 1,
-          "from": "钢厂低库存",
-          "to": "焦化厂提涨",
-          "confidence": 0.8,
-          "lag": "即时"
+          "from": "焦化利润压缩",
+          "to": "焦化厂主动减产",
+          "confidence": "高",
+          "lag": "1-2周",
+          "mechanism": "亏损驱动减产"
         },
         {
           "seq": 2,
-          "from": "焦化厂提涨",
-          "to": "焦炭现货上涨",
-          "confidence": 0.85,
-          "lag": "3-5天"
+          "from": "减产",
+          "to": "焦炭供给减少",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "减产直接减少焦炭产量"
         },
         {
           "seq": 3,
-          "from": "焦炭上涨",
-          "to": "钢厂成本上升",
-          "confidence": 0.9,
-          "lag": "即时"
+          "from": "供给减少",
+          "to": "焦炭价格上涨",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "供需失衡推升价格"
         },
         {
           "seq": 4,
-          "from": "钢厂成本上升",
-          "to": "钢厂利润压缩",
-          "confidence": 0.7,
-          "lag": "同步"
+          "from": "价格上涨",
+          "to": "焦化利润恢复",
+          "confidence": "中",
+          "lag": "2-4周",
+          "mechanism": "价格改善利润"
+        },
+        {
+          "seq": 5,
+          "from": "利润恢复",
+          "to": "焦化厂复产",
+          "confidence": "中",
+          "lag": "1-2月",
+          "mechanism": "利润驱动复产"
         }
       ],
-      "reversalNode": "钢厂利润转负",
-      "reversalCondition": "钢厂减产+焦炭库存回升"
+      "reversalNode": "焦化利润恢复",
+      "reversalCondition": "焦炭价格回升至焦化成本以上",
+      "polarityTensionThreshold": 0.65,
+      "historicalCases": [
+        {
+          "year": "2022",
+          "description": "焦化亏损导致减产，焦炭价格阶段性反弹"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "焦化利润是供给调节的核心变量",
+        "dualityStructure": "焦煤成本刚性vs钢厂压价",
+        "polarityWarning": "关注焦化利润和开工率"
+      },
+      "reversibility": 0.7,
+      "tail_probability": 0.15,
+      "minority_protected": false
+    },
+    {
+      "id": "CK_C002",
+      "name": "钢厂限产压制焦炭需求链",
+      "domain": "黑色系",
+      "groundBase": "order",
+      "triggerEvent": "粗钢限产政策导致焦炭需求下降",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "粗钢限产",
+          "to": "高炉开工率下降",
+          "confidence": "高",
+          "lag": "1-2月",
+          "mechanism": "政策驱动减产"
+        },
+        {
+          "seq": 2,
+          "from": "高炉开工下降",
+          "to": "焦炭日耗减少",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "高炉消耗焦炭"
+        },
+        {
+          "seq": 3,
+          "from": "日耗减少",
+          "to": "焦炭库存累积",
+          "confidence": "高",
+          "lag": "2-4周",
+          "mechanism": "需求下降快于供给调整"
+        },
+        {
+          "seq": 4,
+          "from": "库存累积",
+          "to": "焦炭价格承压",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "库存压力压制价格"
+        }
+      ],
+      "reversalNode": "粗钢产量恢复",
+      "reversalCondition": "限产政策放松或钢材需求超预期",
+      "polarityTensionThreshold": 0.6,
+      "historicalCases": [
+        {
+          "year": "2022",
+          "description": "粗钢压减导致焦炭需求下降，价格承压"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "焦炭需求完全取决于高炉开工",
+        "dualityStructure": "钢厂利润vs焦化利润",
+        "polarityWarning": "粗钢产量政策直接决定焦炭需求"
+      },
+      "reversibility": 0.6,
+      "tail_probability": 0.15,
+      "minority_protected": false
     }
   ]
 }
