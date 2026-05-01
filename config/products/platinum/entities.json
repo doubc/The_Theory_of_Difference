@@ -1,88 +1,83 @@
 {
-  "commodity": "铂",
+  "commodity": "铂金",
   "symbol": "PT",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "entities": [
     {
-      "id": "PT_E01",
-      "name": "铂金氢能叙事",
-      "type": "商品供需叙事",
-      "groundBase": "culture",
-      "importance": 8,
-      "description": "氢燃料电池催化剂是铂金需求增长的核心叙事，绿氢经济扩张将大幅增加铂金需求",
+      "id": "PT_GEO_001",
+      "name": "南非布什维尔德杂岩体",
+      "type": "资源节点",
+      "groundBase": "natural",
+      "importance": 10,
+      "description": "全球最大的铂族金属矿藏，占全球铂金供给约70%，钯金约35%，铑金约80%",
+      "controlledBy": [
+        "英美铂业",
+        "因帕拉铂业",
+        "斯班-静水"
+      ],
+      "vulnerabilities": [
+        "劳工罢工",
+        "电力危机(Eskom)",
+        "矿山老化",
+        "安全问题"
+      ],
       "trackingVariables": [
-        "氢能政策",
-        "燃料电池车销量",
-        "铂金催化剂用量"
-      ]
-    },
-    {
-      "id": "PT_E02",
-      "name": "铂金柴油车催化叙事",
-      "type": "市场共识",
-      "groundBase": "culture",
-      "importance": 6,
-      "description": "柴油车催化转化器是铂金传统需求核心，但柴油车份额持续下降压制需求",
-      "trackingVariables": [
-        "欧洲柴油车份额",
-        "排放标准",
-        "替代催化剂技术"
-      ]
-    },
-    {
-      "id": "PT_E03",
-      "name": "南非铂矿供给叙事",
-      "type": "商品供需叙事",
-      "groundBase": "culture",
-      "importance": 8,
-      "description": "南非占全球铂金供给约70%，电力危机和劳资纠纷是供给端核心变量",
-      "trackingVariables": [
-        "南非电力供应",
-        "矿工罢工",
+        "月度产量",
+        "罢工预警",
+        "Eskom限电等级",
         "矿山资本开支"
       ]
     },
     {
-      "id": "PT_E04",
-      "name": "LME铂金价格",
+      "id": "PT_VAR_001",
+      "name": "铂金价格",
       "type": "大宗商品变量",
       "groundBase": "marginal",
-      "importance": 8,
+      "importance": 9,
       "currentValue": "约1000美元/盎司",
       "historicalRange": {
         "min": 800,
         "max": 2300
       },
+      "recentRange": {
+        "min": 850,
+        "max": 1100
+      },
+      "dualityOpposite": "黄金价格",
+      "trackingFrequency": "实时",
       "trackingVariables": [
-        "LME现货",
-        "ETF持仓",
-        "期货持仓"
+        "现货价",
+        "期货价",
+        "铂金/黄金比价"
       ]
     },
     {
-      "id": "PT_E05",
-      "name": "英美铂业",
-      "type": "产业权力机构",
-      "groundBase": "order",
+      "id": "PT_VAR_002",
+      "name": "全球铂金供需平衡",
+      "type": "供需变量",
+      "groundBase": "marginal",
       "importance": 8,
-      "description": "全球最大铂金生产商，南非矿山主导",
+      "trackingFrequency": "季度",
       "trackingVariables": [
-        "产量指引",
-        "成本报告",
-        "劳资关系"
+        "矿山产量",
+        "回收量",
+        "汽车催化需求",
+        "珠宝需求",
+        "工业需求",
+        "投资需求"
       ]
     },
     {
-      "id": "PT_E06",
+      "id": "PT_POW_001",
       "name": "世界铂金投资协会WPIC",
-      "type": "国际数据机构",
+      "type": "行业数据机构",
       "groundBase": "order",
       "importance": 8,
       "description": "铂金供需平衡表权威发布机构",
       "trackingVariables": [
-        "季度供需报告",
-        "投资需求",
-        "ETF持仓"
+        "季度报告",
+        "供需预测",
+        "投资需求"
       ]
     }
   ]
