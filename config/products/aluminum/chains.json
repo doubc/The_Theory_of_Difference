@@ -1,0 +1,58 @@
+{
+  "commodity": "铝",
+  "symbol": "AL",
+  "version": "1.0.0",
+  "chains": [
+    {
+      "id": "C_071",
+      "name": "限电减产推升铝价链",
+      "domain": "有色金属",
+      "triggerEvent": "云南/四川水电不足导致电解铝减产",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "水电不足",
+          "to": "云南/四川电解铝减产",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "电力供应不足被迫停槽"
+        },
+        {
+          "seq": 2,
+          "from": "减产",
+          "to": "铝供给收紧",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "减产直接减少供给"
+        },
+        {
+          "seq": 3,
+          "from": "供给收紧",
+          "to": "库存快速去化",
+          "confidence": "中",
+          "lag": "2-4周",
+          "mechanism": "供给小于需求"
+        },
+        {
+          "seq": 4,
+          "from": "去库加速",
+          "to": "铝价上涨",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "供需紧张推升价格"
+        }
+      ],
+      "reversalNode": "水电恢复",
+      "reversalCondition": "丰水期来临或水电恢复正常",
+      "polarityTensionThreshold": 0.75,
+      "historicalCases": [
+        {
+          "year": "2022",
+          "description": "云南限电减产，铝价从17000反弹至20000"
+        }
+      ],
+      "reversibility": 0.7,
+      "tail_probability": 0.2
+    }
+  ]
+}
