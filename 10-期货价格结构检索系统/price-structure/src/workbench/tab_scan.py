@@ -700,18 +700,20 @@ def render(ctx: dict):
                         phase_pct = phase_map_score.get(phase_code, 0) * 0.20 * 100
                         pos_pct = pos_map_score.get(pp_code, 0) * 0.15 * 100
                         st.caption(f"构成: 离稳态{dep_pct:.0f} + 质量{qual_pct:.0f} + 阶段{phase_pct:.0f} + 位置{pos_pct:.0f}")
-                        # 3-4: 加入观察池按钮
-                        watch_key = f"watch_{r['symbol']}"
-                        if st.button("⭐ 加入观察池", key=watch_key):
-                            if "watch_pool" not in st.session_state:
-                                st.session_state["watch_pool"] = load_watch_pool()
-                            st.session_state["watch_pool"][r['symbol']] = {
-                                "symbol": r['symbol'],
-                                "symbol_name": r['symbol_name'],
-                                "priority_score": ps,
-                                "sector": sector,
-                                "phase_code": phase_code,
-                                "direction": r['direction'],
+                        # 操作按钮行
+                        btn_col1, btn_col2 = st.columns(2)
+                        with btn_col1:
+                            watch_key = f"watch_{r['symbol']}"
+                            if st.button("⭐ 加入观察池", key=watch_key, use_container_width=True):
+                                if "watch_pool" not in st.session_state:
+                                    st.session_state["watch_pool"] = load_watch_pool()
+                                st.session_state["watch_pool"][r['symbol']] = {
+                                    "symbol": r['symbol'],
+                                    "symbol_name": r['symbol_name'],
+                                    "priority_score": ps,
+                                    "sector": sector,
+                                    "phase_code": phase_code,
+                                    "direction": r['direction'],
                                 "flux": r['flux'],
                                 "last_price": r['last_price'],
                                 "latest_zone_center": r['latest_zone_center'],
@@ -719,6 +721,11 @@ def render(ctx: dict):
                                 "added_at": datetime.now().isoformat(),
                             }
                             st.success(f"✅ {r['symbol']} 已加入观察池")
+                        with btn_col2:
+                            analyze_key = f"analyze_{r['symbol']}"
+                            if st.button("🔎 分析此合约", key=analyze_key, use_container_width=True):
+                                st.session_state["analyze_symbol"] = r['symbol']
+                                st.rerun()
 
                     # 4-1: Signal detail display
                     sig = r.get("signal_info")
@@ -1264,3 +1271,92 @@ def render(ctx: dict):
             blind_count = sum(1 for ss in result.system_states if ss.projection.is_blind)
             if blind_count:
                 st.metric("⚠️ 高压缩", blind_count)
+
+    # ── 内嵌合约分析（点击"分析此合约"后显示）──
+    analyze_sym = st.session_state.get("analyze_symbol")
+    if analyze_sym:
+        st.markdown("---")
+        st.markdown(f"#### 🔎 {analyze_sym} 快速分析")
+        if st.button("❌ 关闭分析", key="close_analysis"):
+            del st.session_state["analyze_symbol"]
+            st.rerun()
+
+        from src.data.sina_fetcher import fetch_bars as _sina_fetch, detect_source as _detect_src
+        from src.compiler.pipeline import compile_full as _cf
+        from src.workbench.shared import (
+            motion_badge as _mb, movement_badge as _mgb,
+            struct_status as _ss, struct_scenario as _sc, struct_invalidation as _si,
+            make_candlestick as _mc,
+        )
+
+        _src = _detect_src(analyze_sym)
+        _src_label = {"inner": "🇨🇳 国内期货", "global": "🌍 外盘期货", "fx": "💱 外汇"}.get(_src, _src)
+        st.caption(f"数据源: {_src_label}")
+
+        with st.spinner(f"📡 正在拉取 {analyze_sym} 数据..."):
+            _bars = _sina_fetch(analyze_sym, freq="1d", timeout=15)
+
+        if not _bars:
+            st.error(f"❌ 未能获取 {analyze_sym} 的数据")
+        else:
+            st.success(f"✅ {_bars[0].timestamp:%Y-%m-%d} → {_bars[-1].timestamp:%Y-%m-%d} · {len(_bars)} 条")
+            _cfg = CompilerConfig(min_amplitude=0.03, min_duration=3, min_cycles=2,
+                                 adaptive_pivots=True, fractal_threshold=0.34)
+            with st.spinner("🔧 编译结构..."):
+                _cr = _cf(_bars, _cfg, symbol=analyze_sym)
+
+            if not _cr.structures:
+                st.warning("🔍 未识别到显著结构 — 试试在合约检索 tab 降低灵敏度")
+            else:
+                _last = _bars[-1].close
+                _mc1, _mc2, _mc3, _mc4, _mc5 = st.columns(5)
+                _mc1.metric("最新价", f"{_last:.2f}")
+                _mc2.metric("结构数", len(_cr.structures))
+                _mc3.metric("Zone 数", len(_cr.zones))
+                _ss_r = sum(1 for s in _cr.system_states if s.is_reliable)
+                _mc4.metric("可信结构", _ss_r)
+                _blind = sum(1 for s in _cr.system_states if s.projection.is_blind)
+                _mc5.metric("⚠️ 高压缩", _blind)
+
+                for _s in _cr.ranked_structures[:3]:
+                    _m = _s.motion
+                    _flux = f"{_m.conservation_flux:+.2f}" if _m else "—"
+                    _tendency = _m.phase_tendency if _m else ""
+                    _mt = _m.movement_type.value if _m and hasattr(_m, 'movement_type') else ""
+                    _mt_html = f" · {_mgb(_mt)}" if _mt else ""
+                    _status = _ss(_s)
+                    _scenario = _sc(_s)
+                    _invalidation = _si(_s)
+
+                    if "breakout" in _tendency:
+                        _card_cls = "danger"
+                    elif "confirmation" in _tendency:
+                        _card_cls = "ok"
+                    else:
+                        _card_cls = ""
+
+                    st.markdown(f"""
+                    <div class="structure-card {_card_cls}">
+                        <span class="zone-label">Zone {_s.zone.price_center:.0f}</span>
+                        <span class="meta-text">(±{_s.zone.bandwidth:.0f}) · {_s.cycle_count}次试探</span>
+                        · {_mb(_tendency)}{_mt_html}
+                        · <span class="meta-text">通量 {_flux}</span>
+                        <div class="narrative-text">{_s.narrative_context or ''}</div>
+                    </div>
+                    """, unsafe_allow_html=True)
+
+                    if _status:
+                        st.markdown(f"**状态**: {_status}")
+                    if _scenario:
+                        st.markdown(f"**剧本**: {_scenario}")
+                    if _invalidation:
+                        st.markdown(f"**失效条件**: {_invalidation}")
+
+                _fig = _mc(_bars[-120:])
+                for _s in _cr.ranked_structures[:5]:
+                    _fig.add_hline(y=_s.zone.price_center, line_dash="dot",
+                                   line_color="#4a90d9", opacity=0.5,
+                                   annotation_text=f"Zone {_s.zone.price_center:.0f}")
+                    _fig.add_hrect(y0=_s.zone.lower, y1=_s.zone.upper,
+                                   fillcolor="#4a90d9", opacity=0.08, line_width=0)
+                st.plotly_chart(_fig, use_container_width=True)

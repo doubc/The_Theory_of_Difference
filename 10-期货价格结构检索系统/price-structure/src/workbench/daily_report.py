@@ -203,69 +203,69 @@ def _full_table(opportunities: list[Opportunity]) -> str:
 
 # ── CSS ────────────────────────────────────────────────────────────────
 _CSS = """
-body{background:#0f1020;color:#e5e5e5;font-family:-apple-system,"PingFang SC","Microsoft YaHei",monospace;margin:0;padding:24px}
-h1{color:#90caf9;margin:0 0 4px 0}
-.page-meta{color:#888;font-size:13px;margin-bottom:18px}
+body{background:#f5f7fa;color:#212529;font-family:-apple-system,"PingFang SC","Microsoft YaHei",monospace;margin:0;padding:24px}
+h1{color:#1565c0;margin:0 0 4px 0}
+.page-meta{color:#546e7a;font-size:13px;margin-bottom:18px}
 
-.summary{background:#1a1a2e;border:1px solid #333;border-radius:8px;padding:16px 20px;margin-bottom:22px}
-.sum-head{color:#90caf9;font-weight:bold;margin-bottom:12px}
+.summary{background:#ffffff;border:1px solid #dee2e6;border-radius:8px;padding:16px 20px;margin-bottom:22px}
+.sum-head{color:#1565c0;font-weight:bold;margin-bottom:12px}
 .sum-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
 .sum-grid div{display:flex;flex-direction:column;align-items:flex-start}
-.sum-grid .big{font-size:22px;font-weight:bold;color:#fff}
-.sum-grid .big.up{color:#26a69a}
-.sum-grid .big.down{color:#4caf50}
-.sum-grid .big.neutral{color:#9e9e9e}
-.sum-grid span:last-child{color:#888;font-size:12px}
+.sum-grid .big{font-size:22px;font-weight:bold;color:#1a1a2e}
+.sum-grid .big.up{color:#c62828}
+.sum-grid .big.down{color:#2e7d32}
+.sum-grid .big.neutral{color:#546e7a}
+.sum-grid span:last-child{color:#78909c;font-size:12px}
 
-.section-title{color:#90caf9;font-size:15px;margin:28px 0 10px 0;border-bottom:1px solid #2a2a4a;padding-bottom:6px}
+.section-title{color:#1565c0;font-size:15px;margin:28px 0 10px 0;border-bottom:1px solid #dee2e6;padding-bottom:6px}
 
-.opp-card{background:#1a1a2e;border:1px solid #333;border-left:3px solid #90caf9;
+.opp-card{background:#ffffff;border:1px solid #dee2e6;border-left:3px solid #1565c0;
   border-radius:8px;padding:14px 18px;margin-bottom:14px}
 .card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .card-title{display:flex;align-items:center;gap:10px}
-.attention{background:#90caf9;color:#0f1020;padding:3px 10px;border-radius:4px;font-weight:bold;font-size:14px}
-.sym-name{font-size:17px;font-weight:bold}
-.sym-code{color:#888;font-size:12px}
-.card-price{color:#ccc;font-size:13px}
+.attention{background:#1565c0;color:#fff;padding:3px 10px;border-radius:4px;font-weight:bold;font-size:14px}
+.sym-name{font-size:17px;font-weight:bold;color:#0d1b2a}
+.sym-code{color:#78909c;font-size:12px}
+.card-price{color:#37474f;font-size:13px}
 
 .badge{padding:2px 8px;border-radius:3px;font-size:12px;font-weight:bold}
-.badge.up{background:#26a69a33;color:#26a69a}
-.badge.down{background:#4caf5033;color:#4caf50}
-.badge.neutral{background:#9e9e9e33;color:#9e9e9e}
+.badge.up{background:#ffcdd2;color:#c62828}
+.badge.down{background:#c8e6c9;color:#2e7d32}
+.badge.neutral{background:#e0e0e0;color:#546e7a}
 
 .card-body{display:grid;grid-template-columns:1fr 1.2fr;gap:20px}
-.label{color:#888;font-size:12px;margin-bottom:4px}
-.window{color:#fff;font-size:14px;margin-bottom:4px}
+.label{color:#78909c;font-size:12px;margin-bottom:4px}
+.window{color:#1a1a2e;font-size:14px;margin-bottom:4px}
 
-.potential-bar .bar-outer{height:6px;background:linear-gradient(90deg,#4caf50 0%,#ffb74d 50%,#ef5350 100%);
+.potential-bar .bar-outer{height:6px;background:linear-gradient(90deg,#2e7d32 0%,#ffb74d 50%,#c62828 100%);
   border-radius:3px;position:relative;margin:4px 0 6px 0}
-.potential-bar .bar-marker{position:absolute;top:-3px;width:2px;height:12px;background:#fff}
-.potential-bar .bar-text{font-size:13px}
+.potential-bar .bar-marker{position:absolute;top:-3px;width:2px;height:12px;background:#1a1a2e}
+.potential-bar .bar-text{font-size:13px;color:#37474f}
 
 .sim-box{display:flex;flex-direction:column;gap:4px}
 .sim-item{display:grid;grid-template-columns:40px 1fr 36px;align-items:center;gap:8px}
-.sim-label{font-size:11px;color:#aaa}
-.sim-bar{height:6px;background:#2a2a4a;border-radius:3px;overflow:hidden}
-.sim-fill{height:100%;background:#90caf9}
-.sim-val{font-size:11px;color:#ccc;text-align:right}
+.sim-label{font-size:11px;color:#78909c}
+.sim-bar{height:6px;background:#e0e0e0;border-radius:3px;overflow:hidden}
+.sim-fill{height:100%;background:#1565c0}
+.sim-val{font-size:11px;color:#37474f;text-align:right}
 
 .matches-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px}
-.match-cell{background:#12132a;border:1px solid #2a2a4a;border-radius:4px;padding:6px 8px;font-size:11px}
-.match-head{color:#eee;font-size:12px}
-.match-date{color:#888;font-size:10px;margin-bottom:4px}
+.match-cell{background:#f5f7fa;border:1px solid #dee2e6;border-radius:4px;padding:6px 8px;font-size:11px}
+.match-head{color:#1a1a2e;font-size:12px}
+.match-date{color:#78909c;font-size:10px;margin-bottom:4px}
 .match-thumb{height:38px;border-radius:3px;display:flex;align-items:center;justify-content:center;
   font-size:12px;margin-bottom:4px}
-.match-sim{color:#90caf9;font-size:10px}
+.match-sim{color:#1565c0;font-size:10px}
 
-.actions{margin:4px 0 0 18px;padding:0;color:#ccc;font-size:12px}
+.actions{margin:4px 0 0 18px;padding:0;color:#37474f;font-size:12px}
 .actions li{margin-bottom:3px}
 
-.full-table{width:100%;border-collapse:collapse;background:#1a1a2e;border:1px solid #333;border-radius:6px;overflow:hidden}
-.full-table th{background:#12132a;color:#90caf9;padding:10px 12px;text-align:left;font-size:12px;border-bottom:1px solid #333}
-.full-table td{padding:10px 12px;border-bottom:1px solid #2a2a4a;font-size:13px}
-.full-table tr:hover td{background:#22223a}
+.full-table{width:100%;border-collapse:collapse;background:#ffffff;border:1px solid #dee2e6;border-radius:6px;overflow:hidden}
+.full-table th{background:#e3f2fd;color:#1565c0;padding:10px 12px;text-align:left;font-size:12px;border-bottom:2px solid #bbdefb}
+.full-table td{padding:10px 12px;border-bottom:1px solid #e0e0e0;font-size:13px;color:#212529}
+.full-table tr:hover td{background:#f5f7fa}
 
-.empty{padding:40px;text-align:center;color:#888;background:#1a1a2e;border-radius:6px}
+.empty{padding:40px;text-align:center;color:#78909c;background:#ffffff;border:1px solid #dee2e6;border-radius:6px}
 """
 
 

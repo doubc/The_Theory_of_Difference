@@ -580,12 +580,16 @@ with tabs[8]:
     }
 
     # TODO: 提供 mtf_snapshots 和 history_transitions 数据
-    render_loop(
-        symbol=selected_symbol,
-        current_structure=_build_current_structure_dict(result, bars),
-        mtf_snapshots=_load_mtf_snapshots(selected_symbol),
-        history_transitions=_load_history_transitions(selected_symbol),
-    )
+    try:
+        render_loop(
+            symbol=selected_symbol,
+            current_structure=_build_current_structure_dict(result, bars),
+            mtf_snapshots=_load_mtf_snapshots(selected_symbol),
+            history_transitions=_load_history_transitions(selected_symbol),
+        )
+    except Exception as e:
+        st.error(f"研究闭环页面渲染出错: {e}")
+        st.exception(e)
 
 with tabs[9]:
     tab_knowledge_graph.render(ctx)

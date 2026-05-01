@@ -788,7 +788,16 @@ def _run_standalone_page() -> None:
     st.sidebar.divider()
     st.sidebar.caption("从主工作台 Tab 进入时，会使用真实结构上下文；直接打开本页时，会使用占位上下文。")
 
-    ctx = st.session_state.get("research_loop_ctx", {})
+    ctx = st.session_state.get("research_loop_ctx")
+
+    if not ctx:
+        st.warning("⚠️ 未检测到结构上下文数据。")
+        st.info(
+            "请从主工作台的「🎯 研究闭环」Tab 进入本页面，以获取真实的结构分析数据。\n\n"
+            "或者在侧栏输入品种代码，使用占位数据预览页面功能。"
+        )
+        # 用占位数据渲染，不空白
+        ctx = {}
 
     symbol = ctx.get("symbol", default_symbol)
     current_structure = ctx.get("current_structure")

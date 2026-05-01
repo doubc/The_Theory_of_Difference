@@ -43,15 +43,15 @@ from src.graph.product_ingester import ProductKnowledgeIngester
 KG_CSS = """
 <style>
 .kg-card {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    background: #ffffff;
     border-radius: 12px;
     padding: 20px;
     margin: 8px 0;
-    border: 1px solid #2d3561;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    border: 1px solid #dee2e6;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 .kg-card h3 {
-    color: #e94560;
+    color: #c62828;
     margin-top: 0;
     font-size: 1.1em;
 }
@@ -59,18 +59,18 @@ KG_CSS = """
     display: inline-block;
     padding: 8px 16px;
     margin: 4px;
-    background: rgba(233, 69, 96, 0.15);
+    background: #ffebee;
     border-radius: 8px;
-    border: 1px solid rgba(233, 69, 96, 0.3);
+    border: 1px solid #ef9a9a;
 }
 .kg-metric .value {
     font-size: 1.5em;
     font-weight: bold;
-    color: #e94560;
+    color: #c62828;
 }
 .kg-metric .label {
     font-size: 0.85em;
-    color: #8892b0;
+    color: #546e7a;
 }
 .kg-badge {
     display: inline-block;
@@ -79,9 +79,9 @@ KG_CSS = """
     font-size: 0.8em;
     font-weight: bold;
 }
-.kg-badge-a { background: #2ecc71; color: #fff; }
-.kg-badge-b { background: #f39c12; color: #fff; }
-.kg-badge-c { background: #e74c3c; color: #fff; }
+.kg-badge-a { background: #2e7d32; color: #fff; }
+.kg-badge-b { background: #e65100; color: #fff; }
+.kg-badge-c { background: #c62828; color: #fff; }
 .kg-badge-d { background: #95a5a6; color: #fff; }
 .narrative-box {
     background: rgba(52, 152, 219, 0.1);
@@ -265,7 +265,7 @@ def _render_graph_visualization(graph: StructureGraph) -> None:
 
         attrs = G.nodes[node]
         nt = attrs.get("node_type", "unknown")
-        node_color.append(color_map.get(nt, "#aaa"))
+        node_color.append(color_map.get(nt, "#78909c"))
 
         # 节点大小：根据连接数
         degree = G.degree(node)
@@ -283,10 +283,10 @@ def _render_graph_visualization(graph: StructureGraph) -> None:
     node_trace = go.Scatter(
         x=node_x, y=node_y,
         mode='markers+text',
-        marker=dict(size=node_size, color=node_color, line=dict(width=1, color="#fff")),
+        marker=dict(size=node_size, color=node_color, line=dict(width=1, color="#37474f")),
         text=[n.split(":")[-1][:8] for n in G.nodes],
         textposition="top center",
-        textfont=dict(size=8, color="#ccc"),
+        textfont=dict(size=8, color="#37474f"),
         hovertext=node_text,
         hoverinfo='text',
         showlegend=False,
@@ -734,10 +734,10 @@ def _render_transfer_graph(report) -> None:
     node_trace = go.Scatter(
         x=node_x, y=node_y,
         mode='markers+text',
-        marker=dict(size=node_size, color=node_color, line=dict(width=2, color="#fff")),
+        marker=dict(size=node_size, color=node_color, line=dict(width=2, color="#37474f")),
         text=symbols,
         textposition="top center",
-        textfont=dict(size=12, color="#fff"),
+        textfont=dict(size=12, color="#1a1a2e"),
         showlegend=False,
     )
 
