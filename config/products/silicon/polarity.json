@@ -1,0 +1,19 @@
+{
+  "commodity": "工业硅",
+  "symbol": "SI",
+  "version": "1.3.0",
+  "entries": {
+    "GFEX工业硅期货价格": {
+      "historicalMin": 10000,
+      "historicalMax": 25000,
+      "recentMin": 11000,
+      "recentMax": 18000,
+      "reversalSignalPatterns": [
+        "光伏装机加速",
+        "云南限电",
+        "多晶硅扩产",
+        "成本变化"
+      ]
+    }
+  }
+}
