@@ -1,68 +1,192 @@
 {
   "commodity": "硅铁",
   "symbol": "SF",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "chains": [
     {
-      "id": "SF_C01",
-      "name": "钢厂利润-硅铁需求传导链",
+      "id": "FS_C001",
+      "name": "硅铁电力成本冲击链",
       "domain": "黑色系",
       "groundBase": "marginal",
-      "triggerEvent": "钢厂利润大幅改善",
+      "triggerEvent": "主产区（内蒙古、宁夏）电价上调或限电政策",
       "steps": [
         {
           "seq": 1,
-          "from": "钢厂利润改善",
-          "to": "高炉开工率上升",
+          "from": "主产区电价上调/限电",
+          "to": "硅铁冶炼成本上升",
           "confidence": "高",
-          "lag": "1-2周",
-          "mechanism": "利润驱动钢厂增产"
+          "lag": "即时",
+          "mechanism": "硅铁冶炼电耗约8000-9000kWh/吨，电力成本占比40-50%"
         },
         {
           "seq": 2,
-          "from": "开工率上升",
-          "to": "硅铁采购增加",
+          "from": "成本上升",
+          "to": "硅铁工厂亏损减产",
           "confidence": "高",
-          "lag": "即时",
-          "mechanism": "粗钢产量增加带动硅铁需求"
+          "lag": "1-2周",
+          "mechanism": "价格传导滞后，工厂利润被压缩"
         },
         {
           "seq": 3,
-          "from": "采购增加",
-          "to": "硅铁库存下降",
+          "from": "减产",
+          "to": "硅铁供应收紧",
           "confidence": "高",
           "lag": "2-4周",
-          "mechanism": "需求增加消耗库存"
+          "mechanism": "减产直接减少市场供给"
         },
         {
           "seq": 4,
-          "from": "库存下降",
+          "from": "供应收紧",
           "to": "硅铁价格上涨",
           "confidence": "高",
           "lag": "即时",
-          "mechanism": "供需紧张推升价格"
+          "mechanism": "供需失衡推高价格"
         },
         {
           "seq": 5,
-          "from": "硅铁上涨",
-          "to": "钢厂成本上升",
+          "from": "价格上涨",
+          "to": "钢厂招标价上调",
           "confidence": "中",
-          "lag": "即时",
-          "mechanism": "硅铁价格上涨增加炼钢成本"
-        },
-        {
-          "seq": 6,
-          "from": "成本上升",
-          "to": "利润压缩",
-          "confidence": "中",
-          "lag": "1-2个月",
-          "mechanism": "成本上升压缩钢厂利润，负反馈"
+          "lag": "月度",
+          "mechanism": "钢厂月度招标跟随市场价"
         }
       ],
-      "reversalNode": "钢厂利润压缩",
-      "reversalCondition": "钢厂利润转负或粗钢限产政策出台",
-      "reversibility": 0.65,
+      "reversalNode": "电力恢复/新增产能",
+      "reversalCondition": "电价回落或新产能投放",
+      "polarityTensionThreshold": 0.7,
+      "historicalCases": [
+        {
+          "year": "2021",
+          "description": "能耗双控限电，硅铁价格从8000飙升至19000元/吨"
+        },
+        {
+          "year": "2022",
+          "description": "限电放松后价格快速回落至8000元附近"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "限电初期价格弹性极大",
+        "dualityStructure": "电力成本刚性vs钢厂压价",
+        "polarityWarning": "限电政策是最核心变量"
+      },
+      "reversibility": 0.6,
+      "tail_probability": 0.25,
+      "minority_protected": false
+    },
+    {
+      "id": "FS_C002",
+      "name": "粗钢产量调控硅铁需求链",
+      "domain": "黑色系",
+      "groundBase": "order",
+      "triggerEvent": "粗钢产量平控/压减政策出台",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "粗钢压减政策",
+          "to": "高炉开工率下降",
+          "confidence": "高",
+          "lag": "1-2月",
+          "mechanism": "政策驱动钢铁企业减产"
+        },
+        {
+          "seq": 2,
+          "from": "高炉开工下降",
+          "to": "硅铁需求减少",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "每吨粗钢消耗约4-5kg硅铁"
+        },
+        {
+          "seq": 3,
+          "from": "需求减少",
+          "to": "硅铁库存累积",
+          "confidence": "中",
+          "lag": "2-4周",
+          "mechanism": "需求下降速度快于供给调整"
+        },
+        {
+          "seq": 4,
+          "from": "库存累积",
+          "to": "硅铁价格承压",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "库存压力压制价格"
+        },
+        {
+          "seq": 5,
+          "from": "价格下跌",
+          "to": "硅铁工厂主动减产",
+          "confidence": "中",
+          "lag": "1-2月",
+          "mechanism": "亏损驱动供给端调整"
+        }
+      ],
+      "reversalNode": "粗钢产量恢复",
+      "reversalCondition": "粗钢压减政策放松或钢材利润恢复",
+      "polarityTensionThreshold": 0.65,
+      "historicalCases": [
+        {
+          "year": "2022",
+          "description": "粗钢压减导致硅铁需求下降，价格从万元回落至7000元"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "政策拐点是关键",
+        "dualityStructure": "钢铁利润vs合金成本",
+        "polarityWarning": "粗钢产量政策直接决定硅铁需求天花板"
+      },
+      "reversibility": 0.5,
       "tail_probability": 0.2,
+      "minority_protected": false
+    },
+    {
+      "id": "FS_C003",
+      "name": "兰炭-硅铁成本联动链",
+      "domain": "黑色系",
+      "groundBase": "marginal",
+      "triggerEvent": "兰炭（半焦）价格大幅波动",
+      "steps": [
+        {
+          "seq": 1,
+          "from": "兰炭价格上涨",
+          "to": "硅铁还原剂成本上升",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "兰炭是硅铁冶炼主要还原剂，成本占比约15-20%"
+        },
+        {
+          "seq": 2,
+          "from": "还原剂成本上升",
+          "to": "硅铁总成本上升",
+          "confidence": "高",
+          "lag": "即时",
+          "mechanism": "成本端全面承压"
+        },
+        {
+          "seq": 3,
+          "from": "成本上升",
+          "to": "硅铁价格支撑",
+          "confidence": "中",
+          "lag": "1-2周",
+          "mechanism": "成本传导，价格底部抬升"
+        }
+      ],
+      "reversalNode": "兰炭价格回落",
+      "reversalCondition": "兰炭产能恢复或钢铁需求减弱",
+      "polarityTensionThreshold": 0.6,
+      "historicalCases": [
+        {
+          "year": "2021",
+          "description": "兰炭同步暴涨，硅铁成本中枢大幅上移"
+        }
+      ],
+      "axiomAnnotation": {
+        "phaseRisk": "成本推动型涨价持续性取决于下游接受度",
+        "dualityStructure": "原料成本刚性vs下游价格弹性",
+        "polarityWarning": "关注兰炭主产区环保政策"
+      },
+      "reversibility": 0.7,
+      "tail_probability": 0.15,
       "minority_protected": false
     }
   ]
