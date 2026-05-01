@@ -18,6 +18,7 @@ products:
     name: 电解铜
     status: active
     last_updated: '2026-05-01'
+    sector: 有色金属
     tags:
     - base_metal
     - macro_sensitive
@@ -33,6 +34,7 @@ products:
     name: 碳酸锂
     status: active
     last_updated: '2026-05-01'
+    sector: 新能源
     tags:
     - new_energy
     - battery_material
