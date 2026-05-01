@@ -1,0 +1,6 @@
+{
+  "commodity": "螺纹钢", "symbol": "RB", "version": "1.0.0",
+  "entries": {
+    "螺纹钢现货": {"historicalMin": 1600, "historicalMax": 6200, "recentMin": 3000, "recentMax": 4500, "reversalSignalPatterns": ["粗钢压减政策", "房地产政策松绑", "春季复工"]}
+  }
+}
