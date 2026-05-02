@@ -1,66 +1,55 @@
 # Python
 __pycache__/
 *.py[cod]
-*.pyo
+*$py.class
 *.so
-*.egg-info/
-dist/
+.Python
 build/
+develop-eggs/
+dist/
+downloads/
+eggs/
 .eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
 *.egg
-.pytest_cache/
 
-# Virtual env
+# Virtual Environment
 venv/
-.venv/
 env/
+ENV/
+.venv
 
 # IDE
 .idea/
 .vscode/
-*.iml
 *.swp
 *.swo
 *~
+.DS_Store
 
-# Data (runtime generated)
-data/activity/
-data/library/
-data/lifecycle/
-data/samples/
-data/cache/
-data/logs/
-data/graph/
-*.csv
-!data/symbol_meta*.yaml
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Environment variables
+.env
+.env.local
 
 # Logs
 *.log
 logs/
 
-# OS
-.DS_Store
-Thumbs.db
-
-# Env
-.env
-.env.local
-
-# Build
-*.o
-*.c.bak
-
-# Temp files
+# Temporary files
 *.tmp
-*.bak
-sync_result.txt
-test_db.py
-test_output.txt
-test_result.txt
+temp/
+tmp/
 
-# Data backups
-data/symbol_meta_v2_backup.yaml
-data/symbol_meta_v3.yaml
-
-# Output
-output/
+# OS
+Thumbs.db
+Desktop.ini

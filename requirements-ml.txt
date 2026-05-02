@@ -1,3 +1,0 @@
-# ML 支持（分类器、特征学习）
--r requirements.txt
-xgboost>=2.0
