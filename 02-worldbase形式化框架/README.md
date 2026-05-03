@@ -1,4 +1,4 @@
-# WorldBase V2.1 — 分章节导航
+# WorldBase 形式化框架 — 分章节导航
 
 ## 文档结构
 
