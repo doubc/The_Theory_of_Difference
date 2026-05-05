@@ -43,7 +43,7 @@ ENV/
 
 # Logs
 *.log
-logs/
+# logs/  # Commented out to allow tracking of logs directory
 
 # Temporary files
 *.tmp
