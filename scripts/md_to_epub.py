@@ -7,9 +7,8 @@ import zipfile
 import html
 from datetime import datetime
 
-# 使用绝对路径
-INPUT = r"D:\PythonWork\The_Theory_of_Difference\04-社会科学应用\期货市场的差异论解读_V1.1修订版.md"
-OUTPUT = r"D:\PythonWork\The_Theory_of_Difference\04-社会科学应用\期货市场的差异论解读_V1.1.epub"
+INPUT = "/root/.openclaw/workspace/The_Theory_of_Difference/04-社会科学应用/期货市场的差异论解读_V1.0.md"
+OUTPUT = "/root/.openclaw/workspace/The_Theory_of_Difference/04-社会科学应用/期货市场的差异论解读_V1.0.epub"
 
 def md_to_html(md_text):
     """Convert markdown to simple HTML, splitting into chapters"""
@@ -98,12 +97,12 @@ def create_epub(chapters, output_path):
     content_opf = f'''<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="BookId">
   <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
-    <dc:title>期货市场的差异论解读 V1.1</dc:title>
+    <dc:title>期货市场的差异论解读</dc:title>
     <dc:creator>差异论研究组</dc:creator>
     <dc:language>zh-CN</dc:language>
-    <dc:identifier id="BookId">urn:uuid:futures-diff-theory-v1.1</dc:identifier>
+    <dc:identifier id="BookId">urn:uuid:futures-diff-theory-v1.0</dc:identifier>
     <dc:date>{now}</dc:date>
-    <dc:description>从现货差异到价格显影——差异论对期货市场的系统解读（V1.1修订版）</dc:description>
+    <dc:description>从现货差异到价格显影——差异论对期货市场的系统解读</dc:description>
   </metadata>
   <manifest>
     {''.join(manifest_items)}
@@ -182,49 +181,18 @@ strong { font-weight: bold; }
 
 
 def main():
-    print(f"输入文件: {INPUT}")
-    print(f"输出文件: {OUTPUT}")
-    
-    if not os.path.exists(INPUT):
-        print(f"错误: 找不到输入文件 {INPUT}")
-        return
-    
-    # 尝试多种编码读取文件
-    md_text = None
-    for encoding in ['utf-8', 'gbk', 'gb2312', 'utf-8-sig']:
-        try:
-            with open(INPUT, 'r', encoding=encoding) as f:
-                md_text = f.read()
-            print(f"使用编码: {encoding}")
-            break
-        except (UnicodeDecodeError, UnicodeError):
-            continue
-    
-    if md_text is None:
-        print("错误: 无法读取文件，编码不支持")
-        return
+    with open(INPUT, 'r', encoding='utf-8') as f:
+        md_text = f.read()
 
-    print(f"文件大小: {len(md_text)} 字符")
-
-    # Start from 导论或第一章 - 支持多种格式
-    patterns = ['# **导论', '# **第一编', '# **第一章', '# 导论', '# 第一编', '# 第一章']
-    start = 0
-    for pattern in patterns:
-        idx = md_text.find(pattern)
-        if idx != -1:
-            start = idx
-            print(f"找到起始位置: '{pattern}' at {start}")
-            break
+    # Start from 导论
+    start = md_text.find('# **导论')
+    if start == -1:
+        start = md_text.find('# **第一编')
+    if start == -1:
+        start = 0
 
     chapters = md_to_html(md_text[start:])
-    print(f"识别到 {len(chapters)} 个章节")
-    
-    if len(chapters) == 0:
-        print("警告: 未识别到任何章节，请检查文件格式")
-        return
-    
     create_epub(chapters, OUTPUT)
-    print("转换完成！")
 
 
 if __name__ == '__main__':
