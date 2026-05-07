@@ -1,0 +1,16 @@
+- amount: 61.2
+  channel_id: basis_channel
+  difference_id: inventory_gap_A_B
+  event_type: transfer
+  from_node: region_A
+  reason: 经通道 basis_channel 转移 61.2 压力
+  time: 1
+  to_node: region_B
+- amount: 0.06
+  channel_id: basis_channel
+  difference_id: ''
+  event_type: lock_in
+  from_node: ''
+  reason: 通道 basis_channel 锁定度从 0.061 增至 0.122
+  time: 1
+  to_node: ''

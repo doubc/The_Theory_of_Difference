@@ -1,0 +1,6 @@
+﻿__pycache__/
+.venv/
+.pytest_cache/
+# outputs/ 保留实验报告和状态，纳入版本控制
+*.pyc
+.idea/

@@ -1,0 +1,184 @@
+- amount: 42.5
+  channel_id: margin_clearing_channel
+  difference_id: margin_hike
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 42.5 压力，剩余能力 42.5
+  time: 1
+  to_node: ''
+- amount: 35.0
+  channel_id: margin_clearing_channel
+  difference_id: margin_hike
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 35.0 压力，剩余能力 35.0
+  time: 1
+  to_node: ''
+- amount: 50.0
+  channel_id: margin_clearing_channel
+  difference_id: margin_hike
+  event_type: transfer
+  from_node: exchange
+  reason: 经通道 margin_clearing_channel 转移 50.0 压力
+  time: 1
+  to_node: market
+- amount: 36.62
+  channel_id: ''
+  difference_id: margin_hike
+  event_type: accumulate
+  from_node: ''
+  reason: 转移后剩余 36.6 压力积累
+  time: 1
+  to_node: ''
+- amount: 21.25
+  channel_id: basis_channel
+  difference_id: inventory_gap
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 21.2 压力，剩余能力 21.2
+  time: 1
+  to_node: ''
+- amount: 14.25
+  channel_id: basis_channel
+  difference_id: inventory_gap
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 14.2 压力，剩余能力 20.8
+  time: 1
+  to_node: ''
+- amount: 35.5
+  channel_id: basis_channel
+  difference_id: inventory_gap
+  event_type: transfer
+  from_node: region_A
+  reason: 经通道 basis_channel 转移 35.5 压力
+  time: 1
+  to_node: region_B
+- amount: 0.05
+  channel_id: margin_clearing_channel
+  difference_id: ''
+  event_type: lock_in
+  from_node: ''
+  reason: 通道 margin_clearing_channel 锁定度从 0.050 增至 0.100
+  time: 1
+  to_node: ''
+- amount: 0.04
+  channel_id: basis_channel
+  difference_id: ''
+  event_type: lock_in
+  from_node: ''
+  reason: 通道 basis_channel 锁定度从 0.036 增至 0.071
+  time: 1
+  to_node: ''
+- amount: 10.62
+  channel_id: margin_clearing_channel
+  difference_id: margin_hike
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 10.6 压力，剩余能力 10.6
+  time: 2
+  to_node: ''
+- amount: 10.38
+  channel_id: margin_clearing_channel
+  difference_id: margin_hike
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 10.4 压力，剩余能力 10.4
+  time: 2
+  to_node: ''
+- amount: 35.0
+  channel_id: margin_clearing_channel
+  difference_id: margin_hike
+  event_type: transfer
+  from_node: exchange
+  reason: 经通道 margin_clearing_channel 转移 35.0 压力
+  time: 2
+  to_node: market
+- amount: 23.0
+  channel_id: ''
+  difference_id: margin_hike
+  event_type: accumulate
+  from_node: ''
+  reason: 转移后剩余 23.0 压力积累
+  time: 2
+  to_node: ''
+- amount: 0.04
+  channel_id: margin_clearing_channel
+  difference_id: ''
+  event_type: lock_in
+  from_node: ''
+  reason: 通道 margin_clearing_channel 锁定度从 0.135 增至 0.170
+  time: 2
+  to_node: ''
+- amount: 5.31
+  channel_id: margin_clearing_channel
+  difference_id: margin_hike
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 5.3 压力，剩余能力 5.3
+  time: 3
+  to_node: ''
+- amount: 5.19
+  channel_id: margin_clearing_channel
+  difference_id: margin_hike
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 5.2 压力，剩余能力 5.2
+  time: 3
+  to_node: ''
+- amount: 35.0
+  channel_id: margin_clearing_channel
+  difference_id: margin_hike
+  event_type: transfer
+  from_node: exchange
+  reason: 经通道 margin_clearing_channel 转移 35.0 压力
+  time: 3
+  to_node: market
+- amount: 8.31
+  channel_id: ''
+  difference_id: margin_hike
+  event_type: accumulate
+  from_node: ''
+  reason: 转移后剩余 8.3 压力积累
+  time: 3
+  to_node: ''
+- amount: 0.04
+  channel_id: margin_clearing_channel
+  difference_id: ''
+  event_type: lock_in
+  from_node: ''
+  reason: 通道 margin_clearing_channel 锁定度从 0.205 增至 0.240
+  time: 3
+  to_node: ''
+- amount: 2.66
+  channel_id: margin_clearing_channel
+  difference_id: margin_hike
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 2.7 压力，剩余能力 2.7
+  time: 4
+  to_node: ''
+- amount: 2.59
+  channel_id: margin_clearing_channel
+  difference_id: margin_hike
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 2.6 压力，剩余能力 2.6
+  time: 4
+  to_node: ''
+- amount: 27.6
+  channel_id: margin_clearing_channel
+  difference_id: margin_hike
+  event_type: transfer
+  from_node: exchange
+  reason: 经通道 margin_clearing_channel 转移 27.6 压力
+  time: 4
+  to_node: market
+- amount: 0.03
+  channel_id: margin_clearing_channel
+  difference_id: ''
+  event_type: lock_in
+  from_node: ''
+  reason: 通道 margin_clearing_channel 锁定度从 0.268 增至 0.295
+  time: 4
+  to_node: ''

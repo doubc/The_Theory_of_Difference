@@ -1,0 +1,1080 @@
+- amount: 90.0
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 exchange_001 承接 90.0 压力，剩余能力 90.0
+  time: 1
+  to_node: ''
+- amount: 20.0
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_short_001 承接 20.0 压力，剩余能力 20.0
+  time: 1
+  to_node: ''
+- amount: 40.0
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: transfer
+  from_node: near_month
+  reason: 经通道 delivery_channel 转移 40.0 压力
+  time: 1
+  to_node: exchange
+- amount: 72.72
+  channel_id: ''
+  difference_id: delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 转移后剩余 72.7 压力积累
+  time: 1
+  to_node: ''
+- amount: 10.0
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_short_001 承接 10.0 压力，剩余能力 10.0
+  time: 1
+  to_node: ''
+- amount: 30.0
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: transfer
+  from_node: region_A
+  reason: 经通道 warehouse_receipt_channel 转移 30.0 压力
+  time: 1
+  to_node: exchange_delivery
+- amount: 47.2
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 转移后剩余 47.2 压力积累
+  time: 1
+  to_node: ''
+- amount: 41.7
+  channel_id: futures_contract_channel
+  difference_id: expectation_bullish
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_long_001 承接 41.7 压力，剩余能力 48.3
+  time: 1
+  to_node: ''
+- amount: 41.7
+  channel_id: futures_contract_channel
+  difference_id: expectation_bullish
+  event_type: transfer
+  from_node: market
+  reason: 经通道 futures_contract_channel 转移 41.7 压力
+  time: 1
+  to_node: price
+- amount: 72.72
+  channel_id: ''
+  difference_id: delivery_pressure
+  event_type: break
+  from_node: ''
+  reason: '破缺: delivery_failure，压力 72.7 >= 阈值 50.0'
+  time: 1
+  to_node: ''
+- amount: 0.04
+  channel_id: delivery_channel
+  difference_id: ''
+  event_type: lock_in
+  from_node: ''
+  reason: 通道 delivery_channel 锁定度从 0.040 增至 0.080
+  time: 1
+  to_node: ''
+- amount: 0.03
+  channel_id: warehouse_receipt_channel
+  difference_id: ''
+  event_type: lock_in
+  from_node: ''
+  reason: 通道 warehouse_receipt_channel 锁定度从 0.030 增至 0.060
+  time: 1
+  to_node: ''
+- amount: 0.04
+  channel_id: futures_contract_channel
+  difference_id: ''
+  event_type: lock_in
+  from_node: ''
+  reason: 通道 futures_contract_channel 锁定度从 0.042 增至 0.083
+  time: 1
+  to_node: ''
+- amount: 45.0
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 exchange_001 承接 45.0 压力，剩余能力 45.0
+  time: 2
+  to_node: ''
+- amount: 5.0
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_short_001 承接 5.0 压力，剩余能力 5.0
+  time: 2
+  to_node: ''
+- amount: 28.0
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: transfer
+  from_node: near_month
+  reason: 经通道 delivery_channel 转移 28.0 压力
+  time: 2
+  to_node: exchange
+- amount: 37.34
+  channel_id: ''
+  difference_id: delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 转移后剩余 37.3 压力积累
+  time: 2
+  to_node: ''
+- amount: 61.28
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异积累 61.3
+  time: 2
+  to_node: ''
+- amount: 122.56
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: break
+  from_node: ''
+  reason: '破缺: accumulation_overflow，压力 122.6 >= 阈值 70.0'
+  time: 2
+  to_node: ''
+- amount: 0.03
+  channel_id: delivery_channel
+  difference_id: ''
+  event_type: lock_in
+  from_node: ''
+  reason: 通道 delivery_channel 锁定度从 0.108 增至 0.136
+  time: 2
+  to_node: ''
+- amount: 22.5
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 exchange_001 承接 22.5 压力，剩余能力 22.5
+  time: 3
+  to_node: ''
+- amount: 2.5
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_short_001 承接 2.5 压力，剩余能力 2.5
+  time: 3
+  to_node: ''
+- amount: 28.0
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: transfer
+  from_node: near_month
+  reason: 经通道 delivery_channel 转移 28.0 压力
+  time: 3
+  to_node: exchange
+- amount: 36.0
+  channel_id: ''
+  difference_id: delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 转移后剩余 36.0 压力积累
+  time: 3
+  to_node: ''
+- amount: 74.62
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异积累 74.6
+  time: 3
+  to_node: ''
+- amount: 149.24
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: break
+  from_node: ''
+  reason: '破缺: accumulation_overflow，压力 149.2 >= 阈值 70.0'
+  time: 3
+  to_node: ''
+- amount: 0.03
+  channel_id: delivery_channel
+  difference_id: ''
+  event_type: lock_in
+  from_node: ''
+  reason: 通道 delivery_channel 锁定度从 0.164 增至 0.192
+  time: 3
+  to_node: ''
+- amount: 0.2
+  channel_id: ''
+  difference_id: ''
+  event_type: exchange_intervene
+  from_node: ''
+  reason: 交易所提高保证金 20%，高杠杆主体承压
+  time: 3
+  to_node: ''
+- amount: 11.25
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 exchange_001 承接 11.2 压力，剩余能力 11.2
+  time: 4
+  to_node: ''
+- amount: 28.0
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: transfer
+  from_node: near_month
+  reason: 经通道 delivery_channel 转移 28.0 压力
+  time: 4
+  to_node: exchange
+- amount: 32.53
+  channel_id: ''
+  difference_id: delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 转移后剩余 32.5 压力积累
+  time: 4
+  to_node: ''
+- amount: 87.38
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异积累 87.4
+  time: 4
+  to_node: ''
+- amount: 174.75
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: break
+  from_node: ''
+  reason: '破缺: accumulation_overflow，压力 174.8 >= 阈值 70.0'
+  time: 4
+  to_node: ''
+- amount: 0.03
+  channel_id: delivery_channel
+  difference_id: ''
+  event_type: lock_in
+  from_node: ''
+  reason: 通道 delivery_channel 锁定度从 0.220 增至 0.248
+  time: 4
+  to_node: ''
+- amount: 0.2
+  channel_id: ''
+  difference_id: ''
+  event_type: exchange_intervene
+  from_node: ''
+  reason: 交易所提高保证金 20%，高杠杆主体承压
+  time: 4
+  to_node: ''
+- amount: 5.62
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 exchange_001 承接 5.6 压力，剩余能力 5.6
+  time: 5
+  to_node: ''
+- amount: 28.0
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: transfer
+  from_node: near_month
+  reason: 经通道 delivery_channel 转移 28.0 压力
+  time: 5
+  to_node: exchange
+- amount: 27.1
+  channel_id: ''
+  difference_id: delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 转移后剩余 27.1 压力积累
+  time: 5
+  to_node: ''
+- amount: 99.65
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异积累 99.6
+  time: 5
+  to_node: ''
+- amount: 199.3
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: break
+  from_node: ''
+  reason: '破缺: accumulation_overflow，压力 199.3 >= 阈值 70.0'
+  time: 5
+  to_node: ''
+- amount: 0.03
+  channel_id: delivery_channel
+  difference_id: ''
+  event_type: lock_in
+  from_node: ''
+  reason: 通道 delivery_channel 锁定度从 0.276 增至 0.304
+  time: 5
+  to_node: ''
+- amount: 0.2
+  channel_id: ''
+  difference_id: ''
+  event_type: exchange_intervene
+  from_node: ''
+  reason: 交易所提高保证金 20%，高杠杆主体承压
+  time: 5
+  to_node: ''
+- amount: 0.3
+  channel_id: ''
+  difference_id: ''
+  event_type: exchange_intervene
+  from_node: ''
+  reason: 交易所强制减仓 30%，释放投机承接力
+  time: 5
+  to_node: ''
+- amount: 2.81
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 exchange_001 承接 2.8 压力，剩余能力 2.8
+  time: 6
+  to_node: ''
+- amount: 27.84
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: transfer
+  from_node: near_month
+  reason: 经通道 delivery_channel 转移 27.8 压力
+  time: 6
+  to_node: exchange
+- amount: 20.02
+  channel_id: ''
+  difference_id: delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 转移后剩余 20.0 压力积累
+  time: 6
+  to_node: ''
+- amount: 111.5
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异积累 111.5
+  time: 6
+  to_node: ''
+- amount: 223.0
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: break
+  from_node: ''
+  reason: '破缺: accumulation_overflow，压力 223.0 >= 阈值 70.0'
+  time: 6
+  to_node: ''
+- amount: 0.03
+  channel_id: delivery_channel
+  difference_id: ''
+  event_type: lock_in
+  from_node: ''
+  reason: 通道 delivery_channel 锁定度从 0.332 增至 0.360
+  time: 6
+  to_node: ''
+- amount: 0.2
+  channel_id: ''
+  difference_id: ''
+  event_type: exchange_intervene
+  from_node: ''
+  reason: 交易所提高保证金 20%，高杠杆主体承压
+  time: 6
+  to_node: ''
+- amount: 0.3
+  channel_id: ''
+  difference_id: ''
+  event_type: exchange_intervene
+  from_node: ''
+  reason: 交易所强制减仓 30%，释放投机承接力
+  time: 6
+  to_node: ''
+- amount: 39.12
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异积累 39.1
+  time: 7
+  to_node: ''
+- amount: 122.97
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异积累 123.0
+  time: 7
+  to_node: ''
+- amount: 78.24
+  channel_id: ''
+  difference_id: delivery_pressure
+  event_type: break
+  from_node: ''
+  reason: '破缺: delivery_failure，压力 78.2 >= 阈值 50.0'
+  time: 7
+  to_node: ''
+- amount: 245.93
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: break
+  from_node: ''
+  reason: '破缺: accumulation_overflow，压力 245.9 >= 阈值 70.0'
+  time: 7
+  to_node: ''
+- amount: 0.2
+  channel_id: ''
+  difference_id: ''
+  event_type: exchange_intervene
+  from_node: ''
+  reason: 交易所提高保证金 20%，高杠杆主体承压
+  time: 7
+  to_node: ''
+- amount: 0.3
+  channel_id: ''
+  difference_id: ''
+  event_type: exchange_intervene
+  from_node: ''
+  reason: 交易所强制减仓 30%，释放投机承接力
+  time: 7
+  to_node: ''
+- amount: 57.46
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异积累 57.5
+  time: 8
+  to_node: ''
+- amount: 134.06
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异积累 134.1
+  time: 8
+  to_node: ''
+- amount: 114.91
+  channel_id: ''
+  difference_id: delivery_pressure
+  event_type: break
+  from_node: ''
+  reason: '破缺: delivery_failure，压力 114.9 >= 阈值 50.0'
+  time: 8
+  to_node: ''
+- amount: 268.12
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: break
+  from_node: ''
+  reason: '破缺: accumulation_overflow，压力 268.1 >= 阈值 70.0'
+  time: 8
+  to_node: ''
+- amount: 0.2
+  channel_id: ''
+  difference_id: ''
+  event_type: exchange_intervene
+  from_node: ''
+  reason: 交易所提高保证金 20%，高杠杆主体承压
+  time: 8
+  to_node: ''
+- amount: 0.3
+  channel_id: ''
+  difference_id: ''
+  event_type: exchange_intervene
+  from_node: ''
+  reason: 交易所强制减仓 30%，释放投机承接力
+  time: 8
+  to_node: ''
+- amount: 75.36
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异积累 75.4
+  time: 9
+  to_node: ''
+- amount: 144.79
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异积累 144.8
+  time: 9
+  to_node: ''
+- amount: 150.72
+  channel_id: ''
+  difference_id: delivery_pressure
+  event_type: break
+  from_node: ''
+  reason: '破缺: delivery_failure，压力 150.7 >= 阈值 50.0'
+  time: 9
+  to_node: ''
+- amount: 289.58
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: break
+  from_node: ''
+  reason: '破缺: accumulation_overflow，压力 289.6 >= 阈值 70.0'
+  time: 9
+  to_node: ''
+- amount: 0.2
+  channel_id: ''
+  difference_id: ''
+  event_type: exchange_intervene
+  from_node: ''
+  reason: 交易所提高保证金 20%，高杠杆主体承压
+  time: 9
+  to_node: ''
+- amount: 0.3
+  channel_id: ''
+  difference_id: ''
+  event_type: exchange_intervene
+  from_node: ''
+  reason: 交易所强制减仓 30%，释放投机承接力
+  time: 9
+  to_node: ''
+- amount: 93.07
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异积累 93.1
+  time: 10
+  to_node: ''
+- amount: 155.14
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异积累 155.1
+  time: 10
+  to_node: ''
+- amount: 186.14
+  channel_id: ''
+  difference_id: delivery_pressure
+  event_type: break
+  from_node: ''
+  reason: '破缺: delivery_failure，压力 186.1 >= 阈值 50.0'
+  time: 10
+  to_node: ''
+- amount: 310.29
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: break
+  from_node: ''
+  reason: '破缺: accumulation_overflow，压力 310.3 >= 阈值 70.0'
+  time: 10
+  to_node: ''
+- amount: 0.2
+  channel_id: ''
+  difference_id: ''
+  event_type: exchange_intervene
+  from_node: ''
+  reason: 交易所提高保证金 20%，高杠杆主体承压
+  time: 10
+  to_node: ''
+- amount: 0.3
+  channel_id: ''
+  difference_id: ''
+  event_type: exchange_intervene
+  from_node: ''
+  reason: 交易所强制减仓 30%，释放投机承接力
+  time: 10
+  to_node: ''
+- amount: 110.78
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异积累 110.8
+  time: 11
+  to_node: ''
+- amount: 165.12
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异积累 165.1
+  time: 11
+  to_node: ''
+- amount: 221.57
+  channel_id: ''
+  difference_id: delivery_pressure
+  event_type: break
+  from_node: ''
+  reason: '破缺: delivery_failure，压力 221.6 >= 阈值 50.0'
+  time: 11
+  to_node: ''
+- amount: 330.25
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: break
+  from_node: ''
+  reason: '破缺: accumulation_overflow，压力 330.2 >= 阈值 70.0'
+  time: 11
+  to_node: ''
+- amount: 0.2
+  channel_id: ''
+  difference_id: ''
+  event_type: exchange_intervene
+  from_node: ''
+  reason: 交易所提高保证金 20%，高杠杆主体承压
+  time: 11
+  to_node: ''
+- amount: 0.3
+  channel_id: ''
+  difference_id: ''
+  event_type: exchange_intervene
+  from_node: ''
+  reason: 交易所强制减仓 30%，释放投机承接力
+  time: 11
+  to_node: ''
+- amount: 128.63
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异积累 128.6
+  time: 12
+  to_node: ''
+- amount: 174.71
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异积累 174.7
+  time: 12
+  to_node: ''
+- amount: 257.26
+  channel_id: ''
+  difference_id: delivery_pressure
+  event_type: break
+  from_node: ''
+  reason: '破缺: delivery_failure，压力 257.3 >= 阈值 50.0'
+  time: 12
+  to_node: ''
+- amount: 349.43
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: break
+  from_node: ''
+  reason: '破缺: accumulation_overflow，压力 349.4 >= 阈值 70.0'
+  time: 12
+  to_node: ''
+- amount: 0.2
+  channel_id: ''
+  difference_id: ''
+  event_type: exchange_intervene
+  from_node: ''
+  reason: 交易所提高保证金 20%，高杠杆主体承压
+  time: 12
+  to_node: ''
+- amount: 0.3
+  channel_id: ''
+  difference_id: ''
+  event_type: exchange_intervene
+  from_node: ''
+  reason: 交易所强制减仓 30%，释放投机承接力
+  time: 12
+  to_node: ''
+- amount: 146.7
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异积累 146.7
+  time: 13
+  to_node: ''
+- amount: 183.91
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异积累 183.9
+  time: 13
+  to_node: ''
+- amount: 293.4
+  channel_id: ''
+  difference_id: delivery_pressure
+  event_type: break
+  from_node: ''
+  reason: '破缺: delivery_failure，压力 293.4 >= 阈值 50.0'
+  time: 13
+  to_node: ''
+- amount: 367.81
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: break
+  from_node: ''
+  reason: '破缺: accumulation_overflow，压力 367.8 >= 阈值 70.0'
+  time: 13
+  to_node: ''
+- amount: 0.2
+  channel_id: ''
+  difference_id: ''
+  event_type: exchange_intervene
+  from_node: ''
+  reason: 交易所提高保证金 20%，高杠杆主体承压
+  time: 13
+  to_node: ''
+- amount: 0.3
+  channel_id: ''
+  difference_id: ''
+  event_type: exchange_intervene
+  from_node: ''
+  reason: 交易所强制减仓 30%，释放投机承接力
+  time: 13
+  to_node: ''
+- amount: 165.07
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异积累 165.1
+  time: 14
+  to_node: ''
+- amount: 192.69
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异积累 192.7
+  time: 14
+  to_node: ''
+- amount: 330.13
+  channel_id: ''
+  difference_id: delivery_pressure
+  event_type: break
+  from_node: ''
+  reason: '破缺: delivery_failure，压力 330.1 >= 阈值 50.0'
+  time: 14
+  to_node: ''
+- amount: 385.39
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: break
+  from_node: ''
+  reason: '破缺: accumulation_overflow，压力 385.4 >= 阈值 70.0'
+  time: 14
+  to_node: ''
+- amount: 0.2
+  channel_id: ''
+  difference_id: ''
+  event_type: exchange_intervene
+  from_node: ''
+  reason: 交易所提高保证金 20%，高杠杆主体承压
+  time: 14
+  to_node: ''
+- amount: 0.3
+  channel_id: ''
+  difference_id: ''
+  event_type: exchange_intervene
+  from_node: ''
+  reason: 交易所强制减仓 30%，释放投机承接力
+  time: 14
+  to_node: ''
+- amount: 183.76
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异积累 183.8
+  time: 15
+  to_node: ''
+- amount: 201.07
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异积累 201.1
+  time: 15
+  to_node: ''
+- amount: 367.51
+  channel_id: ''
+  difference_id: delivery_pressure
+  event_type: break
+  from_node: ''
+  reason: '破缺: delivery_failure，压力 367.5 >= 阈值 50.0'
+  time: 15
+  to_node: ''
+- amount: 402.14
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: break
+  from_node: ''
+  reason: '破缺: accumulation_overflow，压力 402.1 >= 阈值 70.0'
+  time: 15
+  to_node: ''
+- amount: 0.2
+  channel_id: ''
+  difference_id: ''
+  event_type: exchange_intervene
+  from_node: ''
+  reason: 交易所提高保证金 20%，高杠杆主体承压
+  time: 15
+  to_node: ''
+- amount: 0.3
+  channel_id: ''
+  difference_id: ''
+  event_type: exchange_intervene
+  from_node: ''
+  reason: 交易所强制减仓 30%，释放投机承接力
+  time: 15
+  to_node: ''
+- amount: 202.8
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异积累 202.8
+  time: 16
+  to_node: ''
+- amount: 209.03
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异积累 209.0
+  time: 16
+  to_node: ''
+- amount: 405.59
+  channel_id: ''
+  difference_id: delivery_pressure
+  event_type: break
+  from_node: ''
+  reason: '破缺: delivery_failure，压力 405.6 >= 阈值 50.0'
+  time: 16
+  to_node: ''
+- amount: 418.07
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: break
+  from_node: ''
+  reason: '破缺: accumulation_overflow，压力 418.1 >= 阈值 70.0'
+  time: 16
+  to_node: ''
+- amount: 0.2
+  channel_id: ''
+  difference_id: ''
+  event_type: exchange_intervene
+  from_node: ''
+  reason: 交易所提高保证金 20%，高杠杆主体承压
+  time: 16
+  to_node: ''
+- amount: 0.3
+  channel_id: ''
+  difference_id: ''
+  event_type: exchange_intervene
+  from_node: ''
+  reason: 交易所强制减仓 30%，释放投机承接力
+  time: 16
+  to_node: ''
+- amount: 222.18
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异积累 222.2
+  time: 17
+  to_node: ''
+- amount: 216.58
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异积累 216.6
+  time: 17
+  to_node: ''
+- amount: 444.36
+  channel_id: ''
+  difference_id: delivery_pressure
+  event_type: break
+  from_node: ''
+  reason: '破缺: delivery_failure，压力 444.4 >= 阈值 50.0'
+  time: 17
+  to_node: ''
+- amount: 433.16
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: break
+  from_node: ''
+  reason: '破缺: accumulation_overflow，压力 433.2 >= 阈值 70.0'
+  time: 17
+  to_node: ''
+- amount: 0.2
+  channel_id: ''
+  difference_id: ''
+  event_type: exchange_intervene
+  from_node: ''
+  reason: 交易所提高保证金 20%，高杠杆主体承压
+  time: 17
+  to_node: ''
+- amount: 0.3
+  channel_id: ''
+  difference_id: ''
+  event_type: exchange_intervene
+  from_node: ''
+  reason: 交易所强制减仓 30%，释放投机承接力
+  time: 17
+  to_node: ''
+- amount: 241.9
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异积累 241.9
+  time: 18
+  to_node: ''
+- amount: 223.72
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异积累 223.7
+  time: 18
+  to_node: ''
+- amount: 483.8
+  channel_id: ''
+  difference_id: delivery_pressure
+  event_type: break
+  from_node: ''
+  reason: '破缺: delivery_failure，压力 483.8 >= 阈值 50.0'
+  time: 18
+  to_node: ''
+- amount: 447.43
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: break
+  from_node: ''
+  reason: '破缺: accumulation_overflow，压力 447.4 >= 阈值 70.0'
+  time: 18
+  to_node: ''
+- amount: 0.2
+  channel_id: ''
+  difference_id: ''
+  event_type: exchange_intervene
+  from_node: ''
+  reason: 交易所提高保证金 20%，高杠杆主体承压
+  time: 18
+  to_node: ''
+- amount: 0.3
+  channel_id: ''
+  difference_id: ''
+  event_type: exchange_intervene
+  from_node: ''
+  reason: 交易所强制减仓 30%，释放投机承接力
+  time: 18
+  to_node: ''
+- amount: 261.93
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异积累 261.9
+  time: 19
+  to_node: ''
+- amount: 230.44
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异积累 230.4
+  time: 19
+  to_node: ''
+- amount: 523.85
+  channel_id: ''
+  difference_id: delivery_pressure
+  event_type: break
+  from_node: ''
+  reason: '破缺: delivery_failure，压力 523.9 >= 阈值 50.0'
+  time: 19
+  to_node: ''
+- amount: 460.89
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: break
+  from_node: ''
+  reason: '破缺: accumulation_overflow，压力 460.9 >= 阈值 70.0'
+  time: 19
+  to_node: ''
+- amount: 0.2
+  channel_id: ''
+  difference_id: ''
+  event_type: exchange_intervene
+  from_node: ''
+  reason: 交易所提高保证金 20%，高杠杆主体承压
+  time: 19
+  to_node: ''
+- amount: 0.3
+  channel_id: ''
+  difference_id: ''
+  event_type: exchange_intervene
+  from_node: ''
+  reason: 交易所强制减仓 30%，释放投机承接力
+  time: 19
+  to_node: ''
+- amount: 282.23
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异积累 282.2
+  time: 20
+  to_node: ''
+- amount: 236.77
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异积累 236.8
+  time: 20
+  to_node: ''
+- amount: 564.47
+  channel_id: ''
+  difference_id: delivery_pressure
+  event_type: break
+  from_node: ''
+  reason: '破缺: delivery_failure，压力 564.5 >= 阈值 50.0'
+  time: 20
+  to_node: ''
+- amount: 473.54
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: break
+  from_node: ''
+  reason: '破缺: accumulation_overflow，压力 473.5 >= 阈值 70.0'
+  time: 20
+  to_node: ''
+- amount: 0.2
+  channel_id: ''
+  difference_id: ''
+  event_type: exchange_intervene
+  from_node: ''
+  reason: 交易所提高保证金 20%，高杠杆主体承压
+  time: 20
+  to_node: ''
+- amount: 0.3
+  channel_id: ''
+  difference_id: ''
+  event_type: exchange_intervene
+  from_node: ''
+  reason: 交易所强制减仓 30%，释放投机承接力
+  time: 20
+  to_node: ''
