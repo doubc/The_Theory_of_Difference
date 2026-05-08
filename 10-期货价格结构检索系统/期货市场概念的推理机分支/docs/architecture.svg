@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 750" font-family="sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 6" refX="10" refY="3" markerWidth="10" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,3 L0,6 Z" fill="#64748b"/>
+    </marker>
+    <marker id="arr-red" viewBox="0 0 10 6" refX="10" refY="3" markerWidth="10" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,3 L0,6 Z" fill="#ef4444"/>
+    </marker>
+    <marker id="arr-green" viewBox="0 0 10 6" refX="10" refY="3" markerWidth="10" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,3 L0,6 Z" fill="#22c55e"/>
+    </marker>
+    <filter id="sh" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.1"/>
+    </filter>
+  </defs>
+
+  <rect width="1100" height="750" fill="#f8fafc"/>
+
+  <!-- Title -->
+  <text x="550" y="36" text-anchor="middle" font-size="20" font-weight="bold" fill="#1e293b">Real_World -- System Architecture</text>
+  <text x="550" y="56" text-anchor="middle" font-size="12" fill="#94a3b8">exp_005 Full Topology - Phase 2 - 2026-05-08</text>
+
+  <!-- ====== TRANSFORMATION CHAIN ====== -->
+  <text x="550" y="90" text-anchor="middle" font-size="13" font-weight="bold" fill="#475569">Transformation Chain</text>
+
+  <rect x="40" y="110" width="120" height="56" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" filter="url(#sh)"/>
+  <text x="100" y="133" text-anchor="middle" font-size="13" font-weight="bold" fill="#92400e">inventory</text>
+  <text x="100" y="151" text-anchor="middle" font-size="10" fill="#b45309">Stock Diff</text>
+
+  <line x1="160" y1="138" x2="198" y2="138" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="179" y="130" text-anchor="middle" font-size="9" fill="#94a3b8">cap:35</text>
+
+  <rect x="200" y="110" width="120" height="56" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" filter="url(#sh)"/>
+  <text x="260" y="133" text-anchor="middle" font-size="13" font-weight="bold" fill="#92400e">delivery</text>
+  <text x="260" y="151" text-anchor="middle" font-size="10" fill="#b45309">Delivery Diff</text>
+
+  <line x1="320" y1="138" x2="358" y2="138" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="339" y="130" text-anchor="middle" font-size="9" fill="#94a3b8">cap:45</text>
+
+  <rect x="360" y="110" width="120" height="56" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" filter="url(#sh)"/>
+  <text x="420" y="133" text-anchor="middle" font-size="13" font-weight="bold" fill="#92400e">basis</text>
+  <text x="420" y="151" text-anchor="middle" font-size="10" fill="#b45309">Basis Diff</text>
+
+  <line x1="480" y1="138" x2="518" y2="138" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="499" y="130" text-anchor="middle" font-size="9" fill="#94a3b8">cap:80</text>
+
+  <!-- PRICE (highlighted) -->
+  <rect x="520" y="100" width="140" height="76" rx="10" fill="#dbeafe" stroke="#3b82f6" stroke-width="3" filter="url(#sh)"/>
+  <text x="590" y="128" text-anchor="middle" font-size="16" font-weight="bold" fill="#1d4ed8">PRICE</text>
+  <text x="590" y="148" text-anchor="middle" font-size="11" fill="#2563eb">Price Diff</text>
+  <text x="590" y="164" text-anchor="middle" font-size="9" fill="#60a5fa">basis + expectation converge</text>
+
+  <line x1="660" y1="138" x2="698" y2="138" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="679" y="130" text-anchor="middle" font-size="9" fill="#94a3b8">cap:60</text>
+
+  <rect x="700" y="110" width="120" height="56" rx="8" fill="#fee2e2" stroke="#ef4444" stroke-width="2" filter="url(#sh)"/>
+  <text x="760" y="133" text-anchor="middle" font-size="13" font-weight="bold" fill="#991b1b">margin</text>
+  <text x="760" y="151" text-anchor="middle" font-size="10" fill="#b91c1c">Margin Diff</text>
+
+  <line x1="820" y1="138" x2="858" y2="138" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="839" y="130" text-anchor="middle" font-size="9" fill="#94a3b8">cap:50</text>
+
+  <rect x="860" y="110" width="120" height="56" rx="8" fill="#dcfce7" stroke="#22c55e" stroke-width="2" filter="url(#sh)"/>
+  <text x="920" y="133" text-anchor="middle" font-size="13" font-weight="bold" fill="#166534">liquidity</text>
+  <text x="920" y="151" text-anchor="middle" font-size="10" fill="#15803d">Liquidity Diff</text>
+
+  <!-- expectation -> price -->
+  <rect x="520" y="210" width="140" height="56" rx="8" fill="#ede9fe" stroke="#8b5cf6" stroke-width="2" filter="url(#sh)"/>
+  <text x="590" y="233" text-anchor="middle" font-size="13" font-weight="bold" fill="#5b21b6">expectation</text>
+  <text x="590" y="251" text-anchor="middle" font-size="10" fill="#7c3aed">Expectation Diff</text>
+  <line x1="590" y1="210" x2="590" y2="178" stroke="#8b5cf6" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="604" y="198" font-size="9" fill="#8b5cf6">cap:100</text>
+
+  <!-- delivery -> rule -->
+  <rect x="200" y="210" width="120" height="56" rx="8" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="260" y="233" text-anchor="middle" font-size="13" font-weight="bold" fill="#475569">rule</text>
+  <text x="260" y="251" text-anchor="middle" font-size="10" fill="#64748b">Rule Diff</text>
+  <path d="M260,166 L260,208" stroke="#64748b" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+  <text x="274" y="190" font-size="9" fill="#94a3b8">cap:80</text>
+
+  <!-- ====== ENTITIES ====== -->
+  <text x="550" y="300" text-anchor="middle" font-size="13" font-weight="bold" fill="#475569">Entities (承载体)</text>
+
+  <rect x="60" y="320" width="160" height="80" rx="8" fill="#fff7ed" stroke="#f97316" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="140" y="342" text-anchor="middle" font-size="11" font-weight="bold" fill="#c2410c">industrial_short</text>
+  <text x="140" y="358" text-anchor="middle" font-size="10" fill="#ea580c">lev 2.0x | cap 50</text>
+  <text x="140" y="374" text-anchor="middle" font-size="10" fill="#9a3412">liq 40 | tol 35</text>
+  <text x="140" y="390" text-anchor="middle" font-size="8" fill="#9a3412">@warehouse_receipt,delivery</text>
+
+  <rect x="280" y="320" width="160" height="80" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="360" y="342" text-anchor="middle" font-size="11" font-weight="bold" fill="#1d4ed8">speculative_long</text>
+  <text x="360" y="358" text-anchor="middle" font-size="10" fill="#2563eb">lev 2.0x | cap 80</text>
+  <text x="360" y="374" text-anchor="middle" font-size="10" fill="#1e40af">liq 55 | tol 70</text>
+  <text x="360" y="390" text-anchor="middle" font-size="8" fill="#1e40af">@basis,price,margin,liquidity</text>
+
+  <rect x="500" y="320" width="160" height="80" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="580" y="342" text-anchor="middle" font-size="11" font-weight="bold" fill="#1d4ed8">speculator_002</text>
+  <text x="580" y="358" text-anchor="middle" font-size="10" fill="#2563eb">lev 1.5x | cap 60</text>
+  <text x="580" y="374" text-anchor="middle" font-size="10" fill="#1e40af">liq 40 | tol 50</text>
+  <text x="580" y="390" text-anchor="middle" font-size="8" fill="#1e40af">@basis,price,margin,liquidity</text>
+
+  <rect x="720" y="320" width="160" height="80" rx="8" fill="#f0fdf4" stroke="#22c55e" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="800" y="342" text-anchor="middle" font-size="11" font-weight="bold" fill="#166534">exchange</text>
+  <text x="800" y="358" text-anchor="middle" font-size="10" fill="#15803d">lev 1.0x | cap 150</text>
+  <text x="800" y="374" text-anchor="middle" font-size="10" fill="#166534">liq 100 | tol 100</text>
+  <text x="800" y="390" text-anchor="middle" font-size="8" fill="#166534">@delivery,rule</text>
+
+  <!-- ====== FEEDBACK ====== -->
+  <text x="550" y="440" text-anchor="middle" font-size="13" font-weight="bold" fill="#ef4444">Feedback Loop (depth 0 only)</text>
+
+  <path d="M760,166 Q760,470 590,470 Q420,470 420,166" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-red)"/>
+  <text x="590" y="488" text-anchor="middle" font-size="10" fill="#ef4444" font-weight="bold">margin feedback: absorb x 0.3 x leverage</text>
+  <text x="590" y="502" text-anchor="middle" font-size="9" fill="#f87171">triggered when capacity_ratio &gt; 0.6</text>
+
+  <path d="M920,166 Q980,520 590,520 Q200,520 140,166" fill="none" stroke="#22c55e" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-green)"/>
+  <text x="590" y="538" text-anchor="middle" font-size="10" fill="#22c55e" font-weight="bold">liquidity feedback: absorb x 0.2</text>
+  <text x="590" y="552" text-anchor="middle" font-size="9" fill="#4ade80">triggered when liquidity &lt; risk_tolerance x 0.3</text>
+
+  <!-- ====== INTERVENTION ====== -->
+  <text x="550" y="590" text-anchor="middle" font-size="13" font-weight="bold" fill="#f97316">Exchange Intervention</text>
+
+  <rect x="100" y="605" width="160" height="50" rx="6" fill="#fff7ed" stroke="#f97316" stroke-width="1.5"/>
+  <text x="180" y="625" text-anchor="middle" font-size="11" font-weight="bold" fill="#c2410c">1. Reduce Recurrent</text>
+  <text x="180" y="642" text-anchor="middle" font-size="9" fill="#ea580c">recurrent_rate x 0.7</text>
+
+  <rect x="320" y="605" width="160" height="50" rx="6" fill="#fff7ed" stroke="#f97316" stroke-width="1.5"/>
+  <text x="400" y="625" text-anchor="middle" font-size="11" font-weight="bold" fill="#c2410c">2. Expand Channel</text>
+  <text x="400" y="642" text-anchor="middle" font-size="9" fill="#ea580c">capacity x 1.5</text>
+
+  <rect x="540" y="605" width="160" height="50" rx="6" fill="#fff7ed" stroke="#f97316" stroke-width="1.5"/>
+  <text x="620" y="625" text-anchor="middle" font-size="11" font-weight="bold" fill="#c2410c">3. Release Entity</text>
+  <text x="620" y="642" text-anchor="middle" font-size="9" fill="#ea580c">release x 0.3</text>
+
+  <rect x="760" y="605" width="160" height="50" rx="6" fill="#fef2f2" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="840" y="625" text-anchor="middle" font-size="11" font-weight="bold" fill="#991b1b">Side Effects</text>
+  <text x="840" y="642" text-anchor="middle" font-size="9" fill="#b91c1c">expectation/rule/liq diffs</text>
+
+  <!-- ====== ANNOTATION ====== -->
+  <rect x="40" y="670" width="1020" height="65" rx="8" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="550" y="692" text-anchor="middle" font-size="11" font-weight="bold" fill="#334155">PRICE Position Analysis</text>
+  <text x="550" y="710" text-anchor="middle" font-size="10" fill="#475569">PRICE is the convergence hub: basis (structural) + expectation (speculative) merge here, then flow downstream to margin -&gt; liquidity</text>
+  <text x="550" y="726" text-anchor="middle" font-size="10" fill="#475569">Speculators occupy all PRICE channels. Exchange does not touch PRICE directly -- it influences via delivery -&gt; rule path</text>
+</svg>
