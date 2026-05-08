@@ -1,0 +1,169 @@
+break_thresholds:
+  basis: 90
+  delivery: 70
+  expectation: 100
+  inventory: 90
+  liquidity: 80
+  margin: 80
+  rule: 70
+channels:
+- base_cost: 15
+  capacity: 70
+  description: 库存->交割
+  entities:
+  - industrial_short_001
+  from_type: inventory
+  id: warehouse_receipt_channel
+  openness: 0.85
+  to_type: delivery
+- base_cost: 20
+  capacity: 90
+  description: 交割->基差
+  entities:
+  - industrial_short_001
+  - exchange_001
+  from_type: delivery
+  id: delivery_channel
+  openness: 0.8
+  to_type: basis
+- base_cost: 12
+  capacity: 80
+  description: 基差->价格
+  entities:
+  - speculative_long_001
+  - speculator_002
+  from_type: basis
+  id: basis_channel
+  openness: 0.9
+  to_type: price
+- base_cost: 10
+  capacity: 100
+  description: 预期->价格
+  entities:
+  - speculative_long_001
+  - speculator_002
+  from_type: expectation
+  id: futures_contract_channel
+  openness: 0.95
+  to_type: price
+- base_cost: 8
+  capacity: 60
+  description: 价格->保证金
+  entities:
+  - speculative_long_001
+  - speculator_002
+  from_type: price
+  id: margin_clearing_channel
+  openness: 0.9
+  to_type: margin
+- base_cost: 12
+  capacity: 50
+  description: 保证金->流动性
+  entities:
+  - speculative_long_001
+  - speculator_002
+  from_type: margin
+  id: position_reduction_channel
+  openness: 0.85
+  to_type: liquidity
+- base_cost: 50
+  capacity: 80
+  description: 交割->规则
+  entities:
+  - exchange_001
+  from_type: delivery
+  id: exchange_rule_channel
+  openness: 0.6
+  to_type: rule
+differences:
+- description: 库存短缺
+  id: inventory_shortage
+  magnitude: 100
+  persistence: 0.9
+  recurrent: true
+  recurrent_decay: 0.95
+  recurrent_rate: 0.18
+  source_node: region_A
+  target_node: exchange_delivery
+  transformability: 0.9
+  type: inventory
+  visibility: 0.95
+- description: 交割压力
+  id: delivery_pressure
+  magnitude: 80
+  persistence: 0.92
+  recurrent: true
+  recurrent_decay: 0.93
+  recurrent_rate: 0.22
+  source_node: near_month
+  target_node: exchange
+  transformability: 0.7
+  type: delivery
+  visibility: 0.95
+- description: 看涨预期
+  id: expectation_bullish
+  magnitude: 60
+  persistence: 0.7
+  recurrent: true
+  recurrent_decay: 0.95
+  recurrent_rate: 0.15
+  source_node: market
+  target_node: price
+  transformability: 0.8
+  type: expectation
+  visibility: 0.85
+entities:
+- available_capacity: 30
+  capacity: 50
+  description: 产业空头
+  id: industrial_short_001
+  leverage: 2.0
+  liquidity: 40
+  preference: short
+  risk_tolerance: 35
+  type: industrial_short
+- available_capacity: 60
+  capacity: 80
+  description: 投机多头
+  id: speculative_long_001
+  leverage: 2.0
+  liquidity: 55
+  preference: long
+  risk_tolerance: 70
+  type: speculator
+- available_capacity: 45
+  capacity: 60
+  description: 投机多头二号
+  id: speculator_002
+  leverage: 1.5
+  liquidity: 40
+  preference: long
+  risk_tolerance: 50
+  type: speculator
+- available_capacity: 120
+  capacity: 150
+  description: 交易所
+  id: exchange_001
+  leverage: 1.0
+  liquidity: 100
+  preference: neutral
+  risk_tolerance: 100
+  type: exchange
+experiment:
+  description: '同一基础拓扑，三个维度各跑一次，观察系统行为变化。
+
+    对比A：无破缺（threshold=9999）→ 纯积累会怎样？
+
+    对比B：快衰减（decay=0.80）→ recurrent 快速消退能否收敛？
+
+    对比C：通道翻倍（warehouse=70, delivery=90）→ 结构性缺口填上能否收敛？
+
+
+    基准：exp_006a（无干预，threshold=90, decay=0.95/0.93, capacity=35/45）
+
+    '
+  id: exp_007c_double_channel
+  name: Double channel capacity
+world:
+  max_steps: 40
+  name: Comparison-World
