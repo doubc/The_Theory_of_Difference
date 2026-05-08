@@ -1,0 +1,120 @@
+# Experiment 009d: 干预机制验证 - 综合干预
+# 理论依据：《期货市场的差异论解读》第四章「交易所：那个真正有权力的参与者」
+
+experiment:
+  id: exp_009d
+  name: 干预验证-综合干预
+  description: 第5步系统性地降低全局杠杆和通道容量
+
+world:
+  name: Intervention-Composite-World
+  max_steps: 15
+
+# 初始差异：库存缺口（recurrent持续生成）
+differences:
+  - id: inventory_gap
+    type: inventory
+    source_node: region_A
+    target_node: region_B
+    magnitude: 60
+    visibility: 0.8
+    persistence: 0.7
+    recurrent: true
+    recurrent_rate: 5.0
+    recurrent_decay: 0.95
+
+  - id: demand_surge
+    type: demand
+    source_node: market
+    target_node: ""
+    magnitude: 40
+    visibility: 0.7
+    persistence: 0.6
+    recurrent: true
+    recurrent_rate: 3.0
+    recurrent_decay: 0.9
+
+# 承接主体
+entities:
+  - id: normal_speculator
+    type: speculator
+    capacity: 100
+    available_capacity: 80
+    risk_tolerance: 60
+    liquidity: 70
+    leverage: 3.0
+
+  - id: high_leverage_speculator
+    type: speculator
+    capacity: 80
+    available_capacity: 60
+    risk_tolerance: 40
+    liquidity: 50
+    leverage: 5.0
+
+  - id: hedger
+    type: hedger
+    capacity: 120
+    available_capacity: 100
+    risk_tolerance: 80
+    liquidity: 90
+    leverage: 1.5
+
+# 转移通道
+channels:
+  - id: warehouse_receipt_channel
+    from_type: inventory
+    to_type: warehouse_receipt
+    base_cost: 10
+    capacity: 80
+    efficiency: 0.85
+    entities:
+      - hedger
+
+  - id: basis_channel
+    from_type: inventory
+    to_type: basis
+    base_cost: 15
+    capacity: 60
+    efficiency: 0.8
+    entities:
+      - normal_speculator
+      - high_leverage_speculator
+
+  - id: liquidity_channel
+    from_type: demand
+    to_type: liquidity
+    base_cost: 12
+    capacity: 70
+    efficiency: 0.75
+    entities:
+      - normal_speculator
+      - hedger
+
+  - id: margin_channel
+    from_type: warehouse_receipt
+    to_type: margin
+    base_cost: 8
+    capacity: 50
+    efficiency: 0.7
+    entities:
+      - high_leverage_speculator
+
+# 干预事件：第5步系统性综合干预
+interventions:
+  - time: 5
+    type: composite
+    target: global
+    params:
+      global_leverage_multiplier: 0.6    # 全局杠杆降至60%
+      global_capacity_multiplier: 0.7    # 全局通道容量降至70%
+    description: "系统性风险管控：全局杠杆×0.6，全局容量×0.7"
+
+# 破缺阈值
+break_thresholds:
+  inventory: 100
+  warehouse_receipt: 80
+  basis: 70
+  liquidity: 75
+  margin: 60
+  demand: 90
