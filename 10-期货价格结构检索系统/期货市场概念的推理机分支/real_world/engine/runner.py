@@ -111,7 +111,8 @@ class Runner:
         2. 对每个差异：选择通道 → 执行转移 → 检查变形
         3. 变形产生的新差异进入下一轮（队列）
         4. 最多执行 MAX_CHAIN_DEPTH 轮（防止无限循环）
-        5. 每轮收集反馈差异，注入世界
+        5. 反馈差异仅在深度0生成（防止递归爆炸）
+        6. 反馈差异可在深度1+继续转移/变形，但不触发新反馈
         """
         # 初始差异列表
         pending = [
@@ -168,9 +169,10 @@ class Runner:
                             reason=f"主体 {entity.id} 承接 {absorb_amount:.1f}，剩余能力 {entity.available_capacity:.1f}（深度 {chain_depth}）",
                         )
 
-                        # 收集反馈差异
-                        fb = entity.generate_feedback_differences(absorb_amount, time)
-                        feedback_diffs.extend(fb)
+                        # 收集反馈差异（仅在深度0生成，防止递归爆炸）
+                        if chain_depth == 0:
+                            fb = entity.generate_feedback_differences(absorb_amount, time)
+                            feedback_diffs.extend(fb)
 
                         if remaining_pressure <= 0.01:
                             break

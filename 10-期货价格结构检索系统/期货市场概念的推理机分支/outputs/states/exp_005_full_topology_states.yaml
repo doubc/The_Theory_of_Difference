@@ -1,5 +1,5 @@
 - active_channels: 7
-  active_differences: 6
+  active_differences: 3
   blocked_channels: 0
   break_events_count: 0
   detail:
@@ -10,9 +10,9 @@
   nearest_stable_label: margin_relief
   pressure_level: high
   time: 1
-  total_pressure: 73.06
+  total_pressure: 71.79
 - active_channels: 7
-  active_differences: 8
+  active_differences: 5
   blocked_channels: 0
   break_events_count: 0
   detail:
@@ -23,9 +23,9 @@
   nearest_stable_label: margin_relief
   pressure_level: critical
   time: 2
-  total_pressure: 99.99
+  total_pressure: 98.72
 - active_channels: 7
-  active_differences: 8
+  active_differences: 4
   blocked_channels: 0
   break_events_count: 1
   detail:
@@ -36,9 +36,9 @@
   nearest_stable_label: margin_relief
   pressure_level: medium
   time: 3
-  total_pressure: 59.55
+  total_pressure: 58.26
 - active_channels: 7
-  active_differences: 8
+  active_differences: 4
   blocked_channels: 0
   break_events_count: 1
   detail:
@@ -49,9 +49,9 @@
   nearest_stable_label: margin_relief
   pressure_level: medium
   time: 4
-  total_pressure: 38.67
+  total_pressure: 37.4
 - active_channels: 7
-  active_differences: 7
+  active_differences: 4
   blocked_channels: 0
   break_events_count: 1
   detail:
@@ -62,9 +62,9 @@
   nearest_stable_label: unstable
   pressure_level: medium
   time: 5
-  total_pressure: 53.33
+  total_pressure: 52.06
 - active_channels: 7
-  active_differences: 7
+  active_differences: 4
   blocked_channels: 0
   break_events_count: 1
   detail:
@@ -75,9 +75,9 @@
   nearest_stable_label: unstable
   pressure_level: high
   time: 6
-  total_pressure: 67.25
+  total_pressure: 65.98
 - active_channels: 7
-  active_differences: 9
+  active_differences: 4
   blocked_channels: 0
   break_events_count: 1
   detail:
@@ -86,11 +86,11 @@
   dominant_difference_type: inventory
   dominant_entity_id: exchange_001
   nearest_stable_label: unstable
-  pressure_level: critical
+  pressure_level: high
   time: 7
-  total_pressure: 90.31
+  total_pressure: 79.22
 - active_channels: 7
-  active_differences: 11
+  active_differences: 6
   blocked_channels: 0
   break_events_count: 1
   detail:
@@ -101,9 +101,9 @@
   nearest_stable_label: unstable
   pressure_level: critical
   time: 8
-  total_pressure: 108.0
+  total_pressure: 101.61
 - active_channels: 7
-  active_differences: 9
+  active_differences: 5
   blocked_channels: 0
   break_events_count: 2
   detail:
@@ -114,9 +114,9 @@
   nearest_stable_label: unstable
   pressure_level: high
   time: 9
-  total_pressure: 66.48
+  total_pressure: 60.11
 - active_channels: 7
-  active_differences: 9
+  active_differences: 5
   blocked_channels: 0
   break_events_count: 2
   detail:
@@ -127,9 +127,9 @@
   nearest_stable_label: unstable
   pressure_level: high
   time: 10
-  total_pressure: 77.82
+  total_pressure: 71.45
 - active_channels: 7
-  active_differences: 9
+  active_differences: 7
   blocked_channels: 0
   break_events_count: 2
   detail:
@@ -138,11 +138,11 @@
   dominant_difference_type: inventory
   dominant_entity_id: exchange_001
   nearest_stable_label: unstable
-  pressure_level: high
+  pressure_level: critical
   time: 11
-  total_pressure: 88.6
+  total_pressure: 92.06
 - active_channels: 7
-  active_differences: 9
+  active_differences: 6
   blocked_channels: 0
   break_events_count: 2
   detail:
@@ -153,9 +153,9 @@
   nearest_stable_label: unstable
   pressure_level: critical
   time: 12
-  total_pressure: 98.84
+  total_pressure: 97.57
 - active_channels: 7
-  active_differences: 9
+  active_differences: 6
   blocked_channels: 0
   break_events_count: 3
   detail:
@@ -166,9 +166,9 @@
   nearest_stable_label: unstable
   pressure_level: high
   time: 13
-  total_pressure: 63.16
+  total_pressure: 61.89
 - active_channels: 7
-  active_differences: 9
+  active_differences: 6
   blocked_channels: 0
   break_events_count: 3
   detail:
@@ -179,9 +179,9 @@
   nearest_stable_label: unstable
   pressure_level: high
   time: 14
-  total_pressure: 72.4
+  total_pressure: 71.13
 - active_channels: 7
-  active_differences: 9
+  active_differences: 6
   blocked_channels: 0
   break_events_count: 3
   detail:
@@ -192,9 +192,9 @@
   nearest_stable_label: unstable
   pressure_level: high
   time: 15
-  total_pressure: 81.18
+  total_pressure: 79.91
 - active_channels: 7
-  active_differences: 9
+  active_differences: 6
   blocked_channels: 0
   break_events_count: 3
   detail:
@@ -205,9 +205,9 @@
   nearest_stable_label: unstable
   pressure_level: high
   time: 16
-  total_pressure: 89.52
+  total_pressure: 88.25
 - active_channels: 7
-  active_differences: 9
+  active_differences: 6
   blocked_channels: 0
   break_events_count: 3
   detail:
@@ -218,9 +218,9 @@
   nearest_stable_label: unstable
   pressure_level: critical
   time: 17
-  total_pressure: 97.44
+  total_pressure: 96.17
 - active_channels: 7
-  active_differences: 9
+  active_differences: 6
   blocked_channels: 0
   break_events_count: 3
   detail:
@@ -231,9 +231,9 @@
   nearest_stable_label: unstable
   pressure_level: critical
   time: 18
-  total_pressure: 104.97
+  total_pressure: 103.7
 - active_channels: 7
-  active_differences: 9
+  active_differences: 6
   blocked_channels: 0
   break_events_count: 4
   detail:
@@ -244,9 +244,9 @@
   nearest_stable_label: unstable
   pressure_level: high
   time: 19
-  total_pressure: 64.94
+  total_pressure: 63.67
 - active_channels: 7
-  active_differences: 9
+  active_differences: 6
   blocked_channels: 0
   break_events_count: 4
   detail:
@@ -257,9 +257,9 @@
   nearest_stable_label: unstable
   pressure_level: high
   time: 20
-  total_pressure: 71.73
+  total_pressure: 70.46
 - active_channels: 7
-  active_differences: 9
+  active_differences: 6
   blocked_channels: 0
   break_events_count: 4
   detail:
@@ -270,9 +270,9 @@
   nearest_stable_label: unstable
   pressure_level: high
   time: 21
-  total_pressure: 78.18
+  total_pressure: 76.91
 - active_channels: 7
-  active_differences: 9
+  active_differences: 6
   blocked_channels: 0
   break_events_count: 4
   detail:
@@ -283,9 +283,9 @@
   nearest_stable_label: unstable
   pressure_level: high
   time: 22
-  total_pressure: 84.31
+  total_pressure: 83.04
 - active_channels: 7
-  active_differences: 9
+  active_differences: 6
   blocked_channels: 0
   break_events_count: 4
   detail:
@@ -294,11 +294,11 @@
   dominant_difference_type: inventory
   dominant_entity_id: exchange_001
   nearest_stable_label: unstable
-  pressure_level: critical
+  pressure_level: high
   time: 23
-  total_pressure: 90.14
+  total_pressure: 88.87
 - active_channels: 7
-  active_differences: 9
+  active_differences: 6
   blocked_channels: 0
   break_events_count: 4
   detail:
@@ -309,9 +309,9 @@
   nearest_stable_label: unstable
   pressure_level: critical
   time: 24
-  total_pressure: 95.67
+  total_pressure: 94.4
 - active_channels: 7
-  active_differences: 9
+  active_differences: 6
   blocked_channels: 0
   break_events_count: 4
   detail:
@@ -322,9 +322,9 @@
   nearest_stable_label: unstable
   pressure_level: critical
   time: 25
-  total_pressure: 100.93
+  total_pressure: 99.66
 - active_channels: 7
-  active_differences: 9
+  active_differences: 6
   blocked_channels: 0
   break_events_count: 4
   detail:
@@ -335,9 +335,9 @@
   nearest_stable_label: unstable
   pressure_level: critical
   time: 26
-  total_pressure: 105.92
+  total_pressure: 104.65
 - active_channels: 7
-  active_differences: 9
+  active_differences: 6
   blocked_channels: 0
   break_events_count: 5
   detail:
@@ -348,9 +348,9 @@
   nearest_stable_label: unstable
   pressure_level: high
   time: 27
-  total_pressure: 64.21
+  total_pressure: 62.94
 - active_channels: 7
-  active_differences: 9
+  active_differences: 6
   blocked_channels: 0
   break_events_count: 5
   detail:
@@ -361,9 +361,9 @@
   nearest_stable_label: unstable
   pressure_level: high
   time: 28
-  total_pressure: 68.72
+  total_pressure: 67.45
 - active_channels: 7
-  active_differences: 9
+  active_differences: 6
   blocked_channels: 0
   break_events_count: 5
   detail:
@@ -374,9 +374,9 @@
   nearest_stable_label: unstable
   pressure_level: high
   time: 29
-  total_pressure: 73.0
+  total_pressure: 71.73
 - active_channels: 7
-  active_differences: 9
+  active_differences: 6
   blocked_channels: 0
   break_events_count: 5
   detail:
@@ -387,4 +387,4 @@
   nearest_stable_label: unstable
   pressure_level: high
   time: 30
-  total_pressure: 77.07
+  total_pressure: 75.8
