@@ -1,14 +1,14 @@
 # Real_World 实验报告：Full-Topology-World
 
-**实验ID**: exp_005_full_topology
-**运行步数**: 30
-**总破缺事件**: 5
+**实验ID**: exp_005_50
+**运行步数**: 50
+**总破缺事件**: 6
 
 ## 一、输入差异
 
 | ID | 类型 | 源节点 | 目标节点 | 初始压力 | 最终压力 | 状态 |
 |---|---|---|---|---|---|---|
-| inventory_shortage | inventory | region_A | exchange_delivery | 102.6 | 59.3 | active |
+| inventory_shortage | inventory | region_A | exchange_delivery | 102.6 | 63.7 | active |
 | delivery_pressure | delivery | near_month | exchange | 87.4 | 0.0 | resolved |
 | expectation_bullish | expectation | market | price | 41.6 | 0.0 | resolved |
 
@@ -111,12 +111,13 @@
 | 13 | accumulation_overflow | inventory_shortage | 1.00 | 差异 inventory_shortage 压力 90.8 超过阈值 90.0，触发 accumulation_overflow，严重度 1.00 |
 | 19 | accumulation_overflow | inventory_shortage | 1.00 | 差异 inventory_shortage 压力 94.4 超过阈值 90.0，触发 accumulation_overflow，严重度 1.00 |
 | 27 | accumulation_overflow | inventory_shortage | 1.00 | 差异 inventory_shortage 压力 92.9 超过阈值 90.0，触发 accumulation_overflow，严重度 1.00 |
+| 40 | accumulation_overflow | inventory_shortage | 1.00 | 差异 inventory_shortage 压力 90.3 超过阈值 90.0，触发 accumulation_overflow，严重度 1.00 |
 
 ## 八、最近稳态
 
 **最终稳态判定**: unstable
 
-**判定理由**: 近3步有15次破缺，系统不稳定
+**判定理由**: 近3步有18次破缺，系统不稳定
 
 ## 九、状态演变
 
@@ -152,12 +153,32 @@
 | 28 | 68.7 | 9 | 7 | high | unstable |
 | 29 | 73.0 | 9 | 7 | high | unstable |
 | 30 | 77.1 | 9 | 7 | high | unstable |
+| 31 | 80.9 | 9 | 7 | high | unstable |
+| 32 | 84.6 | 9 | 7 | high | unstable |
+| 33 | 88.1 | 9 | 7 | high | unstable |
+| 34 | 91.4 | 9 | 7 | critical | unstable |
+| 35 | 94.5 | 9 | 7 | critical | unstable |
+| 36 | 97.5 | 9 | 7 | critical | unstable |
+| 37 | 100.4 | 9 | 7 | critical | unstable |
+| 38 | 103.1 | 9 | 7 | critical | unstable |
+| 39 | 105.6 | 9 | 7 | critical | unstable |
+| 40 | 62.9 | 9 | 7 | high | unstable |
+| 41 | 65.2 | 9 | 7 | high | unstable |
+| 42 | 67.4 | 9 | 7 | high | unstable |
+| 43 | 69.5 | 9 | 7 | high | unstable |
+| 44 | 71.5 | 9 | 7 | high | unstable |
+| 45 | 73.4 | 9 | 7 | high | unstable |
+| 46 | 75.2 | 9 | 7 | high | unstable |
+| 47 | 76.9 | 9 | 7 | high | unstable |
+| 48 | 78.5 | 9 | 7 | high | unstable |
+| 49 | 80.0 | 9 | 7 | high | unstable |
+| 50 | 81.5 | 9 | 7 | high | unstable |
 
 ## 十、结构判断
 
 > **注意**: 本报告为差异结构分析，不构成任何交易建议。
 
-- **主导差异**: inventory_shortage（inventory），压力 59.3
+- **主导差异**: inventory_shortage（inventory），压力 63.7
 - **承压主体**: industrial_short_001(stressed)
 - **最近稳态**: unstable
 - **变形链事件**: 17 次变形

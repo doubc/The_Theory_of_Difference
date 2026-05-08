@@ -1,6 +1,6 @@
 experiment:
   id: exp_005
-  name: 完整拓扑验证
+  name: 完整拓扑验证（参数调优）
   description: |
     验证反馈循环+干预多动作+变形链的完整拓扑。
     差异源：库存短缺（recurrent）+ 近月交割压力（recurrent）。
@@ -8,18 +8,24 @@ experiment:
     预期：反馈差异 margin/liquidity 从承接体生成。
     预期：交易所三重干预后破缺减少，但产生副作用差异。
 
+    调优说明（v2）：
+    - recurrent_rate 降低，让生成 < channel 排放能力
+    - break_threshold 提高，给系统积累缓冲空间
+    - leverage 降低，削弱反馈放大效应（杠杆4x→2x，margin反馈减半）
+    - 目标：系统在 30 步内趋向收敛或稳定振荡
+
 world:
   name: Full-Topology-World
   max_steps: 30
 
 break_thresholds:
-  inventory: 70
-  liquidity: 60
-  expectation: 80
-  margin: 60
-  delivery: 50
-  basis: 70
-  rule: 50
+  inventory: 90
+  liquidity: 80
+  expectation: 100
+  margin: 80
+  delivery: 70
+  basis: 90
+  rule: 70
 
 differences:
   - id: inventory_shortage
@@ -31,9 +37,9 @@ differences:
     persistence: 0.9
     transformability: 0.9
     recurrent: true
-    recurrent_rate: 0.35
+    recurrent_rate: 0.15
     recurrent_decay: 0.95
-    description: 交割地库存持续短缺（高生成率）
+    description: 交割地库存持续短缺（120×0.15=18/步，channel容量35，充裕）
 
   - id: delivery_pressure
     type: delivery
@@ -44,9 +50,9 @@ differences:
     persistence: 0.92
     transformability: 0.7
     recurrent: true
-    recurrent_rate: 0.4
+    recurrent_rate: 0.20
     recurrent_decay: 0.93
-    description: 近月交割压力持续加大（高生成率）
+    description: 近月交割压力持续加大（100×0.20=20/步，channel容量45，充裕）
 
   - id: expectation_bullish
     type: expectation
@@ -57,9 +63,9 @@ differences:
     persistence: 0.7
     transformability: 0.8
     recurrent: true
-    recurrent_rate: 0.2
+    recurrent_rate: 0.15
     recurrent_decay: 0.95
-    description: 市场看涨预期持续升温
+    description: 市场看涨预期持续升温（70×0.15=10.5/步，channel容量100，充裕）
 
 entities:
   - id: industrial_short_001
@@ -68,9 +74,9 @@ entities:
     available_capacity: 30
     risk_tolerance: 35
     liquidity: 40
-    leverage: 2.5
+    leverage: 2.0
     preference: short
-    description: 产业空头，需卖出套保但交割品不足（低承接力）
+    description: 产业空头，需卖出套保但交割品不足（杠杆降低：2.5→2.0）
 
   - id: speculative_long_001
     type: speculator
@@ -78,9 +84,9 @@ entities:
     available_capacity: 60
     risk_tolerance: 70
     liquidity: 55
-    leverage: 4.0
+    leverage: 2.0
     preference: long
-    description: 投机多头，趋势跟随，高杠杆
+    description: 投机多头，趋势跟随（杠杆降低：4.0→2.0，margin反馈减半）
 
   - id: speculator_002
     type: speculator
@@ -88,9 +94,9 @@ entities:
     available_capacity: 45
     risk_tolerance: 50
     liquidity: 40
-    leverage: 3.0
+    leverage: 1.5
     preference: long
-    description: 投机多头二号，中等杠杆
+    description: 投机多头二号（杠杆降低：3.0→1.5，margin反馈减半）
 
   - id: exchange_001
     type: exchange
