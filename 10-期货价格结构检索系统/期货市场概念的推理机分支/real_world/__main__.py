@@ -20,6 +20,7 @@ def main():
     parser.add_argument("--steps", type=int, default=None, help="运行步数（覆盖配置文件）")
     parser.add_argument("--output", default="outputs", help="输出目录")
     parser.add_argument("--quiet", action="store_true", help="静默模式")
+    parser.add_argument("--no-intervention", action="store_true", help="禁用交易所干预")
 
     args = parser.parse_args()
 
@@ -37,7 +38,7 @@ def main():
         world.max_steps = args.steps
 
     # 运行
-    runner = Runner(world, verbose=not args.quiet)
+    runner = Runner(world, verbose=not args.quiet, exchange_intervention=not args.no_intervention)
     world = runner.run()
 
     # 输出结果
