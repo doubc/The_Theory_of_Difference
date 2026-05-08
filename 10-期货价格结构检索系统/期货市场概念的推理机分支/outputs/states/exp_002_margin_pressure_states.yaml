@@ -1,260 +1,260 @@
 - active_channels: 3
-  active_differences: 4
+  active_differences: 3
   blocked_channels: 0
   break_events_count: 0
   detail:
-    stable_reason: 总压力72.2，近期破缺0次，通道拥堵33%，尚未找到最近稳态
-  dominant_difference_id: margin_hike
-  dominant_difference_type: margin
+    stable_reason: 超过100%主体处于压力状态，等待保证金缓解
+  dominant_difference_id: transform_margin_to_liquidity_3_feedback_margin_industrial_long_001_1
+  dominant_difference_type: liquidity
   dominant_entity_id: industrial_long_001
-  nearest_stable_label: unstable
-  pressure_level: high
+  nearest_stable_label: margin_relief
+  pressure_level: low
   time: 1
-  total_pressure: 72.2
+  total_pressure: 0.18
 - active_channels: 3
-  active_differences: 6
+  active_differences: 2
   blocked_channels: 0
   break_events_count: 0
   detail:
     stable_reason: 超过100%主体处于压力状态，等待保证金缓解
-  dominant_difference_id: margin_hike
-  dominant_difference_type: margin
+  dominant_difference_id: transform_margin_to_liquidity_3_feedback_margin_industrial_long_001_1
+  dominant_difference_type: liquidity
   dominant_entity_id: industrial_long_001
   nearest_stable_label: margin_relief
-  pressure_level: high
+  pressure_level: low
   time: 2
-  total_pressure: 64.04
+  total_pressure: 0.17
 - active_channels: 3
-  active_differences: 8
+  active_differences: 2
   blocked_channels: 0
   break_events_count: 0
   detail:
     stable_reason: 超过100%主体处于压力状态，等待保证金缓解
-  dominant_difference_id: transform_inventory_to_basis_0_inventory_gap
-  dominant_difference_type: basis
+  dominant_difference_id: transform_margin_to_liquidity_3_feedback_margin_industrial_long_001_1
+  dominant_difference_type: liquidity
   dominant_entity_id: industrial_long_001
   nearest_stable_label: margin_relief
-  pressure_level: medium
+  pressure_level: low
   time: 3
-  total_pressure: 52.08
+  total_pressure: 0.17
 - active_channels: 3
-  active_differences: 9
+  active_differences: 2
   blocked_channels: 0
   break_events_count: 0
   detail:
     stable_reason: 超过100%主体处于压力状态，等待保证金缓解
-  dominant_difference_id: transform_inventory_to_basis_0_inventory_gap
-  dominant_difference_type: basis
+  dominant_difference_id: transform_margin_to_liquidity_3_feedback_margin_industrial_long_001_1
+  dominant_difference_type: liquidity
   dominant_entity_id: industrial_long_001
   nearest_stable_label: margin_relief
-  pressure_level: medium
+  pressure_level: low
   time: 4
-  total_pressure: 44.99
+  total_pressure: 0.17
 - active_channels: 3
-  active_differences: 8
+  active_differences: 2
   blocked_channels: 0
   break_events_count: 0
   detail:
     stable_reason: 超过100%主体处于压力状态，等待保证金缓解
-  dominant_difference_id: transform_inventory_to_basis_0_inventory_gap
-  dominant_difference_type: basis
+  dominant_difference_id: transform_margin_to_liquidity_3_feedback_margin_industrial_long_001_1
+  dominant_difference_type: liquidity
   dominant_entity_id: industrial_long_001
   nearest_stable_label: margin_relief
-  pressure_level: medium
+  pressure_level: low
   time: 5
-  total_pressure: 41.84
+  total_pressure: 0.17
 - active_channels: 3
-  active_differences: 8
+  active_differences: 2
   blocked_channels: 0
   break_events_count: 0
   detail:
     stable_reason: 超过100%主体处于压力状态，等待保证金缓解
-  dominant_difference_id: transform_inventory_to_basis_0_inventory_gap
-  dominant_difference_type: basis
+  dominant_difference_id: transform_margin_to_liquidity_3_feedback_margin_industrial_long_001_1
+  dominant_difference_type: liquidity
   dominant_entity_id: industrial_long_001
   nearest_stable_label: margin_relief
-  pressure_level: medium
+  pressure_level: low
   time: 6
-  total_pressure: 41.84
+  total_pressure: 0.17
 - active_channels: 3
-  active_differences: 8
+  active_differences: 2
   blocked_channels: 0
   break_events_count: 0
   detail:
     stable_reason: 超过100%主体处于压力状态，等待保证金缓解
-  dominant_difference_id: transform_inventory_to_basis_0_inventory_gap
-  dominant_difference_type: basis
+  dominant_difference_id: transform_margin_to_liquidity_3_feedback_margin_industrial_long_001_1
+  dominant_difference_type: liquidity
   dominant_entity_id: industrial_long_001
   nearest_stable_label: margin_relief
-  pressure_level: medium
+  pressure_level: low
   time: 7
-  total_pressure: 41.84
+  total_pressure: 0.17
 - active_channels: 3
-  active_differences: 8
+  active_differences: 2
   blocked_channels: 0
   break_events_count: 0
   detail:
     stable_reason: 超过100%主体处于压力状态，等待保证金缓解
-  dominant_difference_id: transform_inventory_to_basis_0_inventory_gap
-  dominant_difference_type: basis
+  dominant_difference_id: transform_margin_to_liquidity_3_feedback_margin_industrial_long_001_1
+  dominant_difference_type: liquidity
   dominant_entity_id: industrial_long_001
   nearest_stable_label: margin_relief
-  pressure_level: medium
+  pressure_level: low
   time: 8
-  total_pressure: 41.84
+  total_pressure: 0.17
 - active_channels: 3
-  active_differences: 8
+  active_differences: 2
   blocked_channels: 0
   break_events_count: 0
   detail:
     stable_reason: 超过100%主体处于压力状态，等待保证金缓解
-  dominant_difference_id: transform_inventory_to_basis_0_inventory_gap
-  dominant_difference_type: basis
+  dominant_difference_id: transform_margin_to_liquidity_3_feedback_margin_industrial_long_001_1
+  dominant_difference_type: liquidity
   dominant_entity_id: industrial_long_001
   nearest_stable_label: margin_relief
-  pressure_level: medium
+  pressure_level: low
   time: 9
-  total_pressure: 41.84
+  total_pressure: 0.17
 - active_channels: 3
-  active_differences: 8
+  active_differences: 2
   blocked_channels: 0
   break_events_count: 0
   detail:
     stable_reason: 超过100%主体处于压力状态，等待保证金缓解
-  dominant_difference_id: transform_inventory_to_basis_0_inventory_gap
-  dominant_difference_type: basis
+  dominant_difference_id: transform_margin_to_liquidity_3_feedback_margin_industrial_long_001_1
+  dominant_difference_type: liquidity
   dominant_entity_id: industrial_long_001
   nearest_stable_label: margin_relief
-  pressure_level: medium
+  pressure_level: low
   time: 10
-  total_pressure: 41.84
+  total_pressure: 0.17
 - active_channels: 3
-  active_differences: 8
+  active_differences: 2
   blocked_channels: 0
   break_events_count: 0
   detail:
     stable_reason: 超过100%主体处于压力状态，等待保证金缓解
-  dominant_difference_id: transform_inventory_to_basis_0_inventory_gap
-  dominant_difference_type: basis
+  dominant_difference_id: transform_margin_to_liquidity_3_feedback_margin_industrial_long_001_1
+  dominant_difference_type: liquidity
   dominant_entity_id: industrial_long_001
   nearest_stable_label: margin_relief
-  pressure_level: medium
+  pressure_level: low
   time: 11
-  total_pressure: 41.84
+  total_pressure: 0.17
 - active_channels: 3
-  active_differences: 8
+  active_differences: 2
   blocked_channels: 0
   break_events_count: 0
   detail:
     stable_reason: 超过100%主体处于压力状态，等待保证金缓解
-  dominant_difference_id: transform_inventory_to_basis_0_inventory_gap
-  dominant_difference_type: basis
+  dominant_difference_id: transform_margin_to_liquidity_3_feedback_margin_industrial_long_001_1
+  dominant_difference_type: liquidity
   dominant_entity_id: industrial_long_001
   nearest_stable_label: margin_relief
-  pressure_level: medium
+  pressure_level: low
   time: 12
-  total_pressure: 41.84
+  total_pressure: 0.17
 - active_channels: 3
-  active_differences: 8
+  active_differences: 2
   blocked_channels: 0
   break_events_count: 0
   detail:
     stable_reason: 超过100%主体处于压力状态，等待保证金缓解
-  dominant_difference_id: transform_inventory_to_basis_0_inventory_gap
-  dominant_difference_type: basis
+  dominant_difference_id: transform_margin_to_liquidity_3_feedback_margin_industrial_long_001_1
+  dominant_difference_type: liquidity
   dominant_entity_id: industrial_long_001
   nearest_stable_label: margin_relief
-  pressure_level: medium
+  pressure_level: low
   time: 13
-  total_pressure: 41.84
+  total_pressure: 0.17
 - active_channels: 3
-  active_differences: 8
+  active_differences: 2
   blocked_channels: 0
   break_events_count: 0
   detail:
     stable_reason: 超过100%主体处于压力状态，等待保证金缓解
-  dominant_difference_id: transform_inventory_to_basis_0_inventory_gap
-  dominant_difference_type: basis
+  dominant_difference_id: transform_margin_to_liquidity_3_feedback_margin_industrial_long_001_1
+  dominant_difference_type: liquidity
   dominant_entity_id: industrial_long_001
   nearest_stable_label: margin_relief
-  pressure_level: medium
+  pressure_level: low
   time: 14
-  total_pressure: 41.84
+  total_pressure: 0.17
 - active_channels: 3
-  active_differences: 8
+  active_differences: 2
   blocked_channels: 0
   break_events_count: 0
   detail:
     stable_reason: 超过100%主体处于压力状态，等待保证金缓解
-  dominant_difference_id: transform_inventory_to_basis_0_inventory_gap
-  dominant_difference_type: basis
+  dominant_difference_id: transform_margin_to_liquidity_3_feedback_margin_industrial_long_001_1
+  dominant_difference_type: liquidity
   dominant_entity_id: industrial_long_001
   nearest_stable_label: margin_relief
-  pressure_level: medium
+  pressure_level: low
   time: 15
-  total_pressure: 41.84
+  total_pressure: 0.17
 - active_channels: 3
-  active_differences: 8
+  active_differences: 2
   blocked_channels: 0
   break_events_count: 0
   detail:
     stable_reason: 超过100%主体处于压力状态，等待保证金缓解
-  dominant_difference_id: transform_inventory_to_basis_0_inventory_gap
-  dominant_difference_type: basis
+  dominant_difference_id: transform_margin_to_liquidity_3_feedback_margin_industrial_long_001_1
+  dominant_difference_type: liquidity
   dominant_entity_id: industrial_long_001
   nearest_stable_label: margin_relief
-  pressure_level: medium
+  pressure_level: low
   time: 16
-  total_pressure: 41.84
+  total_pressure: 0.17
 - active_channels: 3
-  active_differences: 8
+  active_differences: 2
   blocked_channels: 0
   break_events_count: 0
   detail:
     stable_reason: 超过100%主体处于压力状态，等待保证金缓解
-  dominant_difference_id: transform_inventory_to_basis_0_inventory_gap
-  dominant_difference_type: basis
+  dominant_difference_id: transform_margin_to_liquidity_3_feedback_margin_industrial_long_001_1
+  dominant_difference_type: liquidity
   dominant_entity_id: industrial_long_001
   nearest_stable_label: margin_relief
-  pressure_level: medium
+  pressure_level: low
   time: 17
-  total_pressure: 41.84
+  total_pressure: 0.17
 - active_channels: 3
-  active_differences: 8
+  active_differences: 2
   blocked_channels: 0
   break_events_count: 0
   detail:
     stable_reason: 超过100%主体处于压力状态，等待保证金缓解
-  dominant_difference_id: transform_inventory_to_basis_0_inventory_gap
-  dominant_difference_type: basis
+  dominant_difference_id: transform_margin_to_liquidity_3_feedback_margin_industrial_long_001_1
+  dominant_difference_type: liquidity
   dominant_entity_id: industrial_long_001
   nearest_stable_label: margin_relief
-  pressure_level: medium
+  pressure_level: low
   time: 18
-  total_pressure: 41.84
+  total_pressure: 0.17
 - active_channels: 3
-  active_differences: 8
+  active_differences: 2
   blocked_channels: 0
   break_events_count: 0
   detail:
     stable_reason: 超过100%主体处于压力状态，等待保证金缓解
-  dominant_difference_id: transform_inventory_to_basis_0_inventory_gap
-  dominant_difference_type: basis
+  dominant_difference_id: transform_margin_to_liquidity_3_feedback_margin_industrial_long_001_1
+  dominant_difference_type: liquidity
   dominant_entity_id: industrial_long_001
   nearest_stable_label: margin_relief
-  pressure_level: medium
+  pressure_level: low
   time: 19
-  total_pressure: 41.84
+  total_pressure: 0.17
 - active_channels: 3
-  active_differences: 8
+  active_differences: 2
   blocked_channels: 0
   break_events_count: 0
   detail:
     stable_reason: 超过100%主体处于压力状态，等待保证金缓解
-  dominant_difference_id: transform_inventory_to_basis_0_inventory_gap
-  dominant_difference_type: basis
+  dominant_difference_id: transform_margin_to_liquidity_3_feedback_margin_industrial_long_001_1
+  dominant_difference_type: liquidity
   dominant_entity_id: industrial_long_001
   nearest_stable_label: margin_relief
-  pressure_level: medium
+  pressure_level: low
   time: 20
-  total_pressure: 41.84
+  total_pressure: 0.17

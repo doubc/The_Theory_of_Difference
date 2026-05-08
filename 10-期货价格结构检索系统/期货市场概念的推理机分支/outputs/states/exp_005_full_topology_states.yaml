@@ -1,31 +1,44 @@
 - active_channels: 7
-  active_differences: 13
+  active_differences: 8
+  blocked_channels: 0
+  break_events_count: 1
+  detail:
+    stable_reason: 近3步有1次破缺，系统不稳定
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: unstable
+  pressure_level: high
+  time: 1
+  total_pressure: 78.4
+- active_channels: 7
+  active_differences: 10
   blocked_channels: 0
   break_events_count: 2
   detail:
-    stable_reason: 近3步有2次破缺，系统不稳定
+    stable_reason: 近3步有3次破缺，系统不稳定
   dominant_difference_id: inventory_shortage
   dominant_difference_type: inventory
   dominant_entity_id: exchange_001
   nearest_stable_label: unstable
-  pressure_level: critical
-  time: 1
-  total_pressure: 148.14
+  pressure_level: high
+  time: 2
+  total_pressure: 72.75
 - active_channels: 7
-  active_differences: 21
+  active_differences: 10
   blocked_channels: 0
   break_events_count: 3
   detail:
-    stable_reason: 近3步有5次破缺，系统不稳定
+    stable_reason: 近3步有6次破缺，系统不稳定
   dominant_difference_id: inventory_shortage
   dominant_difference_type: inventory
   dominant_entity_id: exchange_001
   nearest_stable_label: unstable
-  pressure_level: critical
-  time: 2
-  total_pressure: 131.94
+  pressure_level: high
+  time: 3
+  total_pressure: 69.9
 - active_channels: 7
-  active_differences: 27
+  active_differences: 10
   blocked_channels: 0
   break_events_count: 4
   detail:
@@ -34,11 +47,11 @@
   dominant_difference_type: inventory
   dominant_entity_id: exchange_001
   nearest_stable_label: unstable
-  pressure_level: critical
-  time: 3
-  total_pressure: 117.74
+  pressure_level: high
+  time: 4
+  total_pressure: 67.53
 - active_channels: 7
-  active_differences: 33
+  active_differences: 10
   blocked_channels: 0
   break_events_count: 5
   detail:
@@ -47,19 +60,331 @@
   dominant_difference_type: inventory
   dominant_entity_id: exchange_001
   nearest_stable_label: unstable
-  pressure_level: critical
-  time: 4
-  total_pressure: 109.88
+  pressure_level: high
+  time: 5
+  total_pressure: 65.44
 - active_channels: 7
-  active_differences: 33
+  active_differences: 12
   blocked_channels: 0
-  break_events_count: 6
+  break_events_count: 5
   detail:
-    stable_reason: 近3步有15次破缺，系统不稳定
+    stable_reason: 近3步有14次破缺，系统不稳定
   dominant_difference_id: inventory_shortage
   dominant_difference_type: inventory
   dominant_entity_id: exchange_001
   nearest_stable_label: unstable
   pressure_level: critical
-  time: 5
-  total_pressure: 112.41
+  time: 6
+  total_pressure: 107.77
+- active_channels: 7
+  active_differences: 12
+  blocked_channels: 0
+  break_events_count: 6
+  detail:
+    stable_reason: 近3步有16次破缺，系统不稳定
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: unstable
+  pressure_level: high
+  time: 7
+  total_pressure: 71.87
+- active_channels: 7
+  active_differences: 10
+  blocked_channels: 0
+  break_events_count: 7
+  detail:
+    stable_reason: 近3步有18次破缺，系统不稳定
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: unstable
+  pressure_level: high
+  time: 8
+  total_pressure: 61.6
+- active_channels: 7
+  active_differences: 12
+  blocked_channels: 0
+  break_events_count: 7
+  detail:
+    stable_reason: 近3步有20次破缺，系统不稳定
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: unstable
+  pressure_level: critical
+  time: 9
+  total_pressure: 99.29
+- active_channels: 7
+  active_differences: 12
+  blocked_channels: 0
+  break_events_count: 8
+  detail:
+    stable_reason: 近3步有22次破缺，系统不稳定
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: unstable
+  pressure_level: high
+  time: 10
+  total_pressure: 74.73
+- active_channels: 7
+  active_differences: 12
+  blocked_channels: 0
+  break_events_count: 9
+  detail:
+    stable_reason: 近3步有24次破缺，系统不稳定
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: unstable
+  pressure_level: high
+  time: 11
+  total_pressure: 63.24
+- active_channels: 7
+  active_differences: 14
+  blocked_channels: 0
+  break_events_count: 9
+  detail:
+    stable_reason: 近3步有26次破缺，系统不稳定
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: unstable
+  pressure_level: critical
+  time: 12
+  total_pressure: 96.9
+- active_channels: 7
+  active_differences: 12
+  blocked_channels: 0
+  break_events_count: 10
+  detail:
+    stable_reason: 近3步有28次破缺，系统不稳定
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: unstable
+  pressure_level: high
+  time: 13
+  total_pressure: 73.54
+- active_channels: 7
+  active_differences: 14
+  blocked_channels: 0
+  break_events_count: 10
+  detail:
+    stable_reason: 近3步有29次破缺，系统不稳定
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: unstable
+  pressure_level: critical
+  time: 14
+  total_pressure: 104.92
+- active_channels: 7
+  active_differences: 13
+  blocked_channels: 0
+  break_events_count: 11
+  detail:
+    stable_reason: 近3步有31次破缺，系统不稳定
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: unstable
+  pressure_level: high
+  time: 15
+  total_pressure: 79.0
+- active_channels: 7
+  active_differences: 13
+  blocked_channels: 0
+  break_events_count: 11
+  detail:
+    stable_reason: 近3步有32次破缺，系统不稳定
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: unstable
+  pressure_level: critical
+  time: 16
+  total_pressure: 98.46
+- active_channels: 7
+  active_differences: 13
+  blocked_channels: 0
+  break_events_count: 12
+  detail:
+    stable_reason: 近3步有34次破缺，系统不稳定
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: unstable
+  pressure_level: high
+  time: 17
+  total_pressure: 77.13
+- active_channels: 7
+  active_differences: 13
+  blocked_channels: 0
+  break_events_count: 12
+  detail:
+    stable_reason: 近3步有35次破缺，系统不稳定
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: unstable
+  pressure_level: critical
+  time: 18
+  total_pressure: 94.69
+- active_channels: 7
+  active_differences: 13
+  blocked_channels: 0
+  break_events_count: 13
+  detail:
+    stable_reason: 近3步有37次破缺，系统不稳定
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: unstable
+  pressure_level: high
+  time: 19
+  total_pressure: 74.34
+- active_channels: 7
+  active_differences: 13
+  blocked_channels: 0
+  break_events_count: 13
+  detail:
+    stable_reason: 近3步有38次破缺，系统不稳定
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: unstable
+  pressure_level: critical
+  time: 20
+  total_pressure: 90.19
+- active_channels: 7
+  active_differences: 13
+  blocked_channels: 0
+  break_events_count: 13
+  detail:
+    stable_reason: 近3步有39次破缺，系统不稳定
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: unstable
+  pressure_level: critical
+  time: 21
+  total_pressure: 105.25
+- active_channels: 7
+  active_differences: 13
+  blocked_channels: 0
+  break_events_count: 14
+  detail:
+    stable_reason: 近3步有40次破缺，系统不稳定
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: unstable
+  pressure_level: high
+  time: 22
+  total_pressure: 78.44
+- active_channels: 7
+  active_differences: 13
+  blocked_channels: 0
+  break_events_count: 14
+  detail:
+    stable_reason: 近3步有41次破缺，系统不稳定
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: unstable
+  pressure_level: critical
+  time: 23
+  total_pressure: 92.02
+- active_channels: 7
+  active_differences: 13
+  blocked_channels: 0
+  break_events_count: 14
+  detail:
+    stable_reason: 近3步有42次破缺，系统不稳定
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: unstable
+  pressure_level: critical
+  time: 24
+  total_pressure: 104.93
+- active_channels: 7
+  active_differences: 13
+  blocked_channels: 0
+  break_events_count: 15
+  detail:
+    stable_reason: 近3步有43次破缺，系统不稳定
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: unstable
+  pressure_level: high
+  time: 25
+  total_pressure: 77.26
+- active_channels: 7
+  active_differences: 13
+  blocked_channels: 0
+  break_events_count: 15
+  detail:
+    stable_reason: 近3步有44次破缺，系统不稳定
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: unstable
+  pressure_level: high
+  time: 26
+  total_pressure: 88.91
+- active_channels: 7
+  active_differences: 13
+  blocked_channels: 0
+  break_events_count: 15
+  detail:
+    stable_reason: 近3步有45次破缺，系统不稳定
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: unstable
+  pressure_level: critical
+  time: 27
+  total_pressure: 99.97
+- active_channels: 7
+  active_differences: 13
+  blocked_channels: 0
+  break_events_count: 16
+  detail:
+    stable_reason: 近3步有46次破缺，系统不稳定
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: unstable
+  pressure_level: high
+  time: 28
+  total_pressure: 73.9
+- active_channels: 7
+  active_differences: 13
+  blocked_channels: 0
+  break_events_count: 16
+  detail:
+    stable_reason: 近3步有47次破缺，系统不稳定
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: unstable
+  pressure_level: high
+  time: 29
+  total_pressure: 83.89
+- active_channels: 7
+  active_differences: 13
+  blocked_channels: 0
+  break_events_count: 16
+  detail:
+    stable_reason: 近3步有48次破缺，系统不稳定
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: unstable
+  pressure_level: critical
+  time: 30
+  total_pressure: 93.38

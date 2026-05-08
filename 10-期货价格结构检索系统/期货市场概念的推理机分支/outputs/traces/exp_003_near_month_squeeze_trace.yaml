@@ -38,23 +38,15 @@
   reason: 主体 industrial_short_001 承接 20.0，剩余能力 20.0（深度 0）
   time: 1
   to_node: ''
-- amount: 40.0
+- amount: 2.72
   channel_id: delivery_channel
   difference_id: delivery_pressure
   event_type: transfer
   from_node: near_month
-  reason: 经通道 delivery_channel 转移 40.0 压力
+  reason: 经通道 delivery_channel 转移 2.7 压力
   time: 1
   to_node: exchange
-- amount: 72.72
-  channel_id: ''
-  difference_id: delivery_pressure
-  event_type: accumulate
-  from_node: ''
-  reason: 转移后剩余 72.7 压力积累
-  time: 1
-  to_node: ''
-- amount: 12.0
+- amount: 2.54
   channel_id: delivery_channel
   difference_id: delivery_pressure
   event_type: transform
@@ -78,12 +70,12 @@
   reason: 经通道 warehouse_receipt_channel 转移 30.0 压力
   time: 1
   to_node: exchange_delivery
-- amount: 47.2
+- amount: 37.2
   channel_id: ''
   difference_id: inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 转移后剩余 47.2 压力积累
+  reason: 转移后剩余 37.2 压力积累
   time: 1
   to_node: ''
 - amount: 9.0
@@ -102,28 +94,12 @@
   reason: 主体 speculative_long_001 承接 41.7，剩余能力 48.3（深度 0）
   time: 1
   to_node: ''
-- amount: 41.7
-  channel_id: futures_contract_channel
-  difference_id: expectation_bullish
-  event_type: transfer
-  from_node: market
-  reason: 经通道 futures_contract_channel 转移 41.7 压力
-  time: 1
-  to_node: price
-- amount: 24.31
-  channel_id: futures_contract_channel
-  difference_id: expectation_bullish
-  event_type: transform
-  from_node: ''
-  reason: '差异变形: expectation → price，经通道 futures_contract_channel，深度 0'
-  time: 1
-  to_node: ''
 - amount: 0
   channel_id: ''
   difference_id: transform_delivery_to_basis_0_delivery_pressure
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 12.0（深度 1）
+  reason: 无可用通道，差异压力保持 2.5（深度 1）
   time: 1
   to_node: ''
 - amount: 0
@@ -132,14 +108,6 @@
   event_type: accumulate
   from_node: ''
   reason: 无可用通道，差异压力保持 9.0（深度 1）
-  time: 1
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_expectation_bullish
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 24.3（深度 1）
   time: 1
   to_node: ''
 - amount: 0
@@ -158,30 +126,6 @@
   reason: 无可用通道，差异压力保持 3.8（深度 1）
   time: 1
   to_node: ''
-- amount: 72.72
-  channel_id: ''
-  difference_id: delivery_pressure
-  event_type: break
-  from_node: ''
-  reason: '破缺: delivery_failure，压力 72.7 >= 阈值 50.0'
-  time: 1
-  to_node: ''
-- amount: 36.36
-  channel_id: ''
-  difference_id: delivery_pressure
-  event_type: break_release
-  from_node: ''
-  reason: 破缺释放压力 36.4
-  time: 1
-  to_node: ''
-- amount: 0.04
-  channel_id: delivery_channel
-  difference_id: ''
-  event_type: lock_in
-  from_node: ''
-  reason: 通道 delivery_channel 锁定度从 0.040 增至 0.080
-  time: 1
-  to_node: ''
 - amount: 0.03
   channel_id: warehouse_receipt_channel
   difference_id: ''
@@ -189,22 +133,6 @@
   from_node: ''
   reason: 通道 warehouse_receipt_channel 锁定度从 0.030 增至 0.060
   time: 1
-  to_node: ''
-- amount: 0.04
-  channel_id: futures_contract_channel
-  difference_id: ''
-  event_type: lock_in
-  from_node: ''
-  reason: 通道 futures_contract_channel 锁定度从 0.042 增至 0.083
-  time: 1
-  to_node: ''
-- amount: 28.98
-  channel_id: ''
-  difference_id: delivery_pressure
-  event_type: recurrent_generate
-  from_node: ''
-  reason: recurrent 生成 28.98 压力
-  time: 2
   to_node: ''
 - amount: 14.08
   channel_id: ''
@@ -214,52 +142,36 @@
   reason: recurrent 生成 14.08 压力
   time: 2
   to_node: ''
-- amount: 45.0
-  channel_id: delivery_channel
-  difference_id: delivery_pressure
-  event_type: entity_absorb
-  from_node: ''
-  reason: 主体 exchange_001 承接 45.0，剩余能力 45.0（深度 0）
-  time: 2
-  to_node: ''
 - amount: 5.0
-  channel_id: delivery_channel
-  difference_id: delivery_pressure
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
   event_type: entity_absorb
   from_node: ''
   reason: 主体 industrial_short_001 承接 5.0，剩余能力 5.0（深度 0）
   time: 2
   to_node: ''
-- amount: 28.0
-  channel_id: delivery_channel
-  difference_id: delivery_pressure
-  event_type: transfer
-  from_node: near_month
-  reason: 经通道 delivery_channel 转移 28.0 压力
-  time: 2
-  to_node: exchange
-- amount: 37.34
-  channel_id: ''
-  difference_id: delivery_pressure
-  event_type: accumulate
-  from_node: ''
-  reason: 转移后剩余 37.3 压力积累
-  time: 2
-  to_node: ''
-- amount: 8.4
-  channel_id: delivery_channel
-  difference_id: delivery_pressure
-  event_type: transform
-  from_node: ''
-  reason: '差异变形: delivery → basis，经通道 delivery_channel，深度 0'
-  time: 2
-  to_node: ''
-- amount: 0
+- amount: 21.0
   channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: transfer
+  from_node: region_A
+  reason: 经通道 warehouse_receipt_channel 转移 21.0 压力
+  time: 2
+  to_node: exchange_delivery
+- amount: 25.28
+  channel_id: ''
   difference_id: inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 主体承接能力不足，差异压力保持 61.3（深度 0）
+  reason: 转移后剩余 25.3 压力积累
+  time: 2
+  to_node: ''
+- amount: 6.3
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: inventory → basis，经通道 warehouse_receipt_channel，深度 0'
   time: 2
   to_node: ''
 - amount: 0
@@ -267,7 +179,7 @@
   difference_id: transform_delivery_to_basis_0_delivery_pressure
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 12.0（深度 0）
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
   time: 2
   to_node: ''
 - amount: 0
@@ -280,14 +192,6 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: transform_expectation_to_price_0_expectation_bullish
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 24.3（深度 0）
-  time: 2
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_1
   event_type: accumulate
   from_node: ''
@@ -296,18 +200,10 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: transform_delivery_to_basis_0_delivery_pressure
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 8.4（深度 1）
-  time: 2
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_2
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 8.5（深度 1）
+  reason: 无可用通道，差异压力保持 6.3（深度 1）
   time: 2
   to_node: ''
 - amount: 0
@@ -318,21 +214,13 @@
   reason: 无可用通道，差异压力保持 1.9（深度 1）
   time: 2
   to_node: ''
-- amount: 0.03
-  channel_id: delivery_channel
+- amount: 0.02
+  channel_id: warehouse_receipt_channel
   difference_id: ''
   event_type: lock_in
   from_node: ''
-  reason: 通道 delivery_channel 锁定度从 0.108 增至 0.136
+  reason: 通道 warehouse_receipt_channel 锁定度从 0.081 增至 0.102
   time: 2
-  to_node: ''
-- amount: 26.66
-  channel_id: ''
-  difference_id: delivery_pressure
-  event_type: recurrent_generate
-  from_node: ''
-  reason: recurrent 生成 26.66 压力
-  time: 3
   to_node: ''
 - amount: 12.39
   channel_id: ''
@@ -342,52 +230,36 @@
   reason: recurrent 生成 12.39 压力
   time: 3
   to_node: ''
-- amount: 22.5
-  channel_id: delivery_channel
-  difference_id: delivery_pressure
-  event_type: entity_absorb
-  from_node: ''
-  reason: 主体 exchange_001 承接 22.5，剩余能力 22.5（深度 0）
-  time: 3
-  to_node: ''
 - amount: 2.5
-  channel_id: delivery_channel
-  difference_id: delivery_pressure
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
   event_type: entity_absorb
   from_node: ''
   reason: 主体 industrial_short_001 承接 2.5，剩余能力 2.5（深度 0）
   time: 3
   to_node: ''
-- amount: 28.0
-  channel_id: delivery_channel
-  difference_id: delivery_pressure
-  event_type: transfer
-  from_node: near_month
-  reason: 经通道 delivery_channel 转移 28.0 压力
-  time: 3
-  to_node: exchange
-- amount: 36.0
-  channel_id: ''
-  difference_id: delivery_pressure
-  event_type: accumulate
-  from_node: ''
-  reason: 转移后剩余 36.0 压力积累
-  time: 3
-  to_node: ''
-- amount: 8.4
-  channel_id: delivery_channel
-  difference_id: delivery_pressure
-  event_type: transform
-  from_node: ''
-  reason: '差异变形: delivery → basis，经通道 delivery_channel，深度 0'
-  time: 3
-  to_node: ''
-- amount: 0
+- amount: 21.0
   channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: transfer
+  from_node: region_A
+  reason: 经通道 warehouse_receipt_channel 转移 21.0 压力
+  time: 3
+  to_node: exchange_delivery
+- amount: 14.17
+  channel_id: ''
   difference_id: inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 主体承接能力不足，差异压力保持 73.7（深度 0）
+  reason: 转移后剩余 14.2 压力积累
+  time: 3
+  to_node: ''
+- amount: 6.3
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: inventory → basis，经通道 warehouse_receipt_channel，深度 0'
   time: 3
   to_node: ''
 - amount: 0
@@ -395,7 +267,7 @@
   difference_id: transform_delivery_to_basis_0_delivery_pressure
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 8.4（深度 0）
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
   time: 3
   to_node: ''
 - amount: 0
@@ -403,15 +275,7 @@
   difference_id: transform_inventory_to_basis_0_inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 9.0（深度 0）
-  time: 3
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_expectation_bullish
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 24.3（深度 0）
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
   time: 3
   to_node: ''
 - amount: 0
@@ -424,14 +288,6 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_2
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 8.5（深度 0）
-  time: 3
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_2
   event_type: accumulate
   from_node: ''
@@ -440,18 +296,10 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: transform_delivery_to_basis_0_delivery_pressure
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 8.4（深度 1）
-  time: 3
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.3（深度 1）
+  reason: 无可用通道，差异压力保持 6.3（深度 1）
   time: 3
   to_node: ''
 - amount: 0
@@ -462,69 +310,13 @@
   reason: 无可用通道，差异压力保持 0.9（深度 1）
   time: 3
   to_node: ''
-- amount: 73.67
-  channel_id: ''
-  difference_id: inventory_shortage
-  event_type: break
-  from_node: ''
-  reason: '破缺: accumulation_overflow，压力 73.7 >= 阈值 70.0'
-  time: 3
-  to_node: ''
-- amount: 36.84
-  channel_id: ''
-  difference_id: inventory_shortage
-  event_type: break_release
-  from_node: ''
-  reason: 破缺释放压力 36.8
-  time: 3
-  to_node: ''
-- amount: 0.03
-  channel_id: delivery_channel
+- amount: 0.02
+  channel_id: warehouse_receipt_channel
   difference_id: ''
   event_type: lock_in
   from_node: ''
-  reason: 通道 delivery_channel 锁定度从 0.164 增至 0.192
+  reason: 通道 warehouse_receipt_channel 锁定度从 0.123 增至 0.144
   time: 3
-  to_node: ''
-- amount: 0.5
-  channel_id: ''
-  difference_id: ''
-  event_type: exchange_intervene
-  from_node: ''
-  reason: '交易所扩大通道容量 50%，影响: delivery_channel(40→60)'
-  time: 3
-  to_node: ''
-- amount: 12.5
-  channel_id: ''
-  difference_id: intervention_rule_3
-  event_type: intervention_side_effect
-  from_node: ''
-  reason: '干预副作用: 扩通道 → 规则差异 12.5'
-  time: 3
-  to_node: ''
-- amount: 0.3
-  channel_id: ''
-  difference_id: ''
-  event_type: exchange_intervene
-  from_node: ''
-  reason: '交易所释放承接力 30%，影响: speculative_long_001(15.5)'
-  time: 3
-  to_node: ''
-- amount: 12.0
-  channel_id: ''
-  difference_id: intervention_liquidity_3
-  event_type: intervention_side_effect
-  from_node: ''
-  reason: '干预副作用: 释放承接力 → 流动性差异 12.0'
-  time: 3
-  to_node: ''
-- amount: 24.53
-  channel_id: ''
-  difference_id: delivery_pressure
-  event_type: recurrent_generate
-  from_node: ''
-  reason: recurrent 生成 24.53 压力
-  time: 4
   to_node: ''
 - amount: 10.9
   channel_id: ''
@@ -534,44 +326,12 @@
   reason: recurrent 生成 10.90 压力
   time: 4
   to_node: ''
-- amount: 11.25
-  channel_id: delivery_channel
-  difference_id: delivery_pressure
-  event_type: entity_absorb
-  from_node: ''
-  reason: 主体 exchange_001 承接 11.2，剩余能力 11.2（深度 0）
-  time: 4
-  to_node: ''
-- amount: 48.0
-  channel_id: delivery_channel
-  difference_id: delivery_pressure
-  event_type: transfer
-  from_node: near_month
-  reason: 经通道 delivery_channel 转移 48.0 压力
-  time: 4
-  to_node: exchange
-- amount: 12.53
-  channel_id: ''
-  difference_id: delivery_pressure
-  event_type: accumulate
-  from_node: ''
-  reason: 转移后剩余 12.5 压力积累
-  time: 4
-  to_node: ''
-- amount: 14.4
-  channel_id: delivery_channel
-  difference_id: delivery_pressure
-  event_type: transform
-  from_node: ''
-  reason: '差异变形: delivery → basis，经通道 delivery_channel，深度 0'
-  time: 4
-  to_node: ''
 - amount: 0
   channel_id: warehouse_receipt_channel
   difference_id: inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 主体承接能力不足，差异压力保持 47.7（深度 0）
+  reason: 主体承接能力不足，差异压力保持 25.1（深度 0）
   time: 4
   to_node: ''
 - amount: 0
@@ -579,7 +339,7 @@
   difference_id: transform_delivery_to_basis_0_delivery_pressure
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 8.4（深度 0）
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
   time: 4
   to_node: ''
 - amount: 0
@@ -587,15 +347,7 @@
   difference_id: transform_inventory_to_basis_0_inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 9.0（深度 0）
-  time: 4
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_expectation_bullish
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 24.3（深度 0）
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
   time: 4
   to_node: ''
 - amount: 0
@@ -608,26 +360,10 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_2
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 8.5（深度 0）
-  time: 4
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_2
   event_type: accumulate
   from_node: ''
   reason: 无可用通道，差异压力保持 1.9（深度 0）
-  time: 4
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.3（深度 0）
   time: 4
   to_node: ''
 - amount: 0
@@ -637,102 +373,6 @@
   from_node: ''
   reason: 无可用通道，差异压力保持 0.9（深度 0）
   time: 4
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 4
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 4
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_delivery_to_basis_0_delivery_pressure
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 14.4（深度 1）
-  time: 4
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 2.1（深度 1）
-  time: 4
-  to_node: ''
-- amount: 0.05
-  channel_id: delivery_channel
-  difference_id: ''
-  event_type: lock_in
-  from_node: ''
-  reason: 通道 delivery_channel 锁定度从 0.240 增至 0.288
-  time: 4
-  to_node: ''
-- amount: 0.3
-  channel_id: ''
-  difference_id: ''
-  event_type: exchange_intervene
-  from_node: ''
-  reason: '交易所降低差异生成率 30%，影响: expectation_bullish'
-  time: 4
-  to_node: ''
-- amount: 10.5
-  channel_id: ''
-  difference_id: intervention_expectation_4
-  event_type: intervention_side_effect
-  from_node: ''
-  reason: '干预副作用: 限仓 → 预期差异 10.5'
-  time: 4
-  to_node: ''
-- amount: 0.5
-  channel_id: ''
-  difference_id: ''
-  event_type: exchange_intervene
-  from_node: ''
-  reason: '交易所扩大通道容量 50%，影响: delivery_channel(60→90)'
-  time: 4
-  to_node: ''
-- amount: 12.5
-  channel_id: ''
-  difference_id: intervention_rule_4
-  event_type: intervention_side_effect
-  from_node: ''
-  reason: '干预副作用: 扩通道 → 规则差异 12.5'
-  time: 4
-  to_node: ''
-- amount: 0.3
-  channel_id: ''
-  difference_id: ''
-  event_type: exchange_intervene
-  from_node: ''
-  reason: '交易所释放承接力 30%，影响: speculative_long_001(10.9)'
-  time: 4
-  to_node: ''
-- amount: 12.0
-  channel_id: ''
-  difference_id: intervention_liquidity_4
-  event_type: intervention_side_effect
-  from_node: ''
-  reason: '干预副作用: 释放承接力 → 流动性差异 12.0'
-  time: 4
-  to_node: ''
-- amount: 22.57
-  channel_id: ''
-  difference_id: delivery_pressure
-  event_type: recurrent_generate
-  from_node: ''
-  reason: recurrent 生成 22.57 压力
-  time: 5
   to_node: ''
 - amount: 9.6
   channel_id: ''
@@ -742,36 +382,12 @@
   reason: recurrent 生成 9.60 压力
   time: 5
   to_node: ''
-- amount: 5.62
-  channel_id: delivery_channel
-  difference_id: delivery_pressure
-  event_type: entity_absorb
-  from_node: ''
-  reason: 主体 exchange_001 承接 5.6，剩余能力 5.6（深度 0）
-  time: 5
-  to_node: ''
-- amount: 35.1
-  channel_id: delivery_channel
-  difference_id: delivery_pressure
-  event_type: transfer
-  from_node: near_month
-  reason: 经通道 delivery_channel 转移 35.1 压力
-  time: 5
-  to_node: exchange
-- amount: 11.3
-  channel_id: delivery_channel
-  difference_id: delivery_pressure
-  event_type: transform
-  from_node: ''
-  reason: '差异变形: delivery → basis，经通道 delivery_channel，深度 0'
-  time: 5
-  to_node: ''
 - amount: 0
   channel_id: warehouse_receipt_channel
   difference_id: inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 主体承接能力不足，差异压力保持 57.3（深度 0）
+  reason: 主体承接能力不足，差异压力保持 34.7（深度 0）
   time: 5
   to_node: ''
 - amount: 0
@@ -779,7 +395,7 @@
   difference_id: transform_delivery_to_basis_0_delivery_pressure
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 14.4（深度 0）
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
   time: 5
   to_node: ''
 - amount: 0
@@ -787,15 +403,7 @@
   difference_id: transform_inventory_to_basis_0_inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 9.0（深度 0）
-  time: 5
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_expectation_bullish
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 24.3（深度 0）
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
   time: 5
   to_node: ''
 - amount: 0
@@ -808,14 +416,6 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_2
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 8.5（深度 0）
-  time: 5
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_2
   event_type: accumulate
   from_node: ''
@@ -824,146 +424,10 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.3（深度 0）
-  time: 5
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_3
   event_type: accumulate
   from_node: ''
   reason: 无可用通道，差异压力保持 0.9（深度 0）
-  time: 5
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 5
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 5
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 2.1（深度 0）
-  time: 5
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_4
-  event_type: entity_absorb
-  from_node: ''
-  reason: 主体 speculative_long_001 承接 4.7，剩余能力 69.9（深度 0）
-  time: 5
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_4
-  event_type: transfer
-  from_node: exchange
-  reason: 经通道 futures_contract_channel 转移 4.7 压力
-  time: 5
-  to_node: market
-- amount: 4.11
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_4
-  event_type: transform
-  from_node: ''
-  reason: '差异变形: expectation → price，经通道 futures_contract_channel，深度 0'
-  time: 5
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 5
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 5
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_delivery_to_basis_0_delivery_pressure
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 11.3（深度 1）
-  time: 5
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 1）
-  time: 5
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 1.1（深度 1）
-  time: 5
-  to_node: ''
-- amount: 0.04
-  channel_id: delivery_channel
-  difference_id: ''
-  event_type: lock_in
-  from_node: ''
-  reason: 通道 delivery_channel 锁定度从 0.323 增至 0.358
-  time: 5
-  to_node: ''
-- amount: 0.3
-  channel_id: ''
-  difference_id: ''
-  event_type: exchange_intervene
-  from_node: ''
-  reason: '交易所降低差异生成率 30%，影响: expectation_bullish'
-  time: 5
-  to_node: ''
-- amount: 10.5
-  channel_id: ''
-  difference_id: intervention_expectation_5
-  event_type: intervention_side_effect
-  from_node: ''
-  reason: '干预副作用: 限仓 → 预期差异 10.5'
-  time: 5
-  to_node: ''
-- amount: 0.3
-  channel_id: ''
-  difference_id: ''
-  event_type: exchange_intervene
-  from_node: ''
-  reason: '交易所释放承接力 30%，影响: speculative_long_001(9.0)'
-  time: 5
-  to_node: ''
-- amount: 12.0
-  channel_id: ''
-  difference_id: intervention_liquidity_5
-  event_type: intervention_side_effect
-  from_node: ''
-  reason: '干预副作用: 释放承接力 → 流动性差异 12.0'
   time: 5
   to_node: ''
 - amount: 8.44
@@ -979,7 +443,7 @@
   difference_id: inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 主体承接能力不足，差异压力保持 65.8（深度 0）
+  reason: 主体承接能力不足，差异压力保持 43.1（深度 0）
   time: 6
   to_node: ''
 - amount: 0
@@ -987,7 +451,7 @@
   difference_id: transform_delivery_to_basis_0_delivery_pressure
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 11.3（深度 0）
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
   time: 6
   to_node: ''
 - amount: 0
@@ -995,15 +459,7 @@
   difference_id: transform_inventory_to_basis_0_inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 9.0（深度 0）
-  time: 6
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_expectation_bullish
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 24.3（深度 0）
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
   time: 6
   to_node: ''
 - amount: 0
@@ -1016,14 +472,6 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_2
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 8.5（深度 0）
-  time: 6
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_2
   event_type: accumulate
   from_node: ''
@@ -1032,130 +480,10 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.3（深度 0）
-  time: 6
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_3
   event_type: accumulate
   from_node: ''
   reason: 无可用通道，差异压力保持 0.9（深度 0）
-  time: 6
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 6
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 6
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 2.1（深度 0）
-  time: 6
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 6
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 6
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 6
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 1.1（深度 0）
-  time: 6
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_5
-  event_type: entity_absorb
-  from_node: ''
-  reason: 主体 speculative_long_001 承接 4.7，剩余能力 74.2（深度 0）
-  time: 6
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_5
-  event_type: transfer
-  from_node: exchange
-  reason: 经通道 futures_contract_channel 转移 4.7 压力
-  time: 6
-  to_node: market
-- amount: 4.06
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_5
-  event_type: transform
-  from_node: ''
-  reason: '差异变形: expectation → price，经通道 futures_contract_channel，深度 0'
-  time: 6
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 6
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 1）
-  time: 6
-  to_node: ''
-- amount: 0.3
-  channel_id: ''
-  difference_id: ''
-  event_type: exchange_intervene
-  from_node: ''
-  reason: '交易所降低差异生成率 30%，影响: expectation_bullish'
-  time: 6
-  to_node: ''
-- amount: 10.5
-  channel_id: ''
-  difference_id: intervention_expectation_6
-  event_type: intervention_side_effect
-  from_node: ''
-  reason: '干预副作用: 限仓 → 预期差异 10.5'
   time: 6
   to_node: ''
 - amount: 7.43
@@ -1171,7 +499,7 @@
   difference_id: inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 主体承接能力不足，差异压力保持 73.2（深度 0）
+  reason: 主体承接能力不足，差异压力保持 50.5（深度 0）
   time: 7
   to_node: ''
 - amount: 0
@@ -1179,7 +507,7 @@
   difference_id: transform_delivery_to_basis_0_delivery_pressure
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 11.3（深度 0）
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
   time: 7
   to_node: ''
 - amount: 0
@@ -1187,15 +515,7 @@
   difference_id: transform_inventory_to_basis_0_inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 9.0（深度 0）
-  time: 7
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_expectation_bullish
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 24.3（深度 0）
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
   time: 7
   to_node: ''
 - amount: 0
@@ -1208,14 +528,6 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_2
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 8.5（深度 0）
-  time: 7
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_2
   event_type: accumulate
   from_node: ''
@@ -1224,154 +536,10 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.3（深度 0）
-  time: 7
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_3
   event_type: accumulate
   from_node: ''
   reason: 无可用通道，差异压力保持 0.9（深度 0）
-  time: 7
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 7
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 7
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 2.1（深度 0）
-  time: 7
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 7
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 7
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 7
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 1.1（深度 0）
-  time: 7
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 7
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 7
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_6
-  event_type: entity_absorb
-  from_node: ''
-  reason: 主体 speculative_long_001 承接 4.7，剩余能力 69.5（深度 0）
-  time: 7
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_6
-  event_type: transfer
-  from_node: exchange
-  reason: 经通道 futures_contract_channel 转移 4.7 压力
-  time: 7
-  to_node: market
-- amount: 4.02
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_6
-  event_type: transform
-  from_node: ''
-  reason: '差异变形: expectation → price，经通道 futures_contract_channel，深度 0'
-  time: 7
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_6
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 1）
-  time: 7
-  to_node: ''
-- amount: 73.21
-  channel_id: ''
-  difference_id: inventory_shortage
-  event_type: break
-  from_node: ''
-  reason: '破缺: accumulation_overflow，压力 73.2 >= 阈值 70.0'
-  time: 7
-  to_node: ''
-- amount: 36.6
-  channel_id: ''
-  difference_id: inventory_shortage
-  event_type: break_release
-  from_node: ''
-  reason: 破缺释放压力 36.6
-  time: 7
-  to_node: ''
-- amount: 0.3
-  channel_id: ''
-  difference_id: ''
-  event_type: exchange_intervene
-  from_node: ''
-  reason: '交易所释放承接力 30%，影响: speculative_long_001(9.1)'
-  time: 7
-  to_node: ''
-- amount: 12.0
-  channel_id: ''
-  difference_id: intervention_liquidity_7
-  event_type: intervention_side_effect
-  from_node: ''
-  reason: '干预副作用: 释放承接力 → 流动性差异 12.0'
   time: 7
   to_node: ''
 - amount: 6.54
@@ -1387,7 +555,7 @@
   difference_id: inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 主体承接能力不足，差异压力保持 43.1（深度 0）
+  reason: 主体承接能力不足，差异压力保持 57.1（深度 0）
   time: 8
   to_node: ''
 - amount: 0
@@ -1395,7 +563,7 @@
   difference_id: transform_delivery_to_basis_0_delivery_pressure
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 11.3（深度 0）
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
   time: 8
   to_node: ''
 - amount: 0
@@ -1403,15 +571,7 @@
   difference_id: transform_inventory_to_basis_0_inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 9.0（深度 0）
-  time: 8
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_expectation_bullish
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 24.3（深度 0）
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
   time: 8
   to_node: ''
 - amount: 0
@@ -1424,14 +584,6 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_2
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 8.5（深度 0）
-  time: 8
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_2
   event_type: accumulate
   from_node: ''
@@ -1440,122 +592,10 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.3（深度 0）
-  time: 8
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_3
   event_type: accumulate
   from_node: ''
   reason: 无可用通道，差异压力保持 0.9（深度 0）
-  time: 8
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 8
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 8
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 2.1（深度 0）
-  time: 8
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 8
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 8
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 8
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 1.1（深度 0）
-  time: 8
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 8
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 8
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_6
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 8
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_7
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 8
-  to_node: ''
-- amount: 0.3
-  channel_id: ''
-  difference_id: ''
-  event_type: exchange_intervene
-  from_node: ''
-  reason: '交易所降低差异生成率 30%，影响: expectation_bullish'
-  time: 8
-  to_node: ''
-- amount: 10.5
-  channel_id: ''
-  difference_id: intervention_expectation_8
-  event_type: intervention_side_effect
-  from_node: ''
-  reason: '干预副作用: 限仓 → 预期差异 10.5'
   time: 8
   to_node: ''
 - amount: 5.75
@@ -1571,7 +611,7 @@
   difference_id: inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 主体承接能力不足，差异压力保持 48.9（深度 0）
+  reason: 主体承接能力不足，差异压力保持 62.8（深度 0）
   time: 9
   to_node: ''
 - amount: 0
@@ -1579,7 +619,7 @@
   difference_id: transform_delivery_to_basis_0_delivery_pressure
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 11.3（深度 0）
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
   time: 9
   to_node: ''
 - amount: 0
@@ -1587,15 +627,7 @@
   difference_id: transform_inventory_to_basis_0_inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 9.0（深度 0）
-  time: 9
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_expectation_bullish
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 24.3（深度 0）
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
   time: 9
   to_node: ''
 - amount: 0
@@ -1608,14 +640,6 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_2
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 8.5（深度 0）
-  time: 9
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_2
   event_type: accumulate
   from_node: ''
@@ -1624,154 +648,10 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.3（深度 0）
-  time: 9
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_3
   event_type: accumulate
   from_node: ''
   reason: 无可用通道，差异压力保持 0.9（深度 0）
-  time: 9
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 9
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 9
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 2.1（深度 0）
-  time: 9
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 9
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 9
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 9
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 1.1（深度 0）
-  time: 9
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 9
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 9
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_6
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 9
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_7
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 9
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_8
-  event_type: entity_absorb
-  from_node: ''
-  reason: 主体 speculative_long_001 承接 4.7，剩余能力 73.9（深度 0）
-  time: 9
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_8
-  event_type: transfer
-  from_node: exchange
-  reason: 经通道 futures_contract_channel 转移 4.7 压力
-  time: 9
-  to_node: market
-- amount: 3.97
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_8
-  event_type: transform
-  from_node: ''
-  reason: '差异变形: expectation → price，经通道 futures_contract_channel，深度 0'
-  time: 9
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_8
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 1）
-  time: 9
-  to_node: ''
-- amount: 0.3
-  channel_id: ''
-  difference_id: ''
-  event_type: exchange_intervene
-  from_node: ''
-  reason: '交易所降低差异生成率 30%，影响: expectation_bullish'
-  time: 9
-  to_node: ''
-- amount: 10.5
-  channel_id: ''
-  difference_id: intervention_expectation_9
-  event_type: intervention_side_effect
-  from_node: ''
-  reason: '干预副作用: 限仓 → 预期差异 10.5'
   time: 9
   to_node: ''
 - amount: 5.06
@@ -1787,7 +667,7 @@
   difference_id: inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 主体承接能力不足，差异压力保持 54.0（深度 0）
+  reason: 主体承接能力不足，差异压力保持 67.9（深度 0）
   time: 10
   to_node: ''
 - amount: 0
@@ -1795,7 +675,7 @@
   difference_id: transform_delivery_to_basis_0_delivery_pressure
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 11.3（深度 0）
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
   time: 10
   to_node: ''
 - amount: 0
@@ -1803,15 +683,7 @@
   difference_id: transform_inventory_to_basis_0_inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 9.0（深度 0）
-  time: 10
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_expectation_bullish
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 24.3（深度 0）
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
   time: 10
   to_node: ''
 - amount: 0
@@ -1824,14 +696,6 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_2
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 8.5（深度 0）
-  time: 10
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_2
   event_type: accumulate
   from_node: ''
@@ -1840,178 +704,10 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.3（深度 0）
-  time: 10
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_3
   event_type: accumulate
   from_node: ''
   reason: 无可用通道，差异压力保持 0.9（深度 0）
-  time: 10
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 10
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 10
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 2.1（深度 0）
-  time: 10
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 10
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 10
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 10
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 1.1（深度 0）
-  time: 10
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 10
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 10
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_6
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 10
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_7
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 10
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_8
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 10
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_9
-  event_type: entity_absorb
-  from_node: ''
-  reason: 主体 speculative_long_001 承接 4.7，剩余能力 69.2（深度 0）
-  time: 10
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_9
-  event_type: transfer
-  from_node: exchange
-  reason: 经通道 futures_contract_channel 转移 4.7 压力
-  time: 10
-  to_node: market
-- amount: 3.93
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_9
-  event_type: transform
-  from_node: ''
-  reason: '差异变形: expectation → price，经通道 futures_contract_channel，深度 0'
-  time: 10
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_9
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.9（深度 1）
-  time: 10
-  to_node: ''
-- amount: 0.3
-  channel_id: ''
-  difference_id: ''
-  event_type: exchange_intervene
-  from_node: ''
-  reason: '交易所降低差异生成率 30%，影响: expectation_bullish'
-  time: 10
-  to_node: ''
-- amount: 10.5
-  channel_id: ''
-  difference_id: intervention_expectation_10
-  event_type: intervention_side_effect
-  from_node: ''
-  reason: '干预副作用: 限仓 → 预期差异 10.5'
-  time: 10
-  to_node: ''
-- amount: 0.3
-  channel_id: ''
-  difference_id: ''
-  event_type: exchange_intervene
-  from_node: ''
-  reason: '交易所释放承接力 30%，影响: speculative_long_001(9.2)'
-  time: 10
-  to_node: ''
-- amount: 12.0
-  channel_id: ''
-  difference_id: intervention_liquidity_10
-  event_type: intervention_side_effect
-  from_node: ''
-  reason: '干预副作用: 释放承接力 → 流动性差异 12.0'
   time: 10
   to_node: ''
 - amount: 4.46
@@ -2027,7 +723,7 @@
   difference_id: inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 主体承接能力不足，差异压力保持 58.4（深度 0）
+  reason: 主体承接能力不足，差异压力保持 72.4（深度 0）
   time: 11
   to_node: ''
 - amount: 0
@@ -2035,7 +731,7 @@
   difference_id: transform_delivery_to_basis_0_delivery_pressure
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 11.3（深度 0）
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
   time: 11
   to_node: ''
 - amount: 0
@@ -2043,15 +739,7 @@
   difference_id: transform_inventory_to_basis_0_inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 9.0（深度 0）
-  time: 11
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_expectation_bullish
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 24.3（深度 0）
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
   time: 11
   to_node: ''
 - amount: 0
@@ -2064,26 +752,10 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_2
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 8.5（深度 0）
-  time: 11
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_2
   event_type: accumulate
   from_node: ''
   reason: 无可用通道，差异压力保持 1.9（深度 0）
-  time: 11
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.3（深度 0）
   time: 11
   to_node: ''
 - amount: 0
@@ -2094,164 +766,20 @@
   reason: 无可用通道，差异压力保持 0.9（深度 0）
   time: 11
   to_node: ''
-- amount: 0
+- amount: 72.36
   channel_id: ''
-  difference_id: intervention_rule_3
-  event_type: accumulate
+  difference_id: inventory_shortage
+  event_type: break
   from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
+  reason: '破缺: accumulation_overflow，压力 72.4 >= 阈值 70.0'
   time: 11
   to_node: ''
-- amount: 0
+- amount: 36.18
   channel_id: ''
-  difference_id: intervention_liquidity_3
-  event_type: accumulate
+  difference_id: inventory_shortage
+  event_type: break_release
   from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 11
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 2.1（深度 0）
-  time: 11
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 11
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 11
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 11
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 1.1（深度 0）
-  time: 11
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 11
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 11
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_6
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 11
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_7
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 11
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_8
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 11
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_9
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.9（深度 0）
-  time: 11
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_10
-  event_type: entity_absorb
-  from_node: ''
-  reason: 主体 speculative_long_001 承接 4.7，剩余能力 73.7（深度 0）
-  time: 11
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_10
-  event_type: transfer
-  from_node: exchange
-  reason: 经通道 futures_contract_channel 转移 4.7 压力
-  time: 11
-  to_node: market
-- amount: 3.88
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_10
-  event_type: transform
-  from_node: ''
-  reason: '差异变形: expectation → price，经通道 futures_contract_channel，深度 0'
-  time: 11
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_10
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 11
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_10
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.9（深度 1）
-  time: 11
-  to_node: ''
-- amount: 0.3
-  channel_id: ''
-  difference_id: ''
-  event_type: exchange_intervene
-  from_node: ''
-  reason: '交易所降低差异生成率 30%，影响: expectation_bullish'
-  time: 11
-  to_node: ''
-- amount: 10.5
-  channel_id: ''
-  difference_id: intervention_expectation_11
-  event_type: intervention_side_effect
-  from_node: ''
-  reason: '干预副作用: 限仓 → 预期差异 10.5'
+  reason: 破缺释放压力 36.2
   time: 11
   to_node: ''
 - amount: 3.92
@@ -2267,7 +795,7 @@
   difference_id: inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 主体承接能力不足，差异压力保持 62.3（深度 0）
+  reason: 主体承接能力不足，差异压力保持 40.1（深度 0）
   time: 12
   to_node: ''
 - amount: 0
@@ -2275,7 +803,7 @@
   difference_id: transform_delivery_to_basis_0_delivery_pressure
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 11.3（深度 0）
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
   time: 12
   to_node: ''
 - amount: 0
@@ -2283,15 +811,7 @@
   difference_id: transform_inventory_to_basis_0_inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 9.0（深度 0）
-  time: 12
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_expectation_bullish
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 24.3（深度 0）
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
   time: 12
   to_node: ''
 - amount: 0
@@ -2304,14 +824,6 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_2
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 8.5（深度 0）
-  time: 12
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_2
   event_type: accumulate
   from_node: ''
@@ -2320,202 +832,10 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.3（深度 0）
-  time: 12
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_3
   event_type: accumulate
   from_node: ''
   reason: 无可用通道，差异压力保持 0.9（深度 0）
-  time: 12
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 12
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 12
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 2.1（深度 0）
-  time: 12
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 12
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 12
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 12
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 1.1（深度 0）
-  time: 12
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 12
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 12
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_6
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 12
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_7
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 12
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_8
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 12
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_9
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.9（深度 0）
-  time: 12
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_10
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 12
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_10
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.9（深度 0）
-  time: 12
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_11
-  event_type: entity_absorb
-  from_node: ''
-  reason: 主体 speculative_long_001 承接 4.7，剩余能力 69.0（深度 0）
-  time: 12
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_11
-  event_type: transfer
-  from_node: exchange
-  reason: 经通道 futures_contract_channel 转移 4.7 压力
-  time: 12
-  to_node: market
-- amount: 3.84
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_11
-  event_type: transform
-  from_node: ''
-  reason: '差异变形: expectation → price，经通道 futures_contract_channel，深度 0'
-  time: 12
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_11
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 1）
-  time: 12
-  to_node: ''
-- amount: 0.3
-  channel_id: ''
-  difference_id: ''
-  event_type: exchange_intervene
-  from_node: ''
-  reason: '交易所降低差异生成率 30%，影响: expectation_bullish'
-  time: 12
-  to_node: ''
-- amount: 10.5
-  channel_id: ''
-  difference_id: intervention_expectation_12
-  event_type: intervention_side_effect
-  from_node: ''
-  reason: '干预副作用: 限仓 → 预期差异 10.5'
-  time: 12
-  to_node: ''
-- amount: 0.3
-  channel_id: ''
-  difference_id: ''
-  event_type: exchange_intervene
-  from_node: ''
-  reason: '交易所释放承接力 30%，影响: speculative_long_001(9.3)'
-  time: 12
-  to_node: ''
-- amount: 12.0
-  channel_id: ''
-  difference_id: intervention_liquidity_12
-  event_type: intervention_side_effect
-  from_node: ''
-  reason: '干预副作用: 释放承接力 → 流动性差异 12.0'
   time: 12
   to_node: ''
 - amount: 3.45
@@ -2531,7 +851,7 @@
   difference_id: inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 主体承接能力不足，差异压力保持 65.8（深度 0）
+  reason: 主体承接能力不足，差异压力保持 43.5（深度 0）
   time: 13
   to_node: ''
 - amount: 0
@@ -2539,7 +859,7 @@
   difference_id: transform_delivery_to_basis_0_delivery_pressure
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 11.3（深度 0）
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
   time: 13
   to_node: ''
 - amount: 0
@@ -2547,15 +867,7 @@
   difference_id: transform_inventory_to_basis_0_inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 9.0（深度 0）
-  time: 13
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_expectation_bullish
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 24.3（深度 0）
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
   time: 13
   to_node: ''
 - amount: 0
@@ -2568,14 +880,6 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_2
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 8.5（深度 0）
-  time: 13
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_2
   event_type: accumulate
   from_node: ''
@@ -2584,202 +888,10 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.3（深度 0）
-  time: 13
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_3
   event_type: accumulate
   from_node: ''
   reason: 无可用通道，差异压力保持 0.9（深度 0）
-  time: 13
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 13
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 13
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 2.1（深度 0）
-  time: 13
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 13
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 13
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 13
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 1.1（深度 0）
-  time: 13
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 13
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 13
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_6
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 13
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_7
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 13
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_8
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 13
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_9
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.9（深度 0）
-  time: 13
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_10
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 13
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_10
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.9（深度 0）
-  time: 13
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_11
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 13
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_12
-  event_type: entity_absorb
-  from_node: ''
-  reason: 主体 speculative_long_001 承接 4.7，剩余能力 73.6（深度 0）
-  time: 13
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_12
-  event_type: transfer
-  from_node: exchange
-  reason: 经通道 futures_contract_channel 转移 4.7 压力
-  time: 13
-  to_node: market
-- amount: 3.8
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_12
-  event_type: transform
-  from_node: ''
-  reason: '差异变形: expectation → price，经通道 futures_contract_channel，深度 0'
-  time: 13
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_12
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 13
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_12
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 1）
-  time: 13
-  to_node: ''
-- amount: 0.3
-  channel_id: ''
-  difference_id: ''
-  event_type: exchange_intervene
-  from_node: ''
-  reason: '交易所降低差异生成率 30%，影响: expectation_bullish'
-  time: 13
-  to_node: ''
-- amount: 10.5
-  channel_id: ''
-  difference_id: intervention_expectation_13
-  event_type: intervention_side_effect
-  from_node: ''
-  reason: '干预副作用: 限仓 → 预期差异 10.5'
   time: 13
   to_node: ''
 - amount: 3.04
@@ -2795,7 +907,7 @@
   difference_id: inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 主体承接能力不足，差异压力保持 68.8（深度 0）
+  reason: 主体承接能力不足，差异压力保持 46.6（深度 0）
   time: 14
   to_node: ''
 - amount: 0
@@ -2803,7 +915,7 @@
   difference_id: transform_delivery_to_basis_0_delivery_pressure
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 11.3（深度 0）
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
   time: 14
   to_node: ''
 - amount: 0
@@ -2811,15 +923,7 @@
   difference_id: transform_inventory_to_basis_0_inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 9.0（深度 0）
-  time: 14
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_expectation_bullish
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 24.3（深度 0）
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
   time: 14
   to_node: ''
 - amount: 0
@@ -2832,14 +936,6 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_2
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 8.5（深度 0）
-  time: 14
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_2
   event_type: accumulate
   from_node: ''
@@ -2848,226 +944,10 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.3（深度 0）
-  time: 14
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_3
   event_type: accumulate
   from_node: ''
   reason: 无可用通道，差异压力保持 0.9（深度 0）
-  time: 14
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 14
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 14
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 2.1（深度 0）
-  time: 14
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 14
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 14
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 14
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 1.1（深度 0）
-  time: 14
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 14
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 14
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_6
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 14
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_7
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 14
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_8
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 14
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_9
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.9（深度 0）
-  time: 14
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_10
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 14
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_10
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.9（深度 0）
-  time: 14
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_11
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 14
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_12
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 14
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_12
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 14
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_13
-  event_type: entity_absorb
-  from_node: ''
-  reason: 主体 speculative_long_001 承接 4.7，剩余能力 68.8（深度 0）
-  time: 14
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_13
-  event_type: transfer
-  from_node: exchange
-  reason: 经通道 futures_contract_channel 转移 4.7 压力
-  time: 14
-  to_node: market
-- amount: 3.75
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_13
-  event_type: transform
-  from_node: ''
-  reason: '差异变形: expectation → price，经通道 futures_contract_channel，深度 0'
-  time: 14
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_13
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 1）
-  time: 14
-  to_node: ''
-- amount: 0.3
-  channel_id: ''
-  difference_id: ''
-  event_type: exchange_intervene
-  from_node: ''
-  reason: '交易所降低差异生成率 30%，影响: expectation_bullish'
-  time: 14
-  to_node: ''
-- amount: 10.5
-  channel_id: ''
-  difference_id: intervention_expectation_14
-  event_type: intervention_side_effect
-  from_node: ''
-  reason: '干预副作用: 限仓 → 预期差异 10.5'
-  time: 14
-  to_node: ''
-- amount: 0.3
-  channel_id: ''
-  difference_id: ''
-  event_type: exchange_intervene
-  from_node: ''
-  reason: '交易所释放承接力 30%，影响: speculative_long_001(9.3)'
-  time: 14
-  to_node: ''
-- amount: 12.0
-  channel_id: ''
-  difference_id: intervention_liquidity_14
-  event_type: intervention_side_effect
-  from_node: ''
-  reason: '干预副作用: 释放承接力 → 流动性差异 12.0'
   time: 14
   to_node: ''
 - amount: 2.67
@@ -3083,7 +963,7 @@
   difference_id: inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 主体承接能力不足，差异压力保持 71.5（深度 0）
+  reason: 主体承接能力不足，差异压力保持 49.3（深度 0）
   time: 15
   to_node: ''
 - amount: 0
@@ -3091,7 +971,7 @@
   difference_id: transform_delivery_to_basis_0_delivery_pressure
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 11.3（深度 0）
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
   time: 15
   to_node: ''
 - amount: 0
@@ -3099,15 +979,7 @@
   difference_id: transform_inventory_to_basis_0_inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 9.0（深度 0）
-  time: 15
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_expectation_bullish
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 24.3（深度 0）
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
   time: 15
   to_node: ''
 - amount: 0
@@ -3120,14 +992,6 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_2
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 8.5（深度 0）
-  time: 15
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_2
   event_type: accumulate
   from_node: ''
@@ -3136,226 +1000,10 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.3（深度 0）
-  time: 15
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_3
   event_type: accumulate
   from_node: ''
   reason: 无可用通道，差异压力保持 0.9（深度 0）
-  time: 15
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 15
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 15
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 2.1（深度 0）
-  time: 15
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 15
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 15
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 15
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 1.1（深度 0）
-  time: 15
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 15
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 15
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_6
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 15
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_7
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 15
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_8
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 15
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_9
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.9（深度 0）
-  time: 15
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_10
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 15
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_10
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.9（深度 0）
-  time: 15
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_11
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 15
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_12
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 15
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_12
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 15
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_13
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 15
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_14
-  event_type: entity_absorb
-  from_node: ''
-  reason: 主体 speculative_long_001 承接 4.7，剩余能力 73.5（深度 0）
-  time: 15
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_14
-  event_type: transfer
-  from_node: exchange
-  reason: 经通道 futures_contract_channel 转移 4.7 压力
-  time: 15
-  to_node: market
-- amount: 3.71
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_14
-  event_type: transform
-  from_node: ''
-  reason: '差异变形: expectation → price，经通道 futures_contract_channel，深度 0'
-  time: 15
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_14
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 15
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_14
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.7（深度 1）
-  time: 15
-  to_node: ''
-- amount: 71.5
-  channel_id: ''
-  difference_id: inventory_shortage
-  event_type: break
-  from_node: ''
-  reason: '破缺: accumulation_overflow，压力 71.5 >= 阈值 70.0'
-  time: 15
-  to_node: ''
-- amount: 35.75
-  channel_id: ''
-  difference_id: inventory_shortage
-  event_type: break_release
-  from_node: ''
-  reason: 破缺释放压力 35.7
   time: 15
   to_node: ''
 - amount: 2.35
@@ -3371,7 +1019,7 @@
   difference_id: inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 主体承接能力不足，差异压力保持 38.1（深度 0）
+  reason: 主体承接能力不足，差异压力保持 51.6（深度 0）
   time: 16
   to_node: ''
 - amount: 0
@@ -3379,7 +1027,7 @@
   difference_id: transform_delivery_to_basis_0_delivery_pressure
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 11.3（深度 0）
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
   time: 16
   to_node: ''
 - amount: 0
@@ -3387,15 +1035,7 @@
   difference_id: transform_inventory_to_basis_0_inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 9.0（深度 0）
-  time: 16
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_expectation_bullish
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 24.3（深度 0）
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
   time: 16
   to_node: ''
 - amount: 0
@@ -3408,14 +1048,6 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_2
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 8.5（深度 0）
-  time: 16
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_2
   event_type: accumulate
   from_node: ''
@@ -3424,186 +1056,10 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.3（深度 0）
-  time: 16
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_3
   event_type: accumulate
   from_node: ''
   reason: 无可用通道，差异压力保持 0.9（深度 0）
-  time: 16
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 16
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 16
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 2.1（深度 0）
-  time: 16
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 16
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 16
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 16
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 1.1（深度 0）
-  time: 16
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 16
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 16
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_6
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 16
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_7
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 16
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_8
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 16
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_9
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.9（深度 0）
-  time: 16
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_10
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 16
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_10
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.9（深度 0）
-  time: 16
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_11
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 16
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_12
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 16
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_12
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 16
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_13
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 16
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_14
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 16
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_14
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.7（深度 0）
   time: 16
   to_node: ''
 - amount: 2.07
@@ -3619,7 +1075,7 @@
   difference_id: inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 主体承接能力不足，差异压力保持 40.2（深度 0）
+  reason: 主体承接能力不足，差异压力保持 53.7（深度 0）
   time: 17
   to_node: ''
 - amount: 0
@@ -3627,7 +1083,7 @@
   difference_id: transform_delivery_to_basis_0_delivery_pressure
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 11.3（深度 0）
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
   time: 17
   to_node: ''
 - amount: 0
@@ -3635,15 +1091,7 @@
   difference_id: transform_inventory_to_basis_0_inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 9.0（深度 0）
-  time: 17
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_expectation_bullish
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 24.3（深度 0）
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
   time: 17
   to_node: ''
 - amount: 0
@@ -3656,14 +1104,6 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_2
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 8.5（深度 0）
-  time: 17
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_2
   event_type: accumulate
   from_node: ''
@@ -3672,202 +1112,10 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.3（深度 0）
-  time: 17
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_3
   event_type: accumulate
   from_node: ''
   reason: 无可用通道，差异压力保持 0.9（深度 0）
-  time: 17
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 17
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 17
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 2.1（深度 0）
-  time: 17
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 17
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 17
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 17
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 1.1（深度 0）
-  time: 17
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 17
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 17
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_6
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 17
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_7
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 17
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_8
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 17
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_9
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.9（深度 0）
-  time: 17
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_10
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 17
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_10
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.9（深度 0）
-  time: 17
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_11
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 17
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_12
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 17
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_12
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 17
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_13
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 17
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_14
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 17
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_14
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.7（深度 0）
-  time: 17
-  to_node: ''
-- amount: 0.3
-  channel_id: ''
-  difference_id: ''
-  event_type: exchange_intervene
-  from_node: ''
-  reason: '交易所降低差异生成率 30%，影响: expectation_bullish'
-  time: 17
-  to_node: ''
-- amount: 10.5
-  channel_id: ''
-  difference_id: intervention_expectation_17
-  event_type: intervention_side_effect
-  from_node: ''
-  reason: '干预副作用: 限仓 → 预期差异 10.5'
   time: 17
   to_node: ''
 - amount: 1.82
@@ -3883,7 +1131,7 @@
   difference_id: inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 主体承接能力不足，差异压力保持 42.0（深度 0）
+  reason: 主体承接能力不足，差异压力保持 55.5（深度 0）
   time: 18
   to_node: ''
 - amount: 0
@@ -3891,7 +1139,7 @@
   difference_id: transform_delivery_to_basis_0_delivery_pressure
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 11.3（深度 0）
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
   time: 18
   to_node: ''
 - amount: 0
@@ -3899,15 +1147,7 @@
   difference_id: transform_inventory_to_basis_0_inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 9.0（深度 0）
-  time: 18
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_expectation_bullish
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 24.3（深度 0）
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
   time: 18
   to_node: ''
 - amount: 0
@@ -3920,14 +1160,6 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_2
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 8.5（深度 0）
-  time: 18
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_2
   event_type: accumulate
   from_node: ''
@@ -3936,250 +1168,10 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.3（深度 0）
-  time: 18
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_3
   event_type: accumulate
   from_node: ''
   reason: 无可用通道，差异压力保持 0.9（深度 0）
-  time: 18
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 18
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 18
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 2.1（深度 0）
-  time: 18
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 18
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 18
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 18
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 1.1（深度 0）
-  time: 18
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 18
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 18
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_6
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 18
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_7
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 18
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_8
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 18
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_9
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.9（深度 0）
-  time: 18
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_10
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 18
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_10
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.9（深度 0）
-  time: 18
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_11
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 18
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_12
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 18
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_12
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 18
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_13
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 18
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_14
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 18
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_14
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.7（深度 0）
-  time: 18
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_17
-  event_type: entity_absorb
-  from_node: ''
-  reason: 主体 speculative_long_001 承接 4.7，剩余能力 68.7（深度 0）
-  time: 18
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_17
-  event_type: transfer
-  from_node: exchange
-  reason: 经通道 futures_contract_channel 转移 4.7 压力
-  time: 18
-  to_node: market
-- amount: 3.66
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_17
-  event_type: transform
-  from_node: ''
-  reason: '差异变形: expectation → price，经通道 futures_contract_channel，深度 0'
-  time: 18
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_17
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.7（深度 1）
-  time: 18
-  to_node: ''
-- amount: 0.3
-  channel_id: ''
-  difference_id: ''
-  event_type: exchange_intervene
-  from_node: ''
-  reason: '交易所降低差异生成率 30%，影响: expectation_bullish'
-  time: 18
-  to_node: ''
-- amount: 10.5
-  channel_id: ''
-  difference_id: intervention_expectation_18
-  event_type: intervention_side_effect
-  from_node: ''
-  reason: '干预副作用: 限仓 → 预期差异 10.5'
-  time: 18
-  to_node: ''
-- amount: 0.3
-  channel_id: ''
-  difference_id: ''
-  event_type: exchange_intervene
-  from_node: ''
-  reason: '交易所释放承接力 30%，影响: speculative_long_001(9.4)'
-  time: 18
-  to_node: ''
-- amount: 12.0
-  channel_id: ''
-  difference_id: intervention_liquidity_18
-  event_type: intervention_side_effect
-  from_node: ''
-  reason: '干预副作用: 释放承接力 → 流动性差异 12.0'
   time: 18
   to_node: ''
 - amount: 1.6
@@ -4195,7 +1187,7 @@
   difference_id: inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 主体承接能力不足，差异压力保持 43.6（深度 0）
+  reason: 主体承接能力不足，差异压力保持 57.1（深度 0）
   time: 19
   to_node: ''
 - amount: 0
@@ -4203,7 +1195,7 @@
   difference_id: transform_delivery_to_basis_0_delivery_pressure
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 11.3（深度 0）
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
   time: 19
   to_node: ''
 - amount: 0
@@ -4211,15 +1203,7 @@
   difference_id: transform_inventory_to_basis_0_inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 9.0（深度 0）
-  time: 19
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_expectation_bullish
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 24.3（深度 0）
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
   time: 19
   to_node: ''
 - amount: 0
@@ -4232,14 +1216,6 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_2
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 8.5（深度 0）
-  time: 19
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_2
   event_type: accumulate
   from_node: ''
@@ -4248,250 +1224,10 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.3（深度 0）
-  time: 19
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_3
   event_type: accumulate
   from_node: ''
   reason: 无可用通道，差异压力保持 0.9（深度 0）
-  time: 19
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 19
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 19
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 2.1（深度 0）
-  time: 19
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 19
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 19
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 19
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 1.1（深度 0）
-  time: 19
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 19
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 19
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_6
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 19
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_7
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 19
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_8
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 19
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_9
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.9（深度 0）
-  time: 19
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_10
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 19
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_10
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.9（深度 0）
-  time: 19
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_11
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 19
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_12
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 19
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_12
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 19
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_13
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 19
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_14
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 19
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_14
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.7（深度 0）
-  time: 19
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_17
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.7（深度 0）
-  time: 19
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_18
-  event_type: entity_absorb
-  from_node: ''
-  reason: 主体 speculative_long_001 承接 4.7，剩余能力 73.4（深度 0）
-  time: 19
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_18
-  event_type: transfer
-  from_node: exchange
-  reason: 经通道 futures_contract_channel 转移 4.7 压力
-  time: 19
-  to_node: market
-- amount: 3.62
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_18
-  event_type: transform
-  from_node: ''
-  reason: '差异变形: expectation → price，经通道 futures_contract_channel，深度 0'
-  time: 19
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_18
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 19
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_18
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.6（深度 1）
-  time: 19
-  to_node: ''
-- amount: 0.3
-  channel_id: ''
-  difference_id: ''
-  event_type: exchange_intervene
-  from_node: ''
-  reason: '交易所降低差异生成率 30%，影响: expectation_bullish'
-  time: 19
-  to_node: ''
-- amount: 10.5
-  channel_id: ''
-  difference_id: intervention_expectation_19
-  event_type: intervention_side_effect
-  from_node: ''
-  reason: '干预副作用: 限仓 → 预期差异 10.5'
   time: 19
   to_node: ''
 - amount: 1.41
@@ -4507,7 +1243,7 @@
   difference_id: inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 主体承接能力不足，差异压力保持 45.0（深度 0）
+  reason: 主体承接能力不足，差异压力保持 58.5（深度 0）
   time: 20
   to_node: ''
 - amount: 0
@@ -4515,7 +1251,7 @@
   difference_id: transform_delivery_to_basis_0_delivery_pressure
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 11.3（深度 0）
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
   time: 20
   to_node: ''
 - amount: 0
@@ -4523,15 +1259,7 @@
   difference_id: transform_inventory_to_basis_0_inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 9.0（深度 0）
-  time: 20
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_expectation_bullish
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 24.3（深度 0）
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
   time: 20
   to_node: ''
 - amount: 0
@@ -4544,14 +1272,6 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_2
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 8.5（深度 0）
-  time: 20
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_2
   event_type: accumulate
   from_node: ''
@@ -4560,274 +1280,10 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.3（深度 0）
-  time: 20
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_3
   event_type: accumulate
   from_node: ''
   reason: 无可用通道，差异压力保持 0.9（深度 0）
-  time: 20
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 20
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 20
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 2.1（深度 0）
-  time: 20
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 20
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 20
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 20
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 1.1（深度 0）
-  time: 20
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 20
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 20
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_6
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 20
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_7
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 20
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_8
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 20
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_9
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.9（深度 0）
-  time: 20
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_10
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 20
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_10
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.9（深度 0）
-  time: 20
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_11
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 20
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_12
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 20
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_12
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 20
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_13
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 20
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_14
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 20
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_14
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.7（深度 0）
-  time: 20
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_17
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.7（深度 0）
-  time: 20
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_18
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 20
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_18
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.6（深度 0）
-  time: 20
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_19
-  event_type: entity_absorb
-  from_node: ''
-  reason: 主体 speculative_long_001 承接 4.7，剩余能力 68.7（深度 0）
-  time: 20
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_19
-  event_type: transfer
-  from_node: exchange
-  reason: 经通道 futures_contract_channel 转移 4.7 压力
-  time: 20
-  to_node: market
-- amount: 3.57
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_19
-  event_type: transform
-  from_node: ''
-  reason: '差异变形: expectation → price，经通道 futures_contract_channel，深度 0'
-  time: 20
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_19
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.6（深度 1）
-  time: 20
-  to_node: ''
-- amount: 0.3
-  channel_id: ''
-  difference_id: ''
-  event_type: exchange_intervene
-  from_node: ''
-  reason: '交易所降低差异生成率 30%，影响: expectation_bullish'
-  time: 20
-  to_node: ''
-- amount: 10.5
-  channel_id: ''
-  difference_id: intervention_expectation_20
-  event_type: intervention_side_effect
-  from_node: ''
-  reason: '干预副作用: 限仓 → 预期差异 10.5'
-  time: 20
-  to_node: ''
-- amount: 0.3
-  channel_id: ''
-  difference_id: ''
-  event_type: exchange_intervene
-  from_node: ''
-  reason: '交易所释放承接力 30%，影响: speculative_long_001(9.4)'
-  time: 20
-  to_node: ''
-- amount: 12.0
-  channel_id: ''
-  difference_id: intervention_liquidity_20
-  event_type: intervention_side_effect
-  from_node: ''
-  reason: '干预副作用: 释放承接力 → 流动性差异 12.0'
   time: 20
   to_node: ''
 - amount: 1.24
@@ -4843,7 +1299,7 @@
   difference_id: inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 主体承接能力不足，差异压力保持 46.2（深度 0）
+  reason: 主体承接能力不足，差异压力保持 59.8（深度 0）
   time: 21
   to_node: ''
 - amount: 0
@@ -4851,7 +1307,7 @@
   difference_id: transform_delivery_to_basis_0_delivery_pressure
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 11.3（深度 0）
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
   time: 21
   to_node: ''
 - amount: 0
@@ -4859,15 +1315,7 @@
   difference_id: transform_inventory_to_basis_0_inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 9.0（深度 0）
-  time: 21
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_expectation_bullish
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 24.3（深度 0）
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
   time: 21
   to_node: ''
 - amount: 0
@@ -4880,14 +1328,6 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_2
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 8.5（深度 0）
-  time: 21
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_2
   event_type: accumulate
   from_node: ''
@@ -4896,274 +1336,10 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.3（深度 0）
-  time: 21
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_3
   event_type: accumulate
   from_node: ''
   reason: 无可用通道，差异压力保持 0.9（深度 0）
-  time: 21
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 21
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 21
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 2.1（深度 0）
-  time: 21
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 21
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 21
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 21
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 1.1（深度 0）
-  time: 21
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 21
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 21
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_6
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 21
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_7
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 21
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_8
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 21
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_9
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.9（深度 0）
-  time: 21
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_10
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 21
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_10
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.9（深度 0）
-  time: 21
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_11
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 21
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_12
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 21
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_12
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 21
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_13
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 21
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_14
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 21
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_14
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.7（深度 0）
-  time: 21
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_17
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.7（深度 0）
-  time: 21
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_18
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 21
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_18
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.6（深度 0）
-  time: 21
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_19
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.6（深度 0）
-  time: 21
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_20
-  event_type: entity_absorb
-  from_node: ''
-  reason: 主体 speculative_long_001 承接 4.7，剩余能力 73.3（深度 0）
-  time: 21
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_20
-  event_type: transfer
-  from_node: exchange
-  reason: 经通道 futures_contract_channel 转移 4.7 压力
-  time: 21
-  to_node: market
-- amount: 3.53
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_20
-  event_type: transform
-  from_node: ''
-  reason: '差异变形: expectation → price，经通道 futures_contract_channel，深度 0'
-  time: 21
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_20
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 21
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_20
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.5（深度 1）
-  time: 21
-  to_node: ''
-- amount: 0.3
-  channel_id: ''
-  difference_id: ''
-  event_type: exchange_intervene
-  from_node: ''
-  reason: '交易所降低差异生成率 30%，影响: expectation_bullish'
-  time: 21
-  to_node: ''
-- amount: 10.5
-  channel_id: ''
-  difference_id: intervention_expectation_21
-  event_type: intervention_side_effect
-  from_node: ''
-  reason: '干预副作用: 限仓 → 预期差异 10.5'
   time: 21
   to_node: ''
 - amount: 1.09
@@ -5179,7 +1355,7 @@
   difference_id: inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 主体承接能力不足，差异压力保持 47.3（深度 0）
+  reason: 主体承接能力不足，差异压力保持 60.8（深度 0）
   time: 22
   to_node: ''
 - amount: 0
@@ -5187,7 +1363,7 @@
   difference_id: transform_delivery_to_basis_0_delivery_pressure
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 11.3（深度 0）
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
   time: 22
   to_node: ''
 - amount: 0
@@ -5195,15 +1371,7 @@
   difference_id: transform_inventory_to_basis_0_inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 9.0（深度 0）
-  time: 22
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_expectation_bullish
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 24.3（深度 0）
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
   time: 22
   to_node: ''
 - amount: 0
@@ -5216,14 +1384,6 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_2
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 8.5（深度 0）
-  time: 22
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_2
   event_type: accumulate
   from_node: ''
@@ -5232,298 +1392,10 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.3（深度 0）
-  time: 22
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_3
   event_type: accumulate
   from_node: ''
   reason: 无可用通道，差异压力保持 0.9（深度 0）
-  time: 22
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 22
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 22
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 2.1（深度 0）
-  time: 22
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 22
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 22
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 22
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 1.1（深度 0）
-  time: 22
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 22
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 22
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_6
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 22
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_7
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 22
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_8
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 22
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_9
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.9（深度 0）
-  time: 22
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_10
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 22
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_10
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.9（深度 0）
-  time: 22
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_11
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 22
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_12
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 22
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_12
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 22
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_13
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 22
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_14
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 22
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_14
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.7（深度 0）
-  time: 22
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_17
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.7（深度 0）
-  time: 22
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_18
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 22
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_18
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.6（深度 0）
-  time: 22
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_19
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.6（深度 0）
-  time: 22
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_20
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 22
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_20
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.5（深度 0）
-  time: 22
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_21
-  event_type: entity_absorb
-  from_node: ''
-  reason: 主体 speculative_long_001 承接 4.7，剩余能力 68.6（深度 0）
-  time: 22
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_21
-  event_type: transfer
-  from_node: exchange
-  reason: 经通道 futures_contract_channel 转移 4.7 压力
-  time: 22
-  to_node: market
-- amount: 3.48
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_21
-  event_type: transform
-  from_node: ''
-  reason: '差异变形: expectation → price，经通道 futures_contract_channel，深度 0'
-  time: 22
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_21
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.5（深度 1）
-  time: 22
-  to_node: ''
-- amount: 0.3
-  channel_id: ''
-  difference_id: ''
-  event_type: exchange_intervene
-  from_node: ''
-  reason: '交易所降低差异生成率 30%，影响: expectation_bullish'
-  time: 22
-  to_node: ''
-- amount: 10.5
-  channel_id: ''
-  difference_id: intervention_expectation_22
-  event_type: intervention_side_effect
-  from_node: ''
-  reason: '干预副作用: 限仓 → 预期差异 10.5'
-  time: 22
-  to_node: ''
-- amount: 0.3
-  channel_id: ''
-  difference_id: ''
-  event_type: exchange_intervene
-  from_node: ''
-  reason: '交易所释放承接力 30%，影响: speculative_long_001(9.4)'
-  time: 22
-  to_node: ''
-- amount: 12.0
-  channel_id: ''
-  difference_id: intervention_liquidity_22
-  event_type: intervention_side_effect
-  from_node: ''
-  reason: '干预副作用: 释放承接力 → 流动性差异 12.0'
   time: 22
   to_node: ''
 - amount: 0.96
@@ -5539,7 +1411,7 @@
   difference_id: inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 主体承接能力不足，差异压力保持 48.3（深度 0）
+  reason: 主体承接能力不足，差异压力保持 61.8（深度 0）
   time: 23
   to_node: ''
 - amount: 0
@@ -5547,7 +1419,7 @@
   difference_id: transform_delivery_to_basis_0_delivery_pressure
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 11.3（深度 0）
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
   time: 23
   to_node: ''
 - amount: 0
@@ -5555,15 +1427,7 @@
   difference_id: transform_inventory_to_basis_0_inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 9.0（深度 0）
-  time: 23
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_expectation_bullish
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 24.3（深度 0）
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
   time: 23
   to_node: ''
 - amount: 0
@@ -5576,14 +1440,6 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_2
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 8.5（深度 0）
-  time: 23
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_2
   event_type: accumulate
   from_node: ''
@@ -5592,298 +1448,10 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.3（深度 0）
-  time: 23
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_3
   event_type: accumulate
   from_node: ''
   reason: 无可用通道，差异压力保持 0.9（深度 0）
-  time: 23
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 23
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 23
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 2.1（深度 0）
-  time: 23
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 23
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 23
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 23
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 1.1（深度 0）
-  time: 23
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 23
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 23
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_6
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 23
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_7
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 23
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_8
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 23
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_9
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.9（深度 0）
-  time: 23
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_10
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 23
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_10
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.9（深度 0）
-  time: 23
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_11
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 23
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_12
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 23
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_12
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 23
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_13
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 23
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_14
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 23
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_14
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.7（深度 0）
-  time: 23
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_17
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.7（深度 0）
-  time: 23
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_18
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 23
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_18
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.6（深度 0）
-  time: 23
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_19
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.6（深度 0）
-  time: 23
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_20
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 23
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_20
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.5（深度 0）
-  time: 23
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_21
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.5（深度 0）
-  time: 23
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_22
-  event_type: entity_absorb
-  from_node: ''
-  reason: 主体 speculative_long_001 承接 4.7，剩余能力 73.3（深度 0）
-  time: 23
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_22
-  event_type: transfer
-  from_node: exchange
-  reason: 经通道 futures_contract_channel 转移 4.7 压力
-  time: 23
-  to_node: market
-- amount: 3.44
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_22
-  event_type: transform
-  from_node: ''
-  reason: '差异变形: expectation → price，经通道 futures_contract_channel，深度 0'
-  time: 23
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_22
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 23
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_22
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.4（深度 1）
-  time: 23
-  to_node: ''
-- amount: 0.3
-  channel_id: ''
-  difference_id: ''
-  event_type: exchange_intervene
-  from_node: ''
-  reason: '交易所降低差异生成率 30%，影响: expectation_bullish'
-  time: 23
-  to_node: ''
-- amount: 10.5
-  channel_id: ''
-  difference_id: intervention_expectation_23
-  event_type: intervention_side_effect
-  from_node: ''
-  reason: '干预副作用: 限仓 → 预期差异 10.5'
   time: 23
   to_node: ''
 - amount: 0.85
@@ -5899,7 +1467,7 @@
   difference_id: inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 主体承接能力不足，差异压力保持 49.1（深度 0）
+  reason: 主体承接能力不足，差异压力保持 62.7（深度 0）
   time: 24
   to_node: ''
 - amount: 0
@@ -5907,7 +1475,7 @@
   difference_id: transform_delivery_to_basis_0_delivery_pressure
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 11.3（深度 0）
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
   time: 24
   to_node: ''
 - amount: 0
@@ -5915,15 +1483,7 @@
   difference_id: transform_inventory_to_basis_0_inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 9.0（深度 0）
-  time: 24
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_expectation_bullish
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 24.3（深度 0）
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
   time: 24
   to_node: ''
 - amount: 0
@@ -5936,14 +1496,6 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_2
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 8.5（深度 0）
-  time: 24
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_2
   event_type: accumulate
   from_node: ''
@@ -5952,322 +1504,10 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.3（深度 0）
-  time: 24
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_3
   event_type: accumulate
   from_node: ''
   reason: 无可用通道，差异压力保持 0.9（深度 0）
-  time: 24
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 24
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 24
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 2.1（深度 0）
-  time: 24
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 24
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 24
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 24
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 1.1（深度 0）
-  time: 24
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 24
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 24
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_6
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 24
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_7
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 24
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_8
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 24
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_9
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.9（深度 0）
-  time: 24
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_10
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 24
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_10
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.9（深度 0）
-  time: 24
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_11
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 24
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_12
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 24
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_12
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 24
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_13
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 24
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_14
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 24
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_14
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.7（深度 0）
-  time: 24
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_17
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.7（深度 0）
-  time: 24
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_18
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 24
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_18
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.6（深度 0）
-  time: 24
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_19
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.6（深度 0）
-  time: 24
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_20
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 24
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_20
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.5（深度 0）
-  time: 24
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_21
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.5（深度 0）
-  time: 24
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_22
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 24
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_22
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.4（深度 0）
-  time: 24
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_23
-  event_type: entity_absorb
-  from_node: ''
-  reason: 主体 speculative_long_001 承接 4.7，剩余能力 68.6（深度 0）
-  time: 24
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_23
-  event_type: transfer
-  from_node: exchange
-  reason: 经通道 futures_contract_channel 转移 4.7 压力
-  time: 24
-  to_node: market
-- amount: 3.39
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_23
-  event_type: transform
-  from_node: ''
-  reason: '差异变形: expectation → price，经通道 futures_contract_channel，深度 0'
-  time: 24
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_23
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.4（深度 1）
-  time: 24
-  to_node: ''
-- amount: 0.3
-  channel_id: ''
-  difference_id: ''
-  event_type: exchange_intervene
-  from_node: ''
-  reason: '交易所降低差异生成率 30%，影响: expectation_bullish'
-  time: 24
-  to_node: ''
-- amount: 10.5
-  channel_id: ''
-  difference_id: intervention_expectation_24
-  event_type: intervention_side_effect
-  from_node: ''
-  reason: '干预副作用: 限仓 → 预期差异 10.5'
-  time: 24
-  to_node: ''
-- amount: 0.3
-  channel_id: ''
-  difference_id: ''
-  event_type: exchange_intervene
-  from_node: ''
-  reason: '交易所释放承接力 30%，影响: speculative_long_001(9.4)'
-  time: 24
-  to_node: ''
-- amount: 12.0
-  channel_id: ''
-  difference_id: intervention_liquidity_24
-  event_type: intervention_side_effect
-  from_node: ''
-  reason: '干预副作用: 释放承接力 → 流动性差异 12.0'
   time: 24
   to_node: ''
 - amount: 0.74
@@ -6283,7 +1523,7 @@
   difference_id: inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 主体承接能力不足，差异压力保持 49.9（深度 0）
+  reason: 主体承接能力不足，差异压力保持 63.4（深度 0）
   time: 25
   to_node: ''
 - amount: 0
@@ -6291,7 +1531,7 @@
   difference_id: transform_delivery_to_basis_0_delivery_pressure
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 11.3（深度 0）
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
   time: 25
   to_node: ''
 - amount: 0
@@ -6299,15 +1539,7 @@
   difference_id: transform_inventory_to_basis_0_inventory_shortage
   event_type: accumulate
   from_node: ''
-  reason: 无可用通道，差异压力保持 9.0（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_expectation_bullish
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 24.3（深度 0）
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
   time: 25
   to_node: ''
 - amount: 0
@@ -6320,14 +1552,6 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_2
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 8.5（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_2
   event_type: accumulate
   from_node: ''
@@ -6336,321 +1560,9 @@
   to_node: ''
 - amount: 0
   channel_id: ''
-  difference_id: feedback_margin_exchange_001_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.3（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
   difference_id: feedback_margin_industrial_short_001_3
   event_type: accumulate
   from_node: ''
   reason: 无可用通道，差异压力保持 0.9（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_3
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 2.1（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_rule_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_4
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: feedback_margin_exchange_001_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 1.1（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_5
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.1（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_6
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_7
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_8
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 4.0（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_9
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.9（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_10
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_10
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.9（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_11
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_12
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_12
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_13
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.8（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_14
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_14
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.7（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_17
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.7（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_18
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_18
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.6（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_19
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.6（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_20
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_20
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.5（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_21
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.5（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_22
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_22
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.4（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_23
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.4（深度 0）
-  time: 25
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_24
-  event_type: entity_absorb
-  from_node: ''
-  reason: 主体 speculative_long_001 承接 4.7，剩余能力 73.3（深度 0）
-  time: 25
-  to_node: ''
-- amount: 4.73
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_24
-  event_type: transfer
-  from_node: exchange
-  reason: 经通道 futures_contract_channel 转移 4.7 压力
-  time: 25
-  to_node: market
-- amount: 3.35
-  channel_id: futures_contract_channel
-  difference_id: intervention_expectation_24
-  event_type: transform
-  from_node: ''
-  reason: '差异变形: expectation → price，经通道 futures_contract_channel，深度 0'
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: intervention_liquidity_24
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 5.1（深度 0）
-  time: 25
-  to_node: ''
-- amount: 0
-  channel_id: ''
-  difference_id: transform_expectation_to_price_0_intervention_expectation_24
-  event_type: accumulate
-  from_node: ''
-  reason: 无可用通道，差异压力保持 3.3（深度 1）
-  time: 25
-  to_node: ''
-- amount: 0.3
-  channel_id: ''
-  difference_id: ''
-  event_type: exchange_intervene
-  from_node: ''
-  reason: '交易所降低差异生成率 30%，影响: expectation_bullish'
-  time: 25
-  to_node: ''
-- amount: 10.5
-  channel_id: ''
-  difference_id: intervention_expectation_25
-  event_type: intervention_side_effect
-  from_node: ''
-  reason: '干预副作用: 限仓 → 预期差异 10.5'
   time: 25
   to_node: ''

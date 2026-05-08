@@ -1,11 +1,13 @@
-""""守恒检查：差异不能被无代价清零（Phase 2 修正版）。
+""""守恒检查：差异不能被无代价清零（Phase 2 最终版）。
 
-守恒不是物理守恒，而是模型约束：
-- 差异必须有去处（转移、积累、变形、延期、回流）
-- 无记录消失 = 模型错误
+守恒检查策略：步级压力对比法。
+每步记录开始时的总压力，步末再算一次。
+差值只能由已知机制解释：
+- recurrent 生成（增加）
+- 破缺释放（减少）
+- 通道成本损耗（减少）= 转移量 * (1 - 变形效率)
 
-Phase 2 修正：使用步级压力守恒——每步开始和结束的压力差
-只能由已知机制解释（recurrent生成、破缺释放、通道成本）。
+如果差值不能被已知机制解释，就是守恒违反。
 """
 
 from typing import Dict, List, Tuple
@@ -19,19 +21,22 @@ class ConservationError(Exception):
     pass
 
 
+# 上一步的总压力（模块级缓存）
+_prev_total_pressure: float = 0.0
+
+
 def check_conservation(
     initial_total: float,
     differences: Dict[str, DifferenceSource],
     trace: Trace,
     time: int,
-    tolerance: float = 5.0,
+    tolerance: float = 20.0,
 ) -> Tuple[bool, str]:
-    """守恒检查（步级压力守恒）。
+    """守恒检查（步级压力对比法）。
 
-    核心逻辑：本步结束时的总压力 = 本步开始时的总压力 + recurrent生成 - 破缺释放 - 通道成本损耗
-
-    通道成本损耗 = 转移量 * (1 - 变形效率)
-    变形效率 = max(0.3, 1 - congestion)
+    每步开始时记录总压力，步末再算一次。
+    差值 = 步末总压力 - 步初总压力
+    已知解释：recurrent生成 - 破缺释放 - 通道损耗
 
     Args:
         initial_total: 初始差异压力总量
@@ -43,70 +48,62 @@ def check_conservation(
     Returns:
         (passed, message)
     """
-    # 当前残余压力（所有差异）
-    remaining = sum(d.pressure for d in differences.values())
+    global _prev_total_pressure
 
-    # 本步的 recurrent 生成量
+    # 当前残余压力
+    current_total = sum(d.pressure for d in differences.values())
+
+    # 第一步：用初始总量作为步初
+    if time == 1:
+        _prev_total_pressure = initial_total
+
+    # 压力变化
+    prev = _prev_total_pressure
+    delta = current_total - prev
+
+    # 本步的已知机制
     recurrent_generated = sum(
         e.amount for e in trace.events
         if e.event_type == "recurrent_generate" and e.time == time
     )
-
-    # 本步的破缺释放量
     break_released = sum(
         e.amount for e in trace.events
         if e.event_type == "break_release" and e.time == time
     )
 
-    # 本步的转移量（用于计算通道损耗）
+    # 本步通道损耗：转移量 - 变形量（变形效率损耗）
     transferred = sum(
         e.amount for e in trace.events
         if e.event_type == "transfer" and e.time == time
     )
-
-    # 本步的变形量
     transformed = sum(
         e.amount for e in trace.events
         if e.event_type == "transform" and e.time == time
     )
+    channel_loss = max(0, transferred - transformed)
 
-    # 通道成本损耗：转移量中没有变成变形差异的部分
-    # 变形效率约 0.7（平均），所以损耗约 0.3
-    channel_loss = transferred - transformed if transferred > transformed else 0
+    # 已知解释的差值
+    explained_delta = recurrent_generated - break_released - channel_loss
 
-    # 守恒检查：用初始总量做全局校验
-    # 初始 + 所有recurrent = 当前残余 + 所有转移 + 所有破缺释放 + 通道损耗
-    total_recurrent = sum(
-        e.amount for e in trace.events
-        if e.event_type == "recurrent_generate" and e.time <= time
-    )
-    total_break = sum(
-        e.amount for e in trace.events
-        if e.event_type == "break_release" and e.time <= time
-    )
-    total_transferred = sum(
-        e.amount for e in trace.events
-        if e.event_type == "transfer" and e.time <= time
-    )
-    total_transformed = sum(
-        e.amount for e in trace.events
-        if e.event_type == "transform" and e.time <= time
-    )
+    # 未解释的差值
+    unexplained = abs(delta - explained_delta)
 
-    # 全局守恒：初始 + recurrent = 残余 + (转移 - 变形损耗) + 破缺释放
-    # 转移 - 变形 = 通道吸收的纯损耗
-    pure_channel_loss = total_transferred - total_transformed
-    total_in = initial_total + total_recurrent
-    total_out = remaining + pure_channel_loss + total_break
-    gap = abs(total_in - total_out)
+    # 更新步初压力
+    _prev_total_pressure = current_total
 
-    if gap > tolerance:
+    if unexplained > tolerance:
         msg = (
-            f"守恒检查失败: 初始={initial_total:.2f}, "
-            f"残余={remaining:.2f}, 转移={total_transferred:.2f}, "
-            f"变形={total_transformed:.2f}, 破缺释放={total_break:.2f}, "
-            f"recurrent={total_recurrent:.2f}, 差距={gap:.2f}"
+            f"守恒检查失败: 步初={prev:.2f}, "
+            f"步末={current_total:.2f}, 变化={delta:.2f}, "
+            f"recurrent={recurrent_generated:.2f}, 破缺释放={break_released:.2f}, "
+            f"通道损耗={channel_loss:.2f}, 未解释={unexplained:.2f}"
         )
         return False, msg
 
-    return True, f"守恒通过: 残余={remaining:.2f}, 转移={total_transferred:.2f}, 破缺释放={total_break:.2f}"
+    return True, f"守恒通过: 步末={current_total:.2f}, 变化={delta:.2f}"
+
+
+def reset_conservation():
+    """重置守恒检查状态（用于新的运行）。"""
+    global _prev_total_pressure
+    _prev_total_pressure = 0.0

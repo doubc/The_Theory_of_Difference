@@ -20,7 +20,7 @@ from ..core.difference import DifferenceSource, DifferenceStatus
 from ..core.entity import Entity, EntityStatus
 from ..domains.futures.futures_rules import ExchangeIntervention
 from .transfer import choose_channel, transfer_difference, transfer_and_transform
-from .conservation import check_conservation
+from .conservation import check_conservation, reset_conservation
 from .lock_in import update_lock_in
 from .break_event import check_break_events
 from .nearest_stable import check_nearest_stable
@@ -42,6 +42,7 @@ class Runner:
         """运行推理机。"""
         steps = steps or self.world.max_steps
         self._initial_total_pressure = self.world.total_pressure()
+        reset_conservation()
 
         if self.verbose:
             print(f"[Runner] 开始运行: {self.world.name}, 最大步数={steps}, 初始总压力={self._initial_total_pressure:.2f}")
@@ -73,11 +74,11 @@ class Runner:
             # 2. 差异转移 + 变形链 + 反馈循环
             self._run_transfers_with_chain(time)
 
-            # 3. 守恒检查
-            self._check_conservation(time)
-
-            # 4. 破缺检查
+            # 3. 破缺检查（在守恒检查之前，这样守恒可以看到本步的破缺释放）
             self._check_breaks(time)
+
+            # 4. 守恒检查
+            self._check_conservation(time)
 
             # 5. 锁定更新
             self._update_lock_in(time)
@@ -156,6 +157,7 @@ class Runner:
                         entity.absorb(absorb_amount)
                         total_absorbed += absorb_amount
                         remaining_pressure -= absorb_amount
+                        diff.reduce_pressure(absorb_amount)  # 同步减少差异压力
 
                         self.world.trace.add_event(
                             time=time,
