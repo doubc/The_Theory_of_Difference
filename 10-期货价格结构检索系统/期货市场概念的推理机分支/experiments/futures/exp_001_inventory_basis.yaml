@@ -60,6 +60,14 @@ channels:
     openness: 0.9
     description: 期货合约通道：库存差异→价格差异
 
+  - id: basis_to_price_channel
+    from_type: basis
+    to_type: price
+    base_cost: 12
+    capacity: 80
+    openness: 0.9
+    description: 基差差异→价格差异（变形链第二步）
+
   - id: storage_channel
     from_type: inventory
     to_type: inventory

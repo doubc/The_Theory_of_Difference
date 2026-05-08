@@ -1,10 +1,15 @@
-﻿""""运行器：完整的时间步循环。
+""""运行器：完整的时间步循环（Phase 2）。
 
 runner 是 Real_World 的主入口：
 1. 初始化世界（加载差异/主体/通道）
 2. 运行时间步循环
-3. 每次迭代：转移→守恒检查→破缺检查→锁定更新→稳态判定→状态快照
+3. 每次迭代：转移+变形→反馈→守恒检查→破缺检查→锁定更新→交易所干预→状态快照→稳态判定
 4. 输出轨迹/状态/报告
+
+Phase 2 新增：
+- 变形链：差异经通道转移后，按变形规则生成新类型差异（递归，最大深度5）
+- 反馈循环：承接体承压后生成新的反馈差异，注入世界
+- 干预多动作：三种干预（降低差异生成率、扩大通道容量、释放承接力）+ 副作用差异
 """
 
 import copy
@@ -12,12 +17,16 @@ from typing import Dict, List, Optional
 
 from ..core.world import World
 from ..core.difference import DifferenceSource, DifferenceStatus
+from ..core.entity import Entity, EntityStatus
 from ..domains.futures.futures_rules import ExchangeIntervention
-from .transfer import choose_channel, transfer_difference
+from .transfer import choose_channel, transfer_difference, transfer_and_transform
 from .conservation import check_conservation
 from .lock_in import update_lock_in
 from .break_event import check_break_events
 from .nearest_stable import check_nearest_stable
+
+# 变形链最大深度，防止无限循环
+MAX_CHAIN_DEPTH = 5
 
 
 class Runner:
@@ -30,14 +39,7 @@ class Runner:
         self.exchange = ExchangeIntervention() if exchange_intervention else None
 
     def run(self, steps: Optional[int] = None) -> World:
-        """运行推理机。
-
-        Args:
-            steps: 步数，默认使用 world.max_steps
-
-        Returns:
-            运行后的世界对象
-        """
+        """运行推理机。"""
         steps = steps or self.world.max_steps
         self._initial_total_pressure = self.world.total_pressure()
 
@@ -57,10 +59,19 @@ class Runner:
 
             # 1.5 差异持续生成（recurrent 机制）
             for diff in self.world.differences.values():
+                old_pressure = diff.pressure
                 diff.tick_recurrence()
+                if diff.pressure - old_pressure > 0.01:
+                    self.world.trace.add_event(
+                        time=time,
+                        event_type="recurrent_generate",
+                        difference_id=diff.id,
+                        amount=diff.pressure - old_pressure,
+                        reason=f"recurrent 生成 {diff.pressure - old_pressure:.2f} 压力",
+                    )
 
-            # 2. 差异转移
-            self._run_transfers(time)
+            # 2. 差异转移 + 变形链 + 反馈循环
+            self._run_transfers_with_chain(time)
 
             # 3. 守恒检查
             self._check_conservation(time)
@@ -71,13 +82,13 @@ class Runner:
             # 5. 锁定更新
             self._update_lock_in(time)
 
-            # 5.5 交易所干预检查（持续破缺时介入）
+            # 5.5 交易所干预检查（三重干预 + 副作用差异）
             self._check_exchange_intervention(time)
 
-            # 6. 状态快照（移到稳态判定之前，快照后立即写入稳态标签）
+            # 6. 状态快照
             state = self.world.snapshot_state()
 
-            # 7. 最近稳态判定 → 写入刚创建的 state
+            # 7. 最近稳态判定
             self._check_stable(time)
 
             if self.verbose:
@@ -91,88 +102,132 @@ class Runner:
 
         return self.world
 
-    def _run_transfers(self, time: int):
-        """对所有活跃差异执行转移（含 Entity 承接检查）。
+    def _run_transfers_with_chain(self, time: int):
+        """差异转移 + 变形链 + 反馈循环（Phase 2 核心）。
 
         流程：
-        1. 差异选择通道
-        2. 查找通道的承接主体
-        3. 主体承接差异压力（减少 available_capacity）
-        4. 主体承接不足时，差异积累
-        5. 无主体或主体退出时，通道仍可转移但差异可能积累
+        1. 取当前所有活跃差异
+        2. 对每个差异：选择通道 → 执行转移 → 检查变形
+        3. 变形产生的新差异进入下一轮（队列）
+        4. 最多执行 MAX_CHAIN_DEPTH 轮（防止无限循环）
+        5. 每轮收集反馈差异，注入世界
         """
-        for diff_id, diff in list(self.world.differences.items()):
-            if diff.status != DifferenceStatus.ACTIVE or diff.pressure <= 0:
-                continue
+        # 初始差异列表
+        pending = [
+            (diff_id, diff)
+            for diff_id, diff in self.world.differences.items()
+            if diff.status == DifferenceStatus.ACTIVE and diff.pressure > 0
+        ]
 
-            channel = choose_channel(diff, list(self.world.channels.values()))
-            if channel is None:
-                diff.accumulate(0)
-                self.world.trace.add_event(
-                    time=time,
-                    event_type="accumulate",
-                    difference_id=diff_id,
-                    amount=diff.pressure,
-                    reason="无可用通道，差异继续积累",
-                )
-                continue
+        chain_depth = 0
+        while pending and chain_depth < MAX_CHAIN_DEPTH:
+            next_round = []
+            feedback_diffs = []
 
-            # ---- Entity 承接检查 ----
-            entities = self.world.get_channel_entities(channel.id)
-            if entities:
-                # 有承接主体：主体必须先承接，再通过通道转移
-                total_absorbed = 0.0
-                remaining_pressure = diff.pressure
+            for diff_id, diff in pending:
+                if diff.status != DifferenceStatus.ACTIVE or diff.pressure <= 0:
+                    continue
 
-                for entity in entities:
-                    if not entity.can_absorb(remaining_pressure * 0.1):  # 至少能承接 10%
-                        continue
-                    # Entity 承接量 = min(差异压力, Entity 可用能力)
-                    absorb_amount = min(remaining_pressure, entity.available_capacity * 0.5)
-                    if absorb_amount <= 0:
-                        continue
-                    entity.absorb(absorb_amount)
-                    total_absorbed += absorb_amount
-                    remaining_pressure -= absorb_amount
-
-                    self.world.trace.add_event(
-                        time=time,
-                        event_type="entity_absorb",
-                        difference_id=diff_id,
-                        channel_id=channel.id,
-                        amount=absorb_amount,
-                        reason=f"主体 {entity.id} 承接 {absorb_amount:.1f} 压力，剩余能力 {entity.available_capacity:.1f}",
-                    )
-
-                    if remaining_pressure <= 0.01:
-                        break
-
-                if total_absorbed > 0:
-                    # 主体承接后，通过通道转移
-                    transferred, remaining = transfer_difference(diff, channel, self.world.trace, time)
-                    if self.verbose and transferred > 0:
-                        print(f"  转移: {diff_id} -> {channel.id}, 量={transferred:.2f}, 主体承接={total_absorbed:.2f}")
-                else:
-                    # 主体无法承接，差异积累
-                    diff.accumulate(remaining_pressure)
+                # 选择通道
+                channel = choose_channel(diff, list(self.world.channels.values()))
+                if channel is None:
+                    # 无可用通道：压力保持不动，不调用 accumulate（避免自增）
                     self.world.trace.add_event(
                         time=time,
                         event_type="accumulate",
                         difference_id=diff_id,
-                        channel_id=channel.id,
-                        amount=remaining_pressure,
-                        reason=f"主体承接能力不足，差异积累 {remaining_pressure:.1f}",
+                        amount=0,
+                        reason=f"无可用通道，差异压力保持 {diff.pressure:.1f}（深度 {chain_depth}）",
                     )
-                    if self.verbose:
-                        print(f"  积累: {diff_id}, 主体承接不足，积累={remaining_pressure:.2f}")
-            else:
-                # 无承接主体：差异直接通过通道转移（老逻辑）
-                transferred, remaining = transfer_difference(diff, channel, self.world.trace, time)
-                if self.verbose and transferred > 0:
-                    print(f"  转移: {diff_id} -> {channel.id}, 量={transferred:.2f}, 剩余={remaining:.2f}")
+                    continue
 
-                if remaining > 0:
-                    diff.accumulate(remaining)
+                # ---- Entity 承接检查 ----
+                entities = self.world.get_channel_entities(channel.id)
+                if entities:
+                    total_absorbed = 0.0
+                    remaining_pressure = diff.pressure
+
+                    for entity in entities:
+                        if not entity.can_absorb(remaining_pressure * 0.1):
+                            continue
+                        absorb_amount = min(remaining_pressure, entity.available_capacity * 0.5)
+                        if absorb_amount <= 0:
+                            continue
+                        entity.absorb(absorb_amount)
+                        total_absorbed += absorb_amount
+                        remaining_pressure -= absorb_amount
+
+                        self.world.trace.add_event(
+                            time=time,
+                            event_type="entity_absorb",
+                            difference_id=diff_id,
+                            channel_id=channel.id,
+                            amount=absorb_amount,
+                            reason=f"主体 {entity.id} 承接 {absorb_amount:.1f}，剩余能力 {entity.available_capacity:.1f}（深度 {chain_depth}）",
+                        )
+
+                        # 收集反馈差异
+                        fb = entity.generate_feedback_differences(absorb_amount, time)
+                        feedback_diffs.extend(fb)
+
+                        if remaining_pressure <= 0.01:
+                            break
+
+                    if total_absorbed > 0:
+                        # 执行转移 + 变形
+                        transferred, remaining, transform_info = transfer_and_transform(
+                            diff, channel, self.world.trace, time, chain_depth
+                        )
+                        if self.verbose and transferred > 0:
+                            print(f"  转移: {diff_id} -> {channel.id}, 量={transferred:.2f}, 深度={chain_depth}")
+
+                        # 变形差异进入下一轮
+                        if transform_info:
+                            transform_diff = DifferenceSource.from_dict(transform_info)
+                            self.world.add_difference(transform_diff)
+                            next_round.append((transform_diff.id, transform_diff))
+                            if self.verbose:
+                                print(f"  变形: {diff.type} → {transform_info['type']}, 压力={transform_info['pressure']:.2f}")
+
+                    else:
+                        # 主体无法承接：差异压力保持不动
+                        self.world.trace.add_event(
+                            time=time,
+                            event_type="accumulate",
+                            difference_id=diff_id,
+                            channel_id=channel.id,
+                            amount=0,
+                            reason=f"主体承接能力不足，差异压力保持 {diff.pressure:.1f}（深度 {chain_depth}）",
+                        )
+                else:
+                    # 无承接主体：直接转移 + 变形
+                    transferred, remaining, transform_info = transfer_and_transform(
+                        diff, channel, self.world.trace, time, chain_depth
+                    )
+                    if self.verbose and transferred > 0:
+                        print(f"  转移: {diff_id} -> {channel.id}, 量={transferred:.2f}, 深度={chain_depth}")
+
+                    if transform_info:
+                        transform_diff = DifferenceSource.from_dict(transform_info)
+                        self.world.add_difference(transform_diff)
+                        next_round.append((transform_diff.id, transform_diff))
+                        if self.verbose:
+                            print(f"  变形: {diff.type} → {transform_info['type']}, 压力={transform_info['pressure']:.2f}")
+
+                    if remaining > 0:
+                        # 剩余压力保持，不自增
+                        pass
+
+            # 注入反馈差异到世界
+            for fb in feedback_diffs:
+                fb_diff = DifferenceSource.from_dict(fb)
+                self.world.add_difference(fb_diff)
+                next_round.append((fb_diff.id, fb_diff))
+                if self.verbose:
+                    print(f"  反馈: {fb['type']} 差异从 {fb['source_node']} 生成, 压力={fb['magnitude']:.2f}")
+
+            pending = next_round
+            chain_depth += 1
 
     def _check_conservation(self, time: int):
         """守恒检查。"""
@@ -200,7 +255,6 @@ class Runner:
 
     def _update_lock_in(self, time: int):
         """更新通道锁定度。"""
-        # 从轨迹中提取本次转移事件
         transfer_events = [e for e in self.world.trace.events if e.time == time and e.event_type == "transfer"]
         for te in transfer_events:
             channel = self.world.channels.get(te.channel_id)
@@ -208,16 +262,15 @@ class Runner:
                 update_lock_in(channel, te.amount, self.world.trace, time)
 
     def _check_exchange_intervention(self, time: int):
-        """交易所干预检查（持续破缺时介入）。
-        
+        """交易所干预检查（Phase 2：三重干预 + 副作用差异）。
+
         交易所是二阶承接位置——当市场承接不足时介入，
         但介入不是消除差异，而是重组差异结构。
         """
         if self.exchange is None:
             return
-        
+
         # 计算主体压力比例
-        from ..core.entity import EntityStatus
         total_entities = len(self.world.entities)
         if total_entities == 0:
             return
@@ -226,18 +279,40 @@ class Runner:
             if e.status in (EntityStatus.STRESSED, EntityStatus.MARGIN_CALLED, EntityStatus.FORCED_OUT)
         )
         stress_ratio = stressed / total_entities
-        
-        if self.exchange.should_intervene(self.world.total_pressure(), stress_ratio):
-            # 交易所介入：先尝试提高保证金
-            self.exchange.intervene_margin_increase(self.world, time, increase=0.2)
-            if self.verbose:
-                print(f"  交易所干预: 提高保证金，压力={self.world.total_pressure():.1f}, 主体压力比={stress_ratio:.0%}")
-            
-            # 如果压力持续极高，强制减仓
-            if self.world.total_pressure() > self.exchange.threshold_pressure * 1.5:
-                self.exchange.intervene_position_limit(self.world, time, reduction=0.3)
+
+        if not self.exchange.should_intervene(self.world.total_pressure(), stress_ratio):
+            return
+
+        # 选择干预动作组合
+        actions = self.exchange.choose_interventions(self.world)
+        side_effects = []
+
+        for action in actions:
+            if action == "reduce_recurrent":
+                se = self.exchange.intervene_reduce_recurrent(self.world, time, reduction=0.3)
+                if se:
+                    side_effects.append(se)
                 if self.verbose:
-                    print(f"  交易所干预: 强制减仓，极高压力={self.world.total_pressure():.1f}")
+                    print(f"  交易所干预: 降低差异生成率，压力={self.world.total_pressure():.1f}")
+
+            elif action == "expand_channel":
+                se = self.exchange.intervene_expand_channel(self.world, time, expansion=0.5)
+                if se:
+                    side_effects.append(se)
+                if self.verbose:
+                    print(f"  交易所干预: 扩大通道容量，压力={self.world.total_pressure():.1f}")
+
+            elif action == "release_entity":
+                se = self.exchange.intervene_release_entity(self.world, time, entity_type="speculator", release=0.3)
+                if se:
+                    side_effects.append(se)
+                if self.verbose:
+                    print(f"  交易所干预: 释放承接力，压力={self.world.total_pressure():.1f}")
+
+        # 注入副作用差异到世界
+        for se in side_effects:
+            se_diff = DifferenceSource.from_dict(se)
+            self.world.add_difference(se_diff)
 
     def _check_stable(self, time: int):
         """最近稳态判定。"""

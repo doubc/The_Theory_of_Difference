@@ -83,7 +83,15 @@ def check_break_events(
                 reason=f"破缺: {event_type.value}，压力 {diff.pressure:.1f} >= 阈值 {threshold:.1f}",
             )
 
-            # 破缺后差异压力部分释放
-            diff.reduce_pressure(diff.pressure * 0.5)
+            # 破缺后差异压力部分释放 —— 记录释放量供守恒追踪
+            released = diff.pressure * 0.5
+            diff.reduce_pressure(released)
+            trace.add_event(
+                time=time,
+                event_type="break_release",
+                difference_id=diff_id,
+                amount=released,
+                reason=f"破缺释放压力 {released:.1f}",
+            )
 
     return events

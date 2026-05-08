@@ -6,6 +6,38 @@
   reason: 经通道 basis_channel 转移 61.2 压力
   time: 1
   to_node: region_B
+- amount: 23.75
+  channel_id: basis_channel
+  difference_id: inventory_gap_A_B
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: inventory → basis，经通道 basis_channel，深度 0'
+  time: 1
+  to_node: ''
+- amount: 23.75
+  channel_id: basis_to_price_channel
+  difference_id: transform_inventory_to_basis_0_inventory_gap_A_B
+  event_type: transfer
+  from_node: basis_channel
+  reason: 经通道 basis_to_price_channel 转移 23.7 压力
+  time: 1
+  to_node: region_B
+- amount: 16.7
+  channel_id: basis_to_price_channel
+  difference_id: transform_inventory_to_basis_0_inventory_gap_A_B
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: basis → price，经通道 basis_to_price_channel，深度 1'
+  time: 1
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_gap_A_B
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 16.7（深度 2）
+  time: 1
+  to_node: ''
 - amount: 0.06
   channel_id: basis_channel
   difference_id: ''
@@ -13,4 +45,124 @@
   from_node: ''
   reason: 通道 basis_channel 锁定度从 0.061 增至 0.122
   time: 1
+  to_node: ''
+- amount: 0.02
+  channel_id: basis_to_price_channel
+  difference_id: ''
+  event_type: lock_in
+  from_node: ''
+  reason: 通道 basis_to_price_channel 锁定度从 0.024 增至 0.047
+  time: 1
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_gap_A_B
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 16.7（深度 0）
+  time: 2
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_gap_A_B
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 16.7（深度 0）
+  time: 3
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_gap_A_B
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 16.7（深度 0）
+  time: 4
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_gap_A_B
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 16.7（深度 0）
+  time: 5
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_gap_A_B
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 16.7（深度 0）
+  time: 6
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_gap_A_B
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 16.7（深度 0）
+  time: 7
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_gap_A_B
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 16.7（深度 0）
+  time: 8
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_gap_A_B
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 16.7（深度 0）
+  time: 9
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_gap_A_B
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 16.7（深度 0）
+  time: 10
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_gap_A_B
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 16.7（深度 0）
+  time: 11
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_gap_A_B
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 16.7（深度 0）
+  time: 12
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_gap_A_B
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 16.7（深度 0）
+  time: 13
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_gap_A_B
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 16.7（深度 0）
+  time: 14
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_gap_A_B
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 16.7（深度 0）
+  time: 15
   to_node: ''

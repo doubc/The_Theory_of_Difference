@@ -12,54 +12,54 @@
   time: 1
   total_pressure: 15.82
 - active_channels: 3
-  active_differences: 1
+  active_differences: 3
   blocked_channels: 0
   break_events_count: 0
   detail:
-    stable_reason: 总压力0.6<30.0，活跃差异1≤2，流动性恢复稳态
-  dominant_difference_id: margin_pressure
+    stable_reason: 总压力8.3，无明显稳定路径，需继续观察
+  dominant_difference_id: feedback_margin_speculative_fund_001_2
   dominant_difference_type: margin
   dominant_entity_id: industrial_long_001
-  nearest_stable_label: liquidity_recovery
+  nearest_stable_label: unstable
   pressure_level: low
   time: 2
-  total_pressure: 0.61
+  total_pressure: 8.3
 - active_channels: 3
-  active_differences: 0
+  active_differences: 2
   blocked_channels: 0
   break_events_count: 0
   detail:
-    stable_reason: 总压力0.0<30.0，活跃差异0≤2，流动性恢复稳态
-  dominant_difference_id: ''
-  dominant_difference_type: ''
+    stable_reason: 超过67%主体处于压力状态，等待保证金缓解
+  dominant_difference_id: feedback_margin_industrial_long_001_3
+  dominant_difference_type: margin
   dominant_entity_id: industrial_long_001
-  nearest_stable_label: liquidity_recovery
+  nearest_stable_label: margin_relief
   pressure_level: low
   time: 3
-  total_pressure: 0
+  total_pressure: 1.32
 - active_channels: 3
-  active_differences: 0
+  active_differences: 4
   blocked_channels: 0
   break_events_count: 0
   detail:
-    stable_reason: 总压力0.0<30.0，活跃差异0≤2，流动性恢复稳态
-  dominant_difference_id: ''
-  dominant_difference_type: ''
+    stable_reason: 超过67%主体处于压力状态，等待保证金缓解
+  dominant_difference_id: feedback_margin_speculative_fund_001_4
+  dominant_difference_type: margin
   dominant_entity_id: industrial_long_001
-  nearest_stable_label: liquidity_recovery
+  nearest_stable_label: margin_relief
   pressure_level: low
   time: 4
-  total_pressure: 0
+  total_pressure: 0.07
 - active_channels: 3
   active_differences: 0
   blocked_channels: 0
   break_events_count: 0
   detail:
-    stable_reason: 总压力0.0<30.0，活跃差异0≤2，流动性恢复稳态
+    stable_reason: 超过67%主体处于压力状态，等待保证金缓解
   dominant_difference_id: ''
   dominant_difference_type: ''
   dominant_entity_id: industrial_long_001
-  nearest_stable_label: liquidity_recovery
+  nearest_stable_label: margin_relief
   pressure_level: low
   time: 5
   total_pressure: 0
@@ -68,11 +68,11 @@
   blocked_channels: 0
   break_events_count: 0
   detail:
-    stable_reason: 总压力0.0<30.0，活跃差异0≤2，流动性恢复稳态
+    stable_reason: 超过67%主体处于压力状态，等待保证金缓解
   dominant_difference_id: ''
   dominant_difference_type: ''
   dominant_entity_id: industrial_long_001
-  nearest_stable_label: liquidity_recovery
+  nearest_stable_label: margin_relief
   pressure_level: low
   time: 6
   total_pressure: 0
@@ -81,11 +81,11 @@
   blocked_channels: 0
   break_events_count: 0
   detail:
-    stable_reason: 总压力0.0<30.0，活跃差异0≤2，流动性恢复稳态
+    stable_reason: 超过67%主体处于压力状态，等待保证金缓解
   dominant_difference_id: ''
   dominant_difference_type: ''
   dominant_entity_id: industrial_long_001
-  nearest_stable_label: liquidity_recovery
+  nearest_stable_label: margin_relief
   pressure_level: low
   time: 7
   total_pressure: 0
@@ -94,11 +94,11 @@
   blocked_channels: 0
   break_events_count: 0
   detail:
-    stable_reason: 总压力0.0<30.0，活跃差异0≤2，流动性恢复稳态
+    stable_reason: 超过67%主体处于压力状态，等待保证金缓解
   dominant_difference_id: ''
   dominant_difference_type: ''
   dominant_entity_id: industrial_long_001
-  nearest_stable_label: liquidity_recovery
+  nearest_stable_label: margin_relief
   pressure_level: low
   time: 8
   total_pressure: 0
@@ -107,11 +107,11 @@
   blocked_channels: 0
   break_events_count: 0
   detail:
-    stable_reason: 总压力0.0<30.0，活跃差异0≤2，流动性恢复稳态
+    stable_reason: 超过67%主体处于压力状态，等待保证金缓解
   dominant_difference_id: ''
   dominant_difference_type: ''
   dominant_entity_id: industrial_long_001
-  nearest_stable_label: liquidity_recovery
+  nearest_stable_label: margin_relief
   pressure_level: low
   time: 9
   total_pressure: 0
@@ -120,11 +120,11 @@
   blocked_channels: 0
   break_events_count: 0
   detail:
-    stable_reason: 总压力0.0<30.0，活跃差异0≤2，流动性恢复稳态
+    stable_reason: 超过67%主体处于压力状态，等待保证金缓解
   dominant_difference_id: ''
   dominant_difference_type: ''
   dominant_entity_id: industrial_long_001
-  nearest_stable_label: liquidity_recovery
+  nearest_stable_label: margin_relief
   pressure_level: low
   time: 10
   total_pressure: 0
@@ -133,11 +133,11 @@
   blocked_channels: 0
   break_events_count: 0
   detail:
-    stable_reason: 总压力0.0<30.0，活跃差异0≤2，流动性恢复稳态
+    stable_reason: 超过67%主体处于压力状态，等待保证金缓解
   dominant_difference_id: ''
   dominant_difference_type: ''
   dominant_entity_id: industrial_long_001
-  nearest_stable_label: liquidity_recovery
+  nearest_stable_label: margin_relief
   pressure_level: low
   time: 11
   total_pressure: 0
@@ -146,11 +146,11 @@
   blocked_channels: 0
   break_events_count: 0
   detail:
-    stable_reason: 总压力0.0<30.0，活跃差异0≤2，流动性恢复稳态
+    stable_reason: 超过67%主体处于压力状态，等待保证金缓解
   dominant_difference_id: ''
   dominant_difference_type: ''
   dominant_entity_id: industrial_long_001
-  nearest_stable_label: liquidity_recovery
+  nearest_stable_label: margin_relief
   pressure_level: low
   time: 12
   total_pressure: 0
@@ -159,11 +159,11 @@
   blocked_channels: 0
   break_events_count: 0
   detail:
-    stable_reason: 总压力0.0<30.0，活跃差异0≤2，流动性恢复稳态
+    stable_reason: 超过67%主体处于压力状态，等待保证金缓解
   dominant_difference_id: ''
   dominant_difference_type: ''
   dominant_entity_id: industrial_long_001
-  nearest_stable_label: liquidity_recovery
+  nearest_stable_label: margin_relief
   pressure_level: low
   time: 13
   total_pressure: 0
@@ -172,11 +172,11 @@
   blocked_channels: 0
   break_events_count: 0
   detail:
-    stable_reason: 总压力0.0<30.0，活跃差异0≤2，流动性恢复稳态
+    stable_reason: 超过67%主体处于压力状态，等待保证金缓解
   dominant_difference_id: ''
   dominant_difference_type: ''
   dominant_entity_id: industrial_long_001
-  nearest_stable_label: liquidity_recovery
+  nearest_stable_label: margin_relief
   pressure_level: low
   time: 14
   total_pressure: 0
@@ -185,11 +185,11 @@
   blocked_channels: 0
   break_events_count: 0
   detail:
-    stable_reason: 总压力0.0<30.0，活跃差异0≤2，流动性恢复稳态
+    stable_reason: 超过67%主体处于压力状态，等待保证金缓解
   dominant_difference_id: ''
   dominant_difference_type: ''
   dominant_entity_id: industrial_long_001
-  nearest_stable_label: liquidity_recovery
+  nearest_stable_label: margin_relief
   pressure_level: low
   time: 15
   total_pressure: 0
@@ -198,11 +198,11 @@
   blocked_channels: 0
   break_events_count: 0
   detail:
-    stable_reason: 总压力0.0<30.0，活跃差异0≤2，流动性恢复稳态
+    stable_reason: 超过67%主体处于压力状态，等待保证金缓解
   dominant_difference_id: ''
   dominant_difference_type: ''
   dominant_entity_id: industrial_long_001
-  nearest_stable_label: liquidity_recovery
+  nearest_stable_label: margin_relief
   pressure_level: low
   time: 16
   total_pressure: 0
@@ -211,11 +211,11 @@
   blocked_channels: 0
   break_events_count: 0
   detail:
-    stable_reason: 总压力0.0<30.0，活跃差异0≤2，流动性恢复稳态
+    stable_reason: 超过67%主体处于压力状态，等待保证金缓解
   dominant_difference_id: ''
   dominant_difference_type: ''
   dominant_entity_id: industrial_long_001
-  nearest_stable_label: liquidity_recovery
+  nearest_stable_label: margin_relief
   pressure_level: low
   time: 17
   total_pressure: 0
@@ -224,11 +224,11 @@
   blocked_channels: 0
   break_events_count: 0
   detail:
-    stable_reason: 总压力0.0<30.0，活跃差异0≤2，流动性恢复稳态
+    stable_reason: 超过67%主体处于压力状态，等待保证金缓解
   dominant_difference_id: ''
   dominant_difference_type: ''
   dominant_entity_id: industrial_long_001
-  nearest_stable_label: liquidity_recovery
+  nearest_stable_label: margin_relief
   pressure_level: low
   time: 18
   total_pressure: 0
@@ -237,11 +237,11 @@
   blocked_channels: 0
   break_events_count: 0
   detail:
-    stable_reason: 总压力0.0<30.0，活跃差异0≤2，流动性恢复稳态
+    stable_reason: 超过67%主体处于压力状态，等待保证金缓解
   dominant_difference_id: ''
   dominant_difference_type: ''
   dominant_entity_id: industrial_long_001
-  nearest_stable_label: liquidity_recovery
+  nearest_stable_label: margin_relief
   pressure_level: low
   time: 19
   total_pressure: 0
@@ -250,11 +250,11 @@
   blocked_channels: 0
   break_events_count: 0
   detail:
-    stable_reason: 总压力0.0<30.0，活跃差异0≤2，流动性恢复稳态
+    stable_reason: 超过67%主体处于压力状态，等待保证金缓解
   dominant_difference_id: ''
   dominant_difference_type: ''
   dominant_entity_id: industrial_long_001
-  nearest_stable_label: liquidity_recovery
+  nearest_stable_label: margin_relief
   pressure_level: low
   time: 20
   total_pressure: 0

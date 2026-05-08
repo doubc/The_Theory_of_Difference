@@ -1,9 +1,25 @@
+- amount: 22.5
+  channel_id: ''
+  difference_id: margin_hike
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 22.50 压力
+  time: 1
+  to_node: ''
+- amount: 7.5
+  channel_id: ''
+  difference_id: inventory_gap
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 7.50 压力
+  time: 1
+  to_node: ''
 - amount: 42.5
   channel_id: margin_clearing_channel
   difference_id: margin_hike
   event_type: entity_absorb
   from_node: ''
-  reason: 主体 industrial_long_001 承接 42.5 压力，剩余能力 42.5
+  reason: 主体 industrial_long_001 承接 42.5，剩余能力 42.5（深度 0）
   time: 1
   to_node: ''
 - amount: 35.0
@@ -11,7 +27,7 @@
   difference_id: margin_hike
   event_type: entity_absorb
   from_node: ''
-  reason: 主体 speculative_fund_001 承接 35.0 压力，剩余能力 35.0
+  reason: 主体 speculative_fund_001 承接 35.0，剩余能力 35.0（深度 0）
   time: 1
   to_node: ''
 - amount: 50.0
@@ -30,12 +46,20 @@
   reason: 转移后剩余 36.6 压力积累
   time: 1
   to_node: ''
+- amount: 15.0
+  channel_id: margin_clearing_channel
+  difference_id: margin_hike
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 0'
+  time: 1
+  to_node: ''
 - amount: 21.25
   channel_id: basis_channel
   difference_id: inventory_gap
   event_type: entity_absorb
   from_node: ''
-  reason: 主体 industrial_long_001 承接 21.2 压力，剩余能力 21.2
+  reason: 主体 industrial_long_001 承接 21.2，剩余能力 21.2（深度 0）
   time: 1
   to_node: ''
 - amount: 14.25
@@ -43,7 +67,7 @@
   difference_id: inventory_gap
   event_type: entity_absorb
   from_node: ''
-  reason: 主体 speculative_fund_001 承接 14.2 压力，剩余能力 20.8
+  reason: 主体 speculative_fund_001 承接 14.2，剩余能力 20.8（深度 0）
   time: 1
   to_node: ''
 - amount: 35.5
@@ -54,6 +78,62 @@
   reason: 经通道 basis_channel 转移 35.5 压力
   time: 1
   to_node: region_B
+- amount: 19.75
+  channel_id: basis_channel
+  difference_id: inventory_gap
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: inventory → basis，经通道 basis_channel，深度 0'
+  time: 1
+  to_node: ''
+- amount: 10.38
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_margin_hike
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 10.4，剩余能力 10.4（深度 1）
+  time: 1
+  to_node: ''
+- amount: 15.0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_margin_hike
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 15.0 压力
+  time: 1
+  to_node: market
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_gap
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 19.7（深度 1）
+  time: 1
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 6.0（深度 1）
+  time: 1
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_speculative_fund_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 13.5（深度 1）
+  time: 1
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_speculative_fund_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 9.8（深度 2）
+  time: 1
+  to_node: ''
 - amount: 0.05
   channel_id: margin_clearing_channel
   difference_id: ''
@@ -70,20 +150,36 @@
   reason: 通道 basis_channel 锁定度从 0.036 增至 0.071
   time: 1
   to_node: ''
+- amount: 0.01
+  channel_id: position_reduction_channel
+  difference_id: ''
+  event_type: lock_in
+  from_node: ''
+  reason: 通道 position_reduction_channel 锁定度从 0.015 增至 0.030
+  time: 1
+  to_node: ''
+- amount: 21.38
+  channel_id: ''
+  difference_id: margin_hike
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 21.38 压力
+  time: 2
+  to_node: ''
 - amount: 10.62
   channel_id: margin_clearing_channel
   difference_id: margin_hike
   event_type: entity_absorb
   from_node: ''
-  reason: 主体 industrial_long_001 承接 10.6 压力，剩余能力 10.6
+  reason: 主体 industrial_long_001 承接 10.6，剩余能力 10.6（深度 0）
   time: 2
   to_node: ''
-- amount: 10.38
+- amount: 5.19
   channel_id: margin_clearing_channel
   difference_id: margin_hike
   event_type: entity_absorb
   from_node: ''
-  reason: 主体 speculative_fund_001 承接 10.4 压力，剩余能力 10.4
+  reason: 主体 speculative_fund_001 承接 5.2，剩余能力 5.2（深度 0）
   time: 2
   to_node: ''
 - amount: 35.0
@@ -102,6 +198,78 @@
   reason: 转移后剩余 23.0 压力积累
   time: 2
   to_node: ''
+- amount: 10.5
+  channel_id: margin_clearing_channel
+  difference_id: margin_hike
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 0'
+  time: 2
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_gap
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 19.7（深度 0）
+  time: 2
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 6.0（深度 0）
+  time: 2
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_speculative_fund_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 9.8（深度 0）
+  time: 2
+  to_node: ''
+- amount: 2.59
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_margin_hike
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 2.6，剩余能力 2.6（深度 1）
+  time: 2
+  to_node: ''
+- amount: 10.5
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_margin_hike
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 10.5 压力
+  time: 2
+  to_node: market
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_long_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 1）
+  time: 2
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_speculative_fund_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 4.9（深度 1）
+  time: 2
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_speculative_fund_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 2.5（深度 2）
+  time: 2
+  to_node: ''
 - amount: 0.04
   channel_id: margin_clearing_channel
   difference_id: ''
@@ -110,20 +278,28 @@
   reason: 通道 margin_clearing_channel 锁定度从 0.135 增至 0.170
   time: 2
   to_node: ''
+- amount: 0.01
+  channel_id: position_reduction_channel
+  difference_id: ''
+  event_type: lock_in
+  from_node: ''
+  reason: 通道 position_reduction_channel 锁定度从 0.041 增至 0.051
+  time: 2
+  to_node: ''
+- amount: 20.31
+  channel_id: ''
+  difference_id: margin_hike
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 20.31 压力
+  time: 3
+  to_node: ''
 - amount: 5.31
   channel_id: margin_clearing_channel
   difference_id: margin_hike
   event_type: entity_absorb
   from_node: ''
-  reason: 主体 industrial_long_001 承接 5.3 压力，剩余能力 5.3
-  time: 3
-  to_node: ''
-- amount: 5.19
-  channel_id: margin_clearing_channel
-  difference_id: margin_hike
-  event_type: entity_absorb
-  from_node: ''
-  reason: 主体 speculative_fund_001 承接 5.2 压力，剩余能力 5.2
+  reason: 主体 industrial_long_001 承接 5.3，剩余能力 5.3（深度 0）
   time: 3
   to_node: ''
 - amount: 35.0
@@ -142,6 +318,86 @@
   reason: 转移后剩余 8.3 压力积累
   time: 3
   to_node: ''
+- amount: 10.5
+  channel_id: margin_clearing_channel
+  difference_id: margin_hike
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 0'
+  time: 3
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_gap
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 19.7（深度 0）
+  time: 3
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 6.0（深度 0）
+  time: 3
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_speculative_fund_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 9.8（深度 0）
+  time: 3
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_long_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 3
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_speculative_fund_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
+  time: 3
+  to_node: ''
+- amount: 1.3
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_margin_hike
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 1.3，剩余能力 1.3（深度 1）
+  time: 3
+  to_node: ''
+- amount: 10.5
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_margin_hike
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 10.5 压力
+  time: 3
+  to_node: market
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_long_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 1.5（深度 1）
+  time: 3
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_speculative_fund_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 1.2（深度 2）
+  time: 3
+  to_node: ''
 - amount: 0.04
   channel_id: margin_clearing_channel
   difference_id: ''
@@ -150,20 +406,28 @@
   reason: 通道 margin_clearing_channel 锁定度从 0.205 增至 0.240
   time: 3
   to_node: ''
+- amount: 0.01
+  channel_id: position_reduction_channel
+  difference_id: ''
+  event_type: lock_in
+  from_node: ''
+  reason: 通道 position_reduction_channel 锁定度从 0.062 增至 0.072
+  time: 3
+  to_node: ''
+- amount: 19.29
+  channel_id: ''
+  difference_id: margin_hike
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 19.29 压力
+  time: 4
+  to_node: ''
 - amount: 2.66
   channel_id: margin_clearing_channel
   difference_id: margin_hike
   event_type: entity_absorb
   from_node: ''
-  reason: 主体 industrial_long_001 承接 2.7 压力，剩余能力 2.7
-  time: 4
-  to_node: ''
-- amount: 2.59
-  channel_id: margin_clearing_channel
-  difference_id: margin_hike
-  event_type: entity_absorb
-  from_node: ''
-  reason: 主体 speculative_fund_001 承接 2.6 压力，剩余能力 2.6
+  reason: 主体 industrial_long_001 承接 2.7，剩余能力 2.7（深度 0）
   time: 4
   to_node: ''
 - amount: 27.6
@@ -174,11 +438,1579 @@
   reason: 经通道 margin_clearing_channel 转移 27.6 压力
   time: 4
   to_node: market
+- amount: 8.28
+  channel_id: margin_clearing_channel
+  difference_id: margin_hike
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 0'
+  time: 4
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_gap
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 19.7（深度 0）
+  time: 4
+  to_node: ''
+- amount: 1.33
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_1
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 1.3，剩余能力 1.3（深度 0）
+  time: 4
+  to_node: ''
+- amount: 0.65
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_1
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.6，剩余能力 0.6（深度 0）
+  time: 4
+  to_node: ''
+- amount: 6.02
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_1
+  event_type: transfer
+  from_node: industrial_long_001
+  reason: 经通道 margin_clearing_channel 转移 6.0 压力
+  time: 4
+  to_node: clearing
+- amount: 1.81
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_1
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 0'
+  time: 4
+  to_node: ''
+- amount: 0.66
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_1
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.7，剩余能力 0.7（深度 0）
+  time: 4
+  to_node: ''
+- amount: 1.38
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_1
+  event_type: transfer
+  from_node: speculative_fund_001
+  reason: 经通道 margin_clearing_channel 转移 1.4 压力
+  time: 4
+  to_node: clearing
+- amount: 8.43
+  channel_id: ''
+  difference_id: feedback_margin_speculative_fund_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 转移后剩余 8.4 压力积累
+  time: 4
+  to_node: ''
+- amount: 0.41
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_1
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 0'
+  time: 4
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_long_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 4
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_speculative_fund_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
+  time: 4
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_long_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 1.5（深度 0）
+  time: 4
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_speculative_fund_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 1.2（深度 0）
+  time: 4
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_margin_hike
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 8.3（深度 1）
+  time: 4
+  to_node: ''
+- amount: 0.32
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_1
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.3，剩余能力 0.3（深度 1）
+  time: 4
+  to_node: ''
+- amount: 1.81
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_1
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 1.8 压力
+  time: 4
+  to_node: clearing
+- amount: 0.16
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_speculative_fund_001_1
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.2，剩余能力 0.2（深度 1）
+  time: 4
+  to_node: ''
+- amount: 0.41
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_speculative_fund_001_1
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 0.4 压力
+  time: 4
+  to_node: clearing
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.8（深度 1）
+  time: 4
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.4（深度 1）
+  time: 4
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.6（深度 1）
+  time: 4
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.2（深度 1）
+  time: 4
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.3（深度 2）
+  time: 4
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.2（深度 2）
+  time: 4
+  to_node: ''
 - amount: 0.03
   channel_id: margin_clearing_channel
   difference_id: ''
   event_type: lock_in
   from_node: ''
-  reason: 通道 margin_clearing_channel 锁定度从 0.268 增至 0.295
+  reason: 通道 margin_clearing_channel 锁定度从 0.275 增至 0.303
   time: 4
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_margin_hike
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 8.3（深度 0）
+  time: 5
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_gap
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 19.7（深度 0）
+  time: 5
+  to_node: ''
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 8.4（深度 0）
+  time: 5
+  to_node: ''
+- amount: 0.33
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_2
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.3，剩余能力 0.3（深度 0）
+  time: 5
+  to_node: ''
+- amount: 3.01
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_2
+  event_type: transfer
+  from_node: industrial_long_001
+  reason: 经通道 margin_clearing_channel 转移 3.0 压力
+  time: 5
+  to_node: clearing
+- amount: 1.9
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_2
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 0'
+  time: 5
+  to_node: ''
+- amount: 0.17
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_2
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.2，剩余能力 0.2（深度 0）
+  time: 5
+  to_node: ''
+- amount: 2.45
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_2
+  event_type: transfer
+  from_node: speculative_fund_001
+  reason: 经通道 margin_clearing_channel 转移 2.5 压力
+  time: 5
+  to_node: clearing
+- amount: 1.42
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_2
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 0'
+  time: 5
+  to_node: ''
+- amount: 0.08
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_3
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.1，剩余能力 0.1（深度 0）
+  time: 5
+  to_node: ''
+- amount: 0.08
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_3
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.1，剩余能力 0.1（深度 0）
+  time: 5
+  to_node: ''
+- amount: 1.51
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_3
+  event_type: transfer
+  from_node: industrial_long_001
+  reason: 经通道 margin_clearing_channel 转移 1.5 压力
+  time: 5
+  to_node: clearing
+- amount: 0.83
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_3
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 0'
+  time: 5
+  to_node: ''
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.2（深度 0）
+  time: 5
+  to_node: ''
+- amount: 0.04
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.0，剩余能力 0.0（深度 0）
+  time: 5
+  to_node: ''
+- amount: 0.04
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.0，剩余能力 0.0（深度 0）
+  time: 5
+  to_node: ''
+- amount: 0.19
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: transfer
+  from_node: industrial_long_001
+  reason: 经通道 margin_clearing_channel 转移 0.2 压力
+  time: 5
+  to_node: clearing
+- amount: 0.1
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 0'
+  time: 5
+  to_node: ''
+- amount: 0.02
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.0，剩余能力 0.0（深度 0）
+  time: 5
+  to_node: ''
+- amount: 0.02
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.0，剩余能力 0.0（深度 0）
+  time: 5
+  to_node: ''
+- amount: 0.15
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: transfer
+  from_node: speculative_fund_001
+  reason: 经通道 margin_clearing_channel 转移 0.2 压力
+  time: 5
+  to_node: clearing
+- amount: 0.08
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 0'
+  time: 5
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.9（深度 1）
+  time: 5
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_speculative_fund_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.4（深度 1）
+  time: 5
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.8（深度 1）
+  time: 5
+  to_node: ''
+- amount: 0.01
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.0，剩余能力 0.0（深度 1）
+  time: 5
+  to_node: ''
+- amount: 0.1
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_4
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 0.1 压力
+  time: 5
+  to_node: clearing
+- amount: 0.01
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_speculative_fund_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.0，剩余能力 0.0（深度 1）
+  time: 5
+  to_node: ''
+- amount: 0.08
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_speculative_fund_001_4
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 0.1 压力
+  time: 5
+  to_node: clearing
+- amount: 0.01
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_5
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.0，剩余能力 0.0（深度 1）
+  time: 5
+  to_node: ''
+- amount: 0.09
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_5
+  event_type: transfer
+  from_node: industrial_long_001
+  reason: 经通道 margin_clearing_channel 转移 0.1 压力
+  time: 5
+  to_node: clearing
+- amount: 0.05
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_5
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 1'
+  time: 5
+  to_node: ''
+- amount: 0.01
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_5
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.0，剩余能力 0.0（深度 1）
+  time: 5
+  to_node: ''
+- amount: 0.0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_5
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.0，剩余能力 0.0（深度 1）
+  time: 5
+  to_node: ''
+- amount: 0.05
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_5
+  event_type: transfer
+  from_node: industrial_long_001
+  reason: 经通道 margin_clearing_channel 转移 0.0 压力
+  time: 5
+  to_node: clearing
+- amount: 0.03
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_5
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 1'
+  time: 5
+  to_node: ''
+- amount: 0.0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_5
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.0，剩余能力 0.0（深度 1）
+  time: 5
+  to_node: ''
+- amount: 0.0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_5
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.0，剩余能力 0.0（深度 1）
+  time: 5
+  to_node: ''
+- amount: 0.02
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_5
+  event_type: transfer
+  from_node: industrial_long_001
+  reason: 经通道 margin_clearing_channel 转移 0.0 压力
+  time: 5
+  to_node: clearing
+- amount: 0.01
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_5
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 1'
+  time: 5
+  to_node: ''
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_5
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.1（深度 1）
+  time: 5
+  to_node: ''
+- amount: 0.0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_5
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.0，剩余能力 0.0（深度 1）
+  time: 5
+  to_node: ''
+- amount: 0.0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_5
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.0，剩余能力 0.0（深度 1）
+  time: 5
+  to_node: ''
+- amount: 0.01
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_5
+  event_type: transfer
+  from_node: industrial_long_001
+  reason: 经通道 margin_clearing_channel 转移 0.0 压力
+  time: 5
+  to_node: clearing
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_5
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.0（深度 1）
+  time: 5
+  to_node: ''
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_5
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.0（深度 1）
+  time: 5
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_industrial_long_001_5
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.1（深度 2）
+  time: 5
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_industrial_long_001_5
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.0（深度 2）
+  time: 5
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_industrial_long_001_5
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.0（深度 2）
+  time: 5
+  to_node: ''
+- amount: 0.0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_5
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.0，剩余能力 0.0（深度 2）
+  time: 5
+  to_node: ''
+- amount: 0.01
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_5
+  event_type: transfer
+  from_node: speculative_fund_001
+  reason: 经通道 margin_clearing_channel 转移 0.0 压力
+  time: 5
+  to_node: clearing
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_margin_hike
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 8.3（深度 0）
+  time: 6
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_gap
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 19.7（深度 0）
+  time: 6
+  to_node: ''
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 8.4（深度 0）
+  time: 6
+  to_node: ''
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.2（深度 0）
+  time: 6
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.9（深度 0）
+  time: 6
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_speculative_fund_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.4（深度 0）
+  time: 6
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.8（深度 0）
+  time: 6
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_industrial_long_001_5
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.0（深度 0）
+  time: 6
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_margin_hike
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 8.3（深度 0）
+  time: 7
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_gap
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 19.7（深度 0）
+  time: 7
+  to_node: ''
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 8.4（深度 0）
+  time: 7
+  to_node: ''
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.2（深度 0）
+  time: 7
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.9（深度 0）
+  time: 7
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_speculative_fund_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.4（深度 0）
+  time: 7
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.8（深度 0）
+  time: 7
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_industrial_long_001_5
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.0（深度 0）
+  time: 7
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_margin_hike
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 8.3（深度 0）
+  time: 8
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_gap
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 19.7（深度 0）
+  time: 8
+  to_node: ''
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 8.4（深度 0）
+  time: 8
+  to_node: ''
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.2（深度 0）
+  time: 8
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.9（深度 0）
+  time: 8
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_speculative_fund_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.4（深度 0）
+  time: 8
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.8（深度 0）
+  time: 8
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_industrial_long_001_5
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.0（深度 0）
+  time: 8
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_margin_hike
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 8.3（深度 0）
+  time: 9
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_gap
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 19.7（深度 0）
+  time: 9
+  to_node: ''
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 8.4（深度 0）
+  time: 9
+  to_node: ''
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.2（深度 0）
+  time: 9
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.9（深度 0）
+  time: 9
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_speculative_fund_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.4（深度 0）
+  time: 9
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.8（深度 0）
+  time: 9
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_industrial_long_001_5
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.0（深度 0）
+  time: 9
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_margin_hike
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 8.3（深度 0）
+  time: 10
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_gap
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 19.7（深度 0）
+  time: 10
+  to_node: ''
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 8.4（深度 0）
+  time: 10
+  to_node: ''
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.2（深度 0）
+  time: 10
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.9（深度 0）
+  time: 10
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_speculative_fund_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.4（深度 0）
+  time: 10
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.8（深度 0）
+  time: 10
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_industrial_long_001_5
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.0（深度 0）
+  time: 10
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_margin_hike
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 8.3（深度 0）
+  time: 11
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_gap
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 19.7（深度 0）
+  time: 11
+  to_node: ''
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 8.4（深度 0）
+  time: 11
+  to_node: ''
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.2（深度 0）
+  time: 11
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.9（深度 0）
+  time: 11
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_speculative_fund_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.4（深度 0）
+  time: 11
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.8（深度 0）
+  time: 11
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_industrial_long_001_5
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.0（深度 0）
+  time: 11
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_margin_hike
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 8.3（深度 0）
+  time: 12
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_gap
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 19.7（深度 0）
+  time: 12
+  to_node: ''
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 8.4（深度 0）
+  time: 12
+  to_node: ''
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.2（深度 0）
+  time: 12
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.9（深度 0）
+  time: 12
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_speculative_fund_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.4（深度 0）
+  time: 12
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.8（深度 0）
+  time: 12
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_industrial_long_001_5
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.0（深度 0）
+  time: 12
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_margin_hike
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 8.3（深度 0）
+  time: 13
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_gap
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 19.7（深度 0）
+  time: 13
+  to_node: ''
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 8.4（深度 0）
+  time: 13
+  to_node: ''
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.2（深度 0）
+  time: 13
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.9（深度 0）
+  time: 13
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_speculative_fund_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.4（深度 0）
+  time: 13
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.8（深度 0）
+  time: 13
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_industrial_long_001_5
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.0（深度 0）
+  time: 13
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_margin_hike
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 8.3（深度 0）
+  time: 14
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_gap
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 19.7（深度 0）
+  time: 14
+  to_node: ''
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 8.4（深度 0）
+  time: 14
+  to_node: ''
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.2（深度 0）
+  time: 14
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.9（深度 0）
+  time: 14
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_speculative_fund_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.4（深度 0）
+  time: 14
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.8（深度 0）
+  time: 14
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_industrial_long_001_5
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.0（深度 0）
+  time: 14
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_margin_hike
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 8.3（深度 0）
+  time: 15
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_gap
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 19.7（深度 0）
+  time: 15
+  to_node: ''
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 8.4（深度 0）
+  time: 15
+  to_node: ''
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.2（深度 0）
+  time: 15
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.9（深度 0）
+  time: 15
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_speculative_fund_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.4（深度 0）
+  time: 15
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.8（深度 0）
+  time: 15
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_industrial_long_001_5
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.0（深度 0）
+  time: 15
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_margin_hike
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 8.3（深度 0）
+  time: 16
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_gap
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 19.7（深度 0）
+  time: 16
+  to_node: ''
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 8.4（深度 0）
+  time: 16
+  to_node: ''
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.2（深度 0）
+  time: 16
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.9（深度 0）
+  time: 16
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_speculative_fund_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.4（深度 0）
+  time: 16
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.8（深度 0）
+  time: 16
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_industrial_long_001_5
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.0（深度 0）
+  time: 16
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_margin_hike
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 8.3（深度 0）
+  time: 17
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_gap
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 19.7（深度 0）
+  time: 17
+  to_node: ''
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 8.4（深度 0）
+  time: 17
+  to_node: ''
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.2（深度 0）
+  time: 17
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.9（深度 0）
+  time: 17
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_speculative_fund_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.4（深度 0）
+  time: 17
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.8（深度 0）
+  time: 17
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_industrial_long_001_5
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.0（深度 0）
+  time: 17
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_margin_hike
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 8.3（深度 0）
+  time: 18
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_gap
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 19.7（深度 0）
+  time: 18
+  to_node: ''
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 8.4（深度 0）
+  time: 18
+  to_node: ''
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.2（深度 0）
+  time: 18
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.9（深度 0）
+  time: 18
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_speculative_fund_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.4（深度 0）
+  time: 18
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.8（深度 0）
+  time: 18
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_industrial_long_001_5
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.0（深度 0）
+  time: 18
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_margin_hike
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 8.3（深度 0）
+  time: 19
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_gap
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 19.7（深度 0）
+  time: 19
+  to_node: ''
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 8.4（深度 0）
+  time: 19
+  to_node: ''
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.2（深度 0）
+  time: 19
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.9（深度 0）
+  time: 19
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_speculative_fund_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.4（深度 0）
+  time: 19
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.8（深度 0）
+  time: 19
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_industrial_long_001_5
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.0（深度 0）
+  time: 19
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_margin_hike
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 8.3（深度 0）
+  time: 20
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_gap
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 19.7（深度 0）
+  time: 20
+  to_node: ''
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 8.4（深度 0）
+  time: 20
+  to_node: ''
+- amount: 0
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.2（深度 0）
+  time: 20
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.9（深度 0）
+  time: 20
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_speculative_fund_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 1.4（深度 0）
+  time: 20
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.8（深度 0）
+  time: 20
+  to_node: ''
+- amount: 0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_industrial_long_001_5
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 0.0（深度 0）
+  time: 20
   to_node: ''

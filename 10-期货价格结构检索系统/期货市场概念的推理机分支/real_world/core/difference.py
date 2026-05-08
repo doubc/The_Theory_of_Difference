@@ -64,9 +64,14 @@ class DifferenceSource:
             self.status = DifferenceStatus.RESOLVED
 
     def accumulate(self, amount: float):
-        """积累压力。"""
-        self.pressure += amount
-        self.magnitude += amount * 0.1  # 积累也缓慢增加规模
+        """积累压力。
+
+        注意：积累只增加 pressure，不增长 magnitude。
+        magnitude 代表差异的结构性规模，不应随无处可去的积累而膨胀。
+        只有 recurrent 机制才应该增长 magnitude。
+        """
+        if amount > 0:
+            self.pressure += amount
         if self.status == DifferenceStatus.DORMANT:
             self.status = DifferenceStatus.ACTIVE
 

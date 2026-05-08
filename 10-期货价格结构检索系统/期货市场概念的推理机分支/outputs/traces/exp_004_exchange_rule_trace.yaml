@@ -1,9 +1,17 @@
+- amount: 13.75
+  channel_id: ''
+  difference_id: margin_pressure
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 13.75 压力
+  time: 1
+  to_node: ''
 - amount: 34.2
   channel_id: exchange_rule_channel
   difference_id: rule_change
   event_type: entity_absorb
   from_node: ''
-  reason: 主体 exchange_001 承接 34.2 压力，剩余能力 145.8
+  reason: 主体 exchange_001 承接 34.2，剩余能力 145.8（深度 0）
   time: 1
   to_node: ''
 - amount: 34.2
@@ -19,7 +27,7 @@
   difference_id: margin_pressure
   event_type: entity_absorb
   from_node: ''
-  reason: 主体 industrial_long_001 承接 40.0 压力，剩余能力 40.0
+  reason: 主体 industrial_long_001 承接 40.0，剩余能力 40.0（深度 0）
   time: 1
   to_node: ''
 - amount: 15.82
@@ -27,7 +35,7 @@
   difference_id: margin_pressure
   event_type: entity_absorb
   from_node: ''
-  reason: 主体 speculative_fund_001 承接 15.8 压力，剩余能力 54.2
+  reason: 主体 speculative_fund_001 承接 15.8，剩余能力 54.2（深度 0）
   time: 1
   to_node: ''
 - amount: 40.0
@@ -46,6 +54,30 @@
   reason: 转移后剩余 15.8 压力积累
   time: 1
   to_node: ''
+- amount: 12.0
+  channel_id: margin_clearing_channel
+  difference_id: margin_pressure
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 0'
+  time: 1
+  to_node: ''
+- amount: 12.0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_margin_pressure
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 12.0，剩余能力 42.2（深度 1）
+  time: 1
+  to_node: ''
+- amount: 12.0
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_margin_pressure
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 12.0 压力
+  time: 1
+  to_node: market
 - amount: 0.03
   channel_id: exchange_rule_channel
   difference_id: ''
@@ -62,20 +94,36 @@
   reason: 通道 margin_clearing_channel 锁定度从 0.040 增至 0.080
   time: 1
   to_node: ''
-- amount: 27.09
-  channel_id: margin_clearing_channel
-  difference_id: margin_pressure
-  event_type: entity_absorb
+- amount: 0.01
+  channel_id: position_reduction_channel
+  difference_id: ''
+  event_type: lock_in
   from_node: ''
-  reason: 主体 speculative_fund_001 承接 27.1 压力，剩余能力 27.1
+  reason: 通道 position_reduction_channel 锁定度从 0.012 增至 0.024
+  time: 1
+  to_node: ''
+- amount: 12.79
+  channel_id: ''
+  difference_id: margin_pressure
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 12.79 压力
   time: 2
   to_node: ''
-- amount: 1.52
+- amount: 21.09
   channel_id: margin_clearing_channel
   difference_id: margin_pressure
   event_type: entity_absorb
   from_node: ''
-  reason: 主体 industrial_long_001 承接 1.5 压力，剩余能力 38.5
+  reason: 主体 speculative_fund_001 承接 21.1，剩余能力 21.1（深度 0）
+  time: 2
+  to_node: ''
+- amount: 7.52
+  channel_id: margin_clearing_channel
+  difference_id: margin_pressure
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 7.5，剩余能力 32.5（深度 0）
   time: 2
   to_node: ''
 - amount: 28.0
@@ -94,6 +142,54 @@
   reason: 转移后剩余 0.6 压力积累
   time: 2
   to_node: ''
+- amount: 8.4
+  channel_id: margin_clearing_channel
+  difference_id: margin_pressure
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 0'
+  time: 2
+  to_node: ''
+- amount: 8.4
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_margin_pressure
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 8.4，剩余能力 12.7（深度 1）
+  time: 2
+  to_node: ''
+- amount: 8.4
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_margin_pressure
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 8.4 压力
+  time: 2
+  to_node: market
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_speculative_fund_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 13.9（深度 1）
+  time: 2
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_long_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 2.1（深度 1）
+  time: 2
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_speculative_fund_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 5.6（深度 2）
+  time: 2
+  to_node: ''
 - amount: 0.03
   channel_id: margin_clearing_channel
   difference_id: ''
@@ -102,12 +198,20 @@
   reason: 通道 margin_clearing_channel 锁定度从 0.108 增至 0.136
   time: 2
   to_node: ''
+- amount: 11.89
+  channel_id: ''
+  difference_id: margin_pressure
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 11.89 压力
+  time: 3
+  to_node: ''
 - amount: 12.5
   channel_id: margin_clearing_channel
   difference_id: margin_pressure
   event_type: entity_absorb
   from_node: ''
-  reason: 主体 industrial_long_001 承接 12.5 压力，剩余能力 26.0
+  reason: 主体 industrial_long_001 承接 12.5，剩余能力 20.0（深度 0）
   time: 3
   to_node: ''
 - amount: 12.5
@@ -118,11 +222,1363 @@
   reason: 经通道 margin_clearing_channel 转移 12.5 压力
   time: 3
   to_node: market
+- amount: 4.84
+  channel_id: margin_clearing_channel
+  difference_id: margin_pressure
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 0'
+  time: 3
+  to_node: ''
+- amount: 5.56
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_2
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 5.6，剩余能力 14.4（深度 0）
+  time: 3
+  to_node: ''
+- amount: 5.56
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_2
+  event_type: transfer
+  from_node: speculative_fund_001
+  reason: 经通道 margin_clearing_channel 转移 5.6 压力
+  time: 3
+  to_node: clearing
+- amount: 1.67
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_2
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 0'
+  time: 3
+  to_node: ''
+- amount: 2.13
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_2
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 2.1，剩余能力 12.3（深度 0）
+  time: 3
+  to_node: ''
+- amount: 2.13
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_2
+  event_type: transfer
+  from_node: industrial_long_001
+  reason: 经通道 margin_clearing_channel 转移 2.1 压力
+  time: 3
+  to_node: clearing
+- amount: 0.64
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_2
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 0'
+  time: 3
+  to_node: ''
+- amount: 4.84
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_margin_pressure
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 4.8，剩余能力 7.8（深度 1）
+  time: 3
+  to_node: ''
+- amount: 4.84
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_margin_pressure
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 4.8 压力
+  time: 3
+  to_node: market
+- amount: 1.67
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_speculative_fund_001_2
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 1.7，剩余能力 6.2（深度 1）
+  time: 3
+  to_node: ''
+- amount: 1.67
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_speculative_fund_001_2
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 1.7 压力
+  time: 3
+  to_node: clearing
+- amount: 0.64
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_2
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.6，剩余能力 5.5（深度 1）
+  time: 3
+  to_node: ''
+- amount: 0.64
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_2
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 0.6 压力
+  time: 3
+  to_node: clearing
+- amount: 3.55
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_3
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 3.5，剩余能力 8.7（深度 1）
+  time: 3
+  to_node: ''
+- amount: 3.55
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_3
+  event_type: transfer
+  from_node: industrial_long_001
+  reason: 经通道 margin_clearing_channel 转移 3.5 压力
+  time: 3
+  to_node: clearing
+- amount: 1.06
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_3
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 1'
+  time: 3
+  to_node: ''
+- amount: 1.58
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_3
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 1.6，剩余能力 7.2（深度 1）
+  time: 3
+  to_node: ''
+- amount: 1.58
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_3
+  event_type: transfer
+  from_node: industrial_long_001
+  reason: 经通道 margin_clearing_channel 转移 1.6 压力
+  time: 3
+  to_node: clearing
+- amount: 0.47
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_3
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 1'
+  time: 3
+  to_node: ''
+- amount: 0.6
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_3
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.6，剩余能力 6.6（深度 1）
+  time: 3
+  to_node: ''
+- amount: 0.6
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_3
+  event_type: transfer
+  from_node: industrial_long_001
+  reason: 经通道 margin_clearing_channel 转移 0.6 压力
+  time: 3
+  to_node: clearing
+- amount: 0.18
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_3
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 1'
+  time: 3
+  to_node: ''
+- amount: 1.06
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_industrial_long_001_3
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 1.1，剩余能力 4.5（深度 2）
+  time: 3
+  to_node: ''
+- amount: 1.06
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_industrial_long_001_3
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 1.1 压力
+  time: 3
+  to_node: clearing
+- amount: 0.47
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_industrial_long_001_3
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.5，剩余能力 4.0（深度 2）
+  time: 3
+  to_node: ''
+- amount: 0.47
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_industrial_long_001_3
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 0.5 压力
+  time: 3
+  to_node: clearing
+- amount: 0.18
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_industrial_long_001_3
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.2，剩余能力 3.8（深度 2）
+  time: 3
+  to_node: ''
+- amount: 0.18
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_industrial_long_001_3
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 0.2 压力
+  time: 3
+  to_node: clearing
+- amount: 3.2
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_3
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 3.2，剩余能力 3.4（深度 2）
+  time: 3
+  to_node: ''
+- amount: 2.08
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_3
+  event_type: transfer
+  from_node: speculative_fund_001
+  reason: 经通道 margin_clearing_channel 转移 2.1 压力
+  time: 3
+  to_node: clearing
+- amount: 1.12
+  channel_id: ''
+  difference_id: feedback_margin_speculative_fund_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 转移后剩余 1.1 压力积累
+  time: 3
+  to_node: ''
+- amount: 0.62
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_3
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 2'
+  time: 3
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_speculative_fund_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 1.1（深度 2）
+  time: 3
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_speculative_fund_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.4（深度 2）
+  time: 3
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_long_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 1.0（深度 2）
+  time: 3
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_long_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.4（深度 2）
+  time: 3
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_long_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.2（深度 2）
+  time: 3
+  to_node: ''
+- amount: 0.62
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_2_feedback_margin_speculative_fund_001_3
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.6，剩余能力 3.2（深度 3）
+  time: 3
+  to_node: ''
+- amount: 0.62
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_2_feedback_margin_speculative_fund_001_3
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 0.6 压力
+  time: 3
+  to_node: clearing
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_speculative_fund_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.7（深度 3）
+  time: 3
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_speculative_fund_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.3（深度 3）
+  time: 3
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_speculative_fund_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.1（深度 3）
+  time: 3
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_long_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.9（深度 3）
+  time: 3
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_speculative_fund_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.4（深度 4）
+  time: 3
+  to_node: ''
 - amount: 0.01
   channel_id: margin_clearing_channel
   difference_id: ''
   event_type: lock_in
   from_node: ''
-  reason: 通道 margin_clearing_channel 锁定度从 0.149 增至 0.161
+  reason: 通道 margin_clearing_channel 锁定度从 0.164 增至 0.177
   time: 3
   to_node: ''
+- amount: 0.91
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_3
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.9，剩余能力 2.4（深度 0）
+  time: 4
+  to_node: ''
+- amount: 0.91
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_3
+  event_type: transfer
+  from_node: industrial_long_001
+  reason: 经通道 margin_clearing_channel 转移 0.9 压力
+  time: 4
+  to_node: clearing
+- amount: 0.62
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_3
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 0'
+  time: 4
+  to_node: ''
+- amount: 0.41
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_3
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.4，剩余能力 2.8（深度 0）
+  time: 4
+  to_node: ''
+- amount: 0.41
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_3
+  event_type: transfer
+  from_node: speculative_fund_001
+  reason: 经通道 margin_clearing_channel 转移 0.4 压力
+  time: 4
+  to_node: clearing
+- amount: 0.28
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_3
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 0'
+  time: 4
+  to_node: ''
+- amount: 0.62
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_3
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.6，剩余能力 2.2（深度 1）
+  time: 4
+  to_node: ''
+- amount: 0.62
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_industrial_long_001_3
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 0.6 压力
+  time: 4
+  to_node: clearing
+- amount: 0.28
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_speculative_fund_001_3
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.3，剩余能力 1.9（深度 1）
+  time: 4
+  to_node: ''
+- amount: 0.28
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_speculative_fund_001_3
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 0.3 压力
+  time: 4
+  to_node: clearing
+- amount: 0.26
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.3，剩余能力 2.2（深度 1）
+  time: 4
+  to_node: ''
+- amount: 0.26
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: transfer
+  from_node: industrial_long_001
+  reason: 经通道 margin_clearing_channel 转移 0.3 压力
+  time: 4
+  to_node: clearing
+- amount: 0.17
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 1'
+  time: 4
+  to_node: ''
+- amount: 0.27
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.3，剩余能力 1.9（深度 1）
+  time: 4
+  to_node: ''
+- amount: 0.27
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: transfer
+  from_node: speculative_fund_001
+  reason: 经通道 margin_clearing_channel 转移 0.3 压力
+  time: 4
+  to_node: clearing
+- amount: 0.18
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 1'
+  time: 4
+  to_node: ''
+- amount: 0.17
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_industrial_long_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.2，剩余能力 1.7（深度 2）
+  time: 4
+  to_node: ''
+- amount: 0.17
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_industrial_long_001_4
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 0.2 压力
+  time: 4
+  to_node: clearing
+- amount: 0.18
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_fund_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.2，剩余能力 1.5（深度 2）
+  time: 4
+  to_node: ''
+- amount: 0.18
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_fund_001_4
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 0.2 压力
+  time: 4
+  to_node: clearing
+- amount: 0.41
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.4，剩余能力 1.5（深度 2）
+  time: 4
+  to_node: ''
+- amount: 0.41
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: transfer
+  from_node: speculative_fund_001
+  reason: 经通道 margin_clearing_channel 转移 0.4 压力
+  time: 4
+  to_node: clearing
+- amount: 0.26
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 2'
+  time: 4
+  to_node: ''
+- amount: 0.18
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.2，剩余能力 1.4（深度 2）
+  time: 4
+  to_node: ''
+- amount: 0.18
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: transfer
+  from_node: speculative_fund_001
+  reason: 经通道 margin_clearing_channel 转移 0.2 压力
+  time: 4
+  to_node: clearing
+- amount: 0.12
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 2'
+  time: 4
+  to_node: ''
+- amount: 0.07
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.1，剩余能力 1.4（深度 2）
+  time: 4
+  to_node: ''
+- amount: 0.07
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: transfer
+  from_node: industrial_long_001
+  reason: 经通道 margin_clearing_channel 转移 0.1 压力
+  time: 4
+  to_node: clearing
+- amount: 0.05
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 2'
+  time: 4
+  to_node: ''
+- amount: 0.08
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.1，剩余能力 1.4（深度 2）
+  time: 4
+  to_node: ''
+- amount: 0.08
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: transfer
+  from_node: industrial_long_001
+  reason: 经通道 margin_clearing_channel 转移 0.1 压力
+  time: 4
+  to_node: clearing
+- amount: 0.05
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 2'
+  time: 4
+  to_node: ''
+- amount: 0.26
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_2_feedback_margin_speculative_fund_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.3，剩余能力 1.1（深度 3）
+  time: 4
+  to_node: ''
+- amount: 0.26
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_2_feedback_margin_speculative_fund_001_4
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 0.3 压力
+  time: 4
+  to_node: clearing
+- amount: 0.12
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_2_feedback_margin_speculative_fund_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.1，剩余能力 1.0（深度 3）
+  time: 4
+  to_node: ''
+- amount: 0.12
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_2_feedback_margin_speculative_fund_001_4
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 0.1 压力
+  time: 4
+  to_node: clearing
+- amount: 0.05
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_2_feedback_margin_industrial_long_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.0，剩余能力 0.9（深度 3）
+  time: 4
+  to_node: ''
+- amount: 0.05
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_2_feedback_margin_industrial_long_001_4
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 0.0 压力
+  time: 4
+  to_node: clearing
+- amount: 0.05
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_2_feedback_margin_industrial_long_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.0，剩余能力 0.9（深度 3）
+  time: 4
+  to_node: ''
+- amount: 0.05
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_2_feedback_margin_industrial_long_001_4
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 0.0 压力
+  time: 4
+  to_node: clearing
+- amount: 0.11
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.1，剩余能力 1.2（深度 3）
+  time: 4
+  to_node: ''
+- amount: 0.11
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: transfer
+  from_node: speculative_fund_001
+  reason: 经通道 margin_clearing_channel 转移 0.1 压力
+  time: 4
+  to_node: clearing
+- amount: 0.07
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 3'
+  time: 4
+  to_node: ''
+- amount: 0.12
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.1，剩余能力 1.1（深度 3）
+  time: 4
+  to_node: ''
+- amount: 0.12
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: transfer
+  from_node: speculative_fund_001
+  reason: 经通道 margin_clearing_channel 转移 0.1 压力
+  time: 4
+  to_node: clearing
+- amount: 0.07
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 3'
+  time: 4
+  to_node: ''
+- amount: 0.12
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.1，剩余能力 1.0（深度 3）
+  time: 4
+  to_node: ''
+- amount: 0.12
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: transfer
+  from_node: industrial_long_001
+  reason: 经通道 margin_clearing_channel 转移 0.1 压力
+  time: 4
+  to_node: clearing
+- amount: 0.07
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 3'
+  time: 4
+  to_node: ''
+- amount: 0.12
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.1，剩余能力 0.9（深度 3）
+  time: 4
+  to_node: ''
+- amount: 0.12
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: transfer
+  from_node: speculative_fund_001
+  reason: 经通道 margin_clearing_channel 转移 0.1 压力
+  time: 4
+  to_node: clearing
+- amount: 0.08
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 3'
+  time: 4
+  to_node: ''
+- amount: 0.02
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.0，剩余能力 0.9（深度 3）
+  time: 4
+  to_node: ''
+- amount: 0.02
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: transfer
+  from_node: industrial_long_001
+  reason: 经通道 margin_clearing_channel 转移 0.0 压力
+  time: 4
+  to_node: clearing
+- amount: 0.01
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 3'
+  time: 4
+  to_node: ''
+- amount: 0.02
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.0，剩余能力 0.9（深度 3）
+  time: 4
+  to_node: ''
+- amount: 0.02
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: transfer
+  from_node: industrial_long_001
+  reason: 经通道 margin_clearing_channel 转移 0.0 压力
+  time: 4
+  to_node: clearing
+- amount: 0.01
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 3'
+  time: 4
+  to_node: ''
+- amount: 0.07
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_3_feedback_margin_speculative_fund_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.1，剩余能力 0.8（深度 4）
+  time: 4
+  to_node: ''
+- amount: 0.07
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_3_feedback_margin_speculative_fund_001_4
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 0.1 压力
+  time: 4
+  to_node: clearing
+- amount: 0.07
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_3_feedback_margin_speculative_fund_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.1，剩余能力 0.7（深度 4）
+  time: 4
+  to_node: ''
+- amount: 0.07
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_3_feedback_margin_speculative_fund_001_4
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 0.1 压力
+  time: 4
+  to_node: clearing
+- amount: 0.07
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_3_feedback_margin_industrial_long_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.1，剩余能力 0.6（深度 4）
+  time: 4
+  to_node: ''
+- amount: 0.07
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_3_feedback_margin_industrial_long_001_4
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 0.1 压力
+  time: 4
+  to_node: clearing
+- amount: 0.08
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_3_feedback_margin_speculative_fund_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.1，剩余能力 0.6（深度 4）
+  time: 4
+  to_node: ''
+- amount: 0.08
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_3_feedback_margin_speculative_fund_001_4
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 0.1 压力
+  time: 4
+  to_node: clearing
+- amount: 0.01
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_3_feedback_margin_industrial_long_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.0，剩余能力 0.6（深度 4）
+  time: 4
+  to_node: ''
+- amount: 0.01
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_3_feedback_margin_industrial_long_001_4
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 0.0 压力
+  time: 4
+  to_node: clearing
+- amount: 0.01
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_3_feedback_margin_industrial_long_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.0，剩余能力 0.5（深度 4）
+  time: 4
+  to_node: ''
+- amount: 0.01
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_3_feedback_margin_industrial_long_001_4
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 0.0 压力
+  time: 4
+  to_node: clearing
+- amount: 0.17
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.2，剩余能力 0.7（深度 4）
+  time: 4
+  to_node: ''
+- amount: 0.17
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: transfer
+  from_node: speculative_fund_001
+  reason: 经通道 margin_clearing_channel 转移 0.2 压力
+  time: 4
+  to_node: clearing
+- amount: 0.11
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 4'
+  time: 4
+  to_node: ''
+- amount: 0.08
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.1，剩余能力 0.6（深度 4）
+  time: 4
+  to_node: ''
+- amount: 0.08
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: transfer
+  from_node: speculative_fund_001
+  reason: 经通道 margin_clearing_channel 转移 0.1 压力
+  time: 4
+  to_node: clearing
+- amount: 0.05
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 4'
+  time: 4
+  to_node: ''
+- amount: 0.03
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.0，剩余能力 0.6（深度 4）
+  time: 4
+  to_node: ''
+- amount: 0.03
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: transfer
+  from_node: speculative_fund_001
+  reason: 经通道 margin_clearing_channel 转移 0.0 压力
+  time: 4
+  to_node: clearing
+- amount: 0.02
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 4'
+  time: 4
+  to_node: ''
+- amount: 0.03
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.0，剩余能力 0.6（深度 4）
+  time: 4
+  to_node: ''
+- amount: 0.03
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: transfer
+  from_node: speculative_fund_001
+  reason: 经通道 margin_clearing_channel 转移 0.0 压力
+  time: 4
+  to_node: clearing
+- amount: 0.02
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 4'
+  time: 4
+  to_node: ''
+- amount: 0.03
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.0，剩余能力 0.5（深度 4）
+  time: 4
+  to_node: ''
+- amount: 0.03
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: transfer
+  from_node: industrial_long_001
+  reason: 经通道 margin_clearing_channel 转移 0.0 压力
+  time: 4
+  to_node: clearing
+- amount: 0.02
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 4'
+  time: 4
+  to_node: ''
+- amount: 0.03
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.0，剩余能力 0.5（深度 4）
+  time: 4
+  to_node: ''
+- amount: 0.03
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: transfer
+  from_node: industrial_long_001
+  reason: 经通道 margin_clearing_channel 转移 0.0 压力
+  time: 4
+  to_node: clearing
+- amount: 0.02
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 4'
+  time: 4
+  to_node: ''
+- amount: 0.03
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.0，剩余能力 0.5（深度 4）
+  time: 4
+  to_node: ''
+- amount: 0.03
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: transfer
+  from_node: industrial_long_001
+  reason: 经通道 margin_clearing_channel 转移 0.0 压力
+  time: 4
+  to_node: clearing
+- amount: 0.02
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 4'
+  time: 4
+  to_node: ''
+- amount: 0.03
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.0，剩余能力 0.5（深度 4）
+  time: 4
+  to_node: ''
+- amount: 0.03
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: transfer
+  from_node: industrial_long_001
+  reason: 经通道 margin_clearing_channel 转移 0.0 压力
+  time: 4
+  to_node: clearing
+- amount: 0.02
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 4'
+  time: 4
+  to_node: ''
+- amount: 0.01
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.0，剩余能力 0.5（深度 4）
+  time: 4
+  to_node: ''
+- amount: 0.01
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: transfer
+  from_node: speculative_fund_001
+  reason: 经通道 margin_clearing_channel 转移 0.0 压力
+  time: 4
+  to_node: clearing
+- amount: 0.01
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.0，剩余能力 0.5（深度 0）
+  time: 5
+  to_node: ''
+- amount: 0.01
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_4
+  event_type: transfer
+  from_node: industrial_long_001
+  reason: 经通道 margin_clearing_channel 转移 0.0 压力
+  time: 5
+  to_node: clearing
+- amount: 0.02
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.0，剩余能力 0.5（深度 0）
+  time: 5
+  to_node: ''
+- amount: 0.02
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: transfer
+  from_node: speculative_fund_001
+  reason: 经通道 margin_clearing_channel 转移 0.0 压力
+  time: 5
+  to_node: clearing
+- amount: 0.02
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_4
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 0'
+  time: 5
+  to_node: ''
+- amount: 0.02
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_4_feedback_margin_speculative_fund_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.0，剩余能力 0.4（深度 0）
+  time: 5
+  to_node: ''
+- amount: 0.02
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_4_feedback_margin_speculative_fund_001_4
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 0.0 压力
+  time: 5
+  to_node: clearing
+- amount: 0.02
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_4_feedback_margin_industrial_long_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.0，剩余能力 0.4（深度 0）
+  time: 5
+  to_node: ''
+- amount: 0.02
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_4_feedback_margin_industrial_long_001_4
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 0.0 压力
+  time: 5
+  to_node: clearing
+- amount: 0.02
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_speculative_fund_001_4
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.0，剩余能力 0.4（深度 1）
+  time: 5
+  to_node: ''
+- amount: 0.02
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_feedback_margin_speculative_fund_001_4
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 0.0 压力
+  time: 5
+  to_node: clearing
+- amount: 0.01
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_5
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.0，剩余能力 0.4（深度 1）
+  time: 5
+  to_node: ''
+- amount: 0.01
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_5
+  event_type: transfer
+  from_node: industrial_long_001
+  reason: 经通道 margin_clearing_channel 转移 0.0 压力
+  time: 5
+  to_node: clearing
+- amount: 0.01
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_5
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.0，剩余能力 0.4（深度 1）
+  time: 5
+  to_node: ''
+- amount: 0.01
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_5
+  event_type: transfer
+  from_node: speculative_fund_001
+  reason: 经通道 margin_clearing_channel 转移 0.0 压力
+  time: 5
+  to_node: clearing
+- amount: 0.01
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_5
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 1'
+  time: 5
+  to_node: ''
+- amount: 0.01
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_5
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.0，剩余能力 0.4（深度 1）
+  time: 5
+  to_node: ''
+- amount: 0.01
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_5
+  event_type: transfer
+  from_node: speculative_fund_001
+  reason: 经通道 margin_clearing_channel 转移 0.0 压力
+  time: 5
+  to_node: clearing
+- amount: 0.01
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_5
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 1'
+  time: 5
+  to_node: ''
+- amount: 0.01
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_fund_001_5
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.0，剩余能力 0.4（深度 2）
+  time: 5
+  to_node: ''
+- amount: 0.01
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_fund_001_5
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 0.0 压力
+  time: 5
+  to_node: clearing
+- amount: 0.01
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_fund_001_5
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 0.0，剩余能力 0.4（深度 2）
+  time: 5
+  to_node: ''
+- amount: 0.01
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_fund_001_5
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 0.0 压力
+  time: 5
+  to_node: clearing
+- amount: 0.01
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_5
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.0，剩余能力 0.4（深度 2）
+  time: 5
+  to_node: ''
+- amount: 0.01
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_5
+  event_type: transfer
+  from_node: speculative_fund_001
+  reason: 经通道 margin_clearing_channel 转移 0.0 压力
+  time: 5
+  to_node: clearing
+- amount: 0.01
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_5
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.0，剩余能力 0.4（深度 3）
+  time: 5
+  to_node: ''
+- amount: 0.01
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_5
+  event_type: transfer
+  from_node: speculative_fund_001
+  reason: 经通道 margin_clearing_channel 转移 0.0 压力
+  time: 5
+  to_node: clearing
+- amount: 0.01
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_5
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 0.0，剩余能力 0.4（深度 3）
+  time: 5
+  to_node: ''
+- amount: 0.01
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_5
+  event_type: transfer
+  from_node: speculative_fund_001
+  reason: 经通道 margin_clearing_channel 转移 0.0 压力
+  time: 5
+  to_node: clearing

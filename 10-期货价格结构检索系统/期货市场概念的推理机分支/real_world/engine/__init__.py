@@ -1,6 +1,6 @@
 ﻿""""推理引擎：转移、守恒、最小变易、最近稳态、锁定、破缺"""
 
-from .transfer import choose_channel, transfer_difference
+from .transfer import choose_channel, transfer_difference, transfer_and_transform
 from .conservation import check_conservation
 from .minimal_change import apply_minimal_change
 from .lock_in import update_lock_in

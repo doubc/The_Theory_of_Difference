@@ -115,6 +115,75 @@ class Entity:
         if self.available_capacity <= 0:
             self.status = EntityStatus.MARGIN_CALLED
 
+    def generate_feedback_differences(self, absorb_amount: float, time: int) -> list:
+        """承压后生成反馈差异（Phase 2）。
+
+        差异论核心判断：差异不能凭空消失，只能换位置、形式或承接体。
+        承接体在承接差异时，自身成为新的差异源——差异生成差异。
+
+        反馈的三个层次：
+        1. 保证金反馈：承压超过阈值 → margin 差异
+        2. 流动性反馈：流动性不足 → liquidity 差异
+        3. 强平反馈：承接力耗尽 → position + liquidity 差异
+
+        Returns:
+            差异定义字典列表，由 runner 注入世界。
+        """
+        if absorb_amount <= 0:
+            return []
+
+        feedback = []
+
+        # 1. 保证金反馈：承压超过 60% → 产生 margin 差异
+        if self.capacity_ratio > 0.6:
+            margin_magnitude = absorb_amount * 0.3 * self.leverage
+            if margin_magnitude > 0.01:
+                feedback.append({
+                    "id": f"feedback_margin_{self.id}_{time}",
+                    "type": "margin",
+                    "source_node": self.id,
+                    "target_node": "clearing",
+                    "magnitude": margin_magnitude,
+                    "visibility": 0.9,
+                    "persistence": 0.7,
+                    "transformability": 0.8,
+                    "description": f"反馈: {self.id} 承压 {absorb_amount:.1f}，杠杆 {self.leverage}x，产生保证金差异 {margin_magnitude:.1f}",
+                })
+
+        # 2. 流动性反馈：流动性低于阈值 → 产生 liquidity 差异
+        if self.liquidity < self.risk_tolerance * 0.3:
+            liq_magnitude = absorb_amount * 0.2
+            if liq_magnitude > 0.01:
+                feedback.append({
+                    "id": f"feedback_liquidity_{self.id}_{time}",
+                    "type": "liquidity",
+                    "source_node": self.id,
+                    "target_node": "market",
+                    "magnitude": liq_magnitude,
+                    "visibility": 0.85,
+                    "persistence": 0.6,
+                    "transformability": 0.7,
+                    "description": f"反馈: {self.id} 流动性 {self.liquidity:.1f} 低于阈值，产生流动性差异 {liq_magnitude:.1f}",
+                })
+
+        # 3. 强平反馈：承接力耗尽 → 产生 position 差异
+        if self.available_capacity <= 0:
+            pos_magnitude = absorb_amount * 0.5
+            if pos_magnitude > 0.01:
+                feedback.append({
+                    "id": f"feedback_position_{self.id}_{time}",
+                    "type": "liquidity",  # 强平最终表现为流动性差异
+                    "source_node": self.id,
+                    "target_node": "market",
+                    "magnitude": pos_magnitude,
+                    "visibility": 0.95,
+                    "persistence": 0.8,
+                    "transformability": 0.6,
+                    "description": f"反馈: {self.id} 承接力耗尽，强平产生流动性差异 {pos_magnitude:.1f}",
+                })
+
+        return feedback
+
     def to_dict(self) -> dict:
         return {
             "id": self.id,
