@@ -1,13 +1,13 @@
 ﻿""""核心对象单元测试"""
 
 import pytest
-from real_world.core.difference import DifferenceSource, DifferenceStatus
-from real_world.core.entity import Entity, EntityStatus
-from real_world.core.channel import Channel, ChannelStatus
-from real_world.core.state import State
-from real_world.core.trace import Trace, TraceEvent
-from real_world.core.event import Event, EventType
-from real_world.core.world import World
+from Real_world.core.channel import Channel, ChannelStatus
+from Real_world.core.difference import DifferenceSource, DifferenceStatus
+from Real_world.core.entity import Entity, EntityStatus
+from Real_world.core.event import Event, EventType
+from Real_world.core.state import State
+from Real_world.core.trace import Trace, TraceEvent
+from Real_world.core.world import World
 
 
 class TestDifferenceSource:

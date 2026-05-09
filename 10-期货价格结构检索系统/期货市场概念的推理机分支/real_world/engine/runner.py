@@ -18,7 +18,9 @@ from typing import Dict, List, Optional
 from ..core.world import World
 from ..core.difference import DifferenceSource, DifferenceStatus
 from ..core.entity import Entity, EntityStatus
+from ..core.intervention import Intervention
 from ..domains.futures.futures_rules import ExchangeIntervention
+from .intervention_engine import InterventionEngine
 from .transfer import choose_channel, transfer_difference, transfer_and_transform
 from .conservation import check_conservation, reset_conservation
 from .lock_in import update_lock_in
@@ -27,6 +29,9 @@ from .nearest_stable import check_nearest_stable
 
 # 变形链最大深度，防止无限循环
 MAX_CHAIN_DEPTH = 5
+
+# Phase 3: 每步全局反馈差异数量上限
+MAX_FEEDBACK_PER_STEP = 10
 
 
 class Runner:
@@ -37,6 +42,7 @@ class Runner:
         self.verbose = verbose
         self._initial_total_pressure: float = 0.0
         self.exchange = ExchangeIntervention() if exchange_intervention else None
+        self.intervention_engine = InterventionEngine(world)
 
     def run(self, steps: Optional[int] = None) -> World:
         """运行推理机。"""
@@ -86,6 +92,9 @@ class Runner:
             # 5.5 交易所干预检查（三重干预 + 副作用差异）
             self._check_exchange_intervention(time)
 
+            # 5.6 制度边界干预检查（Exp 009）
+            self._check_intervention(time)
+
             # 6. 状态快照
             state = self.world.snapshot_state()
 
@@ -104,7 +113,7 @@ class Runner:
         return self.world
 
     def _run_transfers_with_chain(self, time: int):
-        """差异转移 + 变形链 + 反馈循环（Phase 2 核心）。
+        """差异转移 + 变形链 + 反馈循环（Phase 3 核心）。
 
         流程：
         1. 取当前所有活跃差异
@@ -113,6 +122,11 @@ class Runner:
         4. 最多执行 MAX_CHAIN_DEPTH 轮（防止无限循环）
         5. 反馈差异仅在深度0生成（防止递归爆炸）
         6. 反馈差异可在深度1+继续转移/变形，但不触发新反馈
+
+        Phase 3 改进（反馈深度约束）：
+        - 衰减约束：反馈 magnitude 应用 FEEDBACK_DECAY（50%衰减）
+        - 类型冷却：同主体同类型每步最多1次（Entity._feedback_cooldown）
+        - 全局上限：每步最多 MAX_FEEDBACK_PER_STEP 个反馈差异
         """
         # 初始差异列表
         pending = [
@@ -222,13 +236,19 @@ class Runner:
                         # 剩余压力保持，不自增
                         pass
 
-            # 注入反馈差异到世界
+            # 注入反馈差异到世界（Phase 3: 应用全局上限）
+            feedback_injected = 0
             for fb in feedback_diffs:
+                if feedback_injected >= MAX_FEEDBACK_PER_STEP:
+                    if self.verbose:
+                        print(f"  反馈: 达到全局上限 {MAX_FEEDBACK_PER_STEP}，停止注入新反馈")
+                    break
                 fb_diff = DifferenceSource.from_dict(fb)
                 self.world.add_difference(fb_diff)
                 next_round.append((fb_diff.id, fb_diff))
+                feedback_injected += 1
                 if self.verbose:
-                    print(f"  反馈: {fb['type']} 差异从 {fb['source_node']} 生成, 压力={fb['magnitude']:.2f}")
+                    print(f"  反馈: {fb['type']} 差异从 {fb['source_node']} 生成, 压力={fb['magnitude']:.2f} ({feedback_injected}/{MAX_FEEDBACK_PER_STEP})")
 
             pending = next_round
             chain_depth += 1
@@ -317,6 +337,25 @@ class Runner:
         for se in side_effects:
             se_diff = DifferenceSource.from_dict(se)
             self.world.add_difference(se_diff)
+
+    def _check_intervention(self, time: int):
+        """制度边界干预检查（Exp 009）。
+        
+        干预改变系统的条件结构，迫使系统在新的约束下重新组织。
+        这是差异论"最近稳态"概念的实验验证。
+        """
+        # 首先将 world.interventions 注册到干预引擎
+        for inv in self.world.interventions:
+            if inv not in self.intervention_engine.interventions:
+                self.intervention_engine.add_intervention(inv)
+        
+        # 检查并执行当前时间步的干预
+        result = self.intervention_engine.check_and_execute(time)
+        if result and result.success:
+            if self.verbose:
+                print(f"  [干预] {result.message}")
+                print(f"    压力变化: {result.pressure_change:+.2f} ({result.pressure_change_rate*100:+.1f}%)")
+                print(f"    稳态改善: {'是' if result.stability_improved else '否'}")
 
     def _check_stable(self, time: int):
         """最近稳态判定。"""

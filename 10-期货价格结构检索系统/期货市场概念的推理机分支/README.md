@@ -4,7 +4,8 @@
 
 基于差异论的可运行推理系统。输入差异源，输出差异运动轨迹与稳态判断。
 
-系统回答：**当前主要差异源 → 经哪些通道转移 → 通道是否拥堵 → 谁在承接 → 谁可能退出 → 最可能滑向哪个稳态 → 参数变动后的轨迹变化。**
+系统回答：**当前主要差异源 → 经哪些通道转移 → 通道是否拥堵 → 谁在承接 → 谁可能退出 → 最可能滑向哪个稳态 → 参数变动后的轨迹变化。
+**
 
 ## 第一阶段
 
@@ -20,7 +21,7 @@
 
 ```bash
 pip install -r requirements.txt
-python -m real_world.engine.runner experiments/futures/exp_001_inventory_basis.yaml
+python -m Real_world.engine.runner experiments/futures/exp_001_inventory_basis.yaml
 ```
 
 ## 项目结构

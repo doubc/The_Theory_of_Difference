@@ -1,14 +1,14 @@
 # Real_World 实验报告：Comparison-World
 
 **实验ID**: exp_007a_no_break
-**运行步数**: 40
+**运行步数**: 10
 **总破缺事件**: 0
 
 ## 一、输入差异
 
 | ID | 类型 | 源节点 | 目标节点 | 初始压力 | 最终压力 | 状态 |
 |---|---|---|---|---|---|---|
-| inventory_shortage | inventory | region_A | exchange_delivery | 85.5 | 321.0 | active |
+| inventory_shortage | inventory | region_A | exchange_delivery | 85.5 | 151.7 | active |
 | delivery_pressure | delivery | near_month | exchange | 69.9 | 0.0 | resolved |
 | expectation_bullish | expectation | market | price | 35.7 | 0.0 | resolved |
 
@@ -24,9 +24,9 @@
 
 | 时间 | 源差异 | 通道 | 变形量 | 说明 |
 |---|---|---|---|---|
-| 1 | inventory_shortage | warehouse_receipt_channel | 10.5 | 差异变形: inventory → basis，经通道 warehouse_receipt_channel，深度 0 |
-| 1 | delivery_pressure | delivery_channel | 11.1 | 差异变形: delivery → basis，经通道 delivery_channel，深度 0 |
-| 2 | inventory_shortage | warehouse_receipt_channel | 7.3 | 差异变形: inventory → basis，经通道 warehouse_receipt_channel，深度 0 |
+| 1 | inventory_shortage | warehouse_receipt_channel | 10.5 | 差异变形: inventory → basis，经通道 warehouse_receipt_channel，深度 0，损耗=24.50 |
+| 1 | delivery_pressure | delivery_channel | 11.1 | 差异变形: delivery → basis，经通道 delivery_channel，深度 0，损耗=8.91 |
+| 2 | inventory_shortage | warehouse_receipt_channel | 7.3 | 差异变形: inventory → basis，经通道 warehouse_receipt_channel，深度 0，损耗=17.15 |
 
 ## 四、反馈差异
 
@@ -35,6 +35,20 @@
 | feedback_margin_industrial_short_001_1 | margin | industrial_short_001 | 0.0 | resolved | 反馈: industrial_short_001 承压 7.5，杠杆 2.0x，产生保证金差异 4.5 |
 | feedback_margin_speculative_long_001_1 | margin | speculative_long_001 | 0.0 | resolved | 反馈: speculative_long_001 承压 30.0，杠杆 2.0x，产生保证金差异 18.0 |
 | feedback_margin_industrial_short_001_2 | margin | industrial_short_001 | 0.0 | resolved | 反馈: industrial_short_001 承压 3.8，杠杆 2.0x，产生保证金差异 2.2 |
+| feedback_margin_speculative_long_001_6 | margin | speculative_long_001 | 0.0 | resolved | 反馈: speculative_long_001 承压 4.7，杠杆 2.0x，产生保证金差异 2.8 |
+
+## 五、干预记录
+
+| 时间 | 类型 | 量 | 说明 |
+|---|---|---|---|
+| 5 | exchange_intervene | 0.30 | 交易所降低差异生成率 30%，影响: expectation_bullish |
+| 5 | intervention_side_effect | 10.50 | 干预副作用: 限仓 → 预期差异 10.5 |
+| 5 | exchange_intervene | 0.30 | 交易所释放承接力 30%，影响: speculative_long_001(22.6), speculator_002(16.4) |
+| 5 | intervention_side_effect | 12.00 | 干预副作用: 释放承接力 → 流动性差异 12.0 |
+| 6 | exchange_intervene | 0.30 | 交易所降低差异生成率 30%，影响: expectation_bullish |
+| 6 | intervention_side_effect | 10.50 | 干预副作用: 限仓 → 预期差异 10.5 |
+| 6 | exchange_intervene | 0.30 | 交易所释放承接力 30%，影响: speculative_long_001(17.8), speculator_002(11.5) |
+| 6 | intervention_side_effect | 12.00 | 干预副作用: 释放承接力 → 流动性差异 12.0 |
 
 ## 六、通道状态
 
@@ -54,9 +68,9 @@
 
 ## 八、最近稳态
 
-**最终稳态判定**: margin_relief
+**最终稳态判定**: basis_widening
 
-**判定理由**: 超过75%主体处于压力状态，等待保证金缓解
+**判定理由**: 主导差异类型为 inventory，库存差异经基差通道显影，基差扩大稳态
 
 ## 九、状态演变
 
@@ -66,49 +80,19 @@
 | 2 | 42.3 | 1 | 7 | medium | margin_relief |
 | 3 | 58.6 | 1 | 7 | medium | margin_relief |
 | 4 | 74.0 | 1 | 7 | high | margin_relief |
-| 5 | 88.7 | 1 | 7 | high | margin_relief |
-| 6 | 102.6 | 1 | 7 | critical | margin_relief |
-| 7 | 115.8 | 1 | 7 | critical | margin_relief |
-| 8 | 128.4 | 1 | 7 | critical | margin_relief |
-| 9 | 140.4 | 1 | 7 | critical | margin_relief |
-| 10 | 151.7 | 1 | 7 | critical | margin_relief |
-| 11 | 162.5 | 1 | 7 | critical | margin_relief |
-| 12 | 172.7 | 1 | 7 | critical | margin_relief |
-| 13 | 182.4 | 1 | 7 | critical | margin_relief |
-| 14 | 191.7 | 1 | 7 | critical | margin_relief |
-| 15 | 200.5 | 1 | 7 | critical | margin_relief |
-| 16 | 208.8 | 1 | 7 | critical | margin_relief |
-| 17 | 216.7 | 1 | 7 | critical | margin_relief |
-| 18 | 224.3 | 1 | 7 | critical | margin_relief |
-| 19 | 231.4 | 1 | 7 | critical | margin_relief |
-| 20 | 238.2 | 1 | 7 | critical | margin_relief |
-| 21 | 244.6 | 1 | 7 | critical | margin_relief |
-| 22 | 250.8 | 1 | 7 | critical | margin_relief |
-| 23 | 256.6 | 1 | 7 | critical | margin_relief |
-| 24 | 262.1 | 1 | 7 | critical | margin_relief |
-| 25 | 267.4 | 1 | 7 | critical | margin_relief |
-| 26 | 272.4 | 1 | 7 | critical | margin_relief |
-| 27 | 277.1 | 1 | 7 | critical | margin_relief |
-| 28 | 281.6 | 1 | 7 | critical | margin_relief |
-| 29 | 285.9 | 1 | 7 | critical | margin_relief |
-| 30 | 290.0 | 1 | 7 | critical | margin_relief |
-| 31 | 293.8 | 1 | 7 | critical | margin_relief |
-| 32 | 297.5 | 1 | 7 | critical | margin_relief |
-| 33 | 301.0 | 1 | 7 | critical | margin_relief |
-| 34 | 304.3 | 1 | 7 | critical | margin_relief |
-| 35 | 307.5 | 1 | 7 | critical | margin_relief |
-| 36 | 310.4 | 1 | 7 | critical | margin_relief |
-| 37 | 313.3 | 1 | 7 | critical | margin_relief |
-| 38 | 316.0 | 1 | 7 | critical | margin_relief |
-| 39 | 318.6 | 1 | 7 | critical | margin_relief |
-| 40 | 321.0 | 1 | 7 | critical | margin_relief |
+| 5 | 98.5 | 3 | 7 | critical | margin_relief |
+| 6 | 117.5 | 4 | 7 | critical | basis_widening |
+| 7 | 126.0 | 3 | 7 | critical | basis_widening |
+| 8 | 138.6 | 3 | 7 | critical | basis_widening |
+| 9 | 150.6 | 3 | 7 | critical | basis_widening |
+| 10 | 161.9 | 3 | 7 | critical | basis_widening |
 
 ## 十、结构判断
 
 > **注意**: 本报告为差异结构分析，不构成任何交易建议。
 
-- **主导差异**: inventory_shortage（inventory），压力 321.0
-- **承压主体**: industrial_short_001(stressed), speculative_long_001(stressed), speculator_002(stressed)
-- **最近稳态**: margin_relief
+- **主导差异**: inventory_shortage（inventory），压力 151.7
+- **承压主体**: industrial_short_001(stressed), speculative_long_001(stressed)
+- **最近稳态**: basis_widening
 - **变形链事件**: 3 次变形
-- **反馈差异**: 3 个（已解决 3）
+- **反馈差异**: 4 个（已解决 4）

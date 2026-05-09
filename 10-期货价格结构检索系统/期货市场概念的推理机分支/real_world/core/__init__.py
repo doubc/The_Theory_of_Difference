@@ -7,6 +7,7 @@ from .state import State
 from .trace import Trace, TraceEvent
 from .event import Event, EventType
 from .world import World
+from .intervention import Intervention, InterventionType, InterventionResult
 
 __all__ = [
     "World",
@@ -18,4 +19,7 @@ __all__ = [
     "TraceEvent",
     "Event",
     "EventType",
+    "Intervention",
+    "InterventionType",
+    "InterventionResult",
 ]

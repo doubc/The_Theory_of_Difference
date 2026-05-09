@@ -8,7 +8,10 @@
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Optional
+from typing import Dict, Optional
+
+# 反馈衰减因子（每次反馈衰减50%）
+FEEDBACK_DECAY = 0.5
 
 
 class EntityStatus(str, Enum):
@@ -33,6 +36,9 @@ class Entity:
     preference: str = "neutral"  # 偏好方向
     status: EntityStatus = EntityStatus.ACTIVE
     description: str = ""
+    
+    # Phase 3: 反馈冷却机制
+    _feedback_cooldown: Dict[str, int] = field(default_factory=dict)  # type -> last_time
 
     @property
     def used_capacity(self) -> float:
@@ -115,11 +121,26 @@ class Entity:
         if self.available_capacity <= 0:
             self.status = EntityStatus.MARGIN_CALLED
 
+    def _can_generate_feedback(self, fb_type: str, time: int) -> bool:
+        """检查是否可以生成该类型的反馈（类型冷却机制）。
+        
+        同一主体在同一步内，同一类型反馈只能生成一次。
+        """
+        return self._feedback_cooldown.get(fb_type, -1) < time
+
+    def _mark_feedback_generated(self, fb_type: str, time: int):
+        """标记该类型反馈已生成。"""
+        self._feedback_cooldown[fb_type] = time
+
     def generate_feedback_differences(self, absorb_amount: float, time: int) -> list:
-        """承压后生成反馈差异（Phase 2）。
+        """承压后生成反馈差异（Phase 3 - 带约束）。
 
         差异论核心判断：差异不能凭空消失，只能换位置、形式或承接体。
         承接体在承接差异时，自身成为新的差异源——差异生成差异。
+
+        Phase 3 改进：
+        1. 衰减约束：反馈差异的 magnitude 应用衰减因子
+        2. 类型冷却：同一主体在同一步内，同一类型反馈只能生成一次
 
         反馈的三个层次：
         1. 保证金反馈：承压超过阈值 → margin 差异
@@ -135,8 +156,9 @@ class Entity:
         feedback = []
 
         # 1. 保证金反馈：承压超过 60% → 产生 margin 差异
-        if self.capacity_ratio > 0.6:
-            margin_magnitude = absorb_amount * 0.3 * self.leverage
+        if self.capacity_ratio > 0.6 and self._can_generate_feedback("margin", time):
+            # Phase 3: 应用衰减因子
+            margin_magnitude = absorb_amount * 0.3 * self.leverage * FEEDBACK_DECAY
             if margin_magnitude > 0.01:
                 feedback.append({
                     "id": f"feedback_margin_{self.id}_{time}",
@@ -147,12 +169,14 @@ class Entity:
                     "visibility": 0.9,
                     "persistence": 0.7,
                     "transformability": 0.8,
-                    "description": f"反馈: {self.id} 承压 {absorb_amount:.1f}，杠杆 {self.leverage}x，产生保证金差异 {margin_magnitude:.1f}",
+                    "description": f"反馈: {self.id} 承压 {absorb_amount:.1f}，杠杆 {self.leverage}x，衰减后产生保证金差异 {margin_magnitude:.1f}",
                 })
+                self._mark_feedback_generated("margin", time)
 
         # 2. 流动性反馈：流动性低于阈值 → 产生 liquidity 差异
-        if self.liquidity < self.risk_tolerance * 0.3:
-            liq_magnitude = absorb_amount * 0.2
+        if self.liquidity < self.risk_tolerance * 0.3 and self._can_generate_feedback("liquidity", time):
+            # Phase 3: 应用衰减因子
+            liq_magnitude = absorb_amount * 0.2 * FEEDBACK_DECAY
             if liq_magnitude > 0.01:
                 feedback.append({
                     "id": f"feedback_liquidity_{self.id}_{time}",
@@ -163,12 +187,15 @@ class Entity:
                     "visibility": 0.85,
                     "persistence": 0.6,
                     "transformability": 0.7,
-                    "description": f"反馈: {self.id} 流动性 {self.liquidity:.1f} 低于阈值，产生流动性差异 {liq_magnitude:.1f}",
+                    "description": f"反馈: {self.id} 流动性 {self.liquidity:.1f} 低于阈值，衰减后产生流动性差异 {liq_magnitude:.1f}",
                 })
+                self._mark_feedback_generated("liquidity", time)
 
         # 3. 强平反馈：承接力耗尽 → 产生 position 差异
-        if self.available_capacity <= 0:
-            pos_magnitude = absorb_amount * 0.5
+        # 注意：强平反馈使用特殊的 "forced_liquidation" 类型，避免与 liquidity 冷却冲突
+        if self.available_capacity <= 0 and self._can_generate_feedback("forced_liquidation", time):
+            # Phase 3: 应用衰减因子
+            pos_magnitude = absorb_amount * 0.5 * FEEDBACK_DECAY
             if pos_magnitude > 0.01:
                 feedback.append({
                     "id": f"feedback_position_{self.id}_{time}",
@@ -179,8 +206,9 @@ class Entity:
                     "visibility": 0.95,
                     "persistence": 0.8,
                     "transformability": 0.6,
-                    "description": f"反馈: {self.id} 承接力耗尽，强平产生流动性差异 {pos_magnitude:.1f}",
+                    "description": f"反馈: {self.id} 承接力耗尽，衰减后强平产生流动性差异 {pos_magnitude:.1f}",
                 })
+                self._mark_feedback_generated("forced_liquidation", time)
 
         return feedback
 

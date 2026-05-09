@@ -218,11 +218,31 @@ class L0BinaryLattice(LayerBase):
     # --- 粗粒化 ---
 
     def coarse_grain(self, structures: List) -> Optional[LayerBase]:
-        """最小版本：固定 2×2 block 压缩"""
+        """粗粒化：将 L0 稳定结构映射为 L1 抽象层"""
         if not structures:
             return None
-        # TODO: 实现真正的粗粒化
-        return None
+
+        from .L1_abstract_layer import L1AbstractLayer
+
+        # 取第一个稳定结构的 mask
+        struct = structures[0]
+        mask = struct.mask
+
+        # 计算粗粒化后的形状
+        if mask.dim() >= 2:
+            h, w = mask.shape[-2:]
+        else:
+            h, w = self.shape
+
+        block_size = 4
+        l1_h = h // block_size
+        l1_w = w // block_size
+
+        return L1AbstractLayer(
+            block_size=block_size,
+            l1_shape=(l1_h, l1_w),
+            source_mask=mask,
+        )
 
     def measure_ascent_pressure(self, history: List[torch.Tensor],
                                  structures: List) -> float:
