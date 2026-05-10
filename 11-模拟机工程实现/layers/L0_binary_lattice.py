@@ -470,77 +470,31 @@ class L0BinaryLattice(LayerBase):
     # --- 粗粒化 ---
 
     def coarse_grain(self, structures: List) -> Optional[LayerBase]:
-        """将稳定结构封装为新层（粗粒化）
-
-        策略：
-        1. 根据结构密度确定粗粒化因子 block_factor
-        2. 块平均压缩：用 avg_pool2d 将高分辨格点映射到低分辨
-        3. 返回新的 L0BinaryLattice（降低分辨率）
-
-        密度阈值：
-        - density < 0.05 → 结构太稀疏，不粗粒化
-        - 0.05 ≤ density < 0.25 → factor=2
-        - density ≥ 0.25 → factor=4
-
-        新层继承源汇方向。
-        """
+        """粗粒化：将 L0 稳定结构映射为 L1 抽象层"""
         if not structures:
             return None
 
-        # 计算结构密度
-        total_stable = sum(int(s.mask.sum().item()) for s in structures)
-        total_pixels = self.shape[0] * self.shape[1]
-        density = total_stable / max(1, total_pixels)
+        from .L1_abstract_layer import L1AbstractLayer
 
-        if density < 0.05:
-            return None  # 结构太稀疏，不值得粗粒化
+        # 取第一个稳定结构的 mask
+        struct = structures[0]
+        mask = struct.mask
 
-        # 根据密度选择粗粒化因子
-        if density >= 0.25:
-            block_factor = 4
+        # 计算粗粒化后的形状
+        if mask.dim() >= 2:
+            h, w = mask.shape[-2:]
         else:
-            block_factor = 2
+            h, w = self.shape
 
-        # 计算新分辨率（至少为 1）
-        new_h = max(1, self.shape[0] // block_factor)
-        new_w = max(1, self.shape[1] // block_factor)
+        block_size = 4
+        l1_h = h // block_size
+        l1_w = w // block_size
 
-        # 创建新层
-        new_layer = L0BinaryLattice(
-            shape=(new_h, new_w),
-            device=self.device,
-            source_side=self.source_side,
-            sink_side=self.sink_side,
+        return L1AbstractLayer(
+            block_size=block_size,
+            l1_shape=(l1_h, l1_w),
+            source_mask=mask,
         )
-        new_layer._block_factor = block_factor
-
-        return new_layer
-
-    def coarse_grain_state(self, state: torch.Tensor,
-                           structures: List,
-                           block_factor: Optional[int] = None) -> torch.Tensor:
-        """将高分辨状态投影到粗粒网格
-
-        Args:
-            state: (B, C, H, W) 当前层状态
-            structures: 稳定结构列表（用于确定 block_factor）
-            block_factor: 手动指定因子（默认从 density 自动推断）
-
-        Returns:
-            coarse_state: (B, C, new_h, new_w) 粗粒化后的状态
-        """
-        if block_factor is None:
-            # 从 structures 密度推断
-            total_stable = sum(int(s.mask.sum().item()) for s in structures)
-            total_pixels = self.shape[0] * self.shape[1]
-            density = total_stable / max(1, total_pixels)
-            if density < 0.05:
-                return state  # 太稀疏，保持不变
-            block_factor = 4 if density >= 0.25 else 2
-
-        # 用 avg_pool2d 做块平均
-        coarse = F.avg_pool2d(state, kernel_size=block_factor, stride=block_factor)
-        return coarse
 
     def measure_ascent_pressure(self, history: List[torch.Tensor],
                                  structures: List) -> float:

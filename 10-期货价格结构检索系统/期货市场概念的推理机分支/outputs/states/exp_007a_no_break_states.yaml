@@ -1,0 +1,130 @@
+- active_channels: 7
+  active_differences: 1
+  blocked_channels: 0
+  break_events_count: 0
+  detail:
+    stable_reason: 超过75%主体处于压力状态，等待保证金缓解
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: margin_relief
+  pressure_level: medium
+  time: 1
+  total_pressure: 53.5
+- active_channels: 7
+  active_differences: 1
+  blocked_channels: 0
+  break_events_count: 0
+  detail:
+    stable_reason: 超过75%主体处于压力状态，等待保证金缓解
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: margin_relief
+  pressure_level: medium
+  time: 2
+  total_pressure: 42.35
+- active_channels: 7
+  active_differences: 1
+  blocked_channels: 0
+  break_events_count: 0
+  detail:
+    stable_reason: 超过75%主体处于压力状态，等待保证金缓解
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: margin_relief
+  pressure_level: medium
+  time: 3
+  total_pressure: 58.59
+- active_channels: 7
+  active_differences: 1
+  blocked_channels: 0
+  break_events_count: 0
+  detail:
+    stable_reason: 超过75%主体处于压力状态，等待保证金缓解
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: margin_relief
+  pressure_level: high
+  time: 4
+  total_pressure: 74.03
+- active_channels: 7
+  active_differences: 3
+  blocked_channels: 0
+  break_events_count: 0
+  detail:
+    stable_reason: 超过75%主体处于压力状态，等待保证金缓解
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: margin_relief
+  pressure_level: critical
+  time: 5
+  total_pressure: 98.51
+- active_channels: 7
+  active_differences: 4
+  blocked_channels: 0
+  break_events_count: 0
+  detail:
+    stable_reason: 主导差异类型为 inventory，库存差异经基差通道显影，基差扩大稳态
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: basis_widening
+  pressure_level: critical
+  time: 6
+  total_pressure: 117.54
+- active_channels: 7
+  active_differences: 3
+  blocked_channels: 0
+  break_events_count: 0
+  detail:
+    stable_reason: 主导差异类型为 inventory，库存差异经基差通道显影，基差扩大稳态
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: basis_widening
+  pressure_level: critical
+  time: 7
+  total_pressure: 126.05
+- active_channels: 7
+  active_differences: 3
+  blocked_channels: 0
+  break_events_count: 0
+  detail:
+    stable_reason: 主导差异类型为 inventory，库存差异经基差通道显影，基差扩大稳态
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: basis_widening
+  pressure_level: critical
+  time: 8
+  total_pressure: 138.62
+- active_channels: 7
+  active_differences: 3
+  blocked_channels: 0
+  break_events_count: 0
+  detail:
+    stable_reason: 主导差异类型为 inventory，库存差异经基差通道显影，基差扩大稳态
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: basis_widening
+  pressure_level: critical
+  time: 9
+  total_pressure: 150.56
+- active_channels: 7
+  active_differences: 3
+  blocked_channels: 0
+  break_events_count: 0
+  detail:
+    stable_reason: 主导差异类型为 inventory，库存差异经基差通道显影，基差扩大稳态
+  dominant_difference_id: inventory_shortage
+  dominant_difference_type: inventory
+  dominant_entity_id: exchange_001
+  nearest_stable_label: basis_widening
+  pressure_level: critical
+  time: 10
+  total_pressure: 161.9

@@ -1,0 +1,984 @@
+- amount: 18.0
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 18.00 压力
+  time: 1
+  to_node: ''
+- amount: 17.6
+  channel_id: ''
+  difference_id: delivery_pressure
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 17.60 压力
+  time: 1
+  to_node: ''
+- amount: 9.0
+  channel_id: ''
+  difference_id: expectation_bullish
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 9.00 压力
+  time: 1
+  to_node: ''
+- amount: 15.0
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_short_001 承接 15.0，剩余能力 15.0（深度 0）
+  time: 1
+  to_node: ''
+- amount: 70.0
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: transfer
+  from_node: region_A
+  reason: 经通道 warehouse_receipt_channel 转移 70.0 压力
+  time: 1
+  to_node: exchange_delivery
+- amount: 18.5
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 转移后剩余 18.5 压力积累
+  time: 1
+  to_node: ''
+- amount: 21.0
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: inventory → basis，经通道 warehouse_receipt_channel，深度 0'
+  time: 1
+  to_node: ''
+- amount: 60.0
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 exchange_001 承接 60.0，剩余能力 60.0（深度 0）
+  time: 1
+  to_node: ''
+- amount: 7.5
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_short_001 承接 7.5，剩余能力 7.5（深度 0）
+  time: 1
+  to_node: ''
+- amount: 20.02
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: transfer
+  from_node: near_month
+  reason: 经通道 delivery_channel 转移 20.0 压力
+  time: 1
+  to_node: exchange
+- amount: 15.57
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: delivery → basis，经通道 delivery_channel，深度 0'
+  time: 1
+  to_node: ''
+- amount: 30.0
+  channel_id: futures_contract_channel
+  difference_id: expectation_bullish
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_long_001 承接 30.0，剩余能力 30.0（深度 0）
+  time: 1
+  to_node: ''
+- amount: 14.7
+  channel_id: futures_contract_channel
+  difference_id: expectation_bullish
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculator_002 承接 14.7，剩余能力 30.3（深度 0）
+  time: 1
+  to_node: ''
+- amount: 15.15
+  channel_id: basis_channel
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculator_002 承接 15.2，剩余能力 15.2（深度 1）
+  time: 1
+  to_node: ''
+- amount: 5.85
+  channel_id: basis_channel
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_long_001 承接 5.8，剩余能力 24.2（深度 1）
+  time: 1
+  to_node: ''
+- amount: 12.08
+  channel_id: basis_channel
+  difference_id: transform_delivery_to_basis_0_delivery_pressure
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_long_001 承接 12.1，剩余能力 12.1（深度 1）
+  time: 1
+  to_node: ''
+- amount: 3.49
+  channel_id: basis_channel
+  difference_id: transform_delivery_to_basis_0_delivery_pressure
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculator_002 承接 3.5，剩余能力 11.7（深度 1）
+  time: 1
+  to_node: ''
+- amount: 5.67
+  channel_id: position_reduction_channel
+  difference_id: feedback_margin_industrial_short_001_1
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_long_001 承接 5.7，剩余能力 6.4（深度 1）
+  time: 1
+  to_node: ''
+- amount: 2.83
+  channel_id: position_reduction_channel
+  difference_id: feedback_margin_industrial_short_001_1
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculator_002 承接 2.8，剩余能力 8.8（深度 1）
+  time: 1
+  to_node: ''
+- amount: 4.41
+  channel_id: position_reduction_channel
+  difference_id: feedback_margin_speculative_long_001_1
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculator_002 承接 4.4，剩余能力 4.4（深度 1）
+  time: 1
+  to_node: ''
+- amount: 3.2
+  channel_id: position_reduction_channel
+  difference_id: feedback_margin_speculative_long_001_1
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_long_001 承接 3.2，剩余能力 3.2（深度 1）
+  time: 1
+  to_node: ''
+- amount: 3.73
+  channel_id: position_reduction_channel
+  difference_id: feedback_margin_speculative_long_001_1
+  event_type: transfer
+  from_node: speculative_long_001
+  reason: 经通道 position_reduction_channel 转移 3.7 压力
+  time: 1
+  to_node: clearing
+- amount: 3.45
+  channel_id: position_reduction_channel
+  difference_id: feedback_margin_speculative_long_001_1
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 position_reduction_channel，深度 1'
+  time: 1
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 2）
+  time: 1
+  to_node: ''
+- amount: 0.07
+  channel_id: warehouse_receipt_channel
+  difference_id: ''
+  event_type: lock_in
+  from_node: ''
+  reason: 通道 warehouse_receipt_channel 锁定度从 0.070 增至 0.140
+  time: 1
+  to_node: ''
+- amount: 0.02
+  channel_id: delivery_channel
+  difference_id: ''
+  event_type: lock_in
+  from_node: ''
+  reason: 通道 delivery_channel 锁定度从 0.020 增至 0.040
+  time: 1
+  to_node: ''
+- amount: 17.1
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 17.10 压力
+  time: 2
+  to_node: ''
+- amount: 3.75
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_short_001 承接 3.8，剩余能力 3.8（深度 0）
+  time: 2
+  to_node: ''
+- amount: 31.85
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: transfer
+  from_node: region_A
+  reason: 经通道 warehouse_receipt_channel 转移 31.8 压力
+  time: 2
+  to_node: exchange_delivery
+- amount: 9.55
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: inventory → basis，经通道 warehouse_receipt_channel，深度 0'
+  time: 2
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 2
+  to_node: ''
+- amount: 2.21
+  channel_id: basis_channel
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculator_002 承接 2.2，剩余能力 2.2（深度 1）
+  time: 2
+  to_node: ''
+- amount: 1.6
+  channel_id: basis_channel
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_long_001 承接 1.6，剩余能力 1.6（深度 1）
+  time: 2
+  to_node: ''
+- amount: 5.75
+  channel_id: basis_channel
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
+  event_type: transfer
+  from_node: warehouse_receipt_channel
+  reason: 经通道 basis_channel 转移 5.7 压力
+  time: 2
+  to_node: exchange_delivery
+- amount: 5.33
+  channel_id: basis_channel
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: basis → price，经通道 basis_channel，深度 1'
+  time: 2
+  to_node: ''
+- amount: 1.1
+  channel_id: position_reduction_channel
+  difference_id: feedback_margin_industrial_short_001_2
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculator_002 承接 1.1，剩余能力 1.1（深度 1）
+  time: 2
+  to_node: ''
+- amount: 0.31
+  channel_id: position_reduction_channel
+  difference_id: feedback_margin_industrial_short_001_2
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_long_001 承接 0.3，剩余能力 1.3（深度 1）
+  time: 2
+  to_node: ''
+- amount: 0.64
+  channel_id: margin_clearing_channel
+  difference_id: transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_long_001 承接 0.6，剩余能力 0.6（深度 2）
+  time: 2
+  to_node: ''
+- amount: 0.55
+  channel_id: margin_clearing_channel
+  difference_id: transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculator_002 承接 0.6，剩余能力 0.6（深度 2）
+  time: 2
+  to_node: ''
+- amount: 4.14
+  channel_id: margin_clearing_channel
+  difference_id: transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: transfer
+  from_node: basis_channel
+  reason: 经通道 margin_clearing_channel 转移 4.1 压力
+  time: 2
+  to_node: exchange_delivery
+- amount: 3.85
+  channel_id: margin_clearing_channel
+  difference_id: transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: price → margin，经通道 margin_clearing_channel，深度 2'
+  time: 2
+  to_node: ''
+- amount: 0.32
+  channel_id: position_reduction_channel
+  difference_id: transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_long_001 承接 0.3，剩余能力 0.3（深度 3）
+  time: 2
+  to_node: ''
+- amount: 0.28
+  channel_id: position_reduction_channel
+  difference_id: transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculator_002 承接 0.3，剩余能力 0.3（深度 3）
+  time: 2
+  to_node: ''
+- amount: 3.26
+  channel_id: position_reduction_channel
+  difference_id: transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: transfer
+  from_node: margin_clearing_channel
+  reason: 经通道 position_reduction_channel 转移 3.3 压力
+  time: 2
+  to_node: exchange_delivery
+- amount: 2.97
+  channel_id: position_reduction_channel
+  difference_id: transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 position_reduction_channel，深度 3'
+  time: 2
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 4）
+  time: 2
+  to_node: ''
+- amount: 0.03
+  channel_id: warehouse_receipt_channel
+  difference_id: ''
+  event_type: lock_in
+  from_node: ''
+  reason: 通道 warehouse_receipt_channel 锁定度从 0.172 增至 0.204
+  time: 2
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 3
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 3
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 4
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 4
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 5
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 5
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 6
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 6
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 7
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 7
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 8
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 8
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 9
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 9
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 10
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 10
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 11
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 11
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 12
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 12
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 13
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 13
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 14
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 14
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 15
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 15
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 16
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 16
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 17
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 17
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 18
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 18
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 19
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 19
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 20
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 20
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 21
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 21
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 22
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 22
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 23
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 23
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 24
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 24
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 25
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 25
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 26
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 26
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 27
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 27
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 28
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 28
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 29
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 29
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 30
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 30
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 31
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 31
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 32
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 32
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 33
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 33
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 34
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 34
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 35
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 35
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 36
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 36
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 37
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 37
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 38
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 38
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 39
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 39
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_1_feedback_margin_speculative_long_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.4（深度 0）
+  time: 40
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_margin_to_liquidity_3_transform_price_to_margin_2_transform_basis_to_price_1_transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.0（深度 0）
+  time: 40
+  to_node: ''

@@ -15,8 +15,8 @@
 | L | Layer，层级世界规格 | in progress |
 | E | Engine，世界演化引擎 | in progress |
 | M | Model，学习模型 | planned |
-| V | Validator，验证器 | planned |
-| R | Recursion，稳定结构封装与递归 | planned |
+| V | Validator，验证器 | in progress |
+| R | Recursion，稳定结构封装与递归 | in progress |
 | P | Physics Modules，物理模块 | future |
 | D | Documentation，文档与理论回写 | in progress |
 
@@ -47,7 +47,7 @@ A1(源, +1) → A6(流向) → A3(局域) → A4(最小变易)
 
 ## 当前阶段
 
-M1.1：差异反应堆语义稳定化（验收意见修复完成）。
+M2：稳定结构验证 + 粗粒化映射。
 
 ### 已完成里程碑
 
@@ -56,6 +56,7 @@ M1.1：差异反应堆语义稳定化（验收意见修复完成）。
 | M0 | 2026-04 | ✅ | 骨架代码、公理接口、层级基础 |
 | M1 | 2026-04-29 | ✅ | 差异反应堆 + 公理约束训练 |
 | M1.1 | 2026-04-29 | ✅ | 语义修复 + 测试 + 流量平衡 |
+| M2 | 2026-05-06 | ✅ | 稳定结构验证器 + 粗粒化映射 + 实验日志 |
 
 ## 第一阶段禁止事项
 

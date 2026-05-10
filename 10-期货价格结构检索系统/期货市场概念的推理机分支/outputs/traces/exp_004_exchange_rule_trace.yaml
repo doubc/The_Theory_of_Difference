@@ -1,0 +1,32 @@
+- amount: 13.75
+  channel_id: ''
+  difference_id: margin_pressure
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 13.75 压力
+  time: 1
+  to_node: ''
+- amount: 34.2
+  channel_id: exchange_rule_channel
+  difference_id: rule_change
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 exchange_001 承接 34.2，剩余能力 145.8（深度 0）
+  time: 1
+  to_node: ''
+- amount: 40.0
+  channel_id: margin_clearing_channel
+  difference_id: margin_pressure
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 40.0，剩余能力 40.0（深度 0）
+  time: 1
+  to_node: ''
+- amount: 15.82
+  channel_id: margin_clearing_channel
+  difference_id: margin_pressure
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 15.8，剩余能力 54.2（深度 0）
+  time: 1
+  to_node: ''

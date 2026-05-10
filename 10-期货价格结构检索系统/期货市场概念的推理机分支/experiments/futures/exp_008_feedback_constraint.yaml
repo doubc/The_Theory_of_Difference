@@ -1,0 +1,97 @@
+# Experiment 008: 反馈深度约束验证
+# 目的：验证 Phase 3 的反馈约束机制（衰减+冷却+全局上限）
+# 预期：高杠杆场景下，反馈差异数量可控，系统稳定性提升
+
+world:
+  name: Feedback-Constraint-Test
+  max_steps: 15
+
+  nodes:
+    - id: region_A
+      type: region
+      description: 产区
+    - id: exchange_delivery
+      type: exchange
+      description: 交易所交割库
+    - id: clearing
+      type: clearing
+      description: 清算中心
+    - id: market
+      type: market
+      description: 市场
+
+# 高杠杆主体，容易产生大量反馈
+entities:
+  - id: high_leverage_speculator
+    type: speculator
+    capacity: 60  # 降低容量，更容易达到高capacity_ratio
+    available_capacity: 50
+    risk_tolerance: 20  # 降低风险承受度，更容易触发流动性反馈
+    liquidity: 30  # 降低流动性
+    leverage: 5.0  # 高杠杆，反馈放大5倍
+    preference: neutral
+    status: active
+    description: 高杠杆投机者，用于测试反馈约束
+  - id: normal_speculator
+    type: speculator
+    capacity: 80
+    available_capacity: 70
+    risk_tolerance: 40
+    liquidity: 50
+    leverage: 2.0  # 正常杠杆
+    preference: neutral
+    status: active
+    description: 正常杠杆投机者，对照组
+
+channels:
+  - id: warehouse_receipt_channel
+    from_type: inventory
+    to_type: delivery
+    base_cost: 15
+    capacity: 80
+    openness: 0.7
+    congestion: 0.7  # 高拥堵，促进变形
+    description: 库存->交割
+    entities:
+      - high_leverage_speculator
+      - normal_speculator
+  - id: margin_channel
+    from_type: margin
+    to_type: liquidity
+    base_cost: 10
+    capacity: 100
+    openness: 0.8
+    congestion: 0.3
+    description: 保证金->流动性
+    entities:
+      - clearing
+
+# 高压力库存差异，触发大量承接和反馈
+differences:
+  - id: inventory_pressure
+    type: inventory
+    source_node: region_A
+    target_node: exchange_delivery
+    magnitude: 200  # 增加压力
+    visibility: 0.9
+    persistence: 0.8
+    transformability: 0.7
+    description: 高压力库存差异，测试反馈约束
+    recurrent: true
+    recurrent_rate: 0.05
+  - id: margin_stress
+    type: margin
+    source_node: clearing
+    target_node: market
+    magnitude: 80
+    visibility: 0.85
+    persistence: 0.7
+    transformability: 0.8
+    description: 保证金压力差异
+    recurrent: true
+    recurrent_rate: 0.1
+
+break_thresholds:
+  inventory: 120
+  margin: 100
+  liquidity: 80

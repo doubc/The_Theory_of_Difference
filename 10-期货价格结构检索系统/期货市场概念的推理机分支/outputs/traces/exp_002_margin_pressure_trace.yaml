@@ -1,0 +1,96 @@
+- amount: 22.5
+  channel_id: ''
+  difference_id: margin_hike
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 22.50 压力
+  time: 1
+  to_node: ''
+- amount: 7.5
+  channel_id: ''
+  difference_id: inventory_gap
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 7.50 压力
+  time: 1
+  to_node: ''
+- amount: 42.5
+  channel_id: margin_clearing_channel
+  difference_id: margin_hike
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 42.5，剩余能力 42.5（深度 0）
+  time: 1
+  to_node: ''
+- amount: 35.0
+  channel_id: margin_clearing_channel
+  difference_id: margin_hike
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 35.0，剩余能力 35.0（深度 0）
+  time: 1
+  to_node: ''
+- amount: 9.12
+  channel_id: margin_clearing_channel
+  difference_id: margin_hike
+  event_type: transfer
+  from_node: exchange
+  reason: 经通道 margin_clearing_channel 转移 9.1 压力
+  time: 1
+  to_node: market
+- amount: 7.46
+  channel_id: margin_clearing_channel
+  difference_id: margin_hike
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: margin → liquidity，经通道 margin_clearing_channel，深度 0'
+  time: 1
+  to_node: ''
+- amount: 21.25
+  channel_id: basis_channel
+  difference_id: inventory_gap
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 21.2，剩余能力 21.2（深度 0）
+  time: 1
+  to_node: ''
+- amount: 14.25
+  channel_id: basis_channel
+  difference_id: inventory_gap
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 14.2，剩余能力 20.8（深度 0）
+  time: 1
+  to_node: ''
+- amount: 7.46
+  channel_id: position_reduction_channel
+  difference_id: transform_margin_to_liquidity_0_margin_hike
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 7.5，剩余能力 13.3（深度 1）
+  time: 1
+  to_node: ''
+- amount: 6.02
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_industrial_long_001_1
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 6.0，剩余能力 15.2（深度 1）
+  time: 1
+  to_node: ''
+- amount: 7.61
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_1
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_long_001 承接 7.6，剩余能力 7.6（深度 1）
+  time: 1
+  to_node: ''
+- amount: 5.85
+  channel_id: margin_clearing_channel
+  difference_id: feedback_margin_speculative_fund_001_1
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_fund_001 承接 5.9，剩余能力 7.4（深度 1）
+  time: 1
+  to_node: ''

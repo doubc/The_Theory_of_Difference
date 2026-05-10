@@ -1,0 +1,126 @@
+﻿experiment:
+  id: exp_003
+  name: 近月逼仓
+  description: 交割差异在近月积累，库存不足支撑交割，空头承接困难，形成近月挤压
+
+world:
+  name: Near-Month-Squeeze-World
+  max_steps: 25
+
+break_thresholds:
+  inventory: 70
+  liquidity: 60
+  expectation: 80
+  margin: 60
+  delivery: 50
+
+differences:
+  - id: delivery_pressure
+    type: delivery
+    source_node: near_month
+    target_node: exchange
+    magnitude: 90
+    visibility: 0.95
+    persistence: 0.95
+    transformability: 0.5
+    recurrent: true
+    recurrent_rate: 0.35
+    recurrent_decay: 0.92
+    description: 近月交割压力持续加大
+
+  - id: inventory_shortage
+    type: inventory
+    source_node: region_A
+    target_node: exchange_delivery
+    magnitude: 80
+    visibility: 0.9
+    persistence: 0.85
+    recurrent: true
+    recurrent_rate: 0.2
+    recurrent_decay: 0.88
+    description: 交割地库存持续短缺
+
+  - id: expectation_bullish
+    type: expectation
+    source_node: market
+    target_node: price
+    magnitude: 60
+    visibility: 0.85
+    persistence: 0.7
+    recurrent: true
+    recurrent_rate: 0.1
+    recurrent_decay: 0.95
+    description: 市场看涨预期持续升温
+
+entities:
+  - id: industrial_short_001
+    type: industrial_short
+    capacity: 60
+    available_capacity: 40
+    risk_tolerance: 40
+    liquidity: 50
+    leverage: 2.0
+    preference: short
+    description: 产业空头，需卖出套保但交割品不足
+
+  - id: speculative_long_001
+    type: speculator
+    capacity: 100
+    available_capacity: 90
+    risk_tolerance: 85
+    liquidity: 80
+    leverage: 3.0
+    preference: long
+    description: 投机多头，趋势跟随
+
+  - id: exchange_001
+    type: exchange
+    capacity: 200
+    available_capacity: 180
+    risk_tolerance: 100
+    liquidity: 100
+    leverage: 1.0
+    preference: neutral
+    description: 交易所（二阶承接位置）
+
+channels:
+  - id: delivery_channel
+    from_type: delivery
+    to_type: basis
+    base_cost: 20
+    capacity: 40
+    openness: 0.8
+    description: 交割差异→基差差异（容量严重不足）
+    entities:
+      - industrial_short_001
+      - exchange_001
+
+  - id: warehouse_receipt_channel
+    from_type: inventory
+    to_type: delivery
+    base_cost: 15
+    capacity: 30
+    openness: 0.85
+    description: 库存差异→交割差异（仓单生成）
+    entities:
+      - industrial_short_001
+
+  - id: futures_contract_channel
+    from_type: expectation
+    to_type: price
+    base_cost: 10
+    capacity: 100
+    openness: 0.95
+    description: 预期差异→价格差异
+    entities:
+      - speculative_long_001
+
+  - id: exchange_rule_channel
+    from_type: delivery
+    to_type: rule
+    base_cost: 50
+    capacity: 80
+    openness: 0.6
+    description: 交割差异→规则调整（交易所二阶承接）
+    entities:
+      - exchange_001

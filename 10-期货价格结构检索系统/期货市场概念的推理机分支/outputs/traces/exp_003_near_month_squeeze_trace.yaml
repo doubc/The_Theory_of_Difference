@@ -1,0 +1,1568 @@
+- amount: 31.5
+  channel_id: ''
+  difference_id: delivery_pressure
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 31.50 压力
+  time: 1
+  to_node: ''
+- amount: 16.0
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 16.00 压力
+  time: 1
+  to_node: ''
+- amount: 6.0
+  channel_id: ''
+  difference_id: expectation_bullish
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 6.00 压力
+  time: 1
+  to_node: ''
+- amount: 90.0
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 exchange_001 承接 90.0，剩余能力 90.0（深度 0）
+  time: 1
+  to_node: ''
+- amount: 20.0
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_short_001 承接 20.0，剩余能力 20.0（深度 0）
+  time: 1
+  to_node: ''
+- amount: 2.72
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: transfer
+  from_node: near_month
+  reason: 经通道 delivery_channel 转移 2.7 压力
+  time: 1
+  to_node: exchange
+- amount: 2.54
+  channel_id: delivery_channel
+  difference_id: delivery_pressure
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: delivery → basis，经通道 delivery_channel，深度 0'
+  time: 1
+  to_node: ''
+- amount: 10.0
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_short_001 承接 10.0，剩余能力 10.0（深度 0）
+  time: 1
+  to_node: ''
+- amount: 30.0
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: transfer
+  from_node: region_A
+  reason: 经通道 warehouse_receipt_channel 转移 30.0 压力
+  time: 1
+  to_node: exchange_delivery
+- amount: 37.2
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 转移后剩余 37.2 压力积累
+  time: 1
+  to_node: ''
+- amount: 9.0
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: inventory → basis，经通道 warehouse_receipt_channel，深度 0'
+  time: 1
+  to_node: ''
+- amount: 41.7
+  channel_id: futures_contract_channel
+  difference_id: expectation_bullish
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 speculative_long_001 承接 41.7，剩余能力 48.3（深度 0）
+  time: 1
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_delivery_to_basis_0_delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 2.5（深度 1）
+  time: 1
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 9.0（深度 1）
+  time: 1
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 7.6（深度 1）
+  time: 1
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.8（深度 1）
+  time: 1
+  to_node: ''
+- amount: 0.03
+  channel_id: warehouse_receipt_channel
+  difference_id: ''
+  event_type: lock_in
+  from_node: ''
+  reason: 通道 warehouse_receipt_channel 锁定度从 0.030 增至 0.060
+  time: 1
+  to_node: ''
+- amount: 14.08
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 14.08 压力
+  time: 2
+  to_node: ''
+- amount: 5.0
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_short_001 承接 5.0，剩余能力 5.0（深度 0）
+  time: 2
+  to_node: ''
+- amount: 21.0
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: transfer
+  from_node: region_A
+  reason: 经通道 warehouse_receipt_channel 转移 21.0 压力
+  time: 2
+  to_node: exchange_delivery
+- amount: 25.28
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 转移后剩余 25.3 压力积累
+  time: 2
+  to_node: ''
+- amount: 6.3
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: inventory → basis，经通道 warehouse_receipt_channel，深度 0'
+  time: 2
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_delivery_to_basis_0_delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
+  time: 2
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 9.0（深度 0）
+  time: 2
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.8（深度 0）
+  time: 2
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 6.3（深度 1）
+  time: 2
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 1.9（深度 1）
+  time: 2
+  to_node: ''
+- amount: 0.02
+  channel_id: warehouse_receipt_channel
+  difference_id: ''
+  event_type: lock_in
+  from_node: ''
+  reason: 通道 warehouse_receipt_channel 锁定度从 0.081 增至 0.102
+  time: 2
+  to_node: ''
+- amount: 12.39
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 12.39 压力
+  time: 3
+  to_node: ''
+- amount: 2.5
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: entity_absorb
+  from_node: ''
+  reason: 主体 industrial_short_001 承接 2.5，剩余能力 2.5（深度 0）
+  time: 3
+  to_node: ''
+- amount: 21.0
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: transfer
+  from_node: region_A
+  reason: 经通道 warehouse_receipt_channel 转移 21.0 压力
+  time: 3
+  to_node: exchange_delivery
+- amount: 14.17
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 转移后剩余 14.2 压力积累
+  time: 3
+  to_node: ''
+- amount: 6.3
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: transform
+  from_node: ''
+  reason: '差异变形: inventory → basis，经通道 warehouse_receipt_channel，深度 0'
+  time: 3
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_delivery_to_basis_0_delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
+  time: 3
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
+  time: 3
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.8（深度 0）
+  time: 3
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 1.9（深度 0）
+  time: 3
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 6.3（深度 1）
+  time: 3
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.9（深度 1）
+  time: 3
+  to_node: ''
+- amount: 0.02
+  channel_id: warehouse_receipt_channel
+  difference_id: ''
+  event_type: lock_in
+  from_node: ''
+  reason: 通道 warehouse_receipt_channel 锁定度从 0.123 增至 0.144
+  time: 3
+  to_node: ''
+- amount: 10.9
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 10.90 压力
+  time: 4
+  to_node: ''
+- amount: 0
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 25.1（深度 0）
+  time: 4
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_delivery_to_basis_0_delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
+  time: 4
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
+  time: 4
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.8（深度 0）
+  time: 4
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 1.9（深度 0）
+  time: 4
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.9（深度 0）
+  time: 4
+  to_node: ''
+- amount: 9.6
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 9.60 压力
+  time: 5
+  to_node: ''
+- amount: 0
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 34.7（深度 0）
+  time: 5
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_delivery_to_basis_0_delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
+  time: 5
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
+  time: 5
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.8（深度 0）
+  time: 5
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 1.9（深度 0）
+  time: 5
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.9（深度 0）
+  time: 5
+  to_node: ''
+- amount: 8.44
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 8.44 压力
+  time: 6
+  to_node: ''
+- amount: 0
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 43.1（深度 0）
+  time: 6
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_delivery_to_basis_0_delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
+  time: 6
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
+  time: 6
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.8（深度 0）
+  time: 6
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 1.9（深度 0）
+  time: 6
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.9（深度 0）
+  time: 6
+  to_node: ''
+- amount: 7.43
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 7.43 压力
+  time: 7
+  to_node: ''
+- amount: 0
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 50.5（深度 0）
+  time: 7
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_delivery_to_basis_0_delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
+  time: 7
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
+  time: 7
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.8（深度 0）
+  time: 7
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 1.9（深度 0）
+  time: 7
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.9（深度 0）
+  time: 7
+  to_node: ''
+- amount: 6.54
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 6.54 压力
+  time: 8
+  to_node: ''
+- amount: 0
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 57.1（深度 0）
+  time: 8
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_delivery_to_basis_0_delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
+  time: 8
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
+  time: 8
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.8（深度 0）
+  time: 8
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 1.9（深度 0）
+  time: 8
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.9（深度 0）
+  time: 8
+  to_node: ''
+- amount: 5.75
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 5.75 压力
+  time: 9
+  to_node: ''
+- amount: 0
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 62.8（深度 0）
+  time: 9
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_delivery_to_basis_0_delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
+  time: 9
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
+  time: 9
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.8（深度 0）
+  time: 9
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 1.9（深度 0）
+  time: 9
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.9（深度 0）
+  time: 9
+  to_node: ''
+- amount: 5.06
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 5.06 压力
+  time: 10
+  to_node: ''
+- amount: 0
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 67.9（深度 0）
+  time: 10
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_delivery_to_basis_0_delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
+  time: 10
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
+  time: 10
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.8（深度 0）
+  time: 10
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 1.9（深度 0）
+  time: 10
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.9（深度 0）
+  time: 10
+  to_node: ''
+- amount: 4.46
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 4.46 压力
+  time: 11
+  to_node: ''
+- amount: 0
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 72.4（深度 0）
+  time: 11
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_delivery_to_basis_0_delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
+  time: 11
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
+  time: 11
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.8（深度 0）
+  time: 11
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 1.9（深度 0）
+  time: 11
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.9（深度 0）
+  time: 11
+  to_node: ''
+- amount: 72.36
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: break
+  from_node: ''
+  reason: '破缺: accumulation_overflow，压力 72.4 >= 阈值 70.0'
+  time: 11
+  to_node: ''
+- amount: 36.18
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: break_release
+  from_node: ''
+  reason: 破缺释放压力 36.2
+  time: 11
+  to_node: ''
+- amount: 3.92
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 3.92 压力
+  time: 12
+  to_node: ''
+- amount: 0
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 40.1（深度 0）
+  time: 12
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_delivery_to_basis_0_delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
+  time: 12
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
+  time: 12
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.8（深度 0）
+  time: 12
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 1.9（深度 0）
+  time: 12
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.9（深度 0）
+  time: 12
+  to_node: ''
+- amount: 3.45
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 3.45 压力
+  time: 13
+  to_node: ''
+- amount: 0
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 43.5（深度 0）
+  time: 13
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_delivery_to_basis_0_delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
+  time: 13
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
+  time: 13
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.8（深度 0）
+  time: 13
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 1.9（深度 0）
+  time: 13
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.9（深度 0）
+  time: 13
+  to_node: ''
+- amount: 3.04
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 3.04 压力
+  time: 14
+  to_node: ''
+- amount: 0
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 46.6（深度 0）
+  time: 14
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_delivery_to_basis_0_delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
+  time: 14
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
+  time: 14
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.8（深度 0）
+  time: 14
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 1.9（深度 0）
+  time: 14
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.9（深度 0）
+  time: 14
+  to_node: ''
+- amount: 2.67
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 2.67 压力
+  time: 15
+  to_node: ''
+- amount: 0
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 49.3（深度 0）
+  time: 15
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_delivery_to_basis_0_delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
+  time: 15
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
+  time: 15
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.8（深度 0）
+  time: 15
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 1.9（深度 0）
+  time: 15
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.9（深度 0）
+  time: 15
+  to_node: ''
+- amount: 2.35
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 2.35 压力
+  time: 16
+  to_node: ''
+- amount: 0
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 51.6（深度 0）
+  time: 16
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_delivery_to_basis_0_delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
+  time: 16
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
+  time: 16
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.8（深度 0）
+  time: 16
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 1.9（深度 0）
+  time: 16
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.9（深度 0）
+  time: 16
+  to_node: ''
+- amount: 2.07
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 2.07 压力
+  time: 17
+  to_node: ''
+- amount: 0
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 53.7（深度 0）
+  time: 17
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_delivery_to_basis_0_delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
+  time: 17
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
+  time: 17
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.8（深度 0）
+  time: 17
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 1.9（深度 0）
+  time: 17
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.9（深度 0）
+  time: 17
+  to_node: ''
+- amount: 1.82
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 1.82 压力
+  time: 18
+  to_node: ''
+- amount: 0
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 55.5（深度 0）
+  time: 18
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_delivery_to_basis_0_delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
+  time: 18
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
+  time: 18
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.8（深度 0）
+  time: 18
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 1.9（深度 0）
+  time: 18
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.9（深度 0）
+  time: 18
+  to_node: ''
+- amount: 1.6
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 1.60 压力
+  time: 19
+  to_node: ''
+- amount: 0
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 57.1（深度 0）
+  time: 19
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_delivery_to_basis_0_delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
+  time: 19
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
+  time: 19
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.8（深度 0）
+  time: 19
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 1.9（深度 0）
+  time: 19
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.9（深度 0）
+  time: 19
+  to_node: ''
+- amount: 1.41
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 1.41 压力
+  time: 20
+  to_node: ''
+- amount: 0
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 58.5（深度 0）
+  time: 20
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_delivery_to_basis_0_delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
+  time: 20
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
+  time: 20
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.8（深度 0）
+  time: 20
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 1.9（深度 0）
+  time: 20
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.9（深度 0）
+  time: 20
+  to_node: ''
+- amount: 1.24
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 1.24 压力
+  time: 21
+  to_node: ''
+- amount: 0
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 59.8（深度 0）
+  time: 21
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_delivery_to_basis_0_delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
+  time: 21
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
+  time: 21
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.8（深度 0）
+  time: 21
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 1.9（深度 0）
+  time: 21
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.9（深度 0）
+  time: 21
+  to_node: ''
+- amount: 1.09
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 1.09 压力
+  time: 22
+  to_node: ''
+- amount: 0
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 60.8（深度 0）
+  time: 22
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_delivery_to_basis_0_delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
+  time: 22
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
+  time: 22
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.8（深度 0）
+  time: 22
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 1.9（深度 0）
+  time: 22
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.9（深度 0）
+  time: 22
+  to_node: ''
+- amount: 0.96
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 0.96 压力
+  time: 23
+  to_node: ''
+- amount: 0
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 61.8（深度 0）
+  time: 23
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_delivery_to_basis_0_delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
+  time: 23
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
+  time: 23
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.8（深度 0）
+  time: 23
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 1.9（深度 0）
+  time: 23
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.9（深度 0）
+  time: 23
+  to_node: ''
+- amount: 0.85
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 0.85 压力
+  time: 24
+  to_node: ''
+- amount: 0
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 62.7（深度 0）
+  time: 24
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_delivery_to_basis_0_delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
+  time: 24
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
+  time: 24
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.8（深度 0）
+  time: 24
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 1.9（深度 0）
+  time: 24
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.9（深度 0）
+  time: 24
+  to_node: ''
+- amount: 0.74
+  channel_id: ''
+  difference_id: inventory_shortage
+  event_type: recurrent_generate
+  from_node: ''
+  reason: recurrent 生成 0.74 压力
+  time: 25
+  to_node: ''
+- amount: 0
+  channel_id: warehouse_receipt_channel
+  difference_id: inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 主体承接能力不足，差异压力保持 63.4（深度 0）
+  time: 25
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_delivery_to_basis_0_delivery_pressure
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 2.5（深度 0）
+  time: 25
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: transform_inventory_to_basis_0_inventory_shortage
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 6.3（深度 0）
+  time: 25
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_1
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 3.8（深度 0）
+  time: 25
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_2
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 1.9（深度 0）
+  time: 25
+  to_node: ''
+- amount: 0
+  channel_id: ''
+  difference_id: feedback_margin_industrial_short_001_3
+  event_type: accumulate
+  from_node: ''
+  reason: 无可用通道，差异压力保持 0.9（深度 0）
+  time: 25
+  to_node: ''
