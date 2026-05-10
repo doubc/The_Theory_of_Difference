@@ -29,6 +29,8 @@ import numpy as np
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, PROJECT_ROOT)
 
+from experiments.logger import ExperimentLogger
+
 
 def simple_diffuse(state, diffusion_rate=0.1):
     """纯扩散：每个格点向邻居靠拢"""
@@ -91,6 +93,14 @@ def run_with_a4(length=50, steps=200, diff_rate=0.1, inject_rate=0.03,
     history = [state.clone()]
     transition_costs = []
 
+    logger = ExperimentLogger(f"exp_3_a4{a4_weight:.2f}")
+    logger.start(
+        params=dict(length=length, steps=steps, diff_rate=diff_rate,
+                    inject_rate=inject_rate, absorb_rate=absorb_rate,
+                    perturb_amp=perturb_amp, a4_weight=a4_weight, seed=seed),
+        description="A1+A8+A4 最小变易约束：验证惰性是否帮助/阻碍梯度维持",
+    )
+
     print(f"=" * 60)
     print(f"Exp #3: L0 Field + A1 Source + A8 Sink + A4 Minimal Variation")
     print(f"  Length: {length}")
@@ -123,6 +133,13 @@ def run_with_a4(length=50, steps=200, diff_rate=0.1, inject_rate=0.03,
         
         prev_state = state.clone()
         history.append(state.clone())
+
+        if step % 16 == 0:
+            logger.log_step(step, {
+                "mean": round(state.mean().item(), 6),
+                "std": round(state.std().item(), 6),
+                "transition_cost": round(cost, 8),
+            })
 
     history_tensor = torch.stack(history, dim=0)
     means = history_tensor.mean(dim=[1, 2])
@@ -171,6 +188,25 @@ def run_with_a4(length=50, steps=200, diff_rate=0.1, inject_rate=0.03,
     else:
         print(f"  结论：A4 约束导致梯度崩溃或系统冻结")
         grad_type = "COLLAPSED_OR_FROZEN"
+
+    logger.log_event("result", {
+        "gradient_type": grad_type,
+        "avg_transition_cost": round(avg_cost, 8),
+        "gradient": round(gradient, 6),
+    })
+    logger.finish(
+        final_metrics={
+            "initial_grad": round(grads[0].item(), 6),
+            "final_grad": round(grads[-1].item(), 6),
+            "gradient": round(gradient, 6),
+            "avg_cost": round(avg_cost, 8),
+            "final_std": round(stds[-1].item(), 6),
+        },
+        conclusion=(
+            f"A4={a4_weight:.2f}: 梯度={gradient:.4f}, 平均变化成本={avg_cost:.6f}。"
+            f"{'A4帮助维持了梯度。' if grad_type == 'GRADIENT_MAINTAINED' else 'A4过强导致系统冻结或梯度崩塌。'}"
+        ),
+    )
 
     return dict(
         means=means, stds=stds, grads=grads,

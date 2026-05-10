@@ -22,6 +22,7 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, PROJECT_ROOT)
 
 from layers.L0_binary_lattice import L0BinaryLattice
+from experiments.logger import ExperimentLogger
 
 
 def run_integrated_pressure_test(
@@ -35,6 +36,15 @@ def run_integrated_pressure_test(
     seed=42
 ):
     """用 L0 层的累积积分版 measure_ascent_pressure 测试"""
+    logger = ExperimentLogger(f"exp_7_inject{inject_rate:.2f}")
+    logger.start(
+        params=dict(length=length, steps=steps, diff_rate=diff_rate,
+                    inject_rate=inject_rate, absorb_rate=absorb_rate,
+                    perturb_amp=perturb_amp, ascent_threshold=ascent_threshold,
+                    seed=seed),
+        description="验证累积积分版A9升维压力：∫|residual|dt × density",
+    )
+
     torch.manual_seed(seed)
     np.random.seed(seed)
     
@@ -88,8 +98,17 @@ def run_integrated_pressure_test(
             residuals.append(residual)
             structures_counts.append(len(structures))
             
+            logger.log_step(step, {
+                "pressure": round(pressure, 6),
+                "residual": round(residual, 6),
+                "structures": len(structures),
+            })
+
             if pressure > ascent_threshold and ascent_triggered_at is None:
                 ascent_triggered_at = step
+                logger.log_event("ascent_triggered", {
+                    "step": step, "pressure": pressure, "threshold": ascent_threshold,
+                })
                 print(f"\n  ** A9 ASCENT TRIGGERED at step {step} **")
                 print(f"     pressure={pressure:.6f} > threshold={ascent_threshold}")
     
@@ -120,19 +139,37 @@ def run_integrated_pressure_test(
         print(f"\n  Stability: pattern_sim={pattern_sim:.4f}, turnover={turnover:.4f}")
     
     # 结论
+    max_p = max(pressures) if pressures else 0
+    mean_p = np.mean(pressures) if pressures else 0
+
     print(f"\n{'=' * 60}")
     if ascent_triggered_at is not None:
         print(f"A9 Ascent: YES (step {ascent_triggered_at})")
     else:
-        max_p = max(pressures) if pressures else 0
         print(f"A9 Ascent: NO (max={max_p:.6f}, threshold={ascent_threshold})")
         ratio = max_p / ascent_threshold if max_p > 0 else 0
         print(f"  Pressure reached {ratio:.1%} of threshold")
-    
+
+    logger.finish(
+        final_metrics={
+            "ascent_triggered": ascent_triggered_at is not None,
+            "ascent_step": ascent_triggered_at,
+            "max_pressure": round(max_p, 6),
+            "mean_pressure": round(mean_p, 6),
+            "threshold": ascent_threshold,
+            "pressure_ratio": round(max_p / ascent_threshold, 4) if max_p > 0 else 0,
+        },
+        conclusion=(
+            f"注入率{inject_rate}时升维{'触发' if ascent_triggered_at else '未触发'}，"
+            f"最大压力{max_p:.6f}（阈值{ascent_threshold}的"
+            f"{max_p/ascent_threshold*100:.1f}%）"
+        ),
+    )
+
     return {
         'ascent_triggered': ascent_triggered_at is not None,
-        'max_pressure': max(pressures) if pressures else 0,
-        'mean_pressure': np.mean(pressures) if pressures else 0,
+        'max_pressure': max_p,
+        'mean_pressure': mean_p,
     }
 
 

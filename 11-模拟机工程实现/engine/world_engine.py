@@ -128,7 +128,15 @@ class WorldEngine:
                             "structures_count": len(structures_buffer),
                         })
                         self.layer_stack.append(new_layer)
-                        state = new_layer.initial_state().to(self.device)
+                        # 用粗粒化状态投影保持连续性，而非从随机初始重新开始
+                        if hasattr(self.layer, 'coarse_grain_state'):
+                            block_factor = getattr(new_layer, '_block_factor', 2)
+                            projected = self.layer.coarse_grain_state(
+                                state, structures_buffer, block_factor=block_factor
+                            )
+                            state = new_layer.project_state(projected).to(self.device)
+                        else:
+                            state = new_layer.initial_state().to(self.device)
                         history = [state.detach()]
                         structures_buffer = []
                         continue

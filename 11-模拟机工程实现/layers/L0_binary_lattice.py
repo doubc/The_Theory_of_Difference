@@ -6,15 +6,26 @@ L0_binary_lattice.py — 第一层：二元格点
 源端（左边界注入）、汇端（右边界吸收）
 """
 
-from typing import List, Optional
+from typing import List, Optional, Dict, Tuple
 import torch
 import torch.nn.functional as F
+import numpy as np
 from layers.layer_base import LayerBase
 from acl.axiom_base import StableStructure
 
 
 class L0BinaryLattice(LayerBase):
     name = "L0_binary_lattice"
+
+    # 用于升维压力累积积分的滑动窗口
+    _ascent_window_size: int = 16   # 与 stability_window 保持一致
+    _residual_buffer: list          # 缓存最近 N 步的守恒残差，用于累积积分
+
+    # v2 结构检测：跨窗口生命周期追踪
+    _struct_registry: Dict[int, dict]        # struct_id → {first_seen, last_seen, window_count, pattern_sig}
+    _next_struct_id: int                     # 自增 ID
+    _prev_labels: Optional[torch.Tensor]     # 上一窗口的连通分量标记（用于匹配）
+    _interaction_graph: Dict[Tuple[int,int], int]  # (id_a, id_b) → 共存次数
 
     def __init__(self, shape=(4, 4), device="cpu",
                  source_side="left", sink_side="right"):
@@ -23,6 +34,13 @@ class L0BinaryLattice(LayerBase):
         self.source_side = source_side
         self.sink_side = sink_side
         self.stability_window = 16
+        self._residual_buffer = []  # 重置为空列表，让 __init__ 后自动初始化
+
+        # v2 状态
+        self._struct_registry = {}
+        self._next_struct_id = 0
+        self._prev_labels = None
+        self._interaction_graph = {}
 
         # A7 子指标阈值
         self.min_activity = 0.05
@@ -185,58 +203,386 @@ class L0BinaryLattice(LayerBase):
 
     def detect_stable_structures(self,
                                  history: List[torch.Tensor]) -> List[StableStructure]:
-        """最小版本：检测持续存在的局部区域"""
+        """v2：多结构分离 + 跨窗口生命周期追踪
+
+        5项标准：
+        1. 时间稳定性：每像素标准差 < 阈值（同 v1）
+        2. 空间连通性：连通分量分离多个独立结构
+        3. 边界闭合：结构边缘是否完整封闭
+        4. 物质更替率：结构形似但格点变动（活结构的定义）
+        5. 结构间交互：多结构共存时的竞争/合作
+
+        跨窗口追踪通过 spatial IoU 匹配实现，
+        生命周期从首次出现累计到当前窗口。
+        """
         if len(history) < self.stability_window:
             return []
 
         window = history[-self.stability_window:]
-        states = torch.stack(window, dim=0)
+        states = torch.stack(window, dim=0)  # (T, B, C, H, W)
 
-        # 计算每个位置的时间稳定性
+        # --- 第1标准：时间稳定性 ---
         temporal_std = states.std(dim=0)
         temporal_mean = states.mean(dim=0)
-
-        # 稳定区域：标准差小，且不是全 0 或全 1
-        stable_mask = (temporal_std < 0.1) & \
-                      (temporal_mean > 0.1) & \
-                      (temporal_mean < 0.9)
+        active = (temporal_mean >= 0.1) & (temporal_mean <= 0.9)
+        stable = temporal_std < 0.1
+        stable_mask = (stable & active).squeeze(0).squeeze(0)  # (H, W) bool
 
         if not stable_mask.any():
+            self._prev_labels = None
             return []
 
-        # 简单返回整个稳定区域作为一个结构
-        structure = StableStructure(
-            mask=stable_mask,
-            lifetime=self.stability_window,
-            pattern_signature=temporal_mean[stable_mask].mean().unsqueeze(0),
-            boundary_map=stable_mask.float(),
-            material_turnover=temporal_std.mean().item(),
-            source_layer=self.name,
+        # --- 第2标准：连通分量分离 ---
+        components_np = self._flood_fill_labels(
+            stable_mask.cpu().numpy().astype(np.uint8)
         )
-        return [structure]
+        num_components = int(components_np.max())
+
+        # --- 跨窗口结构匹配 ---
+        # 用连通分量标记与上一窗口的标记做 spatial IoU 匹配
+        component_labels = torch.from_numpy(components_np).to(self.device)
+        matched_ids = self._match_structures(component_labels, num_components)
+
+        # --- 逐结构计算 ---
+        structures = []
+        for comp_idx in range(num_components):
+            comp_label = comp_idx + 1
+            struct_mask = component_labels == comp_label  # (H, W) bool
+
+            if not struct_mask.any():
+                continue
+
+            # 生命周期
+            struct_id = matched_ids.get(comp_label, self._next_struct_id)
+            lifetime = self._update_lifetime(struct_id, struct_mask)
+
+            # 边界检测
+            boundary = self._detect_boundary(struct_mask.float())
+
+            # 闭合度
+            closure = self._check_closure(boundary, struct_mask)
+
+            # 物质更替率（仅对匹配到的老结构计算，新结构默认 0）
+            if comp_label in matched_ids:
+                turnover = self._compute_structure_turnover(
+                    struct_mask, states, temporal_mean
+                )
+            else:
+                turnover = 0.0
+
+            # 模式签名（确保 temporal_mean 与 struct_mask 维度一致）
+            tm_squeezed = temporal_mean.squeeze(0).squeeze(0)  # (H, W)
+            pattern = tm_squeezed[struct_mask].mean().unsqueeze(0)
+
+            structures.append(StableStructure(
+                mask=struct_mask,
+                lifetime=lifetime,
+                pattern_signature=pattern,
+                boundary_map=boundary.float(),
+                material_turnover=float(turnover),
+                source_layer=self.name,
+                source_trace=[{"struct_id": struct_id, "closure": closure,
+                               "component_size": int(struct_mask.sum().item())}],
+            ))
+
+        # --- 第5标准：结构间交互 ---
+        self._record_interactions(component_labels, num_components)
+
+        # 更新 registry 中的 prev_label，确保下次窗口可以匹配
+        for comp_label, struct_id in matched_ids.items():
+            if struct_id in self._struct_registry:
+                self._struct_registry[struct_id]["prev_label"] = comp_label
+
+        # 保存当前窗口标记供下次匹配
+        self._prev_labels = component_labels
+
+        return structures
+
+    # ========== v2 辅助方法 ==========
+
+    def _flood_fill_labels(self, mask: np.ndarray) -> np.ndarray:
+        """8邻域连通分量标记（Python flood-fill，适用于小网格）"""
+        labels = np.zeros_like(mask, dtype=np.int32)
+        next_label = 1
+        h, w = mask.shape
+
+        for r in range(h):
+            for c in range(w):
+                if mask[r, c] and labels[r, c] == 0:
+                    stack = [(r, c)]
+                    labels[r, c] = next_label
+                    while stack:
+                        y, x = stack.pop()
+                        for ny, nx in [
+                            (y-1, x), (y+1, x), (y, x-1), (y, x+1),
+                            (y-1, x-1), (y-1, x+1), (y+1, x-1), (y+1, x+1),
+                        ]:
+                            if 0 <= ny < h and 0 <= nx < w:
+                                if mask[ny, nx] and labels[ny, nx] == 0:
+                                    labels[ny, nx] = next_label
+                                    stack.append((ny, nx))
+                    next_label += 1
+        return labels
+
+    def _match_structures(self, current_labels: torch.Tensor,
+                          num_components: int) -> Dict[int, int]:
+        """用 spatial IoU 将当前窗口的结构匹配到历史结构
+
+        Returns: {comp_label → struct_id}
+        新结构分配 self._next_struct_id
+        """
+        matched = {}
+        if self._prev_labels is None or num_components == 0:
+            # 第一次检测，全部新建
+            for c in range(1, num_components + 1):
+                matched[c] = self._next_struct_id
+                self._next_struct_id += 1
+            return matched
+
+        prev_ids = set(pid.item() for pid in torch.unique(self._prev_labels) if pid > 0)
+        taken_ids = set()
+
+        for c in range(1, num_components + 1):
+            cur_mask = current_labels == c
+            best_iou, best_prev = 0.0, -1
+
+            for pid in prev_ids:
+                if pid in taken_ids:
+                    continue
+                prev_mask = self._prev_labels == pid
+                intersection = (cur_mask & prev_mask).sum().item()
+                union = (cur_mask | prev_mask).sum().item()
+                iou = intersection / max(1, union)
+                if iou > best_iou:
+                    best_iou = iou
+                    best_prev = pid
+
+            # IoU > 0.3 认为同一结构
+            if best_iou > 0.3 and best_prev > 0:
+                # 找到 prev_label → struct_id 的映射
+                for sid, reg in self._struct_registry.items():
+                    if reg.get("prev_label") == best_prev:
+                        matched[c] = sid
+                        taken_ids.add(best_prev)
+                        reg["prev_label"] = c  # 更新标记
+                        break
+                else:
+                    # 匹配了但没有 registry 记录，当作新结构
+                    matched[c] = self._next_struct_id
+                    self._next_struct_id += 1
+            else:
+                matched[c] = self._next_struct_id
+                self._next_struct_id += 1
+
+        return matched
+
+    def _update_lifetime(self, struct_id: int,
+                         mask: torch.Tensor) -> int:
+        """更新结构生命周期，返回当前窗口数"""
+        if struct_id not in self._struct_registry:
+            self._struct_registry[struct_id] = {
+                "window_count": 0,
+                "mask": mask,
+                "prev_label": -1,
+            }
+        self._struct_registry[struct_id]["window_count"] += 1
+        self._struct_registry[struct_id]["mask"] = mask
+        # 生命周期 = 窗口数 × 窗口大小（步数）
+        return self._struct_registry[struct_id]["window_count"] * self.stability_window
+
+    def _detect_boundary(self, struct_mask: torch.Tensor) -> torch.Tensor:
+        """梯度法检测结构边界。
+
+        对结构掩码做 4 邻域卷积检测边缘：
+        像素是边界当且仅当它在结构内但至少有一个邻居在结构外。
+        """
+        mask = struct_mask.float().unsqueeze(0).unsqueeze(0)  # (1,1,H,W)
+        kernel = torch.tensor(
+            [[0., 1., 0.], [1., 0., 1.], [0., 1., 0.]],
+            device=mask.device
+        ).view(1, 1, 3, 3)
+
+        neighbor_sum = F.conv2d(mask, kernel, padding=1)  # (1,1,H,W)
+        # 边界：结构内 + 邻域中有非结构像素
+        boundary = (mask > 0) & (neighbor_sum < 4 * mask) & (neighbor_sum > 0)
+        return boundary.squeeze(0).squeeze(0)
+
+    def _check_closure(self, boundary: torch.Tensor,
+                       struct_mask: torch.Tensor) -> float:
+        """闭合度：边界像素数 / 结构面积。值越小越闭合。
+
+        完全闭合的圆形：周长^2/面积 有理论下限，
+        这里用简化的边界比例：
+        - < 0.3: 封闭良好
+        - 0.3-0.6: 部分开放
+        - > 0.6: 结构碎片化
+        """
+        area = struct_mask.sum().item()
+        perimeter = boundary.sum().item()
+        if area == 0:
+            return 0.0
+        closure_ratio = perimeter / area
+        # 归一化到 [0,1]，0=完全闭合,1=完全开放
+        return min(1.0, closure_ratio / 2.0)
+
+    def _compute_structure_turnover(self, struct_mask: torch.Tensor,
+                                    states: torch.Tensor,
+                                    temporal_mean: torch.Tensor) -> float:
+        """物质更替率：结构区域内每步变化的平均速率
+
+        活结构的核心特征：模式持续但物质更换。
+        更替率 = mean(|state[t+1] - state[t]|) / mean(state) 对结构区域取均值
+
+        高更替 + 高模式稳定性 = 活结构
+        低更替 + 高模式稳定性 = 死结构（冻结）
+        """
+        # states: (T, B, C, H, W), struct_mask: (H, W)
+        mask_expanded = struct_mask.unsqueeze(0).unsqueeze(0).unsqueeze(0)  # (1,1,1,H,W)
+
+        # 提取结构区域的状态时间序列
+        struct_states = states[:, :, :, struct_mask]  # (T, B, C, N_pixels)
+
+        if struct_states.shape[-1] == 0:
+            return 0.0
+
+        # 每步变化
+        diffs = (struct_states[1:] - struct_states[:-1]).abs()  # (T-1, B, C, N_pixels)
+        mean_diff = diffs.mean().item()
+
+        # 平均激活度
+        mean_activation = struct_states.mean().item()
+
+        if mean_activation < 1e-8:
+            return 0.0
+
+        return mean_diff / mean_activation
+
+    def _record_interactions(self, component_labels: torch.Tensor,
+                             num_components: int):
+        """记录结构间共存关系"""
+        comps = list(range(1, num_components + 1))
+        for i in range(len(comps)):
+            for j in range(i + 1, len(comps)):
+                pair = (comps[i], comps[j])
+                self._interaction_graph[pair] = \
+                    self._interaction_graph.get(pair, 0) + 1
 
     # --- 粗粒化 ---
 
     def coarse_grain(self, structures: List) -> Optional[LayerBase]:
-        """最小版本：固定 2×2 block 压缩"""
+        """将稳定结构封装为新层（粗粒化）
+
+        策略：
+        1. 根据结构密度确定粗粒化因子 block_factor
+        2. 块平均压缩：用 avg_pool2d 将高分辨格点映射到低分辨
+        3. 返回新的 L0BinaryLattice（降低分辨率）
+
+        密度阈值：
+        - density < 0.05 → 结构太稀疏，不粗粒化
+        - 0.05 ≤ density < 0.25 → factor=2
+        - density ≥ 0.25 → factor=4
+
+        新层继承源汇方向。
+        """
         if not structures:
             return None
-        # TODO: 实现真正的粗粒化
-        return None
+
+        # 计算结构密度
+        total_stable = sum(int(s.mask.sum().item()) for s in structures)
+        total_pixels = self.shape[0] * self.shape[1]
+        density = total_stable / max(1, total_pixels)
+
+        if density < 0.05:
+            return None  # 结构太稀疏，不值得粗粒化
+
+        # 根据密度选择粗粒化因子
+        if density >= 0.25:
+            block_factor = 4
+        else:
+            block_factor = 2
+
+        # 计算新分辨率（至少为 1）
+        new_h = max(1, self.shape[0] // block_factor)
+        new_w = max(1, self.shape[1] // block_factor)
+
+        # 创建新层
+        new_layer = L0BinaryLattice(
+            shape=(new_h, new_w),
+            device=self.device,
+            source_side=self.source_side,
+            sink_side=self.sink_side,
+        )
+        new_layer._block_factor = block_factor
+
+        return new_layer
+
+    def coarse_grain_state(self, state: torch.Tensor,
+                           structures: List,
+                           block_factor: Optional[int] = None) -> torch.Tensor:
+        """将高分辨状态投影到粗粒网格
+
+        Args:
+            state: (B, C, H, W) 当前层状态
+            structures: 稳定结构列表（用于确定 block_factor）
+            block_factor: 手动指定因子（默认从 density 自动推断）
+
+        Returns:
+            coarse_state: (B, C, new_h, new_w) 粗粒化后的状态
+        """
+        if block_factor is None:
+            # 从 structures 密度推断
+            total_stable = sum(int(s.mask.sum().item()) for s in structures)
+            total_pixels = self.shape[0] * self.shape[1]
+            density = total_stable / max(1, total_pixels)
+            if density < 0.05:
+                return state  # 太稀疏，保持不变
+            block_factor = 4 if density >= 0.25 else 2
+
+        # 用 avg_pool2d 做块平均
+        coarse = F.avg_pool2d(state, kernel_size=block_factor, stride=block_factor)
+        return coarse
 
     def measure_ascent_pressure(self, history: List[torch.Tensor],
                                  structures: List) -> float:
-        """A5+A9：度量升维压力"""
+        """A5+A9：度量升维压力（累积积分版）
+
+        改进自 impulse-directions.md 的分析：
+        - 旧公式：pressure = residual × density（瞬时值，只反映"有没有残差"）
+        - 新公式：pressure = ∫|residual| dt × structure_density（累积积分，
+          反映残差持续存在的时间长度）
+
+        物理含义：残差存在时间越长，说明当前层越无法消解它，
+        因此越不可约，越需要升维。
+
+        实现：用滑动窗口缓存最近 _ascent_window_size 步的残差，
+        积分 = 窗口内残差的 L1 范数均值 × 窗口大小
+        """
         if len(history) < 2 or not structures:
             return 0.0
 
-        # 守恒残差
+        # 计算当前步的守恒残差
         q1 = self.measure_invariant(history[-2])
         q2 = self.measure_invariant(history[-1])
         residual = ((q2 - q1) ** 2).mean().item()
 
-        # 结构密度
-        density = len(structures) / max(1, self.shape[0] * self.shape[1])
+        # 累积到滑动窗口（只保留最近 window_size 步）
+        self._residual_buffer.append(residual)
+        if len(self._residual_buffer) > self._ascent_window_size:
+            self._residual_buffer.pop(0)
 
-        # 压力 = 残差 × 结构密度
-        return residual * density
+        # 累积积分：窗口内残差 L1 范数均值 × 窗口大小
+        # ∫|residual| dt ≈ mean(|residual|) × window_size
+        if len(self._residual_buffer) < 2:
+            return 0.0
+
+        integrated_residual = (sum(self._residual_buffer) / len(self._residual_buffer)) * len(self._residual_buffer)
+
+        # 结构密度：稳定格点数 / 总格点数
+        # 直接从 StableStructure 的 mask 计算，不依赖 len(structures)
+        total_stable_pixels = sum(s.mask.sum().item() for s in structures)
+        total_pixels = self.shape[0] * self.shape[1]
+        density = total_stable_pixels / max(1, total_pixels)
+
+        # 升维压力 = 累积残差 × 结构密度
+        # 关键：累积积分放大时间效应，瞬时残差小但持续时间长时，压力也会增大
+        return integrated_residual * density

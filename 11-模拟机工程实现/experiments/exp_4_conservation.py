@@ -185,6 +185,30 @@ def run_with_conservation(length=50, steps=200, diff_rate=0.1, inject_rate=0.03,
     else:
         grad_type = "COLLAPSED"
 
+    logger.log_event("result", {
+        "gradient_type": grad_type,
+        "avg_residual": round(avg_residual, 8),
+        "total_change_pct": round(total_change/initial_total*100, 4),
+    })
+    logger.finish(
+        final_metrics={
+            "initial_grad": round(grads[0].item(), 6),
+            "final_grad": round(grads[-1].item(), 6),
+            "gradient": round(gradient, 6),
+            "avg_residual": round(avg_residual, 8),
+            "max_residual": round(max_residual, 8),
+            "final_std": round(stds[-1].item(), 6),
+            "initial_total": round(initial_total, 6),
+            "final_total": round(final_total, 6),
+            "total_change_pct": round(total_change/initial_total*100, 4),
+        },
+        conclusion=(
+            f"守恒{'约束' if enforce_conservation else '观测'}(strength={conservation_strength}): "
+            f"平均残差={avg_residual:.6f}, 总量变化={total_change/initial_total*100:+.2f}%, "
+            f"梯度={'维持' if grad_type == 'SOURCE_SINK_GRADIENT' else '崩塌'}。"
+        ),
+    )
+
     return dict(
         means=means, stds=stds, grads=grads,
         segment_means=segment_means, gradient=gradient,

@@ -41,6 +41,8 @@ import numpy as np
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, PROJECT_ROOT)
 
+from experiments.logger import ExperimentLogger
+
 
 # ============================================================
 # 基本场操作 (与 Exp#5 一致)
@@ -293,6 +295,16 @@ def run_ascent_experiment(length=50, steps=500, window_size=16,
     torch.manual_seed(seed)
     np.random.seed(seed)
     
+    logger = ExperimentLogger(f"exp_6_inj{inject_rate:.2f}")
+    logger.start(
+        params=dict(length=length, steps=steps, window_size=window_size,
+                    diff_rate=diff_rate, inject_rate=inject_rate,
+                    absorb_rate=absorb_rate, perturb_amp=perturb_amp,
+                    ascent_threshold=ascent_threshold, seed=seed,
+                    inject_schedule=str(inject_schedule)),
+        description="A9升维触发+粗粒化映射（旧公式 residual x density）",
+    )
+
     state = torch.rand(1, length)
     history = [state.clone()]
     
@@ -343,7 +355,19 @@ def run_ascent_experiment(length=50, steps=500, window_size=16,
             ascent_pressures.append(pressure)
             irreducibility_scores.append(irred)
             
+            logger.log_step(step, {
+                "pressure": round(pressure, 6),
+                "residual": round(c_residual, 6),
+                "density": round(s_density, 4),
+                "irreducibility": round(irred, 4),
+            })
+
             if pressure > ascent_threshold and ascent_triggered_at is None:
+                logger.log_event("ascent_triggered", {
+                    "step": step, "pressure": pressure,
+                    "residual": c_residual, "density": s_density,
+                    "threshold": ascent_threshold,
+                })
                 ascent_triggered_at = step
                 print(f"  ** A9 ASCENT TRIGGERED at step {step} **")
                 print(f"     pressure={pressure:.4f} > threshold={ascent_threshold}")
@@ -461,6 +485,31 @@ def run_ascent_experiment(length=50, steps=500, window_size=16,
     else:
         print(f"  High CG error ({cg_error:.6f}): L0 has large differences, simple mean loses too much")
     
+    logger.log_event("result", {
+        "ascent_triggered": ascent_triggered_at is not None,
+        "cg_error": round(cg_error, 6),
+        "structure_type": structure_type,
+    })
+    logger.finish(
+        final_metrics={
+            "max_pressure": round(max(ascent_pressures) if ascent_pressures else 0, 6),
+            "mean_pressure": round(np.mean(ascent_pressures) if ascent_pressures else 0, 6),
+            "mean_residual": round(np.mean(conservation_residuals) if conservation_residuals else 0, 6),
+            "mean_density": round(np.mean(structure_densities) if structure_densities else 0, 4),
+            "structure_type": structure_type,
+            "pattern_persistence": round(pattern_persist, 4),
+            "material_turnover": round(turnover, 4),
+            "cg_error": round(cg_error, 6),
+            "l1_length": l1_analysis['length'],
+            "total_change_pct": round(total_change_pct, 2),
+        },
+        conclusion=(
+            f"A9升维{'触发' if ascent_triggered_at else '未触发'} "
+            f"(max_p={max(ascent_pressures) if ascent_pressures else 0:.4f}), "
+            f"粗粒化MSE={cg_error:.6f}, 结构={structure_type}"
+        ),
+    )
+
     return dict(
         ascent_triggered_at=ascent_triggered_at,
         max_pressure=max(ascent_pressures) if ascent_pressures else 0,

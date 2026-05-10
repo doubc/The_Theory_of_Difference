@@ -22,6 +22,8 @@ import numpy as np
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, PROJECT_ROOT)
 
+from experiments.logger import ExperimentLogger
+
 
 def simple_diffuse(state, diffusion_rate=0.1):
     """纯扩散：每个格点向邻居靠拢"""
@@ -68,6 +70,14 @@ def run_with_injection(length=50, steps=200, diff_rate=0.1, inject_rate=0.03,
     state = torch.rand(1, 1, length)
     history = [state.clone()]
 
+    logger = ExperimentLogger("exp_1_injection")
+    logger.start(
+        params=dict(length=length, steps=steps, diff_rate=diff_rate,
+                    inject_rate=inject_rate, source_mode=source_mode,
+                    perturb_amp=perturb_amp, seed=seed),
+        description="A1 差异源注入：对比 exp_0，看注入能否维持梯度",
+    )
+
     print(f"=" * 60)
     print(f"Exp #1: L0 Field + A1 Difference Injection")
     print(f"  Length: {length}")
@@ -85,6 +95,12 @@ def run_with_injection(length=50, steps=200, diff_rate=0.1, inject_rate=0.03,
         state = random_perturb(state, perturb_amp)
         state = state.clamp(0.0, 1.0)
         history.append(state.clone())
+
+        if step % 16 == 0:
+            logger.log_step(step, {
+                "mean": round(state.mean().item(), 6),
+                "std": round(state.std().item(), 6),
+            })
 
     history_tensor = torch.cat(history, dim=0)  # (steps+1, 1, 1, length)
     means = history_tensor.mean(dim=[1, 2])
@@ -134,6 +150,30 @@ def run_with_injection(length=50, steps=200, diff_rate=0.1, inject_rate=0.03,
 
     print(f"")
     print(f"  下一步：加入 A8 差异汇（吸收端），看能否形成稳定的源-汇梯度结构")
+
+    grad_reduction = (grads[0].item() - grads[-1].item()) / grads[0].item() if grads[0].item() > 0 else 0
+    logger.log_event("result", {
+        "grad_reduction_pct": round(grad_reduction * 100, 2),
+        "source_sink_gradient": round(left_mean - right_mean, 6),
+    })
+    logger.finish(
+        final_metrics={
+            "initial_mean": round(means[0].item(), 6),
+            "initial_std": round(stds[0].item(), 6),
+            "initial_grad": round(grads[0].item(), 6),
+            "final_mean": round(means[-1].item(), 6),
+            "final_std": round(stds[-1].item(), 6),
+            "final_grad": round(grads[-1].item(), 6),
+            "source_end_mean": round(left_mean, 6),
+            "sink_end_mean": round(right_mean, 6),
+            "grad_reduction_pct": round(grad_reduction * 100, 2),
+        },
+        conclusion=(
+            f"注入速率={inject_rate}时，梯度从{grads[0].item():.4f}变为{grads[-1].item():.4f}"
+            f"（{'上升' if grad_change > 0 else '下降'}{abs(grad_change):.4f}）。"
+            f"仅靠A1注入不足以维持稳定梯度，需要A8汇形成源-汇闭环。"
+        ),
+    )
 
     return dict(means=means, stds=stds, grads=grads,
                 left_mean=left_mean, right_mean=right_mean,

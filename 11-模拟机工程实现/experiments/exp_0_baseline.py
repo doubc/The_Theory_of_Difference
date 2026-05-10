@@ -23,6 +23,8 @@ import numpy as np
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, PROJECT_ROOT)
 
+from experiments.logger import ExperimentLogger
+
 
 def simple_diffuse(state, diffusion_rate=0.1):
     """纯扩散：每个格点向邻居靠拢"""
@@ -45,6 +47,13 @@ def run_baseline(length=50, steps=200, diff_rate=0.1, perturb_amp=0.02, seed=42)
     state = torch.rand(1, 1, length)
     history = [state.clone()]
 
+    logger = ExperimentLogger("exp_0_baseline")
+    logger.start(
+        params=dict(length=length, steps=steps, diff_rate=diff_rate,
+                    perturb_amp=perturb_amp, seed=seed),
+        description="无约束L0裸场基线：纯扩散+随机扰动，无差异源/汇",
+    )
+
     print(f"=" * 60)
     print(f"Exp #0: L0 Bare Field Baseline (无约束)")
     print(f"  Length: {length}")
@@ -60,8 +69,16 @@ def run_baseline(length=50, steps=200, diff_rate=0.1, perturb_amp=0.02, seed=42)
         state = state.clamp(0.0, 1.0)
         history.append(state.clone())
 
+        # 每16步记录一次指标
+        if step % 16 == 0:
+            logger.log_step(step, {
+                "mean": round(state.mean().item(), 6),
+                "std": round(state.std().item(), 6),
+                "min": round(state.min().item(), 6),
+                "max": round(state.max().item(), 6),
+            })
+
     history = torch.cat(history, dim=0)  # (steps+1, 1, 1, length)
-    print(f"DEBUG history shape: {history.shape}")
     means = history.mean(dim=[1, 2])
     stds = history.std(dim=[1, 2])
     grads = torch.abs(history[:, :, 1:] - history[:, :, :-1]).mean(dim=[1, 2])
@@ -74,11 +91,30 @@ def run_baseline(length=50, steps=200, diff_rate=0.1, perturb_amp=0.02, seed=42)
     print(f"\n--- 成长日志 #0 ---")
     print(f"  初始状态: mean={means[0].item():.4f} std={stds[0].item():.4f} grad={grads[0].item():.4f}")
     print(f"  最终状态: mean={means[-1].item():.4f} std={stds[-1].item():.4f} grad={grads[-1].item():.4f}")
-    print(f"")
-    print(f"  成长日志：无约束时，差异场趋向热平衡态：梯度持续降低，均值趋近0.5（均匀分布），")
-    print(f"  标准差逐渐下降。证明A1（差异源）和A8（差异汇）是必要的基础设施——")
-    print(f"  没有外部注入，内部的自发演化只会趋向熵增的均匀态。")
-    print(f"  下一步：加入差异源注入，看是否能维持差异结构。")
+
+    # 结构化日志
+    grad_reduction = (grads[0].item() - grads[-1].item()) / grads[0].item() if grads[0].item() > 0 else 0
+    logger.log_event("result", {
+        "grad_reduction_pct": round(grad_reduction * 100, 2),
+    })
+    logger.finish(
+        final_metrics={
+            "initial_mean": round(means[0].item(), 6),
+            "initial_std": round(stds[0].item(), 6),
+            "initial_grad": round(grads[0].item(), 6),
+            "final_mean": round(means[-1].item(), 6),
+            "final_std": round(stds[-1].item(), 6),
+            "final_grad": round(grads[-1].item(), 6),
+            "grad_reduction_pct": round(grad_reduction * 100, 2),
+            "status": "heat_death",
+        },
+        conclusion=(
+            f"无约束时差异场趋向热平衡态：梯度降低{grad_reduction*100:.1f}%，"
+            f"标准差从{stds[0].item():.4f}降至{stds[-1].item():.4f}。"
+            f"A1和A8是维持差异结构的必要基础设施。"
+        ),
+    )
+
     return dict(means=means, stds=stds, grads=grads)
 
 

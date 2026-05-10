@@ -35,6 +35,8 @@ import numpy as np
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, PROJECT_ROOT)
 
+from experiments.logger import ExperimentLogger
+
 
 def simple_diffuse(state, diffusion_rate=0.1):
     """纯扩散"""
@@ -158,6 +160,14 @@ def run_stability_experiment(length=50, steps=400, window_size=16,
     state = torch.rand(1, length)
     history = [state.clone()]
     
+    logger = ExperimentLogger("exp_5_stability")
+    logger.start(
+        params=dict(length=length, steps=steps, window_size=window_size,
+                    diff_rate=diff_rate, inject_rate=inject_rate,
+                    absorb_rate=absorb_rate, perturb_amp=perturb_amp, seed=seed),
+        description="A7 稳定性判定：观测源-汇结构是否形成活结构（模式持续+物质更换）",
+    )
+    
     print(f"=" * 60)
     print(f"Exp #5: L0 Field + A1 Source + A8 Sink + A7 Stability")
     print(f"  Length: {length}")
@@ -175,6 +185,12 @@ def run_stability_experiment(length=50, steps=400, window_size=16,
         state = random_perturb(state, perturb_amp)
         state = state.clamp(0.0, 1.0)
         history.append(state.clone())
+
+        if step % 16 == 0:
+            logger.log_step(step, {
+                "mean": round(state.mean().item(), 6),
+                "std": round(state.std().item(), 6),
+            })
     
     # 计算全局稳定性指标
     print(f"\n--- A7 稳定性指标 ---")
@@ -288,3 +304,26 @@ if __name__ == "__main__":
         print(f"      需要调整参数，让结构有机会稳定")
     
     print(f"\n下一实验：Exp #6 — A9 升维触发 + 粗粒化映射")
+
+    logger.log_event("result", {
+        "structure_type": result['structure_type'],
+        "frozenness": round(result['frozenness'], 4),
+    })
+    logger.finish(
+        final_metrics={
+            "pattern_persistence": round(result['pattern_persistence'], 4),
+            "material_turnover": round(result['material_turnover'], 4),
+            "boundary_integrity": round(result['boundary_integrity'], 4),
+            "structure_type": result['structure_type'],
+            "frozenness": round(result['frozenness'], 4),
+            "final_mean": round(result['final_mean'], 6),
+            "final_std": round(result['final_std'], 6),
+            "final_grad": round(result['final_grad'], 6),
+        },
+        conclusion=(
+            f"结构类型={result['structure_type'].upper()}，"
+            f"模式持续性={result['pattern_persistence']:.4f}，"
+            f"物质周转率={result['material_turnover']:.4f}。"
+            f"{'源-汇形成了活结构：模式持续+物质更换。' if result['structure_type'] == 'alive' else '需要调整参数。'}"
+        ),
+    )
