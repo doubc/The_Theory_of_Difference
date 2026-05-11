@@ -112,6 +112,8 @@ def transfer_and_transform(
             # 压力 = 转移量 * 变形效率（通道拥堵越高，变形损耗越大）
             transform_efficiency = max(0.3, 1.0 - channel.congestion)
             transform_pressure = transferred * transform_efficiency
+            # 精确计算损耗：转移量 - 变形后压力
+            loss_amount = transferred - transform_pressure
 
             if transform_pressure > 0.01:
                 transform_info = {
@@ -127,13 +129,25 @@ def transfer_and_transform(
                     "description": f"变形: {difference.type} → {new_type}，经通道 {channel.id}，深度 {chain_depth}",
                 }
 
+                # 记录变形事件（包含精确损耗）
                 trace.add_event(
                     time=time,
                     event_type="transform",
                     difference_id=difference.id,
                     channel_id=channel.id,
                     amount=transform_pressure,
-                    reason=f"差异变形: {difference.type} → {new_type}，经通道 {channel.id}，深度 {chain_depth}",
+                    reason=f"差异变形: {difference.type} → {new_type}，经通道 {channel.id}，深度 {chain_depth}，损耗={loss_amount:.2f}",
                 )
+
+                # 单独记录损耗事件（用于精确守恒检查）
+                if loss_amount > 0.01:
+                    trace.add_event(
+                        time=time,
+                        event_type="loss",
+                        difference_id=difference.id,
+                        channel_id=channel.id,
+                        amount=loss_amount,
+                        reason=f"通道损耗: 转移 {transferred:.2f}，效率 {transform_efficiency:.2f}，损耗 {loss_amount:.2f}",
+                    )
 
     return transferred, remaining, transform_info

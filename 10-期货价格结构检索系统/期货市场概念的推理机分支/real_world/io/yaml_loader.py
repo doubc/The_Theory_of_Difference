@@ -44,6 +44,7 @@ from ..core.world import World
 from ..core.difference import DifferenceSource, DifferenceStatus
 from ..core.entity import Entity, EntityStatus
 from ..core.channel import Channel, ChannelStatus
+from ..core.intervention import Intervention
 
 
 def load_world_from_yaml(yaml_path: str) -> World:
@@ -120,6 +121,17 @@ def load_world_from_yaml(yaml_path: str) -> World:
         # 注册通道-主体承接关系
         for entity_id in c_data.get("entities", []):
             world.add_channel_entity(channel.id, entity_id)
+
+    # 加载干预配置
+    for i_data in data.get("interventions", []):
+        intervention = Intervention(
+            time=i_data["time"],
+            type=i_data["type"],
+            target=i_data["target"],
+            params=i_data.get("params", {}),
+            description=i_data.get("description", ""),
+        )
+        world.interventions.append(intervention)
 
     return world
 

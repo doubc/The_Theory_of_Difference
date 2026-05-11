@@ -13,6 +13,7 @@ from .channel import Channel
 from .state import State
 from .trace import Trace
 from .event import Event
+from .intervention import Intervention
 
 
 @dataclass
@@ -37,6 +38,7 @@ class World:
         "expectation": 90,
         "margin": 70,
     })
+    interventions: List[Intervention] = field(default_factory=list)  # 干预事件列表
 
     def add_difference(self, diff: DifferenceSource):
         self.differences[diff.id] = diff

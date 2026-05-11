@@ -1,0 +1,101 @@
+﻿experiment:
+  id: exp_004
+  name: 交易所规则调整
+  description: 保证金差异和规则差异同时出现，交易所作为二阶承接位置调整规则
+
+world:
+  name: Exchange-Rule-World
+  max_steps: 20
+
+break_thresholds:
+  inventory: 100
+  liquidity: 60
+  expectation: 80
+  margin: 55
+  rule: 40
+
+differences:
+  - id: rule_change
+    type: rule
+    source_node: exchange
+    target_node: market
+    magnitude: 60
+    visibility: 0.95
+    persistence: 0.6
+    transformability: 0.7
+    description: 交易所调整交易规则（涨跌停板/持仓限制）
+
+  - id: margin_pressure
+    type: margin
+    source_node: exchange
+    target_node: market
+    magnitude: 55
+    visibility: 0.9
+    persistence: 0.85
+    recurrent: true
+    recurrent_rate: 0.25
+    recurrent_decay: 0.93
+    description: 交易所持续提高保证金比例
+
+entities:
+  - id: exchange_001
+    type: exchange
+    capacity: 200
+    available_capacity: 180
+    risk_tolerance: 100
+    liquidity: 100
+    leverage: 1.0
+    preference: neutral
+    description: 交易所（二阶承接位置）
+
+  - id: speculative_fund_001
+    type: speculator
+    capacity: 80
+    available_capacity: 70
+    risk_tolerance: 80
+    liquidity: 85
+    leverage: 3.5
+    preference: trend_following
+    description: 投机资金，规则调整影响大
+
+  - id: industrial_long_001
+    type: industrial_long
+    capacity: 100
+    available_capacity: 80
+    risk_tolerance: 55
+    liquidity: 60
+    leverage: 1.5
+    preference: long
+    description: 产业多头，规则调整影响较小
+
+channels:
+  - id: exchange_rule_channel
+    from_type: rule
+    to_type: rule
+    base_cost: 30
+    capacity: 60
+    openness: 0.7
+    description: 规则差异→规则调整（交易所直接承接）
+    entities:
+      - exchange_001
+
+  - id: margin_clearing_channel
+    from_type: margin
+    to_type: liquidity
+    base_cost: 10
+    capacity: 40
+    openness: 0.85
+    description: 保证金差异→流动性差异
+    entities:
+      - speculative_fund_001
+      - industrial_long_001
+
+  - id: position_reduction_channel
+    from_type: liquidity
+    to_type: liquidity
+    base_cost: 20
+    capacity: 50
+    openness: 0.75
+    description: 流动性差异→减仓
+    entities:
+      - speculative_fund_001

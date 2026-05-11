@@ -32,11 +32,15 @@ def check_conservation(
     time: int,
     tolerance: float = 20.0,
 ) -> Tuple[bool, str]:
-    """守恒检查（步级压力对比法）。
+    """守恒检查（步级压力对比法）- Phase 3 精确版。
 
     每步开始时记录总压力，步末再算一次。
     差值 = 步末总压力 - 步初总压力
-    已知解释：recurrent生成 - 破缺释放 - 通道损耗
+    已知解释：recurrent生成 - 破缺释放 - 通道损耗（精确追踪）
+
+    Phase 3 改进：
+    - 通道损耗从近似计算（transferred - transformed）改为精确追踪（loss 事件）
+    - 每个变形步骤的损耗单独记录，避免跨步骤的累积误差
 
     Args:
         initial_total: 初始差异压力总量
@@ -71,16 +75,12 @@ def check_conservation(
         if e.event_type == "break_release" and e.time == time
     )
 
-    # 本步通道损耗：转移量 - 变形量（变形效率损耗）
-    transferred = sum(
+    # Phase 3：精确通道损耗（从 loss 事件读取）
+    # 每个 transform 步骤都会生成一个 loss 事件，记录精确的损耗量
+    channel_loss = sum(
         e.amount for e in trace.events
-        if e.event_type == "transfer" and e.time == time
+        if e.event_type == "loss" and e.time == time
     )
-    transformed = sum(
-        e.amount for e in trace.events
-        if e.event_type == "transform" and e.time == time
-    )
-    channel_loss = max(0, transferred - transformed)
 
     # 已知解释的差值
     explained_delta = recurrent_generated - break_released - channel_loss
@@ -100,7 +100,7 @@ def check_conservation(
         )
         return False, msg
 
-    return True, f"守恒通过: 步末={current_total:.2f}, 变化={delta:.2f}"
+    return True, f"守恒通过: 步末={current_total:.2f}, 变化={delta:.2f}, 损耗={channel_loss:.2f}"
 
 
 def reset_conservation():
