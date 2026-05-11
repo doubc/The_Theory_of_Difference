@@ -1,6 +1,6 @@
 experiment:
   id: exp_005
-  name: 完整拓扑验证（参数调优）
+  name: 完整拓扑验证（参数调优v4-B组合）
   description: |
     验证反馈循环+干预多动作+变形链的完整拓扑。
     差异源：库存短缺（recurrent）+ 近月交割压力（recurrent）。
@@ -8,11 +8,10 @@ experiment:
     预期：反馈差异 margin/liquidity 从承接体生成。
     预期：交易所三重干预后破缺减少，但产生副作用差异。
 
-    调优说明（v2）：
-    - recurrent_rate 降低，让生成 < channel 排放能力
-    - break_threshold 提高，给系统积累缓冲空间
-    - leverage 降低，削弱反馈放大效应（杠杆4x→2x，margin反馈减半）
-    - 目标：系统在 30 步内趋向收敛或稳定振荡
+    调优说明（v4-B组合）：
+    - recurrent_rate 进一步降低（0.08→0.06, 0.12→0.09, 0.08→0.06）
+    - 通道容量扩大（warehouse_receipt_channel:35→50, basis_channel:80→100）
+    - 目标：系统收敛到稳定状态（破缺<2次/50步）
 
 world:
   name: Full-Topology-World
@@ -37,9 +36,9 @@ differences:
     persistence: 0.9
     transformability: 0.9
     recurrent: true
-    recurrent_rate: 0.15
+    recurrent_rate: 0.06
     recurrent_decay: 0.95
-    description: 交割地库存持续短缺（120×0.15=18/步，channel容量35，充裕）
+    description: 交割地库存持续短缺（120×0.06=7.2/步，channel容量50，更充裕）
 
   - id: delivery_pressure
     type: delivery
@@ -50,9 +49,9 @@ differences:
     persistence: 0.92
     transformability: 0.7
     recurrent: true
-    recurrent_rate: 0.20
+    recurrent_rate: 0.09
     recurrent_decay: 0.93
-    description: 近月交割压力持续加大（100×0.20=20/步，channel容量45，充裕）
+    description: 近月交割压力持续加大（100×0.09=9.0/步，channel容量45，充裕）
 
   - id: expectation_bullish
     type: expectation
@@ -63,9 +62,9 @@ differences:
     persistence: 0.7
     transformability: 0.8
     recurrent: true
-    recurrent_rate: 0.15
+    recurrent_rate: 0.06
     recurrent_decay: 0.95
-    description: 市场看涨预期持续升温（70×0.15=10.5/步，channel容量100，充裕）
+    description: 市场看涨预期持续升温（70×0.06=4.2/步，channel容量100，充裕）
 
 entities:
   - id: industrial_short_001
@@ -113,9 +112,9 @@ channels:
     from_type: inventory
     to_type: delivery
     base_cost: 15
-    capacity: 35
+    capacity: 50
     openness: 0.85
-    description: 库存差异→交割差异（仓单生成）
+    description: 库存差异→交割差异（仓单生成，容量扩大43%）
     entities:
       - industrial_short_001
 
@@ -134,9 +133,9 @@ channels:
     from_type: basis
     to_type: price
     base_cost: 12
-    capacity: 80
+    capacity: 100
     openness: 0.9
-    description: 基差差异→价格差异
+    description: 基差差异→价格差异（容量扩大25%）
     entities:
       - speculative_long_001
       - speculator_002
