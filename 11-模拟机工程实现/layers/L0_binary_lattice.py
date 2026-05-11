@@ -63,32 +63,37 @@ class L0BinaryLattice(LayerBase):
     def measure_difference(self, state: torch.Tensor) -> torch.Tensor:
         """测量相邻格点的差异值。
 
-        返回每个格点与邻居的平均绝对差异。
-        对于 1D (H=1)，只计算水平方向差异。
+        始终返回与输入同 shape 的差异场。
+        对 1D (H=1)，只计算水平方向差异；对双方向，计算 x/y 平均。
+        边界位置用最近邻填充。
         """
-        has_x = state.shape[-1] > 1
-        has_y = state.shape[-2] > 1
+        b, c, h, w = state.shape
+        has_x = w > 1
+        has_y = h > 1
 
         if not has_x and not has_y:
             return torch.zeros_like(state)
 
-        if has_x:
-            dx = (state[:, :, :, 1:] - state[:, :, :, :-1]).abs()
-        if has_y:
-            dy = (state[:, :, 1:, :] - state[:, :, :-1, :]).abs()
-
-        # 只有一个方向，直接返回
+        # 只有一个方向：直接 pad 回原尺寸
         if has_x and not has_y:
-            return dx
+            # dx shape: (b, c, h, w-1)，在最后一维 pad 1 个 0
+            dx = (state[:, :, :, 1:] - state[:, :, :, :-1]).abs()
+            return F.pad(dx, (0, 1))
         if has_y and not has_x:
-            return dy
+            # dy shape: (b, c, h-1, w)，在倒数第二维 pad 1 个 0
+            dy = (state[:, :, 1:, :] - state[:, :, :-1, :]).abs()
+            return F.pad(dy, (0, 0, 0, 1))
 
-        # 两个方向都有，对齐后平均
-        min_h = min(dx.shape[-2], dy.shape[-2])
-        min_w = min(dx.shape[-1], dy.shape[-1])
-        dx_aligned = dx[..., :min_h, :min_w]
-        dy_aligned = dy[..., :min_h, :min_w]
-        return (dx_aligned + dy_aligned) / 2.0
+        # 两个方向都有：分别计算后在各自缺失维 pad，再平均
+        dx = (state[:, :, :, 1:] - state[:, :, :, :-1]).abs()  # (b, c, h, w-1)
+        dy = (state[:, :, 1:, :] - state[:, :, :-1, :]).abs()  # (b, c, h-1, w)
+
+        # dx 水平方向少一列，补回 → (b, c, h, w)
+        dx_full = F.pad(dx, (0, 1))
+        # dy 垂直方向少一行，补回 → (b, c, h, w)
+        dy_full = F.pad(dy, (0, 0, 0, 1))
+
+        return (dx_full + dy_full) / 2.0
 
     def measure_invariant(self, state: torch.Tensor) -> torch.Tensor:
         """守恒量：总激活量"""
@@ -116,13 +121,17 @@ class L0BinaryLattice(LayerBase):
 
         注入模式：在左边界以一定概率设置高值，
         创建从左到右的差异梯度。
+
+        注意：mask 维度完全基于输入 state 推导，
+        不依赖 self.shape，避免 batch/channel/shape 解耦后失配。
         """
         result = state.clone()
         if self.source_side == "left":
-            # 在左边界 3 列注入
-            width = min(3, self.shape[-1] // 4)
-            mask = torch.rand(state.shape[0], 1, self.shape[0], width,
-                              device=self.device) < 0.08
+            b, c, h, w = state.shape
+            # 在左边界注入，宽度至少 1，至多 3
+            width = min(3, max(1, w // 4))
+            mask = torch.rand(b, c, h, width,
+                              device=state.device) < 0.08
             result[:, :, :, :width] = torch.where(
                 mask,
                 torch.clamp(result[:, :, :, :width] + 0.5 * source_strength, 0.0, 1.0),
@@ -136,11 +145,13 @@ class L0BinaryLattice(LayerBase):
 
         吸收模式：在右边界附近衰减，
         创建差异汇。
+
+        注意：width 基于输入 state 推导，与 inject_difference 一致。
         """
         result = state.clone()
         if self.sink_side == "right":
-            # 在右边界 3 列吸收
-            width = min(3, self.shape[-1] // 4)
+            _, _, _, w = state.shape
+            width = min(3, max(1, w // 4))
             result[:, :, :, -width:] = result[:, :, :, -width:] * (1.0 - sink_strength * 0.15)
         return result.clamp(0.0, 1.0)
 
@@ -216,6 +227,16 @@ class L0BinaryLattice(LayerBase):
         return [structure]
 
     # --- 粗粒化 ---
+
+    def upscale_from(self, old_layer, old_state):
+        """用 nearest-neighbor 插值将旧层状态适配到本层尺寸。
+
+        选择 nearest（而非 bilinear）是因为二元格点的状态值应保持 0/1，
+        不应该出现灰度插值。
+        """
+        if self.shape == old_layer.shape:
+            return old_state.clone()
+        return F.interpolate(old_state, size=self.shape, mode='nearest')
 
     def coarse_grain(self, structures: List) -> Optional[LayerBase]:
         """最小版本：固定 2×2 block 压缩"""

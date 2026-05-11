@@ -85,6 +85,9 @@ class DifferenceReactor:
         """计算可微分的公理损失。
 
         直接用 PyTorch 操作计算，保证梯度可回传。
+        A2/A4/A5 的计算公式与 axiom_engine.evaluate() 保持一致，
+        但保留 tensor 路径用于训练。A7 使用前向稳定检测（与 axiom 的后向窗口检测不同）。
+        AxiomEngine 作为离线监控系统独立运行。
         """
         loss_parts = []
         report = {}

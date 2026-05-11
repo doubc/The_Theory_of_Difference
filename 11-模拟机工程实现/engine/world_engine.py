@@ -128,7 +128,7 @@ class WorldEngine:
                             "structures_count": len(structures_buffer),
                         })
                         self.layer_stack.append(new_layer)
-                        state = new_layer.initial_state().to(self.device)
+                        state = new_layer.upscale_from(self.layer, state).to(self.device)
                         history = [state.detach()]
                         structures_buffer = []
                         continue

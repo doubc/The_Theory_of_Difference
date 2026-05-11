@@ -22,7 +22,7 @@ class A1_DifferenceSource(AxiomBase):
     name = "A1_difference_source"
     category = "observation"
 
-    def violation(self, state, next_state, layer, history):
+    def violation(self, state, next_state, layer, history, **kwargs):
         diff_level = layer.measure_difference(next_state)
         return AxiomReport(
             name=self.name, raw_violation=0.0,
@@ -37,7 +37,7 @@ class A6_FlowCoupling(AxiomBase):
     name = "A6_flow_coupling"
     category = "observation"
 
-    def violation(self, state, next_state, layer, history):
+    def violation(self, state, next_state, layer, history, **kwargs):
         diff = layer.measure_difference(next_state)
         return AxiomReport(
             name=self.name, raw_violation=0.0,
@@ -52,7 +52,7 @@ class A8_SymmetrySink(AxiomBase):
     name = "A8_symmetry_sink"
     category = "observation"
 
-    def violation(self, state, next_state, layer, history):
+    def violation(self, state, next_state, layer, history, **kwargs):
         return AxiomReport(
             name=self.name, raw_violation=0.0,
             weight=0.0, weighted_violation=0.0,
@@ -69,7 +69,7 @@ class A2_DiscreteEncoding(AxiomBase):
     name = "A2_discrete_encoding"
     category = "state"
 
-    def violation(self, state, next_state, layer, history):
+    def violation(self, state, next_state, layer, history, **kwargs):
         v = layer.discreteness_violation(next_state)
         return AxiomReport(
             name=self.name, raw_violation=float(v),
@@ -82,7 +82,7 @@ class A3_Locality(AxiomBase):
     name = "A3_locality"
     category = "state"
 
-    def violation(self, state, next_state, layer, history):
+    def violation(self, state, next_state, layer, history, **kwargs):
         v = layer.locality_violation(state, next_state)
         return AxiomReport(
             name=self.name, raw_violation=float(v),
@@ -95,7 +95,7 @@ class A4_MinimalVariation(AxiomBase):
     name = "A4_minimal_variation"
     category = "transition"
 
-    def violation(self, state, next_state, layer, history):
+    def violation(self, state, next_state, layer, history, **kwargs):
         v = layer.transition_cost(state, next_state)
         return AxiomReport(
             name=self.name, raw_violation=float(v),
@@ -104,28 +104,57 @@ class A4_MinimalVariation(AxiomBase):
 
 
 class A5_Conservation(AxiomBase):
-    """A5：守恒律。追踪守恒残差，与 A9 联动检测升维压力。"""
+    """A5：守恒律。支持两种模式：
+    - 封闭系统（无 boundary_info）：追踪守恒量残差
+    - 开放系统（有 boundary_info）：flux_residual = ΔQ - (injected - absorbed)
+    计算方式与 reactor 完全一致，通过 axiom_engine.evaluate() 统一调用。"""
     name = "A5_conservation"
     category = "invariant"
 
-    def violation(self, state, next_state, layer, history):
+    def violation(self, state, next_state, layer, history, **kwargs):
         q_now = layer.measure_invariant(state)
         q_next = layer.measure_invariant(next_state)
-        residual = ((q_next - q_now) ** 2).mean()
-        return AxiomReport(
-            name=self.name, raw_violation=float(residual),
-            weight=1.0, weighted_violation=float(residual),
-            metadata={"conservation_residual": float(residual)}
-        )
+        delta_q = q_next - q_now
+        boundary_info = kwargs.get("boundary_info", None)
 
+        if boundary_info:
+            injected = boundary_info.get("injected", torch.zeros_like(q_now))
+            absorbed = boundary_info.get("absorbed", torch.zeros_like(q_now))
+            expected_delta = injected - absorbed
+            flux_residual = delta_q - expected_delta
+            a5_val = (flux_residual ** 2 / (q_now ** 2 + 1e-6)).mean()
 
+            return AxiomReport(
+                name=self.name,
+                raw_violation=float(a5_val.detach()),
+                weight=1.0,
+                weighted_violation=float(a5_val.detach()),
+                metadata={
+                    "mode": "open_flux_balance",
+                    "actual_delta": float(delta_q.detach().mean()),
+                    "expected_delta": float(expected_delta.detach().mean()),
+                    "injected": float(injected.detach().mean()),
+                    "absorbed": float(absorbed.detach().mean()),
+                    "flux_residual": float(flux_residual.detach().mean()),
+                }
+            )
+        else:
+            a5_val = (delta_q ** 2 / (q_now ** 2 + 1e-6)).mean()
+            return AxiomReport(
+                name=self.name, raw_violation=float(a5_val.detach()),
+                weight=1.0, weighted_violation=float(a5_val.detach()),
+                metadata={
+                    "mode": "closed_conservation",
+                    "conservation_residual": float(a5_val.detach()),
+                }
+            )
 class A7_Stability(AxiomBase):
     """A7：稳定闭合。区分活结构（模式持续+物质更换）、
     死结构（模式持续+物质不换）和噪声（模式不持续）。"""
     name = "A7_stability"
     category = "rollout"
 
-    def violation(self, state, next_state, layer, history):
+    def violation(self, state, next_state, layer, history, **kwargs):
         if len(history) < layer.stability_window:
             return AxiomReport(
                 name=self.name, raw_violation=0.0,
@@ -152,7 +181,7 @@ class A9_MinimalSufficient(AxiomBase):
     category = "ascent_trigger"
     ascent_threshold: float = 0.5
 
-    def violation(self, state, next_state, layer, history):
+    def violation(self, state, next_state, layer, history, **kwargs):
         return AxiomReport(
             name=self.name, raw_violation=0.0,
             weight=0.0, weighted_violation=0.0,

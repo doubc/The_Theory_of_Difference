@@ -62,7 +62,8 @@ class AxiomBase(ABC):
 
     @abstractmethod
     def violation(self, state: torch.Tensor, next_state: torch.Tensor,
-                  layer: 'LayerBase', history: List[torch.Tensor]) -> AxiomReport:
+                  layer: 'LayerBase', history: List[torch.Tensor],
+                  **kwargs) -> AxiomReport:
         """计算当前公理的违背度"""
         ...
 
@@ -78,13 +79,18 @@ class AxiomEngine:
         self.ascent_axiom = next((a for a in axioms if a.category == "ascent_trigger"), None)
 
     def evaluate(self, state: torch.Tensor, next_state: torch.Tensor,
-                 layer: 'LayerBase', history: List[torch.Tensor]) -> tuple:
-        """返回总 loss 和完整报告"""
+                 layer: 'LayerBase', history: List[torch.Tensor],
+                 **kwargs) -> tuple:
+        """返回总 loss 和完整报告。
+
+        **kwargs 透传至各公理 violation()，例如：
+          - boundary_info: dict with 'injected'/'absorbed' for A5 open system mode
+        """
         total_loss = 0.0
         report = {}
 
         for axiom in self.loss_axioms:
-            r = axiom.violation(state, next_state, layer, history)
+            r = axiom.violation(state, next_state, layer, history, **kwargs)
             w = layer.get_axiom_weight(axiom.name)
             r.weight = w
             r.weighted_violation = r.raw_violation * w
@@ -92,7 +98,7 @@ class AxiomEngine:
             report[axiom.name] = r
 
         for axiom in self.observation_axioms:
-            r = axiom.violation(state, next_state, layer, history)
+            r = axiom.violation(state, next_state, layer, history, **kwargs)
             report[axiom.name] = r
 
         return total_loss, report

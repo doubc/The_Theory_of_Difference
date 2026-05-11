@@ -50,14 +50,14 @@ class TestL0BinaryLattice:
         assert diff.max() > 0
 
     def test_measure_difference_1d(self):
-        """1D 不应返回空 tensor 或 NaN"""
+        """1D measure_difference 应返回与输入同型（pad 后）"""
         layer = L0BinaryLattice(shape=(1, 10))
         state = torch.zeros(1, 1, 1, 10)
         state[:, :, :, :5] = 1.0
         diff = layer.measure_difference(state)
-        # dx 的 shape 为 (1, 1, 1, 9)，比输入少 1 列
+        # 同型输出，shape 与输入一致
+        assert diff.shape == state.shape, f"Expected {state.shape}, got {diff.shape}"
         assert diff.numel() > 0
-        assert diff.shape == (1, 1, 1, 9)
         assert not torch.isnan(diff).any()
         assert not torch.isinf(diff).any()
 

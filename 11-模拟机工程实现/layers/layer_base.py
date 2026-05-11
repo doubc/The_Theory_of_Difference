@@ -92,6 +92,18 @@ class LayerBase(ABC):
 
     # --- 粗粒化与升维 ---
 
+    def upscale_from(self, old_layer: 'LayerBase',
+                     old_state: torch.Tensor) -> torch.Tensor:
+        """当升维发生时，将旧层状态适配到新层尺寸。
+
+        默认实现：若形状相同则直接克隆；若不同则创建初始状态
+        （子类应覆盖此方法以实现真正的状态续接）。
+        """
+        if self.shape == old_layer.shape:
+            return old_state.clone()
+        # 子类覆盖此方法实现真正的状态缩放
+        return self.initial_state(batch_size=old_state.shape[0])
+
     @abstractmethod
     def coarse_grain(self, structures: List) -> Optional['LayerBase']:
         """将稳定结构封装为下一层"""
