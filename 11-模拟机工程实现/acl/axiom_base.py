@@ -35,7 +35,14 @@ class StepReport:
 
 @dataclass
 class StableStructure:
-    """一个稳定结构的描述"""
+    """一个稳定结构的描述
+
+    术语澄清（对应审计报告 Section 3）：
+    - connectivity_ratio: 连通性 = 最大连通域 / 总面积（值越高越完整，越低越碎片化）
+      等价于原 closure_ratio（验证器语义一致）。
+    - boundary_closure_score: 边界闭合度 = perimeter / area（归一化，越低越闭合，越高越开放）
+      与 connectivity_ratio 是独立维度：连通性衡量内部完整性，边界闭合度衡量边缘紧致性。
+    """
     mask: torch.Tensor
     lifetime: int
     pattern_signature: torch.Tensor
@@ -43,6 +50,9 @@ class StableStructure:
     material_turnover: float
     source_layer: str
     source_trace: List = field(default_factory=list)
+    # v2 新增：closure 拆分为两个独立指标
+    connectivity_ratio: float = 1.0      # 最大连通域占比，[0,1]，1=完全连通
+    boundary_closure_score: float = 0.0  # 边界闭合度，越小越闭合，≥0
 
 
 @dataclass

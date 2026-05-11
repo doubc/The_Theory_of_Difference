@@ -254,6 +254,12 @@ class L0BinaryLattice(LayerBase):
         component_labels = torch.from_numpy(components_np).to(self.device)
         matched_ids = self._match_structures(component_labels, num_components)
 
+        # --- 全局指标：总稳定面积（用于 connectivity_ratio 计算）---
+        total_stable_area = sum(
+            int((component_labels == (c + 1)).sum().item())
+            for c in range(num_components)
+        )
+
         # --- 逐结构计算 ---
         structures = []
         for comp_idx in range(num_components):
@@ -270,8 +276,15 @@ class L0BinaryLattice(LayerBase):
             # 边界检测
             boundary = self._detect_boundary(struct_mask.float())
 
-            # 闭合度
-            closure = self._check_closure(boundary, struct_mask)
+            # closure 拆分：boundary_closure_score + connectivity_ratio
+            # （对应审计报告 Section 3 同名异义修复）
+            struct_area = int(struct_mask.sum().item())
+            # boundary_closure_score: 边界紧致度，perimeter/area 归一化
+            #   → 0=完全闭合（圆最优），越大越开放/碎片化
+            boundary_closure_score = self._check_closure(boundary, struct_mask)
+            # connectivity_ratio: 本结构占全局稳定区域的比例
+            #   → [0,1]，1=独占总面积（单结构主导），越小越分散
+            connectivity_ratio = struct_area / max(1, total_stable_area)
 
             # 物质更替率（仅对匹配到的老结构计算，新结构默认 0）
             if comp_label in matched_ids:
@@ -292,8 +305,10 @@ class L0BinaryLattice(LayerBase):
                 boundary_map=boundary.float(),
                 material_turnover=float(turnover),
                 source_layer=self.name,
-                source_trace=[{"struct_id": struct_id, "closure": closure,
-                               "component_size": int(struct_mask.sum().item())}],
+                connectivity_ratio=connectivity_ratio,
+                boundary_closure_score=boundary_closure_score,
+                source_trace=[{"struct_id": struct_id,
+                               "component_size": struct_area}],
             ))
 
         # --- 第5标准：结构间交互 ---

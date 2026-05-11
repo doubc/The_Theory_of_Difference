@@ -47,25 +47,30 @@ class StructureValidator:
 
     验证标准：
     1. lifetime: 结构存活时间 ≥ 阈值
-    2. boundary: 边界区域时间稳定性
-    3. closure: 内部连通性（连通域分析）
-    4. turnover: 物质周转率低
-    5. interaction: 结构间存在相互作用
+    2. boundary_stability: 边界区域时间稳定性
+    3. connectivity: 内部连通性（值越高越完整，审计报告拆分指标 #5）
+    4. boundary_closure: 边界紧致度（值越低越闭合，审计报告拆分指标 #5）
+    5. turnover: 物质周转率低
+    6. interaction: 空间接近代理指标（不等价于严格作用关系，审计报告 Section 4.2）
     """
 
     def __init__(
         self,
         min_lifetime: int = 8,
         boundary_stability_threshold: float = 0.3,
-        closure_ratio_threshold: float = 0.5,
+        connectivity_threshold: float = 0.5,
+        boundary_closure_threshold: float = 0.5,
         max_turnover: float = 0.2,
         interaction_distance: float = 3.0,
+        recompute_boundary: bool = False,
     ):
         self.min_lifetime = min_lifetime
         self.boundary_stability_threshold = boundary_stability_threshold
-        self.closure_ratio_threshold = closure_ratio_threshold
+        self.connectivity_threshold = connectivity_threshold
+        self.boundary_closure_threshold = boundary_closure_threshold
         self.max_turnover = max_turnover
         self.interaction_distance = interaction_distance
+        self.recompute_boundary = recompute_boundary
 
     def validate(
         self,
@@ -125,23 +130,57 @@ class StructureValidator:
         struct,
         history: List[torch.Tensor],
     ) -> SingleValidation:
-        """验证单个结构"""
+        """验证单个结构
+
+        对应审计报告 Section 3：closure 拆分为 connectivity_ratio 和
+        boundary_closure_score；Section 4.1：boundary 重算一致性检查。
+        """
+        warnings = []
+
         # 1. Lifetime
         lifetime_pass = struct.lifetime >= self.min_lifetime
 
-        # 2. Boundary stability
+        # 2. Boundary stability（时间维度稳定性）
         boundary_stability = self._measure_boundary_stability(struct, history)
         boundary_pass = boundary_stability < self.boundary_stability_threshold
 
-        # 3. Closure (connectivity)
-        closure_ratio = self._measure_closure(struct)
-        closure_pass = closure_ratio >= self.closure_ratio_threshold
+        # 3. boundary 一致性检查（审计报告 Section 4.1）
+        boundary_consistent = None
+        if self.recompute_boundary:
+            boundary_consistent = self._check_boundary_consistency(struct)
+            if boundary_consistent is False:
+                warnings.append(
+                    "boundary_map inconsistent with recomputed boundary from mask "
+                    "(IoU < 0.5) — possible upstream mismatch"
+                )
 
-        # 4. Turnover
+        # 4. Connectivity（v2 字段优先，降级兼容旧 struct）
+        if hasattr(struct, 'connectivity_ratio') and struct.connectivity_ratio is not None:
+            connectivity_ratio = struct.connectivity_ratio
+        else:
+            connectivity_ratio = self._measure_closure(struct)
+        connectivity_pass = connectivity_ratio >= self.connectivity_threshold
+
+        # 5. Boundary closure（v2 字段优先：值越低越闭合）
+        if hasattr(struct, 'boundary_closure_score') and struct.boundary_closure_score is not None:
+            boundary_closure_val = struct.boundary_closure_score
+        else:
+            boundary_closure_val = 0.5  # 旧数据无此字段，默认中性
+        boundary_closure_pass = boundary_closure_val <= self.boundary_closure_threshold
+        if not boundary_closure_pass:
+            warnings.append(
+                f"boundary_closure={boundary_closure_val:.3f} > threshold "
+                f"{self.boundary_closure_threshold:.3f} (边界过于开放/碎片化)"
+            )
+
+        # 6. Turnover
         turnover_value = struct.material_turnover
         turnover_pass = turnover_value < self.max_turnover
 
-        overall = lifetime_pass and boundary_pass and closure_pass and turnover_pass
+        overall = (
+            lifetime_pass and boundary_pass and connectivity_pass
+            and boundary_closure_pass and turnover_pass
+        )
 
         return SingleValidation(
             structure_id=struct_id,
@@ -149,18 +188,59 @@ class StructureValidator:
             lifetime_value=struct.lifetime,
             boundary_pass=boundary_pass,
             boundary_stability=boundary_stability,
-            closure_pass=closure_pass,
-            closure_ratio=closure_ratio,
+            closure_pass=connectivity_pass,
+            closure_ratio=connectivity_ratio,
             turnover_pass=turnover_pass,
             turnover_value=turnover_value,
             overall_pass=overall,
             details={
                 "min_lifetime": self.min_lifetime,
-                "boundary_threshold": self.boundary_stability_threshold,
-                "closure_threshold": self.closure_ratio_threshold,
+                "boundary_stability_threshold": self.boundary_stability_threshold,
+                "connectivity_threshold": self.connectivity_threshold,
+                "boundary_closure_threshold": self.boundary_closure_threshold,
                 "max_turnover": self.max_turnover,
+                "connectivity_ratio": connectivity_ratio,
+                "boundary_closure_score": boundary_closure_val,
+                "boundary_closure_pass": boundary_closure_pass,
+                "boundary_consistent": boundary_consistent,
+                "warnings": warnings,
             },
         )
+
+    def _check_boundary_consistency(self, struct) -> Optional[bool]:
+        """从 struct.mask 重算边界，与 struct.boundary_map 做 IoU 一致性检查。
+
+        返回 True（一致）/ False（不一致）/ None（无 boundary_map 无法比较）。
+        对应审计报告 Section 4.1：验证器应能检测 boundary_map 与 mask 的不一致。
+        """
+        import torch.nn.functional as F
+
+        if not hasattr(struct, 'boundary_map') or struct.boundary_map is None:
+            return None
+        mask = struct.mask.float()
+        # squeeze to (H, W)
+        while mask.dim() > 2:
+            mask = mask.squeeze(0)
+        mask_4d = mask.unsqueeze(0).unsqueeze(0)  # (1,1,H,W)
+
+        kernel = torch.tensor(
+            [[0., 1., 0.], [1., 0., 1.], [0., 1., 0.]],
+            device=mask.device
+        ).view(1, 1, 3, 3)
+        neighbor_sum = F.conv2d(mask_4d, kernel, padding=1)
+        recomputed = (mask_4d > 0) & (neighbor_sum < 4 * mask_4d) & (neighbor_sum > 0)
+        recomputed = recomputed.squeeze()  # (H, W)
+
+        stored = struct.boundary_map.float()
+        while stored.dim() > 2:
+            stored = stored.squeeze(0)
+
+        both = (recomputed > 0) & (stored > 0)
+        either = (recomputed > 0) | (stored > 0)
+        if either.sum() == 0:
+            return True
+        iou = both.sum().item() / max(1, either.sum().item())
+        return iou >= 0.5
 
     def _measure_boundary_stability(self, struct, history: List[torch.Tensor]) -> float:
         """测量边界区域的时间稳定性
@@ -314,11 +394,12 @@ class StructureValidator:
             f"Passed (all criteria): {passed}/{total}",
             f"",
             f"Criterion breakdown:",
-            f"  Lifetime  (≥{self.min_lifetime} steps): {lifetime}/{total}",
-            f"  Boundary  (<{self.boundary_stability_threshold}): {boundary}/{total}",
-            f"  Closure   (≥{self.closure_ratio_threshold}): {closure}/{total}",
-            f"  Turnover  (<{self.max_turnover}): {turnover}/{total}",
-            f"  Interaction: {'detected' if interaction else 'none'} (score={interaction_score:.2f})",
+            f"  Lifetime          (>= {self.min_lifetime} steps): {lifetime}/{total}",
+            f"  Boundary Stability (< {self.boundary_stability_threshold}): {boundary}/{total}",
+            f"  Connectivity      (>= {self.connectivity_threshold}): {closure}/{total}",
+            f"  Boundary Closure  (<= {self.boundary_closure_threshold}): {closure}/{total}",
+            f"  Turnover          (< {self.max_turnover}): {turnover}/{total}",
+            f"  Interaction (spatial proxy): {'detected' if interaction else 'none'} (score={interaction_score:.2f})",
         ]
 
         if passed == total and total > 0:

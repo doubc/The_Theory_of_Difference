@@ -22,20 +22,24 @@ class TestStructureValidator:
         self.validator = StructureValidator(
             min_lifetime=4,
             boundary_stability_threshold=0.3,
-            closure_ratio_threshold=0.5,
+            connectivity_threshold=0.5,
+            boundary_closure_threshold=0.5,
             max_turnover=0.2,
             interaction_distance=5.0,
         )
 
-    def _make_structure(self, mask, lifetime=10, turnover=0.05):
-        """创建测试用稳定结构"""
+    def _make_structure(self, mask, lifetime=10, turnover=0.05,
+                        connectivity_ratio=1.0, boundary_closure_score=0.0):
+        """创建测试用稳定结构（v2：含审计报告拆分指标）"""
         return StableStructure(
             mask=mask,
             lifetime=lifetime,
             pattern_signature=torch.tensor(0.5),
             boundary_map=mask.float(),
-            material_turnover=turnover,
+            material_turnover=float(turnover),
             source_layer="L0_binary",
+            connectivity_ratio=connectivity_ratio,
+            boundary_closure_score=boundary_closure_score,
         )
 
     def test_empty_structures(self):
@@ -83,7 +87,8 @@ class TestStructureValidator:
         # 创建一个连通的矩形区域
         mask = torch.zeros(1, 1, 16, 16, dtype=torch.bool)
         mask[:, :, 4:12, 4:12] = True
-        struct = self._make_structure(mask, lifetime=10, turnover=0.05)
+        struct = self._make_structure(mask, lifetime=10, turnover=0.05,
+                                    connectivity_ratio=1.0, boundary_closure_score=0.0)
 
         sv = self.validator.validate_single(0, struct, [])
         assert sv.closure_ratio == 1.0  # 完全连通
@@ -95,10 +100,13 @@ class TestStructureValidator:
         mask = torch.zeros(1, 1, 16, 16, dtype=torch.bool)
         mask[:, :, 2:4, 2:4] = True  # 左上角
         mask[:, :, 12:14, 12:14] = True  # 右下角
-        struct = self._make_structure(mask, lifetime=10, turnover=0.05)
+        # 单结构面积 4 / 总稳定面积 8 = 0.5
+        struct = self._make_structure(mask, lifetime=10, turnover=0.05,
+                                    connectivity_ratio=0.5, boundary_closure_score=0.0)
 
         sv = self.validator.validate_single(0, struct, [])
         assert sv.closure_ratio < 1.0  # 不完全连通
+        assert sv.closure_ratio == pytest.approx(0.5, abs=0.01)
 
     def test_interaction_detection(self):
         """相邻结构应检测到相互作用"""

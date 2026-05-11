@@ -9,9 +9,12 @@ JSON 日志 + 自动生成配套说明文档。
 
 import json
 import os
+import subprocess
 from datetime import datetime
 from typing import Dict, Any, List, Optional
 from dataclasses import asdict
+
+import torch
 
 
 class ExperimentLogger:
@@ -29,6 +32,39 @@ class ExperimentLogger:
         self.results = {}
         self.axiom_trends = {}
         self.start_time = None
+        self.seed = None
+        self.commit_sha = None
+        self.runtime_info = {}
+
+    def _collect_runtime_info(self, config: Dict[str, Any]):
+        """采集实验法证元信息（审计报告 Section 5）。
+
+        收集 seed、commit SHA、torch 版本、设备、关键超参数。
+        使日志从"实验结果记录"升级为"实验法证档案"。
+        """
+        # 1. 随机种子
+        self.seed = config.get("seed", None)
+
+        # 2. Git commit SHA
+        try:
+            result = subprocess.run(
+                ["git", "rev-parse", "--short", "HEAD"],
+                cwd=self.project_root,
+                capture_output=True, text=True, timeout=5
+            )
+            if result.returncode == 0:
+                self.commit_sha = result.stdout.strip()
+        except Exception:
+            self.commit_sha = "unknown"
+
+        # 3. 运行时环境
+        self.runtime_info = {
+            "torch_version": torch.__version__,
+            "device": str(config.get("device", "cpu")),
+            "seed": self.seed,
+            "commit_sha": self.commit_sha,
+            "timestamp": datetime.now().isoformat(),
+        }
 
     def start(self, experiment_name: str, config: Dict[str, Any]):
         """开始记录实验"""
@@ -36,6 +72,7 @@ class ExperimentLogger:
         self.config = config
         self.start_time = datetime.now()
         self.axiom_trends = {}
+        self._collect_runtime_info(config)
 
     def log_step(self, step: int, loss: float, report: Dict[str, Any]):
         """记录每步的公理趋势"""
@@ -92,6 +129,7 @@ class ExperimentLogger:
             "config": self.config,
             "results": self.results,
             "axiom_trends": {k: v for k, v in self.axiom_trends.items()},
+            "runtime_info": self.runtime_info,
         }
 
         with open(filepath, "w", encoding="utf-8") as f:
@@ -141,6 +179,10 @@ class ExperimentLogger:
 
 - **时间**: {self.start_time.strftime('%Y-%m-%d %H:%M:%S') if self.start_time else 'unknown'}
 - **耗时**: {self.results.get('duration_seconds', 0):.1f} 秒
+- **代码版本**: {self.runtime_info.get('commit_sha', 'N/A')}
+- **随机种子**: {self.runtime_info.get('seed', 'N/A')}
+- **PyTorch**: {self.runtime_info.get('torch_version', 'N/A')}
+- **设备**: {self.runtime_info.get('device', 'N/A')}
 
 ## 实验目的
 
