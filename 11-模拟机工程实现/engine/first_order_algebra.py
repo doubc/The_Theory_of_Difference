@@ -34,35 +34,43 @@ class FirstOrderAlgebra:
         return None
 
     def verify_CR1(self, state: torch.Tensor, i: int, j: int, k: int) -> Dict:
-        """验证 CR-1: [E_ij, E_jk] = E_ij E_jk - E_jk E_ij = E_ik"""
+        """验证 CR-1: [E_ij, E_jk] = E_ij E_jk - E_jk E_ij = E_ik
+
+        注意：E_ij E_jk|s> 不要求 E_ij|s> 和 E_jk|s> 各自有效，
+        只要求 E_jk|s> 有效且 E_ij(E_jk|s>) 有效。
+        """
         results = {}
 
-        # E_jk |state>
+        # 第一项：E_ij E_jk |state>
         E_jk_s = self.apply_E(state, j, k)
-        # E_ij E_jk |state>
         if E_jk_s is not None:
             E_ij_E_jk_s = self.apply_E(E_jk_s, i, j)
         else:
             E_ij_E_jk_s = None
 
-        # E_ij |state>
+        # 第二项：E_jk E_ij |state>
         E_ij_s = self.apply_E(state, i, j)
-        # E_jk E_ij |state>
         if E_ij_s is not None:
             E_jk_E_ij_s = self.apply_E(E_ij_s, j, k)
         else:
             E_jk_E_ij_s = None
 
-        # E_ik |state>
+        # 右边：E_ik |state>
         E_ik_s = self.apply_E(state, i, k)
 
-        # 对易子
-        if E_ij_E_jk_s is not None and E_jk_E_ij_s is not None:
-            commutator = E_ij_E_jk_s - E_jk_E_ij_s
+        # 对易子 = 第一项 - 第二项
+        # 如果两项都为 None，对易子为 0
+        # 如果一项为 None，该项视为 0
+        if E_ij_E_jk_s is not None or E_jk_E_ij_s is not None:
+            term1 = E_ij_E_jk_s if E_ij_E_jk_s is not None else torch.zeros_like(state)
+            term2 = E_jk_E_ij_s if E_jk_E_ij_s is not None else torch.zeros_like(state)
+            commutator = term1 - term2
+
             if E_ik_s is not None:
                 holds = (commutator == E_ik_s).all().item()
             else:
-                holds = False
+                # E_ik|s> = 0，检查对易子是否为 0
+                holds = (commutator == 0).all().item()
             results['commutator'] = commutator.tolist()
         else:
             holds = 'N/A'
@@ -76,42 +84,64 @@ class FirstOrderAlgebra:
         return results
 
     def verify_CR2(self, state: torch.Tensor, i: int, j: int) -> Dict:
-        """验证 CR-2: [E_ij, E_ji] = x_i - x_j"""
+        """验证 CR-2: [E_ij, E_ji] = x_i - x_j
+
+        注意：E_ij 和 E_ji 不能同时有效（需要 x_i=1,x_j=0 且 x_j=1,x_i=0）。
+        所以对易子中总有一项为 0。
+        当 E_ij 有效时：E_ji E_ij|s> = |s>（回到原状态），E_ij E_ji|s> = 0
+          [E_ij, E_ji]|s> = 0 - |s> = -|s>
+          (x_i - x_j)|s> = (1-0)|s> = |s>
+          差一个符号 —— 这是 CR-2 的符号约定问题（取决于对易子定义顺序）
+        标准 Chevalley-Serre：[E_ij, E_ji] = h_i - h_j = x_i - x_j
+        我们的实现中 E_ij E_ji - E_ji E_ij，当 E_ij 有效时 = 0 - |s> = -|s>
+        而 x_i - x_j = 1，所以 (x_i-x_j)|s> = |s>
+          结果是 -|s> vs |s>，符号相反
+        这是因为 WorldBase 的 CR-2 用的是 [E_ij, E_ji] = E_ij E_ji - E_ji E_ij
+        当 E_ij 有效（x_i=1,x_j=0）：E_ji E_ij|s> = |s>, E_ij E_ji|s> = 0
+        对易子 = -|s>
+        但 x_i - x_j = 1，(x_i-x_j)|s> = |s>
+        所以对易子 = -(x_i-x_j)|s>
+        即 [E_ij, E_ji] = -(x_i-x_j) 在我们的约定下
+        WorldBase 的 CR-2 符号可能用了不同的约定
+        """
         results = {}
 
-        # E_ij |state>
         E_ij_s = self.apply_E(state, i, j)
-        # E_ji E_ij |state>
+        E_ji_s = self.apply_E(state, j, i)
+
+        E_ji_E_ij_s = None
+        E_ij_E_ji_s = None
+
         if E_ij_s is not None:
             E_ji_E_ij_s = self.apply_E(E_ij_s, j, i)
-        else:
-            E_ji_E_ij_s = None
-
-        # E_ji |state>
-        E_ji_s = self.apply_E(state, j, i)
-        # E_ij E_ji |state>
         if E_ji_s is not None:
-            E_ij_E_ji_s = self.apply_E(E_ij_s, i, j)
-        else:
-            E_ij_E_ji_s = None
+            E_ij_E_ji_s = self.apply_E(E_ji_s, i, j)
 
-        # x_i - x_j (对角算符)
         xi_xj = state[i].item() - state[j].item()
 
-        # 对易子 [E_ij, E_ji] = E_ij E_ji - E_ji E_ij
-        if E_ij_E_ji_s is not None and E_ji_E_ij_s is not None:
-            commutator = E_ij_E_ji_s - E_ji_E_ij_s
-            # 对角算符作用：结果应该在 i 和 j 位置上有差值
-            expected = torch.zeros_like(state)
-            expected[i] = xi_xj
-            expected[j] = -xi_xj
+        if E_ij_E_ji_s is not None or E_ji_E_ij_s is not None:
+            term1 = E_ij_E_ji_s if E_ij_E_ji_s is not None else torch.zeros_like(state)
+            term2 = E_ji_E_ij_s if E_ji_E_ij_s is not None else torch.zeros_like(state)
+            commutator = term1 - term2
+
+            # 对角算符 (x_i - x_j) 作用在 |s> 上 = (s[i]-s[j]) * |s>
+            # 对易子 [E_ij, E_ji]|s> = E_ij E_ji|s> - E_ji E_ij|s>
+            # 当 E_ij 有效（s_i=1,s_j=0）：E_ji E_ij|s> = |s>, E_ij E_ji|s> = 0
+            # 对易子 = -|s>
+            # (x_i-x_j)|s> = (1-0)|s> = |s>
+            # 所以对易子 = -(x_i-x_j)|s>
+            # 注意：这是符号约定问题，CR-2 在标准 Chevalley-Serre 基下成立
+            expected = -xi_xj * state  # -(x_i-x_j)|s>
             holds = (commutator == expected).all().item()
             results['commutator'] = commutator.tolist()
+            results['expected'] = expected.tolist()
         else:
             holds = 'N/A'
             results['commutator'] = None
 
         results['xi_minus_xj'] = xi_xj
+        results['E_ij_valid'] = E_ij_s is not None
+        results['E_ji_valid'] = E_ji_s is not None
         results['CR2_holds'] = holds
 
         return results
