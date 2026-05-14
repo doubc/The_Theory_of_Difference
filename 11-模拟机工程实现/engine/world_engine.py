@@ -17,6 +17,7 @@ from acl.axiom_base import AxiomEngine, StepReport, StableStructure
 from layers.layer_base import LayerBase
 from engine.reactor import DifferenceReactor
 from engine.trainer import AxiomTrainer
+from xiangjie.chain import XiangjieChain, XiangjieReport
 
 
 @dataclass
@@ -39,7 +40,8 @@ class WorldEngine:
     def __init__(self, model: nn.Module, layer: LayerBase,
                  axiom_engine: AxiomEngine,
                  lr: float = 1e-3,
-                 device: str = "cpu"):
+                 device: str = "cpu",
+                 xiangjie_check_interval: int = 128):
         self.model = model
         self.axiom_engine = axiom_engine
         self.device = device
@@ -51,6 +53,11 @@ class WorldEngine:
         self.layer_stack: List[LayerBase] = [layer]
         self.global_step = 0
         self.ascent_history: List[Dict] = []
+
+        # 象界显现链
+        self.xiangjie_chain = XiangjieChain()
+        self.xiangjie_check_interval = xiangjie_check_interval
+        self.xiangjie_reports: List[XiangjieReport] = []
 
     @property
     def layer(self) -> LayerBase:
@@ -133,6 +140,14 @@ class WorldEngine:
                         structures_buffer = []
                         continue
 
+            # --- 象界显现链评估 ---
+            if step % self.xiangjie_check_interval == 0 and step > 0:
+                if structures_buffer:
+                    xj_report = self.xiangjie_chain.evaluate(
+                        structures_buffer, history, self.layer, state
+                    )
+                    self.xiangjie_reports.append(xj_report)
+
         return {
             "total_steps": self.global_step,
             "layer_stack": [l.name for l in self.layer_stack],
@@ -140,6 +155,7 @@ class WorldEngine:
             "reports": all_reports,
             "final_state": state,
             "structures_detected": len(structures_buffer),
+            "xiangjie_reports": self.xiangjie_reports,
         }
 
     def train(self, episodes: int = 50, steps_per_episode: int = 100):
