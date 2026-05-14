@@ -379,7 +379,9 @@ class A9_MinimalRealization(AxiomBase):
         # 估计活跃自由度：状态中独立变化的模式数
         # 简化：用硬二值化后的唯一行数估计
         hard = (next_state > 0.5).float()
-        if hard.dim() > 2:
+        if hard.dim() == 1:
+            hard = hard.unsqueeze(0)  # (1, N)
+        elif hard.dim() > 2:
             hard = hard.flatten(1)  # (B, features)
         unique_patterns = len(set(tuple(row.tolist()) for row in hard))
 
