@@ -18,6 +18,8 @@ from layers.layer_base import LayerBase
 from engine.reactor import DifferenceReactor
 from engine.trainer import AxiomTrainer
 from xiangjie.chain import XiangjieChain, XiangjieReport
+from engine.events import EventClassifier, PossibilitySpace, BaseMapOperator
+from engine.difference_layers import DifferenceLayerAnalyzer
 
 
 @dataclass
@@ -41,7 +43,8 @@ class WorldEngine:
                  axiom_engine: AxiomEngine,
                  lr: float = 1e-3,
                  device: str = "cpu",
-                 xiangjie_check_interval: int = 128):
+                 xiangjie_check_interval: int = 128,
+                 base_map_interval: Optional[int] = None):
         self.model = model
         self.axiom_engine = axiom_engine
         self.device = device
@@ -58,6 +61,15 @@ class WorldEngine:
         self.xiangjie_chain = XiangjieChain()
         self.xiangjie_check_interval = xiangjie_check_interval
         self.xiangjie_reports: List[XiangjieReport] = []
+
+        # 事件分类器
+        self.event_classifier = EventClassifier()
+        self.base_map_interval = base_map_interval
+        self.base_map_log: List = []
+
+        # 差异分层分析器
+        self.diff_analyzer = DifferenceLayerAnalyzer()
+        self.diff_reports: List = []
 
     @property
     def layer(self) -> LayerBase:
@@ -112,7 +124,27 @@ class WorldEngine:
                 }
             ))
 
+            # --- 事件分类 ---
+            event = self.event_classifier.classify(
+                state, next_state, step=self.global_step, history=history
+            )
+
+            # --- 差异分层分析 ---
+            diff_report = self.diff_analyzer.analyze(
+                next_state, history, structures_buffer
+            )
+            self.diff_reports.append(diff_report)
+
+            # --- 底图事件注入 ---
+            if (self.base_map_interval
+                    and step > 0
+                    and step % self.base_map_interval == 0):
+                next_state = self._inject_base_map_event(next_state, step)
+
             state = next_state
+            history.append(state.detach())
+            self.global_step += 1
+            step += 1
             history.append(state.detach())
             self.global_step += 1
             step += 1
@@ -156,6 +188,9 @@ class WorldEngine:
             "final_state": state,
             "structures_detected": len(structures_buffer),
             "xiangjie_reports": self.xiangjie_reports,
+            "event_summary": self.event_classifier.summary(),
+            "base_map_log": self.base_map_log,
+            "difference_layers": self.diff_reports,
         }
 
     def train(self, episodes: int = 50, steps_per_episode: int = 100):
@@ -243,6 +278,44 @@ class WorldEngine:
             )
             corrs.append(corr.item())
         return sum(corrs) / len(corrs) if corrs else 0.0
+
+
+    def _inject_base_map_event(self, state: torch.Tensor,
+                                step: int) -> torch.Tensor:
+        """注入底图事件：随机选择一种底图操作
+
+        策略：根据当前可能性空间的状态选择操作类型
+        - 高活动度 → 压缩
+        - 低活动度 → 扩张
+        - 高持续性 → 噪声注入（打破锁定）
+        - 低持续性 → 边界突变
+        """
+        ps = PossibilitySpace.from_state(state)
+
+        if ps.activity > 0.7:
+            # 高活动度：压缩
+            new_state = BaseMapOperator.activity_compression(state, factor=0.5)
+            op = "compression"
+        elif ps.activity < 0.3:
+            # 低活动度：扩张
+            new_state = BaseMapOperator.activity_expansion(state, factor=2.0)
+            op = "expansion"
+        elif ps.persistence > 0.8:
+            # 高持续性（锁定）：噪声注入打破
+            new_state = BaseMapOperator.noise_injection(state, intensity=0.3)
+            op = "noise_unlock"
+        else:
+            # 默认：边界突变
+            shift = 0.2 * (1 if step % 2 == 0 else -1)
+            new_state = BaseMapOperator.boundary_shift(state, shift=shift)
+            op = "boundary_shift"
+
+        self.base_map_log.append({
+            "step": step,
+            "operation": op,
+            "intensity": (state - new_state).abs().mean().item(),
+        })
+        return new_state
 
 
 def layer_measure_diff(state: torch.Tensor) -> torch.Tensor:
