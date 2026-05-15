@@ -39,7 +39,8 @@ class LongRangeEvolverV2:
                  total_steps: int = 50000,
                  sample_interval: int = 200,
                  device: str = "cpu",
-                 n_hierarchy_bits: int = None):
+                 n_hierarchy_bits: int = None,
+                 coupling_strength: float = 0.3):
         self.N = N
         self.total_steps = total_steps
         self.sample_interval = sample_interval
@@ -47,6 +48,7 @@ class LongRangeEvolverV2:
 
         # 公理约束器
         self.constraints = AxiomConstraints(N, n_hierarchy_bits)
+        self.coupling_strength = coupling_strength
 
         # 轨迹记录
         self.snapshots: List[TrajectorySnapshotV2] = []
