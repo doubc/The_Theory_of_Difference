@@ -138,6 +138,8 @@ class LongRangeEvolverV2:
                     self.constraints.update_A6_direction(j, 0.0, 1.0)
                     self.constraints.record_active(i)
                     self.constraints.record_active(j)
+                    # A1'：增强绑定强度
+                    self.constraints.strengthen_binding(i, j, amount=0.1)
                     n_lateral += 1
 
             # ====== 4. 汇吸收（A8 + A5 平衡）======
@@ -203,6 +205,10 @@ class LongRangeEvolverV2:
             print(f"  Active bits: {len(self.constraints.active_bits)}/{self.N}")
             print(f"  Total inject: {self.constraints.total_injected}, "
                   f"absorb: {self.constraints.total_absorbed}")
+            clusters = self.constraints.get_clusters()
+            print(f"  Clusters: {len(clusters)}")
+            for c in clusters:
+                print(f"    Cluster: {c}")
 
         return {
             'total_steps': self.total_steps,
@@ -217,6 +223,8 @@ class LongRangeEvolverV2:
             'cycle_states': len(self.constraints.cycle_states),
             'active_bits': len(self.constraints.active_bits),
             'direction': self.constraints.direction.clone(),
+            'clusters': self.constraints.get_clusters(),
+            'binding_strength': self.constraints.binding_strength.clone(),
         }
 
     def get_trajectory_tensor(self) -> torch.Tensor:

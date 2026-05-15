@@ -23,13 +23,15 @@ class AxiomConstraints:
     allowed=True 表示该演化被公理允许
     """
 
-    def __init__(self, N: int, n_hierarchy_bits: int = None):
+    def __init__(self, N: int, n_hierarchy_bits: int = None, device: str = "cpu"):
         """
         Args:
             N: 总比特数
             n_hierarchy_bits: 层级比特数（A1），剩余为横向比特（A1'）
+            device: 设备
         """
         self.N = N
+        self.device = device
         # 层级比特：控制差异密度（汉明重量）
         # 横向比特：控制差异分布（在重量不变的情况下重新分布）
         self.n_hierarchy = n_hierarchy_bits or N // 3
@@ -49,11 +51,15 @@ class AxiomConstraints:
         self.total_injected = 0
         self.total_absorbed = 0
 
-        # A9 活跃自由度追踪
-        self.active_bits: Set[int] = set()  # 参与过演化的比特
+        # A1' 横向涌现：绑定强度矩阵
+        self.binding_strength = torch.zeros(N, N, device=self.device)
+        # 初始小的随机绑定（原初差异的体现）
+        self.binding_strength += torch.randn(N, N, device=self.device) * 0.01
+        self.binding_strength = (self.binding_strength + self.binding_strength.T) / 2  # 对称
+        self.binding_strength.fill_diagonal_(0)
 
-    # ============================================================
-    # A1：差异沿层级单调累积
+        # A9 活跃自由度追踪
+        self.active_bits: Set[int] = set()
     # ============================================================
 
     def check_A1(self, state: torch.Tensor, flip_idx: int) -> Tuple[bool, str]:
@@ -264,23 +270,66 @@ class AxiomConstraints:
     def get_A1_prime_candidates(self, state: torch.Tensor) -> List[Tuple[int, int]]:
         """A1'：生成横向比特的循环翻转对
 
-        在保持总重量不变的前提下，横向比特之间可以交换差异
-        → 形成循环模式 → 涌现"粒子"
+        关键改变：引入绑定强度，某些比特对倾向于一起翻转
+        绑定强度随共现翻转次数增加 → 聚类涌现
         """
         candidates = []
         lateral_ones = [i for i in self.lateral_indices if state[i] > 0.5]
         lateral_zeros = [i for i in self.lateral_indices if state[i] < 0.5]
 
-        # 随机配对：一个 1→0，一个 0→1（保持重量不变）
-        if lateral_ones and lateral_zeros:
-            n_pairs = min(len(lateral_ones), len(lateral_zeros), 2)
-            for _ in range(n_pairs):
-                i = lateral_ones[np.random.randint(len(lateral_ones))]
-                j = lateral_zeros[np.random.randint(len(lateral_zeros))]
+        if not lateral_ones or not lateral_zeros:
+            return candidates
+
+        # 基于绑定强度选择配对
+        pairs = []
+        for i in lateral_ones:
+            for j in lateral_zeros:
                 if i != j:
-                    candidates.append((i, j))  # i: 1→0, j: 0→1
+                    binding = self.binding_strength[i][j].item()
+                    pairs.append((i, j, binding))
+
+        if not pairs:
+            return candidates
+
+        # 按绑定强度加权采样
+        bindings = torch.tensor([p[2] for p in pairs])
+        bindings = bindings.clamp(min=0.01)
+        bindings = bindings / bindings.sum()
+
+        n_pairs = min(len(pairs), 2)
+        if n_pairs > 0:
+            indices = torch.multinomial(bindings, n_pairs, replacement=False)
+            for idx in indices:
+                i, j, _ = pairs[idx.item()]
+                candidates.append((i, j))
 
         return candidates
+
+    def strengthen_binding(self, i: int, j: int, amount: float = 0.1):
+        """增强比特 i 和 j 之间的绑定强度"""
+        if i in self.lateral_indices and j in self.lateral_indices:
+            self.binding_strength[i][j] += amount
+            self.binding_strength[j][i] += amount
+
+    def get_clusters(self) -> List[List[int]]:
+        """基于绑定强度提取聚类"""
+        visited = set()
+        clusters = []
+        threshold = 0.5  # 绑定强度阈值
+
+        for i in self.lateral_indices:
+            if i in visited:
+                continue
+            cluster = [i]
+            visited.add(i)
+            for j in self.lateral_indices:
+                if j not in visited and self.binding_strength[i][j].item() > threshold:
+                    cluster.append(j)
+                    visited.add(j)
+            if len(cluster) >= 2:
+                clusters.append(cluster)
+
+        return clusters
 
     # ============================================================
     # 综合约束检查
