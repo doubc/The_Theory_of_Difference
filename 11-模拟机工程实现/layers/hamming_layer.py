@@ -1,17 +1,16 @@
 """
-hamming_layer.py — 汉明格点层
+hamming_layer.py — 汉明格点层（增强版）
 
-基于汉明几何的格点层，使用严格化九公理。
-与 L0_binary_lattice 的关键区别：
-- 状态空间：{0,1}^N 超立方体（严格二值）
-- 距离：汉明距离（替代欧氏距离）
-- 演化：单比特翻转（替代连续卷积）
-- 公理：严格化九公理（替代连续近似）
+增强点：
+1. 多源多汇系统（不再是随机翻转）
+2. 源/汇位置基于公理约束动态选择
+3. 通量路径追踪（用于涌现检测）
+4. 纯演化模式（无训练，只看涌现）
 
-对应 WorldBase 形式化 §2.1 的状态空间定义。
+对应 WorldBase 形式化 §2.1-2.2 + §3.4 的通量系统。
 """
 
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Tuple
 import torch
 from layers.layer_base import LayerBase
 from acl.axiom_base import StableStructure
@@ -19,12 +18,30 @@ from acl.axioms_strict import AxiomEngineStrict, create_strict_axiom_engine
 from engine.hamming_engine import HammingTransition, HammingMeasurement
 
 
+class SourceSinkConfig:
+    """源/汇配置"""
+    def __init__(self,
+                 n_sources: int = 2,
+                 n_sinks: int = 2,
+                 source_strength: int = 2,
+                 sink_strength: int = 2,
+                 dynamic_position: bool = True,
+                 flux_conservation: bool = True):
+        self.n_sources = n_sources
+        self.n_sinks = n_sinks
+        self.source_strength = source_strength  # 每步每个源注入的比特数
+        self.sink_strength = sink_strength      # 每步每个汇吸收的比特数
+        self.dynamic_position = dynamic_position  # 是否动态选择源/汇位置
+        self.flux_conservation = flux_conservation  # 是否保持通量守恒
+
+
 class HammingLattice(LayerBase):
-    """汉明格点层
+    """汉明格点层（增强版）
 
     状态空间：{0,1}^N 超立方体
     演化：单比特翻转（A4 严格）+ DAG 方向约束（A6 严格）
     公理：严格化九公理引擎
+    通量：多源多汇 + 动态位置 + 通量追踪
     """
 
     name = "hamming_lattice"
@@ -32,20 +49,16 @@ class HammingLattice(LayerBase):
     def __init__(self, N: int = 16, device: str = "cpu",
                  stability_window: int = 16,
                  use_strict_axioms: bool = True,
-                 dag_enabled: bool = True):
-        """
-        Args:
-            N: 比特数（状态空间维度）
-            device: 计算设备
-            stability_window: 稳定性检测窗口
-            use_strict_axioms: 是否使用严格化公理引擎
-            dag_enabled: 是否启用 DAG 方向约束
-        """
+                 dag_enabled: bool = True,
+                 source_sink_config: Optional[SourceSinkConfig] = None):
         self.N = N
         self.device = device
         self.stability_window = stability_window
         self.use_strict_axioms = use_strict_axioms
         self.dag_enabled = dag_enabled
+
+        # 源/汇配置
+        self.ss_config = source_sink_config or SourceSinkConfig()
 
         # 汉明跃迁算子
         self.transition = HammingTransition(N=N, dag_enabled=dag_enabled)
@@ -69,10 +82,13 @@ class HammingLattice(LayerBase):
             "A7_stability": 0.8,
         }
 
+        # 通量追踪
+        self._flux_log: List[Dict] = []
+
     # --- 状态空间 ---
 
     def initial_state(self, batch_size: int = 1) -> torch.Tensor:
-        """生成初始状态：随机二值向量"""
+        """生成初始状态：随机二值向量（低密度）"""
         return (torch.rand(batch_size, self.N, device=self.device) < 0.3).float()
 
     def project_state(self, raw_state: torch.Tensor,
@@ -84,7 +100,6 @@ class HammingLattice(LayerBase):
         return binary
 
     def valid_state(self, state: torch.Tensor) -> bool:
-        """检查状态是否合法"""
         return state.shape[-1] == self.N
 
     # --- 差异度量 ---
@@ -106,88 +121,219 @@ class HammingLattice(LayerBase):
         return (hard_next - hard_state).abs().sum().float()
 
     def discreteness_violation(self, state: torch.Tensor) -> torch.Tensor:
-        """离散性违背：距离 0/1 的偏离"""
         return (state * (1.0 - state)).mean()
 
     def locality_violation(self, state: torch.Tensor,
                            next_state: torch.Tensor) -> torch.Tensor:
-        """局域性违背：在汉明几何中=0（单比特翻转天然局域）"""
         return torch.tensor(0.0, device=state.device)
 
-    # --- 差异源与汇 ---
+    # --- 增强源/汇系统 ---
+
+    def _select_source_positions(self, state: torch.Tensor) -> torch.Tensor:
+        """动态选择源位置（A1：差异注入点）
+
+        策略：
+        - 优先选择当前为 0 的比特（注入差异 = 0→1）
+        - 基于 A8 对称偏好：如果当前 w < N/2，增强注入
+        - 基于 A5 守恒量：如果当前总通量不足，增强注入
+        - 多源：选择多个位置形成空间分布
+
+        Returns:
+            source_positions: (n_sources,) 源位置索引
+        """
+        flat = state.flatten()
+        zero_mask = flat < 0.5
+        zero_indices = zero_mask.nonzero(as_tuple=True)[0]
+
+        if zero_indices.numel() == 0:
+            return torch.tensor([], dtype=torch.long, device=self.device)
+
+        n = min(self.ss_config.n_sources, zero_indices.numel())
+
+        if self.ss_config.dynamic_position:
+            # 动态选择：基于 A8 对称偏好权重
+            w = flat.sum().item()
+            N = self.N
+
+            # 如果 w < N/2，更倾向于注入（帮助达到中截面）
+            inject_bias = 1.0
+            if w < N / 2:
+                inject_bias = 1.5  # 增强注入
+            elif w > N / 2:
+                inject_bias = 0.5  # 减弱注入
+
+            # 随机选择，但偏向低密度区域
+            probs = torch.ones(zero_indices.numel(), device=self.device) * inject_bias
+            # 额外偏向：选择与其他已激活比特距离较远的位置（扩散）
+            if w > 0:
+                one_indices = (flat > 0.5).nonzero(as_tuple=True)[0]
+                for idx in range(zero_indices.numel()):
+                    pos = zero_indices[idx].item()
+                    # 计算到最近已激活比特的距离
+                    if one_indices.numel() > 0:
+                        min_dist = min(abs(pos - int(o)) for o in one_indices[:50])
+                        probs[idx] *= (1.0 + min_dist / N)  # 越远越优先
+
+            probs = probs / probs.sum()
+            selected = torch.multinomial(probs, n, replacement=False)
+            return zero_indices[selected]
+        else:
+            # 静态随机选择
+            perm = torch.randperm(zero_indices.numel(), device=self.device)[:n]
+            return zero_indices[perm]
+
+    def _select_sink_positions(self, state: torch.Tensor) -> torch.Tensor:
+        """动态选择汇位置（A8：差异吸收点）
+
+        策略：
+        - 优先选择当前为 1 的比特（吸收差异 = 1→0）
+        - 基于 A8 对称偏好：如果当前 w > N/2，增强吸收
+        - 基于 A5 守恒量：如果当前总通量过剩，增强吸收
+        - 多汇：选择多个位置形成空间分布
+
+        Returns:
+            sink_positions: (n_sinks,) 汇位置索引
+        """
+        flat = state.flatten()
+        one_mask = flat > 0.5
+        one_indices = one_mask.nonzero(as_tuple=True)[0]
+
+        if one_indices.numel() == 0:
+            return torch.tensor([], dtype=torch.long, device=self.device)
+
+        n = min(self.ss_config.n_sinks, one_indices.numel())
+
+        if self.ss_config.dynamic_position:
+            w = flat.sum().item()
+            N = self.N
+
+            absorb_bias = 1.0
+            if w > N / 2:
+                absorb_bias = 1.5  # 增强吸收
+            elif w < N / 2:
+                absorb_bias = 0.5  # 减弱吸收
+
+            probs = torch.ones(one_indices.numel(), device=self.device) * absorb_bias
+            probs = probs / probs.sum()
+            selected = torch.multinomial(probs, n, replacement=False)
+            return one_indices[selected]
+        else:
+            perm = torch.randperm(one_indices.numel(), device=self.device)[:n]
+            return one_indices[perm]
 
     def inject_difference(self, state: torch.Tensor,
-                          source_strength: float = 1.0) -> torch.Tensor:
-        """A1：在源端注入差异（翻转 source_strength 个 0→1 比特）"""
+                          source_strength: Optional[int] = None) -> torch.Tensor:
+        """A1：在源端注入差异（增强版）
+
+        多源 + 动态位置选择 + 通量追踪
+        """
+        if source_strength is None:
+            source_strength = self.ss_config.source_strength
+        source_strength = int(source_strength)
+
         result = state.clone()
-        flat = result.view(-1, self.N)
-        # 找到当前为 0 的比特
-        zero_mask = flat < 0.5
-        n_zeros = zero_mask.sum().item()
-        n_inject = min(int(source_strength), int(n_zeros))
+        flat = result.flatten()
+
+        source_positions = self._select_source_positions(state)
+        n_inject = min(int(source_strength * self.ss_config.n_sources), source_positions.numel())
+
         if n_inject > 0:
-            # 随机选择 n_inject 个 0 翻转为 1
-            zero_indices = zero_mask.nonzero(as_tuple=True)
-            perm = torch.randperm(n_zeros, device=self.device)[:n_inject]
-            flat[zero_indices[0][perm], zero_indices[1][perm]] = 1.0
+            injected_positions = source_positions[:n_inject]
+            flat[injected_positions] = 1.0
+
+            # 记录通量
+            self._flux_log.append({
+                'type': 'inject',
+                'positions': injected_positions.tolist(),
+                'n_bits': n_inject,
+                'w_before': flat.sum().item() - n_inject,
+                'w_after': flat.sum().item(),
+            })
+
         return result
 
     def absorb_difference(self, state: torch.Tensor,
-                          sink_strength: float = 1.0) -> torch.Tensor:
-        """A8：在汇端吸收差异（翻转 sink_strength 个 1→0 比特）"""
+                          sink_strength: Optional[int] = None) -> torch.Tensor:
+        """A8：在汇端吸收差异（增强版）
+
+        多汇 + 动态位置选择 + 通量追踪
+        """
+        if sink_strength is None:
+            sink_strength = self.ss_config.sink_strength
+        sink_strength = int(sink_strength)
+
         result = state.clone()
-        flat = result.view(-1, self.N)
-        one_mask = flat > 0.5
-        n_ones = one_mask.sum().item()
-        n_absorb = min(int(sink_strength), int(n_ones))
+        flat = result.flatten()
+
+        sink_positions = self._select_sink_positions(state)
+        n_absorb = min(int(sink_strength * self.ss_config.n_sinks), sink_positions.numel())
+
         if n_absorb > 0:
-            one_indices = one_mask.nonzero(as_tuple=True)
-            perm = torch.randperm(n_ones, device=self.device)[:n_absorb]
-            flat[one_indices[0][perm], one_indices[1][perm]] = 0.0
+            absorbed_positions = sink_positions[:n_absorb]
+            flat[absorbed_positions] = 0.0
+
+            self._flux_log.append({
+                'type': 'absorb',
+                'positions': absorbed_positions.tolist(),
+                'n_bits': n_absorb,
+                'w_before': flat.sum().item() + n_absorb,
+                'w_after': flat.sum().item(),
+            })
+
         return result
 
     def apply_boundary_flow(self, state: torch.Tensor,
-                            source_strength: float = 1.0,
-                            sink_strength: float = 1.0):
-        """应用源/汇边界条件，返回流量信息"""
+                            source_strength: Optional[int] = None,
+                            sink_strength: Optional[int] = None):
+        """应用源/汇边界条件，返回流量信息（增强版）"""
         q_before = self.measure_invariant(state)
         after_source = self.inject_difference(state, source_strength)
         after_sink = self.absorb_difference(after_source, sink_strength)
         q_after = self.measure_invariant(after_sink)
+
         injected = (self.measure_invariant(after_source) - q_before).clamp(min=0.0)
         absorbed = (q_before + injected - q_after).clamp(min=0.0)
+
         return after_sink, injected, absorbed
+
+    def get_flux_stats(self) -> Dict:
+        """获取通量统计"""
+        if not self._flux_log:
+            return {'total_inject': 0, 'total_absorb': 0, 'net_flux': 0}
+
+        total_inject = sum(e['n_bits'] for e in self._flux_log if e['type'] == 'inject')
+        total_absorb = sum(e['n_bits'] for e in self._flux_log if e['type'] == 'absorb')
+        return {
+            'total_inject': total_inject,
+            'total_absorb': total_absorb,
+            'net_flux': total_inject - total_absorb,
+            'n_events': len(self._flux_log),
+        }
+
+    def clear_flux_log(self):
+        """清除通量记录"""
+        self._flux_log = []
 
     # --- 稳定性 ---
 
     def stability_violation(self, window: List[torch.Tensor]) -> torch.Tensor:
-        """A7：稳定性违背"""
         if len(window) < 2:
             return torch.tensor(0.0, device=window[0].device)
         states = torch.stack(window, dim=0)
-        # 时间波动
         temporal_std = states.std(dim=0).mean()
-        # 活动度
         activity = states.mean()
         collapse = torch.relu(torch.tensor(0.05, device=states.device) - activity)
         explosion = torch.relu(activity - torch.tensor(0.95, device=states.device))
         return temporal_std + collapse + explosion
 
-    def detect_stable_structures(self,
-                                 history: List[torch.Tensor]) -> List[StableStructure]:
-        """从演化历史中检测稳定结构"""
+    def detect_stable_structures(self, history: List[torch.Tensor]) -> List[StableStructure]:
         if len(history) < self.stability_window:
             return []
-
         window = history[-self.stability_window:]
         states = torch.stack(window, dim=0)
-
-        # 时间稳定性
         temporal_std = states.std(dim=0)
         temporal_mean = states.mean(dim=0)
-        # 活跃：既非全0也非全1的区域（有变化的余地）
         active = (temporal_mean > 0.0) & (temporal_mean < 1.0)
-        # 或者：所有比特都稳定（包括全0和全1）
         all_stable = (temporal_std < 0.1).all()
         stable = (temporal_std < 0.1) & (active | all_stable)
         stable_mask = stable
@@ -195,12 +341,10 @@ class HammingLattice(LayerBase):
         if not stable_mask.any():
             return []
 
-        # 稳定比特构成一个结构
         stable_bits = stable_mask.float()
         n_stable = int(stable_mask.sum().item())
         n_total = self.N
 
-        # 物质更替率
         if states.shape[0] > 1:
             diffs = (states[1:] - states[:-1]).abs()
             turnover = diffs.mean().item()
@@ -218,25 +362,22 @@ class HammingLattice(LayerBase):
             boundary_closure_score=1.0 - (n_stable / max(1, n_total)),
             source_trace=[{"n_stable_bits": n_stable, "n_total": n_total}],
         )
-
         return [struct]
 
     # --- 粗粒化与升维 ---
 
     def coarse_grain(self, structures: List) -> Optional['LayerBase']:
-        """粗粒化：将稳定结构封装为更高层"""
         if not structures:
             return None
-        # 简化：返回一个 N/2 的汉明层
         new_N = max(4, self.N // 2)
         return HammingLattice(N=new_N, device=self.device,
                               stability_window=self.stability_window,
                               use_strict_axioms=self.use_strict_axioms,
-                              dag_enabled=self.dag_enabled)
+                              dag_enabled=self.dag_enabled,
+                              source_sink_config=self.ss_config)
 
     def measure_ascent_pressure(self, history: List[torch.Tensor],
                                  structures: List) -> float:
-        """A5+A9：升维压力"""
         if len(history) < 2 or not structures:
             return 0.0
         q1 = self.measure_invariant(history[-2])
@@ -257,7 +398,6 @@ class HammingLattice(LayerBase):
     def evaluate_axioms(self, state: torch.Tensor, next_state: torch.Tensor,
                         history: List[torch.Tensor],
                         boundary_info: Optional[Dict] = None) -> Dict:
-        """使用严格化公理引擎评估"""
         if self.axiom_engine is None:
             return {}
         return self.axiom_engine.evaluate(
@@ -268,7 +408,6 @@ class HammingLattice(LayerBase):
     def compute_axiom_loss(self, state: torch.Tensor, next_state: torch.Tensor,
                            history: List[torch.Tensor],
                            boundary_info: Optional[Dict] = None) -> torch.Tensor:
-        """计算严格化公理总损失"""
         if self.axiom_engine is None:
             return torch.tensor(0.0, device=state.device)
         return self.axiom_engine.total_loss(
@@ -278,23 +417,14 @@ class HammingLattice(LayerBase):
 
     def step_hamming(self, state: torch.Tensor,
                      weights: Optional[torch.Tensor] = None) -> tuple:
-        """执行一步汉明演化（单比特翻转）
-
-        Args:
-            state: 当前状态 (B, N) 或 (N,)
-            weights: 翻转权重 (B, N) 或 (N,)，由 A8 对称偏好调制
-
-        Returns:
-            (新状态, 翻转的比特索引)
-        """
+        """执行一步汉明演化（单比特翻转）"""
         if state.dim() == 1:
             new_state, idx = self.transition.random_flip(state, weights)
             return new_state, idx
         else:
-            # 批量处理
             B = state.shape[0]
             new_states = state.clone()
-            indices = torch.full((B,), -1, dtype=torch.long, device=state.device)
+            indices = torch.full((B,), -1, dtype=torch.long, device=self.device)
             for b in range(B):
                 w = weights[b] if weights is not None and weights.dim() > 1 else weights
                 new_states[b], indices[b] = self.transition.random_flip(state[b], w)
@@ -306,3 +436,4 @@ class HammingLattice(LayerBase):
             self.axiom_engine.reset()
         self._struct_registry = {}
         self._next_struct_id = 0
+        self._flux_log = []

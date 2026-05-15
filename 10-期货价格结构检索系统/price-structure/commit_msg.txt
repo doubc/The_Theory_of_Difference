@@ -1,0 +1,10 @@
+fix: potential_median direction for down moves; add movement_type to scan
+
+- opportunity.py: negate down_move when direction=down (template stores
+  absolute decline value, not negative). Down opportunities now show correct
+  negative potential (-15.75% avg vs wrong +15.75% before).
+- daily_scan.py: force compute_motion() on each structure (compile_full builds
+  default motion, bypasses the None check). Pass structure=current_st to
+  aggregate_opportunity so movement_type is extracted.
+- loader.py, workbench/data_layer.py, relations.py: db name sina->sina_futures,
+  password env var, motion type system refactors.

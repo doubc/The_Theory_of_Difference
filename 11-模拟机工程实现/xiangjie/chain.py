@@ -410,6 +410,7 @@ class XiangjieChain:
             SelfMaintenanceGate(),
             MemoryGate(),
             ReplicationGate(),
+            SelectionGate(),
             FunctionGate(),
         ]
         self.pre_subjective_gate = PreSubjectiveGate()
@@ -465,11 +466,6 @@ class XiangjieChain:
                 else:
                     r = gate.evaluate(struct)
                 struct_reports.append(r)
-
-            # 第七章 筛选（独立于前六章）
-            selection_gate = SelectionGate()
-            selection_report = selection_gate.evaluate(struct, structures)
-            struct_reports.append(selection_report)
 
             # 第八章 前主体态
             ps_report = self.pre_subjective_gate.evaluate(struct_reports, struct)
