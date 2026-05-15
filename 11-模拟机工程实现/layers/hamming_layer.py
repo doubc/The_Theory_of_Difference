@@ -148,7 +148,9 @@ class HammingLattice(LayerBase):
         if zero_indices.numel() == 0:
             return torch.tensor([], dtype=torch.long, device=self.device)
 
-        n = min(self.ss_config.n_sources, zero_indices.numel())
+        n = min(int(self.ss_config.n_sources * self.ss_config.source_strength), zero_indices.numel())
+        if n <= 0:
+            return torch.tensor([], dtype=torch.long, device=self.device)
 
         if self.ss_config.dynamic_position:
             # 动态选择：基于 A8 对称偏好权重
@@ -201,7 +203,9 @@ class HammingLattice(LayerBase):
         if one_indices.numel() == 0:
             return torch.tensor([], dtype=torch.long, device=self.device)
 
-        n = min(self.ss_config.n_sinks, one_indices.numel())
+        n = min(int(self.ss_config.n_sinks * self.ss_config.sink_strength), one_indices.numel())
+        if n <= 0:
+            return torch.tensor([], dtype=torch.long, device=self.device)
 
         if self.ss_config.dynamic_position:
             w = flat.sum().item()
@@ -235,7 +239,7 @@ class HammingLattice(LayerBase):
         flat = result.flatten()
 
         source_positions = self._select_source_positions(state)
-        n_inject = min(int(source_strength * self.ss_config.n_sources), source_positions.numel())
+        n_inject = source_positions.numel()
 
         if n_inject > 0:
             injected_positions = source_positions[:n_inject]
@@ -266,7 +270,7 @@ class HammingLattice(LayerBase):
         flat = result.flatten()
 
         sink_positions = self._select_sink_positions(state)
-        n_absorb = min(int(sink_strength * self.ss_config.n_sinks), sink_positions.numel())
+        n_absorb = sink_positions.numel()
 
         if n_absorb > 0:
             absorbed_positions = sink_positions[:n_absorb]

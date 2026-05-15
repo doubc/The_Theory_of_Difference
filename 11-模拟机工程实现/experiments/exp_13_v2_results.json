@@ -1,0 +1,160 @@
+[
+  {
+    "name": "Experimental",
+    "config": {
+      "N": 32,
+      "total_steps": 50000,
+      "use_axioms": true,
+      "use_flux": true,
+      "coupling": 0.3
+    },
+    "signals": {
+      "mi_decay": "False",
+      "symmetry_breaking": false,
+      "narrow_dist": true,
+      "power_law": "True",
+      "clustering": false,
+      "time_arrow": false,
+      "low_dimensional": false
+    },
+    "n_signals": 2,
+    "elapsed_s": 243.8913164138794,
+    "mi_mean": 0.0,
+    "mi_decay_slope": NaN,
+    "hd_mean": 1.0290000438690186,
+    "hd_std": 1.2208311557769775,
+    "hd_peak_ratio": 14.462580095723014,
+    "rt_mean": 31.982528686523438,
+    "rt_power_law_slope": -2.097127035338287,
+    "bc_n_clusters": 0,
+    "bc_max_cluster": 0,
+    "dd_avg_consistency": 0.11133120208978653,
+    "ed_n_dof_90": 20,
+    "ed_compression": 0.625,
+    "n_coupled_flips": 14995,
+    "flux_stats": {
+      "total_inject": 800000,
+      "total_absorb": 787395,
+      "net_flux": 12605,
+      "n_events": 100000
+    }
+  },
+  {
+    "name": "No Axioms",
+    "config": {
+      "N": 32,
+      "total_steps": 50000,
+      "use_axioms": false,
+      "use_flux": true,
+      "coupling": 0.0
+    },
+    "signals": {
+      "mi_decay": "False",
+      "symmetry_breaking": false,
+      "narrow_dist": true,
+      "power_law": "True",
+      "clustering": false,
+      "time_arrow": false,
+      "low_dimensional": false
+    },
+    "n_signals": 2,
+    "elapsed_s": 52.280542612075806,
+    "mi_mean": 0.0,
+    "mi_decay_slope": NaN,
+    "hd_mean": 0.9049800038337708,
+    "hd_std": 1.0600630044937134,
+    "hd_peak_ratio": 14.706779399312156,
+    "rt_mean": 31.983530044555664,
+    "rt_power_law_slope": -2.1154207379788743,
+    "bc_n_clusters": 0,
+    "bc_max_cluster": 0,
+    "dd_avg_consistency": 0.12426003068685532,
+    "ed_n_dof_90": 20,
+    "ed_compression": 0.625,
+    "n_coupled_flips": 0,
+    "flux_stats": {
+      "total_inject": 800000,
+      "total_absorb": 788773,
+      "net_flux": 11227,
+      "n_events": 100000
+    }
+  },
+  {
+    "name": "No Flux",
+    "config": {
+      "N": 32,
+      "total_steps": 50000,
+      "use_axioms": true,
+      "use_flux": false,
+      "coupling": 0.3
+    },
+    "signals": {
+      "mi_decay": "False",
+      "symmetry_breaking": true,
+      "narrow_dist": true,
+      "power_law": "True",
+      "clustering": false,
+      "time_arrow": false,
+      "low_dimensional": false
+    },
+    "n_signals": 3,
+    "elapsed_s": 176.09136390686035,
+    "mi_mean": 0.0,
+    "mi_decay_slope": NaN,
+    "hd_mean": 15.979680061340332,
+    "hd_std": 1.8159440755844116,
+    "hd_peak_ratio": 8.175419269882992,
+    "rt_mean": 31.972063064575195,
+    "rt_power_law_slope": -2.08884365392074,
+    "bc_n_clusters": 0,
+    "bc_max_cluster": 0,
+    "dd_avg_consistency": 0.030452806502580643,
+    "ed_n_dof_90": 24,
+    "ed_compression": 0.75,
+    "n_coupled_flips": 14951,
+    "flux_stats": {
+      "total_inject": 0,
+      "total_absorb": 0,
+      "net_flux": 0
+    }
+  },
+  {
+    "name": "Random Closed",
+    "config": {
+      "N": 32,
+      "total_steps": 50000,
+      "use_axioms": false,
+      "use_flux": false,
+      "coupling": 0.0
+    },
+    "signals": {
+      "mi_decay": "False",
+      "symmetry_breaking": true,
+      "narrow_dist": true,
+      "power_law": "True",
+      "clustering": false,
+      "time_arrow": false,
+      "low_dimensional": false
+    },
+    "n_signals": 3,
+    "elapsed_s": 46.205989599227905,
+    "mi_mean": 0.0,
+    "mi_decay_slope": NaN,
+    "hd_mean": 16.000959396362305,
+    "hd_std": 1.6279226541519165,
+    "hd_peak_ratio": 9.340980765962364,
+    "rt_mean": 31.982269287109375,
+    "rt_power_law_slope": -2.0971500150291433,
+    "bc_n_clusters": 0,
+    "bc_max_cluster": 0,
+    "dd_avg_consistency": 0.023725375533103943,
+    "ed_n_dof_90": 24,
+    "ed_compression": 0.75,
+    "n_coupled_flips": 0,
+    "flux_stats": {
+      "total_inject": 0,
+      "total_absorb": 0,
+      "net_flux": 0
+    }
+  }
+]

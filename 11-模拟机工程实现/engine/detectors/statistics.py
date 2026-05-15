@@ -177,31 +177,25 @@ class BitClusteringDetector:
 
     def compute(self, flip_sequence: torch.Tensor,
                 window_size: int = 1000) -> Dict:
-        """基于翻转相关性对比特进行聚类"""
+        """基于翻转相关性对比特进行聚类（向量化版本）"""
         T = flip_sequence.shape[0]
         if T < window_size:
             return {'error': 'sequence too short'}
 
-        # 构建翻转矩阵 (T, N)
-        flip_matrix = torch.zeros(T, self.N)
-        for t in range(T):
-            pos = flip_sequence[t].item()
-            if 0 <= pos < self.N:
-                flip_matrix[t, pos] = 1.0
+        # 构建翻转矩阵 (T, N) - 向量化
+        flip_matrix = torch.zeros(T, self.N, device=flip_sequence.device)
+        valid_mask = (flip_sequence >= 0) & (flip_sequence < self.N)
+        valid_indices = flip_sequence[valid_mask].long()
+        valid_times = torch.arange(T, device=flip_sequence.device)[valid_mask]
+        flip_matrix[valid_times, valid_indices] = 1.0
 
-        # 计算比特间相关性矩阵
-        corr_matrix = torch.zeros(self.N, self.N)
-        for i in range(self.N):
-            for j in range(i + 1, self.N):
-                fi = flip_matrix[:, i]
-                fj = flip_matrix[:, j]
-                if fi.sum() > 0 and fj.sum() > 0:
-                    stacked = torch.stack([fi, fj])
-                    if stacked[:, 0].std() > 0 and stacked[:, 1].std() > 0:
-                        corr = torch.corrcoef(stacked)[0, 1].item()
-                        if not (corr != corr):  # not nan
-                            corr_matrix[i, j] = corr
-                            corr_matrix[j, i] = corr
+        # 向量化计算相关性矩阵
+        # 标准化
+        mean = flip_matrix.mean(dim=0, keepdim=True)
+        std = flip_matrix.std(dim=0, keepdim=True).clamp(min=1e-8)
+        normalized = (flip_matrix - mean) / std
+        corr_matrix = (normalized.T @ normalized) / T
+        corr_matrix = corr_matrix.cpu()
 
         # 简单聚类：相关性 > 阈值的比特归为一组
         threshold = 0.1
@@ -213,20 +207,17 @@ class BitClusteringDetector:
             cluster = [i]
             visited.add(i)
             for j in range(self.N):
-                if j not in visited and corr_matrix[i, j] > threshold:
+                if j not in visited and abs(corr_matrix[i, j].item()) > threshold:
                     cluster.append(j)
                     visited.add(j)
             if len(cluster) >= 2:
                 clusters.append(cluster)
 
-        # 统计
         n_clusters = len(clusters)
         max_cluster_size = max(len(c) for c in clusters) if clusters else 0
         avg_cluster_size = np.mean([len(c) for c in clusters]) if clusters else 0
         clustered_bits = sum(len(c) for c in clusters)
         cluster_ratio = clustered_bits / self.N
-
-        # 信号：显著聚类
         significant_clusters = cluster_ratio > 0.2 and max_cluster_size >= 3
 
         return {
@@ -236,7 +227,6 @@ class BitClusteringDetector:
             'avg_cluster_size': float(avg_cluster_size),
             'cluster_ratio': float(cluster_ratio),
             'significant_clusters': significant_clusters,
-            'correlation_matrix': corr_matrix.tolist(),
         }
 
 

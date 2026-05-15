@@ -1,0 +1,126 @@
+[
+  {
+    "name": "Experimental",
+    "config": {
+      "N": 16,
+      "total_steps": 20000,
+      "use_axioms": true,
+      "use_flux": true
+    },
+    "signals": {
+      "mi_decay": "False",
+      "symmetry_breaking": false,
+      "narrow_dist": true,
+      "power_law": "True",
+      "clustering": false,
+      "time_arrow": false,
+      "low_dimensional": false
+    },
+    "n_signals": 2,
+    "elapsed_s": 49.079315423965454,
+    "mi_mean": 0.0,
+    "hd_mean": 4.003749847412109,
+    "hd_std": 1.3339883089065552,
+    "hd_peak_ratio": 5.468899401234541,
+    "rt_mean": 15.987990379333496,
+    "rt_power_law_slope": -2.1162559909967134,
+    "bc_n_clusters": 0,
+    "bc_max_cluster": 0,
+    "dd_avg_consistency": 0.0444461926817894,
+    "ed_n_dof_90": 14,
+    "ed_compression": 0.875
+  },
+  {
+    "name": "No Axioms",
+    "config": {
+      "N": 16,
+      "total_steps": 20000,
+      "use_axioms": false,
+      "use_flux": true
+    },
+    "signals": {
+      "mi_decay": "False",
+      "symmetry_breaking": false,
+      "narrow_dist": true,
+      "power_law": "True",
+      "clustering": false,
+      "time_arrow": false,
+      "low_dimensional": false
+    },
+    "n_signals": 2,
+    "elapsed_s": 15.730629444122314,
+    "mi_mean": 0.0,
+    "hd_mean": 4.004799842834473,
+    "hd_std": 1.3418893814086914,
+    "hd_peak_ratio": 5.380500117762014,
+    "rt_mean": 15.991743087768555,
+    "rt_power_law_slope": -2.0907476070450035,
+    "bc_n_clusters": 0,
+    "bc_max_cluster": 0,
+    "dd_avg_consistency": 0.027938425540924072,
+    "ed_n_dof_90": 14,
+    "ed_compression": 0.875
+  },
+  {
+    "name": "No Flux",
+    "config": {
+      "N": 16,
+      "total_steps": 20000,
+      "use_axioms": true,
+      "use_flux": false
+    },
+    "signals": {
+      "mi_decay": "False",
+      "symmetry_breaking": true,
+      "narrow_dist": true,
+      "power_law": "True",
+      "clustering": false,
+      "time_arrow": false,
+      "low_dimensional": false
+    },
+    "n_signals": 3,
+    "elapsed_s": 30.213969945907593,
+    "mi_mean": 0.0,
+    "hd_mean": 8.0108003616333,
+    "hd_std": 1.3905322551727295,
+    "hd_peak_ratio": 5.315899364439853,
+    "rt_mean": 15.989341735839844,
+    "rt_power_law_slope": -2.132399223726331,
+    "bc_n_clusters": 0,
+    "bc_max_cluster": 0,
+    "dd_avg_consistency": 0.032273609191179276,
+    "ed_n_dof_90": 14,
+    "ed_compression": 0.875
+  },
+  {
+    "name": "Random Closed",
+    "config": {
+      "N": 16,
+      "total_steps": 20000,
+      "use_axioms": false,
+      "use_flux": false
+    },
+    "signals": {
+      "mi_decay": "False",
+      "symmetry_breaking": true,
+      "narrow_dist": true,
+      "power_law": "True",
+      "clustering": false,
+      "time_arrow": false,
+      "low_dimensional": false
+    },
+    "n_signals": 3,
+    "elapsed_s": 12.214484214782715,
+    "mi_mean": 0.0,
+    "hd_mean": 8.025199890136719,
+    "hd_std": 1.34270441532135,
+    "hd_peak_ratio": 5.34990044533613,
+    "rt_mean": 15.986689567565918,
+    "rt_power_law_slope": -2.157364116907757,
+    "bc_n_clusters": 0,
+    "bc_max_cluster": 0,
+    "dd_avg_consistency": 0.0331452414393425,
+    "ed_n_dof_90": 14,
+    "ed_compression": 0.875
+  }
+]

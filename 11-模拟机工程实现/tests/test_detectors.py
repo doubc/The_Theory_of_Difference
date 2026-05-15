@@ -133,8 +133,6 @@ class TestBitClusteringDetector:
         # 检查聚类结果结构正确
         assert 'n_clusters' in result
         assert 'clusters' in result
-        # 对于强相关的 bit0,bit1，应该有某种聚类信号
-        # （具体阈值取决于实现，这里只检查不崩溃）
 
 
 class TestDAGDirectionDetector:
