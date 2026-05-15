@@ -1,0 +1,68 @@
+[
+  {
+    "name": "Axioms",
+    "N": 32,
+    "elapsed_s": 65.1552186012268,
+    "final_weight": 16.0,
+    "cycles": 959,
+    "n_clusters": 4,
+    "max_cluster_size": 10,
+    "avg_cluster_size": 5.25,
+    "cluster_coverage": 0.65625,
+    "binding_mean": 3.80605149269104,
+    "binding_max": 338.61492919921875,
+    "binding_std": 21.83988380432129,
+    "clusters": [
+      [
+        10,
+        11,
+        13,
+        21,
+        23,
+        26,
+        27,
+        28,
+        30,
+        31
+      ],
+      [
+        12,
+        18,
+        22,
+        24,
+        25
+      ],
+      [
+        14,
+        17,
+        19,
+        29
+      ],
+      [
+        15,
+        16
+      ]
+    ],
+    "hierarchy_dist": {
+      "0": 32
+    }
+  },
+  {
+    "name": "NoAxioms",
+    "N": 32,
+    "elapsed_s": 20.18849205970764,
+    "final_weight": 6.0,
+    "cycles": 1,
+    "n_clusters": 0,
+    "max_cluster_size": 0,
+    "avg_cluster_size": 0,
+    "cluster_coverage": 0,
+    "binding_mean": 0.0,
+    "binding_max": 0.0,
+    "binding_std": 0.0,
+    "clusters": [],
+    "hierarchy_dist": {
+      "0": 32
+    }
+  }
+]
