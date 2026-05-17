@@ -46,6 +46,8 @@ class AxiomConstraints:
         # A7 循环检测：记录访问过的状态
         self.visited_states: Set[int] = set()
         self.cycle_states: Set[int] = set()  # 参与循环的状态
+        self.state_history: List[int] = []  # 状态历史（用于 SCC 检测）
+        self.cycle_participants: Set[int] = set()  # 参与循环的比特
 
         # A5 守恒追踪
         self.total_injected = 0
@@ -60,6 +62,9 @@ class AxiomConstraints:
 
         # A9 活跃自由度追踪
         self.active_bits: Set[int] = set()
+        self.sealed = False  # 封口标志
+        self.sealed_bits: Set[int] = set()  # 被封口的比特
+        self.min_active_bits = max(3, N // 4)  # 最少活跃比特数
     # ============================================================
 
     def check_A1(self, state: torch.Tensor, flip_idx: int) -> Tuple[bool, str]:
@@ -162,14 +167,41 @@ class AxiomConstraints:
     def check_A7(self, state: torch.Tensor) -> Tuple[bool, str]:
         """A7：检测状态是否参与循环
 
-        循环 = 状态在历史中出现过（通过源/汇通量形成闭合路径）
+        改进：不仅检测精确重复，还检测近似循环（汉明距离 ≤ 2）
+        如果当前状态与历史中某个状态接近，认为参与了循环
         """
         state_key = self._state_key(state)
+        self.state_history.append(state_key)
+
+        # 精确重复
         if state_key in self.visited_states:
             self.cycle_states.add(state_key)
-            return True, "A7: cycle detected"
+            return True, "A7: exact cycle detected"
+
+        # 近似重复：与历史状态汉明距离 ≤ 2
+        if len(self.visited_states) > 10:
+            # 只检查最近 1000 个状态（性能考虑）
+            recent = list(self.visited_states)[-1000:]
+            for prev_key in recent:
+                d_h = bin(state_key ^ prev_key).count('1')
+                if d_h <= 2:
+                    self.cycle_states.add(state_key)
+                    self.cycle_states.add(prev_key)
+                    return True, f"A7: near cycle detected (d_H={d_h})"
+
         self.visited_states.add(state_key)
-        return True, "ok"  # 新状态也允许，只是还没形成循环
+        return True, "ok"
+
+    def get_A7_cycle_participants(self, flip_history: List[int]) -> Set[int]:
+        """获取参与循环的比特
+
+        参与过循环状态的比特翻转 = 循环参与者
+        """
+        return self.cycle_participants
+
+    def record_cycle_bit(self, bit_idx: int):
+        """记录参与循环的比特"""
+        self.cycle_participants.add(bit_idx)
 
     def _state_key(self, state: torch.Tensor) -> int:
         """将状态转换为整数键"""
@@ -210,10 +242,10 @@ class AxiomConstraints:
         """A8：基于当前重量动态确定源注入强度
 
         目标：维持 w ≈ N/2
-        - w < N/2 - 2：强注入（4）
-        - w < N/2：中等注入（2）
-        - w > N/2 + 2：不注入（0）
-        - w > N/2：弱注入（1）
+        - w < N/2 - 4：强注入（4）
+        - w < N/2 - 2：中等注入（2）
+        - w > N/2 + 4：不注入（0）
+        - w > N/2 + 2：弱注入（0）
         - 平衡态：维持（1）
         """
         w = state.sum().item()
@@ -232,33 +264,82 @@ class AxiomConstraints:
             return 1
 
     def get_A8_sink_strength(self, state: torch.Tensor, n_injected: int) -> int:
-        """A8：基于当前重量和注入量确定汇吸收强度
+        """A8：汇吸收强度
 
-        A5 守恒：吸收 = 注入 + 过剩调节
-        - 基础吸收 = n_injected（A5 守恒）
-        - 过剩调节：w > N/2 时多吸收，w < N/2 时少吸收
+        A5 守恒：吸收 = 注入（严格平衡）
+        不再有过剩调节——那是导致 A5 不平衡的根本原因
         """
+        sink = n_injected
+        # 确保不超过当前重量
         w = state.sum().item()
-        target = self.N / 2.0
-        excess = max(0, w - target)  # 只吸收过剩
-        return n_injected + int(excess * 0.5)
+        sink = min(sink, int(w))
+        sink = max(sink, 0)
+        return sink
 
     # ============================================================
     # A9：自由度封口
     # ============================================================
 
     def check_A9(self, flip_idx: int) -> Tuple[bool, str]:
-        """A9：只允许活跃自由度参与演化"""
-        # 前 N 步：所有比特都可以激活
+        """A9：自由度封口
+
+        阶段1（未封口）：所有比特都可以激活
+        阶段2（封口后）：只允许活跃比特中的一部分参与演化
+          - 基于绑定强度选择最活跃的比特
+          - 冻结多余比特（低于阈值的被冻结）
+          - 保留最少 min_active_bits 个比特
+        """
+        # 阶段1：激活阶段
         if len(self.active_bits) < self.N:
             self.active_bits.add(flip_idx)
             return True, "ok"
 
-        # 之后：只允许活跃比特
-        if flip_idx not in self.active_bits:
-            return False, f"A9: bit {flip_idx} not active"
+        # 阶段2：封口
+        if not self.sealed:
+            self._seal()
 
+        # 封口后：只允许非冻结比特
+        if flip_idx in self.sealed_bits:
+            return False, f"A9: bit {flip_idx} sealed"
+
+        self.active_bits.add(flip_idx)
         return True, "ok"
+
+    def _seal(self):
+        """执行封口：冻结多余比特
+
+        策略：
+        1. 计算每个活跃比特的平均绑定强度
+        2. 保留绑定强度最高的 min_active_bits 个比特
+        3. 冻结其余比特
+        """
+        if len(self.active_bits) <= self.min_active_bits:
+            self.sealed = True
+            return
+
+        # 计算每个比特的平均绑定强度
+        binding_scores = {}
+        for i in self.active_bits:
+            total = sum(self.binding_strength[i][j].item() for j in self.active_bits if j != i)
+            binding_scores[i] = total / max(len(self.active_bits) - 1, 1)
+
+        # 按绑定强度排序，保留最强的
+        sorted_bits = sorted(binding_scores.keys(), key=lambda x: binding_scores[x], reverse=True)
+        keep = set(sorted_bits[:self.min_active_bits])
+        freeze = set(sorted_bits[self.min_active_bits:])
+
+        self.sealed_bits = freeze
+        self.sealed = True
+
+        print(f"[A9] Sealed: keeping {len(keep)} bits, freezing {len(freeze)} bits")
+        print(f"[A9] Kept: {sorted(keep)}")
+        print(f"[A9] Frozen: {sorted(freeze)}")
+
+    def get_sealed_ratio(self) -> float:
+        """获取封口比例"""
+        if not self.sealed:
+            return 0.0
+        return len(self.sealed_bits) / self.N
 
     def record_active(self, flip_idx: int):
         self.active_bits.add(flip_idx)

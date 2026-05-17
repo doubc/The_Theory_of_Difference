@@ -203,6 +203,7 @@ class LongRangeEvolverV2:
             print(f"[LongRangeEvolverV2] Done. {len(self.snapshots)} snapshots.")
             print(f"  Cycles detected: {len(self.constraints.cycle_states)}")
             print(f"  Active bits: {len(self.constraints.active_bits)}/{self.N}")
+            print(f"  Sealed: {self.constraints.sealed} ({len(self.constraints.sealed_bits)} bits, ratio={self.constraints.get_sealed_ratio():.2f})")
             print(f"  Total inject: {self.constraints.total_injected}, "
                   f"absorb: {self.constraints.total_absorbed}")
             clusters = self.constraints.get_clusters()
@@ -225,6 +226,10 @@ class LongRangeEvolverV2:
             'direction': self.constraints.direction.clone(),
             'clusters': self.constraints.get_clusters(),
             'binding_strength': self.constraints.binding_strength.clone(),
+            'sealed': self.constraints.sealed,
+            'sealed_bits': len(self.constraints.sealed_bits),
+            'sealed_ratio': self.constraints.get_sealed_ratio(),
+            'n_cycles_near': sum(1 for _ in self.constraints.cycle_states),
         }
 
     def get_trajectory_tensor(self) -> torch.Tensor:
