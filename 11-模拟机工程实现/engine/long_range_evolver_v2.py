@@ -99,6 +99,9 @@ class LongRangeEvolverV2:
                     if ok:
                         chosen = np.random.choice(all_candidates, n_inject, replace=False)
                         for idx in chosen:
+                            a9_ok, _ = self.constraints.check_A9(idx)
+                            if not a9_ok:
+                                continue
                             state[idx] = 1.0
                             self.constraints.record_inject(1)
                             self.constraints.record_active(idx)
@@ -113,16 +116,19 @@ class LongRangeEvolverV2:
             # ====== 2. 内部演化（A4 + A1 + A6 + A8）======
             allowed = self.constraints.get_allowed_flips(state)
             if allowed:
-                # A8 权重采样
                 weights = self.constraints.get_A8_weights(state)
                 allowed_weights = weights[allowed]
                 allowed_weights = allowed_weights / allowed_weights.sum()
                 flip_idx = allowed[torch.multinomial(allowed_weights, 1).item()]
-                old_val = state[flip_idx].item()
-                state[flip_idx] = 1.0 - state[flip_idx]
-                new_val = state[flip_idx].item()
-                self.constraints.update_A6_direction(flip_idx, old_val, new_val)
-                self.constraints.record_active(flip_idx)
+                a9_ok, _ = self.constraints.check_A9(flip_idx)
+                if a9_ok:
+                    old_val = state[flip_idx].item()
+                    state[flip_idx] = 1.0 - state[flip_idx]
+                    new_val = state[flip_idx].item()
+                    self.constraints.update_A6_direction(flip_idx, old_val, new_val)
+                    self.constraints.record_active(flip_idx)
+                else:
+                    flip_idx = -1
             else:
                 flip_idx = -1
 
@@ -130,15 +136,17 @@ class LongRangeEvolverV2:
             lateral_pairs = self.constraints.get_A1_prime_candidates(state)
             n_lateral = 0
             for (i, j) in lateral_pairs:
-                # i: 1→0, j: 0→1（保持重量不变）
                 if state[i] > 0.5 and state[j] < 0.5:
+                    a9_ok_i, _ = self.constraints.check_A9(i)
+                    a9_ok_j, _ = self.constraints.check_A9(j)
+                    if not a9_ok_i or not a9_ok_j:
+                        continue
                     state[i] = 0.0
                     state[j] = 1.0
                     self.constraints.update_A6_direction(i, 1.0, 0.0)
                     self.constraints.update_A6_direction(j, 0.0, 1.0)
                     self.constraints.record_active(i)
                     self.constraints.record_active(j)
-                    # A1'：增强绑定强度
                     self.constraints.strengthen_binding(i, j, amount=0.1)
                     n_lateral += 1
 
@@ -229,7 +237,8 @@ class LongRangeEvolverV2:
             'sealed': self.constraints.sealed,
             'sealed_bits': len(self.constraints.sealed_bits),
             'sealed_ratio': self.constraints.get_sealed_ratio(),
-            'n_cycles_near': sum(1 for _ in self.constraints.cycle_states),
+            'total_injected': self.constraints.total_injected,
+            'total_absorbed': self.constraints.total_absorbed,
         }
 
     def get_trajectory_tensor(self) -> torch.Tensor:

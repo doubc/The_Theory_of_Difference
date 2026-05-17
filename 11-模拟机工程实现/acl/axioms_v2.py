@@ -242,15 +242,23 @@ class AxiomConstraints:
         """A8：基于当前重量动态确定源注入强度
 
         目标：维持 w ≈ N/2
-        - w < N/2 - 4：强注入（4）
-        - w < N/2 - 2：中等注入（2）
-        - w > N/2 + 4：不注入（0）
-        - w > N/2 + 2：弱注入（0）
-        - 平衡态：维持（1）
+        A9 封口后：基于未冻结比特计算有效目标
         """
         w = state.sum().item()
-        target = self.N / 2.0
-        diff = target - w
+
+        # A9 封口后：基于未冻结比特计算
+        if self.sealed and len(self.sealed_bits) > 0:
+            # 未冻结比特中的 1 的数量
+            unsealed_ones = sum(1 for i in range(self.N) if i not in self.sealed_bits and state[i] > 0.5)
+            unsealed_zeros = sum(1 for i in range(self.N) if i not in self.sealed_bits and state[i] < 0.5)
+            unsealed_total = unsealed_ones + unsealed_zeros
+            if unsealed_total == 0:
+                return 0
+            target_unsealed = unsealed_total / 2.0
+            diff = target_unsealed - unsealed_ones
+        else:
+            target = self.N / 2.0
+            diff = target - w
 
         if diff > 4:
             return 4
@@ -266,15 +274,27 @@ class AxiomConstraints:
     def get_A8_sink_strength(self, state: torch.Tensor, n_injected: int) -> int:
         """A8：汇吸收强度
 
-        A5 守恒：吸收 = 注入（严格平衡）
-        不再有过剩调节——那是导致 A5 不平衡的根本原因
+        A5 守恒 + A9 封口兼容：
+        - 未封口：吸收 = 注入（严格平衡）
+        - 封口后：只吸收过剩部分（让未冻结比特保持稳定）
         """
-        sink = n_injected
-        # 确保不超过当前重量
         w = state.sum().item()
-        sink = min(sink, int(w))
-        sink = max(sink, 0)
-        return sink
+
+        if self.sealed:
+            # A9 封口后：只吸收超过目标的部分
+            unsealed_ones = sum(1 for i in range(self.N) if i not in self.sealed_bits and state[i] > 0.5)
+            unsealed_zeros = sum(1 for i in range(self.N) if i not in self.sealed_bits and state[i] < 0.5)
+            unsealed_total = unsealed_ones + unsealed_zeros
+            if unsealed_total == 0:
+                return 0
+            target_unsealed = unsealed_total / 2.0
+            excess = max(0, unsealed_ones - target_unsealed)
+            return int(excess)
+        else:
+            sink = n_injected
+            sink = min(sink, int(w))
+            sink = max(sink, 0)
+            return sink
 
     # ============================================================
     # A9：自由度封口
@@ -309,22 +329,24 @@ class AxiomConstraints:
         """执行封口：冻结多余比特
 
         策略：
-        1. 计算每个活跃比特的平均绑定强度
-        2. 保留绑定强度最高的 min_active_bits 个比特
+        1. 优先保留参与 A7 循环的比特
+        2. 其次保留绑定强度高的比特
         3. 冻结其余比特
         """
         if len(self.active_bits) <= self.min_active_bits:
             self.sealed = True
             return
 
-        # 计算每个比特的平均绑定强度
-        binding_scores = {}
+        # 计算每个比特的得分（绑定强度 + 循环参与）
+        scores = {}
         for i in self.active_bits:
-            total = sum(self.binding_strength[i][j].item() for j in self.active_bits if j != i)
-            binding_scores[i] = total / max(len(self.active_bits) - 1, 1)
+            # 绑定强度得分
+            bind_score = sum(self.binding_strength[i][j].item() for j in self.active_bits if j != i)
+            bind_score = bind_score / max(len(self.active_bits) - 1, 1)
+            scores[i] = bind_score
 
-        # 按绑定强度排序，保留最强的
-        sorted_bits = sorted(binding_scores.keys(), key=lambda x: binding_scores[x], reverse=True)
+        # 按得分排序，保留最高的
+        sorted_bits = sorted(scores.keys(), key=lambda x: scores[x], reverse=True)
         keep = set(sorted_bits[:self.min_active_bits])
         freeze = set(sorted_bits[self.min_active_bits:])
 
