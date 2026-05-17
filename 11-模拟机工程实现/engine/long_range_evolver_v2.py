@@ -85,11 +85,10 @@ class LongRangeEvolverV2:
 
             # ====== 1. 源注入（A1 + A8 调制）======
             source_strength = self.constraints.get_A8_source_strength(state)
+            actual_inject = 0
             if source_strength > 0:
-                # 优先选择层级比特（A1：差异累积）
                 h_candidates = [i for i in self.constraints.hierarchy_indices
                                 if state[i] < 0.5 and self.constraints.direction[i].item() >= 0]
-                # 如果层级比特满了，注入横向比特
                 l_candidates = [i for i in self.constraints.lateral_indices
                                 if state[i] < 0.5 and self.constraints.direction[i].item() >= 0]
                 all_candidates = h_candidates + l_candidates
@@ -106,6 +105,7 @@ class LongRangeEvolverV2:
                             self.constraints.record_inject(1)
                             self.constraints.record_active(idx)
                             self.constraints.direction[idx] = 1
+                            actual_inject += 1
                     else:
                         n_inject = 0
                 else:
@@ -187,7 +187,7 @@ class LongRangeEvolverV2:
             w_after = state.sum().long().item()
             self.flip_history.append(flip_idx)
             self.hamming_weight_history.append(w_after)
-            self.inject_history.append(n_inject)
+            self.inject_history.append(actual_inject)
             self.absorb_history.append(n_absorb)
             self.lateral_history.append(n_lateral)
 

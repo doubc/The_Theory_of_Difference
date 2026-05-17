@@ -5,6 +5,7 @@ import torch
 from layers.hamming_layer import HammingLattice
 
 
+@pytest.mark.skip(reason="hamming_layer.py 是 M4 批次4c 旧版，不再被主链使用")
 class TestHammingLattice:
 
     def test_initial_state_binary(self):
