@@ -57,23 +57,37 @@ class GaugeFieldDetector:
         return states
 
     def verify_CR1_on_state(self, state: torch.Tensor) -> Dict:
-        """在单个状态上验证 CR-1: [E_ij, E_jk] = E_ik"""
-        ones = (state > 0.5).nonzero(as_tuple=True)[0].tolist()
-        if len(ones) < 3:
-            return {'holds': 'N/A', 'reason': 'fewer than 3 ones'}
+        """在单个状态上验证 CR-1: [E_ij, E_jk] = E_ik
 
-        # 取前 3 个 1 的位置
-        a, b, c = ones[0], ones[1], ones[2]
-        return self.algebra.verify_CR1(state, a, b, c)
+        i 必须是 1，j 必须是 0，k 必须是 1。
+        E_ij: i(1)->0, j(0)->1
+        E_jk: j(1)->0, k(1)->1（需要 E_ij 之后 j=1）
+        """
+        ones = (state > 0.5).nonzero(as_tuple=True)[0].tolist()
+        zeros = (state < 0.5).nonzero(as_tuple=True)[0].tolist()
+        if len(ones) < 2 or len(zeros) < 1:
+            return {'holds': 'N/A', 'reason': 'need 2+ ones and 1+ zero'}
+
+        # CR-1: i from ones, j and k from zeros
+        # 这样 E_ij(i=1,j=0), E_jk(j=1,k=0), E_ik(i=1,k=0) 都有效
+        i = ones[0]
+        j = zeros[0]
+        k = zeros[1] if len(zeros) > 1 else zeros[0]
+        return self.algebra.verify_CR1(state, i, j, k)
 
     def verify_CR2_on_state(self, state: torch.Tensor) -> Dict:
-        """在单个状态上验证 CR-2: [E_ij, E_ji] = -(x_i - x_j)"""
-        ones = (state > 0.5).nonzero(as_tuple=True)[0].tolist()
-        if len(ones) < 2:
-            return {'holds': 'N/A', 'reason': 'fewer than 2 ones'}
+        """在单个状态上验证 CR-2: [E_ij, E_ji] = -(x_i - x_j)
 
-        a, b = ones[0], ones[1]
-        return self.algebra.verify_CR2(state, a, b)
+        i 必须是 1，j 必须是 0（这样 E_ij 有效）。
+        """
+        ones = (state > 0.5).nonzero(as_tuple=True)[0].tolist()
+        zeros = (state < 0.5).nonzero(as_tuple=True)[0].tolist()
+        if len(ones) < 1 or len(zeros) < 1:
+            return {'holds': 'N/A', 'reason': 'need 1+ one and 1+ zero'}
+
+        i = ones[0]  # bit i = 1
+        j = zeros[0]  # bit j = 0
+        return self.algebra.verify_CR2(state, i, j)
 
     def count_generators(self, k: int = 3) -> Dict:
         """计算 k 个活跃位的生成元数量"""

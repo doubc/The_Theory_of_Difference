@@ -67,7 +67,9 @@ class FirstOrderAlgebra:
             commutator = term1 - term2
 
             if E_ik_s is not None:
-                holds = (commutator == E_ik_s).all().item()
+                # 注意符号约定：我们的 E_ij 是"右作用"约定，
+                # [E_ij, E_jk] = -E_ik（WorldBase §5.4 符号约定说明）
+                holds = (commutator == -E_ik_s).all().item()
             else:
                 # E_ik|s> = 0，检查对易子是否为 0
                 holds = (commutator == 0).all().item()
@@ -213,7 +215,11 @@ class FirstOrderAlgebra:
         }
 
     def verify_all_CR(self, n_samples: int = 50) -> Dict:
-        """在所有中截面状态上验证对易关系"""
+        """在所有中截面状态上验证对易关系
+
+        CR-1: i,k 从 1 的位置选，j 从 0 的位置选
+        CR-2: i 从 1 的位置选，j 从 0 的位置选
+        """
         from engine.hamming_engine import HammingMeasurement
 
         N = self.N
@@ -233,14 +239,19 @@ class FirstOrderAlgebra:
             state[indices] = 1.0
 
             ones = indices.tolist()
-            if len(ones) < 3:
+            zeros = (state < 0.5).nonzero(as_tuple=True)[0].tolist()
+
+            if len(ones) < 2 or len(zeros) < 1:
                 continue
 
-            # 取前 3 个活跃位
-            a, b, c = ones[0], ones[1], ones[2]
-
-            # CR-1
-            r1 = self.verify_CR1(state, a, b, c)
+            # CR-1: i from ones, j and k from zeros
+            # E_ij: i=1, j=0 -> valid
+            # E_jk: j=1(after E_ij), k=0 -> valid
+            # E_ik: i=1, k=0 -> valid
+            i = ones[0]
+            j = zeros[0]
+            k = zeros[1] if len(zeros) > 1 else zeros[0]
+            r1 = self.verify_CR1(state, i, j, k)
             if r1['CR1_holds'] == True:
                 cr1_pass += 1
             elif r1['CR1_holds'] == False:
@@ -248,14 +259,15 @@ class FirstOrderAlgebra:
             else:
                 cr1_na += 1
 
-            # CR-2
-            r2 = self.verify_CR2(state, a, b)
-            if r2['CR2_holds'] == True:
-                cr2_pass += 1
-            elif r2['CR2_holds'] == False:
-                cr2_fail += 1
-            else:
-                cr2_na += 1
+            # CR-2: i from ones, j from zeros
+            if len(zeros) >= 1 and len(ones) >= 1:
+                r2 = self.verify_CR2(state, ones[0], zeros[0])
+                if r2['CR2_holds'] == True:
+                    cr2_pass += 1
+                elif r2['CR2_holds'] == False:
+                    cr2_fail += 1
+                else:
+                    cr2_na += 1
 
         return {
             'CR1_pass': cr1_pass,
