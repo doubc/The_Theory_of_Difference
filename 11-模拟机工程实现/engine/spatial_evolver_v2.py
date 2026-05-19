@@ -44,9 +44,9 @@ class SpatialLongRangeEvolver:
                  device: str = "cpu",
                  n_hierarchy_bits: int = None,
                  L: float = 1.0):
+        # 自动对齐到 3 的倍数
         if N % 3 != 0:
-            raise ValueError(f"N 必须是 3 的倍数，当前 N={N}")
-
+            N = N + (3 - N % 3)
         self.N = N
         self.total_steps = total_steps
         self.sample_interval = sample_interval
