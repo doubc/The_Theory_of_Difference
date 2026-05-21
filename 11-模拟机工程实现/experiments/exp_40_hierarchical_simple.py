@@ -1,17 +1,11 @@
 """
-experiments/exp_40_hierarchical.py — 分层封装实验
+experiments/exp_40_hierarchical_simple.py — 分层封装实验（简化版）
 
 验证分层封装系统：
 1. 封口后自动封装
 2. 多层级联演化
 3. 跨层级交互
 4. 九机制指标测量
-
-对应 M4 批次11 的验收标准：
-- 封装引擎：给定冻结比特和绑定强度矩阵，正确分组并生成封装比特
-- 层级管理器：L0→L1 状态转换后，活跃比特值不变，封装比特值 = 多数表决
-- 跨层级演化器：L1 层可以独立演化，基底引力正确调制源/汇权重
-- 实验：N=48 运行完成，至少涌现 2 层，每层都有九机制指标输出
 """
 
 import torch
@@ -156,92 +150,26 @@ def analyze_hierarchical_evolution(results):
         print("  解封检测: ✅ (通过 EncapsulationEngine.check_unseal)")
 
 
-def plot_hierarchical_results(results):
-    """绘制分层演化结果"""
-    try:
-        import matplotlib.pyplot as plt
-
-        fig, axes = plt.subplots(2, 2, figsize=(12, 10))
-        fig.suptitle('分层封装实验结果', fontsize=16)
-
-        # 1. 每层比特数
-        layers = [lr['layer'] for lr in results['layer_results']]
-        Ns = [lr['N'] for lr in results['layer_results']]
-        ws = [lr['w'] for lr in results['layer_results']]
-
-        axes[0, 0].plot(layers, Ns, 'o-', label='总比特数')
-        axes[0, 0].plot(layers, ws, 's-', label='汉明权重')
-        axes[0, 0].set_xlabel('层级')
-        axes[0, 0].set_ylabel('比特数')
-        axes[0, 0].legend()
-        axes[0, 0].set_title('每层比特数')
-
-        # 2. 九机制指标
-        injs = [lr['inj'] for lr in results['layer_results']]
-        abs = [lr['abs'] for lr in results['layer_results']]
-        cycles = [lr['cycles'] for lr in results['layer_results']]
-
-        x = np.arange(len(layers))
-        width = 0.3
-        axes[0, 1].bar(x - width, injs, width, label='注入')
-        axes[0, 1].bar(x, abs, width, label='吸收')
-        axes[0, 1].bar(x + width, cycles, width, label='循环')
-        axes[0, 1].set_xlabel('层级')
-        axes[0, 1].set_ylabel('数量')
-        axes[0, 1].set_xticks(x)
-        axes[0, 1].set_xticklabels(layers)
-        axes[0, 1].legend()
-        axes[0, 1].set_title('九机制指标')
-
-        # 3. 封装事件
-        if results['encapsulation_events']:
-            enc_layers = [ev['from_layer'] for ev in results['encapsulation_events']]
-            enc_N_before = [ev['n_bits_before'] for ev in results['encapsulation_events']]
-            enc_N_after = [ev['n_bits_after'] for ev in results['encapsulation_events']]
-
-            axes[1, 0].plot(enc_layers, enc_N_before, 'o-', label='封装前')
-            axes[1, 0].plot(enc_layers, enc_N_after, 's-', label='封装后')
-            axes[1, 0].set_xlabel('基底层')
-            axes[1, 0].set_ylabel('比特数')
-            axes[1, 0].legend()
-            axes[1, 0].set_title('封装事件')
-        else:
-            axes[1, 0].text(0.5, 0.5, '无封装事件', ha='center', va='center')
-            axes[1, 0].set_title('封装事件')
-
-        # 4. 聚类数
-        clusters = [len(lr['clusters']) for lr in results['layer_results']]
-        axes[1, 1].plot(layers, clusters, 'o-')
-        axes[1, 1].set_xlabel('层级')
-        axes[1, 1].set_ylabel('聚类数')
-        axes[1, 1].set_title('每层聚类数')
-
-        plt.tight_layout()
-        plt.savefig('hierarchical_experiment_results.png', dpi=150)
-        print(f"\n✅ 结果图已保存: hierarchical_experiment_results.png")
-
-    except ImportError:
-        print("\n⚠️ matplotlib 未安装，跳过绘图")
-
-
-def test_hierarchical_theory():
-    """测试分层理论对应"""
-    print("\n" + "=" * 70)
-    print("分层理论与九机制对应验证")
-    print("=" * 70)
-
-    print("\n[理论对应]")
-    print("  聚簇（九机制#1） ↔ A1' 绑定聚类")
-    print("  层级（九机制#2） ↔ A9 封口 + 分组封装")
-    print("  守恒（九机制#3） ↔ A5 源汇平衡（跨层级）")
-    print("  循环（九机制#7） ↔ A7 状态循环")
-    print("  锁定（九机制#8） ↔ A6 DAG累积 + 绑定强度")
-
-    print("\n[关键问题验证]")
-    print("  1. 封口后作为整体参与新一轮循环? ✅")
-    print("  2. 被冻结比特 = 低层级（不再活跃）")
-    print("  3. 被保留比特 = 高层级（活跃自由度）")
-    print("  4. 新一轮循环在高层级内部重新运行九机制? ✅")
+def print_simple_visualization(results):
+    """打印简单的结果可视化"""
+    print("\n[结果可视化]")
+    layers = [lr['layer'] for lr in results['layer_results']]
+    Ns = [lr['N'] for lr in results['layer_results']]
+    ws = [lr['w'] for lr in results['layer_results']]
+    
+    print("  每层比特数:")
+    for i, (l, n, w) in enumerate(zip(layers, Ns, ws)):
+        print(f"    L{l}: N={n}, w={w}")
+    
+    if results['encapsulation_events']:
+        print("  封装事件:")
+        for i, ev in enumerate(results['encapsulation_events']):
+            print(f"    事件 {i+1}: L{ev['from_layer']} → L{ev['to_layer']}")
+            print(f"      {ev['n_bits_before']} → {ev['n_bits_after']} bits")
+    
+    print("  九机制指标:")
+    for lr in results['layer_results']:
+        print(f"    L{lr['layer']}: inj={lr['inj']}, abs={lr['abs']}, cycles={lr['cycles']}")
 
 
 if __name__ == "__main__":
@@ -251,11 +179,8 @@ if __name__ == "__main__":
     # 分析结果
     analyze_hierarchical_evolution(results)
 
-    # 理论验证
-    test_hierarchical_theory()
-
-    # 绘图
-    plot_hierarchical_results(results)
+    # 简单可视化
+    print_simple_visualization(results)
 
     print("\n" + "=" * 70)
     print("实验完成！")
