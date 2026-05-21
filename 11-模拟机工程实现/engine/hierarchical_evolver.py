@@ -29,7 +29,8 @@ class HierarchicalSnapshot:
     def __init__(self, step: int, layer: int, state: torch.Tensor,
                  w: int, n_active: int, n_frozen: int,
                  n_inject: int, n_absorb: int, n_lateral: int,
-                 sealed: bool, coords_3d: Optional[np.ndarray] = None):
+                 sealed: bool, coords_3d: Optional[np.ndarray] = None,
+                 gravity_potential: Optional[torch.Tensor] = None):
         self.step = step
         self.layer = layer
         self.state = state.clone()
@@ -41,6 +42,7 @@ class HierarchicalSnapshot:
         self.n_lateral = n_lateral
         self.sealed = sealed
         self.coords_3d = coords_3d.copy() if coords_3d is not None else None
+        self.gravity_potential = gravity_potential.clone() if gravity_potential is not None else None
 
 
 class HierarchicalEvolver:
@@ -62,7 +64,8 @@ class HierarchicalEvolver:
                  min_group_size: int = 2,
                  n_hierarchy_bits: int = None,
                  L: float = 1.0,
-                 auto_encapsulate: bool = True):
+                 auto_encapsulate: bool = True,
+                 verbose_gravity: bool = False):
         """
         Args:
             N0: 第 0 层比特数
@@ -75,6 +78,7 @@ class HierarchicalEvolver:
             n_hierarchy_bits: 层级比特数
             L: 空间嵌入尺寸
             auto_encapsulate: A9 触发时是否自动封装
+            verbose_gravity: 是否打印引力调制详情
         """
         self.N0 = N0
         self.steps_per_layer = steps_per_layer
@@ -82,6 +86,7 @@ class HierarchicalEvolver:
         self.max_layers = max_layers
         self.device = device
         self.auto_encapsulate = auto_encapsulate
+        self._verbose_gravity = verbose_gravity
 
         # 层级管理器
         self.hierarchy = HierarchyManager(
@@ -114,6 +119,126 @@ class HierarchicalEvolver:
             return self.spatial_layers[layer_id].embed_3d(state).cpu().numpy()
         return np.zeros(3)
 
+    def _compute_cross_layer_gravity(self, source_layer_id: int,
+                                     target_layer_id: int) -> torch.Tensor:
+        """计算跨层级引力势
+
+        冻结比特作为质量分布，通过封装映射影响上层创建引力势场。
+        每个上层比特接收来自其源比特的引力贡献。
+
+        Args:
+            source_layer_id: 源层（包含冻结比特的层）
+            target_layer_id: 目标层（受引力影响的层）
+
+        Returns:
+            引力势向量 Φ[0..N_target-1]，值越高表示该位置越"深"
+        """
+        source_layer = self.hierarchy.get_layer(source_layer_id)
+        target_layer = self.hierarchy.get_layer(target_layer_id)
+
+        N_target = target_layer.n_bits
+        if N_target == 0:
+            return torch.zeros(1, device=self.device)
+
+        # 获取冻结比特索引
+        frozen_indices = list(source_layer.constraints.sealed_bits)
+        if not frozen_indices:
+            return torch.zeros(N_target, device=self.device)
+
+        # 构建源层比特到质量的映射
+        # 冻结比特值=1的为"正质量"，值=0的为"负质量"
+        source_masses = source_layer.state.cpu()  # [N_source]
+
+        # 获取封装信息：每个目标比特对应哪些源比特
+        enc_bits = self.hierarchy.encap_engine.encapsulated_bits.get(source_layer_id + 1, [])
+
+        # 计算每个目标比特的引力势
+        # Φ[i] = Σ_{j in source_bits_of_target[i]} mass[j] / (d_H(i,j) + eps)
+        # 使用软化核避免除零
+        epsilon = 0.5  # 软化参数（离散空间需要更大的软化）
+
+        potentials = torch.zeros(N_target, device=self.device)
+
+        # 计算目标层中活跃比特数：N_target = n_active + n_enc
+        # 封装比特在高层中的实际索引 = n_active + enc_bit.bit_id
+        n_enc = len(enc_bits)
+        n_active = N_target - n_enc
+
+        # 遍历每个封装比特
+        for enc_bit in enc_bits:
+            # enc_bit.bit_id 是封装比特在 [0, 1, 2, ...] 中的顺序
+            # 实际在目标层的索引 = n_active + enc_bit.bit_id
+            target_idx = n_active + enc_bit.bit_id
+            source_bits = enc_bit.source_bits
+
+            if not source_bits or target_idx >= N_target:
+                continue
+
+            # 计算到每个源比特的汉明距离（离散空间，距离=1）
+            # 由于跨层映射，每个源比特到目标比特所属的簇的距离为1
+            # 势能 = Σ mass[j] * (1 / (1 + eps)) = Σ mass[j] / (1 + eps)
+            total_mass = sum(source_masses[j] for j in source_bits)
+
+            # 引力势 = -total_mass / (1 + eps) （负号表示吸引）
+            potentials[target_idx] = -total_mass / (1.0 + epsilon)
+
+        # 归一化势能范围到 [0, 1]
+        potential_min = potentials.min()
+        potential_max = potentials.max()
+        if potential_max > potential_min:
+            potentials = (potentials - potential_min) / (potential_max - potential_min)
+        else:
+            potentials = torch.zeros_like(potentials)
+
+        return potentials
+
+    def _apply_cross_layer_gravity_modulation(self, target_layer_id: int):
+        """应用跨层级引力调制
+
+        基于下层的冻结比特分布，计算引力势并存储供后续分析。
+        引力势表示下层质量分布对上层动力学的影响程度。
+
+        这实现了"质量弯曲时空"的离散版本：
+        - 冻结比特（质量）弯曲层级空间
+        - 弯曲的空间调制上层粒子的动力学
+
+        注意：目前版本计算并存储势能，实际的源/汇调制需要后续
+        在 SpatialLongRangeEvolver 中检查 gravity_potential 属性。
+        """
+        if target_layer_id == 0:
+            return  # 第0层没有下层
+
+        source_layer_id = target_layer_id - 1
+
+        # 计算引力势
+        gravity_potential = self._compute_cross_layer_gravity(
+            source_layer_id, target_layer_id
+        )
+
+        target_layer = self.hierarchy.get_layer(target_layer_id)
+
+        # 计算平均势能
+        mean_potential = gravity_potential.mean().item()
+        max_potential = gravity_potential.max().item()
+
+        # 存储引力势信息到layer供后续分析和可视化
+        target_layer.gravity_potential = gravity_potential
+        target_layer.gravity_mean = mean_potential
+        target_layer.gravity_max = max_potential
+
+        # 将势能存储到constraints供演化器查询
+        # 格式：[Φ_0, Φ_1, ..., Φ_{N-1}]
+        target_layer.constraints.gravity_potential = gravity_potential
+        target_layer.constraints.gravity_mean = mean_potential
+        target_layer.constraints.gravity_modulation = True  # 标记是否启用调制
+
+        if hasattr(self, '_verbose_gravity') and self._verbose_gravity:
+            source_layer = self.hierarchy.get_layer(source_layer_id)
+            print(f"    [GRAVITY] L{source_layer_id}→L{target_layer_id}: "
+                  f"Φ_mean={mean_potential:.4f}, Φ_max={max_potential:.4f}, "
+                  f"N_target={target_layer.n_bits}, "
+                  f"frozen_source={len(source_layer.constraints.sealed_bits)}")
+
     def _run_layer(self, layer_id: int, steps: int,
                    initial_state: Optional[torch.Tensor] = None,
                    verbose: bool = True) -> Dict:
@@ -128,6 +253,11 @@ class HierarchicalEvolver:
         # 确保空间嵌入层存在
         if layer_id not in self.spatial_layers:
             self._init_spatial_layer(layer_id, N, L=1.0)
+
+        # 【跨层级引力调制】
+        # 在层 > 0 时，基于下层冻结比特的引力势调制当前层源/汇动力学
+        if layer_id > 0:
+            self._apply_cross_layer_gravity_modulation(layer_id)
 
         # 创建该层的演化器（N 自动对齐到 3 的倍数）
         evolver = SpatialLongRangeEvolver(
@@ -170,6 +300,7 @@ class HierarchicalEvolver:
         layer.constraints = evolver.constraints
 
         # 记录快照
+        gravity_potential = getattr(layer, 'gravity_potential', None)
         for snap in result.get('snapshots', []):
             h_snap = HierarchicalSnapshot(
                 step=snap.step + layer.step_count,
@@ -182,7 +313,8 @@ class HierarchicalEvolver:
                 n_absorb=snap.n_absorb,
                 n_lateral=snap.n_lateral,
                 sealed=evolver.constraints.sealed,
-                coords_3d=snap.coords_3d
+                coords_3d=snap.coords_3d,
+                gravity_potential=gravity_potential
             )
             self.snapshots.append(h_snap)
 
