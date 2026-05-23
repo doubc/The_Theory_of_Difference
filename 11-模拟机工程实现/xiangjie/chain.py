@@ -529,15 +529,21 @@ class ReplicationGate:
 
     工程实现（v2 重设计）：
       三维检测替代旧的均值比较：
-      1. 结构相似度（structural similarity）：
-         不仅比较均值，还比较方差和协方差——捕捉关系结构而不仅是数值水平。
-         使用简化版 SSIM 思想：luminance * contrast * structure。
-      2. 模板效应（template effect）：
+      1. 结构相似度（structural similarity）←→ 理论：关系特征的结构连续性
+         不仅比较均值，还比较方差——捕捉"关系模式"而不仅是数值水平。
+         使用简化版 SSIM 思想（luminance * contrast）：
+         - luminance：均值接近 = 整体水平相似
+         - contrast：方差接近 = 波动模式相似
+         → 两者都接近 = 关系样式相似（不需逐比特相同）
+      2. 模板效应（template effect）←→ 理论：模板效应
          历史中是否存在反复出现的结构模式（不止一次），
-         且其关系特征保持稳定——用 pattern_signature 的自聚类检测。
-      3. 条件独立性（conditional independence，需要多周期 history）：
-         模式是否能在不同条件下重建自身——在不同时间窗口中是否
-         出现结构相似的构型。降级为单周期时跳过此维。
+         且其关系特征保持稳定——用 pattern_signature 的"回归检测"：
+         序列值是否反复回到 struct_mean 附近（距离 < 0.5*std 的比例）。
+      3. 条件独立性（conditional independence）←→ 理论：跨条件重建
+         将历史分为前后两半，分别检测结构相似度。
+         如果两半都出现相似模式 → 模式在不同"条件"（时间窗口）下都能重建。
+         对应理论：复制不依赖特定条件，而是关系样式的跨次"坚持"。
+         降级：数据不足 6 步时跳过此维，只用前两维。
     """
 
     name = "复制"
