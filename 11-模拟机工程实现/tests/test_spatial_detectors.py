@@ -29,10 +29,12 @@ class TestSpatialEvolver:
         assert traj_3d.min() >= 0.0
         assert traj_3d.max() <= 1.0
 
-    def test_N_must_be_divisible_by_3(self):
-        """N 必须是 3 的倍数"""
-        with pytest.raises(ValueError):
-            SpatialLongRangeEvolver(N=25)
+    def test_N_auto_aligns_to_multiple_of_3(self):
+        """N 自动对齐到 3 的倍数（而非抛出异常）"""
+        evolver = SpatialLongRangeEvolver(N=25)
+        # 25 → 27 (自动补齐)
+        assert evolver.N == 27
+        assert evolver.N % 3 == 0
 
     def test_spatial_source_weights(self):
         """空间源权重：远离 1 的位置权重更高"""
