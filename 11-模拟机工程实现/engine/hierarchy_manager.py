@@ -272,11 +272,11 @@ class HierarchyManager:
                     if ok:
                         # 偏置调制：如果存在 bias_profile，用偏置向量作为选择权重
                         if hasattr(constraints, 'bias_profile') and constraints.bias_profile is not None:
+                            composite_bias_np = constraints.bias_profile.detach().cpu().numpy()
                             weights = np.array([
-                                1.0 + composite_bias_val * 2.0  # 偏置越大，权重越高
+                                1.0 + composite_bias_np[idx_c] * 2.0  # 偏置越大，权重越高
                                 for idx_c in candidates
-                                for composite_bias_val in [composite_bias[idx_c].item()]
-                            ])
+                            ], dtype=np.float64)
                             weights = weights / (weights.sum() + 1e-8)
                             chosen = np.random.choice(candidates, n_inject, replace=False, p=weights)
                         else:
@@ -332,11 +332,11 @@ class HierarchyManager:
                     if ok:
                         # 偏置调制：偏置越小（接近0），越容易被吸收
                         if hasattr(constraints, 'bias_profile') and constraints.bias_profile is not None:
+                            composite_bias_np = constraints.bias_profile.detach().cpu().numpy()
                             weights = np.array([
-                                1.0 + (1.0 - composite_bias[idx_c].item()) * 2.0
+                                1.0 + (1.0 - composite_bias_np[idx_c]) * 2.0
                                 for idx_c in allowed_abs
-                                for composite_bias_val in [composite_bias[idx_c].item()]
-                            ])
+                            ], dtype=np.float64)
                             weights = weights / (weights.sum() + 1e-8)
                             chosen = np.random.choice(allowed_abs, n_absorb, replace=False, p=weights)
                         else:
