@@ -270,7 +270,17 @@ class HierarchyManager:
                     n_inject = min(source_strength, len(candidates))
                     ok, _ = constraints.check_A5_inject(state, n_inject)
                     if ok:
-                        chosen = np.random.choice(candidates, n_inject, replace=False)
+                        # 偏置调制：如果存在 bias_profile，用偏置向量作为选择权重
+                        if hasattr(constraints, 'bias_profile') and constraints.bias_profile is not None:
+                            weights = np.array([
+                                1.0 + composite_bias_val * 2.0  # 偏置越大，权重越高
+                                for idx_c in candidates
+                                for composite_bias_val in [composite_bias[idx_c].item()]
+                            ])
+                            weights = weights / (weights.sum() + 1e-8)
+                            chosen = np.random.choice(candidates, n_inject, replace=False, p=weights)
+                        else:
+                            chosen = np.random.choice(candidates, n_inject, replace=False)
                         for idx in chosen:
                             a9_ok, _ = constraints.check_A9(idx)
                             if not a9_ok:
@@ -320,7 +330,17 @@ class HierarchyManager:
                 if n_absorb > 0:
                     ok, _ = constraints.check_A5_absorb(state, n_absorb)
                     if ok:
-                        chosen = np.random.choice(allowed_abs, n_absorb, replace=False)
+                        # 偏置调制：偏置越小（接近0），越容易被吸收
+                        if hasattr(constraints, 'bias_profile') and constraints.bias_profile is not None:
+                            weights = np.array([
+                                1.0 + (1.0 - composite_bias[idx_c].item()) * 2.0
+                                for idx_c in allowed_abs
+                                for composite_bias_val in [composite_bias[idx_c].item()]
+                            ])
+                            weights = weights / (weights.sum() + 1e-8)
+                            chosen = np.random.choice(allowed_abs, n_absorb, replace=False, p=weights)
+                        else:
+                            chosen = np.random.choice(allowed_abs, n_absorb, replace=False)
                         for idx in chosen:
                             state[idx] = 0.0
                             constraints.record_absorb(1)
@@ -454,45 +474,68 @@ class HierarchyManager:
         - 负偏置 → 该比特更容易被吸收（汇吸收概率 ↑）
         - 通过 AxiomConstraints.inject 通道传入，不绕过公理体系
 
+        实现机制：
+        1. 计算综合偏置向量（多个 BiasField 加权叠加）
+        2. 注入阶段：将偏置作为候选比特的选择权重
+           - 候选比特的选择概率 ∝ (1 + bias_strength × bias_vector[idx])
+        3. 吸收阶段：将偏置作为吸收候选的选择权重
+           - 候选比特的选择概率 ∝ (1 + bias_strength × (1 - bias_vector[idx]))
+        4. 偏置强度随每次应用衰减（保护低层自主性）
+
         Returns:
-            应用信息：应用了多少偏置，剩余多少
+            应用信息：应用了多少偏置，剩余多少，偏置强度分布
         """
         biases = self.bias_registry.get(layer_id, [])
         if not biases:
-            return {'applied': 0, 'remaining': 0}
+            return {'applied': 0, 'remaining': 0, 'bias_profile': None}
 
         layer = self.get_layer(layer_id)
         applied = 0
         remaining = []
 
+        # 1. 叠加所有活跃偏置 → 综合偏置向量
+        #    每个 BiasField 的贡献 = strength × bias_vector
+        #    最终偏置 = 归一化到 [0, 1]
+        composite_bias = torch.zeros(layer.n_bits, device=self.device)
+        total_strength = 0.0
+
         for bias in biases:
             if bias.strength < 1e-4:
-                continue  # 太弱，跳过
+                continue
+            n = min(len(bias.bias_vector), layer.n_bits)
+            composite_bias[:n] += bias.bias_vector[:n] * bias.strength
+            total_strength += bias.strength
 
-            # 概率调制：根据偏置向量调整注入/吸收的候选优先级
-            # 这里用偏置作为注入候选的权重，而非直接修改状态
-            constraints = layer.constraints
-            for idx in range(min(len(bias.bias_vector), layer.n_bits)):
-                bias_val = bias.bias_vector[idx].item()
-                if bias_val > 0.5:
-                    # 正偏置：标记该比特为注入优先
-                    # 通过增大 direction 来提升注入概率
-                    if idx < len(constraints.direction):
-                        # 只调整方向权重，不强制翻转
-                        # 偏置强度决定调整幅度
-                        if constraints.direction[idx] == 0:
-                            # 未定向的比特，偏置给予正方向倾向
-                            pass  # direction 不直接改，通过注入候选排序实现
-                elif bias_val < 0.5:
-                    # 负偏置：标记该比特为吸收优先
-                    pass
+        if total_strength == 0:
+            # 所有偏置都已衰减到可忽略
+            self.bias_registry[layer_id] = []
+            return {'applied': 0, 'remaining': 0, 'bias_profile': None}
 
-            applied += 1
+        # 归一化到 [0, 1]
+        composite_bias = composite_bias / (total_strength + 1e-8)
+        composite_bias = composite_bias.clamp(0.0, 1.0)
+
+        # 2. 将偏置写入 constraints 的 bias_profile 字段
+        #    供 step_layer 的注入/吸收阶段使用
+        layer.constraints.bias_profile = composite_bias
+
+        # 3. 记录偏置应用统计
+        bias_stats = {
+            'mean': float(composite_bias.mean().item()),
+            'max': float(composite_bias.max().item()),
+            'min': float(composite_bias.min().item()),
+            'std': float(composite_bias.std().item()),
+            'n_bits': layer.n_bits,
+        }
+
+        # 4. 衰减所有偏置
+        for bias in biases:
             if bias.decay():  # 衰减后仍有效
                 remaining.append(bias)
+            applied += 1
 
         self.bias_registry[layer_id] = remaining
-        return {'applied': applied, 'remaining': len(remaining)}
+        return {'applied': applied, 'remaining': len(remaining), 'bias_profile': bias_stats}
 
     def check_unseal_with_backflow(self, layer_id: int) -> Dict:
         """检查解封并触发回流

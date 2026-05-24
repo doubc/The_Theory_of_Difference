@@ -65,6 +65,8 @@ class AxiomConstraints:
         self.sealed = False  # 封口标志
         self.sealed_bits: Set[int] = set()  # 被封口的比特
         self.min_active_bits = max(3, N // 4)  # 最少活跃比特数
+        # 回流偏置场：跨层偏置的概率调制向量（由 HierarchyManager 注入）
+        self.bias_profile: Optional[torch.Tensor] = None
     # ============================================================
 
     def check_A1(self, state: torch.Tensor, flip_idx: int) -> Tuple[bool, str]:
