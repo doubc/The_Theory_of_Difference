@@ -292,7 +292,7 @@ class TestEncapsulationEngine:
         new_base = torch.tensor([1.0, 1.0, 0.0, 0.0])
         engine.update_encapsulated_values(new_base, layer=0)
 
-        enc = engine.encapsulated_bits[1][0]
+        enc = engine.encapsulated_bits[0][0]
         assert enc.value == 1.0  # 2个1 → 1.0
 
     def test_check_unseal(self):
@@ -336,7 +336,7 @@ class TestEncapsulationEngine:
         engine.encapsulate(state, frozen, binding, active, layer=0)
 
         # 封装比特记录在 layer=1（封装后的新层）
-        summary = engine.get_summary(enc_layer=1)
+        summary = engine.get_summary(base_layer=0)
         assert summary['enc_layer'] == 1
         assert summary['base_layer'] == 0
         assert summary['n_encapsulated_bits'] == 1
@@ -446,8 +446,8 @@ class TestEndToEnd:
         assert len(enc2) == 1
 
         # 验证层级记录
+        assert 0 in engine.encapsulated_bits
         assert 1 in engine.encapsulated_bits
-        assert 2 in engine.encapsulated_bits
 
 
 if __name__ == '__main__':

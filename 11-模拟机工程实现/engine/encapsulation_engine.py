@@ -236,7 +236,7 @@ class EncapsulationEngine:
             mapping.map_encapsulated(high_idx, enc.source_bits)
 
         # ====== 5. 记录 ======
-        self.encapsulated_bits[layer + 1] = enc_bits
+        self.encapsulated_bits[layer] = enc_bits
         self.index_mappings[layer] = mapping
         self.base_states[layer] = state.clone()
 
@@ -244,9 +244,9 @@ class EncapsulationEngine:
 
     def update_encapsulated_values(self, base_state: torch.Tensor, layer: int):
         """更新指定层级的封装比特值（基底状态变化后调用）"""
-        if layer + 1 not in self.encapsulated_bits:
+        if layer not in self.encapsulated_bits:
             return
-        for enc in self.encapsulated_bits[layer + 1]:
+        for enc in self.encapsulated_bits[layer]:
             enc.update_value(base_state)
 
     def check_unseal(self, base_state: torch.Tensor, layer: int,
@@ -257,9 +257,9 @@ class EncapsulationEngine:
             应该解封的封装比特在高层级中的索引列表
         """
         unsealed = []
-        if layer + 1 not in self.encapsulated_bits:
+        if layer not in self.encapsulated_bits:
             return unsealed
-        for enc in self.encapsulated_bits[layer + 1]:
+        for enc in self.encapsulated_bits[layer]:
             if not enc.is_frozen and enc.should_unseal(base_state, threshold):
                 unsealed.append(enc.bit_id)
         return unsealed
@@ -278,7 +278,7 @@ class EncapsulationEngine:
         Returns:
             gravity: 每个高层级比特的引力势
         """
-        if layer + 1 not in self.encapsulated_bits:
+        if layer not in self.encapsulated_bits:
             return torch.zeros(len(base_state))
 
         frozen_ones = [i for i in range(len(base_state))
@@ -312,14 +312,14 @@ class EncapsulationEngine:
 
         return gravity
 
-    def get_summary(self, enc_layer: int) -> Dict:
-        """获取指定封装层级的摘要
+    def get_summary(self, base_layer: int) -> Dict:
+        """获取指定基底层的封装摘要
 
         Args:
-            enc_layer: 封装比特所在的层级（= 基底层 + 1）
+            base_layer: 基底层编号（封装结果存储在此 key 下）
         """
-        enc_bits = self.encapsulated_bits.get(enc_layer, [])
-        base_layer = enc_layer - 1
+        enc_bits = self.encapsulated_bits.get(base_layer, [])
+        enc_layer = base_layer + 1
         mapping = self.index_mappings.get(base_layer, IndexMapping())
         return {
             'enc_layer': enc_layer,

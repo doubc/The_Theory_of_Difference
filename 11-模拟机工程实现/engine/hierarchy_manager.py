@@ -524,25 +524,49 @@ class HierarchyManager:
                         1.0 for si in source_indices
                         if si < source.n_bits and active_pattern[si].item() > 0.5
                     )
-                    bias_vector[enc_bit.encapsulated_idx] = active_count / len(source_indices)
+                    # enc_bit.bit_id 是封装比特在高层级中的索引（封装后排在活跃比特之后）
+                    n_active_in_target = target.n_bits - len(encap_bits)
+                    actual_idx = n_active_in_target + enc_bit.bit_id
+                    if actual_idx < target.n_bits:
+                        bias_vector[actual_idx] = active_count / len(source_indices)
 
-            # 低层活跃但未封装的比特 → 均匀分配到高层剩余比特
+            # 低层活跃但未封装的比特 → 直接映射到高层对应位置
+            # 封装比特在高层的位置 = 活跃比特之后
+            n_active_in_target = target.n_bits - len(encap_bits)
+            enc_mapped_high = set(n_active_in_target + e.bit_id for e in encap_bits
+                                  if n_active_in_target + e.bit_id < target.n_bits)
+
+            # 找出被封装的源比特索引
             enclosed_indices = set()
             for enc_bit in encap_bits:
                 for si in enc_bit.source_bits:
                     enclosed_indices.add(si)
 
+            # 直接映射：未被封装的活跃比特按顺序映射到高层前 n_active_in_target 个位置
+            # 未被封装的比特 = 所有比特 - 被封装的比特
             uncovered = [i for i in range(source.n_bits) if i not in enclosed_indices]
-            if uncovered:
-                uncovered_active = sum(
-                    1.0 for i in uncovered if active_pattern[i].item() > 0.5
-                )
-                avg_bias = uncovered_active / len(uncovered) if uncovered else 0.0
-                enc_mapped_high = set(e.encapsulated_idx for e in encap_bits
-                                      if e.encapsulated_idx < target.n_bits)
-                for hi in range(target.n_bits):
-                    if hi not in enc_mapped_high:
-                        bias_vector[hi] = avg_bias
+            # 按索引排序，确保映射顺序一致
+            uncovered.sort()
+
+            for hi in range(n_active_in_target):
+                if hi < len(uncovered):
+                    low_idx = uncovered[hi]
+                    # 直接复制 active_pattern 的值
+                    bias_vector[hi] = active_pattern[low_idx].item()
+                else:
+                    bias_vector[hi] = 0.0
+
+            # 封装比特位置：计算其源比特中活跃的比例
+            for enc_bit in encap_bits:
+                source_indices = enc_bit.source_bits
+                if source_indices:
+                    active_count = sum(
+                        1.0 for si in source_indices
+                        if si < source.n_bits and active_pattern[si].item() > 0.5
+                    )
+                    high_idx = n_active_in_target + enc_bit.bit_id
+                    if high_idx < target.n_bits:
+                        bias_vector[high_idx] = active_count / len(source_indices)
         else:
             # 没有封装映射：用线性插值/聚合
             source_state = active_pattern.clone()
@@ -695,9 +719,9 @@ class HierarchyManager:
                 for l in self.layers
             ],
             'encapsulation': {
-                layer_id: self.encap_engine.get_summary(enc_layer)
-                for layer_id, enc_layer in enumerate(range(1, self.n_layers + 1), 1)
-                if enc_layer in self.encap_engine.encapsulated_bits
+                layer_id: self.encap_engine.get_summary(layer_id)
+                for layer_id in range(self.n_layers)
+                if layer_id in self.encap_engine.encapsulated_bits
             }
         }
 
