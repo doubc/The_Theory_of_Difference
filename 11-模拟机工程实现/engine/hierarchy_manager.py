@@ -466,6 +466,117 @@ class HierarchyManager:
 
         return bias
 
+    def propagate_bias_up(self, source_layer_id: int,
+                          bias_strength: float = 0.2) -> Optional['BiasField']:
+        """将低层活跃模式向上反馈至高层偏置场
+
+        理论依据（《象界》第八章）：
+        "前主体态是诸机制汇聚的整体状态" — 低层的成功演化模式
+        应当向上影响高层的偏置场，形成双向耦合。
+
+        与 propagate_bias_down() 的区别：
+        - 向下：高层状态 → 低层概率调制（牵引力）
+        - 向上：低层活跃比特 → 高层偏置场（反馈信号）
+
+        实现原理：
+        1. 从低层提取活跃比特的空间模式（hamming weight 分布）
+        2. 通过封装映射关系，将低层活跃比特聚合到高层对应封装比特
+        3. 在高层生成偏置向量，影响高层的注入/吸收选择
+        4. 向上偏置的衰减因子更小（0.97），因为反馈信号需要更持久
+
+        Args:
+            source_layer_id: 产生偏置的层（通常是 L-1，即低层）
+            bias_strength: 初始偏置强度（默认 0.2，低于向下的 0.3）
+
+        Returns:
+            生成的 BiasField，如果目标层不存在则返回 None
+        """
+        if source_layer_id >= self.n_layers - 1:
+            return None  # 最高层没有更高的层
+        if source_layer_id < 0:
+            return None
+
+        source = self.get_layer(source_layer_id)
+        target = self.get_layer(source_layer_id + 1)
+
+        # 提取低层活跃比特的空间模式
+        # 活跃比特 = 被注入过或发生过翻转的比特
+        active_pattern = torch.zeros(source.n_bits, device=self.device)
+        for idx in source.constraints.active_bits:
+            active_pattern[idx] = 1.0
+
+        # 如果低层没有活跃模式，不生成偏置
+        if active_pattern.sum().item() == 0:
+            return None
+
+        # 通过封装映射聚合到低层→高层的对应关系
+        # 如果存在封装引擎的映射，使用它；否则用均匀聚合
+        encap_bits = self.encap_engine.encapsulated_bits.get(source_layer_id, [])
+
+        if encap_bits:
+            # 使用封装映射：低层活跃比特 → 高层封装比特
+            # 每个高层封装比特的偏置 = 其源比特中活跃比特的比例
+            bias_vector = torch.zeros(target.n_bits, device=self.device)
+            for enc_bit in encap_bits:
+                source_indices = enc_bit.source_bits
+                if source_indices:
+                    active_count = sum(
+                        1.0 for si in source_indices
+                        if si < source.n_bits and active_pattern[si].item() > 0.5
+                    )
+                    bias_vector[enc_bit.encapsulated_idx] = active_count / len(source_indices)
+
+            # 低层活跃但未封装的比特 → 均匀分配到高层剩余比特
+            enclosed_indices = set()
+            for enc_bit in encap_bits:
+                for si in enc_bit.source_bits:
+                    enclosed_indices.add(si)
+
+            uncovered = [i for i in range(source.n_bits) if i not in enclosed_indices]
+            if uncovered:
+                uncovered_active = sum(
+                    1.0 for i in uncovered if active_pattern[i].item() > 0.5
+                )
+                avg_bias = uncovered_active / len(uncovered) if uncovered else 0.0
+                enc_mapped_high = set(e.encapsulated_idx for e in encap_bits
+                                      if e.encapsulated_idx < target.n_bits)
+                for hi in range(target.n_bits):
+                    if hi not in enc_mapped_high:
+                        bias_vector[hi] = avg_bias
+        else:
+            # 没有封装映射：用线性插值/聚合
+            source_state = active_pattern.clone()
+            target_N = target.n_bits
+            if len(source_state) < target_N:
+                repeats = target_N // len(source_state) + 1
+                bias_vector = source_state.repeat(repeats)[:target_N]
+            else:
+                k = len(source_state) // target_N
+                bias_vector = torch.zeros(target_N, device=self.device)
+                for hi in range(target_N):
+                    start = hi * k
+                    end = min(start + k, len(source_state))
+                    bias_vector[hi] = source_state[start:end].mean().item()
+
+        # 创建 BiasField（向上）
+        bias = BiasField(
+            source_layer=source_layer_id,
+            target_layer=source_layer_id + 1,
+            bias_vector=bias_vector,
+            strength=bias_strength,
+            origin_step=source.step_count,
+        )
+        # 向上偏置的衰减更慢（0.97 vs 0.95）
+        bias.decay_rate = 0.97
+
+        # 注册偏置到目标层
+        target_id = source_layer_id + 1
+        if target_id not in self.bias_registry:
+            self.bias_registry[target_id] = []
+        self.bias_registry[target_id].append(bias)
+
+        return bias
+
     def apply_bias_to_layer(self, layer_id: int) -> Dict:
         """将所有活跃偏置应用到指定层的公理约束器
 

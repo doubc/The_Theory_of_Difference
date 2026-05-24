@@ -17,6 +17,48 @@ sys.path.insert(0, 'C:\\Users\\Administrator\\Documents\\the_theory_of_differenc
 from engine.hierarchy_manager import HierarchyManager, BiasField
 
 
+def test_propagate_bias_up():
+    """低层->高层偏置反馈"""
+    manager = HierarchyManager(N0=12)
+
+    from engine.hierarchy_manager import LayerState
+    from acl.axioms_v2 import AxiomConstraints
+
+    # 手动添加 L1
+    l1_state = torch.zeros(4)
+    l1 = LayerState(
+        layer_id=1, state=l1_state,
+        constraints=AxiomConstraints(4, n_hierarchy_bits=2),
+        active_bits=set(range(4)), frozen_bits=set()
+    )
+    manager.layers.append(l1)
+
+    # 设置 L0 有活跃比特
+    layer0 = manager.get_layer(0)
+    layer0.constraints.record_active(0)
+    layer0.constraints.record_active(1)
+    layer0.constraints.record_active(2)
+
+    bias = manager.propagate_bias_up(source_layer_id=0, bias_strength=0.3)
+
+    assert bias is not None
+    assert bias.source_layer == 0
+    assert bias.target_layer == 1
+    assert bias.strength == 0.3
+    assert bias.decay_rate == 0.97  # 向上衰减更慢
+    assert len(bias.bias_vector) == 4
+    print("PASS test_propagate_bias_up")
+
+
+def test_propagate_bias_up_returns_none_at_top():
+    """最高层不能向上传播"""
+    manager = HierarchyManager(N0=12)
+    # 只有一层，不能向上
+    bias = manager.propagate_bias_up(source_layer_id=0)
+    assert bias is None
+    print("PASS test_propagate_bias_up_returns_none_at_top")
+
+
 def test_bias_field_decay():
     """BiasField 衰减机制"""
     state = torch.tensor([1.0, 0.0, 1.0, 0.0, 1.0, 0.0])
@@ -185,6 +227,8 @@ def test_composite_bias():
 
 
 if __name__ == "__main__":
+    test_propagate_bias_up()
+    test_propagate_bias_up_returns_none_at_top()
     test_bias_field_decay()
     test_propagate_bias_down()
     test_apply_bias_to_layer()
