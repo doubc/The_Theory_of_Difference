@@ -415,6 +415,10 @@ class HierarchicalEvolver:
                     'abs': self.hierarchy.get_layer(i).constraints.total_absorbed,
                     'cycles': len(self.hierarchy.get_layer(i).constraints.cycle_states),
                     'clusters': self.hierarchy.get_layer(i).constraints.get_clusters(),
+                    'binding_strength': self.hierarchy.get_layer(i).constraints.binding_strength.clone(),
+                    'direction': self.hierarchy.get_layer(i).constraints.direction.clone(),
+                    'active_bits': self.hierarchy.get_layer(i).constraints.active_bits.copy(),
+                    'snapshots': [s.state.clone() for s in self.snapshots if s.layer == i],
                 }
                 for i in range(self.hierarchy.n_layers)
             ]
