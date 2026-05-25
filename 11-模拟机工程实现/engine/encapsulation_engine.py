@@ -333,3 +333,111 @@ class EncapsulationEngine:
                 for e in enc_bits
             ]
         }
+
+    # ─── Phase 2 P2 增强：界面调节度指标 ─────────────────────────
+    #
+    # 理论依据：《象界》第二章：分隔 → 界面
+    # "边界不是围墙，而是差异选择性交换的稳定化结果。"
+    #
+    # 界面调节度 = 活跃交换的边界边数 / 总边界边数
+    # 衡量封装边界从被动分隔变为选择性交换接口的程度
+
+    def compute_interface_regulation(self, layer: int,
+                                     exchange_record: Optional[Dict[int, int]] = None
+                                     ) -> Dict:
+        """计算界面调节度指标
+
+        衡量封装边界的活跃交换程度。
+
+        Args:
+            layer: 层级编号
+            exchange_record: 边界交换记录 {boundary_edge_id: n_exchanges}
+                如果不传，使用封装比特的值变化频率作为代理
+
+        Returns:
+            {
+                'interface_regulation': float,  # 界面调节度 [0, 1]
+                'active_exchanges': int,        # 活跃交换边数
+                'total_boundary_edges': int,    # 总边界边数
+                'exchange_rate': float,         # 交换率
+            }
+        """
+        enc_bits = self.encapsulated_bits.get(layer, [])
+        mapping = self.index_mappings.get(layer, IndexMapping())
+
+        if not enc_bits:
+            return {
+                'interface_regulation': 0.0,
+                'active_exchanges': 0,
+                'total_boundary_edges': 0,
+                'exchange_rate': 0.0,
+            }
+
+        # 总边界边数 = 封装比特数（每个封装比特对应一条边界边）
+        total_boundary_edges = len(enc_bits)
+
+        if exchange_record is not None:
+            # 使用显式交换记录
+            active_exchanges = sum(
+                1 for enc in enc_bits
+                if exchange_record.get(enc.bit_id, 0) > 0
+            )
+        else:
+            # 使用封装比特的源比特多样性作为代理
+            # 源比特数 > 1 的封装比特视为"活跃交换"
+            active_exchanges = sum(
+                1 for enc in enc_bits
+                if len(enc.source_bits) > 1
+            )
+
+        interface_regulation = (
+            active_exchanges / max(1, total_boundary_edges)
+        )
+
+        return {
+            'interface_regulation': interface_regulation,
+            'active_exchanges': active_exchanges,
+            'total_boundary_edges': total_boundary_edges,
+            'exchange_rate': interface_regulation,
+        }
+
+    def compute_all_interface_regulations(self) -> Dict[int, Dict]:
+        """计算所有层级的界面调节度
+
+        Returns:
+            {layer: regulation_info}
+        """
+        results = {}
+        for layer in self.encapsulated_bits:
+            results[layer] = self.compute_interface_regulation(layer)
+        return results
+
+    def track_exchange(self, layer: int, boundary_edge_id: int,
+                       exchange_count: int = 1):
+        """追踪边界交换事件
+
+        记录封装边界的活跃交换，用于界面调节度计算。
+
+        Args:
+            layer: 层级编号
+            boundary_edge_id: 边界边 ID（封装比特 ID）
+            exchange_count: 交换次数增量
+        """
+        if not hasattr(self, '_exchange_records'):
+            self._exchange_records: Dict[int, Dict[int, int]] = {}
+
+        if layer not in self._exchange_records:
+            self._exchange_records[layer] = {}
+
+        current = self._exchange_records[layer].get(boundary_edge_id, 0)
+        self._exchange_records[layer][boundary_edge_id] = current + exchange_count
+
+    def get_exchange_record(self, layer: int) -> Dict[int, int]:
+        """获取指定层级的交换记录
+
+        Returns:
+            {boundary_edge_id: n_exchanges}
+        """
+        if not hasattr(self, '_exchange_records'):
+            return {}
+        return dict(self._exchange_records.get(layer, {}))

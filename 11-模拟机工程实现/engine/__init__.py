@@ -10,6 +10,9 @@ engine — 差异论模拟机工程核心引擎
 - cumulative_selector.py: 累积筛选器 (Phase 2 P0 #3)
 - six_threshold_detector.py: 六阈值同步检测器 (Phase 2 P1 #1)
 - pre_subjectivity_convergence.py: 前主体态收束判定 (Phase 2 P1 #2)
+- self_sustaining_circulation.py: 自维持循环 (Phase 2 P2 #1)
+- functional_differentiation.py: 功能分化 (Phase 2 P2 #2)
+- replicate_pattern.py: 复制模式 (Phase 2 P2 #3)
 - detectors/: 涌现统计量探测器集
 """
 
@@ -21,6 +24,9 @@ from engine.persistent_bias_memory import PersistentBiasMemory, BiasEntry, BiasF
 from engine.cumulative_selector import CumulativeSelector, VariantRecord, SelectionResult
 from engine.six_threshold_detector import SixThresholdDetector, ThresholdStatus, SixThresholdResult
 from engine.pre_subjectivity_convergence import PreSubjectivityConvergence, ConvergenceResult, CouplingStatus, SemanticFirewallResult
+from engine.self_sustaining_circulation import SelfSustainingCirculation, CirculationState, RebuildAttempt
+from engine.functional_differentiation import FunctionalDifferentiation, FunctionalState, ComponentContribution
+from engine.replicate_pattern import ReplicatePattern, ReplicationResult, KeyRelation
 
 __all__ = [
     'HierarchyManager', 'LayerState', 'BiasField',
@@ -31,4 +37,7 @@ __all__ = [
     'CumulativeSelector', 'VariantRecord', 'SelectionResult',
     'SixThresholdDetector', 'ThresholdStatus', 'SixThresholdResult',
     'PreSubjectivityConvergence', 'ConvergenceResult', 'CouplingStatus', 'SemanticFirewallResult',
+    'SelfSustainingCirculation', 'CirculationState', 'RebuildAttempt',
+    'FunctionalDifferentiation', 'FunctionalState', 'ComponentContribution',
+    'ReplicatePattern', 'ReplicationResult', 'KeyRelation',
 ]
