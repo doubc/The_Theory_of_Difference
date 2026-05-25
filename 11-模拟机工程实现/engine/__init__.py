@@ -8,6 +8,8 @@ engine — 差异论模拟机工程核心引擎
 - xiang_detector.py: 底象检测器 (Phase 2 P0 #1)
 - persistent_bias_memory.py: 历史累积偏置记忆 (Phase 2 P0 #2)
 - cumulative_selector.py: 累积筛选器 (Phase 2 P0 #3)
+- six_threshold_detector.py: 六阈值同步检测器 (Phase 2 P1 #1)
+- pre_subjectivity_convergence.py: 前主体态收束判定 (Phase 2 P1 #2)
 - detectors/: 涌现统计量探测器集
 """
 
@@ -17,6 +19,8 @@ from engine.difference_layers import DifferenceLayerAnalyzer, DifferenceLayerRep
 from engine.xiang_detector import XiàngDetector, XiangDetectionResult
 from engine.persistent_bias_memory import PersistentBiasMemory, BiasEntry, BiasFieldSnapshot
 from engine.cumulative_selector import CumulativeSelector, VariantRecord, SelectionResult
+from engine.six_threshold_detector import SixThresholdDetector, ThresholdStatus, SixThresholdResult
+from engine.pre_subjectivity_convergence import PreSubjectivityConvergence, ConvergenceResult, CouplingStatus, SemanticFirewallResult
 
 __all__ = [
     'HierarchyManager', 'LayerState', 'BiasField',
@@ -25,4 +29,6 @@ __all__ = [
     'XiàngDetector', 'XiangDetectionResult',
     'PersistentBiasMemory', 'BiasEntry', 'BiasFieldSnapshot',
     'CumulativeSelector', 'VariantRecord', 'SelectionResult',
+    'SixThresholdDetector', 'ThresholdStatus', 'SixThresholdResult',
+    'PreSubjectivityConvergence', 'ConvergenceResult', 'CouplingStatus', 'SemanticFirewallResult',
 ]
