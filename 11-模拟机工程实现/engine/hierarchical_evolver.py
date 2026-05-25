@@ -415,6 +415,23 @@ class HierarchicalEvolver:
                             agreement = (active_dir.sign() * np.sign(mean_dir)).mean().item()
                             self_sustaining = max(0.0, (agreement + 1) / 2)
 
+                # 功能分化代理：用方向地绝对值的分布计算 Gini
+                # 方向地代表每个比特的压偏倾向，差异越大表明功能分化越明显
+                component_contributions = None
+                active_indices = sorted(constraints.active_bits)
+                if len(active_indices) >= 2 and hasattr(constraints, 'direction'):
+                    dir_vals = constraints.direction.float()
+                    contributions = {}
+                    for bit_id in active_indices:
+                        # 使用方向地绝对值 + 拉普拉斯平滑
+                        contributions[f"bit_{bit_id}"] = float(dir_vals[bit_id].abs().item()) + 0.01
+                    # 加入冻结比特（方向场为基线）
+                    frozen_indices = sorted(constraints.sealed_bits)
+                    for bit_id in frozen_indices:
+                        contributions[f"frozen_{bit_id}"] = 0.01
+                    if len(contributions) >= 2:
+                        component_contributions = contributions
+
                 # 4. SixThresholdDetector: 六阈值同步检测
                 if self.six_threshold_detector is not None:
                     threshold_result = self.six_threshold_detector.detect(
@@ -426,7 +443,7 @@ class HierarchicalEvolver:
                         replicated_pattern=state if active_count > 0 else None,
                         original_pattern=state,
                         variant_continuation_probs=variant_probs,
-                        component_contributions=None,
+                        component_contributions=component_contributions,
                         timestamp=ts,
                     )
                     result_entry['six_threshold'] = {
@@ -448,6 +465,7 @@ class HierarchicalEvolver:
                         'perturbation_count': 10,
                         'bias_recursion_depth': bias_depth,
                         'variant_continuation_probs': variant_probs,
+                        'component_contributions': component_contributions,
                     }
 
                     conv_result = self.pre_subjectivity_convergence.evaluate(
