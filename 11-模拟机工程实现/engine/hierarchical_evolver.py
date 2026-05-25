@@ -17,10 +17,13 @@ engine/hierarchical_evolver.py — 跨层级演化器
 
 import torch
 import numpy as np
-from typing import List, Optional, Dict, Tuple
+from typing import List, Optional, Dict, Tuple, Callable
 from engine.spatial_evolver_v2 import SpatialLongRangeEvolver, SpatialSnapshot
-from engine.hierarchy_manager import HierarchyManager, LayerState
+from engine.hierarchy_manager import HierarchyManager, LayerState, BiasField
 from engine.encapsulation_engine import EncapsulationEngine
+from engine.xiang_detector import XiàngDetector
+from engine.persistent_bias_memory import PersistentBiasMemory
+from engine.cumulative_selector import CumulativeSelector
 from layers.three_dim_hamming import ThreeDimHammingLattice
 
 
@@ -65,7 +68,12 @@ class HierarchicalEvolver:
                  n_hierarchy_bits: int = None,
                  L: float = 1.0,
                  auto_encapsulate: bool = True,
-                 verbose_gravity: bool = False):
+                 verbose_gravity: bool = False,
+                 # Phase 2 组件（可选，用于演化时实时检测）
+                 xiang_detector: Optional[XiàngDetector] = None,
+                 persistent_bias_memory: Optional[PersistentBiasMemory] = None,
+                 cumulative_selector: Optional[CumulativeSelector] = None,
+                 phase2_verbose: bool = False):
         """
         Args:
             N0: 第 0 层比特数
@@ -87,6 +95,13 @@ class HierarchicalEvolver:
         self.device = device
         self.auto_encapsulate = auto_encapsulate
         self._verbose_gravity = verbose_gravity
+
+        # Phase 2 组件
+        self.xiang_detector = xiang_detector
+        self.persistent_bias_memory = persistent_bias_memory
+        self.cumulative_selector = cumulative_selector
+        self._phase2_verbose = phase2_verbose
+        self._phase2_layer_results: Dict[int, List[Dict]] = {}  # layer -> [step_results]
 
         # 层级管理器
         self.hierarchy = HierarchyManager(
@@ -239,6 +254,105 @@ class HierarchicalEvolver:
                   f"N_target={target_layer.n_bits}, "
                   f"frozen_source={len(source_layer.constraints.sealed_bits)}")
 
+    def _make_phase2_callback(self, layer_id: int, N: int) -> Optional[Callable]:
+        """构建 Phase 2 步骤回调
+
+        在演化器每 sample_interval 步调用一次，执行：
+        1. XiàngDetector — 底象检测（基于状态构建差异矩阵）
+        2. PersistentBiasMemory — 记录当前步的偏置
+        3. CumulativeSelector — 记录延续结果
+
+        Args:
+            layer_id: 当前层 ID
+            N: 当前层比特数
+
+        Returns:
+            callback 函数，如果没有任何 Phase 2 组件则返回 None
+        """
+        has_p2 = (self.xiang_detector is not None or
+                 self.persistent_bias_memory is not None or
+                 self.cumulative_selector is not None)
+        if not has_p2:
+            return None
+
+        # 为每个层初始化检测结果列表
+        if layer_id not in self._phase2_layer_results:
+            self._phase2_layer_results[layer_id] = []
+
+        def callback(step: int, state: torch.Tensor,
+                     snapshot: 'SpatialSnapshot',
+                     constraints) -> None:
+            """Phase 2 步骤回调"""
+            result_entry = {'step': step, 'layer': layer_id}
+
+            # 1. XiàngDetector: 从当前状态构建差异矩阵并检测底象
+            if self.xiang_detector is not None:
+                # 构建差异矩阵: D[i,j] = |state[i] - state[j]|
+                D = (state.float().unsqueeze(1) - state.float().unsqueeze(0)).abs()
+                D = (D + D.T) / 2  # 确保对称
+                D.fill_diagonal_(0)
+                # 归一化
+                D_max = D.max()
+                if D_max > 1e-8:
+                    D = D / D_max
+
+                xiang_result = self.xiang_detector.detect(
+                    D, timestamp=layer_id * 10000 + step)
+                result_entry['xiang'] = {
+                    'formed': xiang_result.xiang_formed,
+                    'density': xiang_result.organization_density,
+                    'trace': xiang_result.traceability_score,
+                    'continuity': xiang_result.continuity_length,
+                }
+                if self._phase2_verbose and xiang_result.xiang_formed:
+                    print(f"    [Xiàng] L{layer_id} step={step}: "
+                          f"density={xiang_result.organization_density:.3f}, "
+                          f"trace={xiang_result.traceability_score:.3f}, "
+                          f"continuity={xiang_result.continuity_length}")
+
+            # 2. PersistentBiasMemory: 记录当前步的偏置
+            if self.persistent_bias_memory is not None:
+                # 使用方向场作为偏置向量
+                direction = constraints.direction.clone()
+                bf = BiasField(
+                    source_layer=layer_id,
+                    target_layer=layer_id + 1,
+                    bias_vector=direction.float(),
+                    strength=min(1.0, len(constraints.active_bits) / max(1, N)),
+                    origin_step=layer_id * 10000 + step,
+                )
+                self.persistent_bias_memory.record(
+                    bf, timestamp=layer_id * 10000 + step,
+                    metadata={'layer': layer_id, 'step': step}
+                )
+                result_entry['bias_memory'] = {
+                    'entries': self.persistent_bias_memory.n_entries,
+                    'strength': bf.strength,
+                }
+
+            # 3. CumulativeSelector: 记录活跃比特的延续
+            if self.cumulative_selector is not None:
+                active_bits = list(constraints.active_bits)
+                frozen_bits = list(constraints.sealed_bits)
+                # 活跃变体: 记录为保留
+                for bit_id in active_bits[:10]:  # 限制数量避免过多记录
+                    variant_id = f"L{layer_id}_b{bit_id}"
+                    self.cumulative_selector.record_continuation(
+                        variant_id, retained=True)
+                # 冻结变体: 记录为不再延续
+                for bit_id in frozen_bits[:10]:
+                    variant_id = f"L{layer_id}_b{bit_id}"
+                    self.cumulative_selector.record_continuation(
+                        variant_id, retained=False)
+                result_entry['cumulative_selection'] = {
+                    'active_tracked': min(len(active_bits), 10),
+                    'frozen_tracked': min(len(frozen_bits), 10),
+                }
+
+            self._phase2_layer_results[layer_id].append(result_entry)
+
+        return callback
+
     def _run_layer(self, layer_id: int, steps: int,
                    initial_state: Optional[torch.Tensor] = None,
                    verbose: bool = True) -> Dict:
@@ -246,6 +360,9 @@ class HierarchicalEvolver:
 
         使用 SpatialLongRangeEvolver 的完整逻辑。
         如果演化过程中 A9 触发封口，立即封装并创建新层。
+
+        Phase 2: 如果提供了 xiang_detector / persistent_bias_memory /
+        cumulative_selector，会通过 step_callback 在演化过程中实时检测。
         """
         layer = self.hierarchy.get_layer(layer_id)
         N = layer.n_bits
@@ -282,6 +399,9 @@ class HierarchicalEvolver:
             layer.state = padded_state
             layer.n_bits = evolver.N
 
+        # Phase 2: 构建 step_callback
+        step_callback = self._make_phase2_callback(layer_id, evolver.N)
+
         # 设置初始状态
         if initial_state is not None:
             # pad initial_state 如果需要
@@ -291,9 +411,11 @@ class HierarchicalEvolver:
                     initial_state,
                     torch.zeros(pad_size, device=self.device)
                 ])
-            result = evolver.run(initial_state=initial_state, verbose=verbose)
+            result = evolver.run(initial_state=initial_state, verbose=verbose,
+                                 step_callback=step_callback)
         else:
-            result = evolver.run(verbose=verbose)
+            result = evolver.run(verbose=verbose,
+                                 step_callback=step_callback)
 
         # 同步回层级状态
         layer.state = result['final_state']
@@ -398,30 +520,56 @@ class HierarchicalEvolver:
                               f"sealed={result2['sealed']}")
 
         # 收集结果
+        layer_results = []
+        for i in range(self.hierarchy.n_layers):
+            lr = {
+                'layer': i,
+                'N': self.hierarchy.get_layer(i).n_bits,
+                'w': self.hierarchy.get_layer(i).hamming_weight,
+                'sealed': self.hierarchy.get_layer(i).is_sealed,
+                'steps': self.hierarchy.get_layer(i).step_count,
+                'inj': self.hierarchy.get_layer(i).constraints.total_injected,
+                'abs': self.hierarchy.get_layer(i).constraints.total_absorbed,
+                'cycles': len(self.hierarchy.get_layer(i).constraints.cycle_states),
+                'clusters': self.hierarchy.get_layer(i).constraints.get_clusters(),
+                'binding_strength': self.hierarchy.get_layer(i).constraints.binding_strength.clone(),
+                'direction': self.hierarchy.get_layer(i).constraints.direction.clone(),
+                'active_bits': self.hierarchy.get_layer(i).constraints.active_bits.copy(),
+                'snapshots': [s.state.clone() for s in self.snapshots if s.layer == i],
+            }
+            # Phase 2: 附加实时检测结果
+            if i in self._phase2_layer_results:
+                lr['phase2_step_results'] = self._phase2_layer_results[i]
+                # 汇总 XiàngDetector 结果
+                xiang_results = [r['xiang'] for r in self._phase2_layer_results[i]
+                                 if 'xiang' in r]
+                if xiang_results:
+                    lr['phase2_xiang_summary'] = {
+                        'first_formed_step': next(
+                            (r['step'] for r in self._phase2_layer_results[i]
+                             if r.get('xiang', {}).get('formed')), None),
+                        'max_density': max(r['density'] for r in xiang_results),
+                        'max_trace': max(r['trace'] for r in xiang_results),
+                        'max_continuity': max(r['continuity'] for r in xiang_results),
+                        'n_checks': len(xiang_results),
+                        'n_formed': sum(1 for r in xiang_results if r['formed']),
+                    }
+            layer_results.append(lr)
+
         return {
             'n_layers': self.hierarchy.n_layers,
             'current_layer': self.hierarchy.current_layer,
             'encapsulation_events': self.encapsulation_events,
             'hierarchy_summary': self.hierarchy.get_hierarchy_summary(),
             'snapshots': self.snapshots,
-            'layer_results': [
-                {
-                    'layer': i,
-                    'N': self.hierarchy.get_layer(i).n_bits,
-                    'w': self.hierarchy.get_layer(i).hamming_weight,
-                    'sealed': self.hierarchy.get_layer(i).is_sealed,
-                    'steps': self.hierarchy.get_layer(i).step_count,
-                    'inj': self.hierarchy.get_layer(i).constraints.total_injected,
-                    'abs': self.hierarchy.get_layer(i).constraints.total_absorbed,
-                    'cycles': len(self.hierarchy.get_layer(i).constraints.cycle_states),
-                    'clusters': self.hierarchy.get_layer(i).constraints.get_clusters(),
-                    'binding_strength': self.hierarchy.get_layer(i).constraints.binding_strength.clone(),
-                    'direction': self.hierarchy.get_layer(i).constraints.direction.clone(),
-                    'active_bits': self.hierarchy.get_layer(i).constraints.active_bits.copy(),
-                    'snapshots': [s.state.clone() for s in self.snapshots if s.layer == i],
-                }
-                for i in range(self.hierarchy.n_layers)
-            ]
+            'layer_results': layer_results,
+            'phase2_summary': {
+                'xiang_detector_active': self.xiang_detector is not None,
+                'bias_memory_entries': (self.persistent_bias_memory.n_entries
+                                        if self.persistent_bias_memory else 0),
+                'cumulative_selector_active': self.cumulative_selector is not None,
+                'layers_with_results': list(self._phase2_layer_results.keys()),
+            },
         }
 
     def print_results(self, results: Dict):

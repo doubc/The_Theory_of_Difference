@@ -136,8 +136,18 @@ class SpatialLongRangeEvolver:
         return weights
 
     def run(self, initial_state: Optional[torch.Tensor] = None,
-            verbose: bool = True) -> Dict:
-        """运行空间长程演化"""
+            verbose: bool = True,
+            step_callback: Optional[callable] = None) -> Dict:
+        """运行空间长程演化
+
+        Args:
+            initial_state: 初始状态
+            verbose: 是否打印详情
+            step_callback: 每 sample_interval 步调用的回调函数
+                           签名: callback(step: int, state: torch.Tensor,
+                                          snapshot: SpatialSnapshot,
+                                          constraints: AxiomConstraints) -> None
+        """
 
         if initial_state is None:
             state = torch.zeros(self.N, device=self.device)
@@ -293,6 +303,10 @@ class SpatialLongRangeEvolver:
                     coords_3d=coords_3d
                 )
                 self.snapshots.append(snapshot)
+
+                # Phase 2: step callback (XiàngDetector, PersistentBiasMemory, etc.)
+                if step_callback is not None:
+                    step_callback(step, state, snapshot, self.constraints)
 
                 if verbose and step % (self.sample_interval * 5) == 0:
                     n_cycles = len(self.constraints.cycle_states)
