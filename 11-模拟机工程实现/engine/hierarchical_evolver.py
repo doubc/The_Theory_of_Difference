@@ -24,6 +24,8 @@ from engine.encapsulation_engine import EncapsulationEngine
 from engine.xiang_detector import XiàngDetector
 from engine.persistent_bias_memory import PersistentBiasMemory
 from engine.cumulative_selector import CumulativeSelector
+from engine.six_threshold_detector import SixThresholdDetector
+from engine.pre_subjectivity_convergence import PreSubjectivityConvergence
 from layers.three_dim_hamming import ThreeDimHammingLattice
 
 
@@ -69,10 +71,15 @@ class HierarchicalEvolver:
                  L: float = 1.0,
                  auto_encapsulate: bool = True,
                  verbose_gravity: bool = False,
-                 # Phase 2 组件（可选，用于演化时实时检测）
+                 # Phase 2 P0 组件（可选，用于演化时实时检测）
                  xiang_detector: Optional[XiàngDetector] = None,
                  persistent_bias_memory: Optional[PersistentBiasMemory] = None,
                  cumulative_selector: Optional[CumulativeSelector] = None,
+                 # Phase 2 P1 组件（可选，用于演化时实时检测）
+                 six_threshold_detector: Optional[SixThresholdDetector] = None,
+                 pre_subjectivity_convergence: Optional[PreSubjectivityConvergence] = None,
+                 # P1 评估间隔（每多少个 P0 检测周期执行一次 P1 评估）
+                 p1_eval_interval: int = 5,
                  phase2_verbose: bool = False):
         """
         Args:
@@ -96,10 +103,14 @@ class HierarchicalEvolver:
         self.auto_encapsulate = auto_encapsulate
         self._verbose_gravity = verbose_gravity
 
-        # Phase 2 组件
+        # Phase 2 P0 组件
         self.xiang_detector = xiang_detector
         self.persistent_bias_memory = persistent_bias_memory
         self.cumulative_selector = cumulative_selector
+        # Phase 2 P1 组件
+        self.six_threshold_detector = six_threshold_detector
+        self.pre_subjectivity_convergence = pre_subjectivity_convergence
+        self._p1_eval_interval = p1_eval_interval
         self._phase2_verbose = phase2_verbose
         self._phase2_layer_results: Dict[int, List[Dict]] = {}  # layer -> [step_results]
 
@@ -258,9 +269,13 @@ class HierarchicalEvolver:
         """构建 Phase 2 步骤回调
 
         在演化器每 sample_interval 步调用一次，执行：
-        1. XiàngDetector — 底象检测（基于状态构建差异矩阵）
-        2. PersistentBiasMemory — 记录当前步的偏置
-        3. CumulativeSelector — 记录延续结果
+        P0（每步执行）:
+          1. XiàngDetector — 底象检测（基于状态构建差异矩阵）
+          2. PersistentBiasMemory — 记录当前步的偏置
+          3. CumulativeSelector — 记录延续结果
+        P1（每 p1_eval_interval 步执行）:
+          4. SixThresholdDetector — 六阈值同步检测
+          5. PreSubjectivityConvergence — 前主体态收束判定
 
         Args:
             layer_id: 当前层 ID
@@ -271,7 +286,9 @@ class HierarchicalEvolver:
         """
         has_p2 = (self.xiang_detector is not None or
                  self.persistent_bias_memory is not None or
-                 self.cumulative_selector is not None)
+                 self.cumulative_selector is not None or
+                 self.six_threshold_detector is not None or
+                 self.pre_subjectivity_convergence is not None)
         if not has_p2:
             return None
 
@@ -279,11 +296,16 @@ class HierarchicalEvolver:
         if layer_id not in self._phase2_layer_results:
             self._phase2_layer_results[layer_id] = []
 
+        # P1 评估计数器（按层独立计数）
+        p1_counter = {'value': 0}
+
         def callback(step: int, state: torch.Tensor,
                      snapshot: 'SpatialSnapshot',
                      constraints) -> None:
             """Phase 2 步骤回调"""
             result_entry = {'step': step, 'layer': layer_id}
+
+            # ── P0: 每步执行 ──
 
             # 1. XiàngDetector: 从当前状态构建差异矩阵并检测底象
             if self.xiang_detector is not None:
@@ -348,6 +370,114 @@ class HierarchicalEvolver:
                     'active_tracked': min(len(active_bits), 10),
                     'frozen_tracked': min(len(frozen_bits), 10),
                 }
+
+            # ── P1: 每隔 p1_eval_interval 步执行 ──
+            p1_counter['value'] += 1
+            if p1_counter['value'] >= self._p1_eval_interval:
+                p1_counter['value'] = 0
+
+                # 收集六阈值检测所需的参数
+                active_count = len(constraints.active_bits)
+                frozen_count = len(constraints.sealed_bits)
+                total_bits = max(1, active_count + frozen_count)
+                ts = layer_id * 10000 + step
+
+                # 从 PersistentBiasMemory 获取保持深度（条目数作为代理）
+                bias_depth = 0.0
+                if self.persistent_bias_memory is not None:
+                    bias_depth = float(self.persistent_bias_memory.n_entries)
+
+                # 从 CumulativeSelector 收集各变体的延续概率
+                variant_probs = None
+                if self.cumulative_selector is not None:
+                    active_bits = list(constraints.active_bits)
+                    probs = {}
+                    for bit_id in active_bits[:10]:
+                        vid = f"L{layer_id}_b{bit_id}"
+                        t = self.cumulative_selector.get_trend(vid)
+                        if t is not None:
+                            probs[vid] = max(0.0, min(1.0, t))
+                    if len(probs) >= 2:
+                        variant_probs = probs
+
+                # 界面调节度: 活跃比特比例
+                interface_regulation = active_count / total_bits
+
+                # 自维持稳健性: 方向一致性
+                self_sustaining = 0.0
+                if active_count > 0 and hasattr(constraints, 'direction'):
+                    dir_vals = constraints.direction.float()
+                    active_indices = list(constraints.active_bits)
+                    if len(active_indices) > 0:
+                        active_dir = dir_vals[active_indices]
+                        mean_dir = active_dir.mean().item()
+                        if abs(mean_dir) > 1e-8:
+                            agreement = (active_dir.sign() * np.sign(mean_dir)).mean().item()
+                            self_sustaining = max(0.0, (agreement + 1) / 2)
+
+                # 4. SixThresholdDetector: 六阈值同步检测
+                if self.six_threshold_detector is not None:
+                    threshold_result = self.six_threshold_detector.detect(
+                        active_exchanges=active_count,
+                        total_boundary_edges=total_bits,
+                        rebuild_success_count=int(self_sustaining * 10),
+                        perturbation_count=10,
+                        bias_recursion_depth=bias_depth,
+                        replicated_pattern=state if active_count > 0 else None,
+                        original_pattern=state,
+                        variant_continuation_probs=variant_probs,
+                        component_contributions=None,
+                        timestamp=ts,
+                    )
+                    result_entry['six_threshold'] = {
+                        'all_met': threshold_result.all_met,
+                        'n_met': threshold_result.n_met,
+                        'bottleneck': threshold_result.bottleneck,
+                    }
+                    if self._phase2_verbose:
+                        status = "PASS" if threshold_result.all_met else f"{threshold_result.n_met}/6"
+                        bn = f" bottleneck={threshold_result.bottleneck}" if not threshold_result.all_met else ""
+                        print(f"    [6Threshold] L{layer_id} step={step}: {status}{bn}")
+
+                # 5. PreSubjectivityConvergence: 前主体态收束判定
+                if self.pre_subjectivity_convergence is not None:
+                    threshold_params = {
+                        'active_exchanges': active_count,
+                        'total_boundary_edges': total_bits,
+                        'rebuild_success_count': int(self_sustaining * 10),
+                        'perturbation_count': 10,
+                        'bias_recursion_depth': bias_depth,
+                        'variant_continuation_probs': variant_probs,
+                    }
+
+                    conv_result = self.pre_subjectivity_convergence.evaluate(
+                        threshold_params=threshold_params,
+                        structure_state=state.float(),
+                        timestamp=ts,
+                    )
+                    result_entry['convergence'] = {
+                        'converged': conv_result.converged,
+                        'thresholds_met': conv_result.six_thresholds_met,
+                        'coupling_met': conv_result.coupling_strength_met,
+                        'stability_met': conv_result.stability_met,
+                        'firewall_passed': conv_result.semantic_firewall_passed,
+                        'n_coupled_pairs': conv_result.n_coupled_pairs,
+                        'stability_score': conv_result.stability_score,
+                    }
+                    if self._phase2_verbose:
+                        if conv_result.converged:
+                            print(f"    [Convergence] L{layer_id} step={step}: "
+                                  f"*** PRE-SUBJECTIVE CONVERGED ***")
+                        else:
+                            missing = []
+                            if not conv_result.six_thresholds_met:
+                                missing.append('thresholds')
+                            if not conv_result.coupling_strength_met:
+                                missing.append('coupling')
+                            if not conv_result.stability_met:
+                                missing.append('stability')
+                            print(f"    [Convergence] L{layer_id} step={step}: "
+                                  f"not converged, missing={','.join(missing)}")
 
             self._phase2_layer_results[layer_id].append(result_entry)
 
@@ -564,10 +694,19 @@ class HierarchicalEvolver:
             'snapshots': self.snapshots,
             'layer_results': layer_results,
             'phase2_summary': {
+                # P0
                 'xiang_detector_active': self.xiang_detector is not None,
                 'bias_memory_entries': (self.persistent_bias_memory.n_entries
                                         if self.persistent_bias_memory else 0),
                 'cumulative_selector_active': self.cumulative_selector is not None,
+                # P1
+                'six_threshold_detector_active': self.six_threshold_detector is not None,
+                'pre_subjectivity_convergence_active': self.pre_subjectivity_convergence is not None,
+                'pre_subjectivity_converged': (self.pre_subjectivity_convergence.has_converged
+                                                if self.pre_subjectivity_convergence else False),
+                'convergence_step': (self.pre_subjectivity_convergence.convergence_step
+                                      if self.pre_subjectivity_convergence else None),
+                # common
                 'layers_with_results': list(self._phase2_layer_results.keys()),
             },
         }
