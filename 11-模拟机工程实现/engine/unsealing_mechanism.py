@@ -230,17 +230,48 @@ class UnsealingMechanism:
         return list(self._unsealing_events)
 
     def get_all_structures_status(self) -> Dict[int, Dict]:
-        """获取所有结构的解封状态摘要"""
+        """获取所有结构的解封状态摘要
+
+        优化：先聚合事件计数，避免 O(n_structures × n_events) 的嵌套扫描。
+        """
+        # 预聚合：structure_id → event count [O(n_events)]
+        event_counts: Dict[int, int] = {}
+        for e in self._unsealing_events:
+            event_counts[e.structure_id] = event_counts.get(e.structure_id, 0) + 1
+
         result = {}
         for sid, level in self._unsealing_levels.items():
             result[sid] = {
                 'level': level,
                 'level_name': self.LEVEL_NAMES.get(level, f"Level {level}"),
-                'event_count': len(
-                    [e for e in self._unsealing_events if e.structure_id == sid]
-                ),
+                'event_count': event_counts.get(sid, 0),
             }
         return result
+
+    def get_structures_by_level(self) -> Dict[int, List[int]]:
+        """按解封等级分组返回结构 ID 列表
+
+        Returns:
+            {level: [structure_id, ...], ...}
+            例如: {0: [1, 3], 1: [2], 3: [5]}
+        """
+        grouped: Dict[int, List[int]] = {i: [] for i in range(4)}
+        for sid, level in self._unsealing_levels.items():
+            grouped[level].append(sid)
+        # 过滤空列表
+        return {k: v for k, v in grouped.items() if v}
+
+    def __repr__(self) -> str:
+        n_structures = len(self._unsealing_levels)
+        n_events = len(self._unsealing_events)
+        if n_structures == 0:
+            return "UnsealingMechanism[empty]"
+        levels = self._unsealing_levels
+        avg_level = sum(levels.values()) / n_structures
+        return (
+            f"UnsealingMechanism[structures={n_structures}, "
+            f"events={n_events}, avg_level={avg_level:.2f}]"
+        )
 
     def reset(self):
         """重置所有状态"""
