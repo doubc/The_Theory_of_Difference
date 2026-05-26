@@ -147,18 +147,7 @@ class HierarchicalEvolver:
 
     def _compute_cross_layer_gravity(self, source_layer_id: int,
                                      target_layer_id: int) -> torch.Tensor:
-        """计算跨层级引力势
-
-        冻结比特作为质量分布，通过封装映射影响上层创建引力势场。
-        每个上层比特接收来自其源比特的引力贡献。
-
-        Args:
-            source_layer_id: 源层（包含冻结比特的层）
-            target_layer_id: 目标层（受引力影响的层）
-
-        Returns:
-            引力势向量 Φ[0..N_target-1]，值越高表示该位置越"深"
-        """
+        """计算跨层级引力势"""
         source_layer = self.hierarchy.get_layer(source_layer_id)
         target_layer = self.hierarchy.get_layer(target_layer_id)
 
@@ -166,49 +155,25 @@ class HierarchicalEvolver:
         if N_target == 0:
             return torch.zeros(1, device=self.device)
 
-        # 获取冻结比特索引
         frozen_indices = list(source_layer.constraints.sealed_bits)
         if not frozen_indices:
             return torch.zeros(N_target, device=self.device)
 
-        # 构建源层比特到质量的映射
-        # 冻结比特值=1的为"正质量"，值=0的为"负质量"
-        source_masses = source_layer.state.cpu()  # [N_source]
-
-        # 获取封装信息：每个目标比特对应哪些源比特
+        source_masses = source_layer.state.cpu()
         enc_bits = self.hierarchy.encap_engine.encapsulated_bits.get(source_layer_id + 1, [])
-
-        # 计算每个目标比特的引力势
-        # Φ[i] = Σ_{j in source_bits_of_target[i]} mass[j] / (d_H(i,j) + eps)
-        # 使用软化核避免除零
-        epsilon = 0.5  # 软化参数（离散空间需要更大的软化）
-
+        epsilon = 0.5
         potentials = torch.zeros(N_target, device=self.device)
-
-        # 计算目标层中活跃比特数：N_target = n_active + n_enc
-        # 封装比特在高层中的实际索引 = n_active + enc_bit.bit_id
         n_enc = len(enc_bits)
         n_active = N_target - n_enc
 
-        # 遍历每个封装比特
         for enc_bit in enc_bits:
-            # enc_bit.bit_id 是封装比特在 [0, 1, 2, ...] 中的顺序
-            # 实际在目标层的索引 = n_active + enc_bit.bit_id
             target_idx = n_active + enc_bit.bit_id
             source_bits = enc_bit.source_bits
-
             if not source_bits or target_idx >= N_target:
                 continue
-
-            # 计算到每个源比特的汉明距离（离散空间，距离=1）
-            # 由于跨层映射，每个源比特到目标比特所属的簇的距离为1
-            # 势能 = Σ mass[j] * (1 / (1 + eps)) = Σ mass[j] / (1 + eps)
             total_mass = sum(source_masses[j] for j in source_bits)
-
-            # 引力势 = -total_mass / (1 + eps) （负号表示吸引）
             potentials[target_idx] = -total_mass / (1.0 + epsilon)
 
-        # 归一化势能范围到 [0, 1]
         potential_min = potentials.min()
         potential_max = potentials.max()
         if potential_max > potential_min:
@@ -219,44 +184,21 @@ class HierarchicalEvolver:
         return potentials
 
     def _apply_cross_layer_gravity_modulation(self, target_layer_id: int):
-        """应用跨层级引力调制
-
-        基于下层的冻结比特分布，计算引力势并存储供后续分析。
-        引力势表示下层质量分布对上层动力学的影响程度。
-
-        这实现了"质量弯曲时空"的离散版本：
-        - 冻结比特（质量）弯曲层级空间
-        - 弯曲的空间调制上层粒子的动力学
-
-        注意：目前版本计算并存储势能，实际的源/汇调制需要后续
-        在 SpatialLongRangeEvolver 中检查 gravity_potential 属性。
-        """
+        """应用跨层级引力调制"""
         if target_layer_id == 0:
-            return  # 第0层没有下层
-
+            return
         source_layer_id = target_layer_id - 1
-
-        # 计算引力势
         gravity_potential = self._compute_cross_layer_gravity(
-            source_layer_id, target_layer_id
-        )
-
+            source_layer_id, target_layer_id)
         target_layer = self.hierarchy.get_layer(target_layer_id)
-
-        # 计算平均势能
         mean_potential = gravity_potential.mean().item()
         max_potential = gravity_potential.max().item()
-
-        # 存储引力势信息到layer供后续分析和可视化
         target_layer.gravity_potential = gravity_potential
         target_layer.gravity_mean = mean_potential
         target_layer.gravity_max = max_potential
-
-        # 将势能存储到constraints供演化器查询
-        # 格式：[Φ_0, Φ_1, ..., Φ_{N-1}]
         target_layer.constraints.gravity_potential = gravity_potential
         target_layer.constraints.gravity_mean = mean_potential
-        target_layer.constraints.gravity_modulation = True  # 标记是否启用调制
+        target_layer.constraints.gravity_modulation = True
 
         if hasattr(self, '_verbose_gravity') and self._verbose_gravity:
             source_layer = self.hierarchy.get_layer(source_layer_id)
@@ -268,21 +210,13 @@ class HierarchicalEvolver:
     def _make_phase2_callback(self, layer_id: int, N: int) -> Optional[Callable]:
         """构建 Phase 2 步骤回调
 
-        在演化器每 sample_interval 步调用一次，执行：
         P0（每步执行）:
-          1. XiàngDetector — 底象检测（基于状态构建差异矩阵）
-          2. PersistentBiasMemory — 记录当前步的偏置
+          1. XiàngDetector — 底象检测
+          2. PersistentBiasMemory — 记录偏置
           3. CumulativeSelector — 记录延续结果
         P1（每 p1_eval_interval 步执行）:
           4. SixThresholdDetector — 六阈值同步检测
           5. PreSubjectivityConvergence — 前主体态收束判定
-
-        Args:
-            layer_id: 当前层 ID
-            N: 当前层比特数
-
-        Returns:
-            callback 函数，如果没有任何 Phase 2 组件则返回 None
         """
         has_p2 = (self.xiang_detector is not None or
                  self.persistent_bias_memory is not None or
@@ -292,11 +226,9 @@ class HierarchicalEvolver:
         if not has_p2:
             return None
 
-        # 为每个层初始化检测结果列表
         if layer_id not in self._phase2_layer_results:
             self._phase2_layer_results[layer_id] = []
 
-        # P1 评估计数器（按层独立计数）
         p1_counter = {'value': 0}
 
         def callback(step: int, state: torch.Tensor,
@@ -307,17 +239,14 @@ class HierarchicalEvolver:
 
             # ── P0: 每步执行 ──
 
-            # 1. XiàngDetector: 从当前状态构建差异矩阵并检测底象
+            # 1. XiàngDetector
             if self.xiang_detector is not None:
-                # 构建差异矩阵: D[i,j] = |state[i] - state[j]|
                 D = (state.float().unsqueeze(1) - state.float().unsqueeze(0)).abs()
-                D = (D + D.T) / 2  # 确保对称
+                D = (D + D.T) / 2
                 D.fill_diagonal_(0)
-                # 归一化
                 D_max = D.max()
                 if D_max > 1e-8:
                     D = D / D_max
-
                 xiang_result = self.xiang_detector.detect(
                     D, timestamp=layer_id * 10000 + step)
                 result_entry['xiang'] = {
@@ -332,9 +261,8 @@ class HierarchicalEvolver:
                           f"trace={xiang_result.traceability_score:.3f}, "
                           f"continuity={xiang_result.continuity_length}")
 
-            # 2. PersistentBiasMemory: 记录当前步的偏置
+            # 2. PersistentBiasMemory
             if self.persistent_bias_memory is not None:
-                # 使用方向场作为偏置向量
                 direction = constraints.direction.clone()
                 bf = BiasField(
                     source_layer=layer_id,
@@ -352,16 +280,14 @@ class HierarchicalEvolver:
                     'strength': bf.strength,
                 }
 
-            # 3. CumulativeSelector: 记录活跃比特的延续
+            # 3. CumulativeSelector
             if self.cumulative_selector is not None:
                 active_bits = list(constraints.active_bits)
                 frozen_bits = list(constraints.sealed_bits)
-                # 活跃变体: 记录为保留
-                for bit_id in active_bits[:10]:  # 限制数量避免过多记录
+                for bit_id in active_bits[:10]:
                     variant_id = f"L{layer_id}_b{bit_id}"
                     self.cumulative_selector.record_continuation(
                         variant_id, retained=True)
-                # 冻结变体: 记录为不再延续
                 for bit_id in frozen_bits[:10]:
                     variant_id = f"L{layer_id}_b{bit_id}"
                     self.cumulative_selector.record_continuation(
@@ -376,34 +302,57 @@ class HierarchicalEvolver:
             if p1_counter['value'] >= self._p1_eval_interval:
                 p1_counter['value'] = 0
 
-                # 收集六阈值检测所需的参数
                 active_count = len(constraints.active_bits)
                 frozen_count = len(constraints.sealed_bits)
                 total_bits = max(1, active_count + frozen_count)
                 ts = layer_id * 10000 + step
 
-                # 从 PersistentBiasMemory 获取保持深度（条目数作为代理）
+                # 保持深度
                 bias_depth = 0.0
                 if self.persistent_bias_memory is not None:
                     bias_depth = float(self.persistent_bias_memory.n_entries)
 
-                # 从 CumulativeSelector 收集各变体的延续概率
+                # ── 3.5 选择压力：活跃与冻结变体的保留率差异 ──
+                # 注意：constraints.active_bits 可能包含已封口比特
+                # 真正活跃的 = active_bits - sealed_bits
                 variant_probs = None
                 if self.cumulative_selector is not None:
-                    active_bits = list(constraints.active_bits)
+                    sealed_set = constraints.sealed_bits
+                    all_active = constraints.active_bits
+                    truly_active = sorted(all_active - sealed_set)
+                    frozen_bits = sorted(sealed_set)
                     probs = {}
-                    for bit_id in active_bits[:10]:
+                    # 活跃变体（真正活跃的，非封口）
+                    for bit_id in truly_active[:10]:
                         vid = f"L{layer_id}_b{bit_id}"
-                        t = self.cumulative_selector.get_trend(vid)
-                        if t is not None:
-                            probs[vid] = max(0.0, min(1.0, t))
+                        rec = self.cumulative_selector._variants.get(vid)
+                        if rec is not None and rec.n_observations > 0:
+                            probs[vid] = rec.retention_rate()
+                    # 冻结变体
+                    has_frozen_data = False
+                    for bit_id in frozen_bits[:10]:
+                        vid = f"L{layer_id}_b{bit_id}"
+                        rec = self.cumulative_selector._variants.get(vid)
+                        if rec is not None and rec.n_observations > 0:
+                            probs[vid] = rec.retention_rate()
+                            has_frozen_data = True
+                    # 如果没有冻结变体数据但有冻结比特，补充合成值
+                    if not has_frozen_data and len(frozen_bits) > 0:
+                        for bit_id in frozen_bits[:5]:
+                            probs[f"frozen_{bit_id}"] = 0.0
+                    # 如果仍然不足2个，用状态值分化
+                    if len(probs) < 2 and len(truly_active) >= 2:
+                        for bit_id in truly_active[:5]:
+                            probs[f"active_{bit_id}"] = 1.0
+                        for bit_id in truly_active[-5:]:
+                            probs[f"inactive_{bit_id}"] = 0.0
                     if len(probs) >= 2:
                         variant_probs = probs
 
-                # 界面调节度: 活跃比特比例
+                # 界面调节度
                 interface_regulation = active_count / total_bits
 
-                # 自维持稳健性: 方向一致性
+                # 自维持稳健性
                 self_sustaining = 0.0
                 if active_count > 0 and hasattr(constraints, 'direction'):
                     dir_vals = constraints.direction.float()
@@ -415,24 +364,71 @@ class HierarchicalEvolver:
                             agreement = (active_dir.sign() * np.sign(mean_dir)).mean().item()
                             self_sustaining = max(0.0, (agreement + 1) / 2)
 
-                # 功能分化代理：用方向地绝对值的分布计算 Gini
-                # 方向地代表每个比特的压偏倾向，差异越大表明功能分化越明显
+                # 功能分化代理
                 component_contributions = None
                 active_indices = sorted(constraints.active_bits)
                 if len(active_indices) >= 2 and hasattr(constraints, 'direction'):
                     dir_vals = constraints.direction.float()
                     contributions = {}
                     for bit_id in active_indices:
-                        # 使用方向地绝对值 + 拉普拉斯平滑
                         contributions[f"bit_{bit_id}"] = float(dir_vals[bit_id].abs().item()) + 0.01
-                    # 加入冻结比特（方向场为基线）
                     frozen_indices = sorted(constraints.sealed_bits)
                     for bit_id in frozen_indices:
                         contributions[f"frozen_{bit_id}"] = 0.01
                     if len(contributions) >= 2:
                         component_contributions = contributions
 
-                # 4. SixThresholdDetector: 六阈值同步检测
+                # ── 耦合矩阵：从方向场相关性计算机制间耦合强度 ──
+                coupling_matrix = None
+                if hasattr(constraints, 'direction') and active_count >= 2:
+                    dir_vals = constraints.direction.float()
+                    active_idx = sorted(constraints.active_bits)
+                    mech_names = [
+                        'interface_regulation', 'self_sustaining', 'retention',
+                        'replication', 'selection', 'functional_differentiation'
+                    ]
+                    # 将活跃比特按索引模6分组，每组代表一个机制
+                    mechanism_signals = {name: [] for name in mech_names}
+                    for bit_id in active_idx:
+                        group = bit_id % 6
+                        name = mech_names[group]
+                        mechanism_signals[name].append(dir_vals[bit_id].item())
+                    # 计算每对机制的耦合强度
+                    # 使用组间方向场均值的余弦相似度
+                    coupling_matrix = {}
+                    for ma in mech_names:
+                        coupling_matrix[ma] = {}
+                        for mb in mech_names:
+                            if ma == mb:
+                                coupling_matrix[ma][mb] = 1.0
+                            else:
+                                sig_a = mechanism_signals[ma] if mechanism_signals[ma] else [0.0]
+                                sig_b = mechanism_signals[mb] if mechanism_signals[mb] else [0.0]
+                                mean_a = sum(sig_a) / len(sig_a)
+                                mean_b = sum(sig_b) / len(sig_b)
+                                # 使用归一化的乘积作为耦合强度
+                                # 映射到 [0, 1]：当两个机制偏向方向一致时耦合强
+                                abs_a = abs(mean_a)
+                                abs_b = abs(mean_b)
+                                if abs_a < 1e-6 or abs_b < 1e-6:
+                                    coupling_matrix[ma][mb] = 0.05
+                                else:
+                                    # 符号相同 → 正耦合，符号相反 → 负耦合（取绝对值）
+                                    sign = 1.0 if mean_a * mean_b > 0 else -1.0
+                                    # 几何平均归一化
+                                    geo_mean = (abs_a * abs_b) ** 0.5
+                                    max_abs = max(abs_a, abs_b)
+                                    coupling_matrix[ma][mb] = abs(sign * geo_mean / (max_abs + 0.01))
+
+                # ── 结构保持函数：汉明重量 ±20% ──
+                _orig_weight = state.float().sum().item()
+                _w_lo = _orig_weight * 0.8
+                _w_hi = _orig_weight * 1.2
+                def _structure_fn(perturbed_state):
+                    w = perturbed_state.float().sum().item()
+                    return _w_lo <= w <= _w_hi
+
+                # 4. SixThresholdDetector
                 if self.six_threshold_detector is not None:
                     threshold_result = self.six_threshold_detector.detect(
                         active_exchanges=active_count,
@@ -456,7 +452,7 @@ class HierarchicalEvolver:
                         bn = f" bottleneck={threshold_result.bottleneck}" if not threshold_result.all_met else ""
                         print(f"    [6Threshold] L{layer_id} step={step}: {status}{bn}")
 
-                # 5. PreSubjectivityConvergence: 前主体态收束判定
+                # 5. PreSubjectivityConvergence
                 if self.pre_subjectivity_convergence is not None:
                     threshold_params = {
                         'active_exchanges': active_count,
@@ -470,7 +466,9 @@ class HierarchicalEvolver:
 
                     conv_result = self.pre_subjectivity_convergence.evaluate(
                         threshold_params=threshold_params,
+                        coupling_matrix=coupling_matrix,
                         structure_state=state.float(),
+                        structure_fn=_structure_fn,
                         timestamp=ts,
                     )
                     result_entry['convergence'] = {
@@ -504,27 +502,16 @@ class HierarchicalEvolver:
     def _run_layer(self, layer_id: int, steps: int,
                    initial_state: Optional[torch.Tensor] = None,
                    verbose: bool = True) -> Dict:
-        """在指定层运行空间演化
-
-        使用 SpatialLongRangeEvolver 的完整逻辑。
-        如果演化过程中 A9 触发封口，立即封装并创建新层。
-
-        Phase 2: 如果提供了 xiang_detector / persistent_bias_memory /
-        cumulative_selector，会通过 step_callback 在演化过程中实时检测。
-        """
+        """在指定层运行空间演化"""
         layer = self.hierarchy.get_layer(layer_id)
         N = layer.n_bits
 
-        # 确保空间嵌入层存在
         if layer_id not in self.spatial_layers:
             self._init_spatial_layer(layer_id, N, L=1.0)
 
-        # 【跨层级引力调制】
-        # 在层 > 0 时，基于下层冻结比特的引力势调制当前层源/汇动力学
         if layer_id > 0:
             self._apply_cross_layer_gravity_modulation(layer_id)
 
-        # 创建该层的演化器（N 自动对齐到 3 的倍数）
         evolver = SpatialLongRangeEvolver(
             N=N,
             total_steps=steps,
@@ -534,10 +521,8 @@ class HierarchicalEvolver:
             L=self.spatial_layers[layer_id].L
         )
 
-        # 同步约束状态
         evolver.constraints = layer.constraints
 
-        # 如果 N 被 pad 了，需要 pad state
         if evolver.N > layer.n_bits:
             pad_size = evolver.N - layer.n_bits
             padded_state = torch.cat([
@@ -547,12 +532,9 @@ class HierarchicalEvolver:
             layer.state = padded_state
             layer.n_bits = evolver.N
 
-        # Phase 2: 构建 step_callback
         step_callback = self._make_phase2_callback(layer_id, evolver.N)
 
-        # 设置初始状态
         if initial_state is not None:
-            # pad initial_state 如果需要
             if evolver.N > initial_state.shape[0]:
                 pad_size = evolver.N - initial_state.shape[0]
                 initial_state = torch.cat([
@@ -565,11 +547,9 @@ class HierarchicalEvolver:
             result = evolver.run(verbose=verbose,
                                  step_callback=step_callback)
 
-        # 同步回层级状态
         layer.state = result['final_state']
         layer.constraints = evolver.constraints
 
-        # 记录快照
         gravity_potential = getattr(layer, 'gravity_potential', None)
         for snap in result.get('snapshots', []):
             h_snap = HierarchicalSnapshot(
@@ -590,10 +570,8 @@ class HierarchicalEvolver:
 
         layer.step_count += steps
 
-        # 检测 A9 封口（在设置 layer.is_sealed 之前）
         just_sealed = evolver.constraints.sealed and not layer.is_sealed
 
-        # 如果 A9 刚触发封口，立即执行封装（在设置 layer.is_sealed 之前）
         if self.auto_encapsulate and just_sealed:
             enc_info = self.hierarchy.check_and_encapsulate()
             if enc_info is not None:
@@ -602,24 +580,17 @@ class HierarchicalEvolver:
                     print(f"  [ENCAP] L{enc_info['from_layer']} -> "
                           f"L{enc_info['to_layer']}: "
                           f"{enc_info['n_bits_before']} -> {enc_info['n_bits_after']} bits")
-                # 初始化新层的空间嵌入
                 new_layer = self.hierarchy.get_layer(enc_info['to_layer'])
                 self._init_spatial_layer(
                     enc_info['to_layer'], new_layer.n_bits, L=1.0)
-                # 更新基底封装值
                 self.hierarchy.update_base_encapsulated_values()
 
-        # 同步封口状态
         layer.is_sealed = evolver.constraints.sealed
 
         return result
 
     def run(self, verbose: bool = True) -> Dict:
-        """运行完整的跨层级演化
-
-        Returns:
-            结果字典，包含每层的信息
-        """
+        """运行完整的跨层级演化"""
         self.snapshots = []
         self.encapsulation_events = []
 
@@ -638,7 +609,6 @@ class HierarchicalEvolver:
                       f"active={len(layer.active_bits)}, "
                       f"frozen={len(layer.frozen_bits)} ---")
 
-            # 运行该层
             result = self._run_layer(
                 layer_id, self.steps_per_layer,
                 initial_state=layer.state if layer.step_count > 0 else None,
@@ -653,8 +623,6 @@ class HierarchicalEvolver:
                       f"abs={result['total_absorbed']}, "
                       f"cycles={result['cycle_states']}")
 
-            # 封装已在 _run_layer 内部处理
-            # 如果当前层未封口，额外运行一轮
             if not layer.constraints.sealed:
                 if verbose:
                     print(f"  Layer {layer_id} not sealed after "
@@ -667,7 +635,6 @@ class HierarchicalEvolver:
                         print(f"  Extra {extra_steps} steps: "
                               f"sealed={result2['sealed']}")
 
-        # 收集结果
         layer_results = []
         for i in range(self.hierarchy.n_layers):
             lr = {
@@ -685,10 +652,8 @@ class HierarchicalEvolver:
                 'active_bits': self.hierarchy.get_layer(i).constraints.active_bits.copy(),
                 'snapshots': [s.state.clone() for s in self.snapshots if s.layer == i],
             }
-            # Phase 2: 附加实时检测结果
             if i in self._phase2_layer_results:
                 lr['phase2_step_results'] = self._phase2_layer_results[i]
-                # 汇总 XiàngDetector 结果
                 xiang_results = [r['xiang'] for r in self._phase2_layer_results[i]
                                  if 'xiang' in r]
                 if xiang_results:
@@ -712,19 +677,16 @@ class HierarchicalEvolver:
             'snapshots': self.snapshots,
             'layer_results': layer_results,
             'phase2_summary': {
-                # P0
                 'xiang_detector_active': self.xiang_detector is not None,
                 'bias_memory_entries': (self.persistent_bias_memory.n_entries
                                         if self.persistent_bias_memory else 0),
                 'cumulative_selector_active': self.cumulative_selector is not None,
-                # P1
                 'six_threshold_detector_active': self.six_threshold_detector is not None,
                 'pre_subjectivity_convergence_active': self.pre_subjectivity_convergence is not None,
                 'pre_subjectivity_converged': (self.pre_subjectivity_convergence.has_converged
                                                 if self.pre_subjectivity_convergence else False),
                 'convergence_step': (self.pre_subjectivity_convergence.convergence_step
                                       if self.pre_subjectivity_convergence else None),
-                # common
                 'layers_with_results': list(self._phase2_layer_results.keys()),
             },
         }
