@@ -21,6 +21,7 @@ from typing import List, Optional, Dict, Tuple, Callable
 from engine.spatial_evolver_v2 import SpatialLongRangeEvolver, SpatialSnapshot
 from engine.hierarchy_manager import HierarchyManager, LayerState, BiasField
 from engine.encapsulation_engine import EncapsulationEngine
+from engine.cross_layer_gravity import CrossLayerGravityModulator, GravityField
 from engine.xiang_detector import XiàngDetector
 from engine.persistent_bias_memory import PersistentBiasMemory
 from engine.cumulative_selector import CumulativeSelector
@@ -127,6 +128,14 @@ class HierarchicalEvolver:
         self.spatial_layers: Dict[int, ThreeDimHammingLattice] = {}
         self._init_spatial_layer(0, N0, L)
 
+        # 跨层级引力调制器（替代原有的 duplicated _compute_cross_layer_gravity）
+        self.gravity_modulator = CrossLayerGravityModulator(
+            n_layers=max_layers,
+            gravity_decay=0.5,
+            modulation_strength=0.1,
+            distance_exponent=2.0
+        )
+
         # 轨迹记录
         self.snapshots: List[HierarchicalSnapshot] = []
         self.encapsulation_events: List[Dict] = []
@@ -147,7 +156,15 @@ class HierarchicalEvolver:
 
     def _compute_cross_layer_gravity(self, source_layer_id: int,
                                      target_layer_id: int) -> torch.Tensor:
-        """计算跨层级引力势"""
+        """计算跨层级引力势（委托给 CrossLayerGravityModulator）
+
+        原实现为手写简化版，仅对封装比特计算质量求和。
+        现改用 CrossLayerGravityModulator 的完整引力场模型：
+        - 冻结且激活的比特作为质量源
+        - 逆距离平方律计算引力势
+        - 通过封装映射投影到目标层
+        - 应用层间衰减
+        """
         source_layer = self.hierarchy.get_layer(source_layer_id)
         target_layer = self.hierarchy.get_layer(target_layer_id)
 
@@ -155,33 +172,37 @@ class HierarchicalEvolver:
         if N_target == 0:
             return torch.zeros(1, device=self.device)
 
+        # 质量源 = 源层中冻结且激活的比特
         frozen_indices = list(source_layer.constraints.sealed_bits)
-        if not frozen_indices:
+        active_masses = [
+            i for i in frozen_indices
+            if i < len(source_layer.state) and source_layer.state[i].item() > 0.5
+        ]
+        if not active_masses:
             return torch.zeros(N_target, device=self.device)
 
-        source_masses = source_layer.state.cpu()
-        enc_bits = self.hierarchy.encap_engine.encapsulated_bits.get(source_layer_id + 1, [])
-        epsilon = 0.5
-        potentials = torch.zeros(N_target, device=self.device)
-        n_enc = len(enc_bits)
-        n_active = N_target - n_enc
+        # 使用 modulator 计算源层的引力场
+        state_cpu = source_layer.state.cpu()
+        field = self.gravity_modulator.compute_gravity_field(
+            layer_id=source_layer_id,
+            state=state_cpu,
+            frozen_bits=set(frozen_indices),
+            active_bits=set(range(len(state_cpu))),
+            binding_strength=None,
+            step=0
+        )
 
-        for enc_bit in enc_bits:
-            target_idx = n_active + enc_bit.bit_id
-            source_bits = enc_bit.source_bits
-            if not source_bits or target_idx >= N_target:
-                continue
-            total_mass = sum(source_masses[j] for j in source_bits)
-            potentials[target_idx] = -total_mass / (1.0 + epsilon)
+        # 通过封装映射投影到目标层
+        encap_engine = self.hierarchy.encap_engine
+        projected = self.gravity_modulator.project_gravity_up(
+            source_layer_id=source_layer_id,
+            source_field=field,
+            target_N=N_target,
+            encap_engine=encap_engine,
+            source_layer=source_layer_id
+        )
 
-        potential_min = potentials.min()
-        potential_max = potentials.max()
-        if potential_max > potential_min:
-            potentials = (potentials - potential_min) / (potential_max - potential_min)
-        else:
-            potentials = torch.zeros_like(potentials)
-
-        return potentials
+        return projected
 
     def _apply_cross_layer_gravity_modulation(self, target_layer_id: int):
         """应用跨层级引力调制"""
