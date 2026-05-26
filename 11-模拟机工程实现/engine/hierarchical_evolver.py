@@ -210,9 +210,34 @@ class HierarchicalEvolver:
         收集所有下层引力场（向上牵引）和上层引力场（向下约束），
         通过 CrossLayerGravityModulator.compute_modulation() 聚合为综合调制向量，
         替代原有的单层单向引力计算。
+
+        关键修复：在读取 gravity_fields 之前，先为所有层计算引力场。
+        此前 gravity_fields 始终为空，导致调制向量恒为零。
         """
         if target_layer_id == 0:
             return
+
+        # ── 修复：先为所有层计算引力场 ──
+        # gravity_fields 不会被自动填充，必须在调制前显式计算
+        for lid in range(self.max_layers):
+            layer = self.hierarchy.get_layer(lid)
+            if layer.state is None or layer.state.numel() == 0:
+                continue
+            frozen_indices = list(layer.constraints.sealed_bits)
+            # 引力场的质量源 = 冻结且激活的比特
+            state_cpu = layer.state.cpu()
+            field = self.gravity_modulator.compute_gravity_field(
+                layer_id=lid,
+                state=state_cpu,
+                frozen_bits=set(frozen_indices),
+                active_bits=set(range(len(state_cpu))),
+                binding_strength=layer.constraints.binding_strength,
+                step=layer.step_count,
+            )
+            if self._verbose_gravity:
+                print(f"    [GRAVITY] L{lid} field computed: mass={field.total_mass}, "
+                      f"Φ_mean={field.potential.mean().item():.4f}, "
+                      f"Φ_max={field.potential.max().item():.4f}")
 
         target_layer = self.hierarchy.get_layer(target_layer_id)
         device = self.device
