@@ -76,7 +76,7 @@ class SemanticFirewallResult:
 
     def __repr__(self):
         if self.passed:
-            return f"SemanticFirewall[PASSED] (checked {n_checked} fields)"
+            return f"SemanticFirewall[PASSED] (checked {self.n_checked} fields)"
         return f"SemanticFirewall[FAILED] violations: {self.violations}"
 
 
