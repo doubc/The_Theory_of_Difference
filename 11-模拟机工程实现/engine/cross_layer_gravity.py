@@ -333,26 +333,58 @@ class CrossLayerGravityModulator:
         return scores
 
     def get_active_fields(self, layer_id: int,
-                          max_age_steps: int = 100) -> List[GravityField]:
-        """获取指定层的活跃引力场（未衰减到可忽略）"""
+                          max_age_steps: int = 100,
+                          current_step: int = 0) -> List[GravityField]:
+        """获取指定层的活跃引力场（未衰减到可忽略且未过期）"""
         if layer_id not in self.gravity_fields:
             return []
 
         active = []
         for field in self.gravity_fields[layer_id]:
-            steps_elapsed = 0  # 实际应从演化器获取当前步数
-            if field.decay(steps_elapsed, decay_rate=0.98):
+            steps_elapsed = current_step - field.generation_step if current_step > 0 else 0
+            if steps_elapsed <= max_age_steps and field.decay(0, decay_rate=0.98):
                 active.append(field)
 
         return active
 
-    def clear_old_fields(self, max_age_steps: int = 200):
-        """清除过老的引力场"""
+    def clear_old_fields(self, max_age_steps: int = 200, current_step: int = 0):
+        """清除过老的引力场（超过 max_age_steps 步的场）"""
+        if current_step <= 0:
+            return  # 无法确定年龄时跳过
         for layer_id in self.gravity_fields:
             self.gravity_fields[layer_id] = [
                 f for f in self.gravity_fields[layer_id]
-                if f.generation_step > 0  # 简化：实际应检查年龄
+                if (current_step - f.generation_step) <= max_age_steps
             ]
+
+    def project_gravity_down(self, source_field: GravityField,
+                              target_N: int,
+                              decay_factor: float = 0.5) -> torch.Tensor:
+        """将引力势从高层投影到低层（逆向投影）
+
+        用于上层对下层的约束力计算。
+        高层比特对应低层多个比特时，引力势均匀分配。
+        """
+        device = source_field.potential.device
+        source_N = source_field.potential.numel()
+
+        if source_N == 0:
+            return torch.zeros(target_N, device=device)
+
+        if source_N >= target_N:
+            # 高层维度大：每个低层比特聚合对应的高层引力势
+            k = source_N // target_N
+            projected = torch.zeros(target_N, device=device)
+            for lo in range(target_N):
+                start = lo * k
+                end = min(start + k, source_N)
+                projected[lo] = source_field.potential[start:end].mean()
+        else:
+            # 高层维度小：直接复制/插值
+            repeats = target_N // source_N + 1
+            projected = source_field.potential.repeat(repeats)[:target_N]
+
+        return projected * decay_factor
 
     def get_summary(self) -> Dict:
         """获取引力调制摘要"""

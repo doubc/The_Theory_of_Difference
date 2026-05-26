@@ -135,6 +135,27 @@ def test_modulation_computation():
     print(f"[PASS] Modulation: L1 receives from L0(up) and L2(down), strength={result['modulation_strength']}")
 
 
+def test_gravity_projection_down():
+    """测试高层引力向下投影到低层"""
+    modulator = CrossLayerGravityModulator(gravity_decay=0.5)
+
+    # 高层 N=4 -> 低层 N=8
+    field_high = GravityField(
+        layer_id=2,
+        potential=torch.tensor([0.8, 0.4, -0.4, -0.8]),
+        mass_sources=[0],
+        generation_step=0
+    )
+
+    projected = modulator.project_gravity_down(
+        source_field=field_high, target_N=8, decay_factor=0.5
+    )
+
+    assert projected.shape == (8,)
+    assert projected.abs().max() <= 0.5  # 衰减后不超过 0.5
+    print(f"[PASS] Gravity projection down: L2 N=4 -> L0 N=8, max={projected.max().item():.4f}")
+
+
 def test_injection_modulation_scores():
     modulator = CrossLayerGravityModulator(modulation_strength=0.1)
 
@@ -164,12 +185,13 @@ def run_all_tests():
     test_gravity_field_creation()
     test_gravity_field_with_binding()
     test_gravity_projection_up()
+    test_gravity_projection_down()
     test_gravity_projection_with_encapsulation()
     test_modulation_computation()
     test_injection_modulation_scores()
 
     print("=" * 60)
-    print("All 6 tests passed [OK]")
+    print("All 7 tests passed [OK]")
     print("=" * 60)
 
 
