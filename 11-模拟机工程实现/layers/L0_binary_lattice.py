@@ -128,8 +128,37 @@ class L0BinaryLattice(LayerBase):
 
     def locality_violation(self, state: torch.Tensor,
                            next_state: torch.Tensor) -> torch.Tensor:
-        """局域性由 CNN 结构保证，返回 0"""
-        return torch.tensor(0.0, device=state.device)
+        """A3 局域性违背度量。
+
+        原理：LocalConvModel 使用 3x3 卷积（receptive field=3x3），
+        因此每一步的状态变化 delta = next_state - state 应当局限在
+        每个像素的 3x3 邻域内传播。
+
+        检测方法：
+        1. 计算变化图 delta = |next_state - state|
+        2. 对 delta 做 3x3 平均池化，得到「局域邻域平均变化」
+        3. 如果某个像素的变化远大于其邻域平均（>3倍），
+           说明变化是孤立的、非局域的（长程跳跃）
+        4. 违背度 = 非局域变化量 / 总变化量
+
+        当 delta 全为 0 时（无变化），返回 0（无违背）。"""
+        delta = (next_state - state).abs()
+        total_change = delta.sum()
+
+        if total_change < 1e-8:
+            return torch.tensor(0.0, device=state.device)
+
+        # 3x3 平均池化：模拟 3x3 卷积核的影响范围
+        kernel = torch.ones(1, 1, 3, 3, device=delta.device) / 9.0
+        local_avg = F.conv2d(delta, kernel, padding=1)
+
+        # 如果某像素的变化远大于其邻域平均（>3倍），
+        # 说明变化是孤立的、非局域的
+        non_local_mask = delta > (3.0 * local_avg + 1e-8)
+        non_local_change = (delta * non_local_mask.float()).sum()
+
+        # 违背度 = 非局域变化 / 总变化
+        return (non_local_change / total_change).clamp(0.0, 1.0)
 
     # --- 差异源与汇 ---
 

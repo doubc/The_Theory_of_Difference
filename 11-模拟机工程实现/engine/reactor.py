@@ -106,12 +106,16 @@ class DifferenceReactor:
         )
 
         # --- A3: 局域性 ---
-        # 由 CNN 结构保证，loss 权重为 0
+        # 测量非局域变化传播
+        a3_val = self.layer.locality_violation(state, next_state)
+        w3 = self.layer.get_axiom_weight("A3_locality")
+        a3_loss = a3_val * w3
+        loss_parts.append(a3_loss)
         report["A3_locality"] = AxiomReport(
             name="A3_locality",
-            raw_violation=0.0,
-            weight=0.0,
-            weighted_violation=0.0,
+            raw_violation=float(a3_val.detach()),
+            weight=w3,
+            weighted_violation=float(a3_loss.detach()),
         )
 
         # --- A4: 最小变易 ---
