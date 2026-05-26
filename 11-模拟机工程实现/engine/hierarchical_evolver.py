@@ -27,6 +27,8 @@ from engine.persistent_bias_memory import PersistentBiasMemory
 from engine.cumulative_selector import CumulativeSelector
 from engine.six_threshold_detector import SixThresholdDetector
 from engine.pre_subjectivity_convergence import PreSubjectivityConvergence
+from engine.unsealing_mechanism import UnsealingMechanism, UnsealingEvent
+from engine.return_flow_channel import ReturnFlowChannel, HighSemanticPayload, AnchorPoint, ReturnFlowEvent
 from layers.three_dim_hamming import ThreeDimHammingLattice
 
 
@@ -79,6 +81,9 @@ class HierarchicalEvolver:
                  # Phase 2 P1 组件（可选，用于演化时实时检测）
                  six_threshold_detector: Optional[SixThresholdDetector] = None,
                  pre_subjectivity_convergence: Optional[PreSubjectivityConvergence] = None,
+                 # Phase 2 P0 解封与回流（可选，依赖 pre_subjectivity_convergence）
+                 unsealing_mechanism: Optional[UnsealingMechanism] = None,
+                 return_flow_channel: Optional[ReturnFlowChannel] = None,
                  # P1 评估间隔（每多少个 P0 检测周期执行一次 P1 评估）
                  p1_eval_interval: int = 5,
                  phase2_verbose: bool = False):
@@ -111,9 +116,16 @@ class HierarchicalEvolver:
         # Phase 2 P1 组件
         self.six_threshold_detector = six_threshold_detector
         self.pre_subjectivity_convergence = pre_subjectivity_convergence
+        # Phase 2 解封与回流
+        self.unsealing_mechanism = unsealing_mechanism
+        self.return_flow_channel = return_flow_channel
         self._p1_eval_interval = p1_eval_interval
         self._phase2_verbose = phase2_verbose
         self._phase2_layer_results: Dict[int, List[Dict]] = {}  # layer -> [step_results]
+        # 解封事件记录
+        self._unsealing_events: List[UnsealingEvent] = []
+        # 回流事件记录
+        self._return_flow_events: List[ReturnFlowEvent] = []
 
         # 层级管理器
         self.hierarchy = HierarchyManager(
@@ -317,7 +329,9 @@ class HierarchicalEvolver:
                  self.persistent_bias_memory is not None or
                  self.cumulative_selector is not None or
                  self.six_threshold_detector is not None or
-                 self.pre_subjectivity_convergence is not None)
+                 self.pre_subjectivity_convergence is not None or
+                 self.unsealing_mechanism is not None or
+                 self.return_flow_channel is not None)
         if not has_p2:
             return None
 
@@ -548,6 +562,7 @@ class HierarchicalEvolver:
                         print(f"    [6Threshold] L{layer_id} step={step}: {status}{bn}")
 
                 # 5. PreSubjectivityConvergence
+                conv_result = None
                 if self.pre_subjectivity_convergence is not None:
                     threshold_params = {
                         'active_exchanges': active_count,
@@ -589,6 +604,52 @@ class HierarchicalEvolver:
                                 missing.append('stability')
                             print(f"    [Convergence] L{layer_id} step={step}: "
                                   f"not converged, missing={','.join(missing)}")
+
+                # 6. UnsealingMechanism — 基于收束结果评估解封等级
+                unsealing_event = None
+                if self.unsealing_mechanism is not None and conv_result is not None:
+                    unsealing_event = self.unsealing_mechanism.evaluate(
+                        structure_id=layer_id,
+                        convergence_result=conv_result,
+                        timestamp=ts,
+                    )
+                    if unsealing_event is not None:
+                        self._unsealing_events.append(unsealing_event)
+                        result_entry['unsealing'] = {
+                            'level': unsealing_event.unsealing_level,
+                            'previous_level': unsealing_event.previous_level,
+                            'capacity': unsealing_event.high_semantic_capacity,
+                            'reason': unsealing_event.reason,
+                        }
+                        if self._phase2_verbose:
+                            print(f"    [Unsealing] L{layer_id} step={step}: "
+                                  f"{unsealing_event.reason}, capacity={unsealing_event.high_semantic_capacity:.3f}")
+                    else:
+                        # 无等级变化，但仍记录当前等级
+                        current_level = self.unsealing_mechanism.get_current_level(layer_id)
+                        result_entry['unsealing'] = {
+                            'level': current_level,
+                            'changed': False,
+                            'level_name': self.unsealing_mechanism.get_level_name(layer_id),
+                        }
+
+                # 7. ReturnFlowChannel — 每步执行锚定强度衰减与剥离检测
+                if self.return_flow_channel is not None:
+                    detach_events = self.return_flow_channel.step(timestamp=ts)
+                    for evt in detach_events:
+                        self._return_flow_events.append(evt)
+                    if detach_events and self._phase2_verbose:
+                        for evt in detach_events:
+                            print(f"    [ReturnFlow] L{layer_id} step={step}: "
+                                  f"detached {evt.payload.payload_id} — {evt.reason}")
+                    # 记录当前锚定状态摘要
+                    anchored = self.return_flow_channel.get_anchored_contents()
+                    if anchored:
+                        result_entry['return_flow'] = {
+                            'anchored_count': len(anchored),
+                            'anchored': anchored,
+                            'detach_events_this_step': len(detach_events),
+                        }
 
             self._phase2_layer_results[layer_id].append(result_entry)
 
@@ -782,9 +843,52 @@ class HierarchicalEvolver:
                                                 if self.pre_subjectivity_convergence else False),
                 'convergence_step': (self.pre_subjectivity_convergence.convergence_step
                                       if self.pre_subjectivity_convergence else None),
+                'unsealing_mechanism_active': self.unsealing_mechanism is not None,
+                'unsealing_events': [str(e) for e in self._unsealing_events],
+                'unsealing_summary': (
+                    self.unsealing_mechanism.get_all_structures_status()
+                    if self.unsealing_mechanism else {}),
+                'return_flow_channel_active': self.return_flow_channel is not None,
+                'return_flow_anchored_count': (
+                    self.return_flow_channel.get_anchored_count()
+                    if self.return_flow_channel else 0),
+                'return_flow_success_rate': (
+                    self.return_flow_channel.get_success_rate()
+                    if self.return_flow_channel else 0.0),
                 'layers_with_results': list(self._phase2_layer_results.keys()),
             },
         }
+
+    # ─── Phase 2 查询接口 ───
+
+    def get_unsealing_events(self, structure_id: Optional[int] = None) -> List[UnsealingEvent]:
+        """获取解封事件历史"""
+        if structure_id is not None and self.unsealing_mechanism is not None:
+            return self.unsealing_mechanism.get_event_history(structure_id)
+        return list(self._unsealing_events)
+
+    def get_return_flow_events(self, limit: int = 100) -> List[ReturnFlowEvent]:
+        """获取回流事件历史"""
+        if self.return_flow_channel is not None:
+            return self.return_flow_channel.get_flow_history(limit)
+        return list(self._return_flow_events)
+
+    def get_unsealing_status(self) -> Dict:
+        """获取解封状态摘要"""
+        if self.unsealing_mechanism is not None:
+            return self.unsealing_mechanism.get_all_structures_status()
+        return {}
+
+    def get_return_flow_status(self) -> Dict:
+        """获取回流通道状态摘要"""
+        if self.return_flow_channel is not None:
+            return {
+                'anchored_count': self.return_flow_channel.get_anchored_count(),
+                'anchored_contents': self.return_flow_channel.get_anchored_contents(),
+                'success_rate': self.return_flow_channel.get_success_rate(),
+                'total_events': self.return_flow_channel.get_total_events(),
+            }
+        return {}
 
     def print_results(self, results: Dict):
         """打印结果摘要"""
