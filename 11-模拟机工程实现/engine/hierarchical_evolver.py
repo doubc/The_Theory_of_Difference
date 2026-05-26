@@ -205,15 +205,51 @@ class HierarchicalEvolver:
         return projected
 
     def _apply_cross_layer_gravity_modulation(self, target_layer_id: int):
-        """应用跨层级引力调制"""
+        """应用跨层级引力调制（多层聚合）
+
+        收集所有下层引力场（向上牵引）和上层引力场（向下约束），
+        通过 CrossLayerGravityModulator.compute_modulation() 聚合为综合调制向量，
+        替代原有的单层单向引力计算。
+        """
         if target_layer_id == 0:
             return
-        source_layer_id = target_layer_id - 1
-        gravity_potential = self._compute_cross_layer_gravity(
-            source_layer_id, target_layer_id)
+
         target_layer = self.hierarchy.get_layer(target_layer_id)
+        device = self.device
+        N = target_layer.n_bits
+
+        # 收集所有下层引力场（向上牵引）和上层引力场（向下约束）
+        lower_fields = []
+        upper_fields = []
+        for lid in range(self.max_layers):
+            fields = self.gravity_modulator.gravity_fields.get(lid, [])
+            # 只取非空场
+            active_fields = [f for f in fields if f.total_mass > 0]
+            if lid < target_layer_id:
+                lower_fields.extend(active_fields)
+            elif lid > target_layer_id:
+                upper_fields.extend(active_fields)
+
+        # 构造目标层当前状态（用于调制计算）
+        target_state = target_layer.state.clone() if target_layer.state is not None \
+            else torch.zeros(N, device=device)
+        if len(target_state) < N:
+            target_state = torch.cat([target_state, torch.zeros(N - len(target_state), device=device)])
+        target_state = target_state[:N]
+
+        # 调用多层调制计算
+        mod_result = self.gravity_modulator.compute_modulation(
+            layer_id=target_layer_id,
+            lower_fields=lower_fields,
+            upper_fields=upper_fields,
+            target_state=target_state,
+        )
+
+        # 综合调制向量 = 向上牵引 - 向下约束
+        gravity_potential = mod_result['modulation_vector']
         mean_potential = gravity_potential.mean().item()
-        max_potential = gravity_potential.max().item()
+        max_potential = gravity_potential.abs().max().item()
+
         target_layer.gravity_potential = gravity_potential
         target_layer.gravity_mean = mean_potential
         target_layer.gravity_max = max_potential
@@ -221,12 +257,16 @@ class HierarchicalEvolver:
         target_layer.constraints.gravity_mean = mean_potential
         target_layer.constraints.gravity_modulation = True
 
-        if hasattr(self, '_verbose_gravity') and self._verbose_gravity:
-            source_layer = self.hierarchy.get_layer(source_layer_id)
-            print(f"    [GRAVITY] L{source_layer_id}→L{target_layer_id}: "
+        if self._verbose_gravity:
+            n_lower = len(lower_fields)
+            n_upper = len(upper_fields)
+            lower_mass = sum(f.total_mass for f in lower_fields)
+            upper_mass = sum(f.total_mass for f in upper_fields)
+            print(f"    [GRAVITY] L{target_layer_id} multi-layer modulation: "
+                  f"up={n_lower} fields(mass={lower_mass}), "
+                  f"down={n_upper} fields(mass={upper_mass}), "
                   f"Φ_mean={mean_potential:.4f}, Φ_max={max_potential:.4f}, "
-                  f"N_target={target_layer.n_bits}, "
-                  f"frozen_source={len(source_layer.constraints.sealed_bits)}")
+                  f"N={N}")
 
     def _make_phase2_callback(self, layer_id: int, N: int) -> Optional[Callable]:
         """构建 Phase 2 步骤回调
