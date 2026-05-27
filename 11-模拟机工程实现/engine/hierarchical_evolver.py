@@ -29,6 +29,9 @@ from engine.six_threshold_detector import SixThresholdDetector
 from engine.pre_subjectivity_convergence import PreSubjectivityConvergence
 from engine.unsealing_mechanism import UnsealingMechanism, UnsealingEvent
 from engine.return_flow_channel import ReturnFlowChannel, HighSemanticPayload, AnchorPoint, ReturnFlowEvent
+from engine.organizational_density_index import OrganizationalDensityIndex, DensityIndexResult
+from engine.seventh_threshold_detector import SeventhThresholdDetector, SeventhThresholdResult
+from engine.cooperative_emergence_detector import CooperativeEmergenceDetector, CooperativeEmergenceResult
 from layers.three_dim_hamming import ThreeDimHammingLattice
 
 
@@ -84,6 +87,10 @@ class HierarchicalEvolver:
                  # Phase 2 P0 解封与回流（可选，依赖 pre_subjectivity_convergence）
                  unsealing_mechanism: Optional[UnsealingMechanism] = None,
                  return_flow_channel: Optional[ReturnFlowChannel] = None,
+                 # Phase 2 P1 密度/涌现检测器（可选）
+                 organizational_density_index: Optional[OrganizationalDensityIndex] = None,
+                 seventh_threshold_detector: Optional[SeventhThresholdDetector] = None,
+                 cooperative_emergence_detector: Optional[CooperativeEmergenceDetector] = None,
                  # P1 评估间隔（每多少个 P0 检测周期执行一次 P1 评估）
                  p1_eval_interval: int = 5,
                  phase2_verbose: bool = False):
@@ -119,6 +126,10 @@ class HierarchicalEvolver:
         # Phase 2 解封与回流
         self.unsealing_mechanism = unsealing_mechanism
         self.return_flow_channel = return_flow_channel
+        # Phase 2 P1 密度/涌现检测器
+        self.organizational_density_index = organizational_density_index
+        self.seventh_threshold_detector = seventh_threshold_detector
+        self.cooperative_emergence_detector = cooperative_emergence_detector
         self._p1_eval_interval = p1_eval_interval
         self._phase2_verbose = phase2_verbose
         self._phase2_layer_results: Dict[int, List[Dict]] = {}  # layer -> [step_results]
@@ -324,6 +335,9 @@ class HierarchicalEvolver:
         P1（每 p1_eval_interval 步执行）:
           4. SixThresholdDetector — 六阈值同步检测
           5. PreSubjectivityConvergence — 前主体态收束判定
+          6. OrganizationalDensityIndex — 组织密度指数（基于六阈值结果）
+          7. SeventhThresholdDetector — 第七阈值相变检测（基于 ODI 时间序列）
+          8. CooperativeEmergenceDetector — 协同涌现检测（基于六阈值+耦合矩阵）
         """
         has_p2 = (self.xiang_detector is not None or
                  self.persistent_bias_memory is not None or
@@ -331,7 +345,10 @@ class HierarchicalEvolver:
                  self.six_threshold_detector is not None or
                  self.pre_subjectivity_convergence is not None or
                  self.unsealing_mechanism is not None or
-                 self.return_flow_channel is not None)
+                 self.return_flow_channel is not None or
+                 self.organizational_density_index is not None or
+                 self.seventh_threshold_detector is not None or
+                 self.cooperative_emergence_detector is not None)
         if not has_p2:
             return None
 
@@ -651,6 +668,78 @@ class HierarchicalEvolver:
                             'detach_events_this_step': len(detach_events),
                         }
 
+                # 8. OrganizationalDensityIndex — 基于六阈值结果计算 ODI
+                odi_result = None
+                if self.organizational_density_index is not None:
+                    threshold_result_for_odi = locals().get('threshold_result')
+                    odi_result = self.organizational_density_index.compute(
+                        threshold_result=threshold_result_for_odi,
+                        coupling_matrix=coupling_matrix,
+                        stability_score=self_sustaining if self_sustaining > 0 else None,
+                        timestamp=ts,
+                    )
+                    result_entry['odi'] = {
+                        'value': odi_result.value,
+                        'zone': odi_result.zone,
+                        'base_zone': odi_result.base_zone,
+                        'densification_rate': odi_result.densification_rate,
+                    }
+                    if odi_result.zone_boundary is not None:
+                        result_entry['odi']['zone_boundary'] = {
+                            'depth': odi_result.zone_boundary.depth,
+                            'transition_proximity': odi_result.zone_boundary.transition_proximity,
+                            'is_near_boundary': odi_result.zone_boundary.is_near_boundary,
+                        }
+                    if self._phase2_verbose:
+                        zb_info = ""
+                        if odi_result.zone_boundary is not None:
+                            zb = odi_result.zone_boundary
+                            if zb.is_near_boundary:
+                                zb_info = f" [near boundary, tp={zb.transition_proximity:.2f}]"
+                        print(f"    [ODI] L{layer_id} step={step}: "
+                              f"value={odi_result.value:.3f}, zone={odi_result.zone}"
+                              f"{zb_info}")
+
+                # 9. SeventhThresholdDetector — 基于 ODI 时间序列检测相变
+                seventh_result = None
+                if self.seventh_threshold_detector is not None and odi_result is not None:
+                    seventh_result = self.seventh_threshold_detector.feed(
+                        odi_result=odi_result,
+                    )
+                    result_entry['seventh_threshold'] = {
+                        'detected': seventh_result.detected,
+                        'confidence': seventh_result.confidence,
+                        'n_signals': seventh_result.n_active_signals,
+                        'signals': seventh_result.active_signal_types,
+                    }
+                    if self._phase2_verbose and seventh_result.detected:
+                        print(f"    [7thThreshold] L{layer_id} step={step}: "
+                              f"*** PHASE TRANSITION DETECTED *** "
+                              f"confidence={seventh_result.confidence:.2f}, "
+                              f"signals={seventh_result.active_signal_types}")
+
+                # 10. CooperativeEmergenceDetector — 检测六条件协同涌现
+                ce_result = None
+                if self.cooperative_emergence_detector is not None:
+                    # 需要六阈值结果和耦合矩阵
+                    if threshold_result_for_odi is not None:
+                        ce_result = self.cooperative_emergence_detector.feed(
+                            threshold_result=threshold_result_for_odi,
+                            coupling_matrix=coupling_matrix,
+                            odi_result=odi_result,
+                            timestamp=ts,
+                        )
+                        result_entry['cooperative_emergence'] = {
+                            'detected': ce_result.cooperative_emergence_detected,
+                            'confidence': ce_result.confidence,
+                            'emergence_type': ce_result.emergence_type,
+                        }
+                        if self._phase2_verbose and ce_result.cooperative_emergence_detected:
+                            print(f"    [CoopEmergence] L{layer_id} step={step}: "
+                                  f"*** COOPERATIVE EMERGENCE *** "
+                                  f"type={ce_result.emergence_type}, "
+                                  f"confidence={ce_result.confidence:.2f}")
+
             self._phase2_layer_results[layer_id].append(result_entry)
 
         return callback
@@ -855,6 +944,21 @@ class HierarchicalEvolver:
                 'return_flow_success_rate': (
                     self.return_flow_channel.get_success_rate()
                     if self.return_flow_channel else 0.0),
+                'organizational_density_index_active': self.organizational_density_index is not None,
+                'seventh_threshold_detector_active': self.seventh_threshold_detector is not None,
+                'seventh_threshold_detected': (
+                    self.seventh_threshold_detector.detected
+                    if self.seventh_threshold_detector else False),
+                'seventh_threshold_confidence': (
+                    self.seventh_threshold_detector.confidence
+                    if self.seventh_threshold_detector else 0.0),
+                'cooperative_emergence_detector_active': self.cooperative_emergence_detector is not None,
+                'cooperative_emergence_detected': (
+                    self.cooperative_emergence_detector.cooperative_emergence_detected
+                    if self.cooperative_emergence_detector else False),
+                'cooperative_emergence_confidence': (
+                    self.cooperative_emergence_detector.confidence
+                    if self.cooperative_emergence_detector else 0.0),
                 'layers_with_results': list(self._phase2_layer_results.keys()),
             },
         }
