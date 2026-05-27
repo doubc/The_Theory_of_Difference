@@ -706,6 +706,12 @@ class HierarchicalEvolver:
                         'zone': odi_result.zone,
                         'base_zone': odi_result.base_zone,
                         'densification_rate': odi_result.densification_rate,
+                        'threshold_proximity': odi_result.subindices.threshold_proximity,
+                        'coupling_density': odi_result.subindices.coupling_density,
+                        'stability_margin': odi_result.subindices.stability_margin,
+                        'firewall_purity': odi_result.subindices.firewall_purity,
+                        'temporal_consistency': odi_result.subindices.temporal_consistency,
+                        'cross_mechanism_resonance': odi_result.subindices.cross_mechanism_resonance,
                     }
                     if odi_result.zone_boundary is not None:
                         result_entry['odi']['zone_boundary'] = {
