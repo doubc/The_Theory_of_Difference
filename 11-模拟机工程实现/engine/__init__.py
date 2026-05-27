@@ -81,6 +81,14 @@ from engine.lateral_coupling import (
     StructureHandle,
     DEFAULT_LATERAL_CONFIG,
 )
+from engine.minimal_self_detector import (
+    MinimalSelfDetector,
+    MinimalSelfResult,
+    AsymmetrySignal,
+    HistoryDependencySignal,
+    SelfReferenceSignal,
+    DEFAULT_MSI_CONFIG,
+)
 
 __all__ = [
     'HierarchyManager', 'LayerState', 'BiasField',
@@ -110,4 +118,7 @@ __all__ = [
     'CooperativeOscillation', 'MutualInformationSurge',
     'LateralCoupler', 'LateralCouplingPair', 'LateralCouplingReport',
     'CouplingType', 'StructureHandle', 'DEFAULT_LATERAL_CONFIG',
+    'MinimalSelfDetector', 'MinimalSelfResult',
+    'AsymmetrySignal', 'HistoryDependencySignal',
+    'SelfReferenceSignal', 'DEFAULT_MSI_CONFIG',
 ]
