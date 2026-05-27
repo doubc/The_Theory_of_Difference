@@ -149,18 +149,23 @@ class PreSubjectivityConvergence:
                  coupling_threshold: float = 0.3,
                  stability_threshold: float = 0.5,
                  n_perturbation_tests: int = 5,
-                 perturbation_scale: float = 0.1):
+                 perturbation_scale: float = 0.1,
+                 coupling_mode: str = "all"):
         """
         Args:
             coupling_threshold: 耦合强度阈值（超过此值认为两机制耦合）
             stability_threshold: 稳定性阈值（扰动后保持结构的比例）
             n_perturbation_tests: 扰动测试次数
             perturbation_scale: 扰动强度
+            coupling_mode: 耦合判定模式
+                "all"     — 所有机制对都必须超过阈值（默认，15/15）
+                "majority" — 多数机制对超过阈值（≥12/15）
         """
         self.coupling_threshold = coupling_threshold
         self.stability_threshold = stability_threshold
         self.n_perturbation_tests = n_perturbation_tests
         self.perturbation_scale = perturbation_scale
+        self.coupling_mode = coupling_mode
 
         # 六阈值检测器
         self._threshold_detector = SixThresholdDetector()
@@ -248,13 +253,15 @@ class PreSubjectivityConvergence:
         """评估耦合强度
 
         检查所有机制对之间的耦合强度。
-        要求：所有机制对的耦合强度都超过阈值。
+        模式：
+          "all"     — 所有机制对都必须超过阈值（15/15）
+          "majority" — 多数机制对超过阈值（≥12/15）
 
         Args:
             coupling_matrix: 耦合矩阵
 
         Returns:
-            (all_coupled, n_coupled_pairs, min_coupling)
+            (coupling_met, n_coupled_pairs, min_coupling)
         """
         if coupling_matrix is None:
             return False, 0, 0.0
@@ -281,8 +288,14 @@ class PreSubjectivityConvergence:
         if min_coupling == float('inf'):
             min_coupling = 0.0
 
-        all_coupled = n_coupled == total_pairs
-        return all_coupled, n_coupled, min_coupling
+        if self.coupling_mode == "majority":
+            # 多数制：≥12/15 对超过阈值
+            majority_threshold = max(1, int(total_pairs * 0.8))
+            coupling_met = n_coupled >= majority_threshold
+        else:
+            # 全对制：所有对都必须超过阈值
+            coupling_met = n_coupled == total_pairs
+        return coupling_met, n_coupled, min_coupling
 
     def _evaluate_stability(self,
                             structure_state: Optional[torch.Tensor],
