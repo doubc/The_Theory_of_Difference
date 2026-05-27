@@ -18,6 +18,7 @@ engine — 差异论模拟机工程核心引擎
 - functional_differentiation.py: 功能分化 (Phase 2 P2 #2)
 - replicate_pattern.py: 复制模式 (Phase 2 P2 #3)
 - cooperative_emergence_detector.py: 协同涌现检测器 (Phase 2 P1)
+- lateral_coupling.py: 横向耦合机制 (Phase 2 P2 #4)
 - detectors/: 涌现统计量探测器集
 """
 
@@ -72,6 +73,14 @@ from engine.cooperative_emergence_detector import (
     CooperativeOscillation,
     MutualInformationSurge,
 )
+from engine.lateral_coupling import (
+    LateralCoupler,
+    LateralCouplingPair,
+    LateralCouplingReport,
+    CouplingType,
+    StructureHandle,
+    DEFAULT_LATERAL_CONFIG,
+)
 
 __all__ = [
     'HierarchyManager', 'LayerState', 'BiasField',
@@ -99,4 +108,6 @@ __all__ = [
     'CooperativeEmergenceDetector', 'CooperativeEmergenceResult',
     'SynchronizedCrossing', 'CouplingTopologyTransition',
     'CooperativeOscillation', 'MutualInformationSurge',
+    'LateralCoupler', 'LateralCouplingPair', 'LateralCouplingReport',
+    'CouplingType', 'StructureHandle', 'DEFAULT_LATERAL_CONFIG',
 ]
