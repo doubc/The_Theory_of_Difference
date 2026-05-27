@@ -13,6 +13,7 @@ engine — 差异论模拟机工程核心引擎
 - self_sustaining_circulation.py: 自维持循环 (Phase 2 P2 #1)
 - functional_differentiation.py: 功能分化 (Phase 2 P2 #2)
 - replicate_pattern.py: 复制模式 (Phase 2 P2 #3)
+- cooperative_emergence_detector.py: 协同涌现检测器 (Phase 2 P1)
 - detectors/: 涌现统计量探测器集
 """
 
@@ -27,6 +28,14 @@ from engine.pre_subjectivity_convergence import PreSubjectivityConvergence, Conv
 from engine.self_sustaining_circulation import SelfSustainingCirculation, CirculationState, RebuildAttempt
 from engine.functional_differentiation import FunctionalDifferentiation, FunctionalState, ComponentContribution
 from engine.replicate_pattern import ReplicatePattern, ReplicationResult, KeyRelation
+from engine.cooperative_emergence_detector import (
+    CooperativeEmergenceDetector,
+    CooperativeEmergenceResult,
+    SynchronizedCrossing,
+    CouplingTopologyTransition,
+    CooperativeOscillation,
+    MutualInformationSurge,
+)
 
 __all__ = [
     'HierarchyManager', 'LayerState', 'BiasField',
@@ -40,4 +49,7 @@ __all__ = [
     'SelfSustainingCirculation', 'CirculationState', 'RebuildAttempt',
     'FunctionalDifferentiation', 'FunctionalState', 'ComponentContribution',
     'ReplicatePattern', 'ReplicationResult', 'KeyRelation',
+    'CooperativeEmergenceDetector', 'CooperativeEmergenceResult',
+    'SynchronizedCrossing', 'CouplingTopologyTransition',
+    'CooperativeOscillation', 'MutualInformationSurge',
 ]
