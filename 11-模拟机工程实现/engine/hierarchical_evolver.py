@@ -827,7 +827,8 @@ class HierarchicalEvolver:
                     # 构建响应历史：从偏置记忆获取
                     response_history = {}
                     if self.persistent_bias_memory is not None and self.persistent_bias_memory.n_entries > 0:
-                        recent_entries = self.persistent_bias_memory.get_recent(n=8)
+                        recent_entries = self.persistent_bias_memory._get_active_entries(target_layer=layer_id)
+                        recent_entries = recent_entries[-8:]
                         for entry in recent_entries:
                             ctx = f"t{entry.timestamp}"
                             if ctx not in response_history:

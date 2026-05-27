@@ -1,0 +1,97 @@
+{
+  "experiment": "phase3_anticipation_emergence",
+  "timestamp": "2026-05-28T02:17:31.476456",
+  "config": {
+    "N0": 36,
+    "steps_per_layer": 3000,
+    "sample_interval": 300,
+    "max_layers": 2,
+    "p1_eval_interval": 10
+  },
+  "results": {
+    "wall_time_seconds": 20.969391345977783,
+    "n_data_points": 2,
+    "odi_range": [
+      0.0,
+      0.0
+    ],
+    "correlation_odi_antconf": 0.0,
+    "correlation_odi_msi": 0.0,
+    "correlation_odi_cfbranches": 0.0,
+    "odi_binned_antconf": {},
+    "phase3_summary": {
+      "minimal_self_detector_active": true,
+      "anticipatory_bias_engine_active": true,
+      "counterfactual_engine_active": true,
+      "minimal_self_detected": false,
+      "msi": 0.0,
+      "anticipation_reliable": false,
+      "anticipation_accuracy": -0.5123968508980468,
+      "counterfactual_active": false,
+      "counterfactual_n_branches": 1
+    },
+    "phase2_summary": {
+      "xiang_detector_active": "True",
+      "bias_memory_entries": "20",
+      "cumulative_selector_active": "True",
+      "six_threshold_detector_active": "True",
+      "pre_subjectivity_convergence_active": "True",
+      "pre_subjectivity_converged": "False",
+      "convergence_step": "None",
+      "unsealing_mechanism_active": "True",
+      "unsealing_events": "[]",
+      "unsealing_summary": "{}",
+      "return_flow_channel_active": "True",
+      "return_flow_anchored_count": "0",
+      "return_flow_success_rate": "0.0",
+      "organizational_density_index_active": "True",
+      "seventh_threshold_detector_active": "True",
+      "seventh_threshold_detected": "False",
+      "seventh_threshold_confidence": "0.0",
+      "cooperative_emergence_detector_active": "True",
+      "cooperative_emergence_detected": "False",
+      "cooperative_emergence_confidence": "0.0",
+      "lateral_coupler_active": "True",
+      "lateral_coupler_n_structures": "2",
+      "layers_with_results": "[0, 1]"
+    }
+  },
+  "acceptance": {
+    "All 3 Phase 3 components active": true,
+    "ODI range covers [0.2, 0.6]": false,
+    "AnticipatoryBiasEngine made >= 10 predictions": false,
+    "Correlation analysis completed": false,
+    "Wall time < 180s (21.0s)": true
+  },
+  "all_passed": false,
+  "per_step_data": {
+    "steps": [
+      2700,
+      2700
+    ],
+    "layers": [
+      0,
+      1
+    ],
+    "odi": [
+      0.0,
+      0.0
+    ],
+    "anticipation_confidence": [
+      0.6089447241171675,
+      0.3921809420582797
+    ],
+    "anticipation_accuracy": [
+      0.0,
+      0.0
+    ],
+    "msi": [
+      0.0,
+      0.0
+    ],
+    "cf_branches": [
+      1,
+      1
+    ]
+  }
+}
