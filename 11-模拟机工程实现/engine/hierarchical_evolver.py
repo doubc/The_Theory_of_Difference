@@ -33,6 +33,9 @@ from engine.organizational_density_index import OrganizationalDensityIndex, Dens
 from engine.seventh_threshold_detector import SeventhThresholdDetector, SeventhThresholdResult
 from engine.cooperative_emergence_detector import CooperativeEmergenceDetector, CooperativeEmergenceResult
 from engine.lateral_coupling import LateralCoupler, LateralCouplingReport
+from engine.minimal_self_detector import MinimalSelfDetector, MinimalSelfResult
+from engine.anticipatory_bias_engine import AnticipatoryBiasEngine, AnticipationResult
+from engine.counterfactual_engine import CounterfactualEngine, CounterfactualResult
 from layers.three_dim_hamming import ThreeDimHammingLattice
 
 
@@ -94,9 +97,14 @@ class HierarchicalEvolver:
                  cooperative_emergence_detector: Optional[CooperativeEmergenceDetector] = None,
                  # Phase 2 P2 横向耦合（可选，同层结构间耦合）
                  lateral_coupler: Optional[LateralCoupler] = None,
+                 # Phase 3 组件（可选，前主体态 → 现象意识的结构条件）
+                 minimal_self_detector: Optional[MinimalSelfDetector] = None,
+                 anticipatory_bias_engine: Optional[AnticipatoryBiasEngine] = None,
+                 counterfactual_engine: Optional[CounterfactualEngine] = None,
                  # P1 评估间隔（每多少个 P0 检测周期执行一次 P1 评估）
                  p1_eval_interval: int = 5,
-                 phase2_verbose: bool = False):
+                 phase2_verbose: bool = False,
+                 phase3_verbose: bool = False):
         """
         Args:
             N0: 第 0 层比特数
@@ -134,8 +142,13 @@ class HierarchicalEvolver:
         self.seventh_threshold_detector = seventh_threshold_detector
         self.cooperative_emergence_detector = cooperative_emergence_detector
         self.lateral_coupler = lateral_coupler
+        # Phase 3 组件
+        self.minimal_self_detector = minimal_self_detector
+        self.anticipatory_bias_engine = anticipatory_bias_engine
+        self.counterfactual_engine = counterfactual_engine
         self._p1_eval_interval = p1_eval_interval
         self._phase2_verbose = phase2_verbose
+        self._phase3_verbose = phase3_verbose
         self._phase2_layer_results: Dict[int, List[Dict]] = {}  # layer -> [step_results]
         # 解封事件记录
         self._unsealing_events: List[UnsealingEvent] = []
@@ -354,7 +367,10 @@ class HierarchicalEvolver:
                  self.seventh_threshold_detector is not None or
                  self.cooperative_emergence_detector is not None or
                  self.lateral_coupler is not None)
-        if not has_p2:
+        has_p3 = (self.minimal_self_detector is not None or
+                  self.anticipatory_bias_engine is not None or
+                  self.counterfactual_engine is not None)
+        if not has_p2 and not has_p3:
             return None
 
         if layer_id not in self._phase2_layer_results:
@@ -778,6 +794,128 @@ class HierarchicalEvolver:
                               f"pairs={lateral_report.n_active_pairs}, "
                               f"mean_strength={lateral_report.mean_coupling_strength:.3f}")
 
+            # ── Phase 3: 前主体态 → 现象意识的结构条件 ──
+            # Phase 3 组件在 Phase 2 P1 评估的同一个 P1 周期内执行
+            # 但仅在 ODI > 0.5（前主体态地板）之后才激活
+            if has_p3:
+                # 获取当前 ODI 值（用于门控）
+                # odi_result 是 P1 块内的局部变量，可能未定义（如果 ODI 组件未注册）
+                # 从 result_entry 中安全提取
+                _odi_val = 0.0
+                if 'odi' in result_entry and result_entry['odi'] is not None:
+                    _odi_val = result_entry['odi'].get('value', 0.0)
+                current_odi = _odi_val
+                p3_active = current_odi >= 0.5  # 前主体态地板
+
+                # 12. MinimalSelfDetector — 最小自我检测
+                msi_result = None
+                if self.minimal_self_detector is not None and p3_active:
+                    # 构建敏感度图：从约束方向场计算各部分敏感度
+                    sensitivity_map = {}
+                    if hasattr(constraints, 'direction') and constraints.direction is not None:
+                        dir_vals = constraints.direction.float()
+                        active_idx = sorted(constraints.active_bits)
+                        for i, bit_id in enumerate(active_idx[:20]):
+                            part_name = f"bit_{bit_id}"
+                            sensitivity_map[part_name] = float(dir_vals[bit_id].abs().item()) if bit_id < len(dir_vals) else 0.0
+                    else:
+                        # 回退：使用状态值作为敏感度代理
+                        state_float = state.float()
+                        for i in range(min(20, len(state_float))):
+                            sensitivity_map[f"bit_{i}"] = float(state_float[i].item())
+
+                    # 构建响应历史：从偏置记忆获取
+                    response_history = {}
+                    if self.persistent_bias_memory is not None and self.persistent_bias_memory.n_entries > 0:
+                        recent_entries = self.persistent_bias_memory.get_recent(n=8)
+                        for entry in recent_entries:
+                            ctx = f"t{entry.timestamp}"
+                            if ctx not in response_history:
+                                response_history[ctx] = []
+                            if entry.bias_vector is not None:
+                                response_history[ctx].append(float(entry.bias_vector.float().mean().item()))
+
+                    # 基线偏移：从回流通道获取（如有）
+                    baseline_shift = 0.0
+                    if self.return_flow_channel is not None:
+                        anchored = self.return_flow_channel.get_anchored_contents()
+                        if anchored:
+                            baseline_shift = len(anchored) * 0.01
+
+                    msi_result = self.minimal_self_detector.feed(
+                        sensitivity_map=sensitivity_map if sensitivity_map else None,
+                        response_history=response_history if response_history else None,
+                        baseline_shift=baseline_shift if baseline_shift != 0.0 else None,
+                        odi_result=None,  # ODI 门控已通过 p3_active 处理
+                        timestamp=ts,
+                    )
+                    result_entry['minimal_self'] = {
+                        'detected': msi_result.minimal_self_detected,
+                        'msi': msi_result.msi,
+                        'msi_label': msi_result.msi_label,
+                        'n_active_conditions': msi_result.n_active_conditions,
+                        'asymmetry_index': msi_result.asymmetry_index,
+                        'history_dependency_index': msi_result.history_dependency_index,
+                        'self_reference_index': msi_result.self_reference_index,
+                        'odi_at_detection': msi_result.odi_at_detection,
+                    }
+                    if self._phase3_verbose and msi_result.minimal_self_detected:
+                        print(f"    [MSI] L{layer_id} step={step}: "
+                              f"*** MINIMAL SELF DETECTED *** "
+                              f"MSI={msi_result.msi:.3f}, "
+                              f"conditions={msi_result.n_active_conditions}/3")
+
+                # 13. AnticipatoryBiasEngine — 预期偏置
+                anticipation_result = None
+                if self.anticipatory_bias_engine is not None and p3_active:
+                    target_layer = layer_id + 1
+                    horizon = self.anticipatory_bias_engine.config.get('default_horizon', 1)
+                    anticipation_result = self.anticipatory_bias_engine.predict(
+                        target_layer=target_layer,
+                        horizon=horizon,
+                        timestamp=ts,
+                        odi_result=None,  # ODI 门控已通过 p3_active 处理
+                    )
+                    result_entry['anticipation'] = {
+                        'confidence': anticipation_result.confidence,
+                        'is_reliable': anticipation_result.is_reliable,
+                        'error_trend': anticipation_result.error_trend,
+                        'n_predictions': anticipation_result.n_predictions,
+                        'odi_gated': anticipation_result.odi_gated,
+                    }
+                    if self._phase3_verbose and anticipation_result.is_reliable:
+                        print(f"    [Anticipation] L{layer_id} step={step}: "
+                              f"conf={anticipation_result.confidence:.3f}, "
+                              f"trend={anticipation_result.error_trend:+.4f}, "
+                              f"reliable={anticipation_result.is_reliable}")
+
+                    # 用当前状态更新预测误差
+                    self.anticipatory_bias_engine.update(
+                        actual=state.float(),
+                        timestamp=ts,
+                        horizon=horizon,
+                    )
+
+                # 14. CounterfactualEngine — 反事实探索
+                cf_result = None
+                if self.counterfactual_engine is not None and p3_active:
+                    # 探索分岔
+                    cf_result = self.counterfactual_engine.explore(
+                        current_state=state.float(),
+                        odi_result=None,  # ODI 门控已通过 p3_active 处理
+                        timestamp=ts,
+                    )
+                    result_entry['counterfactual'] = {
+                        'active': cf_result.counterfactual_active,
+                        'n_active_branches': cf_result.n_active_branches,
+                        'n_divergence_points': cf_result.n_divergence_points,
+                        'odi_gated': cf_result.odi_gated,
+                    }
+                    if self._phase3_verbose and cf_result.counterfactual_active:
+                        print(f"    [Counterfactual] L{layer_id} step={step}: "
+                              f"branches={cf_result.n_active_branches}, "
+                              f"divergences={cf_result.n_divergence_points}")
+
             self._phase2_layer_results[layer_id].append(result_entry)
 
         return callback
@@ -1002,6 +1140,29 @@ class HierarchicalEvolver:
                     self.lateral_coupler.n_structures
                     if self.lateral_coupler else 0),
                 'layers_with_results': list(self._phase2_layer_results.keys()),
+            },
+            'phase3_summary': {
+                'minimal_self_detector_active': self.minimal_self_detector is not None,
+                'anticipatory_bias_engine_active': self.anticipatory_bias_engine is not None,
+                'counterfactual_engine_active': self.counterfactual_engine is not None,
+                'minimal_self_detected': (
+                    self.minimal_self_detector.latest_result.minimal_self_detected
+                    if self.minimal_self_detector and self.minimal_self_detector.latest_result else False),
+                'msi': (
+                    self.minimal_self_detector.latest_result.msi
+                    if self.minimal_self_detector and self.minimal_self_detector.latest_result else 0.0),
+                'anticipation_reliable': (
+                    self.anticipatory_bias_engine.get_prediction_accuracy() > 0.5
+                    if self.anticipatory_bias_engine else False),
+                'anticipation_accuracy': (
+                    self.anticipatory_bias_engine.get_prediction_accuracy()
+                    if self.anticipatory_bias_engine else 0.0),
+                'counterfactual_active': (
+                    self.counterfactual_engine.is_active
+                    if self.counterfactual_engine else False),
+                'counterfactual_n_branches': (
+                    self.counterfactual_engine.n_active_branches
+                    if self.counterfactual_engine else 0),
             },
         }
 
