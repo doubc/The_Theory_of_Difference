@@ -57,6 +57,8 @@ from engine.return_flow_channel import (
     ReturnFlowEvent,
     HighSemanticPayload,
     AnchorPoint,
+    SemanticFirewallGuard,
+    SemanticFlowFirewallResult,
 )
 from engine.pre_subjectivity_convergence import PreSubjectivityConvergence, ConvergenceResult, CouplingStatus, SemanticFirewallResult
 from engine.self_sustaining_circulation import SelfSustainingCirculation, CirculationState, RebuildAttempt
@@ -89,6 +91,7 @@ __all__ = [
     'InterfaceExchangeRecord', 'InterfacePatternStability',
     'ReturnFlowChannel', 'ReturnFlowEvent',
     'HighSemanticPayload', 'AnchorPoint',
+    'SemanticFirewallGuard', 'SemanticFlowFirewallResult',
     'PreSubjectivityConvergence', 'ConvergenceResult', 'CouplingStatus', 'SemanticFirewallResult',
     'SelfSustainingCirculation', 'CirculationState', 'RebuildAttempt',
     'FunctionalDifferentiation', 'FunctionalState', 'ComponentContribution',
