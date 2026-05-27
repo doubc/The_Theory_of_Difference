@@ -9,15 +9,206 @@ Phase 2 P1 组件 #1
 - 《象界》第八章：前主体态是低语义层所能达到的最充分完成形态
 - 解封不是外部操作，而是结构自发达到密度后的自然结果
 - 解封是分级过程：Level 1（边界开放）→ Level 2（内部耦合）→ Level 3（全通道开放）
+- 《Appearing Before Appearing》§3.1：界面调节模式必须稳定（不是全有/全无）
 
 设计文档：docs/phase2_unsealing_return_flow_design.md
 """
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Deque
+from collections import deque
 import torch
 
 from engine.pre_subjectivity_convergence import ConvergenceResult
+
+
+# =============================================================================
+# 界面交换记录 & 界面模式稳定性
+# =============================================================================
+
+@dataclass
+class InterfaceExchangeRecord:
+    """单次时间步的界面交换记录
+
+    记录在当前时间步中，边界上各交换通道的吞吐量比例。
+    模式向量归一化后表示各通道的相对活跃程度。
+    """
+    timestamp: int
+    # 各交换通道的活跃比例（归一化后）: channel_name → [0, 1]
+    channel_pattern: Dict[str, float] = field(default_factory=dict)
+    # 总活跃交换数（归一化前）
+    total_active: int = 0
+    # 总边界边数
+    total_edges: int = 0
+
+    @property
+    def openness(self) -> float:
+        """总体开放度 = total_active / total_edges"""
+        if self.total_edges == 0:
+            return 0.0
+        return self.total_active / self.total_edges
+
+    def __repr__(self) -> str:
+        n_channels = len(self.channel_pattern)
+        return (
+            f"InterfaceExchange[ts={self.timestamp}, "
+            f"openness={self.openness:.3f}, channels={n_channels}]"
+        )
+
+
+@dataclass
+class InterfacePatternStability:
+    """界面模式稳定性追踪器
+
+    追踪界面交换模式在连续时间步之间的一致性。
+
+    理论依据（ABA §3.1）：
+        界面不仅是"开放"或"封闭"，而是具有选择性介导的模式。
+        此模式本身必须在连续交互中保持稳定，才能构成真正的界面。
+
+    计算方式：
+        1. 维护最近 W 个时间步的交换模式向量
+        2. 计算相邻时间步模式向量的余弦相似度
+        3. 稳定性 = 所有相邻相似度的平均值
+        4. 稳定性 ≥ threshold → 界面模式稳定
+
+    这解决了缺口1：Level 1 不再是全有/全无，
+    而是要求开放模式本身具有一致性。
+    """
+    window_size: int = 5
+    stability_threshold: float = 0.7
+
+    # 历史交换记录（滑动窗口）
+    _records: Deque[InterfaceExchangeRecord] = field(
+        default_factory=lambda: deque(maxlen=5)
+    )
+    # 历史稳定性分数
+    _stability_history: List[float] = field(default_factory=list)
+
+    def __post_init__(self):
+        # 确保 deque 的 maxlen 与 window_size 一致
+        if self._records.maxlen != self.window_size:
+            self._records = deque(self._records, maxlen=self.window_size)
+
+    def record(self, exchange: InterfaceExchangeRecord) -> float:
+        """记录一次交换，返回当前模式稳定性分数。
+
+        Args:
+            exchange: 当前时间步的交换记录
+
+        Returns:
+            当前稳定性分数 [0, 1]，记录不足时返回 0.0
+        """
+        self._records.append(exchange)
+        stability = self._compute_stability()
+        self._stability_history.append(stability)
+        return stability
+
+    def _compute_stability(self) -> float:
+        """计算当前窗口内的模式稳定性。
+
+        计算相邻时间步模式向量的余弦相似度，取平均。
+        记录数 < 2 时返回 0.0（无法计算变化）。
+        """
+        records = list(self._records)
+        if len(records) < 2:
+            return 0.0
+
+        similarities = []
+        for i in range(1, len(records)):
+            prev = records[i - 1].channel_pattern
+            curr = records[i].channel_pattern
+            sim = self._pattern_cosine_sim(prev, curr)
+            similarities.append(sim)
+
+        if not similarities:
+            return 0.0
+        return sum(similarities) / len(similarities)
+
+    @staticmethod
+    def _pattern_cosine_sim(
+        a: Dict[str, float],
+        b: Dict[str, float],
+    ) -> float:
+        """计算两个模式字典的余弦相似度。
+
+        对两个字典的并集键构建向量，缺失键补 0。
+        返回值 ∈ [0, 1]（因为所有值 ≥ 0）。n        """
+        if not a and not b:
+            return 1.0  # 两个空模式视为完全相同
+        if not a or not b:
+            return 0.0  # 一个空一个非空 → 完全不同
+
+        all_keys = set(a.keys()) | set(b.keys())
+        dot = 0.0
+        norm_a = 0.0
+        norm_b = 0.0
+        for k in all_keys:
+            va = a.get(k, 0.0)
+            vb = b.get(k, 0.0)
+            dot += va * vb
+            norm_a += va * va
+            norm_b += vb * vb
+
+        if norm_a < 1e-10 or norm_b < 1e-10:
+            return 0.0
+
+        return dot / (norm_a ** 0.5 * norm_b ** 0.5)
+
+    @property
+    def is_stable(self) -> bool:
+        """当前界面模式是否稳定"""
+        if not self._stability_history:
+            return False
+        return self._stability_history[-1] >= self.stability_threshold
+
+    @property
+    def current_stability(self) -> float:
+        """当前稳定性分数"""
+        if not self._stability_history:
+            return 0.0
+        return self._stability_history[-1]
+
+    @property
+    def is_ready(self) -> bool:
+        """是否有足够记录进行评估（至少 2 条）"""
+        return len(self._records) >= 2
+
+    @property
+    def n_records(self) -> int:
+        return len(self._records)
+
+    @property
+    def dominant_channels(self) -> List[str]:
+        """返回最近记录中平均活跃度最高的通道（降序）"""
+        if not self._records:
+            return []
+        channel_totals: Dict[str, float] = {}
+        for rec in self._records:
+            for ch, val in rec.channel_pattern.items():
+                channel_totals[ch] = channel_totals.get(ch, 0.0) + val
+        n = len(self._records)
+        avg = {ch: total / n for ch, total in channel_totals.items()}
+        return sorted(avg, key=avg.get, reverse=True)
+
+    def get_stability_trend(self, last_n: Optional[int] = None) -> List[float]:
+        """获取稳定性历史趋势"""
+        if last_n is None:
+            return list(self._stability_history)
+        return list(self._stability_history[-last_n:])
+
+    def reset(self):
+        """重置所有状态"""
+        self._records.clear()
+        self._stability_history.clear()
+
+    def __repr__(self) -> str:
+        return (
+            f"InterfacePatternStability["
+            f"records={len(self._records)}/{self.window_size}, "
+            f"stability={self.current_stability:.3f}, "
+            f"stable={self.is_stable}]"
+        )
 
 
 # =============================================================================
@@ -89,6 +280,9 @@ class UnsealingMechanism:
         # Level 3 条件
         l3_coupling_threshold: float = 0.70,
         l3_stability_threshold: float = 0.85,
+        # 界面模式稳定性参数
+        interface_stability_window: int = 5,
+        interface_stability_threshold: float = 0.7,
     ):
         """
         Args:
@@ -98,6 +292,8 @@ class UnsealingMechanism:
             l2_stability_threshold: Level 2 最小稳定性
             l3_coupling_threshold: Level 3 最小耦合强度
             l3_stability_threshold: Level 3 最小稳定性
+            interface_stability_window: 界面模式稳定性滑动窗口大小
+            interface_stability_threshold: 界面模式稳定性阈值
         """
         self.l1_coupling_threshold = l1_coupling_threshold
         self.l1_stability_threshold = l1_stability_threshold
@@ -105,6 +301,14 @@ class UnsealingMechanism:
         self.l2_stability_threshold = l2_stability_threshold
         self.l3_coupling_threshold = l3_coupling_threshold
         self.l3_stability_threshold = l3_stability_threshold
+
+        # 界面模式稳定性追踪器
+        self._interface_stability = InterfacePatternStability(
+            window_size=interface_stability_window,
+            stability_threshold=interface_stability_threshold,
+        )
+        # 各结构的界面稳定性追踪器: structure_id → InterfacePatternStability
+        self._structure_interface_stability: Dict[int, InterfacePatternStability] = {}
 
         # 当前解封状态: structure_id → level
         self._unsealing_levels: Dict[int, int] = {}
@@ -156,6 +360,55 @@ class UnsealingMechanism:
         self._unsealing_levels[structure_id] = target_level
         self._unsealing_events.append(event)
         return event
+
+    def record_interface_exchange(
+        self,
+        structure_id: int,
+        timestamp: int,
+        channel_pattern: Dict[str, float],
+        total_active: int = 0,
+        total_edges: int = 0,
+    ) -> float:
+        """记录结构的一次界面交换，返回当前模式稳定性。
+
+        每个时间步调用一次，追踪该结构的界面交换模式。
+        当模式稳定性达到阈值时，认为该结构的界面调节已模式化。
+
+        Args:
+            structure_id: 结构 ID
+            timestamp: 当前时间戳
+            channel_pattern: 各交换通道的活跃比例（归一化后）
+            total_active: 总活跃交换数
+            total_edges: 总边界边数
+
+        Returns:
+            当前界面模式稳定性分数 [0, 1]
+        """
+        if structure_id not in self._structure_interface_stability:
+            self._structure_interface_stability[structure_id] = InterfacePatternStability(
+                window_size=self._interface_stability.window_size,
+                stability_threshold=self._interface_stability.stability_threshold,
+            )
+
+        tracker = self._structure_interface_stability[structure_id]
+        record = InterfaceExchangeRecord(
+            timestamp=timestamp,
+            channel_pattern=channel_pattern,
+            total_active=total_active,
+            total_edges=total_edges,
+        )
+        return tracker.record(record)
+
+    def get_interface_stability(self, structure_id: int) -> Optional[InterfacePatternStability]:
+        """获取指定结构的界面模式稳定性追踪器"""
+        return self._structure_interface_stability.get(structure_id)
+
+    def is_interface_stable(self, structure_id: int) -> bool:
+        """指定结构的界面模式是否已稳定"""
+        tracker = self._structure_interface_stability.get(structure_id)
+        if tracker is None:
+            return False
+        return tracker.is_stable
 
     def _compute_target_level(self, result: ConvergenceResult) -> int:
         """根据收束结果计算应达到的解封等级"""
@@ -277,3 +530,7 @@ class UnsealingMechanism:
         """重置所有状态"""
         self._unsealing_levels.clear()
         self._unsealing_events.clear()
+        self._interface_stability.reset()
+        for tracker in self._structure_interface_stability.values():
+            tracker.reset()
+        self._structure_interface_stability.clear()

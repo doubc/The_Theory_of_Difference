@@ -20,6 +20,8 @@ import torch
 from engine.unsealing_mechanism import (
     UnsealingMechanism,
     UnsealingEvent,
+    InterfacePatternStability,
+    InterfaceExchangeRecord,
 )
 from engine.pre_subjectivity_convergence import ConvergenceResult
 
@@ -389,6 +391,286 @@ class TestUnsealingIntegration:
         assert p2['unsealing_mechanism_active'] is True
         assert p2['return_flow_channel_active'] is True
         assert p2['pre_subjectivity_convergence_active'] is True
+
+
+class TestInterfaceExchangeRecord:
+    """InterfaceExchangeRecord 单元测试"""
+
+    def test_openness_calculation(self):
+        rec = InterfaceExchangeRecord(
+            timestamp=100,
+            channel_pattern={'A': 0.6, 'B': 0.4},
+            total_active=60,
+            total_edges=100,
+        )
+        assert rec.openness == 0.6
+
+    def test_openness_zero_edges(self):
+        rec = InterfaceExchangeRecord(timestamp=1, total_edges=0)
+        assert rec.openness == 0.0
+
+    def test_openness_full(self):
+        rec = InterfaceExchangeRecord(
+            timestamp=1, total_active=10, total_edges=10,
+        )
+        assert rec.openness == 1.0
+
+    def test_repr(self):
+        rec = InterfaceExchangeRecord(
+            timestamp=42,
+            channel_pattern={'X': 1.0},
+            total_active=5,
+            total_edges=10,
+        )
+        s = repr(rec)
+        assert "ts=42" in s
+        assert "openness=0.500" in s
+        assert "channels=1" in s
+
+
+class TestInterfacePatternStability:
+    """InterfacePatternStability 单元测试"""
+
+    def test_initial_state(self):
+        ips = InterfacePatternStability(window_size=5, stability_threshold=0.7)
+        assert ips.current_stability == 0.0
+        assert ips.is_stable is False
+        assert ips.is_ready is False
+        assert ips.n_records == 0
+
+    def test_single_record_not_ready(self):
+        ips = InterfacePatternStability()
+        rec = InterfaceExchangeRecord(
+            timestamp=1,
+            channel_pattern={'A': 0.5, 'B': 0.5},
+            total_active=50, total_edges=100,
+        )
+        stability = ips.record(rec)
+        assert stability == 0.0  # 不足2条记录
+        assert ips.is_ready is False
+        assert ips.n_records == 1
+
+    def test_two_identical_patterns_stable(self):
+        ips = InterfacePatternStability(window_size=5, stability_threshold=0.7)
+        pattern = {'inhibitory': 0.3, 'excitatory': 0.5, 'modulatory': 0.2}
+        ips.record(InterfaceExchangeRecord(
+            timestamp=1, channel_pattern=pattern, total_active=50, total_edges=100,
+        ))
+        stability = ips.record(InterfaceExchangeRecord(
+            timestamp=2, channel_pattern=pattern, total_active=50, total_edges=100,
+        ))
+        assert stability == 1.0  # 完全相同模式
+        assert ips.is_stable is True
+        assert ips.is_ready is True
+
+    def test_two_different_patterns_unstable(self):
+        ips = InterfacePatternStability(window_size=5, stability_threshold=0.7)
+        ips.record(InterfaceExchangeRecord(
+            timestamp=1,
+            channel_pattern={'A': 1.0},
+            total_active=50, total_edges=100,
+        ))
+        stability = ips.record(InterfaceExchangeRecord(
+            timestamp=2,
+            channel_pattern={'B': 1.0},
+            total_active=50, total_edges=100,
+        ))
+        assert stability == 0.0  # 完全不重叠
+        assert ips.is_stable is False
+
+    def test_partial_similarity(self):
+        ips = InterfacePatternStability(window_size=5, stability_threshold=0.7)
+        ips.record(InterfaceExchangeRecord(
+            timestamp=1,
+            channel_pattern={'A': 0.8, 'B': 0.2},
+            total_active=50, total_edges=100,
+        ))
+        stability = ips.record(InterfaceExchangeRecord(
+            timestamp=2,
+            channel_pattern={'A': 0.6, 'B': 0.4},
+            total_active=50, total_edges=100,
+        ))
+        assert 0.0 < stability < 1.0  # 部分相似
+
+    def test_sliding_window_eviction(self):
+        ips = InterfacePatternStability(window_size=3, stability_threshold=0.99)
+        # 交替两种完全不同的模式
+        pattern_x = {'X': 1.0}
+        pattern_y = {'Y': 1.0}
+        for i in range(10):
+            p = pattern_x if i % 2 == 0 else pattern_y
+            ips.record(InterfaceExchangeRecord(
+                timestamp=i, channel_pattern=p, total_active=50, total_edges=100,
+            ))
+        # 窗口只保留最近 3 条
+        assert ips.n_records == 3
+
+    def test_stability_trend(self):
+        ips = InterfacePatternStability(window_size=5, stability_threshold=0.7)
+        pattern = {'A': 0.5, 'B': 0.5}
+        for i in range(5):
+            ips.record(InterfaceExchangeRecord(
+                timestamp=i, channel_pattern=pattern, total_active=50, total_edges=100,
+            ))
+        trend = ips.get_stability_trend()
+        assert len(trend) == 5
+        # 第一次是 0.0（不足2条），后面都是 ~1.0（完全相同，允许浮点误差）
+        assert trend[0] == 0.0
+        assert all(abs(t - 1.0) < 1e-6 for t in trend[1:])
+
+    def test_dominant_channels(self):
+        ips = InterfacePatternStability(window_size=5, stability_threshold=0.7)
+        for i in range(3):
+            ips.record(InterfaceExchangeRecord(
+                timestamp=i,
+                channel_pattern={'A': 0.6, 'B': 0.3, 'C': 0.1},
+                total_active=50, total_edges=100,
+            ))
+        dominant = ips.dominant_channels
+        assert dominant == ['A', 'B', 'C']
+
+    def test_dominant_channels_empty(self):
+        ips = InterfacePatternStability()
+        assert ips.dominant_channels == []
+
+    def test_reset(self):
+        ips = InterfacePatternStability()
+        ips.record(InterfaceExchangeRecord(
+            timestamp=1, channel_pattern={'A': 1.0}, total_active=50, total_edges=100,
+        ))
+        ips.record(InterfaceExchangeRecord(
+            timestamp=2, channel_pattern={'A': 1.0}, total_active=50, total_edges=100,
+        ))
+        assert ips.n_records == 2
+        ips.reset()
+        assert ips.n_records == 0
+        assert ips.current_stability == 0.0
+        assert ips.is_stable is False
+
+    def test_pattern_cosine_sim_both_empty(self):
+        sim = InterfacePatternStability._pattern_cosine_sim({}, {})
+        assert sim == 1.0
+
+    def test_pattern_cosine_sim_one_empty(self):
+        sim = InterfacePatternStability._pattern_cosine_sim({'A': 1.0}, {})
+        assert sim == 0.0
+
+    def test_pattern_cosine_sim_identical(self):
+        sim = InterfacePatternStability._pattern_cosine_sim(
+            {'A': 0.5, 'B': 0.5}, {'A': 0.5, 'B': 0.5})
+        assert abs(sim - 1.0) < 1e-8
+
+    def test_pattern_cosine_sim_orthogonal(self):
+        sim = InterfacePatternStability._pattern_cosine_sim(
+            {'A': 1.0}, {'B': 1.0})
+        assert sim == 0.0
+
+    def test_repr(self):
+        ips = InterfacePatternStability(window_size=3, stability_threshold=0.8)
+        ips.record(InterfaceExchangeRecord(
+            timestamp=1, channel_pattern={'A': 1.0}, total_active=50, total_edges=100,
+        ))
+        ips.record(InterfaceExchangeRecord(
+            timestamp=2, channel_pattern={'A': 1.0}, total_active=50, total_edges=100,
+        ))
+        s = repr(ips)
+        assert "records=2/3" in s
+        assert "stability=1.000" in s
+        assert "stable=True" in s
+
+
+class TestUnsealingWithInterfaceStability:
+    """解封机制 + 界面模式稳定性集成测试"""
+
+    def test_record_interface_exchange(self):
+        mech = UnsealingMechanism()
+        stability = mech.record_interface_exchange(
+            structure_id=1,
+            timestamp=1,
+            channel_pattern={'A': 0.6, 'B': 0.4},
+            total_active=60,
+            total_edges=100,
+        )
+        # 第一条记录，稳定性为 0
+        assert stability == 0.0
+        assert mech.is_interface_stable(1) is False
+
+    def test_interface_stability_convergence(self):
+        mech = UnsealingMechanism(
+            interface_stability_window=5,
+            interface_stability_threshold=0.7,
+        )
+        pattern = {'inhibitory': 0.3, 'excitatory': 0.5, 'modulatory': 0.2}
+        for i in range(5):
+            stability = mech.record_interface_exchange(
+                structure_id=1,
+                timestamp=i,
+                channel_pattern=pattern,
+                total_active=50,
+                total_edges=100,
+            )
+        # 5条相同记录后应稳定
+        assert stability == 1.0
+        assert mech.is_interface_stable(1) is True
+
+    def test_get_interface_stability_tracker(self):
+        mech = UnsealingMechanism()
+        assert mech.get_interface_stability(1) is None
+
+        mech.record_interface_exchange(
+            structure_id=1,
+            timestamp=1,
+            channel_pattern={'A': 1.0},
+            total_active=50,
+            total_edges=100,
+        )
+        tracker = mech.get_interface_stability(1)
+        assert tracker is not None
+        assert isinstance(tracker, InterfacePatternStability)
+        assert tracker.n_records == 1
+
+    def test_multiple_structures_independent(self):
+        mech = UnsealingMechanism()
+        # 结构1：稳定模式
+        stable_pattern = {'A': 0.5, 'B': 0.5}
+        for i in range(3):
+            mech.record_interface_exchange(
+                1, i, stable_pattern, 50, 100,
+            )
+        # 结构2：不稳定模式
+        mech.record_interface_exchange(
+            2, 0, {'X': 1.0}, 50, 100,
+        )
+        mech.record_interface_exchange(
+            2, 1, {'Y': 1.0}, 50, 100,
+        )
+
+        assert mech.is_interface_stable(1) is True
+        assert mech.is_interface_stable(2) is False
+
+    def test_reset_clears_interface_stability(self):
+        mech = UnsealingMechanism()
+        for i in range(3):
+            mech.record_interface_exchange(
+                1, i, {'A': 1.0}, 50, 100,
+            )
+        assert mech.is_interface_stable(1) is True
+
+        mech.reset()
+        assert mech.is_interface_stable(1) is False
+        assert mech.get_interface_stability(1) is None
+
+    def test_unsealing_event_repr_with_interface(self):
+        """解封事件与界面稳定性共存时 repr 正常"""
+        mech = UnsealingMechanism()
+        mech.record_interface_exchange(
+            1, 0, {'A': 0.5, 'B': 0.5}, 50, 100,
+        )
+        result = make_convergence(min_coupling=0.4, stability_score=0.6)
+        event = mech.evaluate(1, result, timestamp=100)
+        assert event is not None
+        s = repr(event)
+        assert "structure=1" in s
 
 
 if __name__ == "__main__":
