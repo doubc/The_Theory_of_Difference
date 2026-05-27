@@ -99,6 +99,23 @@ from engine.anticipatory_bias_engine import (
     AnticipationResult,
     DEFAULT_ANTICIPATION_CONFIG,
 )
+from engine.counterfactual_engine import (
+    CounterfactualEngine,
+    ParallelTrajectoryMaintainer,
+    DivergencePointTracker,
+    ConsequenceProjector,
+    CounterfactualSelector,
+    TrajectoryNode,
+    TrajectoryBranch,
+    TrajectoryState,
+    DivergenceType,
+    ProjectionMethod,
+    DivergencePoint,
+    ConsequenceEstimate,
+    ContrastResult,
+    CounterfactualResult,
+    DEFAULT_COUNTERFACTUAL_CONFIG,
+)
 
 __all__ = [
     'HierarchyManager', 'LayerState', 'BiasField',
@@ -135,4 +152,13 @@ __all__ = [
     'PredictionErrorTracker', 'AnticipationConfidence',
     'ExpectationField', 'PredictionError',
     'AnticipationResult', 'DEFAULT_ANTICIPATION_CONFIG',
+    'CounterfactualEngine', 'ParallelTrajectoryMaintainer',
+    'DivergencePointTracker', 'ConsequenceProjector',
+    'CounterfactualSelector',
+    'TrajectoryNode', 'TrajectoryBranch',
+    'TrajectoryState', 'DivergenceType',
+    'ProjectionMethod',
+    'DivergencePoint', 'ConsequenceEstimate',
+    'ContrastResult', 'CounterfactualResult',
+    'DEFAULT_COUNTERFACTUAL_CONFIG',
 ]
