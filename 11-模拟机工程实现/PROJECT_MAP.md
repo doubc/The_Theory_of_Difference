@@ -47,7 +47,28 @@ A1(源, +1) → A6(流向) → A3(局域) → A4(最小变易)
 
 ## 当前阶段
 
-M2：稳定结构验证 + 粗粒化映射。
+**Phase 2（象界 → 前主体态）— 进行中**
+
+M4 批次 11 已完成：分层封装、九公理严格化、汉明几何、引力势验证、跨层级引力调制。
+
+### Phase 2 组件状态
+
+| 组件 | 文件 | 状态 | 说明 |
+|------|------|------|------|
+| 底象检测器 | `xiang_detector.py` | ✅ | Phase 2 P0 #1 |
+| 偏置记忆 | `persistent_bias_memory.py` | ✅ | Phase 2 P0 #2 + 保持深度追踪器 |
+| 累积筛选器 | `cumulative_selector.py` | ✅ | Phase 2 P0 #3 |
+| 回流通道 | `return_flow_channel.py` | ✅ | Phase 2 P0 — 高语义锚定/剥离 |
+| 六阈值检测器 | `six_threshold_detector.py` | ✅ | Phase 2 P1 #1 |
+| 前主体态收束 | `pre_subjectivity_convergence.py` | ✅ | Phase 2 P1 #2 + 语义防火墙 |
+| 解封机制 | `unsealing_mechanism.py` | ✅ | Phase 2 P1 — L1/L2/L3 分级解封 + 界面模式稳定性 |
+| 组织密度指数 | `organizational_density_index.py` | ✅ | Phase 2 P1 — 六子指数加权 + 五密度分区 + 十一子区系统 |
+| 第七阈值检测器 | `seventh_threshold_detector.py` | ✅ | Phase 2 P1 — 三信号融合 + 子区跃进检测 |
+| 协同涌现检测器 | `cooperative_emergence_detector.py` | ✅ | Phase 2 P1 — 五类协同信号 |
+| 自维持循环 | `self_sustaining_circulation.py` | ✅ | Phase 2 P2 #1 |
+| 功能分化 | `functional_differentiation.py` | ✅ | Phase 2 P2 #2 |
+| 复制模式 | `replicate_pattern.py` | ✅ | Phase 2 P2 #3 |
+| HierarchicalEvolver 集成 | `hierarchical_evolver.py` | ✅ | ODI + 第七阈值 + 协同涌现已集成到 Phase 2 callback |
 
 ### 已完成里程碑
 
@@ -57,6 +78,14 @@ M2：稳定结构验证 + 粗粒化映射。
 | M1 | 2026-04-29 | ✅ | 差异反应堆 + 公理约束训练 |
 | M1.1 | 2026-04-29 | ✅ | 语义修复 + 测试 + 流量平衡 |
 | M2 | 2026-05-06 | ✅ | 稳定结构验证器 + 粗粒化映射 + 实验日志 |
+| M3 | 2026-05-11 | ✅ | 第一阶段验收 — 全量测试通过 |
+| M4 | 2026-05-14~27 | ✅ | Phase 2 核心组件实现（13个新组件，752+测试） |
+
+### 下一步
+
+1. reactor.py 中集成回流通道 step（P1）
+2. 横向耦合机制（P2）
+3. Phase 3 规划：前主体态 → 现象意识的结构条件
 
 ## 第一阶段禁止事项
 
