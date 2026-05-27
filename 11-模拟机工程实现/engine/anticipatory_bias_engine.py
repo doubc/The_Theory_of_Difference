@@ -389,7 +389,7 @@ class PredictionErrorTracker:
         error_vec = actual - predicted
         error_magnitude = float(error_vec.norm().item())
         actual_magnitude = float(actual.norm().item())
-        relative_error = error_magnitude / max(actual_magnitude, 1e-8)
+        relative_error = min(error_magnitude / max(actual_magnitude, 1e-8), 1.0)
 
         record = PredictionError(
             timestamp=timestamp,
@@ -715,7 +715,7 @@ class AnticipatoryBiasEngine:
         """获取历史预测准确率（1 - 平均相对误差）"""
         if self.error_tracker.n_predictions == 0:
             return 0.0
-        return 1.0 - self.error_tracker.get_mean_relative_error()
+        return float(np.clip(1.0 - self.error_tracker.get_mean_relative_error(), 0.0, 1.0))
 
     def get_error_stats(self) -> Dict:
         """获取误差统计信息"""
