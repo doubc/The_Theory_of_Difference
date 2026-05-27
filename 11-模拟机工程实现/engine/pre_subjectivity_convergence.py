@@ -145,12 +145,52 @@ class PreSubjectivityConvergence:
         'functional_differentiation', # 3.6 功能分化
     ]
 
+    # ── 默认耦合权重（核心机制对权重更高） ──
+    # 基于象界功能分化理论：核心三对（界面↔自维持、自维持↔保持、保持↔复制）
+    # 对结构稳定贡献最大，权重更高。
+    DEFAULT_COUPLING_WEIGHTS: Dict[str, float] = {
+        # 核心三对（权重 2.0）
+        'interface_regulation:self_sustaining': 2.0,
+        'self_sustaining:retention': 2.0,
+        'retention:replication': 2.0,
+        # 扩展三对（权重 1.5）
+        'interface_regulation:replication': 1.5,
+        'self_sustaining:selection': 1.5,
+        'retention:functional_differentiation': 1.5,
+        # 其余九对（权重 1.0）
+        'interface_regulation:selection': 1.0,
+        'interface_regulation:functional_differentiation': 1.0,
+        'self_sustaining:functional_differentiation': 1.0,
+        'self_sustaining:replication': 1.0,
+        'replication:selection': 1.0,
+        'replication:functional_differentiation': 1.0,
+        'selection:functional_differentiation': 1.0,
+        'interface_regulation:retention': 1.0,
+        'retention:selection': 1.0,
+        'self_sustaining:interface_regulation': 2.0,
+        'retention:self_sustaining': 2.0,
+        'replication:retention': 2.0,
+        'replication:interface_regulation': 1.5,
+        'selection:self_sustaining': 1.5,
+        'functional_differentiation:retention': 1.5,
+        'selection:interface_regulation': 1.0,
+        'functional_differentiation:interface_regulation': 1.0,
+        'functional_differentiation:self_sustaining': 1.0,
+        'replication:self_sustaining': 1.0,
+        'selection:replication': 1.0,
+        'functional_differentiation:replication': 1.0,
+        'functional_differentiation:selection': 1.0,
+        'retention:interface_regulation': 1.0,
+        'selection:retention': 1.0,
+    }
+
     def __init__(self,
                  coupling_threshold: float = 0.3,
                  stability_threshold: float = 0.5,
                  n_perturbation_tests: int = 5,
                  perturbation_scale: float = 0.1,
-                 coupling_mode: str = "all"):
+                 coupling_mode: str = "all",
+                 coupling_weights: Optional[Dict[str, float]] = None):
         """
         Args:
             coupling_threshold: 耦合强度阈值（超过此值认为两机制耦合）
@@ -160,12 +200,17 @@ class PreSubjectivityConvergence:
             coupling_mode: 耦合判定模式
                 "all"     — 所有机制对都必须超过阈值（默认，15/15）
                 "majority" — 多数机制对超过阈值（≥12/15）
+                "weighted" — 加权评分模式（核心机制对权重更高）
+            coupling_weights: 耦合权重字典，键为 "mech_a:mech_b" 格式。
+                如果为 None，使用 DEFAULT_COUPLING_WEIGHTS。
+                仅在 coupling_mode="weighted" 时使用。
         """
         self.coupling_threshold = coupling_threshold
         self.stability_threshold = stability_threshold
         self.n_perturbation_tests = n_perturbation_tests
         self.perturbation_scale = perturbation_scale
         self.coupling_mode = coupling_mode
+        self.coupling_weights = coupling_weights or self.DEFAULT_COUPLING_WEIGHTS.copy()
 
         # 六阈值检测器
         self._threshold_detector = SixThresholdDetector()
@@ -256,6 +301,8 @@ class PreSubjectivityConvergence:
         模式：
           "all"     — 所有机制对都必须超过阈值（15/15）
           "majority" — 多数机制对超过阈值（≥12/15）
+          "weighted" — 加权评分模式（核心机制对权重更高，
+                     加权得分 ≥ 50% 总权重即通过）
 
         Args:
             coupling_matrix: 耦合矩阵
@@ -288,7 +335,25 @@ class PreSubjectivityConvergence:
         if min_coupling == float('inf'):
             min_coupling = 0.0
 
-        if self.coupling_mode == "majority":
+        if self.coupling_mode == "weighted":
+            # 加权评分模式：核心机制对权重更高
+            # 加权得分 = Σ(weight_i * coupled_i) / Σ(weight_i)
+            # 通过条件：加权得分 ≥ 50%
+            total_weight = 0.0
+            weighted_score = 0.0
+            for i, ma in enumerate(mechanisms):
+                for j, mb in enumerate(mechanisms):
+                    if i >= j:
+                        continue
+                    key = f"{ma}:{mb}"
+                    weight = self.coupling_weights.get(key, 1.0)
+                    total_weight += weight
+                    strength = coupling_matrix.get(ma, {}).get(mb, 0.0)
+                    strength = max(strength, coupling_matrix.get(mb, {}).get(ma, 0.0))
+                    if strength > self.coupling_threshold:
+                        weighted_score += weight
+            coupling_met = (weighted_score / total_weight) >= 0.50 if total_weight > 0 else False
+        elif self.coupling_mode == "majority":
             # 多数制：≥12/15 对超过阈值
             majority_threshold = max(1, int(total_pairs * 0.8))
             coupling_met = n_coupled >= majority_threshold
