@@ -1,4 +1,4 @@
-"""
+﻿"""
 engine/hierarchical_evolver.py — 跨层级演化器
 
 将 SpatialLongRangeEvolver 与 HierarchyManager 整合，
@@ -608,6 +608,8 @@ class HierarchicalEvolver:
                         'rebuild_success_count': int(self_sustaining * 10),
                         'perturbation_count': 10,
                         'bias_recursion_depth': bias_depth,
+                        'replicated_pattern': state if active_count > 0 else None,
+                        'original_pattern': state,
                         'variant_continuation_probs': variant_probs,
                         'component_contributions': component_contributions,
                     }
