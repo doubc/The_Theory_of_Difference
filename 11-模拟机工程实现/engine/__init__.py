@@ -31,6 +31,11 @@ from engine.organizational_density_index import (
     OrganizationalDensityIndex,
     DensityIndexResult,
     SubIndexValues,
+    ZoneBoundary,
+    DENSE_ZONES,
+    REFINED_DENSE_ZONES,
+    REFINED_TO_BASE_ZONE,
+    DEFAULT_SUBINDEX_WEIGHTS,
 )
 from engine.six_threshold_detector import SixThresholdDetector, ThresholdStatus, SixThresholdResult
 from engine.seventh_threshold_detector import (
@@ -73,6 +78,8 @@ __all__ = [
     'PersistentBiasMemory', 'BiasEntry', 'BiasFieldSnapshot',
     'CumulativeSelector', 'VariantRecord', 'SelectionResult',
     'OrganizationalDensityIndex', 'DensityIndexResult', 'SubIndexValues',
+    'ZoneBoundary', 'DENSE_ZONES', 'REFINED_DENSE_ZONES', 'REFINED_TO_BASE_ZONE',
+    'DEFAULT_SUBINDEX_WEIGHTS',
     'SixThresholdDetector', 'ThresholdStatus', 'SixThresholdResult',
     'SeventhThresholdDetector', 'SeventhThresholdResult',
     'JumpSignal', 'CriticalSlowingDownSignal', 'EmergenceSignature',

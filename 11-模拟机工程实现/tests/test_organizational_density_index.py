@@ -243,23 +243,48 @@ class TestOrganizationalDensityIndex:
     def test_zone_structuring(self):
         assert OrganizationalDensityIndex()._classify_zone(0.4) == 'structuring'
 
-    def test_zone_pre_subjective(self):
-        assert OrganizationalDensityIndex()._classify_zone(0.55) == 'pre_subjective'
+    def test_zone_pre_subjective_entry(self):
+        """精化分区：前主体态入口"""
+        assert OrganizationalDensityIndex()._classify_zone(0.55) == 'pre_subjective_entry'
 
-    def test_zone_dense(self):
-        assert OrganizationalDensityIndex()._classify_zone(0.75) == 'dense'
+    def test_zone_pre_subjective_deep(self):
+        """精化分区：前主体态深层"""
+        assert OrganizationalDensityIndex()._classify_zone(0.65) == 'pre_subjective_deep'
 
-    def test_zone_ultra_dense(self):
-        assert OrganizationalDensityIndex()._classify_zone(0.9) == 'ultra_dense'
+    def test_zone_dense_entry(self):
+        """精化分区：致密区入口"""
+        assert OrganizationalDensityIndex()._classify_zone(0.73) == 'dense_entry'
+
+    def test_zone_dense_core(self):
+        """精化分区：致密区核心"""
+        assert OrganizationalDensityIndex()._classify_zone(0.80) == 'dense_core'
+
+    def test_zone_ultra_dense_entry(self):
+        """精化分区：超致密区入口"""
+        assert OrganizationalDensityIndex()._classify_zone(0.88) == 'ultra_dense_entry'
+
+    def test_zone_ultra_dense_core(self):
+        """精化分区：超致密区核心"""
+        assert OrganizationalDensityIndex()._classify_zone(0.95) == 'ultra_dense_core'
 
     def test_zone_boundary_values(self):
-        """分区边界值"""
+        """分区边界值（精化十一分区）"""
         assert OrganizationalDensityIndex()._classify_zone(0.0) == 'sparse'
         assert OrganizationalDensityIndex()._classify_zone(0.3) == 'structuring'
-        assert OrganizationalDensityIndex()._classify_zone(0.5) == 'pre_subjective'
-        assert OrganizationalDensityIndex()._classify_zone(0.7) == 'dense'
-        assert OrganizationalDensityIndex()._classify_zone(0.85) == 'ultra_dense'
-        assert OrganizationalDensityIndex()._classify_zone(1.0) == 'ultra_dense'
+        assert OrganizationalDensityIndex()._classify_zone(0.5) == 'pre_subjective_entry'
+        assert OrganizationalDensityIndex()._classify_zone(0.58) == 'pre_subjective_deep'
+        assert OrganizationalDensityIndex()._classify_zone(0.7) == 'dense_entry'
+        assert OrganizationalDensityIndex()._classify_zone(0.76) == 'dense_core'
+        assert OrganizationalDensityIndex()._classify_zone(0.85) == 'ultra_dense_entry'
+        assert OrganizationalDensityIndex()._classify_zone(0.92) == 'ultra_dense_core'
+        assert OrganizationalDensityIndex()._classify_zone(1.0) == 'ultra_dense_core'
+
+    def test_zone_backward_compatible(self):
+        """旧五分区兼容模式"""
+        odi = OrganizationalDensityIndex(use_refined_zones=False)
+        assert odi._classify_zone(0.55) == 'pre_subjective'
+        assert odi._classify_zone(0.75) == 'dense'
+        assert odi._classify_zone(0.9) == 'ultra_dense'
 
     # ── 密化趋势测试 ──
 
@@ -359,9 +384,20 @@ class TestOrganizationalDensityIndex:
         assert r2.is_ultra_dense is False
 
     def test_zone_label(self):
-        """zone_label 中文标签"""
-        r = DensityIndexResult(odi=0.6, zone='pre_subjective')
-        assert r.zone_label == '前主体态区'
+        """zone_label 中文标签（精化分区）"""
+        r = DensityIndexResult(odi=0.6, zone='pre_subjective_entry')
+        assert r.zone_label == '前主体态入口区'
+        r2 = DensityIndexResult(odi=0.8, zone='dense_core')
+        assert r2.zone_label == '致密区核心'
+        r3 = DensityIndexResult(odi=0.95, zone='ultra_dense_core')
+        assert r3.zone_label == '超致密区核心'
+
+    def test_base_zone_label(self):
+        """base_zone_label 基础中文标签"""
+        r = DensityIndexResult(odi=0.6, zone='pre_subjective_entry', base_zone='pre_subjective')
+        assert r.base_zone_label == '前主体态区'
+        r2 = DensityIndexResult(odi=0.8, zone='dense_core', base_zone='dense')
+        assert r2.base_zone_label == '致密区'
 
     # ── reset 测试 ──
 
@@ -416,16 +452,23 @@ class TestOrganizationalDensityIndex:
         )
         assert r2.odi > r1.odi  # ODI 上升
 
-        # 阶段3：前主体态（高值）
+        # 阶段3：前主体态（刚好达标，非超高值）
         r3 = odi.compute(
             threshold_result=_make_threshold_result(all_met=True, high_values=False),
-            coupling_matrix=_make_full_coupling_matrix(0.6),
-            stability_score=0.8,
+            coupling_matrix=_make_full_coupling_matrix(0.35),
+            stability_score=0.5,
             field_names=['boundary'],
             timestamp=3,
         )
         assert r3.odi > r2.odi
         assert r3.is_pre_subjective
+        # 精化分区：前主体态入口或深层或致密区入口（取决于具体参数）
+        assert r3.base_zone in ('pre_subjective', 'dense')
+        # 验证 zone_boundary 信息已填充
+        assert r3.zone_boundary.zone == r3.zone
+        assert r3.zone_boundary.base_zone == r3.base_zone
+        assert 0.0 <= r3.zone_boundary.depth <= 1.0
+        assert 0.0 <= r3.zone_boundary.transition_proximity <= 1.0
 
         # 验证轨迹
         trajectory = odi.get_density_trajectory(last_n=3)
@@ -463,8 +506,167 @@ class TestOrganizationalDensityIndex:
         assert 0.0 <= r2.odi <= 1.0
 
     def test_repr(self):
-        """__repr__ 正常输出"""
-        r = DensityIndexResult(odi=0.65, zone='pre_subjective', densification_rate=0.02, timestamp=5)
+        """__repr__ 正常输出（含深度和过渡邻近度）"""
+        odi_calc = OrganizationalDensityIndex()
+        r = odi_calc.compute(
+            threshold_result=_make_threshold_result(all_met=True, high_values=True),
+            coupling_matrix=_make_full_coupling_matrix(0.8),
+            stability_score=0.9,
+            field_names=['boundary'],
+            timestamp=1,
+        )
         s = repr(r)
-        assert '0.65' in s or '0.6500' in s
-        assert 'pre_subjective' in s or '前主体态' in s
+        assert 'depth=' in s
+        assert 'prox=' in s
+        assert r.zone_label in s
+
+
+# ─── ZoneBoundary 新功能测试 ───
+
+class TestZoneBoundary:
+    """ZoneBoundary 和精化分区测试"""
+
+    def test_refined_zones_count(self):
+        """精化分区应有 8 个分区"""
+        from engine.organizational_density_index import REFINED_DENSE_ZONES
+        assert len(REFINED_DENSE_ZONES) == 8
+
+    def test_refined_zones_cover_full_range(self):
+        """精化分区应覆盖 [0, 1] 全区间"""
+        from engine.organizational_density_index import REFINED_DENSE_ZONES
+        zones = REFINED_DENSE_ZONES
+        # 第一个分区从 0 开始
+        first_lo = list(zones.values())[0][0]
+        assert first_lo == 0.0
+        # 最后一个分区到 1 结束
+        last_hi = list(zones.values())[-1][1]
+        assert last_hi == 1.0
+        # 分区连续（无间隙）
+        sorted_zones = sorted(zones.values(), key=lambda x: x[0])
+        for i in range(len(sorted_zones) - 1):
+            assert sorted_zones[i][1] == sorted_zones[i + 1][0], \
+                f"间隙: {sorted_zones[i]} 和 {sorted_zones[i+1]}"
+
+    def test_refined_to_base_mapping(self):
+        """每个精化分区都映射到一个基础分区"""
+        from engine.organizational_density_index import REFINED_DENSE_ZONES, REFINED_TO_BASE_ZONE, DENSE_ZONES
+        for zone_name in REFINED_DENSE_ZONES:
+            assert zone_name in REFINED_TO_BASE_ZONE, f"{zone_name} 缺少映射"
+            assert REFINED_TO_BASE_ZONE[zone_name] in DENSE_ZONES, \
+                f"{zone_name} 映射到未知基础分区"
+
+    def test_zone_boundary_at_left_edge(self):
+        """分区左边界：depth=0, transition_proximity=1"""
+        odi = OrganizationalDensityIndex()
+        zb = odi._compute_zone_boundary(0.5, 'pre_subjective_entry')
+        assert zb.depth == 0.0
+        assert zb.transition_proximity == 1.0
+        assert zb.is_entering_zone is True
+        assert zb.is_near_boundary is True
+
+    def test_zone_boundary_at_right_edge(self):
+        """分区右边界：depth=1, transition_proximity=1"""
+        odi = OrganizationalDensityIndex()
+        zb = odi._compute_zone_boundary(0.5799, 'pre_subjective_entry')
+        assert zb.depth > 0.99
+        assert zb.transition_proximity > 0.99
+        assert zb.is_exiting_zone is True
+        assert zb.is_near_boundary is True
+
+    def test_zone_boundary_at_center(self):
+        """分区中央：depth=0.5, transition_proximity≈0"""
+        odi = OrganizationalDensityIndex()
+        # pre_subjective_entry: [0.50, 0.58), center = 0.54
+        zb = odi._compute_zone_boundary(0.54, 'pre_subjective_entry')
+        assert abs(zb.depth - 0.5) < 0.01
+        assert zb.transition_proximity < 0.01  # 近似为 0
+        assert zb.is_in_core is True
+        # 注意：0.54 距离左边界 0.04 < 0.05，所以 is_near_boundary=True
+        # 这是正确的——"核心区域"和"靠近边界"不互斥
+        assert zb.is_near_boundary is True  # 0.54-0.50=0.04 < 0.05
+
+    def test_zone_boundary_distance_correctness(self):
+        """到边界距离计算正确"""
+        odi = OrganizationalDensityIndex()
+        # dense_entry: [0.70, 0.76), ODI=0.73
+        zb = odi._compute_zone_boundary(0.73, 'dense_entry')
+        assert abs(zb.distance_to_prev - 0.03) < 0.001  # 0.73 - 0.70
+        assert abs(zb.distance_to_next - 0.03) < 0.001  # 0.76 - 0.73
+        assert abs(zb.zone_width - 0.06) < 0.001
+
+    def test_zone_boundary_in_result(self):
+        """compute() 返回的 result 包含正确的 zone_boundary"""
+        odi = OrganizationalDensityIndex()
+        r = odi.compute(timestamp=1)
+        zb = r.zone_boundary
+        assert zb.zone == r.zone
+        assert zb.base_zone == r.base_zone
+        assert zb.zone_lo <= r.odi <= zb.zone_hi
+
+    def test_zone_boundary_properties(self):
+        """ZoneBoundary 布尔属性正确"""
+        from engine.organizational_density_index import ZoneBoundary
+        # 刚进入
+        zb1 = ZoneBoundary(depth=0.1, transition_proximity=0.9, is_near_boundary=True)
+        assert zb1.is_entering_zone is True
+        assert zb1.is_exiting_zone is False
+        assert zb1.is_in_core is False
+
+        # 核心区域
+        zb2 = ZoneBoundary(depth=0.5, transition_proximity=0.0, is_near_boundary=False)
+        assert zb2.is_entering_zone is False
+        assert zb2.is_exiting_zone is False
+        assert zb2.is_in_core is True
+
+        # 即将离开
+        zb3 = ZoneBoundary(depth=0.9, transition_proximity=0.9, is_near_boundary=True)
+        assert zb3.is_entering_zone is False
+        assert zb3.is_exiting_zone is True
+        assert zb3.is_in_core is False
+
+    def test_backward_compatible_zones(self):
+        """use_refined_zones=False 时使用旧五分区"""
+        odi = OrganizationalDensityIndex(use_refined_zones=False)
+        assert odi._classify_zone(0.55) == 'pre_subjective'
+        assert odi._classify_zone(0.75) == 'dense'
+        assert odi._classify_zone(0.9) == 'ultra_dense'
+        r = odi.compute(timestamp=1)
+        assert r.zone == r.base_zone  # 旧模式下两者相同
+
+    def test_refined_zone_transition_tracking(self):
+        """精化分区下的分区转换追踪"""
+        odi = OrganizationalDensityIndex()
+        # 模拟从结构化区穿过前主体态入口到前主体态深层
+        odi._result_history = [
+            DensityIndexResult(odi=0.40, zone='structuring', base_zone='structuring', timestamp=1),
+            DensityIndexResult(odi=0.52, zone='pre_subjective_entry', base_zone='pre_subjective', timestamp=2),
+            DensityIndexResult(odi=0.60, zone='pre_subjective_deep', base_zone='pre_subjective', timestamp=3),
+        ]
+        transitions = odi.get_zone_transitions()
+        assert len(transitions) == 2
+        assert transitions[0] == (2, 'structuring', 'pre_subjective_entry')
+        assert transitions[1] == (3, 'pre_subjective_entry', 'pre_subjective_deep')
+
+    def test_all_refined_zones_classify_correctly(self):
+        """所有精化分区都能正确分类"""
+        from engine.organizational_density_index import REFINED_DENSE_ZONES
+        odi = OrganizationalDensityIndex()
+        for zone_name, (lo, hi) in REFINED_DENSE_ZONES.items():
+            # 取区间中点
+            mid = (lo + hi) / 2
+            classified = odi._classify_zone(mid)
+            assert classified == zone_name, \
+                f"ODI={mid} 期望 {zone_name}, 实际 {classified}"
+
+    def test_boundary_threshold_configurable(self):
+        """boundary_threshold 可配置"""
+        odi = OrganizationalDensityIndex(boundary_threshold=0.1)
+        # pre_subjective_entry: [0.50, 0.58), ODI=0.505
+        zb = odi._compute_zone_boundary(0.505, 'pre_subjective_entry')
+        # 距离左边界 0.005 < 0.1 → 靠近边界
+        assert zb.is_near_boundary is True
+
+        odi2 = OrganizationalDensityIndex(boundary_threshold=0.001)
+        zb2 = odi2._compute_zone_boundary(0.505, 'pre_subjective_entry')
+        # 距离左边界 0.005 > 0.001 → 不靠近边界
+        assert zb2.is_near_boundary is False

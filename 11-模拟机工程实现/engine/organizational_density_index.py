@@ -45,6 +45,7 @@ DEFAULT_SUBINDEX_WEIGHTS = {
 }
 
 # ─── 密度分区 ───
+# 基础五分区（兼容旧接口）
 DENSE_ZONES = {
     'sparse':        (0.0, 0.3),    # 稀疏区：结构尚未成形
     'structuring':   (0.3, 0.5),    # 结构化区：部分阈值达标
@@ -52,6 +53,78 @@ DENSE_ZONES = {
     'dense':         (0.7, 0.85),   # 致密区：高度组织化
     'ultra_dense':   (0.85, 1.0),   # 超致密区：可能涌现第七阈值
 }
+
+# 精化十一分区（高分辨率版）
+# 理论依据：《Appearing Before Appearing》§4.4
+# 前主体态→致密区的过渡（0.5~0.85）是结构变化最丰富的区域，
+# 需要更高分辨率来捕捉渐变过程中的关键转折点。
+# 新增子分区：
+#   - pre_subjective_entry (0.50~0.58): 前主体态入口，六阈值刚达标
+#   - pre_subjective_deep   (0.58~0.70): 前主体态深层，结构稳定化
+#   - dense_entry           (0.70~0.76): 致密区入口，超密度开始
+#   - dense_core            (0.76~0.85): 致密区核心，高度组织化
+#   - ultra_dense_entry     (0.85~0.92): 超致密区入口，相变前兆区
+#   - ultra_dense_core      (0.92~1.00): 超致密区核心，第七阈值可能涌现
+REFINED_DENSE_ZONES = {
+    'sparse':                (0.00, 0.30),
+    'structuring':           (0.30, 0.50),
+    'pre_subjective_entry':  (0.50, 0.58),
+    'pre_subjective_deep':   (0.58, 0.70),
+    'dense_entry':           (0.70, 0.76),
+    'dense_core':            (0.76, 0.85),
+    'ultra_dense_entry':     (0.85, 0.92),
+    'ultra_dense_core':      (0.92, 1.00),
+}
+
+# 子分区到基础分区的映射
+REFINED_TO_BASE_ZONE = {
+    'sparse':                'sparse',
+    'structuring':           'structuring',
+    'pre_subjective_entry':  'pre_subjective',
+    'pre_subjective_deep':   'pre_subjective',
+    'dense_entry':           'dense',
+    'dense_core':            'dense',
+    'ultra_dense_entry':     'ultra_dense',
+    'ultra_dense_core':      'ultra_dense',
+}
+
+
+@dataclass
+class ZoneBoundary:
+    """密度分区边界描述
+
+    记录当前 ODI 值在密度分区中的位置信息，
+    包括到下一边界的距离和在当前区间的深度。
+    """
+    zone: str = ''                        # 当前分区名
+    base_zone: str = ''                   # 基础分区名（粗粒度）
+    zone_lo: float = 0.0                  # 当前分区左边界
+    zone_hi: float = 1.0                  # 当前分区右边界
+    zone_width: float = 1.0               # 分区宽度
+    depth: float = 0.0                    # 在当前分区中的深度 [0, 1]
+                                           # 0 = 在左边界，1 = 在右边界
+    distance_to_next: float = 1.0         # 到下一分区边界的距离
+    distance_to_prev: float = 0.0         # 到上一分区边界的距离
+    transition_proximity: float = 0.0     # 过渡邻近度 [0, 1]
+                                           # 0 = 在分区中央（远离边界）
+                                           # 1 = 紧贴下一分区边界
+    is_near_boundary: bool = False        # 是否靠近分区边界（阈值内）
+    boundary_threshold: float = 0.05      # 判定"靠近边界"的阈值
+
+    @property
+    def is_entering_zone(self) -> bool:
+        """是否刚进入该分区（深度 < 20%）"""
+        return self.depth < 0.2
+
+    @property
+    def is_exiting_zone(self) -> bool:
+        """是否即将离开该分区（深度 > 80%）"""
+        return self.depth > 0.8
+
+    @property
+    def is_in_core(self) -> bool:
+        """是否在分区核心区域（深度 20%~80%）"""
+        return 0.2 <= self.depth <= 0.8
 
 
 @dataclass
@@ -77,10 +150,12 @@ class DensityIndexResult:
     """组织密度指数计算结果"""
     odi: float = 0.0                        # 组织密度指数 [0, 1]
     subindices: SubIndexValues = field(default_factory=SubIndexValues)
-    zone: str = 'sparse'                    # 密度分区
+    zone: str = 'sparse'                    # 密度分区（精化分区名）
+    base_zone: str = 'sparse'               # 基础分区名（粗粒度五分区）
     densification_rate: float = 0.0         # 密化速率（ΔODI/Δt）
     is_densifying: bool = False             # 是否正在致密化
     timestamp: int = 0
+    zone_boundary: ZoneBoundary = field(default_factory=ZoneBoundary)  # 分区边界信息
 
     @property
     def is_pre_subjective(self) -> bool:
@@ -94,7 +169,22 @@ class DensityIndexResult:
 
     @property
     def zone_label(self) -> str:
-        """密度分区的中文标签"""
+        """密度分区的中文标签（精化版）"""
+        labels = {
+            'sparse':                '稀疏区',
+            'structuring':           '结构化区',
+            'pre_subjective_entry':  '前主体态入口区',
+            'pre_subjective_deep':   '前主体态深层区',
+            'dense_entry':           '致密区入口',
+            'dense_core':            '致密区核心',
+            'ultra_dense_entry':     '超致密区入口',
+            'ultra_dense_core':      '超致密区核心',
+        }
+        return labels.get(self.zone, '未知')
+
+    @property
+    def base_zone_label(self) -> str:
+        """基础密度分区的中文标签"""
         labels = {
             'sparse': '稀疏区',
             'structuring': '结构化区',
@@ -102,11 +192,15 @@ class DensityIndexResult:
             'dense': '致密区',
             'ultra_dense': '超致密区',
         }
-        return labels.get(self.zone, '未知')
+        return labels.get(self.base_zone, '未知')
 
     def __repr__(self):
+        zb = self.zone_boundary
+        depth_info = f" depth={zb.depth:.2f}" if zb.zone else ""
+        prox_info = f" prox={zb.transition_proximity:.2f}" if zb.zone else ""
         return (f"ODI[{self.odi:.4f}] zone={self.zone_label} "
-                f"densifying={self.is_densifying} rate={self.densification_rate:+.4f}")
+                f"densifying={self.is_densifying} rate={self.densification_rate:+.4f}"
+                f"{depth_info}{prox_info}")
 
 
 class OrganizationalDensityIndex:
@@ -129,12 +223,17 @@ class OrganizationalDensityIndex:
     def __init__(self,
                  weights: Optional[Dict[str, float]] = None,
                  temporal_window: int = 5,
-                 densification_threshold: float = 0.01):
+                 densification_threshold: float = 0.01,
+                 use_refined_zones: bool = True,
+                 boundary_threshold: float = 0.05):
         """
         Args:
             weights: 子指数权重（覆盖默认值）
             temporal_window: 时间一致性计算窗口
             densification_threshold: 密化速率阈值（超过此值认为正在致密化）
+            use_refined_zones: 是否使用精化十一分区（默认 True）。
+                              False 则使用旧的五分区。
+            boundary_threshold: 判定"靠近边界"的阈值（ODI 距离边界小于此值算靠近）
         """
         self._weights = dict(DEFAULT_SUBINDEX_WEIGHTS)
         if weights:
@@ -145,6 +244,11 @@ class OrganizationalDensityIndex:
 
         self._temporal_window = temporal_window
         self._densification_threshold = densification_threshold
+        self._use_refined_zones = use_refined_zones
+        self._boundary_threshold = boundary_threshold
+
+        # 选择分区表
+        self._zones = REFINED_DENSE_ZONES if use_refined_zones else DENSE_ZONES
 
         # 历史记录
         self._odi_history: List[float] = []
@@ -212,6 +316,7 @@ class OrganizationalDensityIndex:
 
         # ── 确定密度分区 ──
         zone = self._classify_zone(odi)
+        base_zone = REFINED_TO_BASE_ZONE.get(zone, zone) if self._use_refined_zones else zone
 
         # ── 计算密化速率 ──
         densification_rate = 0.0
@@ -221,13 +326,18 @@ class OrganizationalDensityIndex:
             densification_rate = odi - prev_odi
             is_densifying = densification_rate > self._densification_threshold
 
+        # ── 计算分区边界信息 ──
+        zone_boundary = self._compute_zone_boundary(odi, zone)
+
         result = DensityIndexResult(
             odi=odi,
             subindices=sub,
             zone=zone,
+            base_zone=base_zone,
             densification_rate=densification_rate,
             is_densifying=is_densifying,
             timestamp=self._step_count,
+            zone_boundary=zone_boundary,
         )
 
         self._odi_history.append(odi)
@@ -376,11 +486,70 @@ class OrganizationalDensityIndex:
         return float(np.clip(resonance, 0.0, 1.0))
 
     def _classify_zone(self, odi: float) -> str:
-        """根据 ODI 值分类密度分区"""
-        for zone_name, (lo, hi) in DENSE_ZONES.items():
+        """根据 ODI 值分类密度分区（使用选定的分区表）"""
+        for zone_name, (lo, hi) in self._zones.items():
             if lo <= odi < hi or (hi == 1.0 and odi >= lo):
                 return zone_name
         return 'sparse'
+
+    def _compute_zone_boundary(self, odi: float, zone: str) -> ZoneBoundary:
+        """计算 ODI 值在当前分区中的边界信息
+
+        Args:
+            odi: 当前 ODI 值
+            zone: 当前分区名
+
+        Returns:
+            ZoneBoundary 包含深度、距离、过渡邻近度等信息
+        """
+        zone_names = list(self._zones.keys())
+        lo, hi = self._zones.get(zone, (0.0, 1.0))
+        width = hi - lo
+
+        # 防止除零
+        if width <= 0:
+            width = 1.0
+
+        # 在当前分区中的深度 [0, 1]
+        depth = (odi - lo) / width
+        depth = float(np.clip(depth, 0.0, 1.0))
+
+        # 到下一分区边界的距离
+        distance_to_next = hi - odi
+
+        # 到上一分区边界的距离
+        distance_to_prev = odi - lo
+
+        # 过渡邻近度 [0, 1]：0 = 在分区中央，1 = 紧贴边界
+        # 使用到最近边界的相对距离
+        if depth <= 0.5:
+            # 靠近左边界
+            transition_proximity = 1.0 - (depth / 0.5) if depth <= 0.5 else 0.0
+        else:
+            # 靠近右边界
+            transition_proximity = ((depth - 0.5) / 0.5) if depth > 0.5 else 0.0
+        transition_proximity = float(np.clip(transition_proximity, 0.0, 1.0))
+
+        # 是否靠近边界
+        abs_dist_to_boundary = min(distance_to_next, distance_to_prev)
+        is_near = abs_dist_to_boundary < self._boundary_threshold
+
+        # 基础分区名
+        base_zone = REFINED_TO_BASE_ZONE.get(zone, zone) if self._use_refined_zones else zone
+
+        return ZoneBoundary(
+            zone=zone,
+            base_zone=base_zone,
+            zone_lo=lo,
+            zone_hi=hi,
+            zone_width=width,
+            depth=depth,
+            distance_to_next=distance_to_next,
+            distance_to_prev=distance_to_prev,
+            transition_proximity=transition_proximity,
+            is_near_boundary=is_near,
+            boundary_threshold=self._boundary_threshold,
+        )
 
     @property
     def current_odi(self) -> float:
