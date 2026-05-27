@@ -89,6 +89,16 @@ from engine.minimal_self_detector import (
     SelfReferenceSignal,
     DEFAULT_MSI_CONFIG,
 )
+from engine.anticipatory_bias_engine import (
+    AnticipatoryBiasEngine,
+    PatternExtrapolator,
+    PredictionErrorTracker,
+    AnticipationConfidence,
+    ExpectationField,
+    PredictionError,
+    AnticipationResult,
+    DEFAULT_ANTICIPATION_CONFIG,
+)
 
 __all__ = [
     'HierarchyManager', 'LayerState', 'BiasField',
@@ -121,4 +131,8 @@ __all__ = [
     'MinimalSelfDetector', 'MinimalSelfResult',
     'AsymmetrySignal', 'HistoryDependencySignal',
     'SelfReferenceSignal', 'DEFAULT_MSI_CONFIG',
+    'AnticipatoryBiasEngine', 'PatternExtrapolator',
+    'PredictionErrorTracker', 'AnticipationConfidence',
+    'ExpectationField', 'PredictionError',
+    'AnticipationResult', 'DEFAULT_ANTICIPATION_CONFIG',
 ]
