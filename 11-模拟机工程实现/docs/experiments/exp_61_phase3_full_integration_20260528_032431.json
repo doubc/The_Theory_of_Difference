@@ -1,0 +1,79 @@
+{
+  "experiment": "exp_61_phase3_full_integration",
+  "timestamp": "20260528_032431",
+  "elapsed_seconds": 4.05,
+  "config": {
+    "N0": 48,
+    "steps_per_layer": 500,
+    "max_layers": 1,
+    "sample_interval": 10,
+    "p1_eval_interval": 10
+  },
+  "layer_info": [
+    {
+      "layer": 0,
+      "N": 48,
+      "w": 16,
+      "sealed": true,
+      "steps": 500,
+      "clusters": 5
+    },
+    {
+      "layer": 1,
+      "N": 12,
+      "w": 6,
+      "sealed": false,
+      "steps": 0,
+      "clusters": 0
+    }
+  ],
+  "phase3_summary": {
+    "minimal_self_detector_active": true,
+    "anticipatory_bias_engine_active": true,
+    "counterfactual_engine_active": true,
+    "minimal_self_detected": false,
+    "msi": 0.0,
+    "anticipation_reliable": false,
+    "anticipation_accuracy": 0.0,
+    "counterfactual_active": false,
+    "counterfactual_n_branches": 1
+  },
+  "phase2_summary": {
+    "odi_active": true,
+    "seventh_detected": false,
+    "seventh_confidence": 0.0,
+    "cooperative_emergence": false,
+    "converged": false
+  },
+  "timeseries_length": 50,
+  "analysis": {
+    "odi_max": 0.680833,
+    "odi_mean": 0.06606,
+    "odi_final": 0.680217,
+    "odi_above_05_ratio": 0.1,
+    "A_ODI_reaches_05": true,
+    "odi_zone_distribution": {
+      "pre_subjective_deep": 5
+    },
+    "msi_max": 0.0,
+    "msi_mean": 0.0,
+    "msi_mean_before_05": 0.0,
+    "msi_mean_after_05": 0.0,
+    "B_MSI_grows_after_05": false,
+    "C_ant_odi_correlation": -0.567445,
+    "C_ant_odi_positive": false,
+    "D_cf_active_ratio": 0.0,
+    "D_cf_ever_active": false,
+    "E_6t_max": 6,
+    "E_6t_mean": 0.6,
+    "E_6t_all_met_ratio": 0.1,
+    "F_conv_ratio": 0.0
+  },
+  "acceptance": {
+    "A_ODI_reaches_05": true,
+    "B_MSI_grows_after_05": false,
+    "C_anticipation_positive_corr": false,
+    "D_counterfactual_active": false
+  },
+  "overall_pass": false
+}
