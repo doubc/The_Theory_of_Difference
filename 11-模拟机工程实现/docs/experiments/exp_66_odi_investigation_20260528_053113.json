@@ -1,0 +1,2936 @@
+{
+  "experiment": "exp_66_odi_investigation",
+  "timestamp": "20260528_053113",
+  "config": {
+    "N0": 48,
+    "steps_per_layer": 200,
+    "sample_interval": 5,
+    "p1_eval_interval": 1,
+    "n_seeds": 3,
+    "device": "cpu"
+  },
+  "runs": [
+    {
+      "seed": 0,
+      "odi_max": 0.6787499212339706,
+      "odi_mean": 0.6572003641704105,
+      "odi_final": 0.6766666671633721,
+      "n_converged": 0,
+      "n_total_eval": 40,
+      "elapsed": 1.985835075378418,
+      "n_subindex_entries": 40,
+      "subindex_data": [
+        {
+          "step": 0,
+          "odi": 0.3275289836377436,
+          "zone": "structuring",
+          "subindices": {
+            "threshold_proximity": 0.01919383103666485,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6666666716337204,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.5,
+            "cross_mechanism_resonance": 0.38437499999999997
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 5,
+          "odi": 0.32809028947432217,
+          "zone": "structuring",
+          "subindices": {
+            "threshold_proximity": 0.02154434690031884,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6428571492433548,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.5,
+            "cross_mechanism_resonance": 0.4305555555555556
+          },
+          "densification_rate": 0.0005613058365785961,
+          "is_densifying": false
+        },
+        {
+          "step": 10,
+          "odi": 0.6787499212339706,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.59375,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9999992123397048,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.3506596317596484,
+          "is_densifying": true
+        },
+        {
+          "step": 15,
+          "odi": 0.6548069809615888,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.59375,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.7605698096158872,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": -0.023942940272381752,
+          "is_densifying": false
+        },
+        {
+          "step": 20,
+          "odi": 0.6537286621651138,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.59375,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.7497866216511375,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": -0.0010783187964750196,
+          "is_densifying": false
+        },
+        {
+          "step": 25,
+          "odi": 0.6551239774125107,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.59375,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.7637397741251064,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0013953152473968888,
+          "is_densifying": false
+        },
+        {
+          "step": 30,
+          "odi": 0.660379053717739,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.8371238655436689,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.005255076305228257,
+          "is_densifying": false
+        },
+        {
+          "step": 35,
+          "odi": 0.676578661771595,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9991199460822284,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.016199608053856007,
+          "is_densifying": true
+        },
+        {
+          "step": 40,
+          "odi": 0.6765936953590825,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9992702819571047,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 1.5033587487556233e-05,
+          "is_densifying": false
+        },
+        {
+          "step": 45,
+          "odi": 0.6765641071095939,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9989743994622184,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": -2.9588249488621265e-05,
+          "is_densifying": false
+        },
+        {
+          "step": 50,
+          "odi": 0.6765788718688405,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9991220470546839,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 1.476475924655496e-05,
+          "is_densifying": false
+        },
+        {
+          "step": 55,
+          "odi": 0.6766246866289786,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9995801946560643,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 4.581476013809649e-05,
+          "is_densifying": false
+        },
+        {
+          "step": 60,
+          "odi": 0.6766666667394239,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9999999957605175,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 4.1980110445316576e-05,
+          "is_densifying": false
+        },
+        {
+          "step": 65,
+          "odi": 0.6766666658291283,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9999999866575613,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": -9.102956166628928e-10,
+          "is_densifying": false
+        },
+        {
+          "step": 70,
+          "odi": 0.6766666653248146,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9999999816144246,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": -5.043137019100641e-10,
+          "is_densifying": false
+        },
+        {
+          "step": 75,
+          "odi": 0.6766666659430043,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9999999877963217,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 6.181897216350762e-10,
+          "is_densifying": false
+        },
+        {
+          "step": 80,
+          "odi": 0.6766666668814099,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9999999971803774,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 9.38405575467982e-10,
+          "is_densifying": false
+        },
+        {
+          "step": 85,
+          "odi": 0.6766666671633721,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 2.819622313410264e-10,
+          "is_densifying": false
+        },
+        {
+          "step": 90,
+          "odi": 0.6766666671633721,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 95,
+          "odi": 0.6766666671633721,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 100,
+          "odi": 0.6766666671633721,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 105,
+          "odi": 0.6766666671633721,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 110,
+          "odi": 0.6766666671633721,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 115,
+          "odi": 0.6766666671633721,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 120,
+          "odi": 0.6766666671633721,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 125,
+          "odi": 0.6766666671633721,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 130,
+          "odi": 0.6766666671633721,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 135,
+          "odi": 0.6766666671633721,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 140,
+          "odi": 0.6766666671633721,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 145,
+          "odi": 0.6766666671633721,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 150,
+          "odi": 0.6766666671633721,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 155,
+          "odi": 0.6766666671633721,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 160,
+          "odi": 0.6766666671633721,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 165,
+          "odi": 0.6766666671633721,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 170,
+          "odi": 0.6766666671633721,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 175,
+          "odi": 0.6766666671633721,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 180,
+          "odi": 0.6766666671633721,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 185,
+          "odi": 0.6766666671633721,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 190,
+          "odi": 0.6766666671633721,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 195,
+          "odi": 0.6766666671633721,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        }
+      ],
+      "convergence_data": [
+        {
+          "step": 0,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": false,
+          "n_coupled_pairs": 3,
+          "stability_score": 0.4
+        },
+        {
+          "step": 5,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 0.8
+        },
+        {
+          "step": 10,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 15,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 20,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 25,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 30,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 35,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 40,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 45,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 50,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 55,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 60,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 65,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 70,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 75,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 80,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 85,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 90,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 95,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 100,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 105,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 110,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 115,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 120,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 125,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 130,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 135,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 140,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 145,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 3,
+          "stability_score": 1.0
+        },
+        {
+          "step": 150,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 3,
+          "stability_score": 1.0
+        },
+        {
+          "step": 155,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 3,
+          "stability_score": 1.0
+        },
+        {
+          "step": 160,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 165,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 170,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 175,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 3,
+          "stability_score": 1.0
+        },
+        {
+          "step": 180,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 185,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 190,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 195,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        }
+      ]
+    },
+    {
+      "seed": 1,
+      "odi_max": 0.6975,
+      "odi_mean": 0.6757741381753437,
+      "odi_final": 0.6975,
+      "n_converged": 26,
+      "n_total_eval": 40,
+      "elapsed": 2.036038637161255,
+      "n_subindex_entries": 40,
+      "subindex_data": [
+        {
+          "step": 0,
+          "odi": 0.3275289836377436,
+          "zone": "structuring",
+          "subindices": {
+            "threshold_proximity": 0.01919383103666485,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6666666716337204,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.5,
+            "cross_mechanism_resonance": 0.38437499999999997
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 5,
+          "odi": 0.328930625558688,
+          "zone": "structuring",
+          "subindices": {
+            "threshold_proximity": 0.02154434690031884,
+            "coupling_density": 0.0,
+            "stability_margin": 0.647058829665184,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.5,
+            "cross_mechanism_resonance": 0.4305555555555556
+          },
+          "densification_rate": 0.0014016419209444408,
+          "is_densifying": false
+        },
+        {
+          "step": 10,
+          "odi": 0.6870828431779316,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6354166716337204,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.999995088511875,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.35815221761924354,
+          "is_densifying": true
+        },
+        {
+          "step": 15,
+          "odi": 0.6601134116375438,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.625,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.7511341163754369,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": -0.026969431540387778,
+          "is_densifying": false
+        },
+        {
+          "step": 20,
+          "odi": 0.663314461809059,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6458333283662796,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.7414779613580306,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.003201050171515174,
+          "is_densifying": false
+        },
+        {
+          "step": 25,
+          "odi": 0.6687994714477867,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6666666716337204,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.7546613712104252,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.005485009638727778,
+          "is_densifying": false
+        },
+        {
+          "step": 30,
+          "odi": 0.6783769403202476,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6770833283662796,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.8296027464699159,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.009577468872460915,
+          "is_densifying": false
+        },
+        {
+          "step": 35,
+          "odi": 0.6974012366849494,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.999012366849493,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.01902429636470171,
+          "is_densifying": true
+        },
+        {
+          "step": 40,
+          "odi": 0.6973201532271995,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9982015322719949,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": -8.108345774981984e-05,
+          "is_densifying": false
+        },
+        {
+          "step": 45,
+          "odi": 0.6972994312973482,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9979943129734812,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": -2.0721929851363896e-05,
+          "is_densifying": false
+        },
+        {
+          "step": 50,
+          "odi": 0.6973555319322995,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.998555319322995,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 5.610063495131712e-05,
+          "is_densifying": false
+        },
+        {
+          "step": 55,
+          "odi": 0.6974424549384097,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9994245493840974,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 8.692300611023995e-05,
+          "is_densifying": false
+        },
+        {
+          "step": 60,
+          "odi": 0.6974999972590343,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9999999725903425,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 5.754232062460396e-05,
+          "is_densifying": false
+        },
+        {
+          "step": 65,
+          "odi": 0.6974999942180266,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9999999421802649,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": -3.041007778925575e-09,
+          "is_densifying": false
+        },
+        {
+          "step": 70,
+          "odi": 0.6974999936011077,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9999999360110772,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": -6.169188493387878e-10,
+          "is_densifying": false
+        },
+        {
+          "step": 75,
+          "odi": 0.6974999967961221,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9999999679612204,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 3.195014364187898e-09,
+          "is_densifying": false
+        },
+        {
+          "step": 80,
+          "odi": 0.697499999470254,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9999999947025398,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 2.674131915902933e-09,
+          "is_densifying": false
+        },
+        {
+          "step": 85,
+          "odi": 0.6975,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 5.297460248243624e-10,
+          "is_densifying": false
+        },
+        {
+          "step": 90,
+          "odi": 0.6975,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9999999999999999,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 95,
+          "odi": 0.6975,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9999999999999999,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 100,
+          "odi": 0.6975,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 105,
+          "odi": 0.6975,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 110,
+          "odi": 0.6975,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 115,
+          "odi": 0.6975,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 120,
+          "odi": 0.6975,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 125,
+          "odi": 0.6975,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 130,
+          "odi": 0.6975,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 135,
+          "odi": 0.6975,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 140,
+          "odi": 0.6975,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 145,
+          "odi": 0.6975,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 150,
+          "odi": 0.6975,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 155,
+          "odi": 0.6975,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 160,
+          "odi": 0.6975,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 165,
+          "odi": 0.6975,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 170,
+          "odi": 0.6975,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 175,
+          "odi": 0.6975,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 180,
+          "odi": 0.6975,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 185,
+          "odi": 0.6975,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 190,
+          "odi": 0.6975,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 195,
+          "odi": 0.6975,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        }
+      ],
+      "convergence_data": [
+        {
+          "step": 0,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": false,
+          "n_coupled_pairs": 6,
+          "stability_score": 0.0
+        },
+        {
+          "step": 5,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 10,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 15,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 20,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 25,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 30,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 35,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 40,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 45,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 50,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 55,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 60,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 65,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 70,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 75,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 80,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 85,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 90,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 95,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 100,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 105,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 110,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 115,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 120,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 125,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 130,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 135,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 140,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 145,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 150,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 155,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 160,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 165,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 170,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 175,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 180,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 185,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 190,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 195,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        }
+      ]
+    },
+    {
+      "seed": 2,
+      "odi_max": 0.680833332836628,
+      "odi_mean": 0.6538862174076954,
+      "odi_final": 0.680833332836628,
+      "n_converged": 5,
+      "n_total_eval": 40,
+      "elapsed": 2.0662777423858643,
+      "n_subindex_entries": 40,
+      "subindex_data": [
+        {
+          "step": 0,
+          "odi": 0.32276707915967046,
+          "zone": "structuring",
+          "subindices": {
+            "threshold_proximity": 0.01919383103666485,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6428571492433548,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.5,
+            "cross_mechanism_resonance": 0.38437499999999997
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 5,
+          "odi": 0.33874176497872166,
+          "zone": "structuring",
+          "subindices": {
+            "threshold_proximity": 0.020644667793724186,
+            "coupling_density": 0.0,
+            "stability_margin": 0.7058823555707932,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.5,
+            "cross_mechanism_resonance": 0.41371893526445774
+          },
+          "densification_rate": 0.015974685819051204,
+          "is_densifying": true
+        },
+        {
+          "step": 10,
+          "odi": 0.3786288194470706,
+          "zone": "structuring",
+          "subindices": {
+            "threshold_proximity": 0.019705359090728375,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6666666716337204,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9993622269961724,
+            "cross_mechanism_resonance": 0.39447654693490736
+          },
+          "densification_rate": 0.03988705446834895,
+          "is_densifying": true
+        },
+        {
+          "step": 15,
+          "odi": 0.6802829970155603,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9944966417893231,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.30165417756848967,
+          "is_densifying": true
+        },
+        {
+          "step": 20,
+          "odi": 0.6616676378718186,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.8083430503519058,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": -0.018615359143741683,
+          "is_densifying": false
+        },
+        {
+          "step": 25,
+          "odi": 0.6582468422286377,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.7741350939200974,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": -0.003420795643180874,
+          "is_densifying": false
+        },
+        {
+          "step": 30,
+          "odi": 0.6602948840742028,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.7946155123757477,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.002048041845565063,
+          "is_densifying": false
+        },
+        {
+          "step": 35,
+          "odi": 0.6684717210747759,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.8763838823814795,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.008176837000573145,
+          "is_densifying": false
+        },
+        {
+          "step": 40,
+          "odi": 0.6807690878928409,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9993575505621284,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.012297366818064925,
+          "is_densifying": true
+        },
+        {
+          "step": 45,
+          "odi": 0.6807662345445852,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9993290170795719,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": -2.8533482556714063e-06,
+          "is_densifying": false
+        },
+        {
+          "step": 50,
+          "odi": 0.6807401511825778,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9990681834594988,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": -2.6083362007378597e-05,
+          "is_densifying": false
+        },
+        {
+          "step": 55,
+          "odi": 0.6807623166643445,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9992898382771656,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 2.2165481766700523e-05,
+          "is_densifying": false
+        },
+        {
+          "step": 60,
+          "odi": 0.6808091775349829,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9997584469835495,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 4.686087063843214e-05,
+          "is_densifying": false
+        },
+        {
+          "step": 65,
+          "odi": 0.6808333323370207,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9999999950039269,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 2.4154802037767986e-05,
+          "is_densifying": false
+        },
+        {
+          "step": 70,
+          "odi": 0.6808333316845,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9999999884787197,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": -6.525207041363501e-10,
+          "is_densifying": false
+        },
+        {
+          "step": 75,
+          "odi": 0.6808333313938097,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9999999855718172,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": -2.9069024964911705e-10,
+          "is_densifying": false
+        },
+        {
+          "step": 80,
+          "odi": 0.6808333320736009,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9999999923697287,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 6.797911122902178e-10,
+          "is_densifying": false
+        },
+        {
+          "step": 85,
+          "odi": 0.6808333327432788,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9999999990665088,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 6.696779797366048e-10,
+          "is_densifying": false
+        },
+        {
+          "step": 90,
+          "odi": 0.680833332836628,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 9.334910622271764e-11,
+          "is_densifying": false
+        },
+        {
+          "step": 95,
+          "odi": 0.680833332836628,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 100,
+          "odi": 0.680833332836628,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 105,
+          "odi": 0.680833332836628,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 110,
+          "odi": 0.680833332836628,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 115,
+          "odi": 0.680833332836628,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 120,
+          "odi": 0.680833332836628,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 125,
+          "odi": 0.680833332836628,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 130,
+          "odi": 0.680833332836628,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 135,
+          "odi": 0.680833332836628,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 140,
+          "odi": 0.680833332836628,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 145,
+          "odi": 0.680833332836628,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 150,
+          "odi": 0.680833332836628,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 155,
+          "odi": 0.680833332836628,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 160,
+          "odi": 0.680833332836628,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 165,
+          "odi": 0.680833332836628,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 170,
+          "odi": 0.680833332836628,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 175,
+          "odi": 0.680833332836628,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 180,
+          "odi": 0.680833332836628,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 185,
+          "odi": 0.680833332836628,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 190,
+          "odi": 0.680833332836628,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 195,
+          "odi": 0.680833332836628,
+          "zone": "pre_subjective_deep",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.0,
+            "stability_margin": 0.6041666641831398,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 1.0,
+            "cross_mechanism_resonance": 0.6
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        }
+      ],
+      "convergence_data": [
+        {
+          "step": 0,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": false,
+          "n_coupled_pairs": 1,
+          "stability_score": 0.2
+        },
+        {
+          "step": 5,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 10,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 15,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 20,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 25,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 3,
+          "stability_score": 1.0
+        },
+        {
+          "step": 30,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 35,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 40,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 45,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 50,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 55,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 60,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 65,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 70,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 75,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 80,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 85,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 90,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 95,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 100,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 105,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 110,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 115,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 120,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 125,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 130,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 3,
+          "stability_score": 1.0
+        },
+        {
+          "step": 135,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 140,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 145,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 150,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 3,
+          "stability_score": 1.0
+        },
+        {
+          "step": 155,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 160,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 3,
+          "stability_score": 1.0
+        },
+        {
+          "step": 165,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 170,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 3,
+          "stability_score": 1.0
+        },
+        {
+          "step": 175,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 180,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 3,
+          "stability_score": 1.0
+        },
+        {
+          "step": 185,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 190,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 195,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        }
+      ]
+    }
+  ]
+}

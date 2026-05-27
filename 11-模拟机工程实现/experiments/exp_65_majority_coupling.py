@@ -276,15 +276,15 @@ def main():
     print(f"  Best config: {best['config']} (conv={best['avg_convergence_rate']*100:.1f}%)")
 
     if maj_conv > base_conv:
-        print(f"  ✅ 多数制有效: convergence {base_conv*100:.1f}% -> {maj_conv*100:.1f}%")
+        print(f"  [OK] 多数制有效: convergence {base_conv*100:.1f}% -> {maj_conv*100:.1f}%")
     else:
-        print(f"  ❌ 多数制无改善: {base_conv*100:.1f}% -> {maj_conv*100:.1f}%")
+        print(f"  [FAIL] 多数制无改善: {base_conv*100:.1f}% -> {maj_conv*100:.1f}%")
 
     if maj_low_conv > maj_conv:
-        print(f"  ✅ 多数制+低阈值进一步改善: {maj_conv*100:.1f}% -> {maj_low_conv*100:.1f}%")
+        print(f"  [OK] 多数制+低阈值进一步改善: {maj_conv*100:.1f}% -> {maj_low_conv*100:.1f}%")
 
     # 与 exp_63 历史对比
-    print(f"\n  📊 与 exp_63 历史对比:")
+    print(f"\n  [DATA] 与 exp_63 历史对比:")
     print(f"     exp_63 基线 (all, 0.30): 10.0% → {base_conv*100:.1f}% (当前)")
     print(f"     exp_63 低阈值 (all, 0.15): 21.2% → N/A (本次未测试)")
     print(f"     exp_65 多数制 (majority, 0.30): {maj_conv*100:.1f}%")

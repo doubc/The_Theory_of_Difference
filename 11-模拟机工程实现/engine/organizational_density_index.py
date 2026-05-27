@@ -371,6 +371,16 @@ class OrganizationalDensityIndex:
         geo_mean = np.exp(log_sum / len(ratios))
         return float(np.clip(geo_mean, 0.0, 1.0))
 
+    # 机制名称（与 PreSubjectivityConvergence.MECHANISMS 和 hierarchical_evolver 中的耦合矩阵一致）
+    _COUPLING_MECHANISMS = [
+        'interface_regulation',      # 3.1 界面调节
+        'self_sustaining',           # 3.2 自维持
+        'retention',                 # 3.3 保持
+        'replication',               # 3.4 复制
+        'selection',                 # 3.5 筛选
+        'functional_differentiation', # 3.6 功能分化
+    ]
+
     def _compute_coupling_density(self,
                                    coupling_matrix: Dict[str, Dict[str, float]]) -> float:
         """计算耦合密度
@@ -378,8 +388,7 @@ class OrganizationalDensityIndex:
         所有机制对耦合强度的均值（归一化到 [0, 1]）。
         使用算术平均（耦合是累积的，不是短板驱动的）。
         """
-        mechanisms = SixThresholdDetector.THRESHOLD_NAMES.keys()
-        keys = list(mechanisms)
+        keys = self._COUPLING_MECHANISMS
         strengths = []
 
         for i, ma in enumerate(keys):
@@ -470,7 +479,7 @@ class OrganizationalDensityIndex:
         balance = ratio_mean * (1.0 - ratio_var)
 
         # 耦合谱半径（简化：用耦合矩阵的Frobenius范数归一化）
-        mechanisms = list(SixThresholdDetector.THRESHOLD_NAMES.keys())
+        mechanisms = OrganizationalDensityIndex._COUPLING_MECHANISMS
         n = len(mechanisms)
         mat = np.zeros((n, n))
         for i, ma in enumerate(mechanisms):

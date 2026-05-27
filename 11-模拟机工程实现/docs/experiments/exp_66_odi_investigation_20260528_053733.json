@@ -1,0 +1,2936 @@
+{
+  "experiment": "exp_66_odi_investigation",
+  "timestamp": "20260528_053733",
+  "config": {
+    "N0": 48,
+    "steps_per_layer": 200,
+    "sample_interval": 5,
+    "p1_eval_interval": 1,
+    "n_seeds": 3,
+    "device": "cpu"
+  },
+  "runs": [
+    {
+      "seed": 0,
+      "odi_max": 0.8495261062932561,
+      "odi_mean": 0.74342243141373,
+      "odi_final": 0.752451972924632,
+      "n_converged": 0,
+      "n_total_eval": 40,
+      "elapsed": 1.8749473094940186,
+      "n_subindex_entries": 40,
+      "subindex_data": [
+        {
+          "step": 0,
+          "odi": 0.38197133131673106,
+          "zone": "structuring",
+          "subindices": {
+            "threshold_proximity": 0.01919383103666485,
+            "coupling_density": 0.19935403051967618,
+            "stability_margin": 0.6666666716337204,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.5,
+            "cross_mechanism_resonance": 0.5300904157505225
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 5,
+          "odi": 0.43971953247979684,
+          "zone": "structuring",
+          "subindices": {
+            "threshold_proximity": 0.02154434690031884,
+            "coupling_density": 0.44897882966954705,
+            "stability_margin": 0.6428571492433548,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.5,
+            "cross_mechanism_resonance": 0.6488903262712084
+          },
+          "densification_rate": 0.05774820116306578,
+          "is_densifying": true
+        },
+        {
+          "step": 10,
+          "odi": 0.8495261062932561,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.7105584047268825,
+            "stability_margin": 0.59375,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9916975206996792,
+            "cross_mechanism_resonance": 0.8949467327791167
+          },
+          "densification_rate": 0.40980657381345925,
+          "is_densifying": true
+        },
+        {
+          "step": 15,
+          "odi": 0.7177349199172383,
+          "zone": "dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.28750787753063634,
+            "stability_margin": 0.59375,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.648428090684701,
+            "cross_mechanism_resonance": 0.7664053534264095
+          },
+          "densification_rate": -0.13179118637601783,
+          "is_densifying": false
+        },
+        {
+          "step": 20,
+          "odi": 0.7217378735685424,
+          "zone": "dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.28750787753063634,
+            "stability_margin": 0.59375,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.6884576271977411,
+            "cross_mechanism_resonance": 0.7664053534264095
+          },
+          "densification_rate": 0.0040029536513040975,
+          "is_densifying": false
+        },
+        {
+          "step": 25,
+          "odi": 0.8267925871614145,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.7295082160313797,
+            "stability_margin": 0.59375,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.7236542429377699,
+            "cross_mechanism_resonance": 0.8977551966136157
+          },
+          "densification_rate": 0.1050547135928721,
+          "is_densifying": true
+        },
+        {
+          "step": 30,
+          "odi": 0.7771161883935552,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.48159879300724956,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.8083968318141033,
+            "cross_mechanism_resonance": 0.8329007944732295
+          },
+          "densification_rate": -0.04967639876785923,
+          "is_densifying": false
+        },
+        {
+          "step": 35,
+          "odi": 0.7498156371332331,
+          "zone": "dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.29395871721196504,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9718185248342449,
+            "cross_mechanism_resonance": 0.7717537404404347
+          },
+          "densification_rate": -0.02730055126032216,
+          "is_densifying": false
+        },
+        {
+          "step": 40,
+          "odi": 0.8097562218760493,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.542666900646298,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9839324692173922,
+            "cross_mechanism_resonance": 0.8616292766167841
+          },
+          "densification_rate": 0.05994058474281627,
+          "is_densifying": true
+        },
+        {
+          "step": 45,
+          "odi": 0.760056760144103,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.32828607386300734,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9854170406213286,
+            "cross_mechanism_resonance": 0.7919117414599649
+          },
+          "densification_rate": -0.04969946173194639,
+          "is_densifying": false
+        },
+        {
+          "step": 50,
+          "odi": 0.7526404383232085,
+          "zone": "dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.2971014174061848,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9914739108063892,
+            "cross_mechanism_resonance": 0.7740609659796054
+          },
+          "densification_rate": -0.007416321820894467,
+          "is_densifying": false
+        },
+        {
+          "step": 55,
+          "odi": 0.7530064842868008,
+          "zone": "dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.29710141740618473,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9951343704423131,
+            "cross_mechanism_resonance": 0.7740609659796054
+          },
+          "densification_rate": 0.0003660459635923541,
+          "is_densifying": false
+        },
+        {
+          "step": 60,
+          "odi": 0.7610054175897889,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.3282860738630073,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9949036150781891,
+            "cross_mechanism_resonance": 0.791911741459965
+          },
+          "densification_rate": 0.007998933302988065,
+          "is_densifying": false
+        },
+        {
+          "step": 65,
+          "odi": 0.8106065930336819,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.5415044850049712,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9953830427330795,
+            "cross_mechanism_resonance": 0.8610072459600759
+          },
+          "densification_rate": 0.049601175443892975,
+          "is_densifying": true
+        },
+        {
+          "step": 70,
+          "odi": 0.7539703121281438,
+          "zone": "dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.301335729109293,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9952381307003262,
+            "cross_mechanism_resonance": 0.7751268607288054
+          },
+          "densification_rate": -0.05663628090553807,
+          "is_densifying": false
+        },
+        {
+          "step": 75,
+          "odi": 0.7619834454420993,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.33199751822568674,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9949997142280803,
+            "cross_mechanism_resonance": 0.7941730321078175
+          },
+          "densification_rate": 0.008013133313955478,
+          "is_densifying": false
+        },
+        {
+          "step": 80,
+          "odi": 0.7620201472960699,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.33199751822568674,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.995366732767787,
+            "cross_mechanism_resonance": 0.7941730321078175
+          },
+          "densification_rate": 3.6701853970644294e-05,
+          "is_densifying": false
+        },
+        {
+          "step": 85,
+          "odi": 0.7891356114104614,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.45349107791147086,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9957796155458503,
+            "cross_mechanism_resonance": 0.821927671102102
+          },
+          "densification_rate": 0.027115464114391474,
+          "is_densifying": true
+        },
+        {
+          "step": 90,
+          "odi": 0.7472129119352988,
+          "zone": "dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.27408356126408046,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9955174277154594,
+            "cross_mechanism_resonance": 0.7617778974756473
+          },
+          "densification_rate": -0.041922699475162584,
+          "is_densifying": false
+        },
+        {
+          "step": 95,
+          "odi": 0.7542435574096645,
+          "zone": "dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.301335729109293,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.997970583515534,
+            "cross_mechanism_resonance": 0.7751268607288054
+          },
+          "densification_rate": 0.007030645474365715,
+          "is_densifying": false
+        },
+        {
+          "step": 100,
+          "odi": 0.8111609915321792,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.5426669006462981,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9979801657786916,
+            "cross_mechanism_resonance": 0.8616292766167841
+          },
+          "densification_rate": 0.05691743412251471,
+          "is_densifying": true
+        },
+        {
+          "step": 105,
+          "odi": 0.7538773939422567,
+          "zone": "dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.30133572910929307,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9943089488414559,
+            "cross_mechanism_resonance": 0.7751268607288054
+          },
+          "densification_rate": -0.05728359758992252,
+          "is_densifying": false
+        },
+        {
+          "step": 110,
+          "odi": 0.7470467616716832,
+          "zone": "dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.27408356126408046,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9938559250793036,
+            "cross_mechanism_resonance": 0.7617778974756473
+          },
+          "densification_rate": -0.006830632270573567,
+          "is_densifying": false
+        },
+        {
+          "step": 115,
+          "odi": 0.7470664067360582,
+          "zone": "dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.27408356126408046,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9940523757230529,
+            "cross_mechanism_resonance": 0.7617778974756473
+          },
+          "densification_rate": 1.9645064375017895e-05,
+          "is_densifying": false
+        },
+        {
+          "step": 120,
+          "odi": 0.7538508305582554,
+          "zone": "dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.30133572910929307,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9940433150014423,
+            "cross_mechanism_resonance": 0.7751268607288054
+          },
+          "densification_rate": 0.006784423822197239,
+          "is_densifying": false
+        },
+        {
+          "step": 125,
+          "odi": 0.7609180458206475,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.32828607386300723,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9940298973867748,
+            "cross_mechanism_resonance": 0.791911741459965
+          },
+          "densification_rate": 0.007067215262392068,
+          "is_densifying": false
+        },
+        {
+          "step": 130,
+          "odi": 0.7544197358930772,
+          "zone": "dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.301335729109293,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9997323683496605,
+            "cross_mechanism_resonance": 0.7751268607288054
+          },
+          "densification_rate": -0.006498309927570278,
+          "is_densifying": false
+        },
+        {
+          "step": 135,
+          "odi": 0.8162923795140802,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.5634195238253518,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9997290231246543,
+            "cross_mechanism_resonance": 0.869689052731724
+          },
+          "densification_rate": 0.061872643621002976,
+          "is_densifying": true
+        },
+        {
+          "step": 140,
+          "odi": 0.7538097275683515,
+          "zone": "dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.301335729109293,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9936322851024039,
+            "cross_mechanism_resonance": 0.7751268607288054
+          },
+          "densification_rate": -0.06248265194572866,
+          "is_densifying": false
+        },
+        {
+          "step": 145,
+          "odi": 0.7212385822176853,
+          "zone": "dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.16677298334980742,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9940811979750068,
+            "cross_mechanism_resonance": 0.7180919858685115
+          },
+          "densification_rate": -0.032571145350666186,
+          "is_densifying": false
+        },
+        {
+          "step": 150,
+          "odi": 0.716202970785365,
+          "zone": "dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.15086890035500097,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9905793336858879,
+            "cross_mechanism_resonance": 0.7030459018240394
+          },
+          "densification_rate": -0.005035611432320342,
+          "is_densifying": false
+        },
+        {
+          "step": 155,
+          "odi": 0.7260772354578873,
+          "zone": "dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.18577631057147345,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9873416762803274,
+            "cross_mechanism_resonance": 0.7352113855218783
+          },
+          "densification_rate": 0.009874264672522282,
+          "is_densifying": false
+        },
+        {
+          "step": 160,
+          "odi": 0.7530765108775267,
+          "zone": "dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.30133572910929307,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.986300118194155,
+            "cross_mechanism_resonance": 0.7751268607288054
+          },
+          "densification_rate": 0.026999275419639424,
+          "is_densifying": true
+        },
+        {
+          "step": 165,
+          "odi": 0.7541871032729229,
+          "zone": "dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.30133572910929307,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9974060421481179,
+            "cross_mechanism_resonance": 0.7751268607288054
+          },
+          "densification_rate": 0.0011105923953962371,
+          "is_densifying": false
+        },
+        {
+          "step": 170,
+          "odi": 0.7523713958514247,
+          "zone": "dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.2939587172119651,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9973761120161607,
+            "cross_mechanism_resonance": 0.7717537404404347
+          },
+          "densification_rate": -0.0018157074214982805,
+          "is_densifying": false
+        },
+        {
+          "step": 175,
+          "odi": 0.7215738464767494,
+          "zone": "dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.16677298334980742,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9974338405656468,
+            "cross_mechanism_resonance": 0.7180919858685115
+          },
+          "densification_rate": -0.03079754937467527,
+          "is_densifying": false
+        },
+        {
+          "step": 180,
+          "odi": 0.7613056617084396,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.32828607386300723,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9979060562646956,
+            "cross_mechanism_resonance": 0.791911741459965
+          },
+          "densification_rate": 0.039731815231690226,
+          "is_densifying": true
+        },
+        {
+          "step": 185,
+          "odi": 0.7474698967281725,
+          "zone": "dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.27408356126408046,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9980872756441974,
+            "cross_mechanism_resonance": 0.7617778974756473
+          },
+          "densification_rate": -0.013835764980267062,
+          "is_densifying": false
+        },
+        {
+          "step": 190,
+          "odi": 0.752447729872669,
+          "zone": "dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.29395871721196504,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.998139452228604,
+            "cross_mechanism_resonance": 0.7717537404404347
+          },
+          "densification_rate": 0.004977833144496402,
+          "is_densifying": false
+        },
+        {
+          "step": 195,
+          "odi": 0.752451972924632,
+          "zone": "dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.2939587172119651,
+            "stability_margin": 0.5833333358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9981818827482339,
+            "cross_mechanism_resonance": 0.7717537404404347
+          },
+          "densification_rate": 4.243051963004341e-06,
+          "is_densifying": false
+        }
+      ],
+      "convergence_data": [
+        {
+          "step": 0,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": false,
+          "n_coupled_pairs": 3,
+          "stability_score": 0.4
+        },
+        {
+          "step": 5,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 0.8
+        },
+        {
+          "step": 10,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 15,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 20,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 25,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 30,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 35,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 40,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 45,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 50,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 55,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 60,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 65,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 70,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 75,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 80,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 85,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 90,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 95,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 100,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 105,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 110,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 115,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 120,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 125,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 130,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 135,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 140,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 145,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 3,
+          "stability_score": 1.0
+        },
+        {
+          "step": 150,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 3,
+          "stability_score": 1.0
+        },
+        {
+          "step": 155,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 3,
+          "stability_score": 1.0
+        },
+        {
+          "step": 160,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 165,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 170,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 175,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 3,
+          "stability_score": 1.0
+        },
+        {
+          "step": 180,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 185,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 190,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 195,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        }
+      ]
+    },
+    {
+      "seed": 1,
+      "odi_max": 0.885822935367965,
+      "odi_mean": 0.8242214629595035,
+      "odi_final": 0.8615504854479102,
+      "n_converged": 26,
+      "n_total_eval": 40,
+      "elapsed": 1.8596227169036865,
+      "n_subindex_entries": 40,
+      "subindex_data": [
+        {
+          "step": 0,
+          "odi": 0.41760136189534225,
+          "zone": "structuring",
+          "subindices": {
+            "threshold_proximity": 0.01919383103666485,
+            "coupling_density": 0.3480609375034695,
+            "stability_margin": 0.6666666716337204,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.5,
+            "cross_mechanism_resonance": 0.5889769075690481
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 5,
+          "odi": 0.4065890111518283,
+          "zone": "structuring",
+          "subindices": {
+            "threshold_proximity": 0.02154434690031884,
+            "coupling_density": 0.30004018915836606,
+            "stability_margin": 0.647058829665184,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.5,
+            "cross_mechanism_resonance": 0.6070590331702262
+          },
+          "densification_rate": -0.011012350743513977,
+          "is_densifying": false
+        },
+        {
+          "step": 10,
+          "odi": 0.7891420446963928,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.39461409750802584,
+            "stability_margin": 0.6354166716337204,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9996968662820671,
+            "cross_mechanism_resonance": 0.8316620423983686
+          },
+          "densification_rate": 0.38255303354456455,
+          "is_densifying": true
+        },
+        {
+          "step": 15,
+          "odi": 0.788899174033448,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.5283583892999647,
+            "stability_margin": 0.625,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.7289698831671371,
+            "cross_mechanism_resonance": 0.8533050785674134
+          },
+          "densification_rate": -0.0002428706629448163,
+          "is_densifying": false
+        },
+        {
+          "step": 20,
+          "odi": 0.8179648458086374,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.6582666541044604,
+            "stability_margin": 0.6458333283662796,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.7009395710900701,
+            "cross_mechanism_resonance": 0.8705089220548234
+          },
+          "densification_rate": 0.029065671775189372,
+          "is_densifying": true
+        },
+        {
+          "step": 25,
+          "odi": 0.7924749610581279,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.5217986619903988,
+            "stability_margin": 0.6666666716337204,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.6977515890401308,
+            "cross_mechanism_resonance": 0.8500673542929098
+          },
+          "densification_rate": -0.025489884750509506,
+          "is_densifying": false
+        },
+        {
+          "step": 30,
+          "odi": 0.860439604670167,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.7770360224008417,
+            "stability_margin": 0.6770833283662796,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.7825495208879467,
+            "cross_mechanism_resonance": 0.9136078242794812
+          },
+          "densification_rate": 0.06796464361203913,
+          "is_densifying": true
+        },
+        {
+          "step": 35,
+          "odi": 0.8586936339127512,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.6687527791035964,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9924391568199041,
+            "cross_mechanism_resonance": 0.8819916241004155
+          },
+          "densification_rate": -0.0017459707574157823,
+          "is_densifying": false
+        },
+        {
+          "step": 40,
+          "odi": 0.8715065311748964,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.7250061689206925,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9904591151272655,
+            "cross_mechanism_resonance": 0.8995938587803147
+          },
+          "densification_rate": 0.012812897262145184,
+          "is_densifying": true
+        },
+        {
+          "step": 45,
+          "odi": 0.8631383219300464,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.6909899959771979,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9910327772366397,
+            "cross_mechanism_resonance": 0.883370450109429
+          },
+          "densification_rate": -0.008368209244850044,
+          "is_densifying": false
+        },
+        {
+          "step": 50,
+          "odi": 0.8654092713557311,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.7000637860685001,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9917818884660856,
+            "cross_mechanism_resonance": 0.8871832529542261
+          },
+          "densification_rate": 0.002270949425684732,
+          "is_densifying": false
+        },
+        {
+          "step": 55,
+          "odi": 0.8193276007422315,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.48845874026842395,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9998004630994919,
+            "cross_mechanism_resonance": 0.8415580637859765
+          },
+          "densification_rate": -0.04608167061349955,
+          "is_densifying": false
+        },
+        {
+          "step": 60,
+          "odi": 0.8658854168693056,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.7000637860685001,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9965433436018314,
+            "cross_mechanism_resonance": 0.8871832529542261
+          },
+          "densification_rate": 0.0465578161270741,
+          "is_densifying": true
+        },
+        {
+          "step": 65,
+          "odi": 0.8182438602341078,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.48517470146044434,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9963726342172717,
+            "cross_mechanism_resonance": 0.8407165652029176
+          },
+          "densification_rate": -0.04764155663519787,
+          "is_densifying": false
+        },
+        {
+          "step": 70,
+          "odi": 0.8579474440223672,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.6675026223164428,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9949191746939738,
+            "cross_mechanism_resonance": 0.8745500208968133
+          },
+          "densification_rate": 0.039703583788259444,
+          "is_densifying": true
+        },
+        {
+          "step": 75,
+          "odi": 0.8077086950322845,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.4449419791130413,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9952220895492476,
+            "cross_mechanism_resonance": 0.8169809025475154
+          },
+          "densification_rate": -0.05023874899008274,
+          "is_densifying": false
+        },
+        {
+          "step": 80,
+          "odi": 0.885822935367965,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.7857168980573758,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9945254990095723,
+            "cross_mechanism_resonance": 0.9172700585553257
+          },
+          "densification_rate": 0.07811424033568048,
+          "is_densifying": true
+        },
+        {
+          "step": 85,
+          "odi": 0.8575884328806106,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.6675026223164428,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9913290632764068,
+            "cross_mechanism_resonance": 0.8745500208968133
+          },
+          "densification_rate": -0.028234502487354374,
+          "is_densifying": false
+        },
+        {
+          "step": 90,
+          "odi": 0.8467517953685951,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.6205828528757912,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9918373350400235,
+            "cross_mechanism_resonance": 0.859514912894346
+          },
+          "densification_rate": -0.010836637512015468,
+          "is_densifying": false
+        },
+        {
+          "step": 95,
+          "odi": 0.8718233863939052,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.7250061689206925,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9936276673173541,
+            "cross_mechanism_resonance": 0.8995938587803147
+          },
+          "densification_rate": 0.02507159102531009,
+          "is_densifying": true
+        },
+        {
+          "step": 100,
+          "odi": 0.8086956022660224,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.44842654601092613,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9929476811796535,
+            "cross_mechanism_resonance": 0.8221552494587195
+          },
+          "densification_rate": -0.06312778412788278,
+          "is_densifying": false
+        },
+        {
+          "step": 105,
+          "odi": 0.8737419772743709,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.7348457647983282,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9931273632807772,
+            "cross_mechanism_resonance": 0.8996008798662756
+          },
+          "densification_rate": 0.06504637500834842,
+          "is_densifying": true
+        },
+        {
+          "step": 110,
+          "odi": 0.8568225272264846,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.6627670751826996,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9944169753552173,
+            "cross_mechanism_resonance": 0.873274146544228
+          },
+          "densification_rate": -0.01691945004788631,
+          "is_densifying": false
+        },
+        {
+          "step": 115,
+          "odi": 0.8634784361785908,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.690989995977198,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9944339197220834,
+            "cross_mechanism_resonance": 0.883370450109429
+          },
+          "densification_rate": 0.006655908952106215,
+          "is_densifying": false
+        },
+        {
+          "step": 120,
+          "odi": 0.818778469411694,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.48845874026842395,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.994309149794116,
+            "cross_mechanism_resonance": 0.8415580637859765
+          },
+          "densification_rate": -0.044699966766896804,
+          "is_densifying": false
+        },
+        {
+          "step": 125,
+          "odi": 0.8339248443588192,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.5530120266679895,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9934009147679227,
+            "cross_mechanism_resonance": 0.8648234754842912
+          },
+          "densification_rate": 0.01514637494712523,
+          "is_densifying": true
+        },
+        {
+          "step": 130,
+          "odi": 0.8616142766125905,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.6830636831132763,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9959622261516986,
+            "cross_mechanism_resonance": 0.8790531737476537
+          },
+          "densification_rate": 0.027689432253771296,
+          "is_densifying": true
+        },
+        {
+          "step": 135,
+          "odi": 0.8617087366992642,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.6830636831132763,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.996906827018436,
+            "cross_mechanism_resonance": 0.8790531737476537
+          },
+          "densification_rate": 9.446008667368666e-05,
+          "is_densifying": false
+        },
+        {
+          "step": 140,
+          "odi": 0.872128209615669,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.7250061689206925,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9966758995349916,
+            "cross_mechanism_resonance": 0.8995938587803147
+          },
+          "densification_rate": 0.01041947291640477,
+          "is_densifying": true
+        },
+        {
+          "step": 145,
+          "odi": 0.8636370070722944,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.690989995977198,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9960196286591197,
+            "cross_mechanism_resonance": 0.883370450109429
+          },
+          "densification_rate": -0.008491202543374543,
+          "is_densifying": false
+        },
+        {
+          "step": 150,
+          "odi": 0.8191804946777521,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.48845874026842395,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9983294024546976,
+            "cross_mechanism_resonance": 0.8415580637859765
+          },
+          "densification_rate": -0.04445651239454229,
+          "is_densifying": false
+        },
+        {
+          "step": 155,
+          "odi": 0.8163924423966435,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.47889421705363944,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9965307731052586,
+            "cross_mechanism_resonance": 0.8346052167538986
+          },
+          "densification_rate": -0.002788052281108566,
+          "is_densifying": false
+        },
+        {
+          "step": 160,
+          "odi": 0.88106106720506,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.7656667534698409,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9943469422268509,
+            "cross_mechanism_resonance": 0.9099302228840662
+          },
+          "densification_rate": 0.0646686248084164,
+          "is_densifying": true
+        },
+        {
+          "step": 165,
+          "odi": 0.8612770978923192,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.6830636831132763,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9925904389489859,
+            "cross_mechanism_resonance": 0.8790531737476537
+          },
+          "densification_rate": -0.019783969312740735,
+          "is_densifying": false
+        },
+        {
+          "step": 170,
+          "odi": 0.8613516933446077,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.6830636831132763,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9933363934718707,
+            "cross_mechanism_resonance": 0.8790531737476537
+          },
+          "densification_rate": 7.459545228849507e-05,
+          "is_densifying": false
+        },
+        {
+          "step": 175,
+          "odi": 0.8633817721473919,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.690989995977198,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9934672794100943,
+            "cross_mechanism_resonance": 0.883370450109429
+          },
+          "densification_rate": 0.002030078802784163,
+          "is_densifying": false
+        },
+        {
+          "step": 180,
+          "odi": 0.8579955089516231,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.6675026223164429,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9953998239865324,
+            "cross_mechanism_resonance": 0.8745500208968133
+          },
+          "densification_rate": -0.005386263195768737,
+          "is_densifying": false
+        },
+        {
+          "step": 185,
+          "odi": 0.8619507149451426,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.6830636831132763,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9993266094772201,
+            "cross_mechanism_resonance": 0.8790531737476537
+          },
+          "densification_rate": 0.003955205993519506,
+          "is_densifying": false
+        },
+        {
+          "step": 190,
+          "odi": 0.8072288260571484,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.4410174207937879,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9999687583940309,
+            "cross_mechanism_resonance": 0.8152846605898783
+          },
+          "densification_rate": -0.05472188888799423,
+          "is_densifying": false
+        },
+        {
+          "step": 195,
+          "odi": 0.8615504854479102,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.6830636831132763,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9953243145048966,
+            "cross_mechanism_resonance": 0.8790531737476537
+          },
+          "densification_rate": 0.054321659390761834,
+          "is_densifying": true
+        }
+      ],
+      "convergence_data": [
+        {
+          "step": 0,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": false,
+          "n_coupled_pairs": 6,
+          "stability_score": 0.0
+        },
+        {
+          "step": 5,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 10,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 15,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 20,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 25,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 30,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 35,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 40,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 45,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 50,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 55,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 60,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 65,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 70,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 75,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 80,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 85,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 90,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 95,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 100,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 105,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 110,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 115,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 120,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 125,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 130,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 135,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 140,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 145,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 150,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 155,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 160,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 165,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 170,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 175,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 180,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 185,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 190,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 195,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        }
+      ]
+    },
+    {
+      "seed": 2,
+      "odi_max": 0.9091918279608894,
+      "odi_mean": 0.823727688407755,
+      "odi_final": 0.8527474098111014,
+      "n_converged": 24,
+      "n_total_eval": 40,
+      "elapsed": 1.8434369564056396,
+      "n_subindex_entries": 40,
+      "subindex_data": [
+        {
+          "step": 0,
+          "odi": 0.3512637478754053,
+          "zone": "structuring",
+          "subindices": {
+            "threshold_proximity": 0.01919383103666485,
+            "coupling_density": 0.10003245626978605,
+            "stability_margin": 0.6428571492433548,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.5,
+            "cross_mechanism_resonance": 0.4692767746177775
+          },
+          "densification_rate": 0.0,
+          "is_densifying": false
+        },
+        {
+          "step": 5,
+          "odi": 0.5351641566493486,
+          "zone": "pre_subjective_entry",
+          "subindices": {
+            "threshold_proximity": 0.020644667793724186,
+            "coupling_density": 0.8173698535092891,
+            "stability_margin": 0.7058823555707932,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.5,
+            "cross_mechanism_resonance": 0.743203144952149
+          },
+          "densification_rate": 0.18390040877394326,
+          "is_densifying": true
+        },
+        {
+          "step": 10,
+          "odi": 0.502604244817833,
+          "zone": "pre_subjective_entry",
+          "subindices": {
+            "threshold_proximity": 0.01995020983138441,
+            "coupling_density": 0.526788836339941,
+            "stability_margin": 0.6702127605676651,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9189271774273846,
+            "cross_mechanism_resonance": 0.6532614474415789
+          },
+          "densification_rate": -0.03255991183151563,
+          "is_densifying": false
+        },
+        {
+          "step": 15,
+          "odi": 0.7469655115072107,
+          "zone": "dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.28758286048424264,
+            "stability_margin": 0.59375,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9378138179319914,
+            "cross_mechanism_resonance": 0.7691755761716297
+          },
+          "densification_rate": 0.24436126668937774,
+          "is_densifying": true
+        },
+        {
+          "step": 20,
+          "odi": 0.7128879726058739,
+          "zone": "dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.17752301181602234,
+            "stability_margin": 0.6145833358168602,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.8192756038600099,
+            "cross_mechanism_resonance": 0.7253914269329631
+          },
+          "densification_rate": -0.0340775389013368,
+          "is_densifying": false
+        },
+        {
+          "step": 25,
+          "odi": 0.8519348159220922,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.7447175372166456,
+            "stability_margin": 0.65625,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.8100416792171523,
+            "cross_mechanism_resonance": 0.9073714055704787
+          },
+          "densification_rate": 0.1390468433162183,
+          "is_densifying": true
+        },
+        {
+          "step": 30,
+          "odi": 0.7898488685717086,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.4530814695764704,
+            "stability_margin": 0.6666666716337204,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.8401870786982343,
+            "cross_mechanism_resonance": 0.8188053245984692
+          },
+          "densification_rate": -0.06208594735038364,
+          "is_densifying": false
+        },
+        {
+          "step": 35,
+          "odi": 0.8082816171890114,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.4992835872252234,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.868800814256999,
+            "cross_mechanism_resonance": 0.8404481831826683
+          },
+          "densification_rate": 0.01843274861730282,
+          "is_densifying": true
+        },
+        {
+          "step": 40,
+          "odi": 0.859262683139481,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.6800531665930808,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9769750290908575,
+            "cross_mechanism_resonance": 0.8805454691177906
+          },
+          "densification_rate": 0.050981065950469584,
+          "is_densifying": true
+        },
+        {
+          "step": 45,
+          "odi": 0.8054504686781438,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.4449419791130413,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9726398260078415,
+            "cross_mechanism_resonance": 0.8169809025475154
+          },
+          "densification_rate": -0.053812214461337105,
+          "is_densifying": false
+        },
+        {
+          "step": 50,
+          "odi": 0.8074341682018391,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.44494197911304123,
+            "stability_margin": 0.6875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.992476821244794,
+            "cross_mechanism_resonance": 0.8169809025475154
+          },
+          "densification_rate": 0.0019836995236952593,
+          "is_densifying": false
+        },
+        {
+          "step": 55,
+          "odi": 0.8519970753416669,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.6148501543435501,
+            "stability_margin": 0.71875,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9944536844488513,
+            "cross_mechanism_resonance": 0.8583167602807175
+          },
+          "densification_rate": 0.0445629071398278,
+          "is_densifying": true
+        },
+        {
+          "step": 60,
+          "odi": 0.87183416338118,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.6901557828672067,
+            "stability_margin": 0.7291666716337204,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9942923680850222,
+            "cross_mechanism_resonance": 0.8854043567249239
+          },
+          "densification_rate": 0.019837088039513118,
+          "is_densifying": true
+        },
+        {
+          "step": 65,
+          "odi": 0.8315711265336008,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.5097517838620638,
+            "stability_margin": 0.7291666716337204,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9924697676329589,
+            "cross_mechanism_resonance": 0.8454045867114814
+          },
+          "densification_rate": -0.04026303684757926,
+          "is_densifying": false
+        },
+        {
+          "step": 70,
+          "odi": 0.8828233842876835,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.7382393669514432,
+            "stability_margin": 0.7291666716337204,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9934585880946782,
+            "cross_mechanism_resonance": 0.89996317761183
+          },
+          "densification_rate": 0.05125225775408271,
+          "is_densifying": true
+        },
+        {
+          "step": 75,
+          "odi": 0.8404611377871612,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.5362878141059013,
+            "stability_margin": 0.7395833283662796,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9926157987576891,
+            "cross_mechanism_resonance": 0.8602532941695618
+          },
+          "densification_rate": -0.04236224650052223,
+          "is_densifying": false
+        },
+        {
+          "step": 80,
+          "odi": 0.8923703961070415,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.7682327719801586,
+            "stability_margin": 0.7395833283662796,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9963584080868515,
+            "cross_mechanism_resonance": 0.9117133522906874
+          },
+          "densification_rate": 0.05190925831988025,
+          "is_densifying": true
+        },
+        {
+          "step": 85,
+          "odi": 0.8433105580351973,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.5482395343317565,
+            "stability_margin": 0.7395833283662796,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9943637306748337,
+            "cross_mechanism_resonance": 0.8630961242810669
+          },
+          "densification_rate": -0.04905983807184422,
+          "is_densifying": false
+        },
+        {
+          "step": 90,
+          "odi": 0.892132506182429,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.7682327719801585,
+            "stability_margin": 0.7395833283662796,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9939795088407266,
+            "cross_mechanism_resonance": 0.9117133522906874
+          },
+          "densification_rate": 0.04882194814723173,
+          "is_densifying": true
+        },
+        {
+          "step": 95,
+          "odi": 0.8664774190364662,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.659505112945777,
+            "stability_margin": 0.7395833283662796,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9945362782861038,
+            "cross_mechanism_resonance": 0.8720610294544466
+          },
+          "densification_rate": -0.025655087145962763,
+          "is_densifying": false
+        },
+        {
+          "step": 100,
+          "odi": 0.8665168681165738,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.659505112945777,
+            "stability_margin": 0.7395833283662796,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9949307690871794,
+            "cross_mechanism_resonance": 0.8720610294544466
+          },
+          "densification_rate": 3.9449080107556433e-05,
+          "is_densifying": false
+        },
+        {
+          "step": 105,
+          "odi": 0.864525126584012,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.6500867688694716,
+            "stability_margin": 0.7395833283662796,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9965982230635231,
+            "cross_mechanism_resonance": 0.8693128483050951
+          },
+          "densification_rate": -0.001991741532561764,
+          "is_densifying": false
+        },
+        {
+          "step": 110,
+          "odi": 0.8746504744498429,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.6922351357033294,
+            "stability_margin": 0.7395833283662796,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9976056036826894,
+            "cross_mechanism_resonance": 0.8852622126765217
+          },
+          "densification_rate": 0.010125347865830858,
+          "is_densifying": true
+        },
+        {
+          "step": 115,
+          "odi": 0.8747849535898987,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.6922351357033293,
+            "stability_margin": 0.7395833283662796,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9989503950832482,
+            "cross_mechanism_resonance": 0.8852622126765217
+          },
+          "densification_rate": 0.00013447914005582096,
+          "is_densifying": false
+        },
+        {
+          "step": 120,
+          "odi": 0.8648458695426433,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.6500867688694715,
+            "stability_margin": 0.7395833283662796,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9998056526498368,
+            "cross_mechanism_resonance": 0.8693128483050951
+          },
+          "densification_rate": -0.009939084047255409,
+          "is_densifying": false
+        },
+        {
+          "step": 125,
+          "odi": 0.843852423359523,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.5482395343317564,
+            "stability_margin": 0.7395833283662796,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9997823839180915,
+            "cross_mechanism_resonance": 0.8630961242810669
+          },
+          "densification_rate": -0.020993446183120268,
+          "is_densifying": false
+        },
+        {
+          "step": 130,
+          "odi": 0.841072588579023,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.5362878141059013,
+            "stability_margin": 0.7395833283662796,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9987303066763061,
+            "cross_mechanism_resonance": 0.8602532941695618
+          },
+          "densification_rate": -0.0027798347805000345,
+          "is_densifying": false
+        },
+        {
+          "step": 135,
+          "odi": 0.8925196707362256,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.7682327719801586,
+            "stability_margin": 0.7395833283662796,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9978511543786922,
+            "cross_mechanism_resonance": 0.9117133522906874
+          },
+          "densification_rate": 0.05144708215720262,
+          "is_densifying": true
+        },
+        {
+          "step": 140,
+          "odi": 0.86665242591197,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.659505112945777,
+            "stability_margin": 0.7395833283662796,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.996286347041141,
+            "cross_mechanism_resonance": 0.8720610294544466
+          },
+          "densification_rate": -0.02586724482425562,
+          "is_densifying": false
+        },
+        {
+          "step": 145,
+          "odi": 0.8666787355040888,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.659505112945777,
+            "stability_margin": 0.7395833283662796,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9965494429623285,
+            "cross_mechanism_resonance": 0.8720610294544466
+          },
+          "densification_rate": 2.6309592118800573e-05,
+          "is_densifying": false
+        },
+        {
+          "step": 150,
+          "odi": 0.8923867302889946,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.7682327719801585,
+            "stability_margin": 0.7395833283662796,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9965217499063825,
+            "cross_mechanism_resonance": 0.9117133522906874
+          },
+          "densification_rate": 0.02570799478490582,
+          "is_densifying": true
+        },
+        {
+          "step": 155,
+          "odi": 0.8435048690900826,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.5482395343317565,
+            "stability_margin": 0.7395833283662796,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9963068412236875,
+            "cross_mechanism_resonance": 0.8630961242810669
+          },
+          "densification_rate": -0.048881861198912024,
+          "is_densifying": false
+        },
+        {
+          "step": 160,
+          "odi": 0.8666833812536834,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.659505112945777,
+            "stability_margin": 0.7395833283662796,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9965959004582742,
+            "cross_mechanism_resonance": 0.8720610294544466
+          },
+          "densification_rate": 0.023178512163600784,
+          "is_densifying": true
+        },
+        {
+          "step": 165,
+          "odi": 0.8924955080128097,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.7682327719801585,
+            "stability_margin": 0.7395833283662796,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9976095271445341,
+            "cross_mechanism_resonance": 0.9117133522906874
+          },
+          "densification_rate": 0.025812126759126364,
+          "is_densifying": true
+        },
+        {
+          "step": 170,
+          "odi": 0.8408594122340041,
+          "zone": "dense_core",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.5362878141059013,
+            "stability_margin": 0.7395833283662796,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9965985432261169,
+            "cross_mechanism_resonance": 0.8602532941695618
+          },
+          "densification_rate": -0.05163609577880568,
+          "is_densifying": false
+        },
+        {
+          "step": 175,
+          "odi": 0.8665191118525222,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.659505112945777,
+            "stability_margin": 0.7395833283662796,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.994953206446663,
+            "cross_mechanism_resonance": 0.8720610294544466
+          },
+          "densification_rate": 0.025659699618518106,
+          "is_densifying": true
+        },
+        {
+          "step": 180,
+          "odi": 0.8923829098275922,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.7682327719801586,
+            "stability_margin": 0.7395833283662796,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9964835452923584,
+            "cross_mechanism_resonance": 0.9117133522906874
+          },
+          "densification_rate": 0.02586379797506999,
+          "is_densifying": true
+        },
+        {
+          "step": 185,
+          "odi": 0.9091918279608894,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.8384498060385763,
+            "stability_margin": 0.7395833283662796,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9962802413964336,
+            "cross_mechanism_resonance": 0.9395717694027486
+          },
+          "densification_rate": 0.016808918133297213,
+          "is_densifying": true
+        },
+        {
+          "step": 190,
+          "odi": 0.8921612177543503,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.7682327719801585,
+            "stability_margin": 0.7395833283662796,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9942666245599395,
+            "cross_mechanism_resonance": 0.9117133522906874
+          },
+          "densification_rate": -0.017030610206539065,
+          "is_densifying": false
+        },
+        {
+          "step": 195,
+          "odi": 0.8527474098111014,
+          "zone": "ultra_dense_entry",
+          "subindices": {
+            "threshold_proximity": 1.0,
+            "coupling_density": 0.6000155762370186,
+            "stability_margin": 0.7395833283662796,
+            "firewall_purity": 1.0,
+            "temporal_consistency": 0.9942826743985713,
+            "cross_mechanism_resonance": 0.8539936145058468
+          },
+          "densification_rate": -0.03941380794324889,
+          "is_densifying": false
+        }
+      ],
+      "convergence_data": [
+        {
+          "step": 0,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": false,
+          "n_coupled_pairs": 1,
+          "stability_score": 0.2
+        },
+        {
+          "step": 5,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 10,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 15,
+          "converged": false,
+          "six_thresholds_met": false,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 6,
+          "stability_score": 1.0
+        },
+        {
+          "step": 20,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 3,
+          "stability_score": 1.0
+        },
+        {
+          "step": 25,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 30,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 35,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 40,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 45,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 50,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 55,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 60,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 65,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 70,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 0.8
+        },
+        {
+          "step": 75,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 80,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 0.8
+        },
+        {
+          "step": 85,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 90,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 95,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 100,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 0.8
+        },
+        {
+          "step": 105,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 0.8
+        },
+        {
+          "step": 110,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 115,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 120,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 125,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 130,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 135,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 140,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 145,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 150,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 155,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 1.0
+        },
+        {
+          "step": 160,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 165,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 170,
+          "converged": false,
+          "six_thresholds_met": true,
+          "coupling_strength_met": false,
+          "stability_met": true,
+          "n_coupled_pairs": 10,
+          "stability_score": 0.8
+        },
+        {
+          "step": 175,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 180,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 185,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 0.8
+        },
+        {
+          "step": 190,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        },
+        {
+          "step": 195,
+          "converged": true,
+          "six_thresholds_met": true,
+          "coupling_strength_met": true,
+          "stability_met": true,
+          "n_coupled_pairs": 15,
+          "stability_score": 1.0
+        }
+      ]
+    }
+  ]
+}

@@ -73,11 +73,15 @@ def _make_threshold_result(all_met=True, high_values=False):
 
 
 def _make_full_coupling_matrix(strength=0.5):
-    """创建满耦合矩阵"""
+    """创建满耦合矩阵
+    
+    注意：机制名称必须与 OrganizationalDensityIndex._COUPLING_MECHANISMS 一致
+    （不带 3.X_ 前缀），与 hierarchical_evolver 中的耦合矩阵构建保持一致。
+    """
     mechanisms = [
-        '3.1_interface_regulation', '3.2_self_sustaining',
-        '3.3_retention_depth', '3.4_replication_fidelity',
-        '3.5_selection_pressure', '3.6_functional_differentiation',
+        'interface_regulation', 'self_sustaining',
+        'retention', 'replication',
+        'selection', 'functional_differentiation',
     ]
     matrix = {}
     for ma in mechanisms:
