@@ -44,6 +44,7 @@ from engine.seventh_threshold_detector import (
     JumpSignal,
     CriticalSlowingDownSignal,
     EmergenceSignature,
+    ZoneTransitionSignal,
 )
 from engine.unsealing_mechanism import (
     UnsealingMechanism,
@@ -83,6 +84,7 @@ __all__ = [
     'SixThresholdDetector', 'ThresholdStatus', 'SixThresholdResult',
     'SeventhThresholdDetector', 'SeventhThresholdResult',
     'JumpSignal', 'CriticalSlowingDownSignal', 'EmergenceSignature',
+    'ZoneTransitionSignal',
     'UnsealingMechanism', 'UnsealingEvent',
     'InterfaceExchangeRecord', 'InterfacePatternStability',
     'ReturnFlowChannel', 'ReturnFlowEvent',
