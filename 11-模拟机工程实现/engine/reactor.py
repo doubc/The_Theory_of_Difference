@@ -6,6 +6,10 @@ reactor.py — 差异反应堆核心
     loss = 公理违背度之和
 
 模型预测下一步状态，损失函数驱动模型学习满足公理约束的演化规则。
+
+Phase 2 扩展：
+    - 集成回流通道 (ReturnFlowChannel)：每步演化后执行回流衰减/剥离
+    - 回流事件记录在 report["return_flow_events"] 中
 """
 
 import torch
@@ -18,21 +22,25 @@ from models.local_conv_model import LocalConvModel
 
 
 class DifferenceReactor:
-    """差异反应堆：模型预测 + 公理约束。
+    """差异反应堆：模型预测 + 公理约束 + 回流通道。
 
     核心循环：
     1. 模型预测 next_state
     2. 应用源/汇边界条件（开放系统）
     3. 计算公理损失
+    4. 回流通道演化（Phase 2：锚定衰减 + 自动剥离）
     """
 
     def __init__(self, model: nn.Module, layer: LayerBase,
                  axiom_engine: AxiomEngine,
-                 device: str = "cpu"):
+                 device: str = "cpu",
+                 return_flow_channel: Optional["ReturnFlowChannel"] = None):
         self.model = model
         self.layer = layer
         self.axiom_engine = axiom_engine
         self.device = device
+        self.return_flow_channel = return_flow_channel
+        self._step_counter: int = 0
 
     def step(self, state: torch.Tensor,
              history: Optional[List[torch.Tensor]] = None
@@ -46,7 +54,7 @@ class DifferenceReactor:
         Returns:
             next_state: 下一步状态
             loss: 公理损失（可微分）
-            report: 每条公理的违背报告
+            report: 每条公理的违背报告 + return_flow_events（如有）
         """
         if history is None:
             history = []
@@ -74,6 +82,13 @@ class DifferenceReactor:
         loss, report = self._compute_axiom_loss(
             state, next_state, history, boundary_info=boundary_info
         )
+
+        # 4. 回流通道演化（Phase 2）
+        if self.return_flow_channel is not None:
+            flow_events = self.return_flow_channel.step(self._step_counter)
+            report["return_flow_events"] = flow_events
+
+        self._step_counter += 1
 
         return next_state, loss, report
 
