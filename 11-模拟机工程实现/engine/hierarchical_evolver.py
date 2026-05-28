@@ -37,6 +37,7 @@ from engine.minimal_self_detector import MinimalSelfDetector, MinimalSelfResult
 from engine.anticipatory_bias_engine import AnticipatoryBiasEngine, AnticipationResult
 from engine.counterfactual_engine import CounterfactualEngine, CounterfactualResult
 from layers.three_dim_hamming import ThreeDimHammingLattice
+from engine.functional_signal_coupling import extract_functional_signals
 
 
 class HierarchicalSnapshot:
@@ -627,6 +628,17 @@ class HierarchicalEvolver:
                         'selection_trend_scores': selection_trend_scores if selection_trend_scores else None,
                         'component_contributions': component_contributions,
                     }
+                    # Store computed signal values in result_entry for diagnostics
+                    _sig = extract_functional_signals(
+                        active_count=functional_signals['active_count'],
+                        total_bits=functional_signals['total_bits'],
+                        direction_agreement=functional_signals['direction_agreement'],
+                        aggregate_retention_depth=functional_signals['aggregate_retention_depth'],
+                        variant_retention_rates=functional_signals['variant_retention_rates'],
+                        selection_trend_scores=functional_signals['selection_trend_scores'],
+                        component_contributions=functional_signals['component_contributions'],
+                    )
+                    result_entry['functional_signals'] = _sig.to_dict()
 
                 # 5. PreSubjectivityConvergence
                 conv_result = None

@@ -1,0 +1,741 @@
+{
+  "experiment": "exp_72",
+  "timestamp": "20260528_120353",
+  "elapsed_seconds": 297.4401431083679,
+  "results": {
+    "A_baseline_positional_2000": [
+      {
+        "config": "A_baseline_positional_2000",
+        "run_id": 0,
+        "convergence_rate": 0.925,
+        "converged_count": 37,
+        "total_evaluations": 40,
+        "first_conv_step": 100,
+        "avg_odi": 0.0,
+        "max_odi": 0.0,
+        "coupling_rate": 0.95,
+        "functional_signal_stats": {},
+        "warmup_late_comparison": {},
+        "n_functional_signal_entries": 0
+      },
+      {
+        "config": "A_baseline_positional_2000",
+        "run_id": 1,
+        "convergence_rate": 0.0,
+        "converged_count": 0,
+        "total_evaluations": 40,
+        "first_conv_step": null,
+        "avg_odi": 0.0,
+        "max_odi": 0.0,
+        "coupling_rate": 0.95,
+        "functional_signal_stats": {},
+        "warmup_late_comparison": {},
+        "n_functional_signal_entries": 0
+      },
+      {
+        "config": "A_baseline_positional_2000",
+        "run_id": 2,
+        "convergence_rate": 0.675,
+        "converged_count": 27,
+        "total_evaluations": 40,
+        "first_conv_step": 100,
+        "avg_odi": 0.0,
+        "max_odi": 0.0,
+        "coupling_rate": 0.7,
+        "functional_signal_stats": {},
+        "warmup_late_comparison": {},
+        "n_functional_signal_entries": 0
+      }
+    ],
+    "B_functional_030_2000": [
+      {
+        "config": "B_functional_030_2000",
+        "run_id": 0,
+        "convergence_rate": 0.95,
+        "converged_count": 38,
+        "total_evaluations": 40,
+        "first_conv_step": 100,
+        "avg_odi": 0.0,
+        "max_odi": 0.0,
+        "coupling_rate": 1.0,
+        "functional_signal_stats": {
+          "interface_regulation": {
+            "mean": 0.5821428571428571,
+            "max": 1.0,
+            "nonzero_rate": 1.0
+          },
+          "self_sustaining": {
+            "mean": 0.620461306348443,
+            "max": 0.7142857164144516,
+            "nonzero_rate": 1.0
+          },
+          "retention": {
+            "mean": 0.0,
+            "max": 0.0,
+            "nonzero_rate": 0.0
+          },
+          "replication": {
+            "mean": 0.5937500000000001,
+            "max": 1.0,
+            "nonzero_rate": 1.0
+          },
+          "selection": {
+            "mean": 0.7132352941176471,
+            "max": 1.0,
+            "nonzero_rate": 1.0
+          },
+          "functional_differentiation": {
+            "mean": 0.45516452020711756,
+            "max": 0.45961054604476814,
+            "nonzero_rate": 1.0
+          }
+        },
+        "warmup_late_comparison": {
+          "interface_regulation": {
+            "warmup_mean": 0.6142857142857142,
+            "late_mean": 0.5714285714285714,
+            "growth_factor": 0.930232558139535
+          },
+          "self_sustaining": {
+            "warmup_mean": 0.627678568661213,
+            "late_mean": 0.6180555522441864,
+            "growth_factor": 0.9846688784714258
+          },
+          "retention": {
+            "warmup_mean": 0.0,
+            "late_mean": 0.0,
+            "growth_factor": 0.0
+          },
+          "replication": {
+            "warmup_mean": 0.625,
+            "late_mean": 0.5833333333333334,
+            "growth_factor": 0.9333333333333333
+          },
+          "selection": {
+            "warmup_mean": 0.7352941176470589,
+            "late_mean": 0.7058823529411767,
+            "growth_factor": 0.9600000000000003
+          },
+          "functional_differentiation": {
+            "warmup_mean": 0.4418264426941657,
+            "late_mean": 0.45961054604476814,
+            "growth_factor": 1.0402513331754402
+          }
+        },
+        "n_functional_signal_entries": 40
+      },
+      {
+        "config": "B_functional_030_2000",
+        "run_id": 1,
+        "convergence_rate": 0.0,
+        "converged_count": 0,
+        "total_evaluations": 40,
+        "first_conv_step": null,
+        "avg_odi": 0.0,
+        "max_odi": 0.0,
+        "coupling_rate": 1.0,
+        "functional_signal_stats": {
+          "interface_regulation": {
+            "mean": 0.5821428571428571,
+            "max": 1.0,
+            "nonzero_rate": 1.0
+          },
+          "self_sustaining": {
+            "mean": 0.5933779746294021,
+            "max": 0.7142857164144516,
+            "nonzero_rate": 1.0
+          },
+          "retention": {
+            "mean": 0.0,
+            "max": 0.0,
+            "nonzero_rate": 0.0
+          },
+          "replication": {
+            "mean": 0.5975545994989112,
+            "max": 1.0,
+            "nonzero_rate": 1.0
+          },
+          "selection": {
+            "mean": 0.6780436795991289,
+            "max": 1.0,
+            "nonzero_rate": 1.0
+          },
+          "functional_differentiation": {
+            "mean": 0.4849854142840574,
+            "max": 0.49019607843137314,
+            "nonzero_rate": 1.0
+          }
+        },
+        "warmup_late_comparison": {
+          "interface_regulation": {
+            "warmup_mean": 0.6142857142857142,
+            "late_mean": 0.5714285714285714,
+            "growth_factor": 0.930232558139535
+          },
+          "self_sustaining": {
+            "warmup_mean": 0.6026785701513291,
+            "late_mean": 0.5902777761220932,
+            "growth_factor": 0.9794238676412169
+          },
+          "retention": {
+            "warmup_mean": 0.0,
+            "late_mean": 0.0,
+            "growth_factor": 0.0
+          },
+          "replication": {
+            "warmup_mean": 0.634443796084663,
+            "late_mean": 0.585258200636994,
+            "growth_factor": 0.9224744638513174
+          },
+          "selection": {
+            "warmup_mean": 0.7075550368677302,
+            "late_mean": 0.6682065605095951,
+            "growth_factor": 0.944388105083208
+          },
+          "functional_differentiation": {
+            "warmup_mean": 0.4693534218421102,
+            "late_mean": 0.4901960784313731,
+            "growth_factor": 1.0444071687119272
+          }
+        },
+        "n_functional_signal_entries": 40
+      },
+      {
+        "config": "B_functional_030_2000",
+        "run_id": 2,
+        "convergence_rate": 0.95,
+        "converged_count": 38,
+        "total_evaluations": 40,
+        "first_conv_step": 100,
+        "avg_odi": 0.0,
+        "max_odi": 0.0,
+        "coupling_rate": 1.0,
+        "functional_signal_stats": {
+          "interface_regulation": {
+            "mean": 0.5821428571428571,
+            "max": 1.0,
+            "nonzero_rate": 1.0
+          },
+          "self_sustaining": {
+            "mean": 0.6272321429103613,
+            "max": 0.7142857164144516,
+            "nonzero_rate": 1.0
+          },
+          "retention": {
+            "mean": 0.0,
+            "max": 0.0,
+            "nonzero_rate": 0.0
+          },
+          "replication": {
+            "mean": 0.5588934179084969,
+            "max": 1.0,
+            "nonzero_rate": 1.0
+          },
+          "selection": {
+            "mean": 0.6967392248120916,
+            "max": 1.0,
+            "nonzero_rate": 1.0
+          },
+          "functional_differentiation": {
+            "mean": 0.417714648483879,
+            "max": 0.4212004212004209,
+            "nonzero_rate": 1.0
+          }
+        },
+        "warmup_late_comparison": {
+          "interface_regulation": {
+            "warmup_mean": 0.6142857142857142,
+            "late_mean": 0.5714285714285714,
+            "growth_factor": 0.930232558139535
+          },
+          "self_sustaining": {
+            "warmup_mean": 0.6339285716414451,
+            "late_mean": 0.625,
+            "growth_factor": 0.9859154926266753
+          },
+          "retention": {
+            "warmup_mean": 0.0,
+            "late_mean": 0.0,
+            "growth_factor": 0.0
+          },
+          "replication": {
+            "warmup_mean": 0.5960602524098162,
+            "late_mean": 0.546504473074724,
+            "growth_factor": 0.9168611241317589
+          },
+          "selection": {
+            "warmup_mean": 0.7222914235317486,
+            "late_mean": 0.6882218252388728,
+            "growth_factor": 0.9528312296354183
+          },
+          "functional_differentiation": {
+            "warmup_mean": 0.40725733033425315,
+            "late_mean": 0.4212004212004209,
+            "growth_factor": 1.0342365620643932
+          }
+        },
+        "n_functional_signal_entries": 40
+      }
+    ],
+    "C_functional_015_2000": [
+      {
+        "config": "C_functional_015_2000",
+        "run_id": 0,
+        "convergence_rate": 0.95,
+        "converged_count": 38,
+        "total_evaluations": 40,
+        "first_conv_step": 100,
+        "avg_odi": 0.0,
+        "max_odi": 0.0,
+        "coupling_rate": 1.0,
+        "functional_signal_stats": {
+          "interface_regulation": {
+            "mean": 0.5821428571428571,
+            "max": 1.0,
+            "nonzero_rate": 1.0
+          },
+          "self_sustaining": {
+            "mean": 0.620461306348443,
+            "max": 0.7142857164144516,
+            "nonzero_rate": 1.0
+          },
+          "retention": {
+            "mean": 0.0,
+            "max": 0.0,
+            "nonzero_rate": 0.0
+          },
+          "replication": {
+            "mean": 0.5937500000000001,
+            "max": 1.0,
+            "nonzero_rate": 1.0
+          },
+          "selection": {
+            "mean": 0.7132352941176471,
+            "max": 1.0,
+            "nonzero_rate": 1.0
+          },
+          "functional_differentiation": {
+            "mean": 0.45516452020711756,
+            "max": 0.45961054604476814,
+            "nonzero_rate": 1.0
+          }
+        },
+        "warmup_late_comparison": {
+          "interface_regulation": {
+            "warmup_mean": 0.6142857142857142,
+            "late_mean": 0.5714285714285714,
+            "growth_factor": 0.930232558139535
+          },
+          "self_sustaining": {
+            "warmup_mean": 0.627678568661213,
+            "late_mean": 0.6180555522441864,
+            "growth_factor": 0.9846688784714258
+          },
+          "retention": {
+            "warmup_mean": 0.0,
+            "late_mean": 0.0,
+            "growth_factor": 0.0
+          },
+          "replication": {
+            "warmup_mean": 0.625,
+            "late_mean": 0.5833333333333334,
+            "growth_factor": 0.9333333333333333
+          },
+          "selection": {
+            "warmup_mean": 0.7352941176470589,
+            "late_mean": 0.7058823529411767,
+            "growth_factor": 0.9600000000000003
+          },
+          "functional_differentiation": {
+            "warmup_mean": 0.4418264426941657,
+            "late_mean": 0.45961054604476814,
+            "growth_factor": 1.0402513331754402
+          }
+        },
+        "n_functional_signal_entries": 40
+      },
+      {
+        "config": "C_functional_015_2000",
+        "run_id": 1,
+        "convergence_rate": 0.0,
+        "converged_count": 0,
+        "total_evaluations": 40,
+        "first_conv_step": null,
+        "avg_odi": 0.0,
+        "max_odi": 0.0,
+        "coupling_rate": 1.0,
+        "functional_signal_stats": {
+          "interface_regulation": {
+            "mean": 0.5821428571428571,
+            "max": 1.0,
+            "nonzero_rate": 1.0
+          },
+          "self_sustaining": {
+            "mean": 0.5933779746294021,
+            "max": 0.7142857164144516,
+            "nonzero_rate": 1.0
+          },
+          "retention": {
+            "mean": 0.0,
+            "max": 0.0,
+            "nonzero_rate": 0.0
+          },
+          "replication": {
+            "mean": 0.5975545994989112,
+            "max": 1.0,
+            "nonzero_rate": 1.0
+          },
+          "selection": {
+            "mean": 0.6780436795991289,
+            "max": 1.0,
+            "nonzero_rate": 1.0
+          },
+          "functional_differentiation": {
+            "mean": 0.4849854142840574,
+            "max": 0.49019607843137314,
+            "nonzero_rate": 1.0
+          }
+        },
+        "warmup_late_comparison": {
+          "interface_regulation": {
+            "warmup_mean": 0.6142857142857142,
+            "late_mean": 0.5714285714285714,
+            "growth_factor": 0.930232558139535
+          },
+          "self_sustaining": {
+            "warmup_mean": 0.6026785701513291,
+            "late_mean": 0.5902777761220932,
+            "growth_factor": 0.9794238676412169
+          },
+          "retention": {
+            "warmup_mean": 0.0,
+            "late_mean": 0.0,
+            "growth_factor": 0.0
+          },
+          "replication": {
+            "warmup_mean": 0.634443796084663,
+            "late_mean": 0.585258200636994,
+            "growth_factor": 0.9224744638513174
+          },
+          "selection": {
+            "warmup_mean": 0.7075550368677302,
+            "late_mean": 0.6682065605095951,
+            "growth_factor": 0.944388105083208
+          },
+          "functional_differentiation": {
+            "warmup_mean": 0.4693534218421102,
+            "late_mean": 0.4901960784313731,
+            "growth_factor": 1.0444071687119272
+          }
+        },
+        "n_functional_signal_entries": 40
+      },
+      {
+        "config": "C_functional_015_2000",
+        "run_id": 2,
+        "convergence_rate": 0.95,
+        "converged_count": 38,
+        "total_evaluations": 40,
+        "first_conv_step": 100,
+        "avg_odi": 0.0,
+        "max_odi": 0.0,
+        "coupling_rate": 1.0,
+        "functional_signal_stats": {
+          "interface_regulation": {
+            "mean": 0.5821428571428571,
+            "max": 1.0,
+            "nonzero_rate": 1.0
+          },
+          "self_sustaining": {
+            "mean": 0.6272321429103613,
+            "max": 0.7142857164144516,
+            "nonzero_rate": 1.0
+          },
+          "retention": {
+            "mean": 0.0,
+            "max": 0.0,
+            "nonzero_rate": 0.0
+          },
+          "replication": {
+            "mean": 0.5588934179084969,
+            "max": 1.0,
+            "nonzero_rate": 1.0
+          },
+          "selection": {
+            "mean": 0.6967392248120916,
+            "max": 1.0,
+            "nonzero_rate": 1.0
+          },
+          "functional_differentiation": {
+            "mean": 0.417714648483879,
+            "max": 0.4212004212004209,
+            "nonzero_rate": 1.0
+          }
+        },
+        "warmup_late_comparison": {
+          "interface_regulation": {
+            "warmup_mean": 0.6142857142857142,
+            "late_mean": 0.5714285714285714,
+            "growth_factor": 0.930232558139535
+          },
+          "self_sustaining": {
+            "warmup_mean": 0.6339285716414451,
+            "late_mean": 0.625,
+            "growth_factor": 0.9859154926266753
+          },
+          "retention": {
+            "warmup_mean": 0.0,
+            "late_mean": 0.0,
+            "growth_factor": 0.0
+          },
+          "replication": {
+            "warmup_mean": 0.5960602524098162,
+            "late_mean": 0.546504473074724,
+            "growth_factor": 0.9168611241317589
+          },
+          "selection": {
+            "warmup_mean": 0.7222914235317486,
+            "late_mean": 0.6882218252388728,
+            "growth_factor": 0.9528312296354183
+          },
+          "functional_differentiation": {
+            "warmup_mean": 0.40725733033425315,
+            "late_mean": 0.4212004212004209,
+            "growth_factor": 1.0342365620643932
+          }
+        },
+        "n_functional_signal_entries": 40
+      }
+    ],
+    "D_functional_030_diag_2000": [
+      {
+        "config": "D_functional_030_diag_2000",
+        "run_id": 0,
+        "convergence_rate": 0.95,
+        "converged_count": 38,
+        "total_evaluations": 40,
+        "first_conv_step": 100,
+        "avg_odi": 0.0,
+        "max_odi": 0.0,
+        "coupling_rate": 1.0,
+        "functional_signal_stats": {
+          "interface_regulation": {
+            "mean": 0.5821428571428571,
+            "max": 1.0,
+            "nonzero_rate": 1.0
+          },
+          "self_sustaining": {
+            "mean": 0.620461306348443,
+            "max": 0.7142857164144516,
+            "nonzero_rate": 1.0
+          },
+          "retention": {
+            "mean": 0.0,
+            "max": 0.0,
+            "nonzero_rate": 0.0
+          },
+          "replication": {
+            "mean": 0.5937500000000001,
+            "max": 1.0,
+            "nonzero_rate": 1.0
+          },
+          "selection": {
+            "mean": 0.7132352941176471,
+            "max": 1.0,
+            "nonzero_rate": 1.0
+          },
+          "functional_differentiation": {
+            "mean": 0.45516452020711756,
+            "max": 0.45961054604476814,
+            "nonzero_rate": 1.0
+          }
+        },
+        "warmup_late_comparison": {
+          "interface_regulation": {
+            "warmup_mean": 0.6142857142857142,
+            "late_mean": 0.5714285714285714,
+            "growth_factor": 0.930232558139535
+          },
+          "self_sustaining": {
+            "warmup_mean": 0.627678568661213,
+            "late_mean": 0.6180555522441864,
+            "growth_factor": 0.9846688784714258
+          },
+          "retention": {
+            "warmup_mean": 0.0,
+            "late_mean": 0.0,
+            "growth_factor": 0.0
+          },
+          "replication": {
+            "warmup_mean": 0.625,
+            "late_mean": 0.5833333333333334,
+            "growth_factor": 0.9333333333333333
+          },
+          "selection": {
+            "warmup_mean": 0.7352941176470589,
+            "late_mean": 0.7058823529411767,
+            "growth_factor": 0.9600000000000003
+          },
+          "functional_differentiation": {
+            "warmup_mean": 0.4418264426941657,
+            "late_mean": 0.45961054604476814,
+            "growth_factor": 1.0402513331754402
+          }
+        },
+        "n_functional_signal_entries": 40
+      },
+      {
+        "config": "D_functional_030_diag_2000",
+        "run_id": 1,
+        "convergence_rate": 0.0,
+        "converged_count": 0,
+        "total_evaluations": 40,
+        "first_conv_step": null,
+        "avg_odi": 0.0,
+        "max_odi": 0.0,
+        "coupling_rate": 1.0,
+        "functional_signal_stats": {
+          "interface_regulation": {
+            "mean": 0.5821428571428571,
+            "max": 1.0,
+            "nonzero_rate": 1.0
+          },
+          "self_sustaining": {
+            "mean": 0.5933779746294021,
+            "max": 0.7142857164144516,
+            "nonzero_rate": 1.0
+          },
+          "retention": {
+            "mean": 0.0,
+            "max": 0.0,
+            "nonzero_rate": 0.0
+          },
+          "replication": {
+            "mean": 0.5975545994989112,
+            "max": 1.0,
+            "nonzero_rate": 1.0
+          },
+          "selection": {
+            "mean": 0.6780436795991289,
+            "max": 1.0,
+            "nonzero_rate": 1.0
+          },
+          "functional_differentiation": {
+            "mean": 0.4849854142840574,
+            "max": 0.49019607843137314,
+            "nonzero_rate": 1.0
+          }
+        },
+        "warmup_late_comparison": {
+          "interface_regulation": {
+            "warmup_mean": 0.6142857142857142,
+            "late_mean": 0.5714285714285714,
+            "growth_factor": 0.930232558139535
+          },
+          "self_sustaining": {
+            "warmup_mean": 0.6026785701513291,
+            "late_mean": 0.5902777761220932,
+            "growth_factor": 0.9794238676412169
+          },
+          "retention": {
+            "warmup_mean": 0.0,
+            "late_mean": 0.0,
+            "growth_factor": 0.0
+          },
+          "replication": {
+            "warmup_mean": 0.634443796084663,
+            "late_mean": 0.585258200636994,
+            "growth_factor": 0.9224744638513174
+          },
+          "selection": {
+            "warmup_mean": 0.7075550368677302,
+            "late_mean": 0.6682065605095951,
+            "growth_factor": 0.944388105083208
+          },
+          "functional_differentiation": {
+            "warmup_mean": 0.4693534218421102,
+            "late_mean": 0.4901960784313731,
+            "growth_factor": 1.0444071687119272
+          }
+        },
+        "n_functional_signal_entries": 40
+      },
+      {
+        "config": "D_functional_030_diag_2000",
+        "run_id": 2,
+        "convergence_rate": 0.95,
+        "converged_count": 38,
+        "total_evaluations": 40,
+        "first_conv_step": 100,
+        "avg_odi": 0.0,
+        "max_odi": 0.0,
+        "coupling_rate": 1.0,
+        "functional_signal_stats": {
+          "interface_regulation": {
+            "mean": 0.5821428571428571,
+            "max": 1.0,
+            "nonzero_rate": 1.0
+          },
+          "self_sustaining": {
+            "mean": 0.6272321429103613,
+            "max": 0.7142857164144516,
+            "nonzero_rate": 1.0
+          },
+          "retention": {
+            "mean": 0.0,
+            "max": 0.0,
+            "nonzero_rate": 0.0
+          },
+          "replication": {
+            "mean": 0.5588934179084969,
+            "max": 1.0,
+            "nonzero_rate": 1.0
+          },
+          "selection": {
+            "mean": 0.6967392248120916,
+            "max": 1.0,
+            "nonzero_rate": 1.0
+          },
+          "functional_differentiation": {
+            "mean": 0.417714648483879,
+            "max": 0.4212004212004209,
+            "nonzero_rate": 1.0
+          }
+        },
+        "warmup_late_comparison": {
+          "interface_regulation": {
+            "warmup_mean": 0.6142857142857142,
+            "late_mean": 0.5714285714285714,
+            "growth_factor": 0.930232558139535
+          },
+          "self_sustaining": {
+            "warmup_mean": 0.6339285716414451,
+            "late_mean": 0.625,
+            "growth_factor": 0.9859154926266753
+          },
+          "retention": {
+            "warmup_mean": 0.0,
+            "late_mean": 0.0,
+            "growth_factor": 0.0
+          },
+          "replication": {
+            "warmup_mean": 0.5960602524098162,
+            "late_mean": 0.546504473074724,
+            "growth_factor": 0.9168611241317589
+          },
+          "selection": {
+            "warmup_mean": 0.7222914235317486,
+            "late_mean": 0.6882218252388728,
+            "growth_factor": 0.9528312296354183
+          },
+          "functional_differentiation": {
+            "warmup_mean": 0.40725733033425315,
+            "late_mean": 0.4212004212004209,
+            "growth_factor": 1.0342365620643932
+          }
+        },
+        "n_functional_signal_entries": 40
+      }
+    ]
+  }
+}
