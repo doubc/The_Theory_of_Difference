@@ -599,6 +599,35 @@ class HierarchicalEvolver:
                         bn = f" bottleneck={threshold_result.bottleneck}" if not threshold_result.all_met else ""
                         print(f"    [6Threshold] L{layer_id} step={step}: {status}{bn}")
 
+                # 4.5 Functional signals extraction (for functional coupling mode)
+                functional_signals = None
+                if (self.pre_subjectivity_convergence is not None and
+                        self.pre_subjectivity_convergence.coupling_mode == "functional"):
+                    # Extract functional signals from Phase 2 components
+                    variant_retention_rates = []
+                    if variant_probs is not None:
+                        variant_retention_rates = [float(v) for v in variant_probs.values()]
+
+                    selection_trend_scores = []
+                    if self.cumulative_selector is not None:
+                        for vid, rec in self.cumulative_selector._variants.items():
+                            if rec.n_observations > 0:
+                                selection_trend_scores.append(rec.retention_rate())
+
+                    agg_retention_depth = 0.0
+                    if self.persistent_bias_memory is not None:
+                        agg_retention_depth = self.persistent_bias_memory.get_aggregate_retention_depth()
+
+                    functional_signals = {
+                        'active_count': active_count,
+                        'total_bits': total_bits,
+                        'direction_agreement': self_sustaining,
+                        'aggregate_retention_depth': agg_retention_depth,
+                        'variant_retention_rates': variant_retention_rates if variant_retention_rates else None,
+                        'selection_trend_scores': selection_trend_scores if selection_trend_scores else None,
+                        'component_contributions': component_contributions,
+                    }
+
                 # 5. PreSubjectivityConvergence
                 conv_result = None
                 if self.pre_subjectivity_convergence is not None:
@@ -621,6 +650,7 @@ class HierarchicalEvolver:
                         structure_fn=_structure_fn,
                         timestamp=ts,
                         n_active=active_count,
+                        functional_signals=functional_signals,
                     )
                     result_entry['convergence'] = {
                         'converged': conv_result.converged,

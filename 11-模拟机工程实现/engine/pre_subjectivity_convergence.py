@@ -30,6 +30,11 @@ import numpy as np
 from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass, field
 from engine.six_threshold_detector import SixThresholdDetector, SixThresholdResult
+from engine.functional_signal_coupling import (
+    extract_functional_signals,
+    compute_functional_coupling_matrix,
+    FunctionalSignalSet,
+)
 
 
 # ─── 语义防火墙常量 ───
@@ -213,6 +218,7 @@ class PreSubjectivityConvergence:
                 "all"     — 所有机制对都必须超过阈值（默认，15/15）
                 "majority" — 多数机制对超过阈值（≥12/15）
                 "weighted" — 加权评分模式（核心机制对权重更高）
+                "functional" — 功能信号耦合（从 Phase 2 组件提取功能信号）
             coupling_weights: 耦合权重字典，键为 "mech_a:mech_b" 格式。
                 如果为 None，使用 DEFAULT_COUPLING_WEIGHTS。
                 仅在 coupling_mode="weighted" 时使用。
@@ -281,6 +287,8 @@ class PreSubjectivityConvergence:
                  timestamp: Optional[int] = None,
                  # 活跃比特数（用于动态耦合阈值）
                  n_active: Optional[int] = None,
+                 # 功能信号（用于 functional 耦合模式）
+                 functional_signals: Optional[Dict] = None,
                  ) -> ConvergenceResult:
         """执行前主体态收束判定
 
@@ -312,7 +320,8 @@ class PreSubjectivityConvergence:
         # ── 条件2: 耦合强度检测 ──
         effective_threshold = self._get_dynamic_threshold(n_active)
         coupling_met, n_coupled, min_coupling = self._evaluate_coupling(
-            coupling_matrix, effective_threshold=effective_threshold)
+            coupling_matrix, effective_threshold=effective_threshold,
+            functional_signals=functional_signals)
 
         # ── 条件3: 稳定性检测 ──
         stability_met, stability_score = self._evaluate_stability(
@@ -341,7 +350,8 @@ class PreSubjectivityConvergence:
 
     def _evaluate_coupling(self,
                            coupling_matrix: Optional[Dict[str, Dict[str, float]]],
-                           effective_threshold: Optional[float] = None
+                           effective_threshold: Optional[float] = None,
+                           functional_signals: Optional[Dict] = None,
                            ) -> Tuple[bool, int, float]:
         """评估耦合强度
 
@@ -360,6 +370,11 @@ class PreSubjectivityConvergence:
         Returns:
             (coupling_met, n_coupled_pairs, min_coupling)
         """
+        # ── functional mode: compute coupling from functional signals ──
+        if self.coupling_mode == "functional":
+            return self._evaluate_functional_coupling(
+                functional_signals, effective_threshold)
+
         if coupling_matrix is None:
             return False, 0, 0.0
 
@@ -412,6 +427,82 @@ class PreSubjectivityConvergence:
         else:
             # 全对制：所有对都必须超过阈值
             coupling_met = n_coupled == total_pairs
+        return coupling_met, n_coupled, min_coupling
+
+    def _evaluate_functional_coupling(self,
+                                       functional_signals: Optional[Dict],
+                                       effective_threshold: Optional[float] = None
+                                       ) -> Tuple[bool, int, float]:
+        """评估功能信号耦合强度
+
+        从 Phase 2 组件提取功能信号，计算功能耦合矩阵，
+        并判定是否通过耦合阈值。
+
+        Args:
+            functional_signals: 功能信号字典，包含:
+                - active_count: 活跃比特数
+                - total_bits: 总比特数
+                - direction_agreement: 方向一致性
+                - aggregate_retention_depth: 聚合保持深度
+                - variant_retention_rates: 变体延续率列表
+                - selection_trend_scores: 选择趋势评分列表
+                - component_contributions: 组件贡献字典
+            effective_threshold: 有效耦合阈值
+
+        Returns:
+            (coupling_met, n_coupled_pairs, min_coupling)
+        """
+        if functional_signals is None:
+            return False, 0, 0.0
+
+        threshold = effective_threshold if effective_threshold is not None else self.coupling_threshold
+
+        # Extract functional signals
+        sig = extract_functional_signals(
+            active_count=functional_signals.get('active_count', 0),
+            total_bits=functional_signals.get('total_bits', 1),
+            direction_agreement=functional_signals.get('direction_agreement', 0.0),
+            aggregate_retention_depth=functional_signals.get('aggregate_retention_depth', 0.0),
+            variant_retention_rates=functional_signals.get('variant_retention_rates', None),
+            selection_trend_scores=functional_signals.get('selection_trend_scores', None),
+            component_contributions=functional_signals.get('component_contributions', None),
+        )
+
+        # Compute functional coupling matrix
+        fcm = compute_functional_coupling_matrix(sig, method="product")
+
+        n_coupled = fcm.n_above_threshold(threshold)
+        total_pairs = fcm.total_pairs
+
+        # For functional mode, use weighted scoring
+        # Weight core mechanism pairs higher
+        total_weight = 0.0
+        weighted_score = 0.0
+        names = FunctionalSignalSet.mechanism_names()
+        for i, ma in enumerate(names):
+            for j, mb in enumerate(names):
+                if i >= j:
+                    continue
+                key = "%s:%s" % (ma, mb)
+                weight = self.coupling_weights.get(key, 1.0)
+                total_weight += weight
+                strength = fcm.matrix.get(ma, {}).get(mb, 0.0)
+                if strength > threshold:
+                    weighted_score += weight
+
+        coupling_met = (weighted_score / total_weight) >= 0.50 if total_weight > 0 else False
+
+        # Compute min coupling for reporting
+        min_coupling = float('inf')
+        for i, ma in enumerate(names):
+            for j, mb in enumerate(names):
+                if i >= j:
+                    continue
+                strength = fcm.matrix.get(ma, {}).get(mb, 0.0)
+                min_coupling = min(min_coupling, strength)
+        if min_coupling == float('inf'):
+            min_coupling = 0.0
+
         return coupling_met, n_coupled, min_coupling
 
     def _evaluate_stability(self,
