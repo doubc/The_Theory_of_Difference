@@ -5,7 +5,8 @@
 
 import pytest
 import torch
-from acl.axiom_base import StableStructure
+from dataclasses import dataclass
+from typing import Optional
 from xiangjie.chain import (
     XiangjieChain,
     XiangjieReport,
@@ -22,8 +23,20 @@ from xiangjie.chain import (
 
 
 # =============================================================================
-# 辅助：构造测试用的 StableStructure
+# 辅助：构造测试用的 StableStructure（内联替代已删除的 acl.axiom_base.StableStructure）
 # =============================================================================
+
+@dataclass
+class StableStructure:
+    mask: torch.Tensor
+    lifetime: int
+    pattern_signature: torch.Tensor
+    boundary_map: torch.Tensor
+    material_turnover: float
+    source_layer: str
+    connectivity_ratio: float = 0.0
+    boundary_closure_score: float = 0.0
+
 
 def make_struct(
     size=8,
@@ -52,7 +65,7 @@ def make_struct(
         pattern_signature=pattern,
         boundary_map=boundary,
         material_turnover=turnover,
-        source_layer="L0_binary_lattice",
+        source_layer="hamming_layer",
         connectivity_ratio=connectivity,
         boundary_closure_score=boundary_closure,
     )

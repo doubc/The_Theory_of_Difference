@@ -11,7 +11,7 @@ import torch
 import torch.nn.functional as F
 import numpy as np
 
-from acl.axiom_base import StableStructure
+from layers.hamming_layer import StableStructure  # 存根在 hamming_layer 中定义
 
 
 # =============================================================================

@@ -822,5 +822,5 @@ class TestPhase2Regression:
         # 验证关键 M4 模块可导入
         from engine.hierarchy_manager import HierarchyManager
         from engine.encapsulation_engine import EncapsulationEngine
-        from engine.difference_layers import DifferenceLayerAnalyzer
+        # difference_layers 已清理（Phase 1 遗留）
         assert True

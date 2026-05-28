@@ -13,9 +13,8 @@ long_range_evolver_v2.py — 长程演化器 v2（硬性公理约束版）
 import torch
 import numpy as np
 from typing import List, Optional, Dict, Tuple
-from layers.hamming_layer import HammingLattice, SourceSinkConfig
+from layers.hamming_layer import HammingLattice, SourceSinkConfig, HammingMeasurement
 from acl.axioms_v2 import AxiomConstraints
-from engine.hamming_engine import HammingMeasurement
 
 
 class TrajectorySnapshotV2:

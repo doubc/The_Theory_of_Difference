@@ -12,8 +12,7 @@ three_dim_hamming.py — 三维汉明格点层
 
 import torch
 from typing import List, Optional, Tuple, Dict
-from layers.hamming_layer import HammingLattice
-from engine.hamming_engine import HammingMeasurement
+from layers.hamming_layer import HammingLattice, HammingMeasurement  # HammingMeasurement 存根在 hamming_layer 中定义
 
 
 class ThreeDimHammingLattice(HammingLattice):

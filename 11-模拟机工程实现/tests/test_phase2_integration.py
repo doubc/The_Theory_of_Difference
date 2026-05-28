@@ -78,7 +78,7 @@ def test_full_phase2_pipeline():
           f"density={xiang_result.organization_density:.3f}")
 
     # 2. 象界显现链
-    from acl.axiom_base import StableStructure
+    from layers.hamming_layer import StableStructure
     chain = XiangjieChain()
     state = torch.ones(N) * 0.5
     # 构造最小 StableStructure 列表
@@ -87,9 +87,9 @@ def test_full_phase2_pipeline():
         mask=mask,
         lifetime=10,
         pattern_signature=state,
-        boundary_map=state,
+        boundary_map=mask.float(),
         material_turnover=0.1,
-        source_layer='test',
+        source_layer="hamming_layer",
     )
     report = chain.evaluate([struct], history=[state], current_state=state)
     assert report is not None

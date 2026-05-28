@@ -11,11 +11,41 @@ hamming_layer.py — 汉明格点层（增强版）
 """
 
 from typing import List, Optional, Dict, Tuple
+from dataclasses import dataclass
 import torch
 from layers.layer_base import LayerBase
-from acl.axiom_base import StableStructure
-from acl.axioms_strict import AxiomEngineStrict, create_strict_axiom_engine
-from engine.hamming_engine import HammingTransition, HammingMeasurement
+
+
+@dataclass
+class StableStructure:
+    """稳定结构数据容器（替代已删除的 acl.axiom_base.StableStructure）"""
+    mask: torch.Tensor
+    lifetime: int
+    pattern_signature: torch.Tensor
+    boundary_map: torch.Tensor
+    material_turnover: float
+    source_layer: str
+    connectivity_ratio: float = 0.0
+    boundary_closure_score: float = 0.0
+
+
+# 存根类（替代已删除的 acl.axioms_strict 和 engine.hamming_engine）
+class HammingTransition:
+    def __init__(self, N=16, dag_enabled=True):
+        self.N = N
+        self.dag_enabled = dag_enabled
+
+class HammingMeasurement:
+    @staticmethod
+    def hamming_distance(state1, state2):
+        return (state1 - state2).abs().sum(dim=-1)
+
+class AxiomEngineStrict:
+    def __init__(self, N=16):
+        self.N = N
+
+def create_strict_axiom_engine(N=16):
+    return AxiomEngineStrict(N=N)
 
 
 class SourceSinkConfig:
