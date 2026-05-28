@@ -620,6 +620,7 @@ class HierarchicalEvolver:
                         structure_state=state.float(),
                         structure_fn=_structure_fn,
                         timestamp=ts,
+                        n_active=active_count,
                     )
                     result_entry['convergence'] = {
                         'converged': conv_result.converged,

@@ -449,3 +449,82 @@ class TestPreSubjectivityConvergence:
         # 所以加权得分应该较高，可能通过
         # 这里只验证全对制不通过
         assert met_all is False
+
+    # ── 动态耦合阈值测试 ──
+
+    def test_dynamic_threshold_default_disabled(self):
+        """默认情况下 dynamic_threshold=False"""
+        psc = PreSubjectivityConvergence()
+        assert psc.dynamic_threshold is False
+        # 无论 N_active 多少，返回基准阈值
+        assert psc._get_dynamic_threshold(8) == 0.3
+        assert psc._get_dynamic_threshold(48) == 0.3
+        assert psc._get_dynamic_threshold(None) == 0.3
+
+    def test_dynamic_threshold_n_low(self):
+        """N_active ≤ 12 → threshold = base × 0.50"""
+        psc = PreSubjectivityConvergence(coupling_threshold=0.3,
+                                         dynamic_threshold=True)
+        assert psc._get_dynamic_threshold(8) == pytest.approx(0.15)
+        assert psc._get_dynamic_threshold(12) == pytest.approx(0.15)
+
+    def test_dynamic_threshold_n_mid(self):
+        """N_active ≤ 24 → threshold = base × 0.75"""
+        psc = PreSubjectivityConvergence(coupling_threshold=0.3,
+                                         dynamic_threshold=True)
+        assert psc._get_dynamic_threshold(13) == pytest.approx(0.225)
+        assert psc._get_dynamic_threshold(18) == pytest.approx(0.225)
+        assert psc._get_dynamic_threshold(24) == pytest.approx(0.225)
+
+    def test_dynamic_threshold_n_high(self):
+        """N_active > 24 → threshold = base × 1.00"""
+        psc = PreSubjectivityConvergence(coupling_threshold=0.3,
+                                         dynamic_threshold=True)
+        assert psc._get_dynamic_threshold(25) == pytest.approx(0.3)
+        assert psc._get_dynamic_threshold(48) == pytest.approx(0.3)
+        assert psc._get_dynamic_threshold(72) == pytest.approx(0.3)
+
+    def test_dynamic_threshold_none_returns_base(self):
+        """n_active=None 时返回基准阈值"""
+        psc = PreSubjectivityConvergence(coupling_threshold=0.3,
+                                         dynamic_threshold=True)
+        assert psc._get_dynamic_threshold(None) == 0.3
+
+    def test_dynamic_threshold_coupling_evaluation(self):
+        """动态阈值影响耦合评估结果"""
+        # 构造一个耦合矩阵：所有对强度为 0.20
+        mech = PreSubjectivityConvergence.MECHANISMS
+        matrix = {}
+        for ma in mech:
+            matrix[ma] = {}
+            for mb in mech:
+                if ma == mb:
+                    matrix[ma][mb] = 1.0
+                else:
+                    matrix[ma][mb] = 0.20
+
+        # 静态阈值 0.30：0.20 < 0.30 → 不通过
+        psc_static = PreSubjectivityConvergence(coupling_threshold=0.3,
+                                                coupling_mode="all",
+                                                dynamic_threshold=False)
+        met_static, _, _ = psc_static._evaluate_coupling(matrix)
+        assert met_static is False
+
+        # 动态阈值，N_active=8 → 有效阈值 0.15：0.20 > 0.15 → 通过
+        psc_dynamic = PreSubjectivityConvergence(coupling_threshold=0.3,
+                                                 coupling_mode="all",
+                                                 dynamic_threshold=True)
+        eff_threshold = psc_dynamic._get_dynamic_threshold(8)
+        assert eff_threshold == pytest.approx(0.15)
+        met_dynamic, n_coupled, _ = psc_dynamic._evaluate_coupling(
+            matrix, effective_threshold=eff_threshold)
+        assert met_dynamic is True
+        assert n_coupled == 15  # 所有 15 对都 > 0.15
+
+    def test_dynamic_threshold_class_constants(self):
+        """验证动态阈值类常量"""
+        assert PreSubjectivityConvergence.DYNAMIC_THRESHOLD_SCALE_LOW == 0.50
+        assert PreSubjectivityConvergence.DYNAMIC_THRESHOLD_SCALE_MID == 0.75
+        assert PreSubjectivityConvergence.DYNAMIC_THRESHOLD_SCALE_HIGH == 1.00
+        assert PreSubjectivityConvergence.DYNAMIC_THRESHOLD_N_LOW == 12
+        assert PreSubjectivityConvergence.DYNAMIC_THRESHOLD_N_MID == 24

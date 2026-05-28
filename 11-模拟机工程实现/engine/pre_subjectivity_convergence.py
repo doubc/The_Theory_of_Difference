@@ -184,13 +184,25 @@ class PreSubjectivityConvergence:
         'selection:retention': 1.0,
     }
 
+    # ── 动态耦合阈值参数（P1 方案） ──
+    # 根据活跃比特数自适应调整阈值：
+    #   N_active ≤ 12  → threshold = base × 0.50  (更宽松，信号弱)
+    #   N_active ≤ 24  → threshold = base × 0.75  (适度宽松)
+    #   N_active > 24  → threshold = base × 1.00  (基准)
+    DYNAMIC_THRESHOLD_SCALE_LOW = 0.50    # N_active ≤ 12
+    DYNAMIC_THRESHOLD_SCALE_MID = 0.75    # N_active ≤ 24
+    DYNAMIC_THRESHOLD_SCALE_HIGH = 1.00   # N_active > 24
+    DYNAMIC_THRESHOLD_N_LOW = 12
+    DYNAMIC_THRESHOLD_N_MID = 24
+
     def __init__(self,
                  coupling_threshold: float = 0.3,
                  stability_threshold: float = 0.5,
                  n_perturbation_tests: int = 5,
                  perturbation_scale: float = 0.1,
                  coupling_mode: str = "all",
-                 coupling_weights: Optional[Dict[str, float]] = None):
+                 coupling_weights: Optional[Dict[str, float]] = None,
+                 dynamic_threshold: bool = False):
         """
         Args:
             coupling_threshold: 耦合强度阈值（超过此值认为两机制耦合）
@@ -204,6 +216,9 @@ class PreSubjectivityConvergence:
             coupling_weights: 耦合权重字典，键为 "mech_a:mech_b" 格式。
                 如果为 None，使用 DEFAULT_COUPLING_WEIGHTS。
                 仅在 coupling_mode="weighted" 时使用。
+            dynamic_threshold: 是否启用动态耦合阈值（根据 N_active 自适应调整）。
+                启用后，实际阈值 = coupling_threshold × scale(N_active)。
+                这解决了"活跃比特少时信号弱导致耦合被系统性低估"的问题。
         """
         self.coupling_threshold = coupling_threshold
         self.stability_threshold = stability_threshold
@@ -211,6 +226,7 @@ class PreSubjectivityConvergence:
         self.perturbation_scale = perturbation_scale
         self.coupling_mode = coupling_mode
         self.coupling_weights = coupling_weights or self.DEFAULT_COUPLING_WEIGHTS.copy()
+        self.dynamic_threshold = dynamic_threshold
 
         # 六阈值检测器
         self._threshold_detector = SixThresholdDetector()
@@ -222,6 +238,33 @@ class PreSubjectivityConvergence:
         self._convergence_history: List[ConvergenceResult] = []
 
         self._step_count: int = 0
+
+    def _get_dynamic_threshold(self, n_active: Optional[int] = None) -> float:
+        """计算动态耦合阈值
+
+        根据活跃比特数自适应调整阈值：
+          N_active ≤ 12  → base × 0.50
+          N_active ≤ 24  → base × 0.75
+          N_active > 24  → base × 1.00
+
+        Args:
+            n_active: 活跃比特数。如果为 None 或 dynamic_threshold=False，
+                      返回基准阈值。
+
+        Returns:
+            实际耦合阈值
+        """
+        if not self.dynamic_threshold or n_active is None:
+            return self.coupling_threshold
+
+        if n_active <= self.DYNAMIC_THRESHOLD_N_LOW:
+            scale = self.DYNAMIC_THRESHOLD_SCALE_LOW
+        elif n_active <= self.DYNAMIC_THRESHOLD_N_MID:
+            scale = self.DYNAMIC_THRESHOLD_SCALE_MID
+        else:
+            scale = self.DYNAMIC_THRESHOLD_SCALE_HIGH
+
+        return self.coupling_threshold * scale
 
     def evaluate(self,
                  # 六阈值检测参数（透传给 SixThresholdDetector）
@@ -236,6 +279,8 @@ class PreSubjectivityConvergence:
                  field_names: Optional[List[str]] = None,
                  # 时间戳
                  timestamp: Optional[int] = None,
+                 # 活跃比特数（用于动态耦合阈值）
+                 n_active: Optional[int] = None,
                  ) -> ConvergenceResult:
         """执行前主体态收束判定
 
@@ -265,7 +310,9 @@ class PreSubjectivityConvergence:
         six_met = threshold_result.all_met
 
         # ── 条件2: 耦合强度检测 ──
-        coupling_met, n_coupled, min_coupling = self._evaluate_coupling(coupling_matrix)
+        effective_threshold = self._get_dynamic_threshold(n_active)
+        coupling_met, n_coupled, min_coupling = self._evaluate_coupling(
+            coupling_matrix, effective_threshold=effective_threshold)
 
         # ── 条件3: 稳定性检测 ──
         stability_met, stability_score = self._evaluate_stability(
@@ -293,7 +340,8 @@ class PreSubjectivityConvergence:
         return result
 
     def _evaluate_coupling(self,
-                           coupling_matrix: Optional[Dict[str, Dict[str, float]]]
+                           coupling_matrix: Optional[Dict[str, Dict[str, float]]],
+                           effective_threshold: Optional[float] = None
                            ) -> Tuple[bool, int, float]:
         """评估耦合强度
 
@@ -306,12 +354,16 @@ class PreSubjectivityConvergence:
 
         Args:
             coupling_matrix: 耦合矩阵
+            effective_threshold: 有效耦合阈值（由 _get_dynamic_threshold 计算）。
+                如果为 None，使用 self.coupling_threshold。
 
         Returns:
             (coupling_met, n_coupled_pairs, min_coupling)
         """
         if coupling_matrix is None:
             return False, 0, 0.0
+
+        threshold = effective_threshold if effective_threshold is not None else self.coupling_threshold
 
         n_coupled = 0
         total_pairs = 0
@@ -326,7 +378,7 @@ class PreSubjectivityConvergence:
                 strength = coupling_matrix.get(ma, {}).get(mb, 0.0)
                 strength = max(strength, coupling_matrix.get(mb, {}).get(ma, 0.0))
                 min_coupling = min(min_coupling, strength)
-                if strength > self.coupling_threshold:
+                if strength > threshold:
                     n_coupled += 1
 
         if total_pairs == 0:
@@ -350,7 +402,7 @@ class PreSubjectivityConvergence:
                     total_weight += weight
                     strength = coupling_matrix.get(ma, {}).get(mb, 0.0)
                     strength = max(strength, coupling_matrix.get(mb, {}).get(ma, 0.0))
-                    if strength > self.coupling_threshold:
+                    if strength > threshold:
                         weighted_score += weight
             coupling_met = (weighted_score / total_weight) >= 0.50 if total_weight > 0 else False
         elif self.coupling_mode == "majority":
