@@ -1,0 +1,5290 @@
+{
+  "A_functional_030_1000": [
+    {
+      "config": "A_functional_030_1000",
+      "run_id": 0,
+      "elapsed_seconds": 18.6,
+      "final_pbm_summary": {
+        "n_entries": 50,
+        "n_active": 50,
+        "n_frozen": 49,
+        "n_cycles_tracked": 50,
+        "aggregate_retention_depth": 1.0,
+        "deep_retention_entries": [
+          "bias_000000",
+          "bias_000001",
+          "bias_000002",
+          "bias_000003",
+          "bias_000004",
+          "bias_000005",
+          "bias_000006",
+          "bias_000007",
+          "bias_000008",
+          "bias_000009",
+          "bias_000010",
+          "bias_000011",
+          "bias_000012",
+          "bias_000013",
+          "bias_000014",
+          "bias_000015",
+          "bias_000016",
+          "bias_000017",
+          "bias_000018",
+          "bias_000019",
+          "bias_000020",
+          "bias_000021",
+          "bias_000022",
+          "bias_000023",
+          "bias_000024",
+          "bias_000025",
+          "bias_000026",
+          "bias_000027",
+          "bias_000028",
+          "bias_000029",
+          "bias_000030",
+          "bias_000031",
+          "bias_000032",
+          "bias_000033",
+          "bias_000034",
+          "bias_000035",
+          "bias_000036",
+          "bias_000037",
+          "bias_000038",
+          "bias_000039",
+          "bias_000040",
+          "bias_000041",
+          "bias_000042",
+          "bias_000043",
+          "bias_000044",
+          "bias_000045",
+          "bias_000046"
+        ],
+        "all_retention_stats": {
+          "bias_000000": {
+            "entry_id": "bias_000000",
+            "n_cycles": 49,
+            "n_successful_reinvocations": 49,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999997,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000001": {
+            "entry_id": "bias_000001",
+            "n_cycles": 48,
+            "n_successful_reinvocations": 48,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000002": {
+            "entry_id": "bias_000002",
+            "n_cycles": 47,
+            "n_successful_reinvocations": 47,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000003": {
+            "entry_id": "bias_000003",
+            "n_cycles": 46,
+            "n_successful_reinvocations": 46,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000004": {
+            "entry_id": "bias_000004",
+            "n_cycles": 45,
+            "n_successful_reinvocations": 45,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000005": {
+            "entry_id": "bias_000005",
+            "n_cycles": 44,
+            "n_successful_reinvocations": 44,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000006": {
+            "entry_id": "bias_000006",
+            "n_cycles": 43,
+            "n_successful_reinvocations": 43,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000007": {
+            "entry_id": "bias_000007",
+            "n_cycles": 42,
+            "n_successful_reinvocations": 42,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000008": {
+            "entry_id": "bias_000008",
+            "n_cycles": 41,
+            "n_successful_reinvocations": 41,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000009": {
+            "entry_id": "bias_000009",
+            "n_cycles": 40,
+            "n_successful_reinvocations": 40,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000010": {
+            "entry_id": "bias_000010",
+            "n_cycles": 39,
+            "n_successful_reinvocations": 39,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000011": {
+            "entry_id": "bias_000011",
+            "n_cycles": 38,
+            "n_successful_reinvocations": 38,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000012": {
+            "entry_id": "bias_000012",
+            "n_cycles": 37,
+            "n_successful_reinvocations": 37,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000013": {
+            "entry_id": "bias_000013",
+            "n_cycles": 36,
+            "n_successful_reinvocations": 36,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000014": {
+            "entry_id": "bias_000014",
+            "n_cycles": 35,
+            "n_successful_reinvocations": 35,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000015": {
+            "entry_id": "bias_000015",
+            "n_cycles": 34,
+            "n_successful_reinvocations": 34,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000016": {
+            "entry_id": "bias_000016",
+            "n_cycles": 33,
+            "n_successful_reinvocations": 33,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000017": {
+            "entry_id": "bias_000017",
+            "n_cycles": 32,
+            "n_successful_reinvocations": 32,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000018": {
+            "entry_id": "bias_000018",
+            "n_cycles": 31,
+            "n_successful_reinvocations": 31,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000019": {
+            "entry_id": "bias_000019",
+            "n_cycles": 30,
+            "n_successful_reinvocations": 30,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000020": {
+            "entry_id": "bias_000020",
+            "n_cycles": 29,
+            "n_successful_reinvocations": 29,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000021": {
+            "entry_id": "bias_000021",
+            "n_cycles": 28,
+            "n_successful_reinvocations": 28,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000022": {
+            "entry_id": "bias_000022",
+            "n_cycles": 27,
+            "n_successful_reinvocations": 27,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000023": {
+            "entry_id": "bias_000023",
+            "n_cycles": 26,
+            "n_successful_reinvocations": 26,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000024": {
+            "entry_id": "bias_000024",
+            "n_cycles": 25,
+            "n_successful_reinvocations": 25,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000025": {
+            "entry_id": "bias_000025",
+            "n_cycles": 24,
+            "n_successful_reinvocations": 24,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000026": {
+            "entry_id": "bias_000026",
+            "n_cycles": 23,
+            "n_successful_reinvocations": 23,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000027": {
+            "entry_id": "bias_000027",
+            "n_cycles": 22,
+            "n_successful_reinvocations": 22,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000028": {
+            "entry_id": "bias_000028",
+            "n_cycles": 21,
+            "n_successful_reinvocations": 21,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000029": {
+            "entry_id": "bias_000029",
+            "n_cycles": 20,
+            "n_successful_reinvocations": 20,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000030": {
+            "entry_id": "bias_000030",
+            "n_cycles": 19,
+            "n_successful_reinvocations": 19,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000031": {
+            "entry_id": "bias_000031",
+            "n_cycles": 18,
+            "n_successful_reinvocations": 18,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000032": {
+            "entry_id": "bias_000032",
+            "n_cycles": 17,
+            "n_successful_reinvocations": 17,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000033": {
+            "entry_id": "bias_000033",
+            "n_cycles": 16,
+            "n_successful_reinvocations": 16,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000034": {
+            "entry_id": "bias_000034",
+            "n_cycles": 15,
+            "n_successful_reinvocations": 15,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000035": {
+            "entry_id": "bias_000035",
+            "n_cycles": 14,
+            "n_successful_reinvocations": 14,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000036": {
+            "entry_id": "bias_000036",
+            "n_cycles": 13,
+            "n_successful_reinvocations": 13,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000037": {
+            "entry_id": "bias_000037",
+            "n_cycles": 12,
+            "n_successful_reinvocations": 12,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000038": {
+            "entry_id": "bias_000038",
+            "n_cycles": 11,
+            "n_successful_reinvocations": 11,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000039": {
+            "entry_id": "bias_000039",
+            "n_cycles": 10,
+            "n_successful_reinvocations": 10,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000040": {
+            "entry_id": "bias_000040",
+            "n_cycles": 9,
+            "n_successful_reinvocations": 9,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000041": {
+            "entry_id": "bias_000041",
+            "n_cycles": 8,
+            "n_successful_reinvocations": 8,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000042": {
+            "entry_id": "bias_000042",
+            "n_cycles": 7,
+            "n_successful_reinvocations": 7,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000043": {
+            "entry_id": "bias_000043",
+            "n_cycles": 6,
+            "n_successful_reinvocations": 6,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000044": {
+            "entry_id": "bias_000044",
+            "n_cycles": 5,
+            "n_successful_reinvocations": 5,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000045": {
+            "entry_id": "bias_000045",
+            "n_cycles": 4,
+            "n_successful_reinvocations": 4,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000046": {
+            "entry_id": "bias_000046",
+            "n_cycles": 3,
+            "n_successful_reinvocations": 3,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000047": {
+            "entry_id": "bias_000047",
+            "n_cycles": 2,
+            "n_successful_reinvocations": 2,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": false
+          },
+          "bias_000048": {
+            "entry_id": "bias_000048",
+            "n_cycles": 1,
+            "n_successful_reinvocations": 1,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": false
+          }
+        }
+      },
+      "signal_summary": {
+        "interface_regulation": {
+          "final": 0.5714285714285714,
+          "mean": 0.5885714285714285,
+          "max": 1.0,
+          "first_nonzero": 0
+        },
+        "self_sustaining": {
+          "final": 0.6111111119389534,
+          "mean": 0.6139101281762123,
+          "max": 0.7142857164144516,
+          "first_nonzero": 0
+        },
+        "retention": {
+          "final": 1.0,
+          "mean": 0.96,
+          "max": 1.0,
+          "first_nonzero": 2
+        },
+        "replication": {
+          "final": 0.5876288659793815,
+          "mean": 0.6160639486531158,
+          "max": 1.0,
+          "first_nonzero": 0
+        },
+        "selection": {
+          "final": 0.7089144936325046,
+          "mean": 0.728986316696317,
+          "max": 1.0,
+          "first_nonzero": 0
+        },
+        "functional_differentiation": {
+          "final": 0.4519432183307433,
+          "mean": 0.44172928717815685,
+          "max": 0.4519432183307433,
+          "first_nonzero": 0
+        }
+      },
+      "functional_signal_history": [
+        {
+          "step": 0,
+          "interface_regulation": 1.0,
+          "self_sustaining": 0.7142857164144516,
+          "retention": 0.0,
+          "replication": 1.0,
+          "selection": 1.0,
+          "functional_differentiation": 0.28176951253874355
+        },
+        {
+          "step": 20,
+          "interface_regulation": 1.0,
+          "self_sustaining": 0.6478873193264008,
+          "retention": 0.0,
+          "replication": 1.0,
+          "selection": 1.0,
+          "functional_differentiation": 0.11142036649342002
+        },
+        {
+          "step": 40,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.7222222222222222,
+          "selection": 0.8039215686274509,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 60,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.6666666666666665,
+          "selection": 0.7647058823529411,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 80,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.6428571428571428,
+          "selection": 0.7478991596638656,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 100,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.6296296296296297,
+          "selection": 0.738562091503268,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 120,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.6212121212121211,
+          "selection": 0.7326203208556149,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 140,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.6153846153846153,
+          "selection": 0.7285067873303167,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 160,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.611111111111111,
+          "selection": 0.7254901960784313,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 180,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.6078431372549019,
+          "selection": 0.7231833910034602,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 200,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.6052631578947367,
+          "selection": 0.7213622291021672,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 220,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.6031746031746031,
+          "selection": 0.7198879551820728,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 240,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.6014492753623187,
+          "selection": 0.7186700767263428,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 260,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.6,
+          "selection": 0.7176470588235294,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 280,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5987654320987653,
+          "selection": 0.7167755991285404,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 300,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5977011494252875,
+          "selection": 0.7160243407707911,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 320,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.596774193548387,
+          "selection": 0.715370018975332,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 340,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.595959595959596,
+          "selection": 0.714795008912656,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 360,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5952380952380952,
+          "selection": 0.7142857142857143,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 380,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5945945945945944,
+          "selection": 0.7138314785373608,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 400,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.594017094017094,
+          "selection": 0.7134238310708899,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 420,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5934959349593495,
+          "selection": 0.7130559540889526,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 440,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5930232558139535,
+          "selection": 0.7127222982216144,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 460,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5925925925925926,
+          "selection": 0.7124183006535948,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 480,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5921985815602836,
+          "selection": 0.7121401752190237,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 500,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5918367346938777,
+          "selection": 0.7118847539015606,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 520,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5915032679738562,
+          "selection": 0.7116493656286044,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 540,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.591194968553459,
+          "selection": 0.7114317425083241,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 560,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5909090909090908,
+          "selection": 0.7112299465240642,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 580,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5906432748538012,
+          "selection": 0.7110423116615067,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 600,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5903954802259888,
+          "selection": 0.7108673978065803,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 620,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5901639344262294,
+          "selection": 0.7107039537126325,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 640,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5899470899470899,
+          "selection": 0.7105508870214753,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 660,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5897435897435898,
+          "selection": 0.7104072398190046,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 680,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5895522388059703,
+          "selection": 0.7102721685689202,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 700,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5893719806763285,
+          "selection": 0.7101449275362318,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 720,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5892018779342724,
+          "selection": 0.7100248550124274,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 740,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.589041095890411,
+          "selection": 0.709911361804996,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 760,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.588888888888889,
+          "selection": 0.7098039215686276,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 780,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5887445887445888,
+          "selection": 0.7097020626432391,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 800,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5886075949367089,
+          "selection": 0.7096053611317944,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 820,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.588477366255144,
+          "selection": 0.7095134350036311,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 840,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5883534136546186,
+          "selection": 0.7094259390503188,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 860,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5882352941176471,
+          "selection": 0.7093425605536332,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 880,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5881226053639846,
+          "selection": 0.7092630155510481,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 900,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5880149812734081,
+          "selection": 0.7091870456047588,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 920,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5879120879120879,
+          "selection": 0.709114414996768,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 940,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5878136200716847,
+          "selection": 0.7090449082858951,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 960,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.587719298245614,
+          "selection": 0.7089783281733746,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 980,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5876288659793815,
+          "selection": 0.7089144936325046,
+          "functional_differentiation": 0.4519432183307433
+        }
+      ]
+    },
+    {
+      "config": "A_functional_030_1000",
+      "run_id": 1,
+      "elapsed_seconds": 19.2,
+      "final_pbm_summary": {
+        "n_entries": 50,
+        "n_active": 50,
+        "n_frozen": 49,
+        "n_cycles_tracked": 50,
+        "aggregate_retention_depth": 1.0,
+        "deep_retention_entries": [
+          "bias_000000",
+          "bias_000001",
+          "bias_000002",
+          "bias_000003",
+          "bias_000004",
+          "bias_000005",
+          "bias_000006",
+          "bias_000007",
+          "bias_000008",
+          "bias_000009",
+          "bias_000010",
+          "bias_000011",
+          "bias_000012",
+          "bias_000013",
+          "bias_000014",
+          "bias_000015",
+          "bias_000016",
+          "bias_000017",
+          "bias_000018",
+          "bias_000019",
+          "bias_000020",
+          "bias_000021",
+          "bias_000022",
+          "bias_000023",
+          "bias_000024",
+          "bias_000025",
+          "bias_000026",
+          "bias_000027",
+          "bias_000028",
+          "bias_000029",
+          "bias_000030",
+          "bias_000031",
+          "bias_000032",
+          "bias_000033",
+          "bias_000034",
+          "bias_000035",
+          "bias_000036",
+          "bias_000037",
+          "bias_000038",
+          "bias_000039",
+          "bias_000040",
+          "bias_000041",
+          "bias_000042",
+          "bias_000043",
+          "bias_000044",
+          "bias_000045",
+          "bias_000046"
+        ],
+        "all_retention_stats": {
+          "bias_000000": {
+            "entry_id": "bias_000000",
+            "n_cycles": 49,
+            "n_successful_reinvocations": 49,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999997,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000001": {
+            "entry_id": "bias_000001",
+            "n_cycles": 48,
+            "n_successful_reinvocations": 48,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0000000000000002,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000002": {
+            "entry_id": "bias_000002",
+            "n_cycles": 47,
+            "n_successful_reinvocations": 47,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000003": {
+            "entry_id": "bias_000003",
+            "n_cycles": 46,
+            "n_successful_reinvocations": 46,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000004": {
+            "entry_id": "bias_000004",
+            "n_cycles": 45,
+            "n_successful_reinvocations": 45,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000005": {
+            "entry_id": "bias_000005",
+            "n_cycles": 44,
+            "n_successful_reinvocations": 44,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000006": {
+            "entry_id": "bias_000006",
+            "n_cycles": 43,
+            "n_successful_reinvocations": 43,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000007": {
+            "entry_id": "bias_000007",
+            "n_cycles": 42,
+            "n_successful_reinvocations": 42,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000008": {
+            "entry_id": "bias_000008",
+            "n_cycles": 41,
+            "n_successful_reinvocations": 41,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000009": {
+            "entry_id": "bias_000009",
+            "n_cycles": 40,
+            "n_successful_reinvocations": 40,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000010": {
+            "entry_id": "bias_000010",
+            "n_cycles": 39,
+            "n_successful_reinvocations": 39,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000011": {
+            "entry_id": "bias_000011",
+            "n_cycles": 38,
+            "n_successful_reinvocations": 38,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000012": {
+            "entry_id": "bias_000012",
+            "n_cycles": 37,
+            "n_successful_reinvocations": 37,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000013": {
+            "entry_id": "bias_000013",
+            "n_cycles": 36,
+            "n_successful_reinvocations": 36,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000014": {
+            "entry_id": "bias_000014",
+            "n_cycles": 35,
+            "n_successful_reinvocations": 35,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000015": {
+            "entry_id": "bias_000015",
+            "n_cycles": 34,
+            "n_successful_reinvocations": 34,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000016": {
+            "entry_id": "bias_000016",
+            "n_cycles": 33,
+            "n_successful_reinvocations": 33,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000017": {
+            "entry_id": "bias_000017",
+            "n_cycles": 32,
+            "n_successful_reinvocations": 32,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000018": {
+            "entry_id": "bias_000018",
+            "n_cycles": 31,
+            "n_successful_reinvocations": 31,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000019": {
+            "entry_id": "bias_000019",
+            "n_cycles": 30,
+            "n_successful_reinvocations": 30,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000020": {
+            "entry_id": "bias_000020",
+            "n_cycles": 29,
+            "n_successful_reinvocations": 29,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000021": {
+            "entry_id": "bias_000021",
+            "n_cycles": 28,
+            "n_successful_reinvocations": 28,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000022": {
+            "entry_id": "bias_000022",
+            "n_cycles": 27,
+            "n_successful_reinvocations": 27,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000023": {
+            "entry_id": "bias_000023",
+            "n_cycles": 26,
+            "n_successful_reinvocations": 26,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000024": {
+            "entry_id": "bias_000024",
+            "n_cycles": 25,
+            "n_successful_reinvocations": 25,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000025": {
+            "entry_id": "bias_000025",
+            "n_cycles": 24,
+            "n_successful_reinvocations": 24,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000026": {
+            "entry_id": "bias_000026",
+            "n_cycles": 23,
+            "n_successful_reinvocations": 23,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000027": {
+            "entry_id": "bias_000027",
+            "n_cycles": 22,
+            "n_successful_reinvocations": 22,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000028": {
+            "entry_id": "bias_000028",
+            "n_cycles": 21,
+            "n_successful_reinvocations": 21,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000029": {
+            "entry_id": "bias_000029",
+            "n_cycles": 20,
+            "n_successful_reinvocations": 20,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000030": {
+            "entry_id": "bias_000030",
+            "n_cycles": 19,
+            "n_successful_reinvocations": 19,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000031": {
+            "entry_id": "bias_000031",
+            "n_cycles": 18,
+            "n_successful_reinvocations": 18,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000032": {
+            "entry_id": "bias_000032",
+            "n_cycles": 17,
+            "n_successful_reinvocations": 17,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000033": {
+            "entry_id": "bias_000033",
+            "n_cycles": 16,
+            "n_successful_reinvocations": 16,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000034": {
+            "entry_id": "bias_000034",
+            "n_cycles": 15,
+            "n_successful_reinvocations": 15,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000035": {
+            "entry_id": "bias_000035",
+            "n_cycles": 14,
+            "n_successful_reinvocations": 14,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000036": {
+            "entry_id": "bias_000036",
+            "n_cycles": 13,
+            "n_successful_reinvocations": 13,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000037": {
+            "entry_id": "bias_000037",
+            "n_cycles": 12,
+            "n_successful_reinvocations": 12,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000038": {
+            "entry_id": "bias_000038",
+            "n_cycles": 11,
+            "n_successful_reinvocations": 11,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000039": {
+            "entry_id": "bias_000039",
+            "n_cycles": 10,
+            "n_successful_reinvocations": 10,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000040": {
+            "entry_id": "bias_000040",
+            "n_cycles": 9,
+            "n_successful_reinvocations": 9,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000041": {
+            "entry_id": "bias_000041",
+            "n_cycles": 8,
+            "n_successful_reinvocations": 8,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000042": {
+            "entry_id": "bias_000042",
+            "n_cycles": 7,
+            "n_successful_reinvocations": 7,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000043": {
+            "entry_id": "bias_000043",
+            "n_cycles": 6,
+            "n_successful_reinvocations": 6,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000044": {
+            "entry_id": "bias_000044",
+            "n_cycles": 5,
+            "n_successful_reinvocations": 5,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000045": {
+            "entry_id": "bias_000045",
+            "n_cycles": 4,
+            "n_successful_reinvocations": 4,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000046": {
+            "entry_id": "bias_000046",
+            "n_cycles": 3,
+            "n_successful_reinvocations": 3,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000047": {
+            "entry_id": "bias_000047",
+            "n_cycles": 2,
+            "n_successful_reinvocations": 2,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": false
+          },
+          "bias_000048": {
+            "entry_id": "bias_000048",
+            "n_cycles": 1,
+            "n_successful_reinvocations": 1,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": false
+          }
+        }
+      },
+      "signal_summary": {
+        "interface_regulation": {
+          "final": 0.5714285714285714,
+          "mean": 0.58,
+          "max": 1.0,
+          "first_nonzero": 0
+        },
+        "self_sustaining": {
+          "final": 0.6041666641831398,
+          "mean": 0.606369045227766,
+          "max": 0.7142857164144516,
+          "first_nonzero": 0
+        },
+        "retention": {
+          "final": 1.0,
+          "mean": 0.96,
+          "max": 1.0,
+          "first_nonzero": 2
+        },
+        "replication": {
+          "final": 0.5841750841750842,
+          "mean": 0.5948962914141248,
+          "max": 1.0,
+          "first_nonzero": 0
+        },
+        "selection": {
+          "final": 0.6673400673400673,
+          "mean": 0.6759170331313,
+          "max": 1.0,
+          "first_nonzero": 0
+        },
+        "functional_differentiation": {
+          "final": 0.49019607843137314,
+          "mean": 0.4863322840634456,
+          "max": 0.505432925927626,
+          "first_nonzero": 0
+        }
+      },
+      "functional_signal_history": [
+        {
+          "step": 0,
+          "interface_regulation": 1.0,
+          "self_sustaining": 0.7142857164144516,
+          "retention": 0.0,
+          "replication": 1.0,
+          "selection": 1.0,
+          "functional_differentiation": 0.28176951253874355
+        },
+        {
+          "step": 20,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 0.0,
+          "replication": 0.611111111111111,
+          "selection": 0.6888888888888888,
+          "functional_differentiation": 0.505432925927626
+        },
+        {
+          "step": 40,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.6,
+          "selection": 0.6799999999999999,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 60,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5952380952380952,
+          "selection": 0.6761904761904761,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 80,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5925925925925926,
+          "selection": 0.674074074074074,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 100,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5909090909090908,
+          "selection": 0.6727272727272726,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 120,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5897435897435898,
+          "selection": 0.6717948717948717,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 140,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5888888888888889,
+          "selection": 0.6711111111111111,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 160,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5882352941176471,
+          "selection": 0.6705882352941176,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 180,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.587719298245614,
+          "selection": 0.6701754385964912,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 200,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5873015873015873,
+          "selection": 0.6698412698412698,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 220,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5869565217391305,
+          "selection": 0.6695652173913044,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 240,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5866666666666666,
+          "selection": 0.6693333333333332,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 260,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5864197530864198,
+          "selection": 0.6691358024691358,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 280,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5862068965517242,
+          "selection": 0.6689655172413793,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 300,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.586021505376344,
+          "selection": 0.6688172043010752,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 320,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.585858585858586,
+          "selection": 0.6686868686868688,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 340,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5857142857142857,
+          "selection": 0.6685714285714286,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 360,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5855855855855856,
+          "selection": 0.6684684684684685,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 380,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5854700854700855,
+          "selection": 0.6683760683760683,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 400,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5853658536585366,
+          "selection": 0.6682926829268292,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 420,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5852713178294574,
+          "selection": 0.6682170542635659,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 440,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5851851851851851,
+          "selection": 0.6681481481481482,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 460,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5851063829787234,
+          "selection": 0.6680851063829787,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 480,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5850340136054422,
+          "selection": 0.6680272108843537,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 500,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5849673202614379,
+          "selection": 0.6679738562091503,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 520,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5849056603773585,
+          "selection": 0.6679245283018868,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 540,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5848484848484848,
+          "selection": 0.6678787878787878,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 560,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.584795321637427,
+          "selection": 0.6678362573099416,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 580,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5847457627118645,
+          "selection": 0.6677966101694915,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 600,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5846994535519126,
+          "selection": 0.66775956284153,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 620,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5846560846560847,
+          "selection": 0.6677248677248677,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 640,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5846153846153846,
+          "selection": 0.6676923076923077,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 660,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5845771144278608,
+          "selection": 0.6676616915422886,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 680,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5845410628019323,
+          "selection": 0.6676328502415458,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 700,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5845070422535211,
+          "selection": 0.6676056338028169,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 720,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5844748858447488,
+          "selection": 0.6675799086757991,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 740,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5844444444444444,
+          "selection": 0.6675555555555556,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 760,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5844155844155844,
+          "selection": 0.6675324675324675,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 780,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5843881856540084,
+          "selection": 0.6675105485232068,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 800,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5843621399176954,
+          "selection": 0.6674897119341563,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 820,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5843373493975904,
+          "selection": 0.6674698795180724,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 840,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5843137254901961,
+          "selection": 0.6674509803921569,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 860,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5842911877394635,
+          "selection": 0.6674329501915709,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 880,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5842696629213483,
+          "selection": 0.6674157303370786,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 900,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5842490842490843,
+          "selection": 0.6673992673992674,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 920,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5842293906810037,
+          "selection": 0.6673835125448029,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 940,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5842105263157894,
+          "selection": 0.6673684210526315,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 960,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.584192439862543,
+          "selection": 0.6673539518900343,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 980,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5841750841750842,
+          "selection": 0.6673400673400673,
+          "functional_differentiation": 0.49019607843137314
+        }
+      ]
+    }
+  ],
+  "B_functional_015_1000": [
+    {
+      "config": "B_functional_015_1000",
+      "run_id": 0,
+      "elapsed_seconds": 19.9,
+      "final_pbm_summary": {
+        "n_entries": 50,
+        "n_active": 50,
+        "n_frozen": 49,
+        "n_cycles_tracked": 50,
+        "aggregate_retention_depth": 1.0,
+        "deep_retention_entries": [
+          "bias_000000",
+          "bias_000001",
+          "bias_000002",
+          "bias_000003",
+          "bias_000004",
+          "bias_000005",
+          "bias_000006",
+          "bias_000007",
+          "bias_000008",
+          "bias_000009",
+          "bias_000010",
+          "bias_000011",
+          "bias_000012",
+          "bias_000013",
+          "bias_000014",
+          "bias_000015",
+          "bias_000016",
+          "bias_000017",
+          "bias_000018",
+          "bias_000019",
+          "bias_000020",
+          "bias_000021",
+          "bias_000022",
+          "bias_000023",
+          "bias_000024",
+          "bias_000025",
+          "bias_000026",
+          "bias_000027",
+          "bias_000028",
+          "bias_000029",
+          "bias_000030",
+          "bias_000031",
+          "bias_000032",
+          "bias_000033",
+          "bias_000034",
+          "bias_000035",
+          "bias_000036",
+          "bias_000037",
+          "bias_000038",
+          "bias_000039",
+          "bias_000040",
+          "bias_000041",
+          "bias_000042",
+          "bias_000043",
+          "bias_000044",
+          "bias_000045",
+          "bias_000046"
+        ],
+        "all_retention_stats": {
+          "bias_000000": {
+            "entry_id": "bias_000000",
+            "n_cycles": 49,
+            "n_successful_reinvocations": 49,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999997,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000001": {
+            "entry_id": "bias_000001",
+            "n_cycles": 48,
+            "n_successful_reinvocations": 48,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000002": {
+            "entry_id": "bias_000002",
+            "n_cycles": 47,
+            "n_successful_reinvocations": 47,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000003": {
+            "entry_id": "bias_000003",
+            "n_cycles": 46,
+            "n_successful_reinvocations": 46,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000004": {
+            "entry_id": "bias_000004",
+            "n_cycles": 45,
+            "n_successful_reinvocations": 45,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000005": {
+            "entry_id": "bias_000005",
+            "n_cycles": 44,
+            "n_successful_reinvocations": 44,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000006": {
+            "entry_id": "bias_000006",
+            "n_cycles": 43,
+            "n_successful_reinvocations": 43,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000007": {
+            "entry_id": "bias_000007",
+            "n_cycles": 42,
+            "n_successful_reinvocations": 42,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000008": {
+            "entry_id": "bias_000008",
+            "n_cycles": 41,
+            "n_successful_reinvocations": 41,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000009": {
+            "entry_id": "bias_000009",
+            "n_cycles": 40,
+            "n_successful_reinvocations": 40,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000010": {
+            "entry_id": "bias_000010",
+            "n_cycles": 39,
+            "n_successful_reinvocations": 39,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000011": {
+            "entry_id": "bias_000011",
+            "n_cycles": 38,
+            "n_successful_reinvocations": 38,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000012": {
+            "entry_id": "bias_000012",
+            "n_cycles": 37,
+            "n_successful_reinvocations": 37,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000013": {
+            "entry_id": "bias_000013",
+            "n_cycles": 36,
+            "n_successful_reinvocations": 36,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000014": {
+            "entry_id": "bias_000014",
+            "n_cycles": 35,
+            "n_successful_reinvocations": 35,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000015": {
+            "entry_id": "bias_000015",
+            "n_cycles": 34,
+            "n_successful_reinvocations": 34,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000016": {
+            "entry_id": "bias_000016",
+            "n_cycles": 33,
+            "n_successful_reinvocations": 33,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000017": {
+            "entry_id": "bias_000017",
+            "n_cycles": 32,
+            "n_successful_reinvocations": 32,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000018": {
+            "entry_id": "bias_000018",
+            "n_cycles": 31,
+            "n_successful_reinvocations": 31,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000019": {
+            "entry_id": "bias_000019",
+            "n_cycles": 30,
+            "n_successful_reinvocations": 30,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000020": {
+            "entry_id": "bias_000020",
+            "n_cycles": 29,
+            "n_successful_reinvocations": 29,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000021": {
+            "entry_id": "bias_000021",
+            "n_cycles": 28,
+            "n_successful_reinvocations": 28,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000022": {
+            "entry_id": "bias_000022",
+            "n_cycles": 27,
+            "n_successful_reinvocations": 27,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000023": {
+            "entry_id": "bias_000023",
+            "n_cycles": 26,
+            "n_successful_reinvocations": 26,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000024": {
+            "entry_id": "bias_000024",
+            "n_cycles": 25,
+            "n_successful_reinvocations": 25,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000025": {
+            "entry_id": "bias_000025",
+            "n_cycles": 24,
+            "n_successful_reinvocations": 24,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000026": {
+            "entry_id": "bias_000026",
+            "n_cycles": 23,
+            "n_successful_reinvocations": 23,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000027": {
+            "entry_id": "bias_000027",
+            "n_cycles": 22,
+            "n_successful_reinvocations": 22,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000028": {
+            "entry_id": "bias_000028",
+            "n_cycles": 21,
+            "n_successful_reinvocations": 21,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000029": {
+            "entry_id": "bias_000029",
+            "n_cycles": 20,
+            "n_successful_reinvocations": 20,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000030": {
+            "entry_id": "bias_000030",
+            "n_cycles": 19,
+            "n_successful_reinvocations": 19,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000031": {
+            "entry_id": "bias_000031",
+            "n_cycles": 18,
+            "n_successful_reinvocations": 18,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000032": {
+            "entry_id": "bias_000032",
+            "n_cycles": 17,
+            "n_successful_reinvocations": 17,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000033": {
+            "entry_id": "bias_000033",
+            "n_cycles": 16,
+            "n_successful_reinvocations": 16,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000034": {
+            "entry_id": "bias_000034",
+            "n_cycles": 15,
+            "n_successful_reinvocations": 15,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000035": {
+            "entry_id": "bias_000035",
+            "n_cycles": 14,
+            "n_successful_reinvocations": 14,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000036": {
+            "entry_id": "bias_000036",
+            "n_cycles": 13,
+            "n_successful_reinvocations": 13,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000037": {
+            "entry_id": "bias_000037",
+            "n_cycles": 12,
+            "n_successful_reinvocations": 12,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000038": {
+            "entry_id": "bias_000038",
+            "n_cycles": 11,
+            "n_successful_reinvocations": 11,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000039": {
+            "entry_id": "bias_000039",
+            "n_cycles": 10,
+            "n_successful_reinvocations": 10,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000040": {
+            "entry_id": "bias_000040",
+            "n_cycles": 9,
+            "n_successful_reinvocations": 9,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000041": {
+            "entry_id": "bias_000041",
+            "n_cycles": 8,
+            "n_successful_reinvocations": 8,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000042": {
+            "entry_id": "bias_000042",
+            "n_cycles": 7,
+            "n_successful_reinvocations": 7,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000043": {
+            "entry_id": "bias_000043",
+            "n_cycles": 6,
+            "n_successful_reinvocations": 6,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000044": {
+            "entry_id": "bias_000044",
+            "n_cycles": 5,
+            "n_successful_reinvocations": 5,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000045": {
+            "entry_id": "bias_000045",
+            "n_cycles": 4,
+            "n_successful_reinvocations": 4,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000046": {
+            "entry_id": "bias_000046",
+            "n_cycles": 3,
+            "n_successful_reinvocations": 3,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000047": {
+            "entry_id": "bias_000047",
+            "n_cycles": 2,
+            "n_successful_reinvocations": 2,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": false
+          },
+          "bias_000048": {
+            "entry_id": "bias_000048",
+            "n_cycles": 1,
+            "n_successful_reinvocations": 1,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": false
+          }
+        }
+      },
+      "signal_summary": {
+        "interface_regulation": {
+          "final": 0.5714285714285714,
+          "mean": 0.5885714285714285,
+          "max": 1.0,
+          "first_nonzero": 0
+        },
+        "self_sustaining": {
+          "final": 0.6111111119389534,
+          "mean": 0.6139101281762123,
+          "max": 0.7142857164144516,
+          "first_nonzero": 0
+        },
+        "retention": {
+          "final": 1.0,
+          "mean": 0.96,
+          "max": 1.0,
+          "first_nonzero": 2
+        },
+        "replication": {
+          "final": 0.5876288659793815,
+          "mean": 0.6160639486531158,
+          "max": 1.0,
+          "first_nonzero": 0
+        },
+        "selection": {
+          "final": 0.7089144936325046,
+          "mean": 0.728986316696317,
+          "max": 1.0,
+          "first_nonzero": 0
+        },
+        "functional_differentiation": {
+          "final": 0.4519432183307433,
+          "mean": 0.44172928717815685,
+          "max": 0.4519432183307433,
+          "first_nonzero": 0
+        }
+      },
+      "functional_signal_history": [
+        {
+          "step": 0,
+          "interface_regulation": 1.0,
+          "self_sustaining": 0.7142857164144516,
+          "retention": 0.0,
+          "replication": 1.0,
+          "selection": 1.0,
+          "functional_differentiation": 0.28176951253874355
+        },
+        {
+          "step": 20,
+          "interface_regulation": 1.0,
+          "self_sustaining": 0.6478873193264008,
+          "retention": 0.0,
+          "replication": 1.0,
+          "selection": 1.0,
+          "functional_differentiation": 0.11142036649342002
+        },
+        {
+          "step": 40,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.7222222222222222,
+          "selection": 0.8039215686274509,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 60,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.6666666666666665,
+          "selection": 0.7647058823529411,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 80,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.6428571428571428,
+          "selection": 0.7478991596638656,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 100,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.6296296296296297,
+          "selection": 0.738562091503268,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 120,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.6212121212121211,
+          "selection": 0.7326203208556149,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 140,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.6153846153846153,
+          "selection": 0.7285067873303167,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 160,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.611111111111111,
+          "selection": 0.7254901960784313,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 180,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.6078431372549019,
+          "selection": 0.7231833910034602,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 200,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.6052631578947367,
+          "selection": 0.7213622291021672,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 220,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.6031746031746031,
+          "selection": 0.7198879551820728,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 240,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.6014492753623187,
+          "selection": 0.7186700767263428,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 260,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.6,
+          "selection": 0.7176470588235294,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 280,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5987654320987653,
+          "selection": 0.7167755991285404,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 300,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5977011494252875,
+          "selection": 0.7160243407707911,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 320,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.596774193548387,
+          "selection": 0.715370018975332,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 340,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.595959595959596,
+          "selection": 0.714795008912656,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 360,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5952380952380952,
+          "selection": 0.7142857142857143,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 380,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5945945945945944,
+          "selection": 0.7138314785373608,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 400,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.594017094017094,
+          "selection": 0.7134238310708899,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 420,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5934959349593495,
+          "selection": 0.7130559540889526,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 440,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5930232558139535,
+          "selection": 0.7127222982216144,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 460,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5925925925925926,
+          "selection": 0.7124183006535948,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 480,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5921985815602836,
+          "selection": 0.7121401752190237,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 500,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5918367346938777,
+          "selection": 0.7118847539015606,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 520,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5915032679738562,
+          "selection": 0.7116493656286044,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 540,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.591194968553459,
+          "selection": 0.7114317425083241,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 560,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5909090909090908,
+          "selection": 0.7112299465240642,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 580,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5906432748538012,
+          "selection": 0.7110423116615067,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 600,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5903954802259888,
+          "selection": 0.7108673978065803,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 620,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5901639344262294,
+          "selection": 0.7107039537126325,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 640,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5899470899470899,
+          "selection": 0.7105508870214753,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 660,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5897435897435898,
+          "selection": 0.7104072398190046,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 680,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5895522388059703,
+          "selection": 0.7102721685689202,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 700,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5893719806763285,
+          "selection": 0.7101449275362318,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 720,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5892018779342724,
+          "selection": 0.7100248550124274,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 740,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.589041095890411,
+          "selection": 0.709911361804996,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 760,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.588888888888889,
+          "selection": 0.7098039215686276,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 780,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5887445887445888,
+          "selection": 0.7097020626432391,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 800,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5886075949367089,
+          "selection": 0.7096053611317944,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 820,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.588477366255144,
+          "selection": 0.7095134350036311,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 840,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5883534136546186,
+          "selection": 0.7094259390503188,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 860,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5882352941176471,
+          "selection": 0.7093425605536332,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 880,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5881226053639846,
+          "selection": 0.7092630155510481,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 900,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5880149812734081,
+          "selection": 0.7091870456047588,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 920,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5879120879120879,
+          "selection": 0.709114414996768,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 940,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5878136200716847,
+          "selection": 0.7090449082858951,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 960,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.587719298245614,
+          "selection": 0.7089783281733746,
+          "functional_differentiation": 0.4519432183307433
+        },
+        {
+          "step": 980,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6111111119389534,
+          "retention": 1.0,
+          "replication": 0.5876288659793815,
+          "selection": 0.7089144936325046,
+          "functional_differentiation": 0.4519432183307433
+        }
+      ]
+    },
+    {
+      "config": "B_functional_015_1000",
+      "run_id": 1,
+      "elapsed_seconds": 20.1,
+      "final_pbm_summary": {
+        "n_entries": 50,
+        "n_active": 50,
+        "n_frozen": 49,
+        "n_cycles_tracked": 50,
+        "aggregate_retention_depth": 1.0,
+        "deep_retention_entries": [
+          "bias_000000",
+          "bias_000001",
+          "bias_000002",
+          "bias_000003",
+          "bias_000004",
+          "bias_000005",
+          "bias_000006",
+          "bias_000007",
+          "bias_000008",
+          "bias_000009",
+          "bias_000010",
+          "bias_000011",
+          "bias_000012",
+          "bias_000013",
+          "bias_000014",
+          "bias_000015",
+          "bias_000016",
+          "bias_000017",
+          "bias_000018",
+          "bias_000019",
+          "bias_000020",
+          "bias_000021",
+          "bias_000022",
+          "bias_000023",
+          "bias_000024",
+          "bias_000025",
+          "bias_000026",
+          "bias_000027",
+          "bias_000028",
+          "bias_000029",
+          "bias_000030",
+          "bias_000031",
+          "bias_000032",
+          "bias_000033",
+          "bias_000034",
+          "bias_000035",
+          "bias_000036",
+          "bias_000037",
+          "bias_000038",
+          "bias_000039",
+          "bias_000040",
+          "bias_000041",
+          "bias_000042",
+          "bias_000043",
+          "bias_000044",
+          "bias_000045",
+          "bias_000046"
+        ],
+        "all_retention_stats": {
+          "bias_000000": {
+            "entry_id": "bias_000000",
+            "n_cycles": 49,
+            "n_successful_reinvocations": 49,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999997,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000001": {
+            "entry_id": "bias_000001",
+            "n_cycles": 48,
+            "n_successful_reinvocations": 48,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0000000000000002,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000002": {
+            "entry_id": "bias_000002",
+            "n_cycles": 47,
+            "n_successful_reinvocations": 47,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000003": {
+            "entry_id": "bias_000003",
+            "n_cycles": 46,
+            "n_successful_reinvocations": 46,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000004": {
+            "entry_id": "bias_000004",
+            "n_cycles": 45,
+            "n_successful_reinvocations": 45,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000005": {
+            "entry_id": "bias_000005",
+            "n_cycles": 44,
+            "n_successful_reinvocations": 44,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000006": {
+            "entry_id": "bias_000006",
+            "n_cycles": 43,
+            "n_successful_reinvocations": 43,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000007": {
+            "entry_id": "bias_000007",
+            "n_cycles": 42,
+            "n_successful_reinvocations": 42,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000008": {
+            "entry_id": "bias_000008",
+            "n_cycles": 41,
+            "n_successful_reinvocations": 41,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000009": {
+            "entry_id": "bias_000009",
+            "n_cycles": 40,
+            "n_successful_reinvocations": 40,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000010": {
+            "entry_id": "bias_000010",
+            "n_cycles": 39,
+            "n_successful_reinvocations": 39,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000011": {
+            "entry_id": "bias_000011",
+            "n_cycles": 38,
+            "n_successful_reinvocations": 38,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000012": {
+            "entry_id": "bias_000012",
+            "n_cycles": 37,
+            "n_successful_reinvocations": 37,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000013": {
+            "entry_id": "bias_000013",
+            "n_cycles": 36,
+            "n_successful_reinvocations": 36,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000014": {
+            "entry_id": "bias_000014",
+            "n_cycles": 35,
+            "n_successful_reinvocations": 35,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000015": {
+            "entry_id": "bias_000015",
+            "n_cycles": 34,
+            "n_successful_reinvocations": 34,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000016": {
+            "entry_id": "bias_000016",
+            "n_cycles": 33,
+            "n_successful_reinvocations": 33,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000017": {
+            "entry_id": "bias_000017",
+            "n_cycles": 32,
+            "n_successful_reinvocations": 32,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000018": {
+            "entry_id": "bias_000018",
+            "n_cycles": 31,
+            "n_successful_reinvocations": 31,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000019": {
+            "entry_id": "bias_000019",
+            "n_cycles": 30,
+            "n_successful_reinvocations": 30,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000020": {
+            "entry_id": "bias_000020",
+            "n_cycles": 29,
+            "n_successful_reinvocations": 29,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000021": {
+            "entry_id": "bias_000021",
+            "n_cycles": 28,
+            "n_successful_reinvocations": 28,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000022": {
+            "entry_id": "bias_000022",
+            "n_cycles": 27,
+            "n_successful_reinvocations": 27,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000023": {
+            "entry_id": "bias_000023",
+            "n_cycles": 26,
+            "n_successful_reinvocations": 26,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000024": {
+            "entry_id": "bias_000024",
+            "n_cycles": 25,
+            "n_successful_reinvocations": 25,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000025": {
+            "entry_id": "bias_000025",
+            "n_cycles": 24,
+            "n_successful_reinvocations": 24,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000026": {
+            "entry_id": "bias_000026",
+            "n_cycles": 23,
+            "n_successful_reinvocations": 23,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000027": {
+            "entry_id": "bias_000027",
+            "n_cycles": 22,
+            "n_successful_reinvocations": 22,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000028": {
+            "entry_id": "bias_000028",
+            "n_cycles": 21,
+            "n_successful_reinvocations": 21,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000029": {
+            "entry_id": "bias_000029",
+            "n_cycles": 20,
+            "n_successful_reinvocations": 20,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000030": {
+            "entry_id": "bias_000030",
+            "n_cycles": 19,
+            "n_successful_reinvocations": 19,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000031": {
+            "entry_id": "bias_000031",
+            "n_cycles": 18,
+            "n_successful_reinvocations": 18,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000032": {
+            "entry_id": "bias_000032",
+            "n_cycles": 17,
+            "n_successful_reinvocations": 17,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000033": {
+            "entry_id": "bias_000033",
+            "n_cycles": 16,
+            "n_successful_reinvocations": 16,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000034": {
+            "entry_id": "bias_000034",
+            "n_cycles": 15,
+            "n_successful_reinvocations": 15,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000035": {
+            "entry_id": "bias_000035",
+            "n_cycles": 14,
+            "n_successful_reinvocations": 14,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000036": {
+            "entry_id": "bias_000036",
+            "n_cycles": 13,
+            "n_successful_reinvocations": 13,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000037": {
+            "entry_id": "bias_000037",
+            "n_cycles": 12,
+            "n_successful_reinvocations": 12,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000038": {
+            "entry_id": "bias_000038",
+            "n_cycles": 11,
+            "n_successful_reinvocations": 11,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000039": {
+            "entry_id": "bias_000039",
+            "n_cycles": 10,
+            "n_successful_reinvocations": 10,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000040": {
+            "entry_id": "bias_000040",
+            "n_cycles": 9,
+            "n_successful_reinvocations": 9,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000041": {
+            "entry_id": "bias_000041",
+            "n_cycles": 8,
+            "n_successful_reinvocations": 8,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000042": {
+            "entry_id": "bias_000042",
+            "n_cycles": 7,
+            "n_successful_reinvocations": 7,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000043": {
+            "entry_id": "bias_000043",
+            "n_cycles": 6,
+            "n_successful_reinvocations": 6,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000044": {
+            "entry_id": "bias_000044",
+            "n_cycles": 5,
+            "n_successful_reinvocations": 5,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000045": {
+            "entry_id": "bias_000045",
+            "n_cycles": 4,
+            "n_successful_reinvocations": 4,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000046": {
+            "entry_id": "bias_000046",
+            "n_cycles": 3,
+            "n_successful_reinvocations": 3,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000047": {
+            "entry_id": "bias_000047",
+            "n_cycles": 2,
+            "n_successful_reinvocations": 2,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": false
+          },
+          "bias_000048": {
+            "entry_id": "bias_000048",
+            "n_cycles": 1,
+            "n_successful_reinvocations": 1,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": false
+          }
+        }
+      },
+      "signal_summary": {
+        "interface_regulation": {
+          "final": 0.5714285714285714,
+          "mean": 0.58,
+          "max": 1.0,
+          "first_nonzero": 0
+        },
+        "self_sustaining": {
+          "final": 0.6041666641831398,
+          "mean": 0.606369045227766,
+          "max": 0.7142857164144516,
+          "first_nonzero": 0
+        },
+        "retention": {
+          "final": 1.0,
+          "mean": 0.96,
+          "max": 1.0,
+          "first_nonzero": 2
+        },
+        "replication": {
+          "final": 0.5841750841750842,
+          "mean": 0.5948962914141248,
+          "max": 1.0,
+          "first_nonzero": 0
+        },
+        "selection": {
+          "final": 0.6673400673400673,
+          "mean": 0.6759170331313,
+          "max": 1.0,
+          "first_nonzero": 0
+        },
+        "functional_differentiation": {
+          "final": 0.49019607843137314,
+          "mean": 0.4863322840634456,
+          "max": 0.505432925927626,
+          "first_nonzero": 0
+        }
+      },
+      "functional_signal_history": [
+        {
+          "step": 0,
+          "interface_regulation": 1.0,
+          "self_sustaining": 0.7142857164144516,
+          "retention": 0.0,
+          "replication": 1.0,
+          "selection": 1.0,
+          "functional_differentiation": 0.28176951253874355
+        },
+        {
+          "step": 20,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 0.0,
+          "replication": 0.611111111111111,
+          "selection": 0.6888888888888888,
+          "functional_differentiation": 0.505432925927626
+        },
+        {
+          "step": 40,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.6,
+          "selection": 0.6799999999999999,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 60,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5952380952380952,
+          "selection": 0.6761904761904761,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 80,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5925925925925926,
+          "selection": 0.674074074074074,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 100,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5909090909090908,
+          "selection": 0.6727272727272726,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 120,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5897435897435898,
+          "selection": 0.6717948717948717,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 140,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5888888888888889,
+          "selection": 0.6711111111111111,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 160,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5882352941176471,
+          "selection": 0.6705882352941176,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 180,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.587719298245614,
+          "selection": 0.6701754385964912,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 200,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5873015873015873,
+          "selection": 0.6698412698412698,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 220,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5869565217391305,
+          "selection": 0.6695652173913044,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 240,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5866666666666666,
+          "selection": 0.6693333333333332,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 260,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5864197530864198,
+          "selection": 0.6691358024691358,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 280,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5862068965517242,
+          "selection": 0.6689655172413793,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 300,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.586021505376344,
+          "selection": 0.6688172043010752,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 320,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.585858585858586,
+          "selection": 0.6686868686868688,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 340,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5857142857142857,
+          "selection": 0.6685714285714286,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 360,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5855855855855856,
+          "selection": 0.6684684684684685,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 380,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5854700854700855,
+          "selection": 0.6683760683760683,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 400,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5853658536585366,
+          "selection": 0.6682926829268292,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 420,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5852713178294574,
+          "selection": 0.6682170542635659,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 440,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5851851851851851,
+          "selection": 0.6681481481481482,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 460,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5851063829787234,
+          "selection": 0.6680851063829787,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 480,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5850340136054422,
+          "selection": 0.6680272108843537,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 500,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5849673202614379,
+          "selection": 0.6679738562091503,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 520,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5849056603773585,
+          "selection": 0.6679245283018868,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 540,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5848484848484848,
+          "selection": 0.6678787878787878,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 560,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.584795321637427,
+          "selection": 0.6678362573099416,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 580,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5847457627118645,
+          "selection": 0.6677966101694915,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 600,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5846994535519126,
+          "selection": 0.66775956284153,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 620,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5846560846560847,
+          "selection": 0.6677248677248677,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 640,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5846153846153846,
+          "selection": 0.6676923076923077,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 660,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5845771144278608,
+          "selection": 0.6676616915422886,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 680,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5845410628019323,
+          "selection": 0.6676328502415458,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 700,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5845070422535211,
+          "selection": 0.6676056338028169,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 720,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5844748858447488,
+          "selection": 0.6675799086757991,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 740,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5844444444444444,
+          "selection": 0.6675555555555556,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 760,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5844155844155844,
+          "selection": 0.6675324675324675,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 780,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5843881856540084,
+          "selection": 0.6675105485232068,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 800,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5843621399176954,
+          "selection": 0.6674897119341563,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 820,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5843373493975904,
+          "selection": 0.6674698795180724,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 840,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5843137254901961,
+          "selection": 0.6674509803921569,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 860,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5842911877394635,
+          "selection": 0.6674329501915709,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 880,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5842696629213483,
+          "selection": 0.6674157303370786,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 900,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5842490842490843,
+          "selection": 0.6673992673992674,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 920,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5842293906810037,
+          "selection": 0.6673835125448029,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 940,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5842105263157894,
+          "selection": 0.6673684210526315,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 960,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.584192439862543,
+          "selection": 0.6673539518900343,
+          "functional_differentiation": 0.49019607843137314
+        },
+        {
+          "step": 980,
+          "interface_regulation": 0.5714285714285714,
+          "self_sustaining": 0.6041666641831398,
+          "retention": 1.0,
+          "replication": 0.5841750841750842,
+          "selection": 0.6673400673400673,
+          "functional_differentiation": 0.49019607843137314
+        }
+      ]
+    }
+  ],
+  "C_positional_030_1000": [
+    {
+      "config": "C_positional_030_1000",
+      "run_id": 0,
+      "elapsed_seconds": 18.5,
+      "final_pbm_summary": {
+        "n_entries": 50,
+        "n_active": 50,
+        "n_frozen": 49,
+        "n_cycles_tracked": 50,
+        "aggregate_retention_depth": 1.0,
+        "deep_retention_entries": [
+          "bias_000000",
+          "bias_000001",
+          "bias_000002",
+          "bias_000003",
+          "bias_000004",
+          "bias_000005",
+          "bias_000006",
+          "bias_000007",
+          "bias_000008",
+          "bias_000009",
+          "bias_000010",
+          "bias_000011",
+          "bias_000012",
+          "bias_000013",
+          "bias_000014",
+          "bias_000015",
+          "bias_000016",
+          "bias_000017",
+          "bias_000018",
+          "bias_000019",
+          "bias_000020",
+          "bias_000021",
+          "bias_000022",
+          "bias_000023",
+          "bias_000024",
+          "bias_000025",
+          "bias_000026",
+          "bias_000027",
+          "bias_000028",
+          "bias_000029",
+          "bias_000030",
+          "bias_000031",
+          "bias_000032",
+          "bias_000033",
+          "bias_000034",
+          "bias_000035",
+          "bias_000036",
+          "bias_000037",
+          "bias_000038",
+          "bias_000039",
+          "bias_000040",
+          "bias_000041",
+          "bias_000042",
+          "bias_000043",
+          "bias_000044",
+          "bias_000045",
+          "bias_000046"
+        ],
+        "all_retention_stats": {
+          "bias_000000": {
+            "entry_id": "bias_000000",
+            "n_cycles": 49,
+            "n_successful_reinvocations": 49,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999997,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000001": {
+            "entry_id": "bias_000001",
+            "n_cycles": 48,
+            "n_successful_reinvocations": 48,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000002": {
+            "entry_id": "bias_000002",
+            "n_cycles": 47,
+            "n_successful_reinvocations": 47,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000003": {
+            "entry_id": "bias_000003",
+            "n_cycles": 46,
+            "n_successful_reinvocations": 46,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000004": {
+            "entry_id": "bias_000004",
+            "n_cycles": 45,
+            "n_successful_reinvocations": 45,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000005": {
+            "entry_id": "bias_000005",
+            "n_cycles": 44,
+            "n_successful_reinvocations": 44,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000006": {
+            "entry_id": "bias_000006",
+            "n_cycles": 43,
+            "n_successful_reinvocations": 43,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000007": {
+            "entry_id": "bias_000007",
+            "n_cycles": 42,
+            "n_successful_reinvocations": 42,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000008": {
+            "entry_id": "bias_000008",
+            "n_cycles": 41,
+            "n_successful_reinvocations": 41,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000009": {
+            "entry_id": "bias_000009",
+            "n_cycles": 40,
+            "n_successful_reinvocations": 40,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000010": {
+            "entry_id": "bias_000010",
+            "n_cycles": 39,
+            "n_successful_reinvocations": 39,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000011": {
+            "entry_id": "bias_000011",
+            "n_cycles": 38,
+            "n_successful_reinvocations": 38,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000012": {
+            "entry_id": "bias_000012",
+            "n_cycles": 37,
+            "n_successful_reinvocations": 37,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000013": {
+            "entry_id": "bias_000013",
+            "n_cycles": 36,
+            "n_successful_reinvocations": 36,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000014": {
+            "entry_id": "bias_000014",
+            "n_cycles": 35,
+            "n_successful_reinvocations": 35,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000015": {
+            "entry_id": "bias_000015",
+            "n_cycles": 34,
+            "n_successful_reinvocations": 34,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000016": {
+            "entry_id": "bias_000016",
+            "n_cycles": 33,
+            "n_successful_reinvocations": 33,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000017": {
+            "entry_id": "bias_000017",
+            "n_cycles": 32,
+            "n_successful_reinvocations": 32,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000018": {
+            "entry_id": "bias_000018",
+            "n_cycles": 31,
+            "n_successful_reinvocations": 31,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000019": {
+            "entry_id": "bias_000019",
+            "n_cycles": 30,
+            "n_successful_reinvocations": 30,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000020": {
+            "entry_id": "bias_000020",
+            "n_cycles": 29,
+            "n_successful_reinvocations": 29,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000021": {
+            "entry_id": "bias_000021",
+            "n_cycles": 28,
+            "n_successful_reinvocations": 28,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000022": {
+            "entry_id": "bias_000022",
+            "n_cycles": 27,
+            "n_successful_reinvocations": 27,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000023": {
+            "entry_id": "bias_000023",
+            "n_cycles": 26,
+            "n_successful_reinvocations": 26,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000024": {
+            "entry_id": "bias_000024",
+            "n_cycles": 25,
+            "n_successful_reinvocations": 25,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000025": {
+            "entry_id": "bias_000025",
+            "n_cycles": 24,
+            "n_successful_reinvocations": 24,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000026": {
+            "entry_id": "bias_000026",
+            "n_cycles": 23,
+            "n_successful_reinvocations": 23,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000027": {
+            "entry_id": "bias_000027",
+            "n_cycles": 22,
+            "n_successful_reinvocations": 22,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000028": {
+            "entry_id": "bias_000028",
+            "n_cycles": 21,
+            "n_successful_reinvocations": 21,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000029": {
+            "entry_id": "bias_000029",
+            "n_cycles": 20,
+            "n_successful_reinvocations": 20,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000030": {
+            "entry_id": "bias_000030",
+            "n_cycles": 19,
+            "n_successful_reinvocations": 19,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000031": {
+            "entry_id": "bias_000031",
+            "n_cycles": 18,
+            "n_successful_reinvocations": 18,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000032": {
+            "entry_id": "bias_000032",
+            "n_cycles": 17,
+            "n_successful_reinvocations": 17,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000033": {
+            "entry_id": "bias_000033",
+            "n_cycles": 16,
+            "n_successful_reinvocations": 16,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000034": {
+            "entry_id": "bias_000034",
+            "n_cycles": 15,
+            "n_successful_reinvocations": 15,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000035": {
+            "entry_id": "bias_000035",
+            "n_cycles": 14,
+            "n_successful_reinvocations": 14,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000036": {
+            "entry_id": "bias_000036",
+            "n_cycles": 13,
+            "n_successful_reinvocations": 13,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000037": {
+            "entry_id": "bias_000037",
+            "n_cycles": 12,
+            "n_successful_reinvocations": 12,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000038": {
+            "entry_id": "bias_000038",
+            "n_cycles": 11,
+            "n_successful_reinvocations": 11,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000039": {
+            "entry_id": "bias_000039",
+            "n_cycles": 10,
+            "n_successful_reinvocations": 10,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000040": {
+            "entry_id": "bias_000040",
+            "n_cycles": 9,
+            "n_successful_reinvocations": 9,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000041": {
+            "entry_id": "bias_000041",
+            "n_cycles": 8,
+            "n_successful_reinvocations": 8,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000042": {
+            "entry_id": "bias_000042",
+            "n_cycles": 7,
+            "n_successful_reinvocations": 7,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000043": {
+            "entry_id": "bias_000043",
+            "n_cycles": 6,
+            "n_successful_reinvocations": 6,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000044": {
+            "entry_id": "bias_000044",
+            "n_cycles": 5,
+            "n_successful_reinvocations": 5,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000045": {
+            "entry_id": "bias_000045",
+            "n_cycles": 4,
+            "n_successful_reinvocations": 4,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000046": {
+            "entry_id": "bias_000046",
+            "n_cycles": 3,
+            "n_successful_reinvocations": 3,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000047": {
+            "entry_id": "bias_000047",
+            "n_cycles": 2,
+            "n_successful_reinvocations": 2,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": false
+          },
+          "bias_000048": {
+            "entry_id": "bias_000048",
+            "n_cycles": 1,
+            "n_successful_reinvocations": 1,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": false
+          }
+        }
+      },
+      "signal_summary": {},
+      "functional_signal_history": []
+    },
+    {
+      "config": "C_positional_030_1000",
+      "run_id": 1,
+      "elapsed_seconds": 20.4,
+      "final_pbm_summary": {
+        "n_entries": 50,
+        "n_active": 50,
+        "n_frozen": 49,
+        "n_cycles_tracked": 50,
+        "aggregate_retention_depth": 1.0,
+        "deep_retention_entries": [
+          "bias_000000",
+          "bias_000001",
+          "bias_000002",
+          "bias_000003",
+          "bias_000004",
+          "bias_000005",
+          "bias_000006",
+          "bias_000007",
+          "bias_000008",
+          "bias_000009",
+          "bias_000010",
+          "bias_000011",
+          "bias_000012",
+          "bias_000013",
+          "bias_000014",
+          "bias_000015",
+          "bias_000016",
+          "bias_000017",
+          "bias_000018",
+          "bias_000019",
+          "bias_000020",
+          "bias_000021",
+          "bias_000022",
+          "bias_000023",
+          "bias_000024",
+          "bias_000025",
+          "bias_000026",
+          "bias_000027",
+          "bias_000028",
+          "bias_000029",
+          "bias_000030",
+          "bias_000031",
+          "bias_000032",
+          "bias_000033",
+          "bias_000034",
+          "bias_000035",
+          "bias_000036",
+          "bias_000037",
+          "bias_000038",
+          "bias_000039",
+          "bias_000040",
+          "bias_000041",
+          "bias_000042",
+          "bias_000043",
+          "bias_000044",
+          "bias_000045",
+          "bias_000046"
+        ],
+        "all_retention_stats": {
+          "bias_000000": {
+            "entry_id": "bias_000000",
+            "n_cycles": 49,
+            "n_successful_reinvocations": 49,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999997,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000001": {
+            "entry_id": "bias_000001",
+            "n_cycles": 48,
+            "n_successful_reinvocations": 48,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 1.0000000000000002,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000002": {
+            "entry_id": "bias_000002",
+            "n_cycles": 47,
+            "n_successful_reinvocations": 47,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000003": {
+            "entry_id": "bias_000003",
+            "n_cycles": 46,
+            "n_successful_reinvocations": 46,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000004": {
+            "entry_id": "bias_000004",
+            "n_cycles": 45,
+            "n_successful_reinvocations": 45,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000005": {
+            "entry_id": "bias_000005",
+            "n_cycles": 44,
+            "n_successful_reinvocations": 44,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000006": {
+            "entry_id": "bias_000006",
+            "n_cycles": 43,
+            "n_successful_reinvocations": 43,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000007": {
+            "entry_id": "bias_000007",
+            "n_cycles": 42,
+            "n_successful_reinvocations": 42,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000008": {
+            "entry_id": "bias_000008",
+            "n_cycles": 41,
+            "n_successful_reinvocations": 41,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000009": {
+            "entry_id": "bias_000009",
+            "n_cycles": 40,
+            "n_successful_reinvocations": 40,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000010": {
+            "entry_id": "bias_000010",
+            "n_cycles": 39,
+            "n_successful_reinvocations": 39,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000011": {
+            "entry_id": "bias_000011",
+            "n_cycles": 38,
+            "n_successful_reinvocations": 38,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000012": {
+            "entry_id": "bias_000012",
+            "n_cycles": 37,
+            "n_successful_reinvocations": 37,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000013": {
+            "entry_id": "bias_000013",
+            "n_cycles": 36,
+            "n_successful_reinvocations": 36,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000014": {
+            "entry_id": "bias_000014",
+            "n_cycles": 35,
+            "n_successful_reinvocations": 35,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000015": {
+            "entry_id": "bias_000015",
+            "n_cycles": 34,
+            "n_successful_reinvocations": 34,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000016": {
+            "entry_id": "bias_000016",
+            "n_cycles": 33,
+            "n_successful_reinvocations": 33,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000017": {
+            "entry_id": "bias_000017",
+            "n_cycles": 32,
+            "n_successful_reinvocations": 32,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000018": {
+            "entry_id": "bias_000018",
+            "n_cycles": 31,
+            "n_successful_reinvocations": 31,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000019": {
+            "entry_id": "bias_000019",
+            "n_cycles": 30,
+            "n_successful_reinvocations": 30,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000020": {
+            "entry_id": "bias_000020",
+            "n_cycles": 29,
+            "n_successful_reinvocations": 29,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000021": {
+            "entry_id": "bias_000021",
+            "n_cycles": 28,
+            "n_successful_reinvocations": 28,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000022": {
+            "entry_id": "bias_000022",
+            "n_cycles": 27,
+            "n_successful_reinvocations": 27,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000023": {
+            "entry_id": "bias_000023",
+            "n_cycles": 26,
+            "n_successful_reinvocations": 26,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000024": {
+            "entry_id": "bias_000024",
+            "n_cycles": 25,
+            "n_successful_reinvocations": 25,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000025": {
+            "entry_id": "bias_000025",
+            "n_cycles": 24,
+            "n_successful_reinvocations": 24,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000026": {
+            "entry_id": "bias_000026",
+            "n_cycles": 23,
+            "n_successful_reinvocations": 23,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000027": {
+            "entry_id": "bias_000027",
+            "n_cycles": 22,
+            "n_successful_reinvocations": 22,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000028": {
+            "entry_id": "bias_000028",
+            "n_cycles": 21,
+            "n_successful_reinvocations": 21,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000029": {
+            "entry_id": "bias_000029",
+            "n_cycles": 20,
+            "n_successful_reinvocations": 20,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000030": {
+            "entry_id": "bias_000030",
+            "n_cycles": 19,
+            "n_successful_reinvocations": 19,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000031": {
+            "entry_id": "bias_000031",
+            "n_cycles": 18,
+            "n_successful_reinvocations": 18,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000032": {
+            "entry_id": "bias_000032",
+            "n_cycles": 17,
+            "n_successful_reinvocations": 17,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000033": {
+            "entry_id": "bias_000033",
+            "n_cycles": 16,
+            "n_successful_reinvocations": 16,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000034": {
+            "entry_id": "bias_000034",
+            "n_cycles": 15,
+            "n_successful_reinvocations": 15,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000035": {
+            "entry_id": "bias_000035",
+            "n_cycles": 14,
+            "n_successful_reinvocations": 14,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000036": {
+            "entry_id": "bias_000036",
+            "n_cycles": 13,
+            "n_successful_reinvocations": 13,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000037": {
+            "entry_id": "bias_000037",
+            "n_cycles": 12,
+            "n_successful_reinvocations": 12,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000038": {
+            "entry_id": "bias_000038",
+            "n_cycles": 11,
+            "n_successful_reinvocations": 11,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000039": {
+            "entry_id": "bias_000039",
+            "n_cycles": 10,
+            "n_successful_reinvocations": 10,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000040": {
+            "entry_id": "bias_000040",
+            "n_cycles": 9,
+            "n_successful_reinvocations": 9,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000041": {
+            "entry_id": "bias_000041",
+            "n_cycles": 8,
+            "n_successful_reinvocations": 8,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000042": {
+            "entry_id": "bias_000042",
+            "n_cycles": 7,
+            "n_successful_reinvocations": 7,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000043": {
+            "entry_id": "bias_000043",
+            "n_cycles": 6,
+            "n_successful_reinvocations": 6,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000044": {
+            "entry_id": "bias_000044",
+            "n_cycles": 5,
+            "n_successful_reinvocations": 5,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999998,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000045": {
+            "entry_id": "bias_000045",
+            "n_cycles": 4,
+            "n_successful_reinvocations": 4,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000046": {
+            "entry_id": "bias_000046",
+            "n_cycles": 3,
+            "n_successful_reinvocations": 3,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": true
+          },
+          "bias_000047": {
+            "entry_id": "bias_000047",
+            "n_cycles": 2,
+            "n_successful_reinvocations": 2,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": false
+          },
+          "bias_000048": {
+            "entry_id": "bias_000048",
+            "n_cycles": 1,
+            "n_successful_reinvocations": 1,
+            "retention_depth": 1.0,
+            "avg_direction_similarity": 0.9999999999999999,
+            "avg_strength_ratio": 1.0,
+            "latest_strength_ratio": 1.0,
+            "is_deep_retention": false
+          }
+        }
+      },
+      "signal_summary": {},
+      "functional_signal_history": []
+    }
+  ]
+}
