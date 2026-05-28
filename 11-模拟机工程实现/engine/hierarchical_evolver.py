@@ -385,6 +385,10 @@ class HierarchicalEvolver:
             """Phase 2 步骤回调"""
             result_entry = {'step': step, 'layer': layer_id}
 
+            # ── 重建循环开始：追踪保持深度的可重调用性 ──
+            if self.persistent_bias_memory is not None:
+                self.persistent_bias_memory.begin_reconstruction_cycle()
+
             # ── P0: 每步执行 ──
 
             # 1. XiàngDetector
@@ -971,6 +975,14 @@ class HierarchicalEvolver:
                         print(f"    [Counterfactual] L{layer_id} step={step}: "
                               f"branches={cf_result.n_active_branches}, "
                               f"divergences={cf_result.n_divergence_points}")
+
+            # ── 重建循环结束：评估保持深度的可重调用性 ──
+            if self.persistent_bias_memory is not None:
+                reinvocation_results = self.persistent_bias_memory.end_reconstruction_cycle(
+                    timestamp=layer_id * 10000 + step)
+                result_entry['reinvocation_results'] = reinvocation_results
+                result_entry['n_cycles_tracked'] = (
+                    self.persistent_bias_memory.n_cycles_tracked)
 
             self._phase2_layer_results[layer_id].append(result_entry)
 
