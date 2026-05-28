@@ -852,11 +852,15 @@ class HierarchicalEvolver:
                         if anchored:
                             baseline_shift = len(anchored) * 0.01
 
+                    # 获取 ODI 结果用于 MSD 内部门控
+                    _odi_for_msd = None
+                    if self.organizational_density_index is not None and self.organizational_density_index._result_history:
+                        _odi_for_msd = self.organizational_density_index._result_history[-1]
                     msi_result = self.minimal_self_detector.feed(
                         sensitivity_map=sensitivity_map if sensitivity_map else None,
                         response_history=response_history if response_history else None,
                         baseline_shift=baseline_shift if baseline_shift != 0.0 else None,
-                        odi_result=None,  # ODI 门控已通过 p3_active 处理
+                        odi_result=_odi_for_msd,
                         timestamp=ts,
                     )
                     result_entry['minimal_self'] = {
