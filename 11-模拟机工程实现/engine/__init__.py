@@ -23,6 +23,12 @@ engine — 差异论模拟机工程核心引擎
 """
 
 from engine.hierarchy_manager import HierarchyManager, LayerState, BiasField
+from engine.functional_signal_coupling import (
+    FunctionalSignalSet,
+    FunctionalCouplingMatrix,
+    extract_functional_signals,
+    compute_functional_coupling_matrix,
+)
 from engine.encapsulation_engine import EncapsulationEngine, EncapsulatedBit, IndexMapping
 from engine.difference_layers import DifferenceLayerAnalyzer, DifferenceLayerReport
 from engine.xiang_detector import XiàngDetector, XiangDetectionResult
@@ -119,6 +125,8 @@ from engine.counterfactual_engine import (
 
 __all__ = [
     'HierarchyManager', 'LayerState', 'BiasField',
+    'FunctionalSignalSet', 'FunctionalCouplingMatrix',
+    'extract_functional_signals', 'compute_functional_coupling_matrix',
     'EncapsulationEngine', 'EncapsulatedBit', 'IndexMapping',
     'DifferenceLayerAnalyzer', 'DifferenceLayerReport',
     'XiàngDetector', 'XiangDetectionResult',
