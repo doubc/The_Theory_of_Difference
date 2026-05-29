@@ -1,0 +1,800 @@
+{
+  "A_N48_L2_func": {
+    "config": "A_N48_L2_func",
+    "config_details": {
+      "N0": 48,
+      "steps_per_layer": 2000,
+      "max_layers": 2,
+      "sample_interval": 100,
+      "p1_eval_interval": 5,
+      "coupling_mode": "functional",
+      "coupling_threshold": 0.3,
+      "auto_encapsulate": true,
+      "phase2_verbose": true,
+      "description": "N=48, 2 layers, functional coupling (primary)"
+    },
+    "elapsed_seconds": 21.1,
+    "n_layers": 3,
+    "n_encapsulation_events": 2,
+    "layer_analyses": {
+      "L0": {
+        "layer": 0,
+        "N": 48,
+        "sealed": true,
+        "steps": 2000,
+        "cycles": 586,
+        "n_clusters": 3,
+        "xiang": {
+          "n_checks": 20,
+          "n_formed": 9,
+          "formation_rate": 0.45,
+          "first_formed_step": 500,
+          "max_density": 0.4982638888888889,
+          "mean_density": 0.2940972222222223,
+          "max_trace": 0.7558109230222496,
+          "max_continuity": 10,
+          "density_trend": [
+            0.08159722222222222,
+            0.1388888888888889,
+            0.09375,
+            0.4375,
+            0.1388888888888889,
+            0.4982638888888889,
+            0.11458333333333333,
+            0.4982638888888889,
+            0.4375,
+            0.4375,
+            0.0763888888888889,
+            0.11458333333333333,
+            0.09375,
+            0.4982638888888889,
+            0.11458333333333333,
+            0.11458333333333333,
+            0.4982638888888889,
+            0.4982638888888889,
+            0.4982638888888889,
+            0.4982638888888889
+          ],
+          "trace_trend": [
+            0.0,
+            0.0,
+            0.08585235893237836,
+            0.19999479355353333,
+            0.3650209682678033,
+            0.4810297308465492,
+            0.6197670195834721,
+            0.6302932639843535,
+            0.6054180609890485,
+            0.6484104773799143,
+            0.6124306376989507,
+            0.7558109230222496,
+            0.7068602287622945,
+            0.7317762369521774,
+            0.7530226174758868,
+            0.7556247808077993,
+            0.6870301395889907,
+            0.674287689647856,
+            0.6960585496646703,
+            0.7217868975452213
+          ]
+        },
+        "bias_memory": {
+          "n_records": 20,
+          "max_entries": 20,
+          "mean_strength": 0.95625,
+          "final_entries": 20
+        },
+        "six_threshold": {
+          "n_evals": 4,
+          "n_all_met": 0,
+          "first_all_met_step": null,
+          "max_n_met": 5,
+          "mean_n_met": 5.0,
+          "bottleneck_frequency": {
+            "3.2": 4
+          }
+        },
+        "convergence": {
+          "n_evals": 4,
+          "n_converged": 0,
+          "first_converged_step": null,
+          "convergence_rate": 0.0,
+          "thresholds_met_rate": 0.0,
+          "coupling_met_rate": 1.0,
+          "stability_met_rate": 1.0,
+          "firewall_pass_rate": 1.0,
+          "max_stability_score": 1.0,
+          "mean_stability_score": 1.0,
+          "max_n_coupled_pairs": 15
+        },
+        "unsealing": {
+          "n_records": 4,
+          "n_events": 0,
+          "max_level": 0,
+          "final_level": 0,
+          "level_progression": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "events": []
+        },
+        "return_flow": {
+          "n_records": 0
+        },
+        "odi": {
+          "n_evals": 4,
+          "max_odi": 0.8709070368155615,
+          "mean_odi": 0.8229981482670087,
+          "final_odi": 0.8709070368155615,
+          "zone_distribution": {
+            "dense_core": 1,
+            "dense_entry": 1,
+            "ultra_dense_entry": 2
+          },
+          "value_trend": [
+            0.8143778739646557,
+            0.7499226629817605,
+            0.8567850193060573,
+            0.8709070368155615
+          ]
+        },
+        "functional_signals": {
+          "n_records": 4,
+          "interface_regulation": {
+            "final": 0.5714285714285714,
+            "mean": 0.5714285714285714,
+            "max": 0.5714285714285714
+          },
+          "self_sustaining": {
+            "final": 0.5833333358168602,
+            "mean": 0.5833333358168602,
+            "max": 0.5833333358168602
+          },
+          "retention": {
+            "final": 1.0,
+            "mean": 1.0,
+            "max": 1.0
+          },
+          "replication": {
+            "final": 0.5854700854700855,
+            "mean": 0.5879972182150041,
+            "max": 0.5925925925925926
+          },
+          "selection": {
+            "final": 0.6446886446886447,
+            "mean": 0.6468547584700035,
+            "max": 0.6507936507936508
+          },
+          "functional_differentiation": {
+            "final": 0.44426822821357453,
+            "mean": 0.44426822821357453,
+            "max": 0.44426822821357453
+          }
+        },
+        "chain_score": {
+          "xiang_formation": 0.45,
+          "six_threshold": 0.0,
+          "convergence": 0.0,
+          "unsealing": 0.0,
+          "return_flow": 0.0,
+          "firewall": 1.0,
+          "overall": 0.2175
+        }
+      },
+      "L1": {
+        "layer": 1,
+        "N": 15,
+        "sealed": true,
+        "steps": 2000,
+        "cycles": 3,
+        "n_clusters": 1,
+        "xiang": {
+          "n_checks": 20,
+          "n_formed": 16,
+          "formation_rate": 0.8,
+          "first_formed_step": 400,
+          "max_density": 0.64,
+          "mean_density": 0.3711111111111111,
+          "max_trace": 0.9269981965281806,
+          "max_continuity": 10,
+          "density_trend": [
+            0.24888888888888888,
+            0.3466666666666667,
+            0.3466666666666667,
+            0.3466666666666667,
+            0.3466666666666667,
+            0.3466666666666667,
+            0.3466666666666667,
+            0.3466666666666667,
+            0.3466666666666667,
+            0.3466666666666667,
+            0.3466666666666667,
+            0.64,
+            0.3466666666666667,
+            0.64,
+            0.3466666666666667,
+            0.3466666666666667,
+            0.3466666666666667,
+            0.3466666666666667,
+            0.3466666666666667,
+            0.3466666666666667
+          ],
+          "trace_trend": [
+            0.0,
+            0.0,
+            0.10748670880661178,
+            0.2766489450754824,
+            0.4429373802830884,
+            0.6324665389686276,
+            0.8254859780923204,
+            0.8504165526505603,
+            0.823382776252167,
+            0.8430069122241485,
+            0.8709013429529533,
+            0.7667979486648716,
+            0.920816171434822,
+            0.7935261446813394,
+            0.9026079526257416,
+            0.8977631201621863,
+            0.8977631201621863,
+            0.914803074576961,
+            0.9269981965281806,
+            0.8855679982109667
+          ]
+        },
+        "bias_memory": {
+          "n_records": 20,
+          "max_entries": 40,
+          "mean_strength": 0.97,
+          "final_entries": 40
+        },
+        "six_threshold": {
+          "n_evals": 4,
+          "n_all_met": 0,
+          "first_all_met_step": null,
+          "max_n_met": 5,
+          "mean_n_met": 5.0,
+          "bottleneck_frequency": {
+            "3.2": 4
+          }
+        },
+        "convergence": {
+          "n_evals": 4,
+          "n_converged": 0,
+          "first_converged_step": null,
+          "convergence_rate": 0.0,
+          "thresholds_met_rate": 0.0,
+          "coupling_met_rate": 1.0,
+          "stability_met_rate": 1.0,
+          "firewall_pass_rate": 1.0,
+          "max_stability_score": 1.0,
+          "mean_stability_score": 1.0,
+          "max_n_coupled_pairs": 15
+        },
+        "unsealing": {
+          "n_records": 4,
+          "n_events": 0,
+          "max_level": 0,
+          "final_level": 0,
+          "level_progression": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "events": []
+        },
+        "return_flow": {
+          "n_records": 0
+        },
+        "odi": {
+          "n_evals": 4,
+          "max_odi": 0.7980759367329733,
+          "mean_odi": 0.7973920122157032,
+          "final_odi": 0.7980759367329733,
+          "zone_distribution": {
+            "dense_core": 4
+          },
+          "value_trend": [
+            0.7969686762482349,
+            0.7972960622083677,
+            0.7972273736732371,
+            0.7980759367329733
+          ]
+        },
+        "functional_signals": {
+          "n_records": 4,
+          "interface_regulation": {
+            "final": 0.5555555555555556,
+            "mean": 0.5555555555555556,
+            "max": 0.5555555555555556
+          },
+          "self_sustaining": {
+            "final": 0.5333333350718021,
+            "mean": 0.5333333350718021,
+            "max": 0.5333333350718021
+          },
+          "retention": {
+            "final": 1.0,
+            "mean": 1.0,
+            "max": 1.0
+          },
+          "replication": {
+            "final": 0.5490384615384615,
+            "mean": 0.5573430495447282,
+            "max": 0.5722222222222222
+          },
+          "selection": {
+            "final": 0.600542406311637,
+            "mean": 0.6043752930837603,
+            "max": 0.6112426035502959
+          },
+          "functional_differentiation": {
+            "final": 0.5783956094515101,
+            "mean": 0.5783956094515101,
+            "max": 0.5783956094515101
+          }
+        },
+        "chain_score": {
+          "xiang_formation": 0.8,
+          "six_threshold": 0.0,
+          "convergence": 0.0,
+          "unsealing": 0.0,
+          "return_flow": 0.0,
+          "firewall": 1.0,
+          "overall": 0.27
+        }
+      },
+      "L2": {
+        "layer": 2,
+        "N": 6,
+        "sealed": false,
+        "steps": 0,
+        "cycles": 0,
+        "n_clusters": 0,
+        "xiang": {
+          "n_checks": 0
+        },
+        "bias_memory": {
+          "n_records": 0
+        },
+        "six_threshold": {
+          "n_evals": 0
+        },
+        "convergence": {
+          "n_evals": 0
+        },
+        "unsealing": {
+          "n_records": 0,
+          "n_events": 0,
+          "max_level": 0,
+          "final_level": 0,
+          "level_progression": [],
+          "events": []
+        },
+        "return_flow": {
+          "n_records": 0
+        },
+        "odi": {
+          "n_evals": 0
+        },
+        "functional_signals": {
+          "n_records": 0
+        },
+        "chain_score": {
+          "xiang_formation": 0.0,
+          "six_threshold": 0.0,
+          "convergence": 0.0,
+          "unsealing": 0.0,
+          "return_flow": 0.0,
+          "firewall": 1.0,
+          "overall": 0.15
+        }
+      }
+    },
+    "return_flow_injections": [],
+    "final_unsealing_status": {},
+    "final_return_flow_status": {
+      "anchored_count": 0,
+      "anchored_contents": {},
+      "success_rate": 0.0,
+      "total_events": 0
+    },
+    "phase2_summary": {
+      "xiang_detector_active": true,
+      "bias_memory_entries": 40,
+      "cumulative_selector_active": true,
+      "six_threshold_detector_active": true,
+      "pre_subjectivity_convergence_active": true,
+      "pre_subjectivity_converged": false,
+      "convergence_step": null,
+      "unsealing_mechanism_active": true,
+      "unsealing_summary": {},
+      "return_flow_channel_active": true,
+      "return_flow_anchored_count": 0,
+      "return_flow_success_rate": 0.0,
+      "organizational_density_index_active": true,
+      "seventh_threshold_detector_active": true,
+      "seventh_threshold_detected": true,
+      "seventh_threshold_confidence": 0.0,
+      "cooperative_emergence_detector_active": true,
+      "cooperative_emergence_detected": false,
+      "cooperative_emergence_confidence": 0.0,
+      "lateral_coupler_active": false,
+      "lateral_coupler_n_structures": 0
+    }
+  },
+  "B_N32_L2_func": {
+    "config": "B_N32_L2_func",
+    "error": "index 32 is out of bounds for dimension 0 with size 32"
+  },
+  "C_N48_L2_weighted": {
+    "config": "C_N48_L2_weighted",
+    "config_details": {
+      "N0": 48,
+      "steps_per_layer": 2000,
+      "max_layers": 2,
+      "sample_interval": 100,
+      "p1_eval_interval": 5,
+      "coupling_mode": "weighted",
+      "coupling_threshold": 0.3,
+      "auto_encapsulate": true,
+      "phase2_verbose": true,
+      "description": "N=48, 2 layers, weighted coupling (control)"
+    },
+    "elapsed_seconds": 22.0,
+    "n_layers": 3,
+    "n_encapsulation_events": 2,
+    "layer_analyses": {
+      "L0": {
+        "layer": 0,
+        "N": 48,
+        "sealed": true,
+        "steps": 2000,
+        "cycles": 586,
+        "n_clusters": 3,
+        "xiang": {
+          "n_checks": 20,
+          "n_formed": 9,
+          "formation_rate": 0.45,
+          "first_formed_step": 500,
+          "max_density": 0.4982638888888889,
+          "mean_density": 0.2940972222222223,
+          "max_trace": 0.7558109230222496,
+          "max_continuity": 10,
+          "density_trend": [
+            0.08159722222222222,
+            0.1388888888888889,
+            0.09375,
+            0.4375,
+            0.1388888888888889,
+            0.4982638888888889,
+            0.11458333333333333,
+            0.4982638888888889,
+            0.4375,
+            0.4375,
+            0.0763888888888889,
+            0.11458333333333333,
+            0.09375,
+            0.4982638888888889,
+            0.11458333333333333,
+            0.11458333333333333,
+            0.4982638888888889,
+            0.4982638888888889,
+            0.4982638888888889,
+            0.4982638888888889
+          ],
+          "trace_trend": [
+            0.0,
+            0.0,
+            0.08585235893237836,
+            0.19999479355353333,
+            0.3650209682678033,
+            0.4810297308465492,
+            0.6197670195834721,
+            0.6302932639843535,
+            0.6054180609890485,
+            0.6484104773799143,
+            0.6124306376989507,
+            0.7558109230222496,
+            0.7068602287622945,
+            0.7317762369521774,
+            0.7530226174758868,
+            0.7556247808077993,
+            0.6870301395889907,
+            0.674287689647856,
+            0.6960585496646703,
+            0.7217868975452213
+          ]
+        },
+        "bias_memory": {
+          "n_records": 20,
+          "max_entries": 20,
+          "mean_strength": 0.95625,
+          "final_entries": 20
+        },
+        "six_threshold": {
+          "n_evals": 4,
+          "n_all_met": 0,
+          "first_all_met_step": null,
+          "max_n_met": 5,
+          "mean_n_met": 5.0,
+          "bottleneck_frequency": {
+            "3.2": 4
+          }
+        },
+        "convergence": {
+          "n_evals": 4,
+          "n_converged": 0,
+          "first_converged_step": null,
+          "convergence_rate": 0.0,
+          "thresholds_met_rate": 0.0,
+          "coupling_met_rate": 1.0,
+          "stability_met_rate": 1.0,
+          "firewall_pass_rate": 1.0,
+          "max_stability_score": 1.0,
+          "mean_stability_score": 1.0,
+          "max_n_coupled_pairs": 15
+        },
+        "unsealing": {
+          "n_records": 4,
+          "n_events": 0,
+          "max_level": 0,
+          "final_level": 0,
+          "level_progression": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "events": []
+        },
+        "return_flow": {
+          "n_records": 0
+        },
+        "odi": {
+          "n_evals": 4,
+          "max_odi": 0.8709070368155615,
+          "mean_odi": 0.8229981482670087,
+          "final_odi": 0.8709070368155615,
+          "zone_distribution": {
+            "dense_core": 1,
+            "dense_entry": 1,
+            "ultra_dense_entry": 2
+          },
+          "value_trend": [
+            0.8143778739646557,
+            0.7499226629817605,
+            0.8567850193060573,
+            0.8709070368155615
+          ]
+        },
+        "functional_signals": {
+          "n_records": 0
+        },
+        "chain_score": {
+          "xiang_formation": 0.45,
+          "six_threshold": 0.0,
+          "convergence": 0.0,
+          "unsealing": 0.0,
+          "return_flow": 0.0,
+          "firewall": 1.0,
+          "overall": 0.2175
+        }
+      },
+      "L1": {
+        "layer": 1,
+        "N": 15,
+        "sealed": true,
+        "steps": 2000,
+        "cycles": 3,
+        "n_clusters": 1,
+        "xiang": {
+          "n_checks": 20,
+          "n_formed": 16,
+          "formation_rate": 0.8,
+          "first_formed_step": 400,
+          "max_density": 0.64,
+          "mean_density": 0.3711111111111111,
+          "max_trace": 0.9269981965281806,
+          "max_continuity": 10,
+          "density_trend": [
+            0.24888888888888888,
+            0.3466666666666667,
+            0.3466666666666667,
+            0.3466666666666667,
+            0.3466666666666667,
+            0.3466666666666667,
+            0.3466666666666667,
+            0.3466666666666667,
+            0.3466666666666667,
+            0.3466666666666667,
+            0.3466666666666667,
+            0.64,
+            0.3466666666666667,
+            0.64,
+            0.3466666666666667,
+            0.3466666666666667,
+            0.3466666666666667,
+            0.3466666666666667,
+            0.3466666666666667,
+            0.3466666666666667
+          ],
+          "trace_trend": [
+            0.0,
+            0.0,
+            0.10748670880661178,
+            0.2766489450754824,
+            0.4429373802830884,
+            0.6324665389686276,
+            0.8254859780923204,
+            0.8504165526505603,
+            0.823382776252167,
+            0.8430069122241485,
+            0.8709013429529533,
+            0.7667979486648716,
+            0.920816171434822,
+            0.7935261446813394,
+            0.9026079526257416,
+            0.8977631201621863,
+            0.8977631201621863,
+            0.914803074576961,
+            0.9269981965281806,
+            0.8855679982109667
+          ]
+        },
+        "bias_memory": {
+          "n_records": 20,
+          "max_entries": 40,
+          "mean_strength": 0.97,
+          "final_entries": 40
+        },
+        "six_threshold": {
+          "n_evals": 4,
+          "n_all_met": 0,
+          "first_all_met_step": null,
+          "max_n_met": 5,
+          "mean_n_met": 5.0,
+          "bottleneck_frequency": {
+            "3.2": 4
+          }
+        },
+        "convergence": {
+          "n_evals": 4,
+          "n_converged": 0,
+          "first_converged_step": null,
+          "convergence_rate": 0.0,
+          "thresholds_met_rate": 0.0,
+          "coupling_met_rate": 1.0,
+          "stability_met_rate": 1.0,
+          "firewall_pass_rate": 1.0,
+          "max_stability_score": 1.0,
+          "mean_stability_score": 1.0,
+          "max_n_coupled_pairs": 10
+        },
+        "unsealing": {
+          "n_records": 4,
+          "n_events": 0,
+          "max_level": 0,
+          "final_level": 0,
+          "level_progression": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "events": []
+        },
+        "return_flow": {
+          "n_records": 0
+        },
+        "odi": {
+          "n_evals": 4,
+          "max_odi": 0.7980759367329733,
+          "mean_odi": 0.7973920122157032,
+          "final_odi": 0.7980759367329733,
+          "zone_distribution": {
+            "dense_core": 4
+          },
+          "value_trend": [
+            0.7969686762482349,
+            0.7972960622083677,
+            0.7972273736732371,
+            0.7980759367329733
+          ]
+        },
+        "functional_signals": {
+          "n_records": 0
+        },
+        "chain_score": {
+          "xiang_formation": 0.8,
+          "six_threshold": 0.0,
+          "convergence": 0.0,
+          "unsealing": 0.0,
+          "return_flow": 0.0,
+          "firewall": 1.0,
+          "overall": 0.27
+        }
+      },
+      "L2": {
+        "layer": 2,
+        "N": 6,
+        "sealed": false,
+        "steps": 0,
+        "cycles": 0,
+        "n_clusters": 0,
+        "xiang": {
+          "n_checks": 0
+        },
+        "bias_memory": {
+          "n_records": 0
+        },
+        "six_threshold": {
+          "n_evals": 0
+        },
+        "convergence": {
+          "n_evals": 0
+        },
+        "unsealing": {
+          "n_records": 0,
+          "n_events": 0,
+          "max_level": 0,
+          "final_level": 0,
+          "level_progression": [],
+          "events": []
+        },
+        "return_flow": {
+          "n_records": 0
+        },
+        "odi": {
+          "n_evals": 0
+        },
+        "functional_signals": {
+          "n_records": 0
+        },
+        "chain_score": {
+          "xiang_formation": 0.0,
+          "six_threshold": 0.0,
+          "convergence": 0.0,
+          "unsealing": 0.0,
+          "return_flow": 0.0,
+          "firewall": 1.0,
+          "overall": 0.15
+        }
+      }
+    },
+    "return_flow_injections": [],
+    "final_unsealing_status": {},
+    "final_return_flow_status": {
+      "anchored_count": 0,
+      "anchored_contents": {},
+      "success_rate": 0.0,
+      "total_events": 0
+    },
+    "phase2_summary": {
+      "xiang_detector_active": true,
+      "bias_memory_entries": 40,
+      "cumulative_selector_active": true,
+      "six_threshold_detector_active": true,
+      "pre_subjectivity_convergence_active": true,
+      "pre_subjectivity_converged": false,
+      "convergence_step": null,
+      "unsealing_mechanism_active": true,
+      "unsealing_summary": {},
+      "return_flow_channel_active": true,
+      "return_flow_anchored_count": 0,
+      "return_flow_success_rate": 0.0,
+      "organizational_density_index_active": true,
+      "seventh_threshold_detector_active": true,
+      "seventh_threshold_detected": true,
+      "seventh_threshold_confidence": 0.0,
+      "cooperative_emergence_detector_active": true,
+      "cooperative_emergence_detected": false,
+      "cooperative_emergence_confidence": 0.0,
+      "lateral_coupler_active": false,
+      "lateral_coupler_n_structures": 0
+    }
+  }
+}

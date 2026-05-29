@@ -1,0 +1,14 @@
+{
+  "A_N48_L2_func": {
+    "config": "A_N48_L2_func",
+    "error": "'max_level'"
+  },
+  "B_N32_L3_func": {
+    "config": "B_N32_L3_func",
+    "error": "Layer 2 not exist (total 2)"
+  },
+  "C_N48_L2_weighted": {
+    "config": "C_N48_L2_weighted",
+    "error": "'max_level'"
+  }
+}
