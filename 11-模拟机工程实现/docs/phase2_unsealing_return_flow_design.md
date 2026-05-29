@@ -528,7 +528,7 @@ class ReturnFlowChannel:
 | 1 | 实现 `UnsealingMechanism` 类 | `engine/unsealing_mechanism.py` | P0 |
 | 2 | 实现 `ReturnFlowChannel` 类 | `engine/return_flow_channel.py` | P0 |
 | 3 | 在 `hierarchical_evolver.py` 中集成解封判定 | `engine/hierarchical_evolver.py` | P0 |
-| 4 | 在 `reactor.py` 中集成回流通道 step | `engine/reactor.py` | P1 |
+| 4 | ~~在 `reactor.py` 中集成回流通道 step~~ | ~~`engine/reactor.py`~~ | ~~P1~~ | *已替代：回流通道集成在 `hierarchical_evolver.py` 的 Phase 2 callback 中完成（见 `hierarchical_evolver.py` §回流通道辅助函数及 `_run_phase2_callback`）* |
 | 5 | 编写解封机制单元测试 | `tests/test_unsealing.py` | P1 |
 | 6 | 编写回流通道单元测试 | `tests/test_return_flow.py` | P1 |
 | 7 | 编写端到端集成测试（从检测到解封到锚定） | `tests/test_phase2_integration.py` | P1 |
