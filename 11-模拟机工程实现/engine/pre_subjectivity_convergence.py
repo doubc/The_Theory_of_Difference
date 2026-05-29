@@ -308,9 +308,25 @@ class PreSubjectivityConvergence:
         else:
             self._step_count += 1
 
+        # ── 条件3: 稳定性检测（先执行，结果反馈给六阈值3.2） ──
+        stability_met, stability_score = self._evaluate_stability(
+            structure_state, structure_fn)
+
         # ── 条件1: 六阈值检测 ──
-        if threshold_params is not None:
-            threshold_result = self._threshold_detector.detect(**threshold_params,
+        # 关键修复：将实际稳定性测试结果反馈给3.2阈值（自维持稳健性）
+        # 原来使用方向一致性代理值，现在使用实际扰动-重建存活率
+        # 这创建了正确的测量循环：扰动→存活率→3.2阈值
+        tp = dict(threshold_params) if threshold_params is not None else {}
+        if stability_score > 0:
+            # 使用实际稳定性分数重建rebuild_success_count
+            # stability_score = success_count / n_perturbation_tests
+            # 映射到3.2阈值：rebuild_success_count / perturbation_count > 0.5
+            actual_perturbations = tp.get('perturbation_count',
+                                          self.n_perturbation_tests)
+            tp['rebuild_success_count'] = round(stability_score * actual_perturbations)
+            tp['perturbation_count'] = actual_perturbations
+        if tp:
+            threshold_result = self._threshold_detector.detect(**tp,
                                                                 timestamp=self._step_count)
         else:
             threshold_result = self._threshold_detector.detect(timestamp=self._step_count)
@@ -322,10 +338,6 @@ class PreSubjectivityConvergence:
         coupling_met, n_coupled, min_coupling = self._evaluate_coupling(
             coupling_matrix, effective_threshold=effective_threshold,
             functional_signals=functional_signals)
-
-        # ── 条件3: 稳定性检测 ──
-        stability_met, stability_score = self._evaluate_stability(
-            structure_state, structure_fn)
 
         # ── 条件4: 语义防火墙 ──
         fw_result = self._check_semantic_firewall(field_names or [])

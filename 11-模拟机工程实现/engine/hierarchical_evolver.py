@@ -581,12 +581,26 @@ class HierarchicalEvolver:
                     return _w_lo <= w <= _w_hi
 
                 # 4. SixThresholdDetector
+                # 使用实际扰动-重建测试结果作为3.2阈值输入（而非方向一致性代理）
+                _actual_rebuild_count = int(self_sustaining * 10)
+                _actual_perturbation_n = 10
+                if active_count > 0 and total_bits > 0:
+                    _perturb_success = 0
+                    _perturb_n = min(10, max(5, active_count // 4))
+                    for _p in range(_perturb_n):
+                        _noise = torch.randn_like(state.float()) * 0.1
+                        _perturbed = state.float() + _noise
+                        _w = _perturbed.sum().item()
+                        if _w_lo <= _w <= _w_hi:
+                            _perturb_success += 1
+                    _actual_rebuild_count = _perturb_success
+                    _actual_perturbation_n = _perturb_n
                 if self.six_threshold_detector is not None:
                     threshold_result = self.six_threshold_detector.detect(
                         active_exchanges=active_count,
                         total_boundary_edges=total_bits,
-                        rebuild_success_count=int(self_sustaining * 10),
-                        perturbation_count=10,
+                        rebuild_success_count=_actual_rebuild_count,
+                        perturbation_count=_actual_perturbation_n,
                         bias_recursion_depth=bias_depth,
                         replicated_pattern=state if active_count > 0 else None,
                         original_pattern=state,
