@@ -736,6 +736,7 @@ class HierarchicalEvolver:
 
                 # 7. ReturnFlowChannel — 每步执行锚定强度衰减与剥离检测
                 if self.return_flow_channel is not None:
+                    # 7a. 先处理衰减与剥离
                     detach_events = self.return_flow_channel.step(timestamp=ts)
                     for evt in detach_events:
                         self._return_flow_events.append(evt)
@@ -743,6 +744,35 @@ class HierarchicalEvolver:
                         for evt in detach_events:
                             print(f"    [ReturnFlow] L{layer_id} step={step}: "
                                   f"detached {evt.payload.payload_id} — {evt.reason}")
+
+                    # 7b. 如果本步有解封事件且容量>0，生成高语义载荷并尝试锚定
+                    if unsealing_event is not None and unsealing_event.high_semantic_capacity > 0:
+                        payload = _generate_payload_from_unsealing(
+                            unsealing_event=unsealing_event,
+                            structure_state=state.float(),
+                            layer_id=layer_id,
+                            step=step,
+                        )
+                        if payload is not None:
+                            # 构建可用结构列表（当前层 + 相邻层）
+                            available_structures = _build_available_structures(
+                                hierarchy=self.hierarchy,
+                                current_layer=layer_id,
+                                max_layers=self.max_layers,
+                            )
+                            anchor_event = self.return_flow_channel.attempt_anchor(
+                                payload=payload,
+                                available_structures=available_structures,
+                                timestamp=ts,
+                            )
+                            self._return_flow_events.append(anchor_event)
+                            if self._phase2_verbose:
+                                status = "ANCHORED" if anchor_event.success else "FAILED"
+                                print(f"    [ReturnFlow] L{layer_id} step={step}: "
+                                      f"payload={payload.payload_id} type={payload.content_type} "
+                                      f"capacity={unsealing_event.high_semantic_capacity:.3f} "
+                                      f"→ {status}: {anchor_event.reason}")
+
                     # 记录当前锚定状态摘要
                     anchored = self.return_flow_channel.get_anchored_contents()
                     if anchored:
