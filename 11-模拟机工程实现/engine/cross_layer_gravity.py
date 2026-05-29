@@ -55,7 +55,8 @@ class GravityField:
         return (f"GravityField(L{self.layer_id}, "
                 f"mass={self.total_mass}, "
                 f"Φ_mean={self.potential.mean().item():.4f}, "
-                f"Φ_max={self.potential.max().item():.4f})")
+                f"Φ_max={self.potential.max().item():.4f}, "
+                f"step={self.generation_step})")
 
 
 class CrossLayerGravityModulator:
@@ -335,15 +336,21 @@ class CrossLayerGravityModulator:
     def get_active_fields(self, layer_id: int,
                           max_age_steps: int = 100,
                           current_step: int = 0) -> List[GravityField]:
-        """获取指定层的活跃引力场（未衰减到可忽略且未过期）"""
+        """获取指定层的活跃引力场（未衰减到可忽略且未过期）
+
+        修复：使用实际的 steps_elapsed 计算衰减，而非固定为 0。
+        此前 bug：field.decay(0) 恒为 1.0，引力场永不衰减。
+        """
         if layer_id not in self.gravity_fields:
             return []
 
         active = []
         for field in self.gravity_fields[layer_id]:
-            steps_elapsed = current_step - field.generation_step if current_step > 0 else 0
-            if steps_elapsed <= max_age_steps and field.decay(0, decay_rate=0.98):
-                active.append(field)
+            steps_elapsed = current_step - field.generation_step if current_step > field.generation_step else 0
+            if steps_elapsed <= max_age_steps:
+                # 使用实际经过的步数计算衰减
+                if field.decay(steps_elapsed, decay_rate=0.98):
+                    active.append(field)
 
         return active
 
