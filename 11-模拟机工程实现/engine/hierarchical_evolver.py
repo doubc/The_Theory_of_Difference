@@ -40,6 +40,122 @@ from layers.three_dim_hamming import ThreeDimHammingLattice
 from engine.functional_signal_coupling import extract_functional_signals
 
 
+# ──────────────────────────────────────────────────────────
+# 回流通道辅助函数（Phase 2 第二阶段：象界 → 前主体态）
+# ──────────────────────────────────────────────────────────
+
+def _generate_payload_from_unsealing(
+    unsealing_event: UnsealingEvent,
+    structure_state: torch.Tensor,
+    layer_id: int,
+    step: int,
+) -> Optional[HighSemanticPayload]:
+    """从解封事件生成高语义载荷。
+
+    将解封时的结构状态压缩为内容向量，作为回流通道锚定的原始载荷。
+    """
+    if unsealing_event.high_semantic_capacity <= 0:
+        return None
+
+    # 从结构状态中提取与解封结构相关的特征子向量
+    structure_id = unsealing_event.structure_id
+    # 取结构状态中对应结构 ID 的切片（若超出维度则取整体）
+    dim = structure_state.dim()
+    if dim == 2:
+        # (w, w) 平面状态：取对应行/列的均值作为特征
+        if 0 <= structure_id < structure_state.size(0):
+            content_vec = structure_state[structure_id].clone().float()
+        else:
+            content_vec = structure_state.mean(dim=0).clone().float()
+    elif dim == 3:
+        # (N, N, N) 立方体状态：取对应切片
+        if 0 <= structure_id < structure_state.size(0):
+            content_vec = structure_state[structure_id].clone().float()
+        else:
+            content_vec = structure_state.mean(dim=(1, 2)).clone().float()
+    else:
+        content_vec = structure_state.clone().float()
+
+    # 归一化到 [-1, 1]
+    max_val = content_vec.abs().max().item()
+    if max_val > 0:
+        content_vec = content_vec / max_val
+
+    payload_id = f"unseal_L{layer_id}_s{step}_id{structure_id}"
+    # 将解封原因映射为合法的内容类型
+    _TYPE_MAP = {
+        'coherence': 'meaning',
+        'stability': 'institution',
+        'emergence': 'narrative',
+        'identity': 'identity',
+        'convergence': 'meaning',
+    }
+    content_type = _TYPE_MAP.get(unsealing_event.reason, 'meaning')
+    anchor_strength = min(unsealing_event.high_semantic_capacity, 1.0)
+
+    return HighSemanticPayload(
+        payload_id=payload_id,
+        content_type=content_type,
+        content_vector=content_vec,
+        anchor_strength=anchor_strength,
+        created_at=unsealing_event.timestamp,
+    )
+
+
+def _build_available_structures(
+    hierarchy: HierarchyManager,
+    current_layer: int,
+    max_layers: int,
+) -> List[Dict]:
+    """构建当前层及相邻层的可用结构列表，用于回流锚定搜索空间。
+
+    返回格式: List[Dict]，每个 Dict:
+        {
+            'structure_id': int,       # 封装比特 ID
+            'mechanisms': {            # 各低语义机制的耦合强度
+                'boundary': float,
+                'self_sustaining': float,
+                'retention': float,
+                'replication': float,
+                'selection': float,
+                'function': float,
+            }
+        }
+
+    结构信息来自 EncapsulationEngine 的封装记录，
+    耦合强度用 binding_score 均匀分配到各机制。
+    """
+    available = []
+    encap_engine = hierarchy.encap_engine
+
+    # 收集当前层及相邻层的封装结构
+    layers_to_check = [current_layer]
+    if current_layer > 0:
+        layers_to_check.append(current_layer - 1)
+    if current_layer + 1 < hierarchy.n_layers:
+        layers_to_check.append(current_layer + 1)
+
+    for layer_idx in layers_to_check:
+        summary = encap_engine.get_summary(layer_idx)
+        for enc_bit in summary.get('encapsulated_bits', []):
+            binding = enc_bit.get('binding', 0.0)
+            # 将 binding_score 均匀分配到 6 个低语义机制
+            n_mechanisms = 6
+            per_mechanism = binding / n_mechanisms if n_mechanisms > 0 else 0.0
+            mechanism_names = [
+                'boundary', 'self_sustaining', 'retention',
+                'replication', 'selection', 'function',
+            ]
+            mechanisms = {name: per_mechanism for name in mechanism_names}
+
+            available.append({
+                'structure_id': enc_bit['id'],
+                'mechanisms': mechanisms,
+            })
+
+    return available
+
+
 class HierarchicalSnapshot:
     """跨层级快照"""
     def __init__(self, step: int, layer: int, state: torch.Tensor,
