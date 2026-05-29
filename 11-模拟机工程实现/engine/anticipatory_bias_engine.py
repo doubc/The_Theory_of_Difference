@@ -1,10 +1,26 @@
 """
 engine/anticipatory_bias_engine.py — 预期偏置引擎 (AnticipatoryBiasEngine)
 
-Phase 3 P1 组件
+Phase 3 P0 组件
 
 职责：基于历史偏置序列外推未来差异分布，实现前摄性偏置。
 这是从"回溯性偏置"（PersistentBiasMemory）到"前摄性偏置"的关键扩展。
+
+────────────────────────────────────────────────────
+偏置算子统一语言（Phase 3 理论框架，2026-05-29 心跳浸润）
+────────────────────────────────────────────────────
+
+在偏置算子语言中，预期被表述为偏置算子的时间外推：
+
+    B^(3)_ω(x→y) = B^(2)_ω(x→y) + λ·E_{ω'~P(·|ω)}[Δw_ω'(x→y)]
+
+其中 P(ω'|ω) 是从当前路径 ω 外推的未来路径分布，
+λ ∈ [0,1] 是预期强度系数。
+
+关键约束：
+1. 预期不能引入"意图"——输出必须是纯统计的，不能有任何目标函数优化
+2. 预期误差必须可追踪——PredictionErrorTracker 检测预期偏差
+3. 预期不能破坏语义防火墙——预期偏置只在低语义层运作
 
 理论依据：
 - 《差异论》高语义层：当结构不仅能保留路径，还能基于路径偏置对未来
@@ -13,8 +29,8 @@ Phase 3 P1 组件
 - ABA §4.4：前主体态是一个"范围"，预期能力随 ODI 增长而增强
 
 核心区分：
-- PersistentBiasMemory：过去以偏置形式影响当下（回溯性）
-- AnticipatoryBiasEngine：当下基于历史模式对未来产生预期偏置（前摄性）
+- PersistentBiasMemory：过去以偏置形式影响当下（回溯性 B^(2)）
+- AnticipatoryBiasEngine：当下基于历史模式对未来产生预期偏置（前摄性 B^(3)）
 
 预期不是"猜测"，而是历史路径依赖的统计外推。
 预期不能引入"意图"或"目的"——它只是结构对自身路径依赖的延伸。
@@ -542,11 +558,17 @@ class AnticipatoryBiasEngine:
 
     基于历史偏置序列外推未来差异分布，实现前摄性偏置。
 
+    ────────────────────────────────────────────
+    偏置算子统一语言（Phase 3 理论框架）
+    ────────────────────────────────────────────
+    B^(3)_ω = B^(2)_ω + λ·E_{ω'~P(·|ω)}[Δw_ω']
+    从回溯性偏置 B^(2) 扩展到前摄性偏置 B^(3)。
+
     工作流程：
-    1. 从 PersistentBiasMemory 读取历史偏置
-    2. PatternExtrapolator 外推未来差异分布
-    3. 生成 ExpectationField
-    4. 用实际差异更新 PredictionErrorTracker
+    1. 从 PersistentBiasMemory 读取历史偏置（B^(2) 快照）
+    2. PatternExtrapolator 外推未来差异分布（计算 E[B^(3)]）
+    3. 生成 ExpectationField（预期场）
+    4. 用实际差异更新 PredictionErrorTracker（检测 B^(3) vs B^(2) 偏差）
     5. AnticipationConfidence 综合评估置信度
 
     语义防火墙：
