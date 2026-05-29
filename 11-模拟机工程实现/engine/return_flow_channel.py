@@ -211,6 +211,7 @@ class ReturnFlowChannel:
         payload: HighSemanticPayload,
         available_structures: List[Dict],
         timestamp: int,
+        unsealing_levels: Optional[Dict[int, int]] = None,
     ) -> ReturnFlowEvent:
         """尝试为高语义载荷找到锚点。
 
@@ -219,9 +220,12 @@ class ReturnFlowChannel:
             available_structures: 可用的低语义结构及其机制强度
                 格式: [{
                     'structure_id': int,
-                    'mechanisms': {'boundary': float, 'self_sustaining': float, ...}
+                    'mechanisms': {'boundary': float, 'self_sustaining': float, ...},
+                    'unsealing_level': int,  # 可选，若未提供则从 unsealing_levels 查询
                 }, ...]
             timestamp: 当前时间戳
+            unsealing_levels: 结构的解封等级映射 {structure_id: level}，可选
+                若 structure 未标注 unsealing_level 且此处未提供映射，默认视为 Level 0（封闭）
 
         Returns:
             ReturnFlowEvent 回流事件
@@ -255,7 +259,15 @@ class ReturnFlowChannel:
                 self.firewall_block_count += 1
                 return event
 
-        # 1. 选择最佳锚点
+        # 1. 解封等级检查：Level 0（封闭）结构拒绝锚定
+        if unsealing_levels is not None:
+            for struct in available_structures:
+                sid = struct.get("structure_id")
+                level = struct.get("unsealing_level", unsealing_levels.get(sid, 0))
+                if level == 0:
+                    struct["_filtered"] = True
+
+        # 2. 选择最佳锚点（自动跳过已过滤的封闭结构）
         best_anchor = self._select_best_anchor(payload, available_structures)
 
         if best_anchor is None:
@@ -334,6 +346,8 @@ class ReturnFlowChannel:
         选择得分最高的锚点。
 
         评分 = 锚定权重 × 机制强度
+
+        注意：会自动跳过标记为 "_filtered" 的结构（如 Level 0 封闭结构）。
         """
         weights = self.ANCHOR_WEIGHTS.get(payload.content_type, {})
         if not weights:
