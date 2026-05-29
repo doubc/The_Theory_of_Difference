@@ -54,7 +54,7 @@ DEFAULT_COUNTERFACTUAL_CONFIG = {
 
     # 分岔点检测
     'divergence_entropy_threshold': 0.5,  # 分岔熵阈值（高于此值认为是分岔点）
-    'divergence_ratio_threshold': 2.0,    # 分岔显著性阈值（最优/次优比）
+    'divergence_ratio_threshold': 1.3,    # 分岔显著性阈值（最优/次优比）
     'max_divergence_points': 3,          # 最大追踪分岔点数
 
     # 后果投影
@@ -171,8 +171,16 @@ class DivergencePoint:
 
     @property
     def is_significant(self) -> bool:
-        return (self.entropy >= DEFAULT_COUNTERFACTUAL_CONFIG['divergence_entropy_threshold'] and
-                self.significance >= DEFAULT_COUNTERFACTUAL_CONFIG['divergence_ratio_threshold'])
+        # A divergence point means "multiple viable futures exist".
+        # This is determined solely by normalized entropy:
+        #   - High entropy (close to 1.0): multiple directions are equally viable → divergence
+        #   - Low entropy (close to 0.0): one direction dominates → no divergence
+        # The significance ratio is NOT used because it incorrectly rejects
+        # uniform distributions (ratio ~1.0) which ARE genuine divergence points
+        # by the theoretical definition. The entropy check alone correctly
+        # distinguishes "multiple futures" (high entropy) from "one clear
+        # future" (low entropy, high ratio).
+        return self.entropy >= DEFAULT_COUNTERFACTUAL_CONFIG['divergence_entropy_threshold']
 
     def __repr__(self):
         return (f"DivergencePoint(t={self.timestamp}, type={self.divergence_type.name}, "

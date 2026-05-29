@@ -962,7 +962,7 @@ class HierarchicalEvolver:
                     # 探索分岔
                     cf_result = self.counterfactual_engine.explore(
                         current_state=state.float(),
-                        odi_result=None,  # ODI 门控已通过 p3_active 处理
+                        odi_result=odi_result,  # 传递实际 ODI 结果以支持内部门控
                         timestamp=ts,
                     )
                     result_entry['counterfactual'] = {
