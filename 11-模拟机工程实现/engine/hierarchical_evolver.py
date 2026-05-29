@@ -36,6 +36,7 @@ from engine.lateral_coupling import LateralCoupler, LateralCouplingReport
 from engine.minimal_self_detector import MinimalSelfDetector, MinimalSelfResult
 from engine.anticipatory_bias_engine import AnticipatoryBiasEngine, AnticipationResult
 from engine.counterfactual_engine import CounterfactualEngine, CounterfactualResult
+from models.narrative_self import NarrativeRecursionOperator, DifferenceSignal
 from layers.three_dim_hamming import ThreeDimHammingLattice
 from engine.functional_signal_coupling import extract_functional_signals
 
@@ -233,6 +234,7 @@ class HierarchicalEvolver:
                  minimal_self_detector: Optional[MinimalSelfDetector] = None,
                  anticipatory_bias_engine: Optional[AnticipatoryBiasEngine] = None,
                  counterfactual_engine: Optional[CounterfactualEngine] = None,
+                 narrative_recursion_operator: Optional[NarrativeRecursionOperator] = None,
                  # P1 评估间隔（每多少个 P0 检测周期执行一次 P1 评估）
                  p1_eval_interval: int = 5,
                  phase2_verbose: bool = False,
@@ -278,6 +280,7 @@ class HierarchicalEvolver:
         self.minimal_self_detector = minimal_self_detector
         self.anticipatory_bias_engine = anticipatory_bias_engine
         self.counterfactual_engine = counterfactual_engine
+        self.narrative_recursion_operator = narrative_recursion_operator
         self._p1_eval_interval = p1_eval_interval
         self._phase2_verbose = phase2_verbose
         self._phase3_verbose = phase3_verbose
@@ -501,7 +504,8 @@ class HierarchicalEvolver:
                  self.lateral_coupler is not None)
         has_p3 = (self.minimal_self_detector is not None or
                   self.anticipatory_bias_engine is not None or
-                  self.counterfactual_engine is not None)
+                  self.counterfactual_engine is not None or
+                  self.narrative_recursion_operator is not None)
         if not has_p2 and not has_p3:
             return None
 
@@ -579,6 +583,73 @@ class HierarchicalEvolver:
                     'active_tracked': min(len(active_bits), 10),
                     'frozen_tracked': min(len(frozen_bits), 10),
                 }
+
+            # 4. NarrativeRecursionOperator (Phase 3)
+            if self.narrative_recursion_operator is not None:
+                # 构建差异信号列表
+                ts = layer_id * 10000 + step
+                diff_signals = []
+                # 从状态重建差异矩阵
+                state_float = state.float()
+                D = (state_float.unsqueeze(0) - state_float.unsqueeze(1)).abs()
+                D_max = D.max().item()
+                if D_max > 1e-8:
+                    D = D / D_max
+                D.fill_diagonal_(0)
+
+                # 采样差异信号（避免信号过多）
+                N_bits = state.shape[0]
+                sample_step = max(1, N_bits // 32)  # 最多 32 个信号
+                signal_idx = 0
+                for i in range(0, N_bits, sample_step):
+                    for j in range(i + 1, N_bits, sample_step):
+                        mag = D[i, j].item()
+                        if mag > 0.05:  # 幅度阈值
+                            direction = (state_float[j] - state_float[i]).unsqueeze(0)
+                            diff_signals.append(DifferenceSignal(
+                                signal_id=f"sig_L{layer_id}_{step}_{signal_idx:03d}",
+                                source_layer=layer_id,
+                                target_layer=layer_id,
+                                magnitude=mag,
+                                direction=direction,
+                                timestamp=ts,
+                            ))
+                            signal_idx += 1
+                            if signal_idx >= 32:  # 上限
+                                break
+                    if signal_idx >= 32:
+                        break
+
+                # 获取当前偏置
+                current_bias = constraints.direction.clone() if hasattr(constraints, 'direction') else torch.zeros(N, device=self.device)
+
+                # 获取当前 ODI
+                current_odi = 0.0
+                if self.organizational_density_index is not None:
+                    # 从最近的 ODI 结果获取
+                    pass  # ODI 在 P1 中计算，此处用 0 作为初始值
+
+                # 执行叙事递归步骤
+                narrative_correction = self.narrative_recursion_operator.step(
+                    signals=diff_signals,
+                    current_bias=current_bias,
+                    current_odi=current_odi,
+                    timestamp=ts,
+                )
+
+                # 将叙事偏置修正反馈到偏置场
+                if narrative_correction is not None and narrative_correction.norm().item() > 1e-8:
+                    # 修正方向场
+                    if hasattr(constraints, 'direction'):
+                        new_direction = constraints.direction + narrative_correction
+                        constraints.direction = new_direction / new_direction.norm().item()
+
+                    # 记录到结果
+                    result_entry['narrative_recursion'] = {
+                        'signals_processed': len(diff_signals),
+                        'bias_correction_applied': True,
+                        'correction_norm': narrative_correction.norm().item(),
+                    }
 
             # ── P1: 每隔 p1_eval_interval 步执行 ──
             p1_counter['value'] += 1
@@ -1408,6 +1479,11 @@ class HierarchicalEvolver:
                 'counterfactual_n_branches': (
                     self.counterfactual_engine.n_active_branches
                     if self.counterfactual_engine else 0),
+                'narrative_recursion_active': (
+                    self.narrative_recursion_operator is not None),
+                'narrative_summary': (
+                    self.narrative_recursion_operator.get_summary()
+                    if self.narrative_recursion_operator else None),
             },
         }
 
