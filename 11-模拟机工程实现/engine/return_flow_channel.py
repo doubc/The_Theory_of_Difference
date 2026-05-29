@@ -25,7 +25,7 @@ Phase 2 P0 组件 #2
 """
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Set, Tuple
 import torch
 import numpy as np
 
@@ -50,6 +50,13 @@ class HighSemanticPayload:
     anchor_strength: float = 0.0  # 初始锚定强度 [0, 1]
     created_at: int = 0  # 时间戳
 
+    def __post_init__(self):
+        if self.content_type not in HIGH_SEMANTIC_TYPES:
+            raise ValueError(
+                f"Invalid content_type '{self.content_type}'. "
+                f"Must be one of {HIGH_SEMANTIC_TYPES}"
+            )
+
     def __repr__(self) -> str:
         return (f"HighSemanticPayload[id={self.payload_id}, "
                 f"type={self.content_type}, "
@@ -64,9 +71,16 @@ class AnchorPoint:
     锚定在某个结构的某个机制上，耦合强度表示锚定的牢固程度。
     """
     structure_id: int
-    mechanism: str  # 锚定在哪个机制上
+    mechanism: Optional[str] = None  # 锚定在哪个机制上（None 表示无可用锚点）
     location: Optional[torch.Tensor] = None  # 空间位置（如有）
     coupling_strength: float = 0.0  # 与对应机制的耦合强度
+
+    def __post_init__(self):
+        if self.mechanism is not None and self.mechanism not in LOW_SEMANTIC_MECHANISMS:
+            raise ValueError(
+                f"Invalid mechanism '{self.mechanism}'. "
+                f"Must be one of {LOW_SEMANTIC_MECHANISMS} or None"
+            )
 
     def __repr__(self) -> str:
         return (f"AnchorPoint[struct={self.structure_id}, "
@@ -94,6 +108,17 @@ class ReturnFlowEvent:
                 f"→ struct={self.anchor.structure_id}/{self.anchor.mechanism} "
                 f"reason={self.reason}")
 
+
+# =============================================================================
+# 语义类型常量 — 供测试和外部模块引用
+# =============================================================================
+
+HIGH_SEMANTIC_TYPES = frozenset({'meaning', 'institution', 'narrative', 'identity'})
+"""高语义内容类型 — 对应解封事件的 reason 映射"""
+
+LOW_SEMANTIC_MECHANISMS = frozenset({'boundary', 'self_sustaining', 'retention',
+                                      'replication', 'selection', 'function'})
+"""低语义锚定机制 — 高语义载荷可锚定的低语义结构机制"""
 
 # =============================================================================
 # 回流通道
@@ -137,15 +162,17 @@ class ReturnFlowChannel:
 
     def __init__(
         self,
-        anchor_threshold: float = 0.3,      # 最小锚定强度
-        decay_rate: float = 0.01,            # 每步锚定强度衰减率
-        min_retention_steps: int = 10,       # 最小保留步数（防止过快剥离）
+        anchor_threshold: float = 0.3,          # 最小锚定强度
+        decay_rate: float = 0.01,               # 每步锚定强度衰减率
+        min_retention_steps: int = 10,          # 最小保留步数（防止过快剥离）
+        firewall_guard: Optional['SemanticFirewallGuard'] = None,  # 语义防火墙守卫
     ):
         """
         Args:
             anchor_threshold: 最小锚定强度，低于此值认为锚定无效
             decay_rate: 每步锚定强度衰减率（模拟时间对锚定关系的侵蚀）
             min_retention_steps: 锚定后至少保留的步数，防止瞬时波动导致剥离
+            firewall_guard: 语义防火墙守卫（可选，不提供则不启用防火墙）
         """
         self.anchor_threshold = anchor_threshold
         self.decay_rate = decay_rate
@@ -161,6 +188,23 @@ class ReturnFlowChannel:
         self._total_anchor_attempts: int = 0
         self._total_successful_anchors: int = 0
         self._total_detachments: int = 0
+
+        # 防火墙
+        self._firewall_guard: Optional['SemanticFirewallGuard'] = firewall_guard
+        self.firewall_block_count: int = 0
+
+    @property
+    def has_firewall(self) -> bool:
+        """是否启用了防火墙守卫"""
+        return self._firewall_guard is not None
+
+    def set_firewall_guard(self, guard: Optional['SemanticFirewallGuard']) -> None:
+        """动态设置或移除防火墙守卫"""
+        self._firewall_guard = guard
+
+    def get_firewall_guard(self) -> Optional['SemanticFirewallGuard']:
+        """获取当前防火墙守卫"""
+        return self._firewall_guard
 
     def attempt_anchor(
         self,
@@ -184,19 +228,66 @@ class ReturnFlowChannel:
         """
         self._total_anchor_attempts += 1
 
+        # 0. 防火墙预审查（如果启用了守卫）：仅检查内容类型和向量范数
+        if self._firewall_guard is not None:
+            violations = []
+            # 层1：内容类型检查
+            if not self._firewall_guard.check_content_type(payload.content_type):
+                violations.append(
+                    f"content_type '{payload.content_type}' not in allowed high-semantic types {HIGH_SEMANTIC_TYPES}"
+                )
+            # 层4：向量范数检查
+            if payload.content_vector is not None:
+                norm_ok, norm_val = self._firewall_guard.check_vector_norm(payload.content_vector)
+                if not norm_ok:
+                    violations.append(
+                        f"vector norm {norm_val:.2f} exceeds max_safe_norm {self._firewall_guard.max_safe_norm}"
+                    )
+            if violations:
+                event = ReturnFlowEvent(
+                    payload=payload,
+                    anchor=AnchorPoint(structure_id=-1, mechanism=None),
+                    timestamp=timestamp,
+                    success=False,
+                    reason=f"firewall blocked: {'; '.join(violations)}",
+                )
+                self._flow_events.append(event)
+                self.firewall_block_count += 1
+                return event
+
         # 1. 选择最佳锚点
         best_anchor = self._select_best_anchor(payload, available_structures)
 
         if best_anchor is None:
             event = ReturnFlowEvent(
                 payload=payload,
-                anchor=AnchorPoint(structure_id=-1, mechanism="none"),
+                anchor=AnchorPoint(structure_id=-1, mechanism=None),
                 timestamp=timestamp,
                 success=False,
                 reason="无可用锚点",
             )
             self._flow_events.append(event)
             return event
+
+        # 2.1 二次防火墙审查：确定锚点后检查危险组合
+        if self._firewall_guard is not None:
+            fw_result = self._firewall_guard.check_anchor(
+                content_type=payload.content_type,
+                mechanism=best_anchor.mechanism,
+                content_vector=payload.content_vector,
+                payload_id=payload.payload_id,
+            )
+            if not fw_result.passed:
+                event = ReturnFlowEvent(
+                    payload=payload,
+                    anchor=best_anchor,
+                    timestamp=timestamp,
+                    success=False,
+                    reason=f"firewall blocked: {'; '.join(fw_result.violations)}",
+                )
+                self._flow_events.append(event)
+                self.firewall_block_count += 1
+                return event
 
         # 2. 验证耦合强度
         coupling = best_anchor.coupling_strength
@@ -286,7 +377,14 @@ class ReturnFlowChannel:
         events = []
         to_remove = []
 
-        for payload_id, (anchor, strength, steps) in list(self._anchored.items()):
+        for payload_id, entry in list(self._anchored.items()):
+            # 兼容旧格式 (anchor, strength, steps) 和新格式 (payload, anchor, strength, steps)
+            if len(entry) == 3:
+                anchor, strength, steps = entry
+                # 旧格式没有存储 payload，构造一个占位符
+                payload = None
+            else:
+                payload, anchor, strength, steps = entry
             # 衰减
             new_strength = max(0.0, strength - self.decay_rate)
             steps += 1
@@ -295,7 +393,9 @@ class ReturnFlowChannel:
             if (new_strength < self.anchor_threshold
                     and steps >= self.min_retention_steps):
                 event = ReturnFlowEvent(
-                    payload=payload,
+                    payload=payload or HighSemanticPayload(
+                        payload_id=payload_id, content_type="meaning",
+                        content_vector=torch.zeros(1)),
                     anchor=anchor,
                     timestamp=timestamp,
                     success=False,
@@ -307,13 +407,22 @@ class ReturnFlowChannel:
                 to_remove.append(payload_id)
                 self._total_detachments += 1
             else:
-                self._anchored[payload_id] = (anchor, new_strength, steps)
+                self._anchored[payload_id] = (payload, anchor, new_strength, steps)
 
         for pid in to_remove:
             del self._anchored[pid]
 
         self._flow_events.extend(events)
         return events
+
+    def clear(self) -> None:
+        """清空所有已锚定内容、事件历史和统计计数（含防火墙拦截计数）。"""
+        self._anchored.clear()
+        self._flow_events.clear()
+        self._total_anchor_attempts = 0
+        self._total_successful_anchors = 0
+        self._total_detachments = 0
+        self.firewall_block_count = 0
 
     # ─── 查询接口 ───
 
@@ -460,19 +569,31 @@ class SemanticFlowFirewallResult:
     violations: List[str] = field(default_factory=list)
     n_checked: int = 0
     payload_id: str = ""
+    content_type_checked: str = ""
+    mechanism_checked: str = ""
+
+    @property
+    def is_clean(self) -> bool:
+        """是否通过所有检查（无违规）"""
+        return self.passed and len(self.violations) == 0
 
     def __repr__(self) -> str:
         if self.passed:
-            return f"SemanticFlowFirewall[PASSED] payload={self.payload_id} (checked {self.n_checked} fields)"
+            return (f"SemanticFlowFirewall[PASSED] payload={self.payload_id} "
+                    f"(checked {self.n_checked} fields"
+                    f"{f', content_type={self.content_type_checked}' if self.content_type_checked else ''}"
+                    f"{f', mechanism={self.mechanism_checked}' if self.mechanism_checked else ''})")
         return f"SemanticFlowFirewall[FAILED] payload={self.payload_id} violations: {self.violations}"
 
 
 class SemanticFirewallGuard:
     """语义防火墙守卫 — 保护低语义层不被高语义词汇污染。
 
-    在回流通道中，高语义内容以向量形式传递，但锚定过程中可能
-    产生元数据（payload_id、reason 等），这些元数据需要检查
-    是否包含被禁止的高语义词汇。
+    四层审查：
+      1. 内容类型白名单检查（content_type 是否在 HIGH_SEMANTIC_TYPES 中）
+      2. 锚点机制白名单检查（mechanism 是否在 LOW_SEMANTIC_MECHANISMS 中）
+      3. 危险组合检查（如 identity+function, meaning+boundary 等）
+      4. 向量范数检查（防止过强的语义内容一次性注入低语义层）
 
     理论依据：
       - 前主体态阶段，低语义层必须保持语义纯净
@@ -498,40 +619,153 @@ class SemanticFirewallGuard:
         'anchor', 'payload', 'structure', 'mechanism',
     }
 
-    def check_payload_metadata(
+    # 危险组合：(content_type, mechanism) 对，禁止锚定
+    DEFAULT_DANGEROUS_COMBINATIONS = {
+        ('identity', 'function'),
+        ('meaning', 'boundary'),
+        ('institution', 'replication'),
+        ('narrative', 'function'),
+    }
+
+    def __init__(
         self,
-        payload: HighSemanticPayload,
-    ) -> SemanticFlowFirewallResult:
-        """检查高语义载荷的元数据是否包含被禁止的词汇。
-
-        检查范围：
-          - payload_id
-          - content_type
-          - 所有字符串字段
-
+        max_safe_norm: float = 10.0,
+        forbidden_terms: Optional[Set[str]] = None,
+        allowed_mechanisms: Optional[Set[str]] = None,
+        dangerous_combinations: Optional[Set[Tuple[str, str]]] = None,
+    ):
+        """
         Args:
-            payload: 待检查的高语义载荷
+            max_safe_norm: 内容向量的最大安全范数，超过则拦截
+            forbidden_terms: 被禁止的术语集合（默认使用 FORBIDDEN_TERMS）
+            allowed_mechanisms: 允许的低语义机制集合（默认使用 LOW_SEMANTIC_MECHANISMS）
+            dangerous_combinations: 危险的内容类型+机制组合（默认使用 DEFAULT_DANGEROUS_COMBINATIONS）
+        """
+        self.max_safe_norm = max_safe_norm
+        self.forbidden_terms = forbidden_terms if forbidden_terms is not None else self.FORBIDDEN_TERMS
+        self.allowed_mechanisms = allowed_mechanisms if allowed_mechanisms is not None else set(LOW_SEMANTIC_MECHANISMS)
+        self.dangerous_combinations = (
+            dangerous_combinations if dangerous_combinations is not None
+            else self.DEFAULT_DANGEROUS_COMBINATIONS
+        )
+
+    # ─── 四层审查方法 ───
+
+    def check_content_type(self, content_type: str) -> bool:
+        """层1：检查内容类型是否在允许的高语义类型集合中。"""
+        return content_type in HIGH_SEMANTIC_TYPES
+
+    def check_mechanism(self, mechanism: str) -> bool:
+        """层2：检查锚点机制是否在允许的低语义机制集合中。"""
+        return mechanism in self.allowed_mechanisms
+
+    def check_dangerous_combination(self, content_type: str, mechanism: str) -> bool:
+        """层3：检查内容类型+机制组合是否为危险组合。
+        支持两种格式：set of tuples 或 dict of sets。"""
+        if isinstance(self.dangerous_combinations, dict):
+            return mechanism not in self.dangerous_combinations.get(content_type, set())
+        return (content_type, mechanism) not in self.dangerous_combinations
+
+    def check_vector_norm(self, content_vector: Optional[torch.Tensor]) -> Tuple[bool, float]:
+        """层4：检查内容向量的范数是否超过安全阈值。
 
         Returns:
-            SemanticFlowFirewallResult 检测结果
+            (passed, norm_value)
+        """
+        if content_vector is None:
+            return True, 0.0
+        norm = float(torch.norm(content_vector).item())
+        return norm <= self.max_safe_norm, norm
+
+    def check_anchor(
+        self,
+        content_type: str,
+        mechanism: str,
+        content_vector: Optional[torch.Tensor] = None,
+        payload_id: str = "",
+    ) -> SemanticFlowFirewallResult:
+        """执行完整的四层防火墙审查。
+
+        Args:
+            content_type: 高语义内容类型
+            mechanism: 低语义锚点机制
+            content_vector: 内容向量（可选，若不提供则跳过层4）
+            payload_id: 载荷 ID（用于结果报告）
+
+        Returns:
+            SemanticFlowFirewallResult 检查结果
         """
         violations = []
         n_checked = 0
 
-        # 检查 payload_id
+        # 层1：内容类型检查
         n_checked += 1
-        for term in self.FORBIDDEN_TERMS:
+        if not self.check_content_type(content_type):
+            violations.append(
+                f"content_type '{content_type}' not in allowed high-semantic types {HIGH_SEMANTIC_TYPES}"
+            )
+
+        # 层2：机制检查
+        n_checked += 1
+        if not self.check_mechanism(mechanism):
+            violations.append(
+                f"mechanism '{mechanism}' not in low-semantic mechanisms {self.allowed_mechanisms}"
+            )
+
+        # 层3：危险组合检查（仅当层1和层2都通过时才检查）
+        if self.check_content_type(content_type) and self.check_mechanism(mechanism):
+            n_checked += 1
+            if not self.check_dangerous_combination(content_type, mechanism):
+                violations.append(
+                    f"dangerous combination: '{content_type}' + '{mechanism}' is prohibited"
+                )
+
+        # 层4：向量范数检查
+        if content_vector is not None:
+            n_checked += 1
+            norm_ok, norm_val = self.check_vector_norm(content_vector)
+            if not norm_ok:
+                violations.append(
+                    f"vector norm {norm_val:.2f} exceeds max_safe_norm {self.max_safe_norm}"
+                )
+
+        return SemanticFlowFirewallResult(
+            passed=len(violations) == 0,
+            violations=violations,
+            n_checked=n_checked,
+            payload_id=payload_id,
+            content_type_checked=content_type,
+            mechanism_checked=mechanism,
+        )
+
+    def get_safe_mechanisms(self, content_type: str) -> Set[str]:
+        """获取对给定内容类型安全的机制集合（排除危险组合）。"""
+        safe = set(self.allowed_mechanisms)
+        for ct, mech in self.dangerous_combinations:
+            if ct == content_type:
+                safe.discard(mech)
+        return safe
+
+    # ─── 元数据检查（保留向后兼容） ───
+
+    def check_payload_metadata(
+        self,
+        payload: HighSemanticPayload,
+    ) -> SemanticFlowFirewallResult:
+        """检查高语义载荷的元数据是否包含被禁止的词汇。"""
+        violations = []
+        n_checked = 0
+
+        n_checked += 1
+        for term in self.forbidden_terms:
             if term in payload.payload_id.lower():
                 violations.append(
                     f"payload_id '{payload.payload_id}' contains forbidden term '{term}'"
                 )
 
-        # 检查 content_type（content_type 本身是枚举值，理论上不应有违规，但检查以防万一）
         n_checked += 1
-        for term in self.FORBIDDEN_TERMS:
+        for term in self.forbidden_terms:
             if term in payload.content_type.lower():
-                # content_type 是预定义的枚举值，这里只做记录不报错
-                # 因为 'meaning' 等本身就是合法的 content_type
                 pass
 
         return SemanticFlowFirewallResult(
@@ -545,20 +779,13 @@ class SemanticFirewallGuard:
         self,
         event: ReturnFlowEvent,
     ) -> SemanticFlowFirewallResult:
-        """检查回流事件的 reason 字段是否包含被禁止的词汇。
-
-        Args:
-            event: 待检查的回流事件
-
-        Returns:
-            SemanticFlowFirewallResult 检测结果
-        """
+        """检查回流事件的 reason 字段是否包含被禁止的词汇。"""
         violations = []
         n_checked = 0
 
         reason = event.reason
         n_checked += 1
-        for term in self.FORBIDDEN_TERMS:
+        for term in self.forbidden_terms:
             if term in reason.lower():
                 violations.append(
                     f"event reason '{reason}' contains forbidden term '{term}'"
@@ -575,16 +802,5 @@ class SemanticFirewallGuard:
         self,
         mechanism: str,
     ) -> bool:
-        """检查锚定机制名称是否为合法的低语义术语。
-
-        Args:
-            mechanism: 机制名称
-
-        Returns:
-            True 如果机制名称是合法的，False 否则
-        """
-        mech_lower = mechanism.lower()
-        for term in self.FORBIDDEN_TERMS:
-            if term in mech_lower:
-                return False
-        return True
+        """检查锚定机制名称是否为合法的低语义术语。"""
+        return self.check_mechanism(mechanism)
