@@ -517,7 +517,11 @@ class ReturnFlowChannel:
         return result
 
     def force_detach(self, payload_id: str) -> Optional[ReturnFlowEvent]:
-        """强制剥离指定载荷（用于调试或外部干预）"""
+        """强制剥离指定载荷（用于调试或外部干预）
+
+        注意：构造占位 Payload 时使用 'meaning' 作为默认 content_type
+        以满足 HighSemanticPayload 的 __post_init__ 校验。
+        """
         if payload_id not in self._anchored:
             return None
 
@@ -525,8 +529,8 @@ class ReturnFlowChannel:
         event = ReturnFlowEvent(
             payload=HighSemanticPayload(
                 payload_id=payload_id,
-                content_type="",
-                content_vector=torch.tensor([]),
+                content_type='meaning',  # 占位类型，满足校验
+                content_vector=torch.zeros(1),
             ),
             anchor=anchor,
             timestamp=0,

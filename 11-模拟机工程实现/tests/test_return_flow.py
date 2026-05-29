@@ -229,6 +229,36 @@ def test_clear():
     print("[PASS] test_clear: clear state OK")
 
 
+def test_force_detach_regression():
+    """回归测试：force_detach 不应因 content_type 校验失败而崩溃
+
+    此前 bug：force_detach 构造 HighSemanticPayload 时使用 content_type=""
+    导致 __post_init__ 校验抛出 ValueError。修复：使用 'meaning' 作为占位类型。
+    """
+    channel = ReturnFlowChannel()
+    # 先成功锚定一个载荷
+    payload = HighSemanticPayload("p1", "meaning", torch.tensor([1.0]))
+    event = channel.attempt_anchor(
+        payload,
+        [{'structure_id': 1, 'mechanisms': {'function': 0.9}}],
+        1,
+    )
+    assert event.success
+    assert channel.get_anchored_count() == 1
+
+    # force_detach 不应抛出异常
+    detach_event = channel.force_detach("p1")
+    assert detach_event is not None
+    assert detach_event.success is False
+    assert detach_event.reason == "强制剥离"
+    assert channel.get_anchored_count() == 0
+    print("[PASS] test_force_detach_regression: force_detach works without crash")
+
+    # 对不存在的 payload_id 返回 None
+    assert channel.force_detach("nonexistent") is None
+    print("[PASS] test_force_detach_regression: nonexistent payload returns None")
+
+
 if __name__ == "__main__":
     test_payload_validation()
     test_anchor_point_validation()
@@ -239,4 +269,5 @@ if __name__ == "__main__":
     test_anchored_contents_query()
     test_success_rate()
     test_clear()
+    test_force_detach_regression()
     print("\n[OK] All ReturnFlowChannel tests passed!")
