@@ -168,10 +168,39 @@ class GlobalBiasConstraint:
         avg_coherence = float(np.mean(list(coherence_by_mechanism.values())))
 
         # 5. 计算强度平衡度
-        norms = [float(bias.norm().item()) for bias in valid_biases.values()]
-        max_norm = max(norms)
-        min_norm = min(norms)
-        balance = 1.0 - (max_norm - min_norm) / (max_norm + 1e-10)
+        # 使用归一化强度：将每个机制的偏置强度归一化到 [0, 1] 后比较
+        # 避免不同机制因向量维度/来源不同导致的量纲差异
+        # 每个机制有其理论最大强度，归一化后进行比较
+        INTENSITY_NORMALIZATION = {
+            'boundary': 1.0,           # direction 值域 [-1, 1], mean_abs 最大 1.0
+            'self_sustaining': 1.0,    # 与 boundary 同维度
+            'memory': 1.0,             # 累积偏置场，理论最大 1.0
+            'replication': 1.0,        # binding_strength 行均值，理论最大 1.0
+            'selection': 1.0,          # variant probs, 理论最大 1.0
+            'function': 1.0,           # direction_agreement ∈ [0, 1]
+        }
+        
+        intensities = []
+        norm_debug = {}
+        for name, bias in valid_biases.items():
+            raw_norm = float(bias.norm().item())
+            mean_abs = float(bias.abs().mean().item())
+            # 归一化到 [0, 1]
+            max_int = INTENSITY_NORMALIZATION.get(name, 1.0)
+            normalized_int = min(1.0, mean_abs / max_int) if max_int > 0 else 0.0
+            norm_debug[name] = {'raw_norm': raw_norm, 'mean_abs': mean_abs, 'normalized': normalized_int}
+            intensities.append(normalized_int)
+        
+        if len(intensities) >= 2:
+            # 使用对数尺度计算平衡度：对比例差异更公平
+            # balance = 1 - std(log(intensities)) / max_std
+            # 这样 10x 和 100x 的差异被视为可比的比例差异
+            log_ints = [np.log10(max(i, 1e-10)) for i in intensities]
+            log_std = float(np.std(log_ints))
+            max_log_std = 2.0  # log10(100) ≈ 2，即 100 倍差异作为最大参考
+            balance = max(0.0, 1.0 - log_std / max_log_std)
+        else:
+            balance = 1.0
 
         # 6. 判定违反的机制
         violating = [
@@ -188,7 +217,8 @@ class GlobalBiasConstraint:
 
         # 8. 构建描述
         description = self._build_description(
-            passed, avg_coherence, balance, violating, len(valid_biases)
+            passed, avg_coherence, balance, violating, len(valid_biases),
+            norm_debug if 'norm_debug' in dir() else {}
         )
 
         result = GlobalBiasConstraintResult(
@@ -256,6 +286,7 @@ class GlobalBiasConstraint:
         balance: float,
         violating: List[str],
         n_valid: int,
+        norm_debug: Optional[Dict[str, Dict[str, float]]] = None,
     ) -> str:
         """构建结果描述"""
         if passed:
@@ -271,6 +302,13 @@ class GlobalBiasConstraint:
             parts.append(f"强度不平衡({balance:.3f}<{self.balance_threshold})")
         if violating:
             parts.append(f"偏离机制: {', '.join(violating)}")
+        
+        # 附加强度诊断
+        if norm_debug:
+            intensity_str = ", ".join(
+                f"{k}(|·|_mean={v['mean_abs']:.4f}, norm={v['normalized']:.3f})" for k, v in norm_debug.items()
+            )
+            parts.append(f"强度分布: [{intensity_str}]")
 
         return "全局偏置约束失败: " + "; ".join(parts)
 

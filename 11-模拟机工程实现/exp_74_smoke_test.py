@@ -15,6 +15,8 @@ from engine.organizational_density_index import OrganizationalDensityIndex
 from engine.minimal_self_detector import MinimalSelfDetector
 from engine.anticipatory_bias_engine import AnticipatoryBiasEngine
 from engine.counterfactual_engine import CounterfactualEngine
+from engine.global_bias_constraint import GlobalBiasConstraint
+from engine.return_flow_channel import ReturnFlowChannel, SemanticFirewallGuard
 from models.narrative_self import NarrativeRecursionOperator
 
 print("=" * 60)
@@ -62,6 +64,18 @@ anticipatory_engine = AnticipatoryBiasEngine(
     config={'default_horizon': 5, 'learning_rate': 0.01},
 )
 counterfactual_engine = CounterfactualEngine(config=None)
+gbc = GlobalBiasConstraint(
+    coherence_threshold=0.6,
+    balance_threshold=0.5,
+    min_mechanisms_required=4,
+    geometric_weighting=True,
+)
+rf_channel = ReturnFlowChannel(
+    anchor_threshold=0.3,
+    decay_rate=0.01,
+    min_retention_steps=10,
+    firewall_guard=SemanticFirewallGuard(),
+)
 
 evolver = HierarchicalEvolver(
     N0=N0,
@@ -76,6 +90,8 @@ evolver = HierarchicalEvolver(
     counterfactual_engine=counterfactual_engine,
     narrative_recursion_operator=narrative_op,
     organizational_density_index=OrganizationalDensityIndex(),
+    global_bias_constraint=gbc,
+    return_flow_channel=rf_channel,
     phase3_verbose=False,
 )
 
@@ -104,9 +120,12 @@ print(f"MSI:  mean={msi_mean:.4f}, max={msi_max:.4f}")
 print(f"MSI>0 steps: {msi_positive}/{len(msi_values)} ({msi_positive/len(msi_values)*100:.1f}%)")
 print(f"Phase 3 active: {p3_count}/{len(phase2)}")
 
-# ODI subindex diagnostics
+# ODI subindex diagnostics — ODI is stored in the last phase2 step result
 layer0 = evolver_result.get('layer_results', [{}])[0]
-odi_sub = layer0.get('odi', {}).get('subindices', {})
+phase2 = layer0.get('phase2_step_results', [])
+odi_sub = {}
+if phase2 and 'odi' in phase2[-1]:
+    odi_sub = phase2[-1]['odi'].get('subindices', {})
 if odi_sub:
     print(f"\nODI Sub-indices (final):")
     for k, v in odi_sub.items():
@@ -119,3 +138,34 @@ print(f"MSI>0:    {msi_positive/len(msi_values)*100:.1f}% (baseline 0%)")
 
 effect = 'POSITIVE' if (odi_mean > 0.12 or msi_max > 0.01) else 'NEEDS_MORE_STEPS'
 print(f"\n[P0 FIX EFFECT: {effect}]")
+
+# ── Phase 3 组件状态报告 ──
+print(f"\n--- Phase 3 Component Status ---")
+print(f"GlobalBiasConstraint: {gbc}")
+gbc_history = gbc.get_history(limit=5)
+for i, r in enumerate(gbc_history):
+    print(f"  Check #{i+1}: {'PASS' if r.passed else 'FAIL'} coh={r.coherence:.3f} bal={r.balance:.3f} viol={r.violating_mechanisms}")
+
+print(f"\nReturnFlowChannel: {rf_channel}")
+rf_stats = rf_channel.get_stats()
+for k, v in rf_stats.items():
+    if isinstance(v, float):
+        print(f"  {k}: {v:.4f}")
+    else:
+        print(f"  {k}: {v}")
+
+anchored = rf_channel.get_anchored_contents()
+if anchored:
+    print(f"\n  Anchored payloads:")
+    for pid, info in anchored.items():
+        print(f"    {pid}: struct={info['structure_id']} mech={info['mechanism']} strength={info['anchor_strength']:.3f}")
+else:
+    print(f"  (no anchored payloads yet — awaiting unsealing events)")
+
+# ODI subindex diagnostics (duplicate check at end)
+if odi_sub:
+    print(f"\nODI Sub-indices (final, verified):")
+    for k, v in odi_sub.items():
+        print(f"  {k}: {v:.4f}")
+else:
+    print(f"\nODI Sub-indices: (empty)")
