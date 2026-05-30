@@ -292,6 +292,8 @@ class HierarchicalEvolver:
         self._unsealing_events: List[UnsealingEvent] = []
         # 回流事件记录
         self._return_flow_events: List[ReturnFlowEvent] = []
+        # P1 fix (2026-05-30): ODI 滑动窗口（用于 p3_active 门控）
+        self._odi_window: List[float] = []
 
         # 层级管理器
         self.hierarchy = HierarchyManager(
@@ -1125,6 +1127,12 @@ class HierarchicalEvolver:
                               f"value={odi_result.odi:.3f}, zone={odi_result.zone}"
                               f"{zb_info}")
 
+                # P1 fix (2026-05-30): 更新 ODI 滑动窗口（无论 verbose 是否开启）
+                if odi_result is not None:
+                    self._odi_window.append(odi_result.odi)
+                    if len(self._odi_window) > 100:
+                        self._odi_window.pop(0)
+
                 # 9. SeventhThresholdDetector — 基于 ODI 时间序列检测相变
                 seventh_result = None
                 if self.seventh_threshold_detector is not None and odi_result is not None:
@@ -1210,6 +1218,14 @@ class HierarchicalEvolver:
                     _odi_val = result_entry['odi'].get('value', 0.0)
                 current_odi = _odi_val
                 p3_active = current_odi >= 0.5  # 前主体态地板
+                # P1 fix (2026-05-30): 滑动窗口门控补充
+                # 单步门控易受 ODI 波动影响，用最近 10 步滑动窗口作为补充判断
+                p3_active_window = False
+                if hasattr(self, '_odi_window') and len(self._odi_window) >= 5:
+                    window_mean = np.mean(list(self._odi_window)[-10:])
+                    p3_active_window = window_mean >= 0.35  # 窗口均值阈值略低于单步阈值
+                    # 单步或窗口任一满足即激活（宽松模式，确保 Phase 3 能收集数据）
+                    p3_active = p3_active or p3_active_window
 
                 # 12. MinimalSelfDetector — 最小自我检测
                 msi_result = None
@@ -1244,11 +1260,25 @@ class HierarchicalEvolver:
                             sensitivity_map[f"bit_{i}"] = float(state_float[i].item())
 
                     # 基线偏移：从回流通道获取（如有）
+                    # P0 fix (2026-05-30): 锚定 baseline_shift 到回流通道状态
+                    # 不仅考虑当前锚定数量，还考虑锚定强度总和与历史锚定事件
                     baseline_shift = 0.0
                     if self.return_flow_channel is not None:
                         anchored = self.return_flow_channel.get_anchored_contents()
                         if anchored:
-                            baseline_shift = len(anchored) * 0.01
+                            # 锚定强度加权平均（比单纯计数更精确）
+                            strengths = [v['anchor_strength'] for v in anchored.values()]
+                            baseline_shift = float(np.mean(strengths))
+                            # 叠加锚定数量因子
+                            baseline_shift *= (1.0 + 0.1 * len(anchored))
+                        # 补充：从回流事件历史中获取累积锚定信号
+                        flow_history = self.return_flow_channel.get_flow_history(limit=20)
+                        successful_anchors = sum(1 for e in flow_history if e.success)
+                        if successful_anchors > 0:
+                            # 历史锚定成功率作为基线偏移的修正因子
+                            success_rate = successful_anchors / len(flow_history)
+                            baseline_shift += 0.02 * success_rate
+                        baseline_shift = min(baseline_shift, 1.0)  # 上限约束
 
                     # 获取 ODI 结果用于 MSD 内部门控
                     _odi_for_msd = None

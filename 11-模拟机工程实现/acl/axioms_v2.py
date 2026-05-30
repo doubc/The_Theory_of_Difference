@@ -64,7 +64,10 @@ class AxiomConstraints:
         self.active_bits: Set[int] = set()
         self.sealed = False  # 封口标志
         self.sealed_bits: Set[int] = set()  # 被封口的比特
-        self.min_active_bits = max(3, N // 4)  # 最少活跃比特数
+        # P0 fix (2026-05-30): 提高最少活跃比特数，降低系统密封率
+        # 原公式 max(3, N//4) 对 N=72 仅保留 18 比特（密封率 75%）
+        # 新公式 max(N//3, 12) 对 N=72 保留 24 比特（密封率 67%），释放更多结构多样性
+        self.min_active_bits = max(N // 3, 12)  # 最少活跃比特数（≥33% 自由度）
         # 回流偏置场：跨层偏置的概率调制向量（由 HierarchyManager 注入）
         self.bias_profile: Optional[torch.Tensor] = None
     # ============================================================
