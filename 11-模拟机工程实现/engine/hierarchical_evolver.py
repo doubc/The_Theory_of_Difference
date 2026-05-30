@@ -37,6 +37,7 @@ from engine.minimal_self_detector import MinimalSelfDetector, MinimalSelfResult
 from engine.anticipatory_bias_engine import AnticipatoryBiasEngine, AnticipationResult
 from engine.counterfactual_engine import CounterfactualEngine, CounterfactualResult
 from models.narrative_self import NarrativeRecursionOperator, DifferenceSignal
+from engine.global_bias_constraint import GlobalBiasConstraint, GlobalBiasConstraintResult
 from layers.three_dim_hamming import ThreeDimHammingLattice
 from engine.functional_signal_coupling import extract_functional_signals
 
@@ -235,6 +236,7 @@ class HierarchicalEvolver:
                  anticipatory_bias_engine: Optional[AnticipatoryBiasEngine] = None,
                  counterfactual_engine: Optional[CounterfactualEngine] = None,
                  narrative_recursion_operator: Optional[NarrativeRecursionOperator] = None,
+                 global_bias_constraint: Optional[GlobalBiasConstraint] = None,
                  # P1 评估间隔（每多少个 P0 检测周期执行一次 P1 评估）
                  p1_eval_interval: int = 5,
                  phase2_verbose: bool = False,
@@ -281,6 +283,7 @@ class HierarchicalEvolver:
         self.anticipatory_bias_engine = anticipatory_bias_engine
         self.counterfactual_engine = counterfactual_engine
         self.narrative_recursion_operator = narrative_recursion_operator
+        self.global_bias_constraint = global_bias_constraint
         self._p1_eval_interval = p1_eval_interval
         self._phase2_verbose = phase2_verbose
         self._phase3_verbose = phase3_verbose
@@ -717,6 +720,104 @@ class HierarchicalEvolver:
                         if abs(mean_dir) > 1e-8:
                             agreement = (active_dir.sign() * np.sign(mean_dir)).mean().item()
                             self_sustaining = max(0.0, (agreement + 1) / 2)
+
+                # functional_signals 在 SixThresholdDetector 之后可能定义，提前初始化为 None
+                functional_signals = None
+
+                # ── GlobalBiasConstraint: 全局偏置一致性检测 ──
+                # 在 P1 周期内执行，收集各机制局部偏置并评估全局一致性
+                if self.global_bias_constraint is not None:
+                    local_biases = {}
+                    coupling_strengths = {}
+
+                    # 1. boundary: 从 constraints.direction 提取
+                    if hasattr(constraints, 'direction') and constraints.direction is not None:
+                        boundary_vec = constraints.direction.float().clone()
+                        if boundary_vec.norm() > 1e-8:
+                            local_biases['boundary'] = boundary_vec
+                            coupling_strengths['boundary'] = float(active_count / max(1, total_bits))
+
+                    # 2. self_sustaining: 从 active bits 的方向一致性提取
+                    if self_sustaining > 0 and hasattr(constraints, 'direction'):
+                        dir_vals = constraints.direction.float()
+                        active_indices_list = list(constraints.active_bits)
+                        if len(active_indices_list) > 0:
+                            active_dir = dir_vals[active_indices_list]
+                            # 构建与 direction 同维度的偏置：active bits 设为平均方向，其余为 0
+                            ss_vec = torch.zeros_like(dir_vals)
+                            ss_vec[active_indices_list] = active_dir.mean().item()
+                            if ss_vec.norm() > 1e-8:
+                                local_biases['self_sustaining'] = ss_vec.clone()
+                                coupling_strengths['self_sustaining'] = self_sustaining
+
+                    # 3. memory: 从 PersistentBiasMemory 获取当前层的累积偏置场
+                    if self.persistent_bias_memory is not None:
+                        memory_field = self.persistent_bias_memory.get_accumulated(layer_id, n_bits=N)
+                        if memory_field is not None:
+                            memory_field = memory_field.float()
+                            if memory_field.norm() > 1e-8:
+                                local_biases['memory'] = memory_field.clone()
+                                coupling_strengths['memory'] = min(1.0, self.persistent_bias_memory.n_entries / 50.0)
+
+                    # 4. replication: 从 binding_strength 提取（行均值 → 1D 向量）
+                    if hasattr(constraints, 'binding_strength'):
+                        bs = constraints.binding_strength.float()
+                        if bs.norm() > 1e-8:
+                            # 行均值 → 与 direction 同维度的 1D 向量
+                            rep_vec = bs.mean(dim=0).clone()
+                            if rep_vec.norm() > 1e-8:
+                                local_biases['replication'] = rep_vec
+                                coupling_strengths['replication'] = float(bs.norm().item() / 10.0)
+
+                    # 5. selection: 从 CumulativeSelector 的保留率构建偏置
+                    if self.cumulative_selector is not None and variant_probs is not None:
+                        sel_vec = torch.zeros(N, device=self.device, dtype=torch.float)
+                        for vid, prob in variant_probs.items():
+                            if vid.startswith('L' + str(layer_id) + '_b'):
+                                try:
+                                    bit_id = int(vid.split('_b')[1])
+                                    if 0 <= bit_id < N:
+                                        sel_vec[bit_id] = float(prob)
+                                except (IndexError, ValueError):
+                                    pass
+                        if sel_vec.norm() > 1e-8:
+                            local_biases['selection'] = sel_vec.clone()
+                            coupling_strengths['selection'] = float(sel_vec.mean().item())
+
+                    # 6. function: 从 functional_signals 提取
+                    if functional_signals is not None:
+                        fs = functional_signals
+                        if fs.get('direction_agreement', 0) > 0:
+                            func_vec = torch.zeros(N, device=self.device, dtype=torch.float)
+                            active_indices_sorted = sorted(constraints.active_bits)
+                            if len(active_indices_sorted) > 0:
+                                dir_vals = constraints.direction.float()
+                                func_vec[active_indices_sorted] = dir_vals[active_indices_sorted] * fs['direction_agreement']
+                            if func_vec.norm() > 1e-8:
+                                local_biases['function'] = func_vec.clone()
+                                coupling_strengths['function'] = float(fs['direction_agreement'])
+
+                    # 评估全局偏置约束
+                    if local_biases:
+                        gbc_result = self.global_bias_constraint.evaluate(
+                            local_biases=local_biases,
+                            coupling_strengths=coupling_strengths or None,
+                        )
+                        result_entry['global_bias_constraint'] = {
+                            'passed': gbc_result.passed,
+                            'coherence': round(gbc_result.coherence, 4),
+                            'balance': round(gbc_result.balance, 4),
+                            'violating_mechanisms': gbc_result.violating_mechanisms,
+                            'n_mechanisms': len(local_biases),
+                        }
+                        if self._phase2_verbose:
+                            status = "PASS" if gbc_result.passed else "FAIL"
+                            print(f"    [GBC] L{layer_id} step={step}: {status} "
+                                  f"coh={gbc_result.coherence:.3f} bal={gbc_result.balance:.3f} "
+                                  f"n={len(local_biases)}")
+                        if not gbc_result.passed and gbc_result.violating_mechanisms:
+                            if self._phase2_verbose:
+                                print(f"    [GBC] 违反机制: {', '.join(gbc_result.violating_mechanisms)}")
 
                 # 功能分化代理
                 component_contributions = None
@@ -1484,6 +1585,19 @@ class HierarchicalEvolver:
                 'narrative_summary': (
                     self.narrative_recursion_operator.get_summary()
                     if self.narrative_recursion_operator else None),
+                'global_bias_constraint_active': self.global_bias_constraint is not None,
+                'global_bias_constraint_pass_rate': (
+                    self.global_bias_constraint.get_pass_rate()
+                    if self.global_bias_constraint else 0.0),
+                'global_bias_constraint_latest': (
+                    (lambda h: {
+                        'passed': h[0].passed,
+                        'coherence': round(h[0].coherence, 4),
+                        'balance': round(h[0].balance, 4),
+                        'violating_mechanisms': h[0].violating_mechanisms,
+                    })(self.global_bias_constraint.get_history(limit=1))
+                    if self.global_bias_constraint and self.global_bias_constraint.get_history(limit=1)
+                    else None),
             },
         }
 
