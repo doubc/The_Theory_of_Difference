@@ -1,36 +1,13 @@
 """
-全局偏置算子约束 — 对各局部偏置施加统一约束，确保前主体态的"统一内部视角"。
+GlobalBiasConstraint — 全局偏置算子约束机制
+
+Phase 3 核心组件：对各局部偏置算子施加统一约束，确保前主体态的"统一内部视角"。
 
 理论依据：
   - 《象界》第八章：前主体态具有统一的内部视角
-  - 偏置算子统一语言：B_G 是各 B_{M^(k)} 的整合
+  - 偏置算子统一语言：B_G 是各 B_M(k) 的加权几何整合
 
-核心功能：
-  1. 从各机制收集局部偏置算子
-  2. 计算全局偏置算子 B_G（加权几何平均）
-  3. 检测方向一致性约束
-  4. 检测强度一致性约束
-  5. 返回约束检测结果和违反机制列表
-
-使用方式：
-    gbc = GlobalBiasConstraint()
-    result = gbc.evaluate(
-        local_biases={
-            'boundary': bias_boundary,
-            'self_sustaining': bias_self_sustaining,
-            'memory': bias_memory,
-            'replication': bias_replication,
-            'selection': bias_selection,
-            'function': bias_function,
-        },
-        coupling_strengths={
-            'boundary': 0.8,
-            'self_sustaining': 0.6,
-            ...
-        },
-    )
-    if not result.passed:
-        print(f"全局偏置约束失败: {result.description}")
+设计文档：docs/phase3_global_bias_constraint_design.md
 """
 
 from dataclasses import dataclass, field
@@ -55,6 +32,37 @@ class GlobalBiasConstraintResult:
 class GlobalBiasConstraint:
     """
     全局偏置算子约束 — 对各局部偏置施加统一约束，确保前主体态的"统一内部视角"。
+
+    理论依据：
+      - 《象界》第八章：前主体态具有统一的内部视角
+      - 偏置算子统一语言：B_G 是各 B_M(k) 的整合
+
+    核心功能：
+      1. 从各机制收集局部偏置算子
+      2. 计算全局偏置算子 B_G（加权几何平均）
+      3. 检测方向一致性约束
+      4. 检测强度一致性约束
+      5. 返回约束检测结果和违反机制列表
+
+    使用方式：
+        gbc = GlobalBiasConstraint()
+        result = gbc.evaluate(
+            local_biases={
+                'boundary': bias_boundary,
+                'self_sustaining': bias_self_sustaining,
+                'memory': bias_memory,
+                'replication': bias_replication,
+                'selection': bias_selection,
+                'function': bias_function,
+            },
+            coupling_strengths={
+                'boundary': 0.8,
+                'self_sustaining': 0.6,
+                ...
+            },
+        )
+        if not result.passed:
+            print(f"全局偏置约束失败: {result.description}")
     """
 
     # 六机制名称（与 Phase 2 的六阈值保持一致）
@@ -105,13 +113,13 @@ class GlobalBiasConstraint:
             GlobalBiasConstraintResult 约束检测结果
         """
         # 1. 过滤有效偏置（非零向量）
-        valid_biases: Dict[str, torch.Tensor] = {}
+        valid_biases = {}
         for name, bias in local_biases.items():
             if bias.norm() > 1e-8:
                 valid_biases[name] = bias
 
         if len(valid_biases) < self.min_mechanisms_required:
-            ref_tensor = next(iter(local_biases.values()), torch.tensor([]))
+            ref_tensor = list(local_biases.values())[0] if local_biases else torch.tensor([])
             return GlobalBiasConstraintResult(
                 passed=False,
                 coherence=0.0,
@@ -152,7 +160,7 @@ class GlobalBiasConstraint:
             )
 
         # 4. 计算方向一致性
-        coherence_by_mechanism: Dict[str, float] = {}
+        coherence_by_mechanism = {}
         for name, bias in valid_biases.items():
             cos_sim = self._cosine_similarity(bias, global_bias)
             coherence_by_mechanism[name] = cos_sim
@@ -202,12 +210,11 @@ class GlobalBiasConstraint:
         vectors: List[torch.Tensor],
         weights: List[float],
     ) -> torch.Tensor:
-        """加权几何平均：在单位球面上进行加权平均"""
+        """加权几何平均：在单位球面上进行加权平均（Karcher 均值近似）"""
         # 归一化所有向量到单位长度
         normalized = [v / (v.norm() + 1e-10) for v in vectors]
 
-        # 在切空间中进行加权平均（将向量视为切向量）
-        # 使用 Karcher 均值近似：迭代加权平均 + 归一化
+        # 在切空间中进行加权平均
         result = torch.zeros_like(vectors[0])
         for v, w in zip(normalized, weights):
             result = result + w * v
