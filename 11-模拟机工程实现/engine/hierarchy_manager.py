@@ -1,4 +1,4 @@
-"""
+﻿"""
 engine/hierarchy_manager.py — 层级管理器
 
 管理多层状态空间，支持：

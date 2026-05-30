@@ -1,6 +1,6 @@
 {
   "experiment": "exp_75_return_flow_integration_800steps",
-  "timestamp": "20260530_181834",
+  "timestamp": "20260530_195620",
   "description": "回流通道集成 + 800步演化 + 六阈值诊断",
   "config": {
     "N0": 72,
@@ -31,9 +31,16 @@
       "narrative_activations": 0,
       "narrative_max": 0.0,
       "return_flow_events": 8,
-      "return_flow_anchored": 0,
+      "return_flow_anchored": 8,
       "bottleneck": null,
-      "odi_sub_indices": {}
+      "odi_sub_indices": {
+        "threshold_proximity": 0.0,
+        "coupling_density": 0.7182,
+        "stability_margin": 0.6875,
+        "firewall_purity": 1.0,
+        "temporal_consistency": 0.9978,
+        "cross_mechanism_resonance": 0.0
+      }
     },
     {
       "seed": 142,
@@ -57,9 +64,16 @@
       "narrative_activations": 0,
       "narrative_max": 0.0,
       "return_flow_events": 10,
-      "return_flow_anchored": 0,
+      "return_flow_anchored": 10,
       "bottleneck": null,
-      "odi_sub_indices": {}
+      "odi_sub_indices": {
+        "threshold_proximity": 0.0,
+        "coupling_density": 0.6181,
+        "stability_margin": 0.6389,
+        "firewall_purity": 1.0,
+        "temporal_consistency": 0.9893,
+        "cross_mechanism_resonance": 0.0
+      }
     },
     {
       "seed": 242,
@@ -83,9 +97,16 @@
       "narrative_activations": 0,
       "narrative_max": 0.0,
       "return_flow_events": 10,
-      "return_flow_anchored": 0,
+      "return_flow_anchored": 10,
       "bottleneck": null,
-      "odi_sub_indices": {}
+      "odi_sub_indices": {
+        "threshold_proximity": 0.0,
+        "coupling_density": 0.4237,
+        "stability_margin": 0.6042,
+        "firewall_purity": 1.0,
+        "temporal_consistency": 0.9966,
+        "cross_mechanism_resonance": 0.0
+      }
     }
   ],
   "aggregate": {

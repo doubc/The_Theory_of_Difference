@@ -1,4 +1,4 @@
-"""experiments/exp_75_return_flow_integration_800steps.py
+﻿"""experiments/exp_75_return_flow_integration_800steps.py
 
 Phase 3 实验五：回流通道集成 + 800步长演化
 
@@ -78,9 +78,19 @@ def six_threshold_diagnostic(step_results: List[Dict]) -> Dict:
                     diagnostic['bottleneck'] = name
                     diagnostic['bottleneck_gap'] = gap
 
-    # ODI sub-indices
+    # ODI sub-indices (stored as flat keys in evolver, not nested under 'sub_indices')
     odi_data = last.get('odi', {})
     sub_indices = odi_data.get('sub_indices', {})
+    if not sub_indices:
+        # Fallback: extract from flat keys
+        sub_indices = {
+            'threshold_proximity': odi_data.get('threshold_proximity', 0.0),
+            'coupling_density': odi_data.get('coupling_density', 0.0),
+            'stability_margin': odi_data.get('stability_margin', 0.0),
+            'firewall_purity': odi_data.get('firewall_purity', 0.0),
+            'temporal_consistency': odi_data.get('temporal_consistency', 0.0),
+            'cross_mechanism_resonance': odi_data.get('cross_mechanism_resonance', 0.0),
+        }
     diagnostic['odi_sub_indices'] = {}
     for key, val in sub_indices.items():
         diagnostic['odi_sub_indices'][key] = round(float(val), 4)
@@ -104,8 +114,10 @@ def run_with_return_flow(
     np.random.seed(seed)
 
     # 创建 ReturnFlowChannel
+    # 降低 anchor_threshold 至 0.05，因为 per-mechanism coupling 值较小
+    # (binding 均匀分配到 6 个机制，典型 binding=0.3 → per_mech=0.05)
     return_flow_channel = ReturnFlowChannel(
-        anchor_threshold=0.2,
+        anchor_threshold=0.05,
         decay_rate=0.01,
         min_retention_steps=10,
     )

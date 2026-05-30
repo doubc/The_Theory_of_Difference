@@ -109,69 +109,63 @@ def _build_available_structures(
     current_layer: int,
     max_layers: int,
     unsealing_mechanism: Optional[UnsealingMechanism] = None,
+    coupling_matrix: Optional[Dict[str, Dict[str, float]]] = None,
+    layer_state: Optional[torch.Tensor] = None,
 ) -> Tuple[List[Dict], Optional[Dict[int, int]]]:
-    """构建当前层及相邻层的可用结构列表，用于回流锚定搜索空间。
+    """Build available structures for return flow anchoring.
 
-    返回格式: (available_structures, unsealing_levels)
-        available_structures: List[Dict]，每个 Dict:
-            {
-                'structure_id': int,       # 封装比特 ID
-                'unsealing_level': int,    # 解封等级（来自 UnsealingMechanism）
-                'mechanisms': {            # 各低语义机制的耦合强度
-                    'boundary': float,
-                    'self_sustaining': float,
-                    'retention': float,
-                    'replication': float,
-                    'selection': float,
-                    'function': float,
-                }
-            }
-        unsealing_levels: Dict[int, int] 结构ID→解封等级的映射（供 attempt_anchor 使用）
-
-    结构信息来自 EncapsulationEngine 的封装记录，
-    耦合强度用 binding_score 均匀分配到各机制。
-    解封等级来自 UnsealingMechanism（若未提供则默认 Level 0）。
+    Uses layer_state to estimate coupling for all bits.
     """
     available = []
-    encap_engine = hierarchy.encap_engine
     unsealing_levels: Dict[int, int] = {}
+    mechanism_names = [
+        'boundary', 'self_sustaining', 'retention',
+        'replication', 'selection', 'function',
+    ]
+    n_mechanisms = len(mechanism_names)
 
-    # 收集当前层及相邻层的封装结构
-    layers_to_check = [current_layer]
-    if current_layer > 0:
-        layers_to_check.append(current_layer - 1)
-    if current_layer + 1 < hierarchy.n_layers:
-        layers_to_check.append(current_layer + 1)
+    # Determine number of bits from layer_state or default
+    if layer_state is not None:
+        n_bits = layer_state.size(0)
+    else:
+        n_bits = 72
 
-    for layer_idx in layers_to_check:
-        summary = encap_engine.get_summary(layer_idx)
-        for enc_bit in summary.get('encapsulated_bits', []):
-            sid = enc_bit['id']
-            binding = enc_bit.get('binding', 0.0)
-            # 将 binding_score 均匀分配到 6 个低语义机制
-            n_mechanisms = 6
-            per_mechanism = binding / n_mechanisms if n_mechanisms > 0 else 0.0
-            mechanism_names = [
-                'boundary', 'self_sustaining', 'retention',
-                'replication', 'selection', 'function',
-            ]
-            mechanisms = {name: per_mechanism for name in mechanism_names}
-
-            # 获取解封等级
-            if unsealing_mechanism is not None:
-                level = unsealing_mechanism.get_current_level(sid)
+    # Use all bits as anchor candidates
+    for sid in range(n_bits):
+        # Estimate coupling from layer_state
+        if layer_state is not None and 0 <= sid < layer_state.size(0):
+            if layer_state.dim() == 1:
+                total_coupling = float(torch.abs(layer_state[sid].float()).item())
+            elif layer_state.dim() == 2:
+                total_coupling = float(torch.abs(layer_state[sid].float()).sum().item())
+                max_norm = layer_state.size(1)
+                if max_norm > 0:
+                    total_coupling /= max_norm
             else:
-                level = 0  # 默认封闭
-            unsealing_levels[sid] = level
+                total_coupling = 0.0
+        else:
+            total_coupling = 0.0
 
-            available.append({
-                'structure_id': sid,
-                'unsealing_level': level,
-                'mechanisms': mechanisms,
-            })
+        per_mechanism = total_coupling / n_mechanisms if n_mechanisms > 0 else 0.0
+        mechanisms = {name: per_mechanism for name in mechanism_names}
+
+        # Unsealing level
+        level = 0
+        if unsealing_mechanism is not None:
+            stored = unsealing_mechanism.get_current_level(sid)
+            if stored > 0:
+                level = stored
+
+        unsealing_levels[sid] = level
+
+        available.append({
+            'structure_id': sid,
+            'unsealing_level': level,
+            'mechanisms': mechanisms,
+            'total_coupling': total_coupling,
+        })
 
     return available, unsealing_levels if unsealing_levels else None
-
 
 class HierarchicalSnapshot:
     """跨层级快照"""
@@ -1067,13 +1061,38 @@ class HierarchicalEvolver:
                             step=step,
                         )
                         if payload is not None:
-                            # 构建可用结构列表（当前层 + 相邻层），携带解封等级
+                            # 构建可用结构列表：优先包含解封结构本身（作为主要锚点）
                             available_structures, unsealing_levels = _build_available_structures(
                                 hierarchy=self.hierarchy,
                                 current_layer=layer_id,
                                 max_layers=self.max_layers,
                                 unsealing_mechanism=self.unsealing_mechanism,
+                                coupling_matrix=coupling_matrix,
+                                layer_state=state,
                             )
+                            # 将解封结构插入到列表头部，并赋予高耦合强度
+                            unseal_sid = unsealing_event.structure_id
+                            # 检查是否已存在
+                            existing = [s for s in available_structures if s['structure_id'] == unseal_sid]
+                            if existing:
+                                # 更新其耦合强度为高值（基于解封容量）
+                                existing[0]['total_coupling'] = min(unsealing_event.high_semantic_capacity * 2, 1.0)
+                                existing[0]['mechanisms'] = {
+                                    k: min(unsealing_event.high_semantic_capacity * 2, 1.0) / 6
+                                    for k in existing[0]['mechanisms']
+                                }
+                                # 移到列表头部
+                                available_structures.remove(existing[0])
+                                available_structures.insert(0, existing[0])
+                            else:
+                                # 添加解封结构
+                                cap = min(unsealing_event.high_semantic_capacity * 2, 1.0)
+                                available_structures.insert(0, {
+                                    'structure_id': unseal_sid,
+                                    'unsealing_level': unsealing_event.unsealing_level,
+                                    'mechanisms': {k: cap / 6 for k in ['boundary', 'self_sustaining', 'retention', 'replication', 'selection', 'function']},
+                                    'total_coupling': cap,
+                                })
                             anchor_event = self.return_flow_channel.attempt_anchor(
                                 payload=payload,
                                 available_structures=available_structures,

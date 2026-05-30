@@ -1,4 +1,4 @@
-"""
+﻿"""
 engine/return_flow_channel.py — 回流通道 (Return Flow Channel)
 
 Phase 2 P0 组件 #2
@@ -421,7 +421,7 @@ class ReturnFlowChannel:
                 to_remove.append(payload_id)
                 self._total_detachments += 1
             else:
-                self._anchored[payload_id] = (payload, anchor, new_strength, steps)
+                self._anchored[payload_id] = (anchor, new_strength, steps)
 
         for pid in to_remove:
             del self._anchored[pid]
