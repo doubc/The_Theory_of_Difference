@@ -213,7 +213,28 @@ def run_config(name: str, cfg: dict, n_runs: int = 3) -> Dict:
             narrative_decay_rate=0.9,
         )
         
-        mini_detector = MinimalSelfDetector(config=None)  # 使用默认配置
+        # 诊断：ODI 在现有配置下最高仅达 ~0.47（structuring 区），
+        # 默认 odi_activation_threshold=0.5 导致 MSI 始终被门控为 0。
+        # 临时降低阈值以观察 MSI 在 structuring→pre_subjective 过渡区的行为。
+        # 理论依据：ODI=0.5 是"六阈值刚好达标"的地板，但实际系统可能需更宽松的门控
+        # 来捕捉前主体态萌芽期的 MSI 增长曲线。
+        msi_config = {
+            'odi_activation_threshold': 0.35,   # 从 0.5 降至 0.35（structuring 区内）
+            'odi_saturation_threshold': 0.70,
+            'asymmetry_window': 10,
+            'asymmetry_threshold': 0.25,
+            'min_parts': 3,
+            'history_window': 8,
+            'history_dependency_threshold': 0.3,
+            'min_history_depth': 5,
+            'self_reference_window': 8,
+            'self_reference_threshold': 0.2,
+            'baseline_correlation_threshold': 0.4,
+            'msi_activation_threshold': 0.20,   # 从 0.35 降至 0.20（捕捉萌芽期）
+            'msi_emergence_threshold': 0.35,
+            'min_active_conditions': 1,          # 从 2 降至 1（单条件即可触发）
+        }
+        mini_detector = MinimalSelfDetector(config=msi_config)
         
         anticipatory_engine = AnticipatoryBiasEngine(
             memory=PersistentBiasMemory(),  # 需要 memory 参数
@@ -248,6 +269,13 @@ def run_config(name: str, cfg: dict, n_runs: int = 3) -> Dict:
         
         # 获取叙事汇总
         narrative_summary = get_narrative_summary(narrative_op)
+
+        # ODI 子指数诊断：理解为何 ODI 无法突破 0.5
+        odi_subindices = {}
+        if evolver_result.get('layer_results'):
+            layer_0_results = evolver_result['layer_results'][0]
+            if layer_0_results.get('odi'):
+                odi_subindices = layer_0_results['odi'].get('subindices', {})
         
         # 转换为 numpy 数组用于分析
         msi_arr = np.array(samples['msi'])
@@ -304,6 +332,13 @@ def run_config(name: str, cfg: dict, n_runs: int = 3) -> Dict:
             'elapsed_seconds': round(elapsed, 2),
             'samples': samples,
             'narrative_summary': narrative_summary,
+            'odi_diagnostics': {
+                'subindices': odi_subindices,
+                'odi_max': float(np.max(odi_arr)) if len(odi_arr) > 0 else 0,
+                'odi_mean': float(np.mean(odi_arr)) if len(odi_arr) > 0 else 0,
+                'odi_final': float(odi_arr[-1]) if len(odi_arr) > 0 else 0,
+                'msi_config_used': msi_config,
+            },
             'analysis': {
                 'msi_final': float(msi_arr[-1]) if len(msi_arr) > 0 else 0,
                 'msi_max': float(np.max(msi_arr)) if len(msi_arr) > 0 else 0,

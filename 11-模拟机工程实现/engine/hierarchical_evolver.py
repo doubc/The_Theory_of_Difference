@@ -1218,27 +1218,30 @@ class HierarchicalEvolver:
                     sensitivity_map = {}
                     if hasattr(constraints, 'direction') and constraints.direction is not None:
                         dir_vals = constraints.direction.float()
+                        state_float = state.float()
                         active_idx = sorted(constraints.active_bits)
                         for i, bit_id in enumerate(active_idx[:20]):
                             part_name = f"bit_{bit_id}"
-                            sensitivity_map[part_name] = float(dir_vals[bit_id].abs().item()) if bit_id < len(dir_vals) else 0.0
+                            # 多信号融合敏感度：方向 + 状态值 + 绑定强度
+                            dir_sens = float(dir_vals[bit_id].abs().item()) if bit_id < len(dir_vals) else 0.0
+                            state_sens = float(state_float[bit_id].item()) if bit_id < len(state_float) else 0.0
+                            # 绑定强度：该比特与其他活跃比特的平均绑定
+                            if hasattr(constraints, 'binding_strength') and bit_id < constraints.binding_strength.size(0):
+                                active_list = list(constraints.active_bits)
+                                if active_list:
+                                    bs_vals = [float(constraints.binding_strength[bit_id, a].abs().item()) for a in active_list if a != bit_id]
+                                    bind_sens = float(np.mean(bs_vals)) if bs_vals else 0.0
+                                else:
+                                    bind_sens = 0.0
+                            else:
+                                bind_sens = 0.0
+                            # 融合：方向权重0.2 + 状态权重0.5 + 绑定权重0.3（状态值为主要差异化信号）
+                            sensitivity_map[part_name] = 0.2 * dir_sens + 0.5 * state_sens + 0.3 * bind_sens * 100.0
                     else:
                         # 回退：使用状态值作为敏感度代理
                         state_float = state.float()
                         for i in range(min(20, len(state_float))):
                             sensitivity_map[f"bit_{i}"] = float(state_float[i].item())
-
-                    # 构建响应历史：从偏置记忆获取
-                    response_history = {}
-                    if self.persistent_bias_memory is not None and self.persistent_bias_memory.n_entries > 0:
-                        recent_entries = self.persistent_bias_memory._get_active_entries(target_layer=layer_id)
-                        recent_entries = recent_entries[-8:]
-                        for entry in recent_entries:
-                            ctx = f"t{entry.timestamp}"
-                            if ctx not in response_history:
-                                response_history[ctx] = []
-                            if entry.bias_vector is not None:
-                                response_history[ctx].append(float(entry.bias_vector.float().mean().item()))
 
                     # 基线偏移：从回流通道获取（如有）
                     baseline_shift = 0.0
@@ -1251,6 +1254,53 @@ class HierarchicalEvolver:
                     _odi_for_msd = None
                     if self.organizational_density_index is not None and self.organizational_density_index._result_history:
                         _odi_for_msd = self.organizational_density_index._result_history[-1]
+                    # 获取响应历史：使用状态空间分布作为差异化信号
+                    # 状态值在不同比特间差异显著，比偏置向量更适合区分历史上下文
+                    response_history = {}
+                    state_float = state.float()
+                    # 将状态按空间位置分组，每组取均值作为特征
+                    state_N = state_float.size(0)
+                    n_groups = 8  # 分成8个空间区域
+                    group_size = max(1, state_N // n_groups)
+                    for g in range(n_groups):
+                        start = g * group_size
+                        end = min((g + 1) * group_size, state_N)
+                        ctx = f"state_region_{g}"
+                        if ctx not in response_history:
+                            response_history[ctx] = []
+                        # 该区域的状态均值 + 方差 + 活跃比特数
+                        region = state_float[start:end]
+                        response_history[ctx].extend([
+                            float(region.mean().item()),
+                            float(region.std().item()),
+                            float((region > 0.5).sum().item()),
+                            float((region > 0.2).sum().item()),
+                        ])
+                    # 补充：偏置记忆条目（作为额外上下文）
+                    if self.persistent_bias_memory is not None and self.persistent_bias_memory.n_entries > 0:
+                        recent_entries = self.persistent_bias_memory._get_active_entries(target_layer=layer_id + 1)
+                        if not recent_entries:
+                            all_entries = [e for entries in self.persistent_bias_memory._layer_index.values() for i in entries]
+                            recent_entries = [self.persistent_bias_memory._entries[i] for i in all_entries[-20:] if self.persistent_bias_memory._entries[i].is_active]
+                        for entry in recent_entries[-4:]:
+                            ctx = f"bias_t{entry.timestamp}"
+                            if ctx not in response_history:
+                                response_history[ctx] = []
+                            if entry.bias_vector is not None:
+                                bv = entry.bias_vector.float()
+                                response_history[ctx].extend([
+                                    float(bv.norm().item()), float(entry.current_strength),
+                                ])
+                    # 叙事修正信号
+                    if result_entry.get('narrative_recursion', {}).get('bias_correction_applied'):
+                        narr_corr = result_entry['narrative_recursion'].get('correction_norm', 0.0)
+                        narr_key = f"narr_t{ts}"
+                        if hasattr(constraints, 'direction') and constraints.direction is not None:
+                            cd = constraints.direction.float()
+                            response_history[narr_key] = [
+                                narr_corr, float(cd.norm().item()),
+                                float((cd > 0).sum().item()), float((cd < 0).sum().item()),
+                            ]
                     msi_result = self.minimal_self_detector.feed(
                         sensitivity_map=sensitivity_map if sensitivity_map else None,
                         response_history=response_history if response_history else None,
