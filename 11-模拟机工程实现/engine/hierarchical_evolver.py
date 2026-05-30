@@ -525,6 +525,9 @@ class HierarchicalEvolver:
             """Phase 2 步骤回调"""
             result_entry = {'step': step, 'layer': layer_id}
 
+            # Ensure odi_result is always defined (used by Phase 3 components)
+            odi_result = None
+
             # ── 重建循环开始：追踪保持深度的可重调用性 ──
             if self.persistent_bias_memory is not None:
                 self.persistent_bias_memory.begin_reconstruction_cycle()
@@ -1090,7 +1093,6 @@ class HierarchicalEvolver:
                         }
 
                 # 8. OrganizationalDensityIndex — 基于六阈值结果计算 ODI
-                odi_result = None
                 if self.organizational_density_index is not None:
                     threshold_result_for_odi = locals().get('threshold_result')
                     odi_result = self.organizational_density_index.compute(
