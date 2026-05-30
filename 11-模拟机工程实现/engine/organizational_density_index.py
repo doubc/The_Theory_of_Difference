@@ -348,12 +348,17 @@ class OrganizationalDensityIndex:
         """计算阈值接近度
 
         对每个阈值，计算 value/threshold 的归一化值（上限1.0）。
-        然后取几何平均（惩罚不均衡——某个阈值远低于其他）。
+        然后使用 sigmoid 平滑聚合（替代纯几何平均），
+        给予接近阈值的"部分信用"，避免几何平均的极端惩罚。
+
+        理论依据：《Appearing Before Appearing》§4.4
+        前主体态不是尖锐边界，而是连续过渡。阈值接近度应当反映
+        "接近达标"的程度，而非"完全达标/完全未达标"的二值判定。
 
         返回 [0, 1]：
         - 1.0 = 所有阈值都远超阈值线
         - 0.0 = 所有阈值都远低于阈值线
-        - ~0.5 = 所有阈值刚好达标
+        - ~0.5 = 所有阈值刚好达标（ratio ≈ 1.0 → sigmoid(0) ≈ 0.5）
         """
         ratios = []
         for status in result.threshold_statuses:
@@ -366,10 +371,26 @@ class OrganizationalDensityIndex:
         if not ratios:
             return 0.0
 
-        # 使用几何平均：惩罚短板
+        # 方案A：纯几何平均（原始，极端惩罚）
         log_sum = sum(np.log(max(r, 1e-10)) for r in ratios)
         geo_mean = np.exp(log_sum / len(ratios))
-        return float(np.clip(geo_mean, 0.0, 1.0))
+
+        # 方案B：sigmoid 平滑聚合 — 对每个 ratio 用 sigmoid 映射，再取均值
+        # sigmoid(x) = 1 / (1 + exp(-k*x)), k=5 使 ratio=1.0 时 sigmoid≈0.99
+        # ratio=0.5 时 sigmoid≈0.07, ratio=0.8 时 sigmoid≈0.55
+        k = 5.0  # sigmoid 陡峭度
+        sigmoid_vals = []
+        for r in ratios:
+            # 将 ratio 映射到 sigmoid 的输入域：ratio=0 → -3, ratio=1 → 2
+            x = 5.0 * r - 3.0  # ratio 0→-3, 0.6→0, 1→2
+            sig = 1.0 / (1.0 + np.exp(-k * x / 5.0))
+            sigmoid_vals.append(sig)
+        sigmoid_mean = float(np.mean(sigmoid_vals))
+
+        # 混合：70% sigmoid + 30% geo_mean
+        # sigmoid 提供平滑的"接近信用"，geo_mean 保留对极端短板的惩罚
+        proximity = 0.7 * sigmoid_mean + 0.3 * geo_mean
+        return float(np.clip(proximity, 0.0, 1.0))
 
     # 机制名称（与 PreSubjectivityConvergence.MECHANISMS 和 hierarchical_evolver 中的耦合矩阵一致）
     _COUPLING_MECHANISMS = [
