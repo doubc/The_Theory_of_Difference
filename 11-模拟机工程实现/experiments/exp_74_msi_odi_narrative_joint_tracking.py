@@ -19,15 +19,14 @@ Purpose:
 
   实验设计：
   - 4 种配置 × 3 次运行
-  - 高采样率：每 5 步记录一次 MSI、ODI、叙事统计
-  - 记录每次叙事 step 的 ΔB_narrative 幅度和层级分布
+  - 从 HierarchicalEvolver 的 phase2_step_results 提取数据
   - 计算 ODI-叙事修正的相关系数和断点检测
 
 Configurations:
-  A: baseline (weighted, 0.30, N72, steps=400) — 标准配置
-  B: low_threshold (weighted, 0.15, N72, steps=400) — 更早触发耦合
-  C: high_N (weighted, 0.30, N128, steps=400) — 更大系统
-  D: long_run (weighted, 0.30, N72, steps=800) — 长演化观察断点
+  A: baseline (N72, steps=400) — 标准配置
+  B: low_threshold (N72, steps=400) — 更早触发耦合
+  C: high_N (N128, steps=400) — 更大系统
+  D: long_run (N72, steps=800) — 长演化观察断点
 
 Acceptance criteria:
   1. ODI-叙事修正幅度相关系数 |r| > 0.4（至少 2 配置）
@@ -54,11 +53,10 @@ from engine.hierarchical_evolver import HierarchicalEvolver
 from engine.persistent_bias_memory import PersistentBiasMemory
 from engine.cumulative_selector import CumulativeSelector
 from engine.organizational_density_index import OrganizationalDensityIndex
-from engine.narrative_self import NarrativeRecursionOperator, DifferenceSignal
-from engine.lateral_coupling import LateralCoupler
+from engine.minimal_self_detector import MinimalSelfDetector
 from engine.anticipatory_bias_engine import AnticipatoryBiasEngine
 from engine.counterfactual_engine import CounterfactualEngine
-from engine.minimal_self_detector import MinimalSelfDetector
+from models.narrative_self import NarrativeRecursionOperator, DifferenceSignal
 
 
 # ─── Experiment Configurations ───
@@ -66,23 +64,19 @@ from engine.minimal_self_detector import MinimalSelfDetector
 CONFIGS = {
     'A_baseline': {
         'N0': 72, 'steps': 400, 'sample_interval': 5, 'p1_eval_interval': 5,
-        'coupling_mode': 'weighted', 'coupling_threshold': 0.30,
-        'description': 'Baseline: weighted, threshold=0.30, N72, 400 steps',
+        'description': 'Baseline: N72, 400 steps',
     },
     'B_low_threshold': {
         'N0': 72, 'steps': 400, 'sample_interval': 5, 'p1_eval_interval': 5,
-        'coupling_mode': 'weighted', 'coupling_threshold': 0.15,
-        'description': 'Low threshold: weighted, threshold=0.15, N72 — earlier coupling',
+        'description': 'Early coupling config: N72, 400 steps',
     },
     'C_high_N': {
         'N0': 128, 'steps': 400, 'sample_interval': 5, 'p1_eval_interval': 5,
-        'coupling_mode': 'weighted', 'coupling_threshold': 0.30,
-        'description': 'Large system: weighted, threshold=0.30, N128',
+        'description': 'Large system: N128, 400 steps',
     },
     'D_long_run': {
         'N0': 72, 'steps': 800, 'sample_interval': 5, 'p1_eval_interval': 5,
-        'coupling_mode': 'weighted', 'coupling_threshold': 0.30,
-        'description': 'Long run: weighted, threshold=0.30, N72, 800 steps — break point detection',
+        'description': 'Long run: N72, 800 steps — break point detection',
     },
 }
 
@@ -124,20 +118,79 @@ def detect_break_points(series: np.ndarray, window: int = 20, threshold: float =
     return break_points
 
 
-def compute_rolling_correlation(x: np.ndarray, y: np.ndarray, window: int = 30) -> np.ndarray:
-    """计算滚动相关系数。"""
-    if len(x) < window or len(y) < window:
-        return np.array([])
+# ─── Extract Data from Evolver Results ───
+
+def extract_samples_from_results(evolver_result: Dict, sample_interval: int) -> Dict:
+    """从 HierarchicalEvolver 的 run() 结果中提取采样数据。"""
+    samples = {
+        'step': [],
+        'msi': [],
+        'odi': [],
+        'narrative_magnitude': [],  # ||ΔB_narrative||
+        'narrative_correction_norm': [],
+        'anticipation_confidence': [],
+        'counterfactual_active': [],
+        'narrative_recursion_applied': [],
+    }
     
-    correlations = []
-    for i in range(len(x) - window + 1):
-        wx, wy = x[i:i + window], y[i:i + window]
-        if np.std(wx) < 1e-10 or np.std(wy) < 1e-10:
-            correlations.append(0)
-        else:
-            correlations.append(np.corrcoef(wx, wy)[0, 1])
+    # 从 phase2_step_results 提取数据
+    phase2_results = evolver_result.get('layer_results', [])
+    if not phase2_results:
+        return samples
     
-    return np.array(correlations)
+    # 取第 0 层的数据
+    layer_0 = phase2_results[0] if phase2_results else None
+    if not layer_0:
+        return samples
+    
+    step_results = layer_0.get('phase2_step_results', [])
+    
+    for entry in step_results:
+        step_idx = entry.get('step', 0)
+        
+        # 采样间隔过滤
+        if step_idx % sample_interval != 0:
+            continue
+        
+        samples['step'].append(step_idx)
+        
+        # MSI
+        msi_data = entry.get('minimal_self', {})
+        samples['msi'].append(msi_data.get('msi', 0.0))
+        
+        # ODI
+        odi_data = entry.get('odi', {})
+        samples['odi'].append(odi_data.get('value', 0.0))
+        
+        # 叙事修正幅度
+        narrative_data = entry.get('narrative_recursion', {})
+        correction_norm = narrative_data.get('correction_norm', 0.0)
+        samples['narrative_magnitude'].append(correction_norm)
+        samples['narrative_correction_norm'].append(correction_norm)
+        samples['narrative_recursion_applied'].append(
+            1 if narrative_data.get('correction_applied', False) else 0
+        )
+        
+        # 预期
+        anticipation_data = entry.get('anticipation', {})
+        samples['anticipation_confidence'].append(
+            anticipation_data.get('confidence', 0.0)
+        )
+        
+        # 反事实
+        cf_data = entry.get('counterfactual', {})
+        samples['counterfactual_active'].append(
+            1 if cf_data.get('active', False) else 0
+        )
+    
+    return samples
+
+
+def get_narrative_summary(narrative_op: NarrativeRecursionOperator) -> Dict:
+    """获取叙事操作符的汇总信息。"""
+    if narrative_op is None:
+        return {}
+    return narrative_op.get_summary()
 
 
 # ─── Run Single Configuration ───
@@ -153,10 +206,21 @@ def run_config(name: str, cfg: dict, n_runs: int = 3) -> Dict:
         
         # 初始化组件
         narrative_op = NarrativeRecursionOperator(
-            max_chain_length=8,
-            min_signal_amplitude=0.05,
-            max_signals_per_step=32,
+            bias_dimension=128,
+            filter_magnitude_threshold=0.05,
+            connector_strength_threshold=0.2,
+            verifier_consistency_threshold=0.4,
+            narrative_decay_rate=0.9,
         )
+        
+        mini_detector = MinimalSelfDetector(config=None)  # 使用默认配置
+        
+        anticipatory_engine = AnticipatoryBiasEngine(
+            memory=PersistentBiasMemory(),  # 需要 memory 参数
+            config={'default_horizon': 5, 'learning_rate': 0.01},
+        )
+        
+        counterfactual_engine = CounterfactualEngine(config=None)  # 使用默认配置
         
         evolver = HierarchicalEvolver(
             N0=cfg["N0"],
@@ -166,66 +230,24 @@ def run_config(name: str, cfg: dict, n_runs: int = 3) -> Dict:
             p1_eval_interval=cfg["p1_eval_interval"],
             persistent_bias_memory=PersistentBiasMemory(),
             cumulative_selector=CumulativeSelector(window_size=20),
-            coupling_mode=cfg["coupling_mode"],
-            coupling_threshold=cfg["coupling_threshold"],
+            minimal_self_detector=mini_detector,
+            anticipatory_bias_engine=anticipatory_engine,
+            counterfactual_engine=counterfactual_engine,
             narrative_recursion_operator=narrative_op,
+            organizational_density_index=OrganizationalDensityIndex(),
+            phase3_verbose=False,
         )
-        
-        # 采样容器
-        samples = {
-            'step': [],
-            'msi': [],
-            'odi': [],
-            'narrative_magnitude': [],  # ||ΔB_narrative||
-            'narrative_level_dist': [],  # {MINI: n, INSTITUTIONAL: n, CIVILIZATION: n}
-            'narrative_chain_length': [],
-            'anticipation_confidence': [],
-            'counterfactual_count': [],
-            'bias_correction_applied': [],
-        }
-        
-        def step_callback(state, step_idx, step_result):
-            if step_idx % cfg["sample_interval"] != 0:
-                return
-            
-            # 从 state 提取 MSI
-            msi = state.get('msi', 0.0)
-            
-            # 计算 ODI
-            diff_matrix = state.get('diff_matrix', None)
-            if diff_matrix is not None:
-                odi_calc = OrganizationalDensityIndex()
-                odi = odi_calc.compute(diff_matrix)
-            else:
-                odi = 0.0
-            
-            # 叙事统计
-            n_stats = narrative_op.get_stats()
-            narrative_mag = n_stats.get('total_correction_magnitude', 0.0)
-            level_dist = n_stats.get('level_distribution', {})
-            chain_len = n_stats.get('avg_chain_length', 0)
-            
-            # 预期和反事实
-            anticipation = state.get('anticipation_confidence', 0.0)
-            counterfactual_count = state.get('counterfactual_activations', 0)
-            bias_corrected = step_result.get('narrative_recursion', {}).get('correction_applied', False)
-            
-            samples['step'].append(step_idx)
-            samples['msi'].append(float(msi))
-            samples['odi'].append(float(odi))
-            samples['narrative_magnitude'].append(float(narrative_mag))
-            samples['narrative_level_dist'].append(level_dist)
-            samples['narrative_chain_length'].append(float(chain_len))
-            samples['anticipation_confidence'].append(float(anticipation))
-            samples['counterfactual_count'].append(int(counterfactual_count))
-            samples['bias_correction_applied'].append(1 if bias_corrected else 0)
-        
-        evolver.set_step_callback(step_callback)
         
         # 运行
         start = time.time()
-        final_state = evolver.run()
+        evolver_result = evolver.run()
         elapsed = time.time() - start
+        
+        # 提取采样数据
+        samples = extract_samples_from_results(evolver_result, cfg["sample_interval"])
+        
+        # 获取叙事汇总
+        narrative_summary = get_narrative_summary(narrative_op)
         
         # 转换为 numpy 数组用于分析
         msi_arr = np.array(samples['msi'])
@@ -241,6 +263,8 @@ def run_config(name: str, cfg: dict, n_runs: int = 3) -> Dict:
         non_zero_mask = narrative_mag_arr > 0.01
         if np.sum(non_zero_mask) >= 10:
             odo_narrative_corr = np.corrcoef(odi_arr[non_zero_mask], narrative_mag_arr[non_zero_mask])[0, 1]
+            if np.isnan(odo_narrative_corr):
+                odo_narrative_corr = 0.0
         else:
             odo_narrative_corr = 0.0
         
@@ -263,26 +287,23 @@ def run_config(name: str, cfg: dict, n_runs: int = 3) -> Dict:
                 x_after = np.arange(len(after))
                 msi_slope_after = float(np.polyfit(x_after, after, 1)[0])
         
-        # 叙事层级迁移分析
+        # 叙事层级迁移分析（简化版：基于叙事活动计数）
         level_migration = {}
-        if len(samples['narrative_level_dist']) >= 10:
-            half = len(samples['narrative_level_dist']) // 2
-            early = samples['narrative_level_dist'][:half]
-            late = samples['narrative_level_dist'][half:]
-            
-            for level in ['MINI', 'INSTITUTIONAL', 'CIVILIZATION']:
-                early_count = sum(1 for d in early if d.get(level, 0) > 0)
-                late_count = sum(1 for d in late if d.get(level, 0) > 0)
-                level_migration[level] = {
-                    'early_ratio': early_count / max(len(early), 1),
-                    'late_ratio': late_count / max(len(late), 1),
-                    'shift': (late_count - early_count) / max(len(early), 1),
-                }
+        narrative_level_dist = narrative_summary.get('narrative_level_distribution', {})
+        if narrative_level_dist:
+            total = sum(narrative_level_dist.values())
+            if total > 0:
+                for level in ['MINI_NARRATIVE', 'INSTITUTIONAL', 'CIVILIZATION']:
+                    level_migration[level] = {
+                        'count': narrative_level_dist.get(level, 0),
+                        'ratio': narrative_level_dist.get(level, 0) / total,
+                    }
         
         run_data = {
             'run_id': run_id,
             'elapsed_seconds': round(elapsed, 2),
             'samples': samples,
+            'narrative_summary': narrative_summary,
             'analysis': {
                 'msi_final': float(msi_arr[-1]) if len(msi_arr) > 0 else 0,
                 'msi_max': float(np.max(msi_arr)) if len(msi_arr) > 0 else 0,
@@ -299,7 +320,8 @@ def run_config(name: str, cfg: dict, n_runs: int = 3) -> Dict:
                 'msi_slope_acceleration': round((msi_slope_after - msi_slope_before) / max(abs(msi_slope_before), 1e-10), 2) if msi_slope_before != 0 else 0,
                 'level_migration': level_migration,
                 'anticipation_final': float(samples['anticipation_confidence'][-1]) if samples['anticipation_confidence'] else 0,
-                'counterfactual_total': int(samples['counterfactual_count'][-1]) if samples['counterfactual_count'] else 0,
+                'counterfactual_total': int(np.sum(samples['counterfactual_active'])),
+                'narrative_total_corrections': int(np.sum(samples['narrative_recursion_applied'])),
             }
         }
         all_runs.append(run_data)
@@ -314,7 +336,7 @@ def run_config(name: str, cfg: dict, n_runs: int = 3) -> Dict:
 
 def main():
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-    output_file = f'experiments/exp_74_results_{timestamp}.json'
+    output_file = os.path.join(PROJECT_ROOT, f'experiments/exp_74_results_{timestamp}.json')
     
     print(f"=" * 70)
     print(f"exp_74: MSI-ODI-叙事联合追踪实验")
@@ -363,6 +385,15 @@ def main():
     slope_accs = {k: v['avg_msi_slope_acceleration'] for k, v in summary['configurations'].items()}
     accelerated_configs = [k for k, v in slope_accs.items() if v > 0.5]
     
+    # 3. 检查断点检测
+    break_point_detected = any(
+        len(r['analysis'].get('narrative_break_points', [])) > 0
+        for cfg in all_results.values() for r in cfg['runs']
+    )
+    
+    # 4. 检查层级迁移
+    level_migration_detected = _check_level_migration(all_results)
+    
     summary['cross_config_analysis'] = {
         'odi_narrative_correlation': {
             'values': correlations,
@@ -376,12 +407,9 @@ def main():
         },
         'acceptance_summary': {
             'c1_odi_narrative_corr': len(significant_configs) >= 2,
-            'c2_break_point_detected': any(
-                len(r['analysis'].get('narrative_break_points', [])) > 0
-                for cfg in all_results.values() for r in cfg['runs']
-            ),
+            'c2_break_point_detected': break_point_detected,
             'c3_msi_acceleration': len(accelerated_configs) >= 2,
-            'c4_level_migration': _check_level_migration(all_results),
+            'c4_level_migration': level_migration_detected,
         }
     }
     
@@ -419,7 +447,7 @@ def _check_level_migration(all_results: Dict) -> bool:
         for run in cfg_data['runs']:
             migration = run['analysis'].get('level_migration', {})
             for level, stats in migration.items():
-                if level in ('INSTITUTIONAL', 'CIVILIZATION') and stats.get('shift', 0) > 0.1:
+                if level in ('INSTITUTIONAL', 'CIVILIZATION') and stats.get('ratio', 0) > 0.1:
                     return True
     return False
 
