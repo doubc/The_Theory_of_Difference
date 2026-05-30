@@ -153,19 +153,22 @@ class TestGlobalBiasConstraintThresholds:
         assert result.coherence >= 0.6
 
     def test_balance_below_threshold(self):
-        """强度平衡度低于阈值 → 应失败"""
+        """强度平衡度低于阈值应失败"""
         gbc = GlobalBiasConstraint(balance_threshold=0.5)
-        # 创建一个强度差异很大的情况
+        # 创建一个强度极端不平衡的情况（log-scale需要更大差异）
+        # 5个机制强度=1.0，1个机制强度=0.001（1000倍差异）
+        # log10(0.001)=-3, log10(1.0)=0, std≈1.44, balance=1-1.44/2≈0.28<0.5
         local_biases = {
             'boundary': torch.ones(72) * 1.0,
             'self_sustaining': torch.ones(72) * 1.0,
             'memory': torch.ones(72) * 1.0,
-            'replication': torch.ones(72) * 0.4,  # 强度只有 40%
+            'replication': torch.ones(72) * 0.001,  # 强度只有 0.1%（极端不平衡）
             'selection': torch.ones(72) * 1.0,
             'function': torch.ones(72) * 1.0,
         }
         result = gbc.evaluate(local_biases)
-        # balance = 1 - (1.0 - 0.4) / (1.0 + eps) ≈ 0.4
+        # log-scale balance: 1 - std(log_intensities) / 2.0
+        # 5个log10(1)=0, 1个log10(0.001)=-3, std≈1.44, balance≈0.28
         assert result.balance < 0.5
         assert result.passed is False
 

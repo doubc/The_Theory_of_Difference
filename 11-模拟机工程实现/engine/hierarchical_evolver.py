@@ -1216,6 +1216,84 @@ class HierarchicalEvolver:
                               f"pairs={lateral_report.n_active_pairs}, "
                               f"mean_strength={lateral_report.mean_coupling_strength:.3f}")
 
+                # ── P2: GlobalBiasConstraint — 全局偏置算子统一约束 ──
+                # 在 Phase 3 之前评估各局部偏置的方向一致性与强度平衡
+                if self.global_bias_constraint is not None and odi_result is not None:
+                    # 收集六个机制的局部偏置向量
+                    local_biases = {}
+                    coupling_strengths = {}
+
+                    # 1. boundary: 来自约束的方向向量
+                    local_biases['boundary'] = constraints.direction.clone()
+                    coupling_strengths['boundary'] = 1.0
+
+                    # 2. self_sustaining: 自维持环路的净偏置
+                    if self.self_sustaining_circulation is not None:
+                        ss_bias = self.self_sustaining_circulation.get_cumulative_bias()
+                        if ss_bias is not None and ss_bias.norm() > 1e-8:
+                            local_biases['self_sustaining'] = ss_bias
+                            coupling_strengths['self_sustaining'] = self.self_sustaining_circulation.get_current_strength()
+
+                    # 3. memory: 偏置记忆的累积场
+                    if self.persistent_bias_memory is not None and self.persistent_bias_memory.n_entries > 0:
+                        mem_bias = self.persistent_bias_memory.get_cumulative_bias_field(
+                            target_layer=layer_id, normalize=True)
+                        if mem_bias is not None and mem_bias.norm() > 1e-8:
+                            local_biases['memory'] = mem_bias
+                            coupling_strengths['memory'] = min(1.0, self.persistent_bias_memory.n_entries / 50.0)
+
+                    # 4. replication: 复制模式的绑定偏置
+                    if self.replicate_pattern is not None:
+                        rep_bias = self.replicate_pattern.get_binding_bias()
+                        if rep_bias is not None and rep_bias.norm() > 1e-8:
+                            local_biases['replication'] = rep_bias
+                            coupling_strengths['replication'] = self.replicate_pattern.get_average_binding_strength()
+
+                    # 5. selection: 累积选择器的选择压力偏置
+                    if self.cumulative_selector is not None:
+                        sel_bias = self.cumulative_selector.get_selection_pressure_vector()
+                        if sel_bias is not None and sel_bias.norm() > 1e-8:
+                            local_biases['selection'] = sel_bias
+                            coupling_strengths['selection'] = self.cumulative_selector.get_current_strength()
+
+                    # 6. function: 功能分化的方向偏置
+                    if self.functional_differentiation is not None:
+                        func_bias = self.functional_differentiation.get_direction_bias()
+                        if func_bias is not None and func_bias.norm() > 1e-8:
+                            local_biases['function'] = func_bias
+                            coupling_strengths['function'] = self.functional_differentiation.get_agreement_score()
+
+                    # 评估全局偏置约束
+                    if len(local_biases) >= self.global_bias_constraint.min_mechanisms_required:
+                        gbc_result = self.global_bias_constraint.evaluate(
+                            local_biases=local_biases,
+                            coupling_strengths=coupling_strengths,
+                        )
+                        result_entry['global_bias_constraint'] = {
+                            'passed': gbc_result.passed,
+                            'coherence': gbc_result.coherence,
+                            'balance': gbc_result.balance,
+                            'global_bias_norm': float(gbc_result.global_bias.norm().item()),
+                            'violating_mechanisms': gbc_result.violating_mechanisms,
+                            'n_mechanisms': len(local_biases),
+                            'description': gbc_result.description,
+                        }
+                        if self._phase2_verbose and not gbc_result.passed:
+                            print(f"    [GBC] L{layer_id} step={step}: FAIL — {gbc_result.description}")
+                        elif self._phase2_verbose:
+                            print(f"    [GBC] L{layer_id} step={step}: PASS — coh={gbc_result.coherence:.3f}, "
+                                  f"bal={gbc_result.balance:.3f}, n={len(local_biases)}")
+                    else:
+                        result_entry['global_bias_constraint'] = {
+                            'passed': False,
+                            'coherence': 0.0,
+                            'balance': 0.0,
+                            'global_bias_norm': 0.0,
+                            'violating_mechanisms': list(self.global_bias_constraint.MECHANISMS),
+                            'n_mechanisms': len(local_biases),
+                            'description': f"有效偏置不足: {len(local_biases)}/{self.global_bias_constraint.min_mechanisms_required}",
+                        }
+
             # ── Phase 3: 前主体态 → 现象意识的结构条件 ──
             # Phase 3 组件在 Phase 2 P1 评估的同一个 P1 周期内执行
             # 但仅在 ODI > 0.5（前主体态地板）之后才激活
@@ -1646,6 +1724,16 @@ class HierarchicalEvolver:
                 'lateral_coupler_n_structures': (
                     self.lateral_coupler.n_structures
                     if self.lateral_coupler else 0),
+                'global_bias_constraint_active': self.global_bias_constraint is not None,
+                'global_bias_constraint_pass_rate': (
+                    self.global_bias_constraint.get_pass_rate()
+                    if self.global_bias_constraint else 0.0),
+                'global_bias_constraint_coherence_trend': (
+                    self.global_bias_constraint.get_coherence_trend()
+                    if self.global_bias_constraint else []),
+                'global_bias_constraint_balance_trend': (
+                    self.global_bias_constraint.get_balance_trend()
+                    if self.global_bias_constraint else []),
                 'layers_with_results': list(self._phase2_layer_results.keys()),
             },
             'phase3_summary': {
