@@ -294,6 +294,11 @@ class HierarchicalEvolver:
         self._return_flow_events: List[ReturnFlowEvent] = []
         # P1 fix (2026-05-30): ODI 滑动窗口（用于 p3_active 门控）
         self._odi_window: List[float] = []
+        # Phase 2 自维持环路 & 复制模式（可选，未实现时默认为 None）
+        self.self_sustaining_circulation = None
+        self.replicate_pattern = None
+        # Phase 2 功能分化（可选，未实现时默认为 None）
+        self.functional_differentiation = None
 
         # 层级管理器
         self.hierarchy = HierarchyManager(
@@ -1236,8 +1241,8 @@ class HierarchicalEvolver:
 
                     # 3. memory: 偏置记忆的累积场
                     if self.persistent_bias_memory is not None and self.persistent_bias_memory.n_entries > 0:
-                        mem_bias = self.persistent_bias_memory.get_cumulative_bias_field(
-                            target_layer=layer_id, normalize=True)
+                        mem_bias = self.persistent_bias_memory.get_accumulated(
+                            target_layer=layer_id, n_bits=constraints.direction.shape[0])
                         if mem_bias is not None and mem_bias.norm() > 1e-8:
                             local_biases['memory'] = mem_bias
                             coupling_strengths['memory'] = min(1.0, self.persistent_bias_memory.n_entries / 50.0)

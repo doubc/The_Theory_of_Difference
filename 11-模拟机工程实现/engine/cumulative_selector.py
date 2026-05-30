@@ -271,6 +271,14 @@ class CumulativeSelector:
 
         return new_prob
 
+    def get_selection_pressure_vector(self, n_bits: Optional[int] = None) -> Optional[torch.Tensor]:
+        """获取选择压力偏置向量（当前未实现，返回 None 由其他机制补充）"""
+        return None
+
+    def get_current_strength(self) -> float:
+        """获取当前选择强度（基于保留率估算）"""
+        return self.retention_rate()
+
     def reset(self):
         """重置所有状态"""
         self._variants.clear()
