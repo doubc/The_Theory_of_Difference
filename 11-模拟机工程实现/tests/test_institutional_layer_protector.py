@@ -42,7 +42,8 @@ class TestAccumulationGuard:
     def test_below_threshold_weak_protection(self):
         """低于阈值但高于地板 → 弱保护"""
         guard = AccumulationGuard()
-        rate, level, should = guard.step(40)
+        # threshold=35, floor=20, so use value in [20, 35)
+        rate, level, should = guard.step(28)
         assert level == 'weak'
 
     def test_above_threshold_no_protection(self):
@@ -70,9 +71,10 @@ class TestAccumulationGuard:
     def test_rate_limit_bounds(self):
         """消耗速率限制在合理范围内"""
         guard = AccumulationGuard()
+        # max_consumption_rate_per_step=0.10 (exp_92 update)
         for count in [5, 15, 30, 40, 50, 60, 100]:
             rate, _, _ = guard.step(count)
-            assert 0.0 <= rate <= 0.05, f"count={count}: rate={rate} out of bounds"
+            assert 0.0 <= rate <= 0.10, f"count={count}: rate={rate} out of bounds"
 
     def test_trend_positive(self):
         """INSTITUTIONAL 增长 → 正趋势"""
@@ -132,10 +134,11 @@ class TestTransitionGate:
     def test_below_odi_threshold(self):
         """ODI 不足 → 不允许转换"""
         gate = TransitionGate({'transition_cooldown_steps': 0})
+        # min_odi=0.15, so 0.1 < 0.15 → odi_ok=False
         allowed, openness = gate.evaluate(
             institutional_count=50,
             n_categories=4,
-            current_odi=0.2,
+            current_odi=0.1,
             step=1,
         )
         assert not allowed
@@ -273,12 +276,14 @@ class TestInstitutionalLayerProtector:
     def test_weak_protection_when_moderate(self):
         """INSTITUTIONAL 中等 → 弱保护"""
         protector = InstitutionalLayerProtector()
+        # threshold=35, floor=20, so 28 is in [20, 35)
         result = protector.step(
-            institutional_count=40,
-            institutional_categories={'cat_A': 20, 'cat_B': 10, 'cat_C': 10},
+            institutional_count=28,
+            institutional_categories={'cat_A': 15, 'cat_B': 13},
             current_odi=0.5,
         )
-        assert result.protection_level == 'weak'
+        assert result.protection_level == 'weak', \
+            f"expected weak, got {result.protection_level} (count=28)"
 
     def test_no_protection_when_abundant(self):
         """INSTITUTIONAL 充足 → 无保护"""
@@ -392,13 +397,14 @@ class TestInstitutionalLayerProtector:
     def test_consumption_rate_bounded(self):
         """消耗速率始终有界"""
         protector = InstitutionalLayerProtector()
+        # max_consumption_rate_per_step=0.10 (exp_92 update)
         for count in [5, 15, 25, 35, 45, 55, 65, 75, 85, 95]:
             result = protector.step(
                 institutional_count=count,
                 institutional_categories={'cat_A': count},
                 current_odi=0.5,
             )
-            assert 0.0 <= result.consumption_rate_limit <= 0.05 + 1e-8, \
+            assert 0.0 <= result.consumption_rate_limit <= 0.10 + 1e-8, \
                 f"count={count}: rate={result.consumption_rate_limit} out of bounds"
 
 
