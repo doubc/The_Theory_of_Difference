@@ -150,7 +150,8 @@ class LongRangeEvolverV2:
                     n_lateral += 1
 
             # ====== 4. 汇吸收（A8 + A5 平衡）======
-            sink_strength = self.constraints.get_A8_sink_strength(state, n_inject)
+            # Fix: use actual_inject (not n_inject) for sink balance to prevent conservation drift
+            sink_strength = self.constraints.get_A8_sink_strength(state, actual_inject)
             if sink_strength > 0:
                 # 优先吸收横向比特（保护层级比特）
                 allowed_abs = self.constraints.get_allowed_absorbs(state)
