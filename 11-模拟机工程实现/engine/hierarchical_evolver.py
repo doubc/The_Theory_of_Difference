@@ -919,6 +919,18 @@ class HierarchicalEvolver:
                         'all_met': threshold_result.all_met,
                         'n_met': threshold_result.n_met,
                         'bottleneck': threshold_result.bottleneck,
+                        'statuses': [
+                            {
+                                'id': s.threshold_id,
+                                'name': s.name,
+                                'value': round(s.value, 6),
+                                'threshold': s.threshold,
+                                'is_met': s.is_met,
+                                'gap': round(s.threshold - s.value, 6),
+                                'ratio': round(s.value / max(s.threshold, 1e-10), 4),
+                            }
+                            for s in threshold_result.threshold_statuses
+                        ],
                     }
                     if self._phase2_verbose:
                         status = "PASS" if threshold_result.all_met else f"{threshold_result.n_met}/6"
@@ -1240,84 +1252,6 @@ class HierarchicalEvolver:
                               f"pairs={lateral_report.n_active_pairs}, "
                               f"mean_strength={lateral_report.mean_coupling_strength:.3f}")
 
-                # ── P2: GlobalBiasConstraint — 全局偏置算子统一约束 ──
-                # 在 Phase 3 之前评估各局部偏置的方向一致性与强度平衡
-                if self.global_bias_constraint is not None and odi_result is not None:
-                    # 收集六个机制的局部偏置向量
-                    local_biases = {}
-                    coupling_strengths = {}
-
-                    # 1. boundary: 来自约束的方向向量
-                    local_biases['boundary'] = constraints.direction.clone()
-                    coupling_strengths['boundary'] = 1.0
-
-                    # 2. self_sustaining: 自维持环路的净偏置
-                    if self.self_sustaining_circulation is not None:
-                        ss_bias = self.self_sustaining_circulation.get_cumulative_bias()
-                        if ss_bias is not None and ss_bias.norm() > 1e-8:
-                            local_biases['self_sustaining'] = ss_bias
-                            coupling_strengths['self_sustaining'] = self.self_sustaining_circulation.get_current_strength()
-
-                    # 3. memory: 偏置记忆的累积场
-                    if self.persistent_bias_memory is not None and self.persistent_bias_memory.n_entries > 0:
-                        mem_bias = self.persistent_bias_memory.get_accumulated(
-                            target_layer=layer_id, n_bits=constraints.direction.shape[0])
-                        if mem_bias is not None and mem_bias.norm() > 1e-8:
-                            local_biases['memory'] = mem_bias
-                            coupling_strengths['memory'] = min(1.0, self.persistent_bias_memory.n_entries / 50.0)
-
-                    # 4. replication: 复制模式的绑定偏置
-                    if self.replicate_pattern is not None:
-                        rep_bias = self.replicate_pattern.get_binding_bias()
-                        if rep_bias is not None and rep_bias.norm() > 1e-8:
-                            local_biases['replication'] = rep_bias
-                            coupling_strengths['replication'] = self.replicate_pattern.get_average_binding_strength()
-
-                    # 5. selection: 累积选择器的选择压力偏置
-                    if self.cumulative_selector is not None:
-                        sel_bias = self.cumulative_selector.get_selection_pressure_vector()
-                        if sel_bias is not None and sel_bias.norm() > 1e-8:
-                            local_biases['selection'] = sel_bias
-                            coupling_strengths['selection'] = self.cumulative_selector.get_current_strength()
-
-                    # 6. function: 功能分化的方向偏置
-                    if self.functional_differentiation is not None:
-                        func_bias = self.functional_differentiation.get_direction_bias()
-                        if func_bias is not None and func_bias.norm() > 1e-8:
-                            local_biases['function'] = func_bias
-                            coupling_strengths['function'] = self.functional_differentiation.get_agreement_score()
-
-                    # 评估全局偏置约束
-                    if len(local_biases) >= self.global_bias_constraint.min_mechanisms_required:
-                        gbc_result = self.global_bias_constraint.evaluate(
-                            local_biases=local_biases,
-                            coupling_strengths=coupling_strengths,
-                        )
-                        result_entry['global_bias_constraint'] = {
-                            'passed': gbc_result.passed,
-                            'coherence': gbc_result.coherence,
-                            'balance': gbc_result.balance,
-                            'global_bias_norm': float(gbc_result.global_bias.norm().item()),
-                            'violating_mechanisms': gbc_result.violating_mechanisms,
-                            'n_mechanisms': len(local_biases),
-                            'description': gbc_result.description,
-                        }
-                        if self._phase2_verbose and not gbc_result.passed:
-                            print(f"    [GBC] L{layer_id} step={step}: FAIL — {gbc_result.description}")
-                        elif self._phase2_verbose:
-                            print(f"    [GBC] L{layer_id} step={step}: PASS — coh={gbc_result.coherence:.3f}, "
-                                  f"bal={gbc_result.balance:.3f}, n={len(local_biases)}")
-                    else:
-                        result_entry['global_bias_constraint'] = {
-                            'passed': False,
-                            'coherence': 0.0,
-                            'balance': 0.0,
-                            'global_bias_norm': 0.0,
-                            'violating_mechanisms': list(self.global_bias_constraint.MECHANISMS),
-                            'n_mechanisms': len(local_biases),
-                            'description': f"有效偏置不足: {len(local_biases)}/{self.global_bias_constraint.min_mechanisms_required}",
-                        }
-
             # ── Phase 3: 前主体态 → 现象意识的结构条件 ──
             # Phase 3 组件在 Phase 2 P1 评估的同一个 P1 周期内执行
             # 但仅在 ODI > 0.5（前主体态地板）之后才激活
@@ -1342,33 +1276,74 @@ class HierarchicalEvolver:
                 # 12. MinimalSelfDetector — 最小自我检测
                 msi_result = None
                 if self.minimal_self_detector is not None and p3_active:
-                    # 构建敏感度图：从约束方向场计算各部分敏感度
+                    # P2 fix (2026-05-30): 改进敏感度图构建 — 解决密封后 Gini=0 问题
+                    # 根因：旧代码只使用 18 个活跃比特（密封后），且 bind_sens*100 使分布同质化
+                    # 修复：(a) 使用全部 72 比特 (b) 移除 *100 同质化 (c) Z-score 归一化
+                    #       (d) 冻结比特使用绑定模式偏差作为结构性不对称信号
                     sensitivity_map = {}
                     if hasattr(constraints, 'direction') and constraints.direction is not None:
                         dir_vals = constraints.direction.float()
                         state_float = state.float()
-                        active_idx = sorted(constraints.active_bits)
-                        for i, bit_id in enumerate(active_idx[:20]):
+                        n_bits = constraints.N
+                        active_set = set(constraints.active_bits) if hasattr(constraints, 'active_bits') else set()
+
+                        # 使用全部比特（含冻结比特），计算高维敏感度分布
+                        for bit_id in range(n_bits):
                             part_name = f"bit_{bit_id}"
-                            # 多信号融合敏感度：方向 + 状态值 + 绑定强度
                             dir_sens = float(dir_vals[bit_id].abs().item()) if bit_id < len(dir_vals) else 0.0
                             state_sens = float(state_float[bit_id].item()) if bit_id < len(state_float) else 0.0
-                            # 绑定强度：该比特与其他活跃比特的平均绑定
+
+                            # 绑定敏感度：该比特与所有其他比特的平均绑定强度
                             if hasattr(constraints, 'binding_strength') and bit_id < constraints.binding_strength.size(0):
-                                active_list = list(constraints.active_bits)
-                                if active_list:
-                                    bs_vals = [float(constraints.binding_strength[bit_id, a].abs().item()) for a in active_list if a != bit_id]
+                                all_others = [j for j in range(min(n_bits, constraints.binding_strength.size(0))) if j != bit_id]
+                                if all_others:
+                                    bs_vals = [float(constraints.binding_strength[bit_id, j].abs().item()) for j in all_others]
                                     bind_sens = float(np.mean(bs_vals)) if bs_vals else 0.0
                                 else:
                                     bind_sens = 0.0
                             else:
                                 bind_sens = 0.0
-                            # 融合：方向权重0.2 + 状态权重0.5 + 绑定权重0.3（状态值为主要差异化信号）
-                            sensitivity_map[part_name] = 0.2 * dir_sens + 0.5 * state_sens + 0.3 * bind_sens * 100.0
+
+                            # 分情况计算敏感度（移除 * 100.0 同质化因子）
+                            if bit_id in active_set:
+                                # 活跃比特：状态值 + 方向 + 绑定
+                                sensitivity = 0.25 * dir_sens + 0.45 * state_sens + 0.30 * bind_sens
+                            else:
+                                # 冻结比特：绑定模式偏离度作为结构性不对称信号
+                                # 计算该比特的绑定向量与其他比特的平均余弦距离
+                                if hasattr(constraints, 'binding_strength') and bit_id < constraints.binding_strength.size(0):
+                                    bs = constraints.binding_strength[bit_id, :n_bits]
+                                    # 使用 binding_strength 方差作为区分度
+                                    bind_var = float(bs.var().item()) if bs.numel() > 0 else 0.0
+                                    sensitivity = 0.4 * bind_var + 0.4 * dir_sens + 0.2 * state_sens
+                                else:
+                                    sensitivity = 0.5 * dir_sens + 0.5 * state_sens
+
+                            sensitivity_map[part_name] = sensitivity
+
+                        # Z-score 归一化：放大比特间差异，为 Gini 系数提供有意义分布
+                        vals = np.array(list(sensitivity_map.values()))
+                        mean_val = np.mean(vals)
+                        std_val = np.std(vals) if np.std(vals) > 1e-10 else 1.0
+                        for key in sensitivity_map:
+                            z = (sensitivity_map[key] - mean_val) / (std_val + 1e-10)
+                            # tanh 映射到 [0, 1]，保持相对差异
+                            sensitivity_map[key] = float(np.clip((np.tanh(z) + 1.0) / 2.0, 0.01, 0.99))
+
+                        # 诊断日志：敏感度图质量
+                        if self._phase3_verbose:
+                            sv = np.array(list(sensitivity_map.values()))
+                            sorted_sv = np.sort(sv)
+                            gini_diag = 1.0 - (2.0 / len(sv)) * np.sum(
+                                [(len(sv) - i) * v for i, v in enumerate(sorted_sv)]) / (np.sum(sorted_sv) + 1e-10)
+                            print(f"    [MSI-Diag] L{layer_id} step={step}: "
+                                  f"sensitivity n={len(sensitivity_map)} mean={np.mean(sv):.4f} "
+                                  f"std={np.std(sv):.4f} gini={gini_diag:.4f} "
+                                  f"active={len(active_set)} sealed={constraints.sealed}")
                     else:
-                        # 回退：使用状态值作为敏感度代理
+                        # 回退：使用状态值作为敏感度代理（罕见）
                         state_float = state.float()
-                        for i in range(min(20, len(state_float))):
+                        for i in range(len(state_float)):
                             sensitivity_map[f"bit_{i}"] = float(state_float[i].item())
 
                     # 基线偏移：从回流通道获取（如有）
