@@ -55,9 +55,11 @@ DEFAULT_ADAPTIVE_MOMENTUM_CONFIG = {
     'institutional_min_accumulation': 50,  # INSTITUTIONAL 最低积累量
     'institutional_monitor_window': 100,   # 积累速率监控窗口
 
-    # 模式检测
-    'stability_trap_threshold': 0.8,    # 过度稳定判定阈值（INSTITUTIONAL 高但 CIV 低）
-    'fragmentation_threshold': 0.2,     # 碎片化判定阈值（动量高但 INSTITUTIONAL 低）
+    # 模式检测（exp_92 调整：降低阈值以匹配实际数据分布）
+    # 原阈值 (0.8/0.2) 在 exp_91 中完全未触发 — 所有种子 mode=normal
+    # 新阈值：stability_trap 检测 inst>20 且 civ<5；fragmentation 检测 inst<8
+    'stability_trap_threshold': 0.4,    # 过度稳定判定阈值（exp_92: 0.8→0.4, inst>20 且 civ<5）
+    'fragmentation_threshold': 0.16,    # 碎片化判定阈值（exp_92: 0.2→0.16, inst<8）
 
     # 调节增益
     'entropy_gain': 0.02,               # 熵偏差 → 动量调节的增益
@@ -389,15 +391,25 @@ class AdaptiveMomentumController:
         cfg = self.config
         adjustment = 0.0
 
-        # ── 熵反馈 ──
-        # 熵过低（< low_threshold）→ 动量过度集中 → 需要降低动量（扩散）
-        # 熵过高（> high_threshold）→ 动量过度分散 → 需要增加动量（聚焦）
+        # ── 熵反馈（exp_92 调整：模式感知，避免高熵时错误增加动量）
+        # 原逻辑：熵高 → 增加动量（聚焦），熵低 → 减少动量（扩散）
+        # 问题：exp_91 中熵普遍很高（0.76-0.99），熵反馈持续产生负调整，
+        #       与 INSTITUTIONAL 缺失的正调整相互抵消，导致 mean_adjustment≈0
+        # 新逻辑：仅在 normal 模式下应用熵反馈；在模式检测触发时，以模式信号为主
         entropy_mid = (cfg['entropy_low_threshold'] + cfg['entropy_high_threshold']) / 2.0
-        entropy_deviation = entropy - entropy_mid  # 正=熵高，负=熵低
-        # 熵高 → 需要聚焦 → 增加动量（正调节）
-        # 熵低 → 需要扩散 → 减少动量（负调节）
-        entropy_adjustment = entropy_deviation * cfg['entropy_gain']
-        adjustment += entropy_adjustment
+        entropy_deviation = entropy - entropy_mid
+        if mode == 'normal':
+            # normal 模式下：熵高→增加动量（聚焦），熵低→减少动量（扩散）
+            entropy_adjustment = entropy_deviation * cfg['entropy_gain']
+            adjustment += entropy_adjustment
+        elif mode == 'stability_trap':
+            # 过度稳定：熵通常较低，但需要增加动量打破稳定 → 熵反馈反向
+            entropy_adjustment = -entropy_deviation * cfg['entropy_gain'] * 0.5
+            adjustment += entropy_adjustment
+        elif mode == 'fragmentation':
+            # 碎片化：熵通常很高，需要降低动量 → 熵反馈同向但增强
+            entropy_adjustment = entropy_deviation * cfg['entropy_gain'] * 0.5
+            adjustment -= entropy_adjustment  # 注意这里是减去（高熵→负调整）
 
         # ── INSTITUTIONAL 积累反馈 ──
         # 积累不足 → 需要增加动量帮助跨越

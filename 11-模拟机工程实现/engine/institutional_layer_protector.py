@@ -46,22 +46,22 @@ import numpy as np
 # ─── 默认配置 ───
 DEFAULT_INSTITUTIONAL_PROTECTOR_CONFIG = {
     # INSTITUTIONAL 积累保护
-    'min_institutional_floor': 30,      # INSTITUTIONAL 最低地板值（低于此触发强保护）
-    'min_institutional_threshold': 50,  # INSTITUTIONAL 最低阈值（低于此触发弱保护）
+    'min_institutional_floor': 20,      # INSTITUTIONAL 最低地板值（低于此触发强保护）
+    'min_institutional_threshold': 35,  # INSTITUTIONAL 最低阈值（低于此触发弱保护）
     'protection_response_delay': 10,    # 保护响应延迟步数
 
     # 消耗速率限制
-    'max_consumption_rate_per_step': 0.05,  # 每步最大消耗比例（5%）
-    'consumption_cooldown_steps': 20,        # 消耗冷却步数（消耗后暂停）
+    'max_consumption_rate_per_step': 0.10,  # 每步最大消耗比例（10%，exp_92 从 5% 翻倍）
+    'consumption_cooldown_steps': 10,        # 消耗冷却步数（exp_92 从 20 减半）
 
     # 转换门控
-    'transition_min_institutional': 40,     # 转换所需最低 INSTITUTIONAL 数量
-    'transition_min_diversity': 3,           # 转换所需最低类别数
-    'transition_min_odi': 0.5,              # 转换所需最低 ODI
-    'transition_cooldown_steps': 30,         # 转换冷却步数
+    'transition_min_institutional': 25,     # 转换所需最低 INSTITUTIONAL 数量（exp_92 从 40 降低）
+    'transition_min_diversity': 2,           # 转换所需最低类别数（exp_92 从 3 降低）
+    'transition_min_odi': 0.15,             # 转换所需最低 ODI（exp_92 从 0.5 大幅降低）
+    'transition_cooldown_steps': 15,         # 转换冷却步数（exp_92 从 30 减半）
 
     # 多样性强制
-    'min_categories_for_transition': 3,     # 转换所需的最低 INSTITUTIONAL 类别数
+    'min_categories_for_transition': 2,     # 转换所需的最低 INSTITUTIONAL 类别数（exp_92 从 3 降低）
     'diversity_window': 50,                 # 多样性计算窗口
 
     # 调节增益
