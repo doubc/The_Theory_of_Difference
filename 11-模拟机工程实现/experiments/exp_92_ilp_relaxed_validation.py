@@ -66,18 +66,19 @@ from engine.institutional_layer_protector import (
 
 # ─── exp_92 配置覆盖 ───
 EXP92_ILP_CONFIG = {
-    # 转换门控（大幅降低门槛）
-    'transition_min_institutional': 25,
+    # 转换门控（进一步降低：ILP从narrative level_dist获取inst_count，
+    # 但narrative未激活时level_dist全为0，需极低阈值才能放行）
+    'transition_min_institutional': 12,   # 从35→12：允许少量INSTITUTIONAL即可尝试转换
     'transition_min_diversity': 2,
-    'transition_min_odi': 0.15,
+    'transition_min_odi': 0.15,           # ODI实际可达0.73-0.81，0.15足够
     'transition_cooldown_steps': 15,
-    # 积累保护（降低地板和阈值）
-    'min_institutional_floor': 20,
-    'min_institutional_threshold': 35,
-    # 消耗速率（翻倍）
-    'max_consumption_rate_per_step': 0.10,
-    'consumption_cooldown_steps': 10,
-    # 多样性（降低要求）
+    # 积累保护（降低地板以匹配低阈值）
+    'min_institutional_floor': 8,          # 从25→8：地板与阈值比例保持一致
+    'min_institutional_threshold': 15,     # 从40→15：弱保护触发点
+    # 消耗速率（保持保守）
+    'max_consumption_rate_per_step': 0.05,
+    'consumption_cooldown_steps': 15,
+    # 多样性
     'min_categories_for_transition': 2,
 }
 
@@ -216,7 +217,25 @@ def run_single_seed(N0=72, steps=1600, seed=142, sample_interval=10,
     mini_count = 0
 
     for sr in step_results:
-        level = sr.get('level', 'MINI')
+        # Fix: narrative level comes from narrative_recursion, not unsealing level
+        # (unsealing level only changes on convergence, which rarely happens)
+        narr_info = sr.get('narrative_recursion', {})
+        if narr_info and narr_info.get('narrative_level'):
+            level = narr_info.get('narrative_level', 'MINI_NARRATIVE')
+        else:
+            # Fallback: query narrative operator for latest level
+            # (narrative_recursion entry only created when correction norm > 1e-8)
+            try:
+                narr_history = narrative.get_narrative_history(n=1)
+                if narr_history:
+                    level = narr_history[-1].get('narrative_level', 'MINI_NARRATIVE')
+                else:
+                    level = sr.get('level', 'MINI')
+            except Exception:
+                level = sr.get('level', 'MINI')
+        # Normalize: MINI_NARRATIVE -> MINI
+        if level == 'MINI_NARRATIVE':
+            level = 'MINI'
         if level == 'CIVILIZATION':
             civ_count += 1
         elif level == 'INSTITUTIONAL':
@@ -225,6 +244,28 @@ def run_single_seed(N0=72, steps=1600, seed=142, sample_interval=10,
             mini_count += 1
         if sr.get('narrative_active', False):
             active_count += 1
+
+    # Extract ODI from phase2_step_results (was missing — defaulted to 0)
+    odi_values = [sr['odi']['value'] for sr in step_results if 'odi' in sr and sr.get('odi', {}).get('value') is not None]
+    odi_max = float(np.max(odi_values)) if odi_values else 0.0
+    odi_mean = float(np.mean(odi_values)) if odi_values else 0.0
+    max_odi_zone = 'N/A'
+    if odi_values:
+        for sr in reversed(step_results):  # last occurrence of max
+            if 'odi' in sr and sr['odi'].get('value') == odi_max:
+                max_odi_zone = sr['odi'].get('zone', 'unknown')
+                break
+
+    # Extract MSI from phase2_step_results
+    msi_values = [sr.get('minimal_self', {}).get('msi', 0.0) for sr in step_results if 'minimal_self' in sr]
+    msi_max = float(np.max(msi_values)) if msi_values else 0.0
+    msi_mean = float(np.mean(msi_values)) if msi_values else 0.0
+
+    # Extract six_threshold summary from phase2_step_results
+    six_results = [sr['six_threshold'] for sr in step_results if 'six_threshold' in sr]
+    six_pass_count = sum(1 for sr in six_results if sr.get('all_met'))
+    six_pass_rate = six_pass_count / len(six_results) if six_results else 0.0
+    six_bottlenecks = [sr.get('bottleneck', 'unknown') for sr in six_results if sr.get('bottleneck')]
 
     # GBC summary
     gbc_checks = result.get('gbc_checks', [])
@@ -288,10 +329,13 @@ def run_single_seed(N0=72, steps=1600, seed=142, sample_interval=10,
             'INSTITUTIONAL': inst_count,
             'CIVILIZATION': civ_count,
         },
-        'odi_max': float(result.get('odi_max', 0.0)),
-        'odi_mean': float(result.get('odi_mean', 0.0)),
-        'msi_max': float(result.get('msi_max', 0.0)),
-        'msi_mean': float(result.get('msi_mean', 0.0)),
+        'odi_max': odi_max,
+        'odi_mean': odi_mean,
+        'msi_max': msi_max,
+        'msi_mean': msi_mean,
+        'odi_zone_at_max': (max_odi_zone if odi_values else 'N/A'),
+        'six_threshold_pass_rate': six_pass_rate,
+        'six_threshold_bottlenecks': six_bottlenecks[:5],
         'momentum_cache': connector_stats,
         'final_momentum_bonus': amc_summary.get('current_momentum_bonus', 0.3),
         'gbc': {
@@ -393,10 +437,10 @@ def main():
             'civ_max': int(max(civ_values)),
             'gbc_coh_mean': float(np.mean(gbc_coh)),
             'gbc_pr_mean': float(np.mean(gbc_pr)),
-            'h1_pass': h1_pass,
-            'h2_pass': h2_pass,
-            'h3_pass': h3_pass,
-            'h4_pass': h4_pass,
+            'h1_pass': bool(h1_pass),
+            'h2_pass': bool(h2_pass),
+            'h3_pass': bool(h3_pass),
+            'h4_pass': bool(h4_pass),
         },
     }
     with open(output_path, 'w', encoding='utf-8') as f:

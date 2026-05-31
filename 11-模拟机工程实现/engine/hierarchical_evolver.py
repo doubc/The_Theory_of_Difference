@@ -785,6 +785,14 @@ class HierarchicalEvolver:
                             k: v for k, v in level_dist.items()
                             if k != 'CIVILIZATION'
                         }
+                    # Fallback: 如果 narrative level_dist 全为 0，尝试从 AMC 获取 institutional count
+                    # AMC 通过熵检测识别 institutional 级代理，是更可靠的 institutional 信号源
+                    if inst_count_for_protector <= 0 and self.adaptive_momentum_controller is not None:
+                        amc_hist = self.adaptive_momentum_controller.get_history()
+                        inst_count_for_protector = amc_hist.get('institutional_count', 0)
+                        # AMC 的类别分布基于熵聚类
+                        if inst_count_for_protector > 0:
+                            inst_categories = {'amc_entropy_cluster': inst_count_for_protector}
                 except Exception:
                     pass
 
