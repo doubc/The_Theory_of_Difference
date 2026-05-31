@@ -1,0 +1,43 @@
+{
+  "experiment": "exp_76_threshold_diagnostic",
+  "timestamp": "20260530_235539",
+  "description": "六阈值逐值诊断 — 定位 threshold_proximity=0 的根本原因",
+  "config": {
+    "N0": 72,
+    "steps": 400,
+    "sample_interval": 5
+  },
+  "runs": [
+    {
+      "seed": 42,
+      "odi_final": 0.485011,
+      "odi_max": 0.506049,
+      "odi_above_05": 3,
+      "msi_max": 0.32679,
+      "msi_nonzero_ratio": 0.7,
+      "n_steps": 80,
+      "bottleneck": null,
+      "worst_gap": null,
+      "threshold_best": {},
+      "threshold_met_frac": {}
+    },
+    {
+      "seed": 142,
+      "odi_final": 0.420545,
+      "odi_max": 0.49423,
+      "odi_above_05": 0,
+      "msi_max": 0.389526,
+      "msi_nonzero_ratio": 0.7,
+      "n_steps": 80,
+      "bottleneck": null,
+      "worst_gap": null,
+      "threshold_best": {},
+      "threshold_met_frac": {}
+    }
+  ],
+  "aggregate": {
+    "msi_max_mean": 0.3582,
+    "odi_max_mean": 0.5001,
+    "odi_above_05_total": 3
+  }
+}

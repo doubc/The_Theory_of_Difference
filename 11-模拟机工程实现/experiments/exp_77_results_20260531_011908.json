@@ -1,0 +1,186 @@
+{
+  "experiment": "exp_77_long_run_threshold",
+  "timestamp": "20260531_011908",
+  "description": "Long-run (1600 steps) six-threshold stability verification",
+  "hypothesis": "ODI/MSI should stabilize above pre-subjective floor with longer evolution",
+  "runs": [
+    {
+      "seed": 42,
+      "elapsed": 42.6,
+      "steps_recorded": 160,
+      "odi": {
+        "min": 0.0,
+        "max": 0.871373,
+        "final": 0.838627,
+        "mean": 0.082895,
+        "above_05_count": 16,
+        "above_08_count": 12,
+        "above_05_ratio": 0.1,
+        "first_cross_05_step": 90,
+        "first_cross_05_value": 0.805553,
+        "first_half_mean": 0.083117,
+        "second_half_mean": 0.082674,
+        "q1_mean": 0.083011,
+        "q2_mean": 0.083222,
+        "q3_mean": 0.082089,
+        "q4_mean": 0.083258
+      },
+      "msi": {
+        "min": 0.0,
+        "max": 0.536104,
+        "final": 0.339872,
+        "mean": 0.261657,
+        "nonzero_count": 115,
+        "nonzero_ratio": 0.7188,
+        "above_035_count": 42,
+        "first_cross_035_step": 90,
+        "first_cross_035_value": 0.358219,
+        "first_half_mean": 0.136954,
+        "second_half_mean": 0.386359,
+        "q1_mean": 0.033341,
+        "q2_mean": 0.240568,
+        "q3_mean": 0.36112,
+        "q4_mean": 0.411598
+      },
+      "narrative": {
+        "narrative_active_steps": 0,
+        "narrative_active_ratio": 0.0,
+        "narrative_correction_steps": 0,
+        "msi_at_narrative_mean": 0.0,
+        "msi_at_narrative_max": 0.0
+      },
+      "gbc": {
+        "available": true,
+        "coherence_mean": 0.0,
+        "coherence_max": 0.0,
+        "balance_mean": 0.0,
+        "balance_max": 0.0,
+        "pass_rate": 0.0,
+        "pass_count": 0
+      },
+      "threshold_met_by_quarter": {
+        "q1": {
+          "3.1": 1.0,
+          "3.2": 1.0,
+          "3.3": 1.0,
+          "3.4": 1.0,
+          "3.5": 1.0,
+          "3.6": 1.0
+        },
+        "q2": {
+          "3.1": 1.0,
+          "3.2": 1.0,
+          "3.3": 1.0,
+          "3.4": 1.0,
+          "3.5": 1.0,
+          "3.6": 1.0
+        },
+        "q3": {
+          "3.1": 1.0,
+          "3.2": 1.0,
+          "3.3": 1.0,
+          "3.4": 1.0,
+          "3.5": 1.0,
+          "3.6": 1.0
+        },
+        "q4": {
+          "3.1": 1.0,
+          "3.2": 1.0,
+          "3.3": 1.0,
+          "3.4": 1.0,
+          "3.5": 1.0,
+          "3.6": 1.0
+        }
+      }
+    },
+    {
+      "seed": 142,
+      "elapsed": 41.0,
+      "steps_recorded": 160,
+      "odi": {
+        "min": 0.0,
+        "max": 0.862516,
+        "final": 0.83177,
+        "mean": 0.079644,
+        "above_05_count": 16,
+        "above_08_count": 5,
+        "above_05_ratio": 0.1,
+        "first_cross_05_step": 90,
+        "first_cross_05_value": 0.74426,
+        "first_half_mean": 0.078991,
+        "second_half_mean": 0.080297,
+        "q1_mean": 0.078279,
+        "q2_mean": 0.079702,
+        "q3_mean": 0.079259,
+        "q4_mean": 0.081336
+      },
+      "msi": {
+        "min": 0.0,
+        "max": 0.511437,
+        "final": 0.511437,
+        "mean": 0.255689,
+        "nonzero_count": 115,
+        "nonzero_ratio": 0.7188,
+        "above_035_count": 61,
+        "first_cross_035_step": 580,
+        "first_cross_035_value": 0.350481,
+        "first_half_mean": 0.142131,
+        "second_half_mean": 0.369247,
+        "q1_mean": 0.028184,
+        "q2_mean": 0.256079,
+        "q3_mean": 0.36618,
+        "q4_mean": 0.372314
+      },
+      "narrative": {
+        "narrative_active_steps": 0,
+        "narrative_active_ratio": 0.0,
+        "narrative_correction_steps": 0,
+        "msi_at_narrative_mean": 0.0,
+        "msi_at_narrative_max": 0.0
+      },
+      "gbc": {
+        "available": true,
+        "coherence_mean": 0.0,
+        "coherence_max": 0.0,
+        "balance_mean": 0.0,
+        "balance_max": 0.0,
+        "pass_rate": 0.0,
+        "pass_count": 0
+      },
+      "threshold_met_by_quarter": {
+        "q1": {
+          "3.1": 1.0,
+          "3.2": 1.0,
+          "3.3": 1.0,
+          "3.4": 1.0,
+          "3.5": 1.0,
+          "3.6": 1.0
+        },
+        "q2": {
+          "3.1": 1.0,
+          "3.2": 1.0,
+          "3.3": 1.0,
+          "3.4": 1.0,
+          "3.5": 1.0,
+          "3.6": 1.0
+        },
+        "q3": {
+          "3.1": 1.0,
+          "3.2": 1.0,
+          "3.3": 1.0,
+          "3.4": 1.0,
+          "3.5": 1.0,
+          "3.6": 1.0
+        },
+        "q4": {
+          "3.1": 1.0,
+          "3.2": 1.0,
+          "3.3": 1.0,
+          "3.4": 1.0,
+          "3.5": 1.0,
+          "3.6": 1.0
+        }
+      }
+    }
+  ]
+}

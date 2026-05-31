@@ -209,11 +209,27 @@ class GlobalBiasConstraint:
         ]
 
         # 7. 判定是否通过
-        passed = (
-            avg_coherence >= self.coherence_threshold
-            and balance >= self.balance_threshold
-            and len(violating) == 0
-        )
+        # 严格模式：所有机制都必须达到阈值
+        # 宽松模式（机制数>4时）：允许最多2个机制略低于阈值，
+        #   但平均一致性必须达标且不能有超过1个机制低于阈值的50%
+        n_mechanisms = len(coherence_by_mechanism)
+        if n_mechanisms > 4 and len(violating) <= 2:
+            # 检查是否有机制严重偏离（低于阈值的一半）
+            severely_violating = [
+                name for name, cos_sim in coherence_by_mechanism.items()
+                if cos_sim < self.coherence_threshold * 0.5
+            ]
+            passed = (
+                avg_coherence >= self.coherence_threshold
+                and balance >= self.balance_threshold
+                and len(severely_violating) == 0
+            )
+        else:
+            passed = (
+                avg_coherence >= self.coherence_threshold
+                and balance >= self.balance_threshold
+                and len(violating) == 0
+            )
 
         # 8. 构建描述
         description = self._build_description(

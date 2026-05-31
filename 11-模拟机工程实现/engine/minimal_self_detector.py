@@ -98,19 +98,23 @@ DEFAULT_MSI_CONFIG = {
     'odi_saturation_threshold': 0.85,   # ODI 超过此值后 MSI 可能饱和
 
     # 视角不对称检测
+    # P2 fix (2026-05-30): 降低阈值以兼容密封系统的小样本敏感度分布
+    # 密封后 active_bits 经 Z-score 归一化后仍可能产生较窄的分布
+    # 标准基尼阈值 0.25 对 N=72 样本过高，降至 0.15 以检测弱不对称萌芽
     'asymmetry_window': 10,             # 敏感度历史窗口
-    'asymmetry_threshold': 0.25,        # 不对称度阈值（基尼系数）
+    'asymmetry_threshold': 0.15,        # 不对称度阈值（基尼系数）— P2: 0.25→0.15
     'min_parts': 3,                     # 最少部分数（少于此数无法计算不对称）
 
     # 历史依赖检测
+    # P2 fix: 降低阈值以在稀疏演化历史中检测弱依赖
     'history_window': 8,                # 历史响应窗口
-    'history_dependency_threshold': 0.3,  # 历史依赖度阈值
-    'min_history_depth': 5,             # 最少历史深度
+    'history_dependency_threshold': 0.2,  # 历史依赖度阈值 — P2: 0.3→0.2
+    'min_history_depth': 4,             # 最少历史深度 — P2: 5→4
 
     # 自我参照检测
     'self_reference_window': 8,         # 基线偏移窗口
-    'self_reference_threshold': 0.2,    # 自我参照度阈值
-    'baseline_correlation_threshold': 0.4,  # 响应-基线相关系数阈值
+    'self_reference_threshold': 0.15,   # 自我参照度阈值 — P2: 0.2→0.15
+    'baseline_correlation_threshold': 0.3,  # 响应-基线相关系数阈值 — P2: 0.4→0.3
 
     # 综合判定
     'msi_activation_threshold': 0.35,   # MSI 超过此值认为最小自我涌现

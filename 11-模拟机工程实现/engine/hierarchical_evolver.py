@@ -560,7 +560,7 @@ class HierarchicalEvolver:
                 direction = constraints.direction.clone()
                 bf = BiasField(
                     source_layer=layer_id,
-                    target_layer=layer_id + 1,
+                    target_layer=layer_id,
                     bias_vector=direction.float(),
                     strength=min(1.0, len(constraints.active_bits) / max(1, N)),
                     origin_step=layer_id * 10000 + step,
@@ -725,8 +725,23 @@ class HierarchicalEvolver:
                             agreement = (active_dir.sign() * np.sign(mean_dir)).mean().item()
                             self_sustaining = max(0.0, (agreement + 1) / 2)
 
-                # functional_signals 在 SixThresholdDetector 之后可能定义，提前初始化为 None
+                # functional_signals: 为 GBC 的 function 机制提取功能信号
+                # 注意：此处提取不依赖 coupling_mode，专为 GBC 提供 function 偏置
                 functional_signals = None
+                if self.global_bias_constraint is not None:
+                    # 从已有组件提取功能信号（不依赖 pre_subjectivity_convergence 的 coupling_mode）
+                    dir_vals = constraints.direction.float()
+                    active_indices_list = list(constraints.active_bits)
+                    if len(active_indices_list) > 0:
+                        active_dir = dir_vals[active_indices_list]
+                        direction_agreement = float(active_dir.abs().mean().item())
+                    else:
+                        direction_agreement = 0.0
+                    functional_signals = {
+                        'direction_agreement': direction_agreement,
+                        'active_count': active_count if 'active_count' in dir() else 0,
+                        'total_bits': total_bits if 'total_bits' in dir() else N,
+                    }
 
                 # ── GlobalBiasConstraint: 全局偏置一致性检测 ──
                 # 在 P1 周期内执行，收集各机制局部偏置并评估全局一致性
@@ -763,15 +778,17 @@ class HierarchicalEvolver:
                                 local_biases['memory'] = memory_field.clone()
                                 coupling_strengths['memory'] = min(1.0, self.persistent_bias_memory.n_entries / 50.0)
 
-                    # 4. replication: 从 binding_strength 提取（行均值 → 1D 向量）
-                    if hasattr(constraints, 'binding_strength'):
-                        bs = constraints.binding_strength.float()
-                        if bs.norm() > 1e-8:
-                            # 行均值 → 与 direction 同维度的 1D 向量
-                            rep_vec = bs.mean(dim=0).clone()
+                    # 4. replication: 从当前状态模式提取
+                    # 复制机制的偏置 = 当前活跃比特的模式（哪些比特是活跃的）
+                    # 使用 state 向量本身作为复制偏好：正值=应激活，负值=应抑制
+                    if state is not None:
+                        rep_vec = state.float().clone()
+                        if rep_vec.norm() > 1e-8:
+                            # 中心化：减去均值使偏置向量以 0 为中心
+                            rep_vec = rep_vec - rep_vec.mean()
                             if rep_vec.norm() > 1e-8:
                                 local_biases['replication'] = rep_vec
-                                coupling_strengths['replication'] = float(bs.norm().item() / 10.0)
+                                coupling_strengths['replication'] = float(rep_vec.abs().mean().item())
 
                     # 5. selection: 从 CumulativeSelector 的保留率构建偏置
                     if self.cumulative_selector is not None and variant_probs is not None:
@@ -785,8 +802,11 @@ class HierarchicalEvolver:
                                 except (IndexError, ValueError):
                                     pass
                         if sel_vec.norm() > 1e-8:
-                            local_biases['selection'] = sel_vec.clone()
-                            coupling_strengths['selection'] = float(sel_vec.mean().item())
+                            # 中心化：0.5 表示无偏好，>0.5 正偏好，<0.5 负偏好
+                            sel_vec = sel_vec - 0.5
+                            if sel_vec.norm() > 1e-8:
+                                local_biases['selection'] = sel_vec.clone()
+                                coupling_strengths['selection'] = float(sel_vec.abs().mean().item())
 
                     # 6. function: 从 functional_signals 提取
                     if functional_signals is not None:
@@ -1397,7 +1417,7 @@ class HierarchicalEvolver:
                     if self.persistent_bias_memory is not None and self.persistent_bias_memory.n_entries > 0:
                         recent_entries = self.persistent_bias_memory._get_active_entries(target_layer=layer_id + 1)
                         if not recent_entries:
-                            all_entries = [e for entries in self.persistent_bias_memory._layer_index.values() for i in entries]
+                            all_entries = [i for entries in self.persistent_bias_memory._layer_index.values() for i in entries]
                             recent_entries = [self.persistent_bias_memory._entries[i] for i in all_entries[-20:] if self.persistent_bias_memory._entries[i].is_active]
                         for entry in recent_entries[-4:]:
                             ctx = f"bias_t{entry.timestamp}"
