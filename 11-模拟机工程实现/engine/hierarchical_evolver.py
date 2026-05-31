@@ -288,6 +288,7 @@ class HierarchicalEvolver:
         self._return_flow_events: List[ReturnFlowEvent] = []
         # P1 fix (2026-05-30): ODI 滑动窗口（用于 p3_active 门控）
         self._odi_window: List[float] = []
+        self._last_odi_value: float = 0.0
         # Phase 2 自维持环路 & 复制模式（可选，未实现时默认为 None）
         self.self_sustaining_circulation = None
         self.replicate_pattern = None
@@ -635,11 +636,8 @@ class HierarchicalEvolver:
                 # 获取当前偏置
                 current_bias = constraints.direction.clone() if hasattr(constraints, 'direction') else torch.zeros(N, device=self.device)
 
-                # 获取当前 ODI
-                current_odi = 0.0
-                if self.organizational_density_index is not None:
-                    # 从最近的 ODI 结果获取
-                    pass  # ODI 在 P1 中计算，此处用 0 作为初始值
+                # 获取当前 ODI（使用最近一次 P1 评估的值）
+                current_odi = getattr(self, '_last_odi_value', 0.0)
 
                 # 执行叙事递归步骤
                 narrative_correction = self.narrative_recursion_operator.step(
@@ -1228,6 +1226,7 @@ class HierarchicalEvolver:
                     self._odi_window.append(odi_result.odi)
                     if len(self._odi_window) > 100:
                         self._odi_window.pop(0)
+                    self._last_odi_value = odi_result.odi
 
                 # 9. SeventhThresholdDetector — 基于 ODI 时间序列检测相变
                 seventh_result = None
