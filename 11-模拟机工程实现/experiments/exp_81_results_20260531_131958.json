@@ -1,0 +1,75 @@
+{
+  "experiment": "exp_81_civilization_activation",
+  "timestamp": "20260531_131958",
+  "description": "CIVILIZATION activation with Jaccard stability + growth-based path",
+  "fixes_tested": [
+    "Jaccard stability: _check_stability uses set similarity (>=0.6) instead of exact 3-node match",
+    "Growth path: _infer_narrative_level allows CIVILIZATION with strength>=0.6 even without stability"
+  ],
+  "diagnostic": {
+    "seed": 142,
+    "N0": 72,
+    "steps": 800,
+    "sample_interval": 5,
+    "elapsed_seconds": 49.7,
+    "n_steps_recorded": 240,
+    "odi": {
+      "odi_min": 0.0,
+      "odi_max": 0.713228,
+      "odi_final": 0.660871,
+      "odi_mean": 0.128457,
+      "odi_q1_mean": 0.121102,
+      "odi_q2_mean": 0.132754,
+      "odi_q3_mean": 0.130545,
+      "odi_q4_mean": 0.129427
+    },
+    "msi": {
+      "msi_min": 0.0,
+      "msi_max": 0.32042,
+      "msi_final": 0.296056,
+      "msi_mean": 0.266759,
+      "msi_q1_mean": 0.187004,
+      "msi_q2_mean": 0.300199,
+      "msi_q3_mean": 0.295018,
+      "msi_q4_mean": 0.284815
+    },
+    "narrative": {
+      "narrative_active_steps": 90,
+      "narrative_active_ratio": 0.375,
+      "narrative_correction_steps": 90,
+      "msi_at_active_mean": 0.2327,
+      "msi_at_active_max": 0.317,
+      "odi_at_active_mean": 0.1317,
+      "odi_at_active_max": 0.6932,
+      "mean_correction_norm": 0.786494,
+      "max_correction_norm": 0.786494,
+      "civilization_activated": false,
+      "civilization_steps": [],
+      "civilization_n_steps": 0,
+      "civilization_msi_mean": 0.0,
+      "civilization_odi_mean": 0.0
+    },
+    "narrative_operator_summary": {
+      "total_narrative_records": 90,
+      "validated_records": 90,
+      "validation_rate": 1.0,
+      "total_actions": 116,
+      "validated_actions": 116,
+      "action_validation_rate": 1.0,
+      "active_narratives": 90,
+      "narrative_level_distribution": {
+        "MINI_NARRATIVE": 49,
+        "INSTITUTIONAL": 33,
+        "CIVILIZATION": 8
+      },
+      "latest_record": "narrative_380_000089"
+    },
+    "narrative_level_distribution": {
+      "MINI": 49,
+      "INSTITUTIONAL": 33,
+      "CIVILIZATION": 8
+    },
+    "gbc_coherence_mean": 0.5463,
+    "gbc_coherence_max": 0.6453
+  }
+}
