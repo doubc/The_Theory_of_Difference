@@ -40,6 +40,8 @@ from models.narrative_self import NarrativeRecursionOperator, DifferenceSignal
 from engine.global_bias_constraint import GlobalBiasConstraint, GlobalBiasConstraintResult
 from layers.three_dim_hamming import ThreeDimHammingLattice
 from engine.functional_signal_coupling import extract_functional_signals
+from engine.adaptive_momentum_controller import AdaptiveMomentumController, DEFAULT_ADAPTIVE_MOMENTUM_CONFIG
+from engine.institutional_layer_protector import InstitutionalLayerProtector, DEFAULT_INSTITUTIONAL_PROTECTOR_CONFIG
 
 
 # ──────────────────────────────────────────────────────────
@@ -236,7 +238,14 @@ class HierarchicalEvolver:
                  # P1 评估间隔（每多少个 P0 检测周期执行一次 P1 评估）
                  p1_eval_interval: int = 5,
                  phase2_verbose: bool = False,
-                 phase3_verbose: bool = False):
+                 phase3_verbose: bool = False,
+                 # Phase 4 P0 组件（可选，H4 修复）
+                 adaptive_momentum_controller: Optional[AdaptiveMomentumController] = None,
+                 institutional_layer_protector: Optional[InstitutionalLayerProtector] = None,
+                 # Phase 4 配置（可选，覆盖默认配置）
+                 adaptive_momentum_config: Optional[Dict] = None,
+                 institutional_protector_config: Optional[Dict] = None,
+                 phase4_verbose: bool = False):
         """
         Args:
             N0: 第 0 层比特数
@@ -284,6 +293,12 @@ class HierarchicalEvolver:
         self._p1_eval_interval = p1_eval_interval
         self._phase2_verbose = phase2_verbose
         self._phase3_verbose = phase3_verbose
+        self._phase4_verbose = phase4_verbose
+        # Phase 4 P0 组件
+        self.adaptive_momentum_controller = adaptive_momentum_controller
+        self.institutional_layer_protector = institutional_layer_protector
+        self._adaptive_momentum_config = adaptive_momentum_config
+        self._institutional_protector_config = institutional_protector_config
         self._phase2_layer_results: Dict[int, List[Dict]] = {}  # layer -> [step_results]
         # 解封事件记录
         self._unsealing_events: List[UnsealingEvent] = []
@@ -514,7 +529,9 @@ class HierarchicalEvolver:
                   self.anticipatory_bias_engine is not None or
                   self.counterfactual_engine is not None or
                   self.narrative_recursion_operator is not None)
-        if not has_p2 and not has_p3:
+        has_p4 = (self.adaptive_momentum_controller is not None or
+                  self.institutional_layer_protector is not None)
+        if not has_p2 and not has_p3 and not has_p4:
             return None
 
         if layer_id not in self._phase2_layer_results:
@@ -706,6 +723,88 @@ class HierarchicalEvolver:
                         'is_civilization': is_civ,
                         'level_distribution_snapshot': level_dist,
                     }
+
+            # 5. AdaptiveMomentumController (Phase 4 P0)
+            if self.adaptive_momentum_controller is not None:
+                # 获取当前叙事层级计数
+                inst_count = 0
+                civ_count = 0
+                category_heats = {}
+                try:
+                    if self.narrative_recursion_operator is not None:
+                        narr_summary = self.narrative_recursion_operator.get_summary()
+                        level_dist = narr_summary.get('narrative_level_distribution', {})
+                        inst_count = level_dist.get('INSTITUTIONAL', 0)
+                        civ_count = level_dist.get('CIVILIZATION', 0)
+                        category_heats = level_dist
+                except Exception:
+                    pass
+
+                amc_result = self.adaptive_momentum_controller.step(
+                    category_heats=category_heats,
+                    institutional_count=inst_count,
+                    civilization_count=civ_count,
+                )
+
+                result_entry['adaptive_momentum'] = {
+                    'momentum_bonus': round(amc_result.momentum_bonus, 4),
+                    'entropy': round(amc_result.entropy, 4),
+                    'institutional_count': amc_result.institutional_count,
+                    'institutional_rate': round(amc_result.institutional_rate, 4),
+                    'adjustment': round(amc_result.adjustment, 4),
+                    'mode': amc_result.mode,
+                    'should_diffuse': amc_result.should_diffuse,
+                    'should_focus': amc_result.should_focus,
+                }
+
+                if self._phase4_verbose:
+                    print(f"    [AMC] L{layer_id} step={step}: "
+                          f"bonus={amc_result.momentum_bonus:.3f} "
+                          f"mode={amc_result.mode} "
+                          f"entropy={amc_result.entropy:.3f}")
+
+            # 6. InstitutionalLayerProtector (Phase 4 P0)
+            if self.institutional_layer_protector is not None:
+                # 获取 INSTITUTIONAL 类别分布
+                inst_categories = {}
+                current_odi = getattr(self, '_last_odi_value', 0.0)
+                inst_count_for_protector = 0
+                try:
+                    if self.narrative_recursion_operator is not None:
+                        narr_summary = self.narrative_recursion_operator.get_summary()
+                        level_dist = narr_summary.get('narrative_level_distribution', {})
+                        inst_count_for_protector = level_dist.get('INSTITUTIONAL', 0)
+                        # 使用 level_dist 作为类别分布的代理
+                        inst_categories = {
+                            k: v for k, v in level_dist.items()
+                            if k != 'CIVILIZATION'
+                        }
+                except Exception:
+                    pass
+
+                ilp_result = self.institutional_layer_protector.step(
+                    institutional_count=inst_count_for_protector,
+                    institutional_categories=inst_categories if inst_categories else None,
+                    current_odi=current_odi,
+                )
+
+                result_entry['institutional_protector'] = {
+                    'institutional_count': ilp_result.institutional_count,
+                    'institutional_floor': round(ilp_result.institutional_floor, 2),
+                    'consumption_rate_limit': round(ilp_result.consumption_rate_limit, 4),
+                    'transition_allowed': ilp_result.transition_allowed,
+                    'transition_openness': round(ilp_result.transition_openness, 4),
+                    'n_categories': ilp_result.n_categories,
+                    'diversity_sufficient': ilp_result.diversity_sufficient,
+                    'protection_level': ilp_result.protection_level,
+                    'should_consume': ilp_result.should_consume,
+                }
+
+                if self._phase4_verbose:
+                    print(f"    [ILP] L{layer_id} step={step}: "
+                          f"level={ilp_result.protection_level} "
+                          f"floor={ilp_result.institutional_floor:.1f} "
+                          f"openness={ilp_result.transition_openness:.3f}")
 
             # ── P1: 每隔 p1_eval_interval 步执行 ──
             p1_counter['value'] += 1
@@ -1819,6 +1918,16 @@ class HierarchicalEvolver:
                     self.global_bias_constraint.get_balance_trend()
                     if self.global_bias_constraint else []),
                 'layers_with_results': list(self._phase2_layer_results.keys()),
+            },
+            'phase4_summary': {
+                'adaptive_momentum_controller_active': self.adaptive_momentum_controller is not None,
+                'institutional_layer_protector_active': self.institutional_layer_protector is not None,
+                'amc_history': (
+                    self.adaptive_momentum_controller.get_history()
+                    if self.adaptive_momentum_controller else None),
+                'ilp_history': (
+                    self.institutional_layer_protector.get_history()
+                    if self.institutional_layer_protector else None),
             },
             'phase3_summary': {
                 'minimal_self_detector_active': self.minimal_self_detector is not None,
