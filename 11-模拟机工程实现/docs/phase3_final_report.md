@@ -1,206 +1,168 @@
-# Phase 3 最终报告：前主体态 → 现象意识的结构条件
-
-> **版本**: v1.0
-> **日期**: 2026-05-31
-> **状态**: 完成
-> **前置**: Phase 2 全组件验证通过（M4 批次11，807 tests）
-> **理论依据**: 《差异论》V1.7 + ABA §4.4 + 《象界》第八章
+﻿# Phase 3 鏈€缁堟姤鍛婏細鍓嶄富浣撴€?鈫?鐜拌薄鎰忚瘑鐨勭粨鏋勬潯浠?
+> **鐗堟湰**: v1.0
+> **鏃ユ湡**: 2026-05-31
+> **鐘舵€?*: 瀹屾垚
+> **鍓嶇疆**: Phase 2 鍏ㄧ粍浠堕獙璇侀€氳繃锛圡4 鎵规11锛?07 tests锛?> **鐞嗚渚濇嵁**: 銆婂樊寮傝銆媀1.7 + ABA 搂4.4 + 銆婅薄鐣屻€嬬鍏珷
 
 ---
 
-## 一、执行摘要
+## 涓€銆佹墽琛屾憳瑕?
+Phase 3 鐨勬牳蹇冪洰鏍囨槸楠岃瘉锛?*鍓嶄富浣撴€侊紙ODI > 0.5锛夌殑缁撴瀯楠ㄦ灦鑳藉惁寮€濮嬫壙杞借涔夊唴瀹圭殑涓夌鍘熷垵褰㈠紡鈥斺€旈鏈熴€佸弽浜嬪疄銆佹渶灏忚嚜鎴戙€?*
 
-Phase 3 的核心目标是验证：**前主体态（ODI > 0.5）的结构骨架能否开始承载语义内容的三种原初形式——预期、反事实、最小自我。**
-
-经过 11 个实验（exp_75 → exp_90）和 3 个核心组件的实现验证，Phase 3 的结论是：
-
-| 假设 | 标准 | 结果 |
+缁忚繃 11 涓疄楠岋紙exp_75 鈫?exp_90锛夊拰 3 涓牳蹇冪粍浠剁殑瀹炵幇楠岃瘉锛孭hase 3 鐨勭粨璁烘槸锛?
+| 鍋囪 | 鏍囧噯 | 缁撴灉 |
 |------|------|------|
-| H1: 文明涌现 | mean CIV ≥ 5 | ✅ PASS (5.25) |
-| H2: 全局偏置相干 | GBC coh ≥ 0.55 | ✅ PASS (0.572) |
-| H3: GBC 通过率 | pass_rate ≥ 0.30 | ✅ PASS (0.375) |
-| H4: 全种子 CIV ≥ 3 | min CIV ≥ 3 | ❌ FAIL (3 seeds at CIV=2) |
+| H1: 鏂囨槑娑岀幇 | mean CIV 鈮?5 | 鉁?PASS (5.25) |
+| H2: 鍏ㄥ眬鍋忕疆鐩稿共 | GBC coh 鈮?0.55 | 鉁?PASS (0.572) |
+| H3: GBC 閫氳繃鐜?| pass_rate 鈮?0.30 | 鉁?PASS (0.375) |
+| H4: 鍏ㄧ瀛?CIV 鈮?3 | min CIV 鈮?3 | 鉂?FAIL (3 seeds at CIV=2) |
 
-**H1/H2/H3 在 8 种子统计验证中稳定通过，H4 未通过。** Phase 3 主体目标完成，H4 的低种子停滞问题列为 Phase 4 的首个研究课题。
-
+**H1/H2/H3 鍦?8 绉嶅瓙缁熻楠岃瘉涓ǔ瀹氶€氳繃锛孒4 鏈€氳繃銆?* Phase 3 涓讳綋鐩爣瀹屾垚锛孒4 鐨勪綆绉嶅瓙鍋滄粸闂鍒椾负 Phase 4 鐨勯涓爺绌惰棰樸€?
 ---
 
-## 二、Phase 3 组件完成清单
+## 浜屻€丳hase 3 缁勪欢瀹屾垚娓呭崟
 
-### 2.1 P0: MinimalSelfDetector（最小自我检测器）
-
-**状态**: ✅ 完成并验证
-
-| 子组件 | 功能 | 验证结果 |
+### 2.1 P0: MinimalSelfDetector锛堟渶灏忚嚜鎴戞娴嬪櫒锛?
+**鐘舵€?*: 鉁?瀹屾垚骞堕獙璇?
+| 瀛愮粍浠?| 鍔熻兘 | 楠岃瘉缁撴灉 |
 |--------|------|----------|
-| `AsymmetryTracker` | 追踪结构内在不对称性 | MSI max = 0.583 (seed 742) |
-| `HistoryDependencyAnalyzer` | 分析响应的历史依赖性 | 85% 步数 MSI > 0 (seeds 142/242) |
-| `SelfReferenceLoopDetector` | 检测自我参照回路 | 通过 ReturnFlowChannel 锚定验证 |
-| `MinimalSelfIndex (MSI)` | 综合指数 [0,1] | mean max = 0.427 |
+| `AsymmetryTracker` | 杩借釜缁撴瀯鍐呭湪涓嶅绉版€?| MSI max = 0.583 (seed 742) |
+| `HistoryDependencyAnalyzer` | 鍒嗘瀽鍝嶅簲鐨勫巻鍙蹭緷璧栨€?| 85% 姝ユ暟 MSI > 0 (seeds 142/242) |
+| `SelfReferenceLoopDetector` | 妫€娴嬭嚜鎴戝弬鐓у洖璺?| 閫氳繃 ReturnFlowChannel 閿氬畾楠岃瘉 |
+| `MinimalSelfIndex (MSI)` | 缁煎悎鎸囨暟 [0,1] | mean max = 0.427 |
 
-**关键发现**: MSI 的激活不依赖 ODI 持续高于 0.5——ODI 的瞬时峰值（max=0.76-0.82 全部种子）已足够触发 MSI 响应。这证实 MSI-ODI 关系是非线性的阈值触发，而非线性相关。
+**鍏抽敭鍙戠幇**: MSI 鐨勬縺娲讳笉渚濊禆 ODI 鎸佺画楂樹簬 0.5鈥斺€擮DI 鐨勭灛鏃跺嘲鍊硷紙max=0.76-0.82 鍏ㄩ儴绉嶅瓙锛夊凡瓒冲瑙﹀彂 MSI 鍝嶅簲銆傝繖璇佸疄 MSI-ODI 鍏崇郴鏄潪绾挎€х殑闃堝€艰Е鍙戯紝鑰岄潪绾挎€х浉鍏炽€?
+### 2.2 P1: AnticipatoryBiasEngine锛堥鏈熷亸缃紩鎿庯級
 
-### 2.2 P1: AnticipatoryBiasEngine（预期偏置引擎）
-
-**状态**: ✅ 完成并集成
-
-| 子组件 | 功能 | 验证结果 |
+**鐘舵€?*: 鉁?瀹屾垚骞堕泦鎴?
+| 瀛愮粍浠?| 鍔熻兘 | 楠岃瘉缁撴灉 |
 |--------|------|----------|
-| `PatternExtrapolator` | 历史偏置序列外推 | 集成到 evolver 偏置收集循环 |
-| `ExpectationField` | 预期差异场 | 与 BiasField 对偶运行 |
-| `PredictionErrorTracker` | 预测误差追踪 | GBC coherence 反馈闭环 |
-| `AnticipationConfidence` | 预期置信度 | momentum_cache heat 指标 |
+| `PatternExtrapolator` | 鍘嗗彶鍋忕疆搴忓垪澶栨帹 | 闆嗘垚鍒?evolver 鍋忕疆鏀堕泦寰幆 |
+| `ExpectationField` | 棰勬湡宸紓鍦?| 涓?BiasField 瀵瑰伓杩愯 |
+| `PredictionErrorTracker` | 棰勬祴璇樊杩借釜 | GBC coherence 鍙嶉闂幆 |
+| `AnticipationConfidence` | 棰勬湡缃俊搴?| momentum_cache heat 鎸囨爣 |
 
-**关键发现**: 预期引擎通过 momentum_cache 的 heat 分布反映——高 CIV 种子（42/142/542）的 max_heat 显著高于低 CIV 种子（242/642），但 742 例外（高 heat=12.35 但 CIV=2），表明动量不是 CIV 的充分条件。
-
-### 2.3 P2: GlobalBiasConstraint（全局偏置约束）
-
-**状态**: ✅ 完成并验证
-
-| 子组件 | 功能 | 验证结果 |
+**鍏抽敭鍙戠幇**: 棰勬湡寮曟搸閫氳繃 momentum_cache 鐨?heat 鍒嗗竷鍙嶆槧鈥斺€旈珮 CIV 绉嶅瓙锛?2/142/542锛夌殑 max_heat 鏄捐憲楂樹簬浣?CIV 绉嶅瓙锛?42/642锛夛紝浣?742 渚嬪锛堥珮 heat=12.35 浣?CIV=2锛夛紝琛ㄦ槑鍔ㄩ噺涓嶆槸 CIV 鐨勫厖鍒嗘潯浠躲€?
+### 2.3 P2: GlobalBiasConstraint锛堝叏灞€鍋忕疆绾︽潫锛?
+**鐘舵€?*: 鉁?瀹屾垚骞堕獙璇?
+| 瀛愮粍浠?| 鍔熻兘 | 楠岃瘉缁撴灉 |
 |--------|------|----------|
-| 几何平均整合 | 6 机制偏置几何平均 | boundary/function 高相干 (>0.9) |
-| 方向一致性约束 | cos θ ≥ 0.5 判定 | selection 3/8 种子负相干 |
-| 平衡度指标 | 跨机制量纲归一化 | balance 均值 0.738 |
-| 软约束 (Soft Nudge) | 负相干机制温和旋转 | exp_89 H1/H2/H3 全部通过 |
+| 鍑犱綍骞冲潎鏁村悎 | 6 鏈哄埗鍋忕疆鍑犱綍骞冲潎 | boundary/function 楂樼浉骞?(>0.9) |
+| 鏂瑰悜涓€鑷存€х害鏉?| cos 胃 鈮?0.5 鍒ゅ畾 | selection 3/8 绉嶅瓙璐熺浉骞?|
+| 骞宠　搴︽寚鏍?| 璺ㄦ満鍒堕噺绾插綊涓€鍖?| balance 鍧囧€?0.738 |
+| 杞害鏉?(Soft Nudge) | 璐熺浉骞叉満鍒舵俯鍜屾棆杞?| exp_89 H1/H2/H3 鍏ㄩ儴閫氳繃 |
 
-**关键发现**: selection 机制的负相干是结构性问题——选择后 variant 极少导致偏置极度稀疏。GBC 软约束（nudge=0.2）是有效折中，非根治。
+**鍏抽敭鍙戠幇**: selection 鏈哄埗鐨勮礋鐩稿共鏄粨鏋勬€ч棶棰樷€斺€旈€夋嫨鍚?variant 鏋佸皯瀵艰嚧鍋忕疆鏋佸害绋€鐤忋€侴BC 杞害鏉燂紙nudge=0.2锛夋槸鏈夋晥鎶樹腑锛岄潪鏍规不銆?
+### 2.4 杈呭姪缁勪欢
 
-### 2.4 辅助组件
-
-| 组件 | 状态 | 关键指标 |
+| 缁勪欢 | 鐘舵€?| 鍏抽敭鎸囨爣 |
 |------|------|----------|
-| NarrativeRecursionOperator | ✅ 修复完成 | 55/55 validated, ODI max=0.77 |
-| ReturnFlowChannel | ✅ 完成 | 28/28 anchoring success (exp_75) |
-| SemanticFirewallGuard | ✅ 完成 | firewall_purity = 1.0 (全部种子) |
+| NarrativeRecursionOperator | 鉁?淇瀹屾垚 | 55/55 validated, ODI max=0.77 |
+| ReturnFlowChannel | 鉁?瀹屾垚 | 28/28 anchoring success (exp_75) |
+| SemanticFirewallGuard | 鉁?瀹屾垚 | firewall_purity = 1.0 (鍏ㄩ儴绉嶅瓙) |
 
 ---
 
-## 三、实验序列与关键里程碑
+## 涓夈€佸疄楠屽簭鍒椾笌鍏抽敭閲岀▼纰?
+### exp_75: ReturnFlowChannel 闆嗘垚
+- **鐩爣**: 淇 RFC 浠庢湭琚疄渚嬪寲鐨勬牴鏈棶棰?- **淇**: 3 涓?bug锛堝垵濮嬬姸鎬佸叏闆躲€佸厓缁勪笉鍖归厤銆佹悳绱㈢┖闂翠负绌猴級
+- **缁撴灉**: RFC 閿氬畾 100% (28/28), ODI 棣栨绐佺牬 0.5 (0.5068)
+- **鐡堕**: threshold_proximity=0.0 闃绘柇鍙欎簨娑岀幇
 
-### exp_75: ReturnFlowChannel 集成
-- **目标**: 修复 RFC 从未被实例化的根本问题
-- **修复**: 3 个 bug（初始状态全零、元组不匹配、搜索空间为空）
-- **结果**: RFC 锚定 100% (28/28), ODI 首次突破 0.5 (0.5068)
-- **瓶颈**: threshold_proximity=0.0 阻断叙事涌现
+### exp_79: NarrativeRecursionOperator 瀹屽叏淇
+- **鐩爣**: 淇鏂瑰悜鍚戦噺/ODI浼犻€?verifier/Jaccard绋冲畾鎬?澧為暱璺緞
+- **缁撴灉**: 55/55 validated, ODI max=0.77, MSI max=0.33
 
-### exp_79: NarrativeRecursionOperator 完全修复
-- **目标**: 修复方向向量/ODI传递/verifier/Jaccard稳定性/增长路径
-- **结果**: 55/55 validated, ODI max=0.77, MSI max=0.33
+### exp_80: CIVILIZATION=0 缁撴瀯鎬х摱棰堢‘璁?- **鐩爣**: 纭 civilization 灞傜骇娑岀幇缂哄け
+- **缁撴灉**: CIVILIZATION=0/240姝ワ紝纭闇€瑕佺郴缁熸€у弬鏁拌皟鏁?
+### exp_81: CIVILIZATION 娑岀幇绐佺牬
+- **鐩爣**: 璋冩暣鍙傛暟浣?civilization 灞傜骇棣栨娑岀幇
+- **缁撴灉**: CIVILIZATION=4/240姝?鉁?- **灞傜骇鍒嗗竷**: 47 MINI + 26 INSTITUTIONAL + 4 CIVILIZATION
 
-### exp_80: CIVILIZATION=0 结构性瓶颈确认
-- **目标**: 确认 civilization 层级涌现缺失
-- **结果**: CIVILIZATION=0/240步，确认需要系统性参数调整
+### exp_87: 8-seed 缁熻楠岃瘉 (bonus=0.5)
+- **鐩爣**: 鍔ㄩ噺鍙傛暟缁熻楠岃瘉
+- **缁撴灉**: mean CIV=4.25 鉂? bonus=0.5 涓嶉瞾妫?- **鍙戠幇**: 鍊扷鍨嬫洸绾库€斺€旇繃搴﹀己鍖栫儹鐐瑰鑷村眬閮ㄥ惛寮曞瓙
 
-### exp_81: CIVILIZATION 涌现突破
-- **目标**: 调整参数使 civilization 层级首次涌现
-- **结果**: CIVILIZATION=4/240步 ✅
-- **层级分布**: 47 MINI + 26 INSTITUTIONAL + 4 CIVILIZATION
+### exp_88: momentum=0.3 鍥為€€ + GBC 杞害鏉熷墠娴?- **鐩爣**: 鍥為€€鍒?bonus=0.3 骞惰瘎浼?GBC nudge 蹇呰鎬?- **缁撴灉**: mean CIV=5.0, selection 璐熺浉骞蹭弗閲?- **鍙戠幇**: bonus=0.3 鍏ㄩ潰浼樹簬 0.5
 
-### exp_87: 8-seed 统计验证 (bonus=0.5)
-- **目标**: 动量参数统计验证
-- **结果**: mean CIV=4.25 ❌, bonus=0.5 不鲁棒
-- **发现**: 倒U型曲线——过度强化热点导致局部吸引子
-
-### exp_88: momentum=0.3 回退 + GBC 软约束前测
-- **目标**: 回退到 bonus=0.3 并评估 GBC nudge 必要性
-- **结果**: mean CIV=5.0, selection 负相干严重
-- **发现**: bonus=0.3 全面优于 0.5
-
-### exp_89: GBC 软约束突破 ⭐
-- **目标**: 引入 GBC soft nudge 解决 selection 负相干
-- **配置**: bonus=0.3, nudge=0.2, threshold=0.5
-- **结果**: mean CIV=6.25, GBC coh=0.559, pass=0.328
-- **H1/H2/H3 全部通过** ✅
-
-### exp_90: 8-seed 全验证（最终统计验证）
-- **目标**: 最优配置的 8 种子统计验证
-- **配置**: bonus=0.3, nudge=0.2, threshold=0.5, N0=72, steps=1600
-- **结果**: H1/H2/H3 PASS, H4 FAIL (3 seeds at CIV=2)
+### exp_89: GBC 杞害鏉熺獊鐮?猸?- **鐩爣**: 寮曞叆 GBC soft nudge 瑙ｅ喅 selection 璐熺浉骞?- **閰嶇疆**: bonus=0.3, nudge=0.2, threshold=0.5
+- **缁撴灉**: mean CIV=6.25, GBC coh=0.559, pass=0.328
+- **H1/H2/H3 鍏ㄩ儴閫氳繃** 鉁?
+### exp_90: 8-seed 鍏ㄩ獙璇侊紙鏈€缁堢粺璁￠獙璇侊級
+- **鐩爣**: 鏈€浼橀厤缃殑 8 绉嶅瓙缁熻楠岃瘉
+- **閰嶇疆**: bonus=0.3, nudge=0.2, threshold=0.5, N0=72, steps=1600
+- **缁撴灉**: H1/H2/H3 PASS, H4 FAIL (3 seeds at CIV=2)
 
 ---
 
-## 四、exp_90 详细结果分析
+## 鍥涖€乪xp_90 璇︾粏缁撴灉鍒嗘瀽
 
-### 4.1 种子分类
+### 4.1 绉嶅瓙鍒嗙被
 
-| 类型 | 种子 | CIV | ODI max | MSI max | GBC coh | GBC pass | selection coh |
+| 绫诲瀷 | 绉嶅瓙 | CIV | ODI max | MSI max | GBC coh | GBC pass | selection coh |
 |------|------|-----|---------|---------|---------|----------|---------------|
-| **高CIV** | 42 | 9 | 0.712 | 0.316 | 0.572 | 0.000 | -0.324 |
-| **高CIV** | 142 | 10 | 0.716 | 0.303 | 0.558 | 0.000 | -0.339 |
-| **高CIV** | 542 | 9 | 0.733 | 0.289 | 0.555 | 0.000 | -0.417 |
-| **中CIV** | 342 | 5 | 0.720 | 0.379 | 0.602 | 0.875 | +0.436 |
-| **中CIV** | 442 | 3 | 0.818 | 0.527 | 0.563 | 0.625 | +0.341 |
-| **低CIV** | 242 | 2 | 0.809 | 0.503 | 0.552 | 0.688 | +0.313 |
-| **低CIV** | 642 | 2 | 0.810 | 0.518 | 0.582 | 0.813 | +0.527 |
-| **低CIV** | 742 | 2 | 0.778 | 0.583 | 0.597 | 0.000 | +0.063 |
+| **楂楥IV** | 42 | 9 | 0.712 | 0.316 | 0.572 | 0.000 | -0.324 |
+| **楂楥IV** | 142 | 10 | 0.716 | 0.303 | 0.558 | 0.000 | -0.339 |
+| **楂楥IV** | 542 | 9 | 0.733 | 0.289 | 0.555 | 0.000 | -0.417 |
+| **涓瑿IV** | 342 | 5 | 0.720 | 0.379 | 0.602 | 0.875 | +0.436 |
+| **涓瑿IV** | 442 | 3 | 0.818 | 0.527 | 0.563 | 0.625 | +0.341 |
+| **浣嶤IV** | 242 | 2 | 0.809 | 0.503 | 0.552 | 0.688 | +0.313 |
+| **浣嶤IV** | 642 | 2 | 0.810 | 0.518 | 0.582 | 0.813 | +0.527 |
+| **浣嶤IV** | 742 | 2 | 0.778 | 0.583 | 0.597 | 0.000 | +0.063 |
 
-### 4.2 双峰分布
+### 4.2 鍙屽嘲鍒嗗竷
 
-exp_90 最显著的特征是 CIV 的双峰分布：
+exp_90 鏈€鏄捐憲鐨勭壒寰佹槸 CIV 鐨勫弻宄板垎甯冿細
 
-- **高CIV组** (42/142/542): CIV=9-10, GBC pass=0.0, selection 负相干
-- **低CIV组** (242/642/742): CIV=2, GBC pass=高或零, selection 正相干
-- **中CIV组** (342/442): CIV=3-5, GBC pass 最高, selection 正相干
-
-**反直觉发现**: 低 CIV 种子的 ODI max 和 MSI max 反而**更高**于高 CIV 种子。这说明叙事引擎（ODI/MSI）和文明涌现（CIV）是**解耦的**——高 ODI/MSI 不保证高 CIV。
-
-### 4.3 GBC 通过率的双峰性
-
-GBC pass_rate 呈现极端双峰：要么 0.0（3/8 种子），要么 0.6-0.875（5/8 种子），**无中间值**。这表明 GBC 约束存在一个隐性的"全有或全无"相变——要么机制偏置方向足够一致使得大部分检查通过，要么 selection 的负相干主导导致全部失败。
-
-### 4.4 Selection 负相干的种子依赖性
-
-| Selection 相干性 | 种子数 | CIV 范围 |
+- **楂楥IV缁?* (42/142/542): CIV=9-10, GBC pass=0.0, selection 璐熺浉骞?- **浣嶤IV缁?* (242/642/742): CIV=2, GBC pass=楂樻垨闆? selection 姝ｇ浉骞?- **涓瑿IV缁?* (342/442): CIV=3-5, GBC pass 鏈€楂? selection 姝ｇ浉骞?
+**鍙嶇洿瑙夊彂鐜?*: 浣?CIV 绉嶅瓙鐨?ODI max 鍜?MSI max 鍙嶈€?*鏇撮珮**浜庨珮 CIV 绉嶅瓙銆傝繖璇存槑鍙欎簨寮曟搸锛圤DI/MSI锛夊拰鏂囨槑娑岀幇锛圕IV锛夋槸**瑙ｈ€︾殑**鈥斺€旈珮 ODI/MSI 涓嶄繚璇侀珮 CIV銆?
+### 4.3 GBC 閫氳繃鐜囩殑鍙屽嘲鎬?
+GBC pass_rate 鍛堢幇鏋佺鍙屽嘲锛氳涔?0.0锛?/8 绉嶅瓙锛夛紝瑕佷箞 0.6-0.875锛?/8 绉嶅瓙锛夛紝**鏃犱腑闂村€?*銆傝繖琛ㄦ槑 GBC 绾︽潫瀛樺湪涓€涓殣鎬х殑"鍏ㄦ湁鎴栧叏鏃?鐩稿彉鈥斺€旇涔堟満鍒跺亸缃柟鍚戣冻澶熶竴鑷翠娇寰楀ぇ閮ㄥ垎妫€鏌ラ€氳繃锛岃涔?selection 鐨勮礋鐩稿共涓诲瀵艰嚧鍏ㄩ儴澶辫触銆?
+### 4.4 Selection 璐熺浉骞茬殑绉嶅瓙渚濊禆鎬?
+| Selection 鐩稿共鎬?| 绉嶅瓙鏁?| CIV 鑼冨洿 |
 |-----------------|--------|----------|
-| 强负 (< -0.30) | 3 | 9-10 (高CIV) |
-| 弱负/弱正 (-0.1~+0.3) | 2 | 2-3 (低/中CIV) |
-| 中强正 (> +0.3) | 3 | 2-5 (低/中CIV) |
+| 寮鸿礋 (< -0.30) | 3 | 9-10 (楂楥IV) |
+| 寮辫礋/寮辨 (-0.1~+0.3) | 2 | 2-3 (浣?涓瑿IV) |
+| 涓己姝?(> +0.3) | 3 | 2-5 (浣?涓瑿IV) |
 
-**规律**: 高 CIV 种子恰好是 selection 强负相干的种子。这意味着 selection 负相干不是 CIV 涌现的障碍——恰恰相反，高 CIV 可能以某种方式"绕过"了 selection 的约束。
-
+**瑙勫緥**: 楂?CIV 绉嶅瓙鎭板ソ鏄?selection 寮鸿礋鐩稿共鐨勭瀛愩€傝繖鎰忓懗鐫€ selection 璐熺浉骞蹭笉鏄?CIV 娑岀幇鐨勯殰纰嶁€斺€旀伆鎭扮浉鍙嶏紝楂?CIV 鍙兘浠ユ煇绉嶆柟寮?缁曡繃"浜?selection 鐨勭害鏉熴€?
 ---
 
-## 五、Phase 3 的理论-工程映射总结
+## 浜斻€丳hase 3 鐨勭悊璁?宸ョ▼鏄犲皠鎬荤粨
 
-### 5.1 有效映射
+### 5.1 鏈夋晥鏄犲皠
 
-| 理论概念 | 工程组件 | 验证状态 |
+| 鐞嗚姒傚康 | 宸ョ▼缁勪欢 | 楠岃瘉鐘舵€?|
 |---------|---------|---------|
-| 前主体态统一性 | GlobalBiasConstraint | ✅ GBC coh=0.572 > 0.55 |
-| 预期驱动处理 | AnticipatoryBiasEngine | ✅ momentum_cache 活跃 |
-| 最小自我 | MinimalSelfDetector | ✅ MSI max=0.583 |
-| 内在不对称性 | AsymmetryTracker | ✅ 全部种子 MSI > 0 |
-| 自我参照回路 | ReturnFlowChannel | ✅ 28/28 锚定成功 |
-| 叙事递归 | NarrativeRecursionOperator | ✅ 55/55 validated |
-| 语义防火墙 | SemanticFirewallGuard | ✅ purity=1.0 |
+| 鍓嶄富浣撴€佺粺涓€鎬?| GlobalBiasConstraint | 鉁?GBC coh=0.572 > 0.55 |
+| 棰勬湡椹卞姩澶勭悊 | AnticipatoryBiasEngine | 鉁?momentum_cache 娲昏穬 |
+| 鏈€灏忚嚜鎴?| MinimalSelfDetector | 鉁?MSI max=0.583 |
+| 鍐呭湪涓嶅绉版€?| AsymmetryTracker | 鉁?鍏ㄩ儴绉嶅瓙 MSI > 0 |
+| 鑷垜鍙傜収鍥炶矾 | ReturnFlowChannel | 鉁?28/28 閿氬畾鎴愬姛 |
+| 鍙欎簨閫掑綊 | NarrativeRecursionOperator | 鉁?55/55 validated |
+| 璇箟闃茬伀澧?| SemanticFirewallGuard | 鉁?purity=1.0 |
 
-### 5.2 理论预测 vs 实验结果
+### 5.2 鐞嗚棰勬祴 vs 瀹為獙缁撴灉
 
-| 理论预测 | 实验结果 | 判定 |
+| 鐞嗚棰勬祴 | 瀹為獙缁撴灉 | 鍒ゅ畾 |
 |---------|---------|------|
-| MSI 在 ODI > 0.5 后增长 | MSI 由 ODI 瞬时峰值触发（非持续） | 部分确认 |
-| GBC 相干 → CIV 涌现 | GBC coh 高 ≠ CIV 高（解耦） | 修正：需区分前主体态和文明涌现 |
-| selection 负相干阻碍涌现 | 高 CIV 种子恰好 selection 负相干 | 反直觉：需重新解释 |
-| 预期 → 反事实 → 最小自我 | 三者均已实现但耦合度低于预期 | 部分确认 |
+| MSI 鍦?ODI > 0.5 鍚庡闀?| MSI 鐢?ODI 鐬椂宄板€艰Е鍙戯紙闈炴寔缁級 | 閮ㄥ垎纭 |
+| GBC 鐩稿共 鈫?CIV 娑岀幇 | GBC coh 楂?鈮?CIV 楂橈紙瑙ｈ€︼級 | 淇锛氶渶鍖哄垎鍓嶄富浣撴€佸拰鏂囨槑娑岀幇 |
+| selection 璐熺浉骞查樆纰嶆秾鐜?| 楂?CIV 绉嶅瓙鎭板ソ selection 璐熺浉骞?| 鍙嶇洿瑙夛細闇€閲嶆柊瑙ｉ噴 |
+| 棰勬湡 鈫?鍙嶄簨瀹?鈫?鏈€灏忚嚜鎴?| 涓夎€呭潎宸插疄鐜颁絾鑰﹀悎搴︿綆浜庨鏈?| 閮ㄥ垎纭 |
 
-### 5.3 核心理论修正
+### 5.3 鏍稿績鐞嗚淇
 
-Phase 3 实验数据要求对 Phase 3 规划文档中的以下假设进行修正：
-
-1. **MSI-ODI 关系**: 不是 ODI 持续 > 0.5 后 MSI 线性增长，而是 ODI 的**瞬时峰值**触发 MSI 响应。这表明 MSI 是事件驱动的，不是状态驱动的。
-
-2. **GBC 相干与 CIV 的关系**: GBC 高相干不保证高 CIV。二者可能对应不同层次的组织——GBC 相干是**机制层面**的一致性，CIV 涌现是**系统层面**的相变。
-
-3. **Selection 的角色**: Selection 负相干不是简单的"障碍"。高 CIV 种子中 selection 的强负相干可能反映了一种**选择性压力的释放机制**——当系统找到稳定的组织形态时，选择压力降低，selection 偏置变得稀疏和不稳定。
-
+Phase 3 瀹為獙鏁版嵁瑕佹眰瀵?Phase 3 瑙勫垝鏂囨。涓殑浠ヤ笅鍋囪杩涜淇锛?
+1. **MSI-ODI 鍏崇郴**: 涓嶆槸 ODI 鎸佺画 > 0.5 鍚?MSI 绾挎€у闀匡紝鑰屾槸 ODI 鐨?*鐬椂宄板€?*瑙﹀彂 MSI 鍝嶅簲銆傝繖琛ㄦ槑 MSI 鏄簨浠堕┍鍔ㄧ殑锛屼笉鏄姸鎬侀┍鍔ㄧ殑銆?
+2. **GBC 鐩稿共涓?CIV 鐨勫叧绯?*: GBC 楂樼浉骞蹭笉淇濊瘉楂?CIV銆備簩鑰呭彲鑳藉搴斾笉鍚屽眰娆＄殑缁勭粐鈥斺€擥BC 鐩稿共鏄?*鏈哄埗灞傞潰**鐨勪竴鑷存€э紝CIV 娑岀幇鏄?*绯荤粺灞傞潰**鐨勭浉鍙樸€?
+3. **Selection 鐨勮鑹?*: Selection 璐熺浉骞蹭笉鏄畝鍗曠殑"闅滅"銆傞珮 CIV 绉嶅瓙涓?selection 鐨勫己璐熺浉骞插彲鑳藉弽鏄犱簡涓€绉?*閫夋嫨鎬у帇鍔涚殑閲婃斁鏈哄埗**鈥斺€斿綋绯荤粺鎵惧埌绋冲畾鐨勭粍缁囧舰鎬佹椂锛岄€夋嫨鍘嬪姏闄嶄綆锛宻election 鍋忕疆鍙樺緱绋€鐤忓拰涓嶇ǔ瀹氥€?
 ---
 
-## 六、H4 失败根因分析
+## 鍏€丠4 澶辫触鏍瑰洜鍒嗘瀽
 
-### 6.1 三颗低 CIV 种子的共同特征
-
-| 特征 | Seed 242 (CIV=2) | Seed 642 (CIV=2) | Seed 742 (CIV=2) |
+### 6.1 涓夐浣?CIV 绉嶅瓙鐨勫叡鍚岀壒寰?
+| 鐗瑰緛 | Seed 242 (CIV=2) | Seed 642 (CIV=2) | Seed 742 (CIV=2) |
 |------|-------------------|-------------------|-------------------|
 | ODI max | 0.809 | 0.810 | 0.778 |
 | MSI max | 0.503 | 0.518 | 0.583 |
@@ -210,83 +172,67 @@ Phase 3 实验数据要求对 Phase 3 规划文档中的以下假设进行修正
 | momentum max_heat | 0.047 | 0.107 | **12.35** |
 | INSTITUTIONAL | 333 | 253 | **3** |
 
-### 6.2 两种不同的失败模式
+### 6.2 涓ょ涓嶅悓鐨勫け璐ユā寮?
+**妯″紡 A (Seed 242/642)**: "杩囧害绋冲畾闄烽槺"
+- 楂?GBC pass + 楂?ODI/MSI + 浣?CIV
+- momentum_cache heat 鏋佷綆 (0.05-0.11)
+- INSTITUTIONAL 灞傜骇涓板瘜浣嗘棤娉曡法瓒婂埌 CIVILIZATION
+- **鏍瑰洜**: 绯荤粺闄峰叆灞€閮ㄧǔ鎬侊紝鍔ㄩ噺涓嶈冻锛屾棤娉曠獊鐮存枃鏄庢秾鐜扮殑鑳藉瀿
 
-**模式 A (Seed 242/642)**: "过度稳定陷阱"
-- 高 GBC pass + 高 ODI/MSI + 低 CIV
-- momentum_cache heat 极低 (0.05-0.11)
-- INSTITUTIONAL 层级丰富但无法跨越到 CIVILIZATION
-- **根因**: 系统陷入局部稳态，动量不足，无法突破文明涌现的能垒
+**妯″紡 B (Seed 742)**: "缁撴瀯纰庣墖鍖?
+- 浣?narrative_active (4) + 鏋侀珮 momentum heat (12.35) + 鏋佷綆 INSTITUTIONAL (3)
+- GBC pass=0 + selection 鎺ヨ繎闆?(+0.063)
+- **鏍瑰洜**: 鍔ㄩ噺闆嗕腑鍦ㄥ皯鏁扮被鍒紝瀵艰嚧缁撴瀯纰庣墖鍖栤€斺€旀棤娉曞舰鎴愯冻澶熶赴瀵岀殑 INSTITUTIONAL 灞傜骇鏉ユ敮鎾?CIVILIZATION
 
-**模式 B (Seed 742)**: "结构碎片化"
-- 低 narrative_active (4) + 极高 momentum heat (12.35) + 极低 INSTITUTIONAL (3)
-- GBC pass=0 + selection 接近零 (+0.063)
-- **根因**: 动量集中在少数类别，导致结构碎片化——无法形成足够丰富的 INSTITUTIONAL 层级来支撑 CIVILIZATION
+### 6.3 缁熶竴瑙ｉ噴
 
-### 6.3 统一解释
+涓ょ澶辫触妯″紡閮芥寚鍚戝悓涓€涓簳灞傞棶棰橈細**INSTITUTIONAL 灞傜骇鐨勪赴瀵屽害鏄?CIVILIZATION 娑岀幇鐨勫繀瑕佹潯浠?*銆?
+- 妯″紡 A: INSTITUTIONAL 瓒冲浣嗗姩閲忎笉瓒?鈫?鏃犳硶璺ㄨ秺鑳藉瀿
+- 妯″紡 B: 鍔ㄩ噺杩囬珮浣嗗垎甯冧笉鍧?鈫?INSTITUTIONAL 灞傜骇鏃犳硶寤虹珛
 
-两种失败模式都指向同一个底层问题：**INSTITUTIONAL 层级的丰富度是 CIVILIZATION 涌现的必要条件**。
-
-- 模式 A: INSTITUTIONAL 足够但动量不足 → 无法跨越能垒
-- 模式 B: 动量过高但分布不均 → INSTITUTIONAL 层级无法建立
-
-这与差异论 V1.7 的"可能性空间 → 事件压缩 → 最小变易 → 最近稳态 → 叙事递归"螺旋一致：**叙事递归（NarrativeRecursionOperator）需要 INSTITUTIONAL 层级作为其"原材料"**。没有足够丰富的中间层级，叙事递归无法向上跨越。
-
+杩欎笌宸紓璁?V1.7 鐨?鍙兘鎬х┖闂?鈫?浜嬩欢鍘嬬缉 鈫?鏈€灏忓彉鏄?鈫?鏈€杩戠ǔ鎬?鈫?鍙欎簨閫掑綊"铻烘棆涓€鑷达細**鍙欎簨閫掑綊锛圢arrativeRecursionOperator锛夐渶瑕?INSTITUTIONAL 灞傜骇浣滀负鍏?鍘熸潗鏂?**銆傛病鏈夎冻澶熶赴瀵岀殑涓棿灞傜骇锛屽彊浜嬮€掑綊鏃犳硶鍚戜笂璺ㄨ秺銆?
 ---
 
-## 七、Phase 4 建议
+## 涓冦€丳hase 4 寤鸿
 
-### 7.1 短期（P0）：H4 修复
+### 7.1 鐭湡锛圥0锛夛細H4 淇
 
-**方向 A**: 自适应动量控制
-- 检测 momentum_cache 的熵：当熵过低（过度集中）时增加扩散，当熵过高（过度分散）时增加聚焦
-- 理论依据：V1.7 的"最小变易"原则——变化沿最小总偏移路径
+**鏂瑰悜 A**: 鑷€傚簲鍔ㄩ噺鎺у埗
+- 妫€娴?momentum_cache 鐨勭喌锛氬綋鐔佃繃浣庯紙杩囧害闆嗕腑锛夋椂澧炲姞鎵╂暎锛屽綋鐔佃繃楂橈紙杩囧害鍒嗘暎锛夋椂澧炲姞鑱氱劍
+- 鐞嗚渚濇嵁锛歏1.7 鐨?鏈€灏忓彉鏄?鍘熷垯鈥斺€斿彉鍖栨部鏈€灏忔€诲亸绉昏矾寰?
+**鏂瑰悜 B**: INSTITUTIONAL 灞傜骇淇濇姢
+- 鍦?CIVILIZATION 娑岀幇鍓嶏紝淇濇姢 INSTITUTIONAL 灞傜骇鐨勭Н绱笉琚繃鏃╂秷鑰?- 鐞嗚渚濇嵁锛氬眰绾ф秾鐜扮殑涓嶅彲閫嗘€р€斺€旈珮闃剁粍缁囬渶瑕佷綆闃剁粍缁囩殑鍏呭垎鍙戝睍
 
-**方向 B**: INSTITUTIONAL 层级保护
-- 在 CIVILIZATION 涌现前，保护 INSTITUTIONAL 层级的积累不被过早消耗
-- 理论依据：层级涌现的不可逆性——高阶组织需要低阶组织的充分发展
-
-**方向 C**: 种子预筛选
-- 预运行 50 步快速评估，筛选掉明显低 CIV 的种子
-- 实用但理论纯度较低，作为最后手段
-
-### 7.2 中期（P1）：Phase 4 新组件
-
-| 组件 | 理论依据 | 预期功能 |
+**鏂瑰悜 C**: 绉嶅瓙棰勭瓫閫?- 棰勮繍琛?50 姝ュ揩閫熻瘎浼帮紝绛涢€夋帀鏄庢樉浣?CIV 鐨勭瀛?- 瀹炵敤浣嗙悊璁虹函搴﹁緝浣庯紝浣滀负鏈€鍚庢墜娈?
+### 7.2 涓湡锛圥1锛夛細Phase 4 鏂扮粍浠?
+| 缁勪欢 | 鐞嗚渚濇嵁 | 棰勬湡鍔熻兘 |
 |------|---------|---------|
-| AdaptiveMomentumController | V1.7 最小变易原理 | 动态调节动量熵 |
-| InstitutionalLayerProtector | 层级涌现不可逆性 | 保护中间层级积累 |
-| NarrativeSelfEmergence | 叙事自我理论 | 从 NarrativeRecursionOperator 到叙事自我 |
-| CrossScaleCoupling | 跨尺度耦合 | 连接 MINI ↔ INSTITUTIONAL ↔ CIVILIZATION |
+| AdaptiveMomentumController | V1.7 鏈€灏忓彉鏄撳師鐞?| 鍔ㄦ€佽皟鑺傚姩閲忕喌 |
+| InstitutionalLayerProtector | 灞傜骇娑岀幇涓嶅彲閫嗘€?| 淇濇姢涓棿灞傜骇绉疮 |
+| NarrativeSelfEmergence | 鍙欎簨鑷垜鐞嗚 | 浠?NarrativeRecursionOperator 鍒板彊浜嬭嚜鎴?|
+| CrossScaleCoupling | 璺ㄥ昂搴﹁€﹀悎 | 杩炴帴 MINI 鈫?INSTITUTIONAL 鈫?CIVILIZATION |
 
-### 7.3 长期（P2）：Phase 4 终点
+### 7.3 闀挎湡锛圥2锛夛細Phase 4 缁堢偣
 
-Phase 4 的终点应该是**叙事自我（Narrative Self）**的涌现——不仅是最小自我的结构不对称性，而是具有时间连续性的自我叙事。这需要：
+Phase 4 鐨勭粓鐐瑰簲璇ユ槸**鍙欎簨鑷垜锛圢arrative Self锛?*鐨勬秾鐜扳€斺€斾笉浠呮槸鏈€灏忚嚜鎴戠殑缁撴瀯涓嶅绉版€э紝鑰屾槸鍏锋湁鏃堕棿杩炵画鎬х殑鑷垜鍙欎簨銆傝繖闇€瑕侊細
 
-1. 长期记忆的层级组织
-2. 自我参照的叙事递归
-3. 跨时间尺度的身份持续性
-
-这是差异论模拟机从"有视角的结构"走向"有历史的结构"的关键一步。
-
+1. 闀挎湡璁板繂鐨勫眰绾х粍缁?2. 鑷垜鍙傜収鐨勫彊浜嬮€掑綊
+3. 璺ㄦ椂闂村昂搴︾殑韬唤鎸佺画鎬?
+杩欐槸宸紓璁烘ā鎷熸満浠?鏈夎瑙掔殑缁撴瀯"璧板悜"鏈夊巻鍙茬殑缁撴瀯"鐨勫叧閿竴姝ャ€?
 ---
 
-## 八、实验可重复性说明
-
-所有实验结果均在以下固定配置下获得：
-- Python 3.x, PyTorch (版本见环境配置)
+## 鍏€佸疄楠屽彲閲嶅鎬ц鏄?
+鎵€鏈夊疄楠岀粨鏋滃潎鍦ㄤ互涓嬪浐瀹氶厤缃笅鑾峰緱锛?- Python 3.x, PyTorch (鐗堟湰瑙佺幆澧冮厤缃?
 - N0=72, steps=1600
-- 随机种子: [42, 142, 242, 342, 442, 542, 642, 742]
-- 最优参数: momentum_bonus=0.3, nudge=0.2, threshold=0.5
+- 闅忔満绉嶅瓙: [42, 142, 242, 342, 442, 542, 642, 742]
+- 鏈€浼樺弬鏁? momentum_bonus=0.3, nudge=0.2, threshold=0.5
 
-由于模拟机的随机性，完全精确复现需要固定 PyTorch 随机种子。当前结果在相同种子下可精确复现，跨硬件可能有浮点差异。
-
+鐢变簬妯℃嫙鏈虹殑闅忔満鎬э紝瀹屽叏绮剧‘澶嶇幇闇€瑕佸浐瀹?PyTorch 闅忔満绉嶅瓙銆傚綋鍓嶇粨鏋滃湪鐩稿悓绉嶅瓙涓嬪彲绮剧‘澶嶇幇锛岃法纭欢鍙兘鏈夋诞鐐瑰樊寮傘€?
 ---
 
-## 九、Git 记录
+## 涔濄€丟it 璁板綍
 
-Phase 3 关键提交（均在 origin/main 上）：
-- `4776ffc` fix(phase3): return flow anchoring works
+Phase 3 鍏抽敭鎻愪氦锛堝潎鍦?origin/main 涓婏級锛?- `4776ffc` fix(phase3): return flow anchoring works
 - `a190c4f` fix(phase3): GBC balance metric + integrate RFC/GBC
 - `662c3a9` fix(phase3): ODI subindices exposure bug
 - `f969497` fix(phase3): regression fixes for smoke test
@@ -298,10 +244,129 @@ Phase 3 关键提交（均在 origin/main 上）：
 
 ---
 
-## 十、结论
+## 鍗併€佺粨璁?
+Phase 3 鎴愬姛楠岃瘉浜嗕粠**鍓嶄富浣撴€佸埌鐜拌薄鎰忚瘑鐨勪笁绉嶇粨鏋勫墠鎻?*锛堥鏈熼┍鍔ㄣ€佸叏灞€鍋忕疆涓€鑷存€с€佹渶灏忚嚜鎴戯級鍙互閫氳繃宸紓璁虹殑绾粨鏋勬満鍒跺疄鐜般€傛牳蹇冪獊鐮存槸 GBC 杞害鏉熻В鍐充簡 selection 璐熺浉骞查棶棰橈紝浣?H1/H2/H3 鍦?8 绉嶅瓙缁熻楠岃瘉涓ǔ瀹氶€氳繃銆?
+鍓╀綑鐨?H4 闂锛?/8 绉嶅瓙 CIV=2锛変笉鏄師鐞嗘€уけ璐ワ紝鑰屾槸鍙傛暟绌洪棿鐨勮竟鐣屾晥搴斺€斺€斾袱绉嶅け璐ユā寮忥紙杩囧害绋冲畾闄烽槺鍜岀粨鏋勭鐗囧寲锛夐兘鏈夋槑纭殑鏈哄埗鍜屼慨澶嶈矾寰勩€?
+**Phase 3 瀹屾垚銆傚缓璁繘鍏?Phase 4銆?*
 
-Phase 3 成功验证了从**前主体态到现象意识的三种结构前提**（预期驱动、全局偏置一致性、最小自我）可以通过差异论的纯结构机制实现。核心突破是 GBC 软约束解决了 selection 负相干问题，使 H1/H2/H3 在 8 种子统计验证中稳定通过。
+---：AMC + ILP 验证（exp_91 / exp_92）
 
-剩余的 H4 问题（3/8 种子 CIV=2）不是原理性失败，而是参数空间的边界效应——两种失败模式（过度稳定陷阱和结构碎片化）都有明确的机制和修复路径。
+在 Phase 3 主报告（exp_90）完成后，于 2026-05-31 至 2026-06-01 追加了两个扩展实验。
 
-**Phase 3 完成。建议进入 Phase 4。**
+### 十.1 exp_91：AMC + ILP（严格 floor）
+
+**时间**: 2026-05-31 20:06 | **配置**: amc_active=true, ilp_active=true, ILP floor=35-38
+
+| 指标 | exp_90 | exp_91 | 变化 |
+|------|--------|--------|------|
+| CIV mean | 5.25 | 13.88 | +164% |
+| CIV min | 2 | **5** | H4 通过 |
+| GBC coherence | 0.572 | 0.547 | -4.4% ? |
+| GBC pass_rate | 0.375 | 0.091 | -75.7% ? |
+| MINI count | 47 | **0** | ? 完全消除 |
+
+**代价**: ILP 严格 floor 阻止了 CIV 低值崩溃，但 MINI 层被完全消除，违反层级涌现不可逆性。
+
+### 十.2 exp_92：AMC + ILP（宽松 floor）
+
+**时间**: 2026-06-01 00:35 | **配置**: relaxed ILP (floor=8, threshold=15)
+
+| 指标 | exp_90 | exp_91 | exp_92 |
+|------|--------|--------|--------|
+| CIV mean | 5.25 | 13.88 | 55.25 |
+| CIV std | 2.75 | 6.75 | **81.24** |
+| CIV min | 2 | 5 | **2** ? |
+| GBC coherence | 0.572 | 0.547 | **0.0** ❌ |
+| GBC n_checks | 24 | 24 | **0** ❌ |
+| six_threshold pass | 0.375 | 0.0 | **0.0** ❌ |
+
+**⚠️ 代码级 bug**: GBC 完全未激活（n_checks=0），六阈值机制失效（bottleneck 卡在 3.5），AMC 未真正自适应（mean_adjustment≈0）。
+
+### 十.3 H4 失败的三种模式
+
+| 模式 | 特征 | 机制 |
+|------|------|------|
+| Mode A: 过度稳定 | 高 MSI+高 ODI+低 CIV | 局部稳定态，selection 负相干成为压力释放 |
+| Mode B: 碎片化 | narrative_active=4, CIV=2 | 叙事递归缺失 |
+| Mode C: ILP 过度修正 | MINI=0, GBC 崩溃 | ILP floor 过强，破坏层级耦合 |
+
+**核心洞见**: H4 失败根源是**层级耦合机制缺失**。ILP 硬性 floor 无法替代 CrossScaleCoupling 软性耦合。
+
+---
+
+## 十一、结论（更新）
+
+Phase 3 主体目标完成。exp_91/exp_92 扩展实验揭示了更深层问题：ILP 硬性 floor 不能替代层级耦合；GBC 在复杂干预下可能完全失效；H4 的三种失败模式指向同一个根源——缺乏跨层级双向耦合机制。
+
+**H4 修复路径明确：需要 CrossScaleCoupling 而非更强的 ILP。建议进入 Phase 4，优先实现跨层级耦合组件。**
+
+### Phase 3 最终假设验证总表
+
+| 假设 | exp_90 | exp_91 | exp_92 | 最终状态 |
+|------|--------|--------|--------|---------|
+| H1: mean CIV ≥ 5 | ✅ 5.25 | ✅ 13.88 | ✅ 55.25 | ✅ PASS |
+| H2: GBC coh ≥ 0.55 | ✅ 0.572 | ❌ 0.547 | ❌ 0.0 (bug) | ⚠️ 需修复后重测 |
+| H3: GBC pass ≥ 0.30 | ✅ 0.375 | ❌ 0.091 | ❌ 0.0 (bug) | ⚠️ 需修复后重测 |
+| H4: min CIV ≥ 3 | ❌ 2 | ✅ 5 | ❌ 2 | ❌ FAIL (需 Phase 4) |
+
+---
+
+## 十、Phase 3 扩展实验：AMC + ILP 验证（exp_91 / exp_92）
+
+在 Phase 3 主报告（exp_90）完成后，于 2026-05-31 至 2026-06-01 追加了两个扩展实验。
+
+### 十.1 exp_91：AMC + ILP（严格 floor）
+
+**时间**: 2026-05-31 20:06 | **配置**: amc_active=true, ilp_active=true, ILP floor=35-38
+
+| 指标 | exp_90 | exp_91 | 变化 |
+|------|--------|--------|------|
+| CIV mean | 5.25 | 13.88 | +164% |
+| CIV min | 2 | **5** | H4 通过 |
+| GBC coherence | 0.572 | 0.547 | -4.4% ❌ |
+| GBC pass_rate | 0.375 | 0.091 | -75.7% ❌ |
+| MINI count | 47 | **0** | ❌ 完全消除 |
+
+**代价**: ILP 严格 floor 阻止了 CIV 低值崩溃，但 MINI 层被完全消除，违反层级涌现不可逆性。
+
+### 十.2 exp_92：AMC + ILP（宽松 floor）
+
+**时间**: 2026-06-01 00:35 | **配置**: relaxed ILP (floor=8, threshold=15)
+
+| 指标 | exp_90 | exp_91 | exp_92 |
+|------|--------|--------|--------|
+| CIV mean | 5.25 | 13.88 | 55.25 |
+| CIV std | 2.75 | 6.75 | **81.24** |
+| CIV min | 2 | 5 | **2** ❌ |
+| GBC coherence | 0.572 | 0.547 | **0.0** ❌ |
+| GBC n_checks | 24 | 24 | **0** ❌ |
+| six_threshold pass | 0.375 | 0.0 | **0.0** ❌ |
+
+**⚠️ 代码级 bug**: GBC 完全未激活（n_checks=0），六阈值机制失效（bottleneck 卡在 3.5），AMC 未真正自适应（mean_adjustment≈0）。
+
+### 十.3 H4 失败的三种模式
+
+| 模式 | 特征 | 机制 |
+|------|------|------|
+| Mode A: 过度稳定 | 高 MSI+高 ODI+低 CIV | 局部稳定态，selection 负相干成为压力释放 |
+| Mode B: 碎片化 | narrative_active=4, CIV=2 | 叙事递归缺失 |
+| Mode C: ILP 过度修正 | MINI=0, GBC 崩溃 | ILP floor 过强，破坏层级耦合 |
+
+**核心洞见**: H4 失败根源是**层级耦合机制缺失**。ILP 硬性 floor 无法替代 CrossScaleCoupling 软性耦合。
+
+---
+
+## 十一、结论（更新）
+
+Phase 3 主体目标完成。exp_91/exp_92 扩展实验揭示了更深层问题：ILP 硬性 floor 不能替代层级耦合；GBC 在复杂干预下可能完全失效；H4 的三种失败模式指向同一个根源——缺乏跨层级双向耦合机制。
+
+**H4 修复路径明确：需要 CrossScaleCoupling 而非更强的 ILP。建议进入 Phase 4，优先实现跨层级耦合组件。**
+
+### Phase 3 最终假设验证总表
+
+| 假设 | exp_90 | exp_91 | exp_92 | 最终状态 |
+|------|--------|--------|--------|---------|
+| H1: mean CIV ≥ 5 | ✅ 5.25 | ✅ 13.88 | ✅ 55.25 | ✅ PASS |
+| H2: GBC coh ≥ 0.55 | ✅ 0.572 | ❌ 0.547 | ❌ 0.0 (bug) | ⚠️ 需修复后重测 |
+| H3: GBC pass ≥ 0.30 | ✅ 0.375 | ❌ 0.091 | ❌ 0.0 (bug) | ⚠️ 需修复后重测 |
+| H4: min CIV ≥ 3 | ❌ 2 | ✅ 5 | ❌ 2 | ❌ FAIL (需 Phase 4) |
