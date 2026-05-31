@@ -295,7 +295,8 @@ class AxiomConstraints:
                 return 0
             target_unsealed = unsealed_total / 2.0
             excess = max(0, unsealed_ones - target_unsealed)
-            return int(excess)
+            # A5 守恒：吸收量不超过本步注入量（内部0→1翻转不额外触发吸收）
+            return min(int(excess), n_injected)
         else:
             sink = n_injected
             sink = min(sink, int(w))
