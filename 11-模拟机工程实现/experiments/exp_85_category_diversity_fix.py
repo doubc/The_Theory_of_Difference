@@ -4,19 +4,11 @@ Phase 3 Experiment 13: Validate cache diversity fix (exp_84 root cause)
 
 Root cause (exp_84): All DifferenceSignal objects have source_layer==target_layer,
 so _assign_category() always returns internal_layer_0 for all nodes. The momentum
-cache therefore has only 1 category, limiting the mechanism's effectiveness.
+cache therefore has only 1 category.
 
-Fix applied: _assign_category() now calls _subcategorize_same_layer() which
-differentiates same-layer signals based on:
-  - Active bit positions in the direction vector (4 regions: R0-R3)
-  - Signal magnitude (3 levels: low/mid/high)
-
-This yields up to 12 sub-categories per layer, enabling the momentum cache
-to track multiple distinct hotspots.
-
-Purpose:
-  Validate that the fix increases cache diversity without breaking CIVILIZATION
-  activation. Compare against exp_84 baseline.
+Fix: _assign_category() now calls _subcategorize_same_layer() which
+differentiates signals based on active bit positions (4 regions) and
+magnitude (3 levels), yielding up to 12 sub-categories per layer.
 
 Design:
   - Seeds: [42, 142, 242, 342] (same as exp_84 for direct comparison)
@@ -62,13 +54,9 @@ from engine.six_threshold_detector import SixThresholdDetector
 
 
 class NarrativeMomentumConnector(NarrativeConnector):
-    """带叙事动量的连接器 — CIVILIZATION 热点缓存 (same as exp_84)"""
-
-    def __init__(self, strength_threshold: float = 0.3,
-                 max_chain_length: int = 10,
-                 category_similarity_threshold: float = 0.5,
-                 momentum_decay: float = 0.95,
-                 momentum_bonus: float = 0.3):
+    def __init__(self, strength_threshold=0.3, max_chain_length=10,
+                 category_similarity_threshold=0.5, momentum_decay=0.95,
+                 momentum_bonus=0.3):
         super().__init__(
             strength_threshold=strength_threshold,
             max_chain_length=max_chain_length,
@@ -78,15 +66,12 @@ class NarrativeMomentumConnector(NarrativeConnector):
         self.momentum_bonus = momentum_bonus
         self.civ_category_cache: Dict[str, float] = {}
 
-    def connect(self, nodes: List[NarrativeNode],
-                timestamp: int) -> List[CausalChain]:
+    def connect(self, nodes, timestamp):
         for cat in list(self.civ_category_cache.keys()):
             self.civ_category_cache[cat] *= self.momentum_decay
             if self.civ_category_cache[cat] < 0.01:
                 del self.civ_category_cache[cat]
-
         chains = super().connect(nodes, timestamp)
-
         for chain in chains:
             if len(chain.node_ids) >= 5:
                 for node_id in chain.node_ids:
@@ -98,8 +83,7 @@ class NarrativeMomentumConnector(NarrativeConnector):
                         )
         return chains
 
-    def _compute_edge_strength(self, a: NarrativeNode,
-                                b: NarrativeNode) -> float:
+    def _compute_edge_strength(self, a, b):
         base_strength = super()._compute_edge_strength(a, b)
         a_heat = self.civ_category_cache.get(a.category, 0.0)
         b_heat = self.civ_category_cache.get(b.category, 0.0)
@@ -110,9 +94,10 @@ class NarrativeMomentumConnector(NarrativeConnector):
             base_strength *= bonus
         return base_strength
 
-    def get_cache_stats(self) -> Dict:
+    def get_cache_stats(self):
         if not self.civ_category_cache:
-            return {'n_categories': 0, 'max_heat': 0.0, 'mean_heat': 0.0}
+            return {'n_categories': 0, 'max_heat': 0.0, 'mean_heat': 0.0,
+                    'categories': {}}
         heats = list(self.civ_category_cache.values())
         return {
             'n_categories': len(heats),
@@ -125,15 +110,11 @@ class NarrativeMomentumConnector(NarrativeConnector):
 
 
 class MomentumNarrativeOperator(NarrativeRecursionOperator):
-    """带叙事动量的叙事递归算子 (same as exp_84)"""
-
-    def __init__(self, bias_dimension: int = 128,
-                 filter_magnitude_threshold: float = 0.3,
-                 connector_strength_threshold: float = 0.3,
-                 verifier_consistency_threshold: float = 0.5,
-                 narrative_decay_rate: float = 0.9,
-                 momentum_decay: float = 0.95,
-                 momentum_bonus: float = 0.3):
+    def __init__(self, bias_dimension=128, filter_magnitude_threshold=0.02,
+                 connector_strength_threshold=0.1,
+                 verifier_consistency_threshold=0.3,
+                 narrative_decay_rate=0.9, momentum_decay=0.95,
+                 momentum_bonus=0.3):
         self.filter = NarrativeFilter(
             magnitude_threshold=filter_magnitude_threshold)
         self.namer = NarrativeNamer()
@@ -152,86 +133,76 @@ class MomentumNarrativeOperator(NarrativeRecursionOperator):
         self._total_actions = 0
         self._validated_actions = 0
 
-    def get_momentum_stats(self) -> Dict:
+    def get_momentum_stats(self):
         return self.connector.get_cache_stats()
 
 
-def extract_narrative_level_counts(narrative_summary: Dict) -> Dict:
-    level_dist = narrative_summary.get('narrative_level_distribution', {})
-    return {
-        'MINI': level_dist.get('MINI_NARRATIVE', 0) or level_dist.get('MINI', 0),
-        'INSTITUTIONAL': level_dist.get('INSTITUTIONAL', 0),
-        'CIVILIZATION': level_dist.get('CIVILIZATION', 0),
-    }
-
-
-def run_single_seed(seed: int, N0: int = 72, steps: int = 1600,
-                     sample_interval: int = 10) -> Dict:
-    """Run a single seed experiment"""
+def run_single_seed(N0=72, steps=1600, seed=142, sample_interval=10):
     torch.manual_seed(seed)
     np.random.seed(seed)
 
-    N = N0
-    bias_dim = 128
-
-    evolver = HierarchicalEvolver(
-        N=N,
-        bias_dimension=bias_dim,
-        device='cpu',
+    return_flow_channel = ReturnFlowChannel(
+        anchor_threshold=0.05, decay_rate=0.01, min_retention_steps=10,
     )
-
-    # Inject Phase 3 components
-    return_flow = ReturnFlowChannel(N=N)
-    unsealing = UnsealingMechanism(N=N)
-    pre_subj = PreSubjectivityConvergence(N=N)
-    odi = OrganizationalDensityIndex(N=N)
-    msi_detector = MinimalSelfDetector(N=N)
-    gbc = GlobalBiasConstraint(N=N, min_mechanisms_required=4)
-    bias_memory = PersistentBiasMemory(N=N)
-    cumulative_selector = CumulativeSelector(N=N)
-    anticipatory = AnticipatoryBiasEngine(N=N, bias_dimension=bias_dim)
-    counterfactual = CounterfactualEngine(N=N, bias_dimension=bias_dim)
+    unsealing_mechanism = UnsealingMechanism(
+        l1_coupling_threshold=0.20, l1_stability_threshold=0.35,
+        l2_coupling_threshold=0.40, l2_stability_threshold=0.55,
+    )
+    pre_subjectivity = PreSubjectivityConvergence(
+        coupling_threshold=0.25, stability_threshold=0.40, dynamic_threshold=True,
+    )
+    odi = OrganizationalDensityIndex(
+        temporal_window=10, densification_threshold=0.005, use_refined_zones=True,
+    )
+    msi_detector = MinimalSelfDetector(config={
+        'odi_activation_threshold': 0.35, 'odi_saturation_threshold': 0.70,
+        'asymmetry_window': 10, 'asymmetry_threshold': 0.15,
+        'min_parts': 3, 'history_window': 8, 'history_dependency_threshold': 0.15,
+        'min_history_depth': 5, 'self_reference_window': 8,
+        'self_reference_threshold': 0.05, 'baseline_correlation_threshold': 0.2,
+        'msi_activation_threshold': 0.20, 'msi_emergence_threshold': 0.35,
+        'min_active_conditions': 1,
+    })
+    gbc = GlobalBiasConstraint(
+        coherence_threshold=0.5, balance_threshold=0.3,
+        min_mechanisms_required=4, geometric_weighting=True,
+    )
+    narrative = MomentumNarrativeOperator(
+        bias_dimension=128, filter_magnitude_threshold=0.02,
+        connector_strength_threshold=0.1, verifier_consistency_threshold=0.3,
+        narrative_decay_rate=0.9, momentum_decay=0.95, momentum_bonus=0.3,
+    )
+    anticipatory = AnticipatoryBiasEngine(
+        memory=PersistentBiasMemory(),
+        config={'default_horizon': 5, 'learning_rate': 0.01},
+    )
+    counterfactual = CounterfactualEngine(config={
+        'divergence_threshold': 0.1, 'max_branches': 4,
+    })
     six_threshold = SixThresholdDetector()
 
-    evolver.return_flow_channel = return_flow
-    evolver.unsealing_mechanism = unsealing
-    evolver.pre_subjectivity_convergence = pre_subj
-    evolver.organizational_density_index = odi
-    evolver.minimal_self_detector = msi_detector
-    evolver.global_bias_constraint = gbc
-    evolver.persistent_bias_memory = bias_memory
-    evolver.cumulative_selector = cumulative_selector
-    evolver.anticipatory_bias_engine = anticipatory
-    evolver.counterfactual_engine = counterfactual
-    evolver.six_threshold_detector = six_threshold
-
-    # Create momentum narrative operator
-    narrative_op = MomentumNarrativeOperator(
-        bias_dimension=bias_dim,
-        filter_magnitude_threshold=0.3,
-        connector_strength_threshold=0.3,
-        verifier_consistency_threshold=0.5,
-        narrative_decay_rate=0.9,
-        momentum_decay=0.95,
-        momentum_bonus=0.3,
+    evolver = HierarchicalEvolver(
+        N0=N0, steps_per_layer=steps, sample_interval=sample_interval,
+        max_layers=1, p1_eval_interval=sample_interval,
+        phase2_verbose=False, phase3_verbose=False,
+        persistent_bias_memory=PersistentBiasMemory(),
+        cumulative_selector=CumulativeSelector(window_size=20),
+        organizational_density_index=odi, six_threshold_detector=six_threshold,
+        unsealing_mechanism=unsealing_mechanism, return_flow_channel=return_flow_channel,
+        pre_subjectivity_convergence=pre_subjectivity, minimal_self_detector=msi_detector,
+        anticipatory_bias_engine=anticipatory, counterfactual_engine=counterfactual,
+        narrative_recursion_operator=narrative, global_bias_constraint=gbc,
     )
-    evolver.narrative_recursion_operator = narrative_op
 
-    # Run evolution
-    step_results = []
-    for step in range(steps):
-        result = evolver.step()
-        if step % sample_interval == 0:
-            entry = {
-                'step': step,
-                'odi': result.get('odi', {}),
-                'msi': result.get('minimal_self', {}),
-                'narrative': result.get('narrative_recursion', {}),
-                'gbc': result.get('global_bias_constraint', {}),
-            }
-            step_results.append(entry)
+    print(f"  [seed={seed}] Running...", flush=True)
+    start = time.time()
+    result = evolver.run()
+    elapsed = time.time() - start
+    print(f"  [seed={seed}] Done in {elapsed:.1f}s", flush=True)
 
-    # Analyze results
+    layer_0 = result.get('layer_results', [{}])[0]
+    step_results = layer_0.get('phase2_step_results', [])
+
     active_count = 0
     civ_count = 0
     level_counts = {'MINI': 0, 'INSTITUTIONAL': 0, 'CIVILIZATION': 0}
@@ -240,11 +211,11 @@ def run_single_seed(seed: int, N0: int = 72, steps: int = 1600,
 
     for entry in step_results:
         odi_val = entry.get('odi', {}).get('value', 0.0) if isinstance(entry.get('odi'), dict) else 0.0
-        msi_val = entry.get('msi', {}).get('msi', 0.0) if isinstance(entry.get('msi'), dict) else 0.0
+        msi_val = entry.get('minimal_self', {}).get('msi', 0.0) if isinstance(entry.get('minimal_self'), dict) else 0.0
         odi_values.append(odi_val)
         msi_values.append(msi_val)
 
-        narrative_data = entry.get('narrative', {})
+        narrative_data = entry.get('narrative_recursion', {})
         if narrative_data.get('bias_correction_applied', False):
             active_count += 1
         level = narrative_data.get('narrative_level', '')
@@ -254,10 +225,10 @@ def run_single_seed(seed: int, N0: int = 72, steps: int = 1600,
         for k in level_counts:
             level_counts[k] += level_snap.get(k, 0)
 
-    odi_arr = np.array(odi_values)
-    msi_arr = np.array(msi_values)
+    odi_arr = np.array(odi_values) if odi_values else np.array([0.0])
+    msi_arr = np.array(msi_values) if msi_values else np.array([0.0])
 
-    momentum_stats = narrative_op.get_momentum_stats()
+    momentum_stats = narrative.get_momentum_stats()
 
     return {
         'seed': seed,
@@ -272,6 +243,7 @@ def run_single_seed(seed: int, N0: int = 72, steps: int = 1600,
         'msi_max': round(float(np.max(msi_arr)), 4),
         'msi_mean': round(float(np.mean(msi_arr)), 4),
         'momentum_cache': momentum_stats,
+        'elapsed_s': round(elapsed, 1),
     }
 
 
@@ -284,48 +256,36 @@ def main():
     all_results = []
 
     for seed in seeds:
-        print(f"\n--- Seed {seed} ---")
-        t0 = time.time()
-        result = run_single_seed(seed=seed, N0=72, steps=1600, sample_interval=10)
-        elapsed = time.time() - t0
-
-        result['elapsed_s'] = round(elapsed, 1)
+        print(f"\n--- Seed {seed} ---", flush=True)
+        result = run_single_seed(N0=72, steps=1600, seed=seed, sample_interval=10)
         all_results.append(result)
 
-        print(f"  CIVILIZATION: {result['civilization_steps']}")
-        print(f"  Level counts: {result['level_counts']}")
-        print(f"  ODI max: {result['odi_max']}, MSI max: {result['msi_max']}")
-        print(f"  Cache diversity: {result['momentum_cache']['n_categories']} categories")
-        print(f"  Cache categories: {result['momentum_cache'].get('categories', {})}")
-        print(f"  Time: {elapsed:.1f}s")
+        print(f"  CIVILIZATION: {result['civilization_steps']}", flush=True)
+        print(f"  Level counts: {result['level_counts']}", flush=True)
+        print(f"  ODI max: {result['odi_max']}, MSI max: {result['msi_max']}", flush=True)
+        print(f"  Cache diversity: {result['momentum_cache']['n_categories']} categories", flush=True)
+        print(f"  Cache categories: {result['momentum_cache'].get('categories', {})}", flush=True)
+        print(f"  Time: {result['elapsed_s']}s", flush=True)
 
-    # Cross-seed aggregation
     civ_values = [r['civilization_steps'] for r in all_results]
     cache_div_values = [r['momentum_cache']['n_categories'] for r in all_results]
 
-    print("\n" + "=" * 70)
-    print("CROSS-SEED SUMMARY")
-    print("=" * 70)
-    print(f"  CIVILIZATION: mean={np.mean(civ_values):.1f}, std={np.std(civ_values):.2f}, range=[{min(civ_values)}, {max(civ_values)}]")
-    print(f"  Cache diversity: mean={np.mean(cache_div_values):.1f}, range=[{min(cache_div_values)}, {max(cache_div_values)}]")
+    print("\n" + "=" * 70, flush=True)
+    print("CROSS-SEED SUMMARY", flush=True)
+    print("=" * 70, flush=True)
+    print(f"  CIV: mean={np.mean(civ_values):.1f}, std={np.std(civ_values):.2f}, range=[{min(civ_values)}, {max(civ_values)}]", flush=True)
+    print(f"  Cache diversity: mean={np.mean(cache_div_values):.1f}, range=[{min(cache_div_values)}, {max(cache_div_values)}]", flush=True)
 
-    # Hypothesis tests
     h1 = all(d >= 3 for d in cache_div_values)
     h2 = all(c >= 5 for c in civ_values)
-    h3 = True  # ODI/MSI stability check
 
-    print(f"\n  H1 (cache diversity >= 3): {'PASS' if h1 else 'FAIL'}")
-    print(f"  H2 (CIV >= 5 all seeds): {'PASS' if h2 else 'FAIL'}")
-    print(f"  H3 (metrics stable): {'PASS' if h3 else 'FAIL'}")
+    print(f"\n  H1 (cache diversity >= 3): {'PASS' if h1 else 'FAIL'}", flush=True)
+    print(f"  H2 (CIV >= 5 all seeds): {'PASS' if h2 else 'FAIL'}", flush=True)
 
-    # Comparison with exp_84 baseline
-    exp84_civ_mean = 6.0
-    exp84_cache_div = 1
-    print(f"\n  vs exp_84 baseline:")
-    print(f"    CIV: exp_84={exp84_civ_mean} -> exp_85={np.mean(civ_values):.1f}")
-    print(f"    Cache div: exp_84={exp84_cache_div} -> exp_85={np.mean(cache_div_values):.1f}")
+    print(f"\n  vs exp_84 baseline:", flush=True)
+    print(f"    CIV: exp_84=6.0 -> exp_85={np.mean(civ_values):.1f}", flush=True)
+    print(f"    Cache div: exp_84=1 -> exp_85={np.mean(cache_div_values):.1f}", flush=True)
 
-    # Save results
     ts = datetime.now().strftime('%Y%m%d_%H%M%S')
     output_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                 f'exp_85_results_{ts}.json')
@@ -341,10 +301,9 @@ def main():
                 'cache_diversity_mean': round(float(np.mean(cache_div_values)), 2),
                 'h1_cache_diversity': h1,
                 'h2_civ_maintained': h2,
-                'h3_metrics_stable': h3,
             }
         }, f, indent=2, ensure_ascii=False)
-    print(f"\n  Results saved to: {output_path}")
+    print(f"\n  Results saved to: {output_path}", flush=True)
 
 
 if __name__ == '__main__':

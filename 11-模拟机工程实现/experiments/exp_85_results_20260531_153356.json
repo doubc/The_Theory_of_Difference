@@ -1,0 +1,135 @@
+{
+  "experiment": "exp_85_category_diversity_fix",
+  "timestamp": "20260531_153356",
+  "seeds": [
+    42,
+    142,
+    242,
+    342
+  ],
+  "per_seed": [
+    {
+      "seed": 42,
+      "steps": 1600,
+      "N0": 72,
+      "narrative_active_steps": 41,
+      "narrative_total_sampled": 160,
+      "civilization_steps": 4,
+      "level_counts": {
+        "MINI": 0,
+        "INSTITUTIONAL": 256,
+        "CIVILIZATION": 153
+      },
+      "odi_max": 0.8207,
+      "odi_mean": 0.0747,
+      "msi_max": 0.5153,
+      "msi_mean": 0.2738,
+      "momentum_cache": {
+        "n_categories": 4,
+        "max_heat": 0.1491,
+        "mean_heat": 0.0748,
+        "categories": {
+          "internal_layer_0_R3_high": 0.149,
+          "internal_layer_0_R0_high": 0.073,
+          "internal_layer_0_R2_high": 0.044,
+          "internal_layer_0_R1_high": 0.034
+        }
+      },
+      "elapsed_s": 43.7
+    },
+    {
+      "seed": 142,
+      "steps": 1600,
+      "N0": 72,
+      "narrative_active_steps": 32,
+      "narrative_total_sampled": 160,
+      "civilization_steps": 8,
+      "level_counts": {
+        "MINI": 0,
+        "INSTITUTIONAL": 143,
+        "CIVILIZATION": 203
+      },
+      "odi_max": 0.8325,
+      "odi_mean": 0.0727,
+      "msi_max": 0.4914,
+      "msi_mean": 0.2632,
+      "momentum_cache": {
+        "n_categories": 4,
+        "max_heat": 1.908,
+        "mean_heat": 1.0466,
+        "categories": {
+          "internal_layer_0_R1_high": 1.908,
+          "internal_layer_0_R2_high": 1.435,
+          "internal_layer_0_R3_high": 0.504,
+          "internal_layer_0_R0_high": 0.339
+        }
+      },
+      "elapsed_s": 42.7
+    },
+    {
+      "seed": 242,
+      "steps": 1600,
+      "N0": 72,
+      "narrative_active_steps": 38,
+      "narrative_total_sampled": 240,
+      "civilization_steps": 9,
+      "level_counts": {
+        "MINI": 0,
+        "INSTITUTIONAL": 282,
+        "CIVILIZATION": 279
+      },
+      "odi_max": 0.7939,
+      "odi_mean": 0.066,
+      "msi_max": 0.3454,
+      "msi_mean": 0.2265,
+      "momentum_cache": {
+        "n_categories": 4,
+        "max_heat": 1.5474,
+        "mean_heat": 1.0575,
+        "categories": {
+          "internal_layer_0_R3_high": 1.547,
+          "internal_layer_0_R1_high": 1.409,
+          "internal_layer_0_R2_high": 0.968,
+          "internal_layer_0_R0_high": 0.305
+        }
+      },
+      "elapsed_s": 61.2
+    },
+    {
+      "seed": 342,
+      "steps": 1600,
+      "N0": 72,
+      "narrative_active_steps": 80,
+      "narrative_total_sampled": 240,
+      "civilization_steps": 15,
+      "level_counts": {
+        "MINI": 0,
+        "INSTITUTIONAL": 1092,
+        "CIVILIZATION": 805
+      },
+      "odi_max": 0.7148,
+      "odi_mean": 0.0657,
+      "msi_max": 0.3183,
+      "msi_mean": 0.1984,
+      "momentum_cache": {
+        "n_categories": 4,
+        "max_heat": 2.6089,
+        "mean_heat": 1.9386,
+        "categories": {
+          "internal_layer_0_R2_high": 2.609,
+          "internal_layer_0_R1_high": 2.538,
+          "internal_layer_0_R3_high": 1.55,
+          "internal_layer_0_R0_high": 1.057
+        }
+      },
+      "elapsed_s": 55.9
+    }
+  ],
+  "cross_seed": {
+    "civ_mean": 9.0,
+    "civ_std": 3.94,
+    "cache_diversity_mean": 4.0,
+    "h1_cache_diversity": true,
+    "h2_civ_maintained": false
+  }
+}
