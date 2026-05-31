@@ -1,0 +1,108 @@
+{
+  "experiment": "exp_83_narrative_momentum",
+  "timestamp": "20260531_144447",
+  "description": "Narrative momentum — CIVILIZATION sustained activation via category cache",
+  "intervention": {
+    "name": "NarrativeMomentumConnector",
+    "mechanism": "CIVILIZATION chain categories cached as hotspots; matching nodes get connection bonus",
+    "parameters": {
+      "momentum_decay": 0.95,
+      "momentum_bonus": 0.3
+    }
+  },
+  "hypothesis": "Momentum cache helps CIVILIZATION persist beyond early phase (Q3/Q4 activation)",
+  "comparison_target": "exp_82 (1600 steps, no momentum, CIVILIZATION=6 all in Q1)",
+  "diagnostic": {
+    "seed": 142,
+    "N0": 72,
+    "steps": 1600,
+    "sample_interval": 10,
+    "elapsed_seconds": 61.4,
+    "n_steps_recorded": 240,
+    "odi": {
+      "odi_min": 0.0,
+      "odi_max": 0.720548,
+      "odi_final": 0.680635,
+      "odi_mean": 0.064746,
+      "odi_q1_mean": 0.061079,
+      "odi_q2_mean": 0.065301,
+      "odi_q3_mean": 0.06579,
+      "odi_q4_mean": 0.066816
+    },
+    "msi": {
+      "msi_min": 0.0,
+      "msi_max": 0.335375,
+      "msi_final": 0.263459,
+      "msi_mean": 0.212855,
+      "msi_q1_mean": 0.070461,
+      "msi_q2_mean": 0.251177,
+      "msi_q3_mean": 0.267333,
+      "msi_q4_mean": 0.26245
+    },
+    "narrative": {
+      "narrative_active_steps": 74,
+      "narrative_active_ratio": 0.3083,
+      "narrative_correction_steps": 74,
+      "msi_at_active_mean": 0.1865,
+      "msi_at_active_max": 0.3354,
+      "odi_at_active_mean": 0.0762,
+      "odi_at_active_max": 0.6834,
+      "mean_correction_norm": 0.752781,
+      "max_correction_norm": 0.752782,
+      "civilization_activated": true,
+      "civilization_steps": [
+        10,
+        20,
+        30,
+        40,
+        30,
+        80,
+        170,
+        210
+      ],
+      "civilization_n_steps": 8,
+      "civilization_msi_mean": 0.1339,
+      "civilization_odi_mean": 0.0
+    },
+    "civilization_accumulation": {
+      "cumulative_civ_final": 8,
+      "civ_rate_by_quarter": [
+        4,
+        0,
+        3,
+        1
+      ],
+      "civ_acceleration": "stable_or_decreasing"
+    },
+    "narrative_operator_summary": {
+      "total_narrative_records": 74,
+      "validated_records": 74,
+      "validation_rate": 1.0,
+      "total_actions": 102,
+      "validated_actions": 102,
+      "action_validation_rate": 1.0,
+      "active_narratives": 74,
+      "narrative_level_distribution": {
+        "MINI_NARRATIVE": 42,
+        "INSTITUTIONAL": 24,
+        "CIVILIZATION": 8
+      },
+      "latest_record": "narrative_760_000073"
+    },
+    "narrative_level_distribution": {
+      "MINI": 42,
+      "INSTITUTIONAL": 24,
+      "CIVILIZATION": 8
+    },
+    "momentum_cache_stats": {
+      "n_categories": 1,
+      "max_heat": 3.9045,
+      "mean_heat": 3.9045,
+      "categories": {
+        "internal_layer_0": 3.904
+      }
+    },
+    "gbc_coherence_mean": 0.5433,
+    "gbc_coherence_max": 0.6044
+  }
+}
