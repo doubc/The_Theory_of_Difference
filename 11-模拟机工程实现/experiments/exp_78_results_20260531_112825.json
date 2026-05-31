@@ -1,0 +1,1988 @@
+{
+  "experiment": "exp_78_narrative_activation",
+  "timestamp": "20260531_112825",
+  "description": "Narrative activation verification after direction vector + ODI fix",
+  "fixes_tested": [
+    "4eab9b2: direction vector one-hot encoding (was scalar, novelty always 0)",
+    "ODI passthrough: _last_odi_value tracking (was hardcoded 0.0)"
+  ],
+  "diagnostic": {
+    "seed": 42,
+    "N0": 72,
+    "steps": 800,
+    "sample_interval": 5,
+    "elapsed_seconds": 49.9,
+    "n_steps_recorded": 240,
+    "odi": {
+      "odi_min": 0.0,
+      "odi_max": 0.698777,
+      "odi_final": 0.656582,
+      "odi_mean": 0.124893,
+      "odi_q1_mean": 0.121394,
+      "odi_q2_mean": 0.124633,
+      "odi_q3_mean": 0.125758,
+      "odi_q4_mean": 0.127785
+    },
+    "msi": {
+      "msi_min": 0.0,
+      "msi_max": 0.3221,
+      "msi_final": 0.281986,
+      "msi_mean": 0.235153,
+      "msi_q1_mean": 0.186876,
+      "msi_q2_mean": 0.25124,
+      "msi_q3_mean": 0.229928,
+      "msi_q4_mean": 0.272569
+    },
+    "narrative": {
+      "narrative_active_steps": 30,
+      "narrative_active_ratio": 0.125,
+      "narrative_correction_steps": 30,
+      "msi_at_active_mean": 0.1556,
+      "msi_at_active_max": 0.309,
+      "odi_at_active_mean": 0.1406,
+      "odi_at_active_max": 0.6531,
+      "signals_at_active_mean": 32.0,
+      "mean_correction_norm": 0.690418,
+      "max_correction_norm": 0.690418
+    },
+    "narrative_operator_summary": {
+      "total_narrative_records": 30,
+      "validated_records": 0,
+      "validation_rate": 0.0,
+      "total_actions": 47,
+      "validated_actions": 0,
+      "action_validation_rate": 0.0,
+      "active_narratives": 0,
+      "narrative_level_distribution": {
+        "MINI_NARRATIVE": 10,
+        "INSTITUTIONAL": 19,
+        "CIVILIZATION": 1
+      },
+      "latest_record": "narrative_130_000029"
+    },
+    "gbc_coherence_mean": 0.5674,
+    "gbc_coherence_max": 0.6149
+  },
+  "narrative_timeseries": [
+    {
+      "step": 0,
+      "msi": 0.0,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 5,
+      "msi": 0.0,
+      "odi": 0.0,
+      "narrative_active": true,
+      "signals_processed": 32,
+      "correction_norm": 0.69041836
+    },
+    {
+      "step": 10,
+      "msi": 0.0,
+      "odi": 0.0,
+      "narrative_active": true,
+      "signals_processed": 32,
+      "correction_norm": 0.69041836
+    },
+    {
+      "step": 15,
+      "msi": 0.0,
+      "odi": 0.0,
+      "narrative_active": true,
+      "signals_processed": 32,
+      "correction_norm": 0.69041842
+    },
+    {
+      "step": 20,
+      "msi": 0.279653,
+      "odi": 0.522396,
+      "narrative_active": true,
+      "signals_processed": 32,
+      "correction_norm": 0.69041836
+    },
+    {
+      "step": 25,
+      "msi": 0.0,
+      "odi": 0.0,
+      "narrative_active": true,
+      "signals_processed": 32,
+      "correction_norm": 0.69041842
+    },
+    {
+      "step": 30,
+      "msi": 0.0,
+      "odi": 0.0,
+      "narrative_active": true,
+      "signals_processed": 32,
+      "correction_norm": 0.69041836
+    },
+    {
+      "step": 35,
+      "msi": 0.0,
+      "odi": 0.0,
+      "narrative_active": true,
+      "signals_processed": 32,
+      "correction_norm": 0.6904183
+    },
+    {
+      "step": 40,
+      "msi": 0.0,
+      "odi": 0.0,
+      "narrative_active": true,
+      "signals_processed": 32,
+      "correction_norm": 0.6904183
+    },
+    {
+      "step": 45,
+      "msi": 0.278021,
+      "odi": 0.56381,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 50,
+      "msi": 0.0,
+      "odi": 0.0,
+      "narrative_active": true,
+      "signals_processed": 32,
+      "correction_norm": 0.69041836
+    },
+    {
+      "step": 55,
+      "msi": 0.0,
+      "odi": 0.0,
+      "narrative_active": true,
+      "signals_processed": 32,
+      "correction_norm": 0.6904183
+    },
+    {
+      "step": 60,
+      "msi": 0.0,
+      "odi": 0.0,
+      "narrative_active": true,
+      "signals_processed": 32,
+      "correction_norm": 0.69041836
+    },
+    {
+      "step": 65,
+      "msi": 0.0,
+      "odi": 0.0,
+      "narrative_active": true,
+      "signals_processed": 32,
+      "correction_norm": 0.69041836
+    },
+    {
+      "step": 70,
+      "msi": 0.308965,
+      "odi": 0.62926,
+      "narrative_active": true,
+      "signals_processed": 32,
+      "correction_norm": 0.6904183
+    },
+    {
+      "step": 75,
+      "msi": 0.0,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 80,
+      "msi": 0.0,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 85,
+      "msi": 0.0,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 90,
+      "msi": 0.0,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 95,
+      "msi": 0.3221,
+      "odi": 0.683703,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 100,
+      "msi": 0.0,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 105,
+      "msi": 0.0,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 110,
+      "msi": 0.0,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 115,
+      "msi": 0.0,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 120,
+      "msi": 0.284509,
+      "odi": 0.627659,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 125,
+      "msi": 0.283321,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 130,
+      "msi": 0.286664,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 135,
+      "msi": 0.286866,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 140,
+      "msi": 0.287353,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 145,
+      "msi": 0.280764,
+      "odi": 0.616014,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 150,
+      "msi": 0.285364,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 155,
+      "msi": 0.288123,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 160,
+      "msi": 0.291474,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 165,
+      "msi": 0.292213,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 170,
+      "msi": 0.272625,
+      "odi": 0.577178,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 175,
+      "msi": 0.272688,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 180,
+      "msi": 0.272672,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 185,
+      "msi": 0.271556,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 190,
+      "msi": 0.271944,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 195,
+      "msi": 0.294692,
+      "odi": 0.628761,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 200,
+      "msi": 0.295427,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 205,
+      "msi": 0.295259,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 210,
+      "msi": 0.292646,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 215,
+      "msi": 0.29087,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 220,
+      "msi": 0.277275,
+      "odi": 0.600913,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 225,
+      "msi": 0.276014,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 230,
+      "msi": 0.273554,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 235,
+      "msi": 0.270922,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 240,
+      "msi": 0.270331,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 245,
+      "msi": 0.271719,
+      "odi": 0.601376,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 250,
+      "msi": 0.270002,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 255,
+      "msi": 0.270218,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 260,
+      "msi": 0.270606,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 265,
+      "msi": 0.270042,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 270,
+      "msi": 0.269557,
+      "odi": 0.605158,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 275,
+      "msi": 0.268166,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 280,
+      "msi": 0.266281,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 285,
+      "msi": 0.265459,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 290,
+      "msi": 0.264319,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 295,
+      "msi": 0.272317,
+      "odi": 0.627399,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 300,
+      "msi": 0.271583,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 305,
+      "msi": 0.269955,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 310,
+      "msi": 0.267884,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 315,
+      "msi": 0.267478,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 320,
+      "msi": 0.269901,
+      "odi": 0.63513,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 325,
+      "msi": 0.269218,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 330,
+      "msi": 0.270919,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 335,
+      "msi": 0.271416,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 340,
+      "msi": 0.270475,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 345,
+      "msi": 0.255863,
+      "odi": 0.603195,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 350,
+      "msi": 0.255158,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 355,
+      "msi": 0.256407,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 360,
+      "msi": 0.255617,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 365,
+      "msi": 0.253984,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 370,
+      "msi": 0.249357,
+      "odi": 0.597562,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 375,
+      "msi": 0.24745,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 380,
+      "msi": 0.246518,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 385,
+      "msi": 0.244968,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 390,
+      "msi": 0.245266,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 395,
+      "msi": 0.252957,
+      "odi": 0.618953,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 400,
+      "msi": 0.252015,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 405,
+      "msi": 0.250572,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 410,
+      "msi": 0.250361,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 415,
+      "msi": 0.248882,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 420,
+      "msi": 0.246033,
+      "odi": 0.613956,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 425,
+      "msi": 0.245808,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 430,
+      "msi": 0.246989,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 435,
+      "msi": 0.247468,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 440,
+      "msi": 0.247312,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 445,
+      "msi": 0.269976,
+      "odi": 0.672195,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 450,
+      "msi": 0.269867,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 455,
+      "msi": 0.269654,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 460,
+      "msi": 0.268696,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 465,
+      "msi": 0.268255,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 470,
+      "msi": 0.259069,
+      "odi": 0.647899,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 475,
+      "msi": 0.259178,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 480,
+      "msi": 0.257776,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 485,
+      "msi": 0.256883,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 490,
+      "msi": 0.254997,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 495,
+      "msi": 0.243788,
+      "odi": 0.62489,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 500,
+      "msi": 0.241782,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 505,
+      "msi": 0.24081,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 510,
+      "msi": 0.240616,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 515,
+      "msi": 0.23973,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 520,
+      "msi": 0.239327,
+      "odi": 0.620759,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 525,
+      "msi": 0.239416,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 530,
+      "msi": 0.238901,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 535,
+      "msi": 0.23732,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 540,
+      "msi": 0.237631,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 545,
+      "msi": 0.249121,
+      "odi": 0.647708,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 550,
+      "msi": 0.248405,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 555,
+      "msi": 0.248362,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 560,
+      "msi": 0.248248,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 565,
+      "msi": 0.248251,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 570,
+      "msi": 0.228592,
+      "odi": 0.598389,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 575,
+      "msi": 0.227766,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 580,
+      "msi": 0.228446,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 585,
+      "msi": 0.228968,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 590,
+      "msi": 0.229043,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 595,
+      "msi": 0.227687,
+      "odi": 0.597348,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 600,
+      "msi": 0.228216,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 605,
+      "msi": 0.226203,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 610,
+      "msi": 0.224863,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 615,
+      "msi": 0.221924,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 620,
+      "msi": 0.217274,
+      "odi": 0.587965,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 625,
+      "msi": 0.217498,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 630,
+      "msi": 0.216889,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 635,
+      "msi": 0.217298,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 640,
+      "msi": 0.217088,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 645,
+      "msi": 0.238671,
+      "odi": 0.648351,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 650,
+      "msi": 0.238326,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 655,
+      "msi": 0.236809,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 660,
+      "msi": 0.236641,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 665,
+      "msi": 0.234933,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 670,
+      "msi": 0.224702,
+      "odi": 0.619587,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 675,
+      "msi": 0.225437,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 680,
+      "msi": 0.225731,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 685,
+      "msi": 0.226464,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 690,
+      "msi": 0.226386,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 695,
+      "msi": 0.248585,
+      "odi": 0.683334,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 700,
+      "msi": 0.24657,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 705,
+      "msi": 0.2434,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 710,
+      "msi": 0.242785,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 715,
+      "msi": 0.243547,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 720,
+      "msi": 0.226723,
+      "odi": 0.638873,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 725,
+      "msi": 0.227463,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 730,
+      "msi": 0.227974,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 735,
+      "msi": 0.226123,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 740,
+      "msi": 0.224945,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 745,
+      "msi": 0.211265,
+      "odi": 0.600244,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 750,
+      "msi": 0.211031,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 755,
+      "msi": 0.210246,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 760,
+      "msi": 0.209052,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 765,
+      "msi": 0.208719,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 770,
+      "msi": 0.216932,
+      "odi": 0.624632,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 775,
+      "msi": 0.217044,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 780,
+      "msi": 0.217785,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 785,
+      "msi": 0.216262,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 790,
+      "msi": 0.21473,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 795,
+      "msi": 0.224811,
+      "odi": 0.658225,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 0,
+      "msi": 0.227215,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 5,
+      "msi": 0.245642,
+      "odi": 0.0,
+      "narrative_active": true,
+      "signals_processed": 32,
+      "correction_norm": 0.69041836
+    },
+    {
+      "step": 10,
+      "msi": 0.245548,
+      "odi": 0.0,
+      "narrative_active": true,
+      "signals_processed": 32,
+      "correction_norm": 0.69041836
+    },
+    {
+      "step": 15,
+      "msi": 0.247361,
+      "odi": 0.0,
+      "narrative_active": true,
+      "signals_processed": 32,
+      "correction_norm": 0.69041836
+    },
+    {
+      "step": 20,
+      "msi": 0.22579,
+      "odi": 0.614226,
+      "narrative_active": true,
+      "signals_processed": 32,
+      "correction_norm": 0.6904183
+    },
+    {
+      "step": 25,
+      "msi": 0.227332,
+      "odi": 0.0,
+      "narrative_active": true,
+      "signals_processed": 32,
+      "correction_norm": 0.69041836
+    },
+    {
+      "step": 30,
+      "msi": 0.223548,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 35,
+      "msi": 0.222446,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 40,
+      "msi": 0.225616,
+      "odi": 0.0,
+      "narrative_active": true,
+      "signals_processed": 32,
+      "correction_norm": 0.69041842
+    },
+    {
+      "step": 45,
+      "msi": 0.219829,
+      "odi": 0.599107,
+      "narrative_active": true,
+      "signals_processed": 32,
+      "correction_norm": 0.69041842
+    },
+    {
+      "step": 50,
+      "msi": 0.220064,
+      "odi": 0.0,
+      "narrative_active": true,
+      "signals_processed": 32,
+      "correction_norm": 0.6904183
+    },
+    {
+      "step": 55,
+      "msi": 0.226618,
+      "odi": 0.0,
+      "narrative_active": true,
+      "signals_processed": 32,
+      "correction_norm": 0.69041836
+    },
+    {
+      "step": 60,
+      "msi": 0.234219,
+      "odi": 0.0,
+      "narrative_active": true,
+      "signals_processed": 32,
+      "correction_norm": 0.69041842
+    },
+    {
+      "step": 65,
+      "msi": 0.238011,
+      "odi": 0.0,
+      "narrative_active": true,
+      "signals_processed": 32,
+      "correction_norm": 0.6904183
+    },
+    {
+      "step": 70,
+      "msi": 0.259894,
+      "odi": 0.653082,
+      "narrative_active": true,
+      "signals_processed": 32,
+      "correction_norm": 0.6904183
+    },
+    {
+      "step": 75,
+      "msi": 0.261448,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 80,
+      "msi": 0.260648,
+      "odi": 0.0,
+      "narrative_active": true,
+      "signals_processed": 32,
+      "correction_norm": 0.69041842
+    },
+    {
+      "step": 85,
+      "msi": 0.256548,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 90,
+      "msi": 0.2578,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 95,
+      "msi": 0.252787,
+      "odi": 0.617882,
+      "narrative_active": true,
+      "signals_processed": 32,
+      "correction_norm": 0.6904183
+    },
+    {
+      "step": 100,
+      "msi": 0.256658,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 105,
+      "msi": 0.259243,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 110,
+      "msi": 0.261432,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 115,
+      "msi": 0.264443,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 120,
+      "msi": 0.250287,
+      "odi": 0.582564,
+      "narrative_active": true,
+      "signals_processed": 32,
+      "correction_norm": 0.69041842
+    },
+    {
+      "step": 125,
+      "msi": 0.250023,
+      "odi": 0.0,
+      "narrative_active": true,
+      "signals_processed": 32,
+      "correction_norm": 0.69041836
+    },
+    {
+      "step": 130,
+      "msi": 0.250218,
+      "odi": 0.0,
+      "narrative_active": true,
+      "signals_processed": 32,
+      "correction_norm": 0.6904183
+    },
+    {
+      "step": 135,
+      "msi": 0.246335,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 140,
+      "msi": 0.244076,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 145,
+      "msi": 0.281248,
+      "odi": 0.673413,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 150,
+      "msi": 0.278165,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 155,
+      "msi": 0.275394,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 160,
+      "msi": 0.275485,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 165,
+      "msi": 0.276114,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 170,
+      "msi": 0.271694,
+      "odi": 0.657071,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 175,
+      "msi": 0.275689,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 180,
+      "msi": 0.283192,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 185,
+      "msi": 0.282844,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 190,
+      "msi": 0.283368,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 195,
+      "msi": 0.289515,
+      "odi": 0.67093,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 200,
+      "msi": 0.289133,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 205,
+      "msi": 0.28919,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 210,
+      "msi": 0.291701,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 215,
+      "msi": 0.290334,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 220,
+      "msi": 0.285248,
+      "odi": 0.656458,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 225,
+      "msi": 0.285308,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 230,
+      "msi": 0.282973,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 235,
+      "msi": 0.281359,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 240,
+      "msi": 0.28202,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 245,
+      "msi": 0.270345,
+      "odi": 0.63135,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 250,
+      "msi": 0.267926,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 255,
+      "msi": 0.267966,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 260,
+      "msi": 0.265524,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 265,
+      "msi": 0.264812,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 270,
+      "msi": 0.26192,
+      "odi": 0.620705,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 275,
+      "msi": 0.264997,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 280,
+      "msi": 0.264431,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 285,
+      "msi": 0.263685,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 290,
+      "msi": 0.26518,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 295,
+      "msi": 0.261195,
+      "odi": 0.609239,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 300,
+      "msi": 0.261459,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 305,
+      "msi": 0.260644,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 310,
+      "msi": 0.261434,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 315,
+      "msi": 0.263529,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 320,
+      "msi": 0.257524,
+      "odi": 0.593652,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 325,
+      "msi": 0.259687,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 330,
+      "msi": 0.261606,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 335,
+      "msi": 0.259676,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 340,
+      "msi": 0.258723,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 345,
+      "msi": 0.27081,
+      "odi": 0.616342,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 350,
+      "msi": 0.273399,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 355,
+      "msi": 0.272765,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 360,
+      "msi": 0.273897,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 365,
+      "msi": 0.270836,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 370,
+      "msi": 0.305989,
+      "odi": 0.698777,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 375,
+      "msi": 0.304001,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 380,
+      "msi": 0.302504,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 385,
+      "msi": 0.302074,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 390,
+      "msi": 0.300921,
+      "odi": 0.0,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    },
+    {
+      "step": 395,
+      "msi": 0.281986,
+      "odi": 0.656582,
+      "narrative_active": false,
+      "signals_processed": 0,
+      "correction_norm": 0.0
+    }
+  ]
+}

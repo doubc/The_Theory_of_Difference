@@ -744,8 +744,24 @@ class NarrativeRecursionOperator:
         # 执行偏置修正（模拟行动）
         narrative_correction = self._aggregate_actions(actions)
 
+        # 维度匹配：将 narrative_correction 投影到 current_bias 的维度
+        # current_bias 是约束方向（N0维），narrative_correction 是 bias_dimension 维
+        if narrative_correction is not None and current_bias is not None:
+            corr_flat = narrative_correction.flatten()
+            bias_flat = current_bias.flatten()
+            if len(corr_flat) != len(bias_flat):
+                # 线性插值投影到匹配维度
+                if len(corr_flat) >= len(bias_flat):
+                    indices = torch.linspace(0, len(corr_flat) - 1, len(bias_flat)).long()
+                    corr_projected = corr_flat[indices]
+                else:
+                    repeat_times = (len(bias_flat) + len(corr_flat) - 1) // len(corr_flat)
+                    extended = corr_flat.repeat(repeat_times)
+                    corr_projected = extended[:len(bias_flat)]
+                narrative_correction = corr_projected
+
         # 应用修正后，验证
-        post_bias = current_bias + narrative_correction
+        post_bias = current_bias + narrative_correction if narrative_correction is not None else current_bias
         post_odi = current_odi  # 简化：实际应由模拟器计算
 
         for action in actions:
