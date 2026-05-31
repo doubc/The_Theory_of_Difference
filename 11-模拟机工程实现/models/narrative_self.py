@@ -492,6 +492,13 @@ class NarrativeConnector:
 
         return cat_sim * 0.4 + type_compat * 0.3 + time_score * 0.2 + conf_avg * 0.1
 
+    def set_momentum_bonus(self, bonus: float):
+        """Set momentum bonus (called by external adaptive controller).
+
+        Base class is a no-op -- only momentum-aware connector subclasses override.
+        """
+        pass
+
     def _compute_chain_strength(self, node_ids: List[str]) -> float:
         """计算链条强度（节点间连接强度的几何平均）"""
         if len(node_ids) < 2:
@@ -1040,3 +1047,85 @@ class NarrativeRecursionOperator:
         if self._total_actions == 0:
             return 0.0
         return self._validated_actions / self._total_actions
+
+
+class AdaptiveMomentumConnector(NarrativeConnector):
+    """Adaptive momentum connector with external AMC support.
+
+    Extends NarrativeConnector with:
+    - Category heat tracking (momentum cache)
+    - Decay on heat cache
+    - Momentum bonus in edge strength computation
+    - set_momentum_bonus() override for AMC feedback
+
+    This class replaces the ad-hoc NarrativeMomentumConnectorV2 subclasses
+    that were defined inside individual experiment files.
+    """
+
+    def __init__(self, strength_threshold: float = 0.3,
+                 max_chain_length: int = 10,
+                 category_similarity_threshold: float = 0.5,
+                 momentum_decay: float = 0.95,
+                 momentum_bonus: float = 0.3):
+        super().__init__(
+            strength_threshold=strength_threshold,
+            max_chain_length=max_chain_length,
+            category_similarity_threshold=category_similarity_threshold,
+        )
+        self.momentum_decay = momentum_decay
+        self.momentum_bonus = momentum_bonus
+        self.civ_category_cache: dict = {}
+
+    def connect(self, nodes, timestamp):
+        # Decay existing cache
+        for cat in list(self.civ_category_cache.keys()):
+            self.civ_category_cache[cat] *= self.momentum_decay
+            if self.civ_category_cache[cat] < 0.01:
+                del self.civ_category_cache[cat]
+
+        chains = super().connect(nodes, timestamp)
+
+        # Boost cache for long chains
+        for chain in chains:
+            if len(chain.node_ids) >= 5:
+                for node_id in chain.node_ids:
+                    node = self._node_index.get(node_id)
+                    if node:
+                        cat = node.category
+                        self.civ_category_cache[cat] = (
+                            self.civ_category_cache.get(cat, 0.0) + 1.0
+                        )
+        return chains
+
+    def _compute_edge_strength(self, a, b):
+        base_strength = super()._compute_edge_strength(a, b)
+        a_heat = self.civ_category_cache.get(a.category, 0.0)
+        b_heat = self.civ_category_cache.get(b.category, 0.0)
+        max_heat = max(a_heat, b_heat)
+        if max_heat > 0.01:
+            normalized_heat = min(max_heat / 5.0, 1.0)
+            bonus = 1.0 + self.momentum_bonus * normalized_heat
+            base_strength *= bonus
+        return base_strength
+
+    def set_momentum_bonus(self, bonus: float):
+        """Override: update momentum_bonus from external AMC."""
+        self.momentum_bonus = float(bonus)
+
+    def get_cache_stats(self):
+        if not self.civ_category_cache:
+            return {'n_categories': 0, 'max_heat': 0.0, 'mean_heat': 0.0,
+                    'categories': {}}
+        import numpy as np
+        heats = list(self.civ_category_cache.values())
+        return {
+            'n_categories': len(heats),
+            'max_heat': round(max(heats), 4),
+            'mean_heat': round(float(np.mean(heats)), 4),
+            'categories': {k: round(v, 3) for k, v in
+                          sorted(self.civ_category_cache.items(),
+                                 key=lambda x: -x[1])[:10]},
+        }
+
+    def get_momentum_bonus(self) -> float:
+        return self.momentum_bonus

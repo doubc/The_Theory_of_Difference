@@ -757,6 +757,12 @@ class HierarchicalEvolver:
                     'should_focus': amc_result.should_focus,
                 }
 
+                # Propagate AMC momentum bonus to narrative connector
+                if self.narrative_recursion_operator is not None:
+                    connector = self.narrative_recursion_operator.connector
+                    if hasattr(connector, 'set_momentum_bonus'):
+                        connector.set_momentum_bonus(amc_result.momentum_bonus)
+
                 if self._phase4_verbose:
                     print(f"    [AMC] L{layer_id} step={step}: "
                           f"bonus={amc_result.momentum_bonus:.3f} "
@@ -1761,7 +1767,12 @@ class HierarchicalEvolver:
 
         just_sealed = evolver.constraints.sealed and not layer.is_sealed
 
-        if self.auto_encapsulate and just_sealed:
+        # ILP gating: check if InstitutionalLayerProtector allows consumption
+        ilp_allows_consume = True
+        if self.institutional_layer_protector is not None:
+            ilp_allows_consume = self.institutional_layer_protector.should_consume
+
+        if self.auto_encapsulate and just_sealed and ilp_allows_consume:
             enc_info = self.hierarchy.check_and_encapsulate()
             if enc_info is not None:
                 self.encapsulation_events.append(enc_info)
