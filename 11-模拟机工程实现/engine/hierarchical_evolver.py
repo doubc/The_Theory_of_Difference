@@ -42,6 +42,7 @@ from layers.three_dim_hamming import ThreeDimHammingLattice
 from engine.functional_signal_coupling import extract_functional_signals
 from engine.adaptive_momentum_controller import AdaptiveMomentumController, DEFAULT_ADAPTIVE_MOMENTUM_CONFIG
 from engine.institutional_layer_protector import InstitutionalLayerProtector, DEFAULT_INSTITUTIONAL_PROTECTOR_CONFIG
+from engine.cross_scale_coupling import CrossScaleCoupling, DEFAULT_CROSS_SCALE_COUPLING_CONFIG
 
 
 # ──────────────────────────────────────────────────────────
@@ -242,9 +243,11 @@ class HierarchicalEvolver:
                  # Phase 4 P0 组件（可选，H4 修复）
                  adaptive_momentum_controller: Optional[AdaptiveMomentumController] = None,
                  institutional_layer_protector: Optional[InstitutionalLayerProtector] = None,
+                 cross_scale_coupling: Optional[CrossScaleCoupling] = None,
                  # Phase 4 配置（可选，覆盖默认配置）
                  adaptive_momentum_config: Optional[Dict] = None,
                  institutional_protector_config: Optional[Dict] = None,
+                 cross_scale_coupling_config: Optional[Dict] = None,
                  phase4_verbose: bool = False):
         """
         Args:
@@ -297,8 +300,11 @@ class HierarchicalEvolver:
         # Phase 4 P0 组件
         self.adaptive_momentum_controller = adaptive_momentum_controller
         self.institutional_layer_protector = institutional_layer_protector
+        # Phase 4 P1 组件
+        self.cross_scale_coupling = cross_scale_coupling
         self._adaptive_momentum_config = adaptive_momentum_config
         self._institutional_protector_config = institutional_protector_config
+        self._cross_scale_coupling_config = cross_scale_coupling_config
         self._phase2_layer_results: Dict[int, List[Dict]] = {}  # layer -> [step_results]
         # 解封事件记录
         self._unsealing_events: List[UnsealingEvent] = []
@@ -1697,6 +1703,78 @@ class HierarchicalEvolver:
                 result_entry['reinvocation_results'] = reinvocation_results
                 result_entry['n_cycles_tracked'] = (
                     self.persistent_bias_memory.n_cycles_tracked)
+
+            # ── Phase 4 P1: Cross-Scale Coupling ──
+            if self.cross_scale_coupling is not None:
+                level_states = {}
+                mini_stability = float(self_sustaining) if self_sustaining > 0 else 0.0
+                mini_odi = result_entry.get('odi', {}).get('value', 0.0)
+                level_states['MINI'] = {
+                    'stability_score': mini_stability,
+                    'odi': mini_odi,
+                    'structure_vector': constraints.direction.float().clone() if
+                        hasattr(constraints, 'direction') and constraints.direction is not None else None,
+                }
+                for hl in ['INSTITUTIONAL', 'CIVILIZATION']:
+                    hl_state = self.hierarchy.get_layer_state_by_name(hl)
+                    if hl_state is not None:
+                        level_states[hl] = {
+                            'stability_score': hl_state.get('stability_score', 0.0),
+                            'odi': hl_state.get('odi', 0.0),
+                            'structure_vector': hl_state.get('structure_vector', None),
+                        }
+                narrative_labels = {}
+                if self.narrative_recursion_operator is not None:
+                    narr_history = self.narrative_recursion_operator.get_narrative_history(n=1)
+                    if narr_history:
+                        narrative_labels['MINI'] = narr_history[-1].get('narrative_label', 'silent')
+                        narrative_labels['INSTITUTIONAL'] = narr_history[-1].get('institutional_label', 'silent')
+                        narrative_labels['CIVILIZATION'] = narr_history[-1].get('civilization_label', 'silent')
+                    else:
+                        narrative_labels = {'MINI': 'silent', 'INSTITUTIONAL': 'silent', 'CIVILIZATION': 'silent'}
+                else:
+                    narrative_labels = {'MINI': 'silent', 'INSTITUTIONAL': 'silent', 'CIVILIZATION': 'silent'}
+                emergence_events = []
+                if self.cooperative_emergence_detector is not None:
+                    co_result = locals().get('cooperative_emergence_result')
+                    if co_result is not None and co_result.emergence_active:
+                        emergence_events.append({
+                            'emergence_id': f"co_emerg_{layer_id}_{step}",
+                            'source_level': 'MINI',
+                            'target_level': co_result.emergence_level,
+                            'stability_score': co_result.stability_score,
+                            'odi': mini_odi,
+                            'structure_vector': constraints.direction.float().clone() if
+                                hasattr(constraints, 'direction') and constraints.direction is not None else None,
+                        })
+                csc_result = self.cross_scale_coupling.step(
+                    level_states=level_states,
+                    narrative_labels=narrative_labels,
+                    emergence_events=emergence_events if emergence_events else None,
+                    bias_field=constraints.direction.float() if
+                        hasattr(constraints, 'direction') and constraints.direction is not None else None,
+                )
+                result_entry['cross_scale_coupling'] = {
+                    'csci': round(csc_result['csci'].csci, 4),
+                    'csci_coherent': csc_result['csci'].is_coherent,
+                    'pairwise_coherence': csc_result['csci'].pairwise_coherence,
+                    'narrative_coherence': round(csc_result['csci'].narrative_coherence, 4),
+                    'structural_coherence': round(csc_result['csci'].structural_coherence, 4),
+                    'level_stabilities': {k: round(v, 4) for k, v in csc_result['csci'].level_stabilities.items()},
+                    'top_down_constraints': [
+                        {'id': c['id'], 'source': c['source'], 'target': c['target'],
+                         'strength': c['strength'], 'is_active': c['is_active']}
+                        for c in csc_result.get('top_down_constraints', [])
+                        if isinstance(c, dict)
+                    ],
+                    'emergence_count': len(csc_result.get('emergence_results', [])),
+                    'narrative_bridge_coherence': round(csc_result['narrative_bridge'].coherence, 4),
+                }
+                if self._phase4_verbose:
+                    csci_val = csc_result['csci'].csci
+                    print(f"    [CSC] L{layer_id} step={step}: CSCI={csci_val:.4f} "
+                          f"coherent={csc_result['csci'].is_coherent} "
+                          f"narrative_coh={csc_result['narrative_bridge'].coherence:.4f}")
 
             self._phase2_layer_results[layer_id].append(result_entry)
 

@@ -162,6 +162,35 @@ class HierarchyManager:
             raise IndexError(f"Layer {layer_id} not exist (total {len(self.layers)})")
         return self.layers[layer_id]
 
+    def get_layer_state_by_name(self, name: str) -> Optional[Dict]:
+        """通过语义层级名称获取层级状态。
+
+        层级名称映射: MINI -> L0, INSTITUTIONAL -> L1, CIVILIZATION -> L2
+        返回该层的状态摘要（stability_score, odi, structure_vector），
+        用于跨尺度耦合器的 level_states 构建。
+
+        Args:
+            name: 层级名称 ('MINI', 'INSTITUTIONAL', 'CIVILIZATION')
+
+        Returns:
+            Dict with stability_score, odi, structure_vector, or None if not found
+        """
+        name_to_layer = {
+            'MINI': 0,
+            'INSTITUTIONAL': 1,
+            'CIVILIZATION': 2,
+        }
+        layer_id = name_to_layer.get(name)
+        if layer_id is None or layer_id >= len(self.layers):
+            return None
+
+        layer = self.layers[layer_id]
+        return {
+            'stability_score': float(layer.state.abs().mean().item()),
+            'odi': 0.0,  # ODI computed externally
+            'structure_vector': layer.state.float().clone(),
+        }
+
     def encapsulate_current_layer(self) -> Tuple[LayerState, Dict]:
         """对当前层执行封装，创建新层
 
