@@ -679,11 +679,29 @@ class HierarchicalEvolver:
                         if norm_val > 1e-8:
                             constraints.direction = new_direction / norm_val
 
+                    # 获取叙事层级信息
+                    # 从当前步骤的行动中提取最高叙事层级
+                    latest_level_name = 'MINI_NARRATIVE'
+                    is_civ = False
+                    level_dist = {}
+                    try:
+                        narr_history = self.narrative_recursion_operator.get_narrative_history(n=1)
+                        if narr_history:
+                            latest_level_name = narr_history[-1].get('narrative_level', 'MINI_NARRATIVE')
+                            is_civ = latest_level_name == 'CIVILIZATION'
+                        narr_summary = self.narrative_recursion_operator.get_summary()
+                        level_dist = narr_summary.get('narrative_level_distribution', {})
+                    except Exception:
+                        pass
+
                     # 记录到结果
                     result_entry['narrative_recursion'] = {
                         'signals_processed': len(diff_signals),
                         'bias_correction_applied': True,
                         'correction_norm': narrative_correction.norm().item(),
+                        'narrative_level': latest_level_name,
+                        'is_civilization': is_civ,
+                        'level_distribution_snapshot': level_dist,
                     }
 
             # ── P1: 每隔 p1_eval_interval 步执行 ──

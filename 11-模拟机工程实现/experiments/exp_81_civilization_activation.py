@@ -72,6 +72,7 @@ def analyze_narrative_activation(step_results: List[Dict]) -> Dict:
     civ_msi = []
     civ_odi = []
 
+    prev_civ_count = 0
     for entry in step_results:
         narrative_data = entry.get('narrative_recursion', {})
         msi_data = entry.get('minimal_self', {})
@@ -85,9 +86,18 @@ def analyze_narrative_activation(step_results: List[Dict]) -> Dict:
             odi_at_active.append(odi_val)
             norms_at_active.append(float(narrative_data.get('correction_norm', 0.0)))
 
-            # Check if this step had CIVILIZATION level
+            # Check if this step had CIVILIZATION level (two methods)
             level = narrative_data.get('narrative_level', '')
-            if level == 'CIVILIZATION' or narrative_data.get('is_civilization', False):
+            is_civ_step = (level == 'CIVILIZATION' or narrative_data.get('is_civilization', False))
+
+            # Also detect via cumulative distribution delta
+            level_snap = narrative_data.get('level_distribution_snapshot', {})
+            curr_civ_count = level_snap.get('CIVILIZATION', 0)
+            if curr_civ_count > prev_civ_count:
+                is_civ_step = True
+                prev_civ_count = curr_civ_count
+
+            if is_civ_step:
                 civ_activated = True
                 civ_steps.append(entry.get('step', 0))
                 civ_msi.append(msi_val)
