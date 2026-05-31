@@ -1707,7 +1707,20 @@ class HierarchicalEvolver:
             # ── Phase 4 P1: Cross-Scale Coupling ──
             if self.cross_scale_coupling is not None:
                 level_states = {}
-                mini_stability = float(self_sustaining) if self_sustaining > 0 else 0.0
+                # self_sustaining may not be defined if P1 block hasn't run yet;
+                # recompute inline from available context (same logic as line 885-894)
+                _ss = 0.0
+                _ac = len(constraints.active_bits)
+                if _ac > 0 and hasattr(constraints, 'direction'):
+                    _dv = constraints.direction.float()
+                    _ai = list(constraints.active_bits)
+                    if len(_ai) > 0:
+                        _ad = _dv[_ai]
+                        _md = _ad.mean().item()
+                        if abs(_md) > 1e-8:
+                            _ag = (_ad.sign() * np.sign(_md)).mean().item()
+                            _ss = max(0.0, (_ag + 1) / 2)
+                mini_stability = float(_ss) if _ss > 0 else 0.0
                 mini_odi = result_entry.get('odi', {}).get('value', 0.0)
                 level_states['MINI'] = {
                     'stability_score': mini_stability,

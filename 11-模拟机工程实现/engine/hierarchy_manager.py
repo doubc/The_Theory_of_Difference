@@ -137,7 +137,8 @@ class HierarchyManager:
         constraints = AxiomConstraints(
             N0,
             n_hierarchy_bits=n_hierarchy_bits or N0 // 3,
-            device=self.device
+            device=self.device,
+            initial_state=state,  # Fix (2026-06-01): 派生初始方向，激活GBC
         )
         active = set(range(N0))  # 初始所有比特都活跃
         frozen = set()
@@ -231,7 +232,8 @@ class HierarchyManager:
         new_constraints = AxiomConstraints(
             n_new,
             n_hierarchy_bits=new_n_hierarchy,
-            device=self.device
+            device=self.device,
+            initial_state=new_state,  # Fix (2026-06-01): 从封装状态派生初始方向
         )
 
         # 新层的活跃比特 = 全部（初始都活跃）

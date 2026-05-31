@@ -23,12 +23,14 @@ class AxiomConstraints:
     allowed=True 表示该演化被公理允许
     """
 
-    def __init__(self, N: int, n_hierarchy_bits: int = None, device: str = "cpu"):
+    def __init__(self, N: int, n_hierarchy_bits: int = None, device: str = "cpu",
+                 initial_state: Optional[torch.Tensor] = None):
         """
         Args:
             N: 总比特数
             n_hierarchy_bits: 层级比特数（A1），剩余为横向比特（A1'）
             device: 设备
+            initial_state: 初始状态向量，用于派生初始A6方向
         """
         self.N = N
         self.device = device
@@ -41,7 +43,18 @@ class AxiomConstraints:
 
         # A6 DAG方向：+1=只能0→1, -1=只能1→0, 0=双向（初始）
         # 关键：方向一旦设定，永不重置
-        self.direction = torch.zeros(N, dtype=torch.long)
+        # Fix (2026-06-01): 从initial_state派生初始方向，避免全零导致GBC无法激活
+        # 规则：state > 0.5 → direction=+1（已持留，只能巩固）；state ≤ 0.5 → direction=-1（待激活）
+        # 若initial_state为全零或None，则统一设为+1（允许0→1，与A1单调性一致）
+        if initial_state is not None and initial_state.numel() == N:
+            self.direction = torch.where(initial_state > 0.5, 
+                                          torch.ones(N, dtype=torch.long, device=device),
+                                          torch.full((N,), -1, dtype=torch.long, device=device))
+            # 全零状态的特殊情况：全部设为+1，允许系统启动
+            if self.direction.unique().numel() == 1 and self.direction[0].item() == -1:
+                self.direction.fill_(1)
+        else:
+            self.direction = torch.ones(N, dtype=torch.long, device=device)
 
         # A7 循环检测：记录访问过的状态
         self.visited_states: Set[int] = set()
@@ -71,6 +84,8 @@ class AxiomConstraints:
         self.min_active_bits = min(N, max(N // 3, 12))  # 最少活跃比特数（≥33% 自由度，不超过 N）
         # 回流偏置场：跨层偏置的概率调制向量（由 HierarchyManager 注入）
         self.bias_profile: Optional[torch.Tensor] = None
+        # 初始状态引用（用于调试/分析）
+        self._initial_state = initial_state
     # ============================================================
 
     def check_A1(self, state: torch.Tensor, flip_idx: int) -> Tuple[bool, str]:
