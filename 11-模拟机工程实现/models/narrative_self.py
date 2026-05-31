@@ -281,16 +281,83 @@ class NarrativeNamer:
         return nodes
 
     def _assign_category(self, signal: DifferenceSignal) -> str:
-        """分配范畴标签"""
+        """分配范畴标签
+
+        改进 (exp_84 后): 同层信号不再全部映射到 internal_layer_X，
+        而是根据方向向量的活跃位位置生成子范畴，以支持动量缓存多样性。
+        """
         layer_key = (signal.source_layer, signal.target_layer)
         if layer_key in self.LAYER_CATEGORY_MAP:
             return self.LAYER_CATEGORY_MAP[layer_key]
 
-        # 同层信号
+        # 同层信号 — 基于活跃位位置生成子范畴
         if signal.source_layer == signal.target_layer:
-            return f"internal_layer_{signal.source_layer}"
+            sub = self._subcategorize_same_layer(signal)
+            return f"internal_layer_{signal.source_layer}_{sub}"
 
         return f"cross_layer_L{signal.source_layer}_L{signal.target_layer}"
+
+    def _subcategorize_same_layer(self, signal: DifferenceSignal) -> str:
+        """对同层信号按活跃位位置生成子范畴标签。
+
+        将状态向量分为四个象限（按位索引范围），
+        根据信号方向向量中活跃位（非零位）的分布确定子范畴。
+        这样不同位区域的差异信号会获得不同的范畴标签，
+        动量缓存就能区分不同的热点区域。
+        """
+        direction = signal.direction
+        if direction is None or direction.numel() == 0:
+            return "unknown"
+
+        # 展平方向向量
+        flat = direction.flatten()
+        n = flat.shape[0]
+
+        # 找到活跃位（绝对值 > 0.01）
+        active_mask = flat.abs() > 0.01
+        if not active_mask.any():
+            return "silent"
+
+        active_indices = torch.where(active_mask)[0]
+        first_idx = active_indices[0].item()
+        last_idx = active_indices[-1].item()
+
+        # 按位索引范围分为四个象限
+        q1 = n // 4
+        q2 = n // 2
+        q3 = 3 * n // 4
+
+        # 根据活跃位的起始位置确定象限
+        if last_idx < q1:
+            region = "R0"
+        elif first_idx < q1 and last_idx < q2:
+            region = "R01"
+        elif first_idx < q1 and last_idx < q3:
+            region = "R012"
+        elif first_idx < q1:
+            region = "R0123"
+        elif first_idx < q2 and last_idx < q2:
+            region = "R1"
+        elif first_idx < q2 and last_idx < q3:
+            region = "R12"
+        elif first_idx < q2:
+            region = "R123"
+        elif first_idx < q3 and last_idx < q3:
+            region = "R2"
+        elif first_idx < q3:
+            region = "R23"
+        else:
+            region = "R3"
+
+        # 结合幅度级别
+        if signal.magnitude > 0.5:
+            intensity = "high"
+        elif signal.magnitude > 0.2:
+            intensity = "mid"
+        else:
+            intensity = "low"
+
+        return f"{region}_{intensity}"
 
     def _infer_content_type(self, signal: DifferenceSignal) -> ContentType:
         """推断内容类型"""
