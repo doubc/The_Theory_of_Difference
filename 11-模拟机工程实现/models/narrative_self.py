@@ -446,17 +446,41 @@ class NarrativeConnector:
         return product ** (1.0 / len(strengths))
 
     def _check_stability(self, node_ids: List[str]) -> bool:
-        """检查链条稳定性（是否已在历史中出现过）"""
+        """检查链条稳定性（是否已在历史中出现过）
+
+        两档判定：
+        - 精确稳定 (exact): 最后3个节点模式与历史链完全匹配
+        - 相似稳定 (similar): 节点集合与历史链的 Jaccard 相似度 >= 0.6
+          且历史链长度 >= 3（确保有足够的模式基础）
+
+        理论依据：ABA §4.4 — 前主体态是"范围"而非"开关"。
+        叙事稳定性不应要求完美的模式重复（那是 INSTITUTIONAL 级的标准），
+        而应允许基于语义相似性的"准稳定"——差异论中的"相似即稳定"。
+        """
         if len(node_ids) < 2:
             return False
 
-        # 简化：检查是否有相同模式的链条
+        current_set = set(node_ids)
         pattern = tuple(node_ids[-3:])  # 最后3个节点的模式
+
         for existing in self._chains:
-            if len(existing.node_ids) >= 3:
-                existing_pattern = tuple(existing.node_ids[-3:])
-                if existing_pattern == pattern:
+            if len(existing.node_ids) < 3:
+                continue
+
+            # 精确匹配（原逻辑保留）
+            existing_pattern = tuple(existing.node_ids[-3:])
+            if existing_pattern == pattern:
+                return True
+
+            # 相似性匹配（新增）
+            existing_set = set(existing.node_ids)
+            intersection = len(current_set & existing_set)
+            union = len(current_set | existing_set)
+            if union > 0:
+                jaccard = intersection / union
+                if jaccard >= 0.6:
                     return True
+
         return False
 
 
@@ -549,8 +573,17 @@ class NarrativeActionizer:
 
     def _infer_narrative_level(self, chain: CausalChain,
                                 nodes: Dict[str, NarrativeNode]) -> NarrativeLevel:
-        """推断叙事层级"""
-        if len(chain.node_ids) >= 5 and chain.is_stable:
+        """推断叙事层级
+
+        三档判定：
+        - CIVILIZATION: 链长 >= 5 且（is_stable 或 chain_strength >= 0.6）
+          理论依据：文明级叙事不需要完美的稳定性——持续的高强度传播
+          本身就是一种"涌现稳定"。ABA §4.4 的前主体态范围论支持
+          将"强传播"视为"弱稳定"的等价物。
+        - INSTITUTIONAL: 链长 >= 3 且 chain_strength >= 0.5
+        - MINI_NARRATIVE: 其他
+        """
+        if len(chain.node_ids) >= 5 and (chain.is_stable or chain.chain_strength >= 0.6):
             return NarrativeLevel.CIVILIZATION
         elif len(chain.node_ids) >= 3 and chain.chain_strength >= 0.5:
             return NarrativeLevel.INSTITUTIONAL
