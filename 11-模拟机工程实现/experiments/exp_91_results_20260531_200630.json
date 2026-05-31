@@ -1,0 +1,539 @@
+{
+  "experiment": "exp_91_adaptive_momentum_validation",
+  "timestamp": "20260531_200630",
+  "seeds": [
+    42,
+    142,
+    242,
+    342,
+    442,
+    542,
+    642,
+    742
+  ],
+  "n_seeds": 8,
+  "config": {
+    "momentum_bonus_init": 0.3,
+    "momentum_decay": 0.95,
+    "coherence_threshold": 0.5,
+    "gbc_soft_nudge": 0.2,
+    "N0": 72,
+    "steps": 1600,
+    "amc_active": true,
+    "ilp_active": true
+  },
+  "per_seed": [
+    {
+      "seed": 42,
+      "steps": 1600,
+      "N0": 72,
+      "narrative_active_steps": 83,
+      "narrative_total_sampled": 240,
+      "civilization_steps": 28,
+      "level_counts": {
+        "MINI": 0,
+        "INSTITUTIONAL": 1327,
+        "CIVILIZATION": 1312
+      },
+      "odi_max": 0.7294,
+      "odi_mean": 0.0666,
+      "msi_max": 0.3318,
+      "msi_mean": 0.2075,
+      "momentum_cache": {
+        "n_categories": 4,
+        "max_heat": 41.4437,
+        "mean_heat": 15.8242,
+        "categories": {
+          "internal_layer_0_R1_high": 41.444,
+          "internal_layer_0_R0_high": 11.582,
+          "internal_layer_0_R2_high": 6.655,
+          "internal_layer_0_R3_high": 3.616
+        }
+      },
+      "final_momentum_bonus": 0.5,
+      "gbc": {
+        "coherence_mean": 0.5404,
+        "coherence_std": 0.0194,
+        "balance_mean": 0.8332,
+        "pass_rate": 0.0,
+        "n_checks": 24,
+        "mechanism_mean_coherence": {
+          "boundary": 0.8935,
+          "self_sustaining": 0.5743,
+          "memory": 0.646,
+          "replication": 0.6416,
+          "selection": -0.4058,
+          "function": 0.8929
+        }
+      },
+      "amc_summary": {
+        "current_momentum_bonus": 0.5,
+        "final_entropy": 0.9919,
+        "final_institutional_count": 31,
+        "final_institutional_rate": 0.1313,
+        "mode": "normal",
+        "n_adjustments": 100,
+        "mean_adjustment": 0.0
+      },
+      "ilp_summary": {
+        "final_institutional_count": 31,
+        "final_floor": 38.0,
+        "n_protection_events": 240,
+        "n_transitions_allowed": 0,
+        "n_transitions_blocked": 240,
+        "mode": "weak"
+      },
+      "elapsed_s": 65.5
+    },
+    {
+      "seed": 142,
+      "steps": 1600,
+      "N0": 72,
+      "narrative_active_steps": 84,
+      "narrative_total_sampled": 240,
+      "civilization_steps": 13,
+      "level_counts": {
+        "MINI": 0,
+        "INSTITUTIONAL": 1822,
+        "CIVILIZATION": 739
+      },
+      "odi_max": 0.7084,
+      "odi_mean": 0.0662,
+      "msi_max": 0.3222,
+      "msi_mean": 0.2009,
+      "momentum_cache": {
+        "n_categories": 4,
+        "max_heat": 2.3583,
+        "mean_heat": 0.9786,
+        "categories": {
+          "internal_layer_0_R2_high": 2.358,
+          "internal_layer_0_R1_high": 0.807,
+          "internal_layer_0_R3_high": 0.549,
+          "internal_layer_0_R0_high": 0.2
+        }
+      },
+      "final_momentum_bonus": 0.5,
+      "gbc": {
+        "coherence_mean": 0.5309,
+        "coherence_std": 0.0171,
+        "balance_mean": 0.8111,
+        "pass_rate": 0.0,
+        "n_checks": 24,
+        "mechanism_mean_coherence": {
+          "boundary": 0.8844,
+          "self_sustaining": 0.5953,
+          "memory": 0.6841,
+          "replication": 0.5909,
+          "selection": -0.4528,
+          "function": 0.8837
+        }
+      },
+      "amc_summary": {
+        "current_momentum_bonus": 0.5,
+        "final_entropy": 0.9208,
+        "final_institutional_count": 40,
+        "final_institutional_rate": 0.1616,
+        "mode": "normal",
+        "n_adjustments": 100,
+        "mean_adjustment": 0.0
+      },
+      "ilp_summary": {
+        "final_institutional_count": 40,
+        "final_floor": 38.0,
+        "n_protection_events": 240,
+        "n_transitions_allowed": 0,
+        "n_transitions_blocked": 240,
+        "mode": "weak"
+      },
+      "elapsed_s": 77.8
+    },
+    {
+      "seed": 242,
+      "steps": 1600,
+      "N0": 72,
+      "narrative_active_steps": 53,
+      "narrative_total_sampled": 240,
+      "civilization_steps": 12,
+      "level_counts": {
+        "MINI": 0,
+        "INSTITUTIONAL": 502,
+        "CIVILIZATION": 375
+      },
+      "odi_max": 0.7152,
+      "odi_mean": 0.0649,
+      "msi_max": 0.3206,
+      "msi_mean": 0.2106,
+      "momentum_cache": {
+        "n_categories": 4,
+        "max_heat": 17.386,
+        "mean_heat": 8.9733,
+        "categories": {
+          "internal_layer_0_R1_high": 17.386,
+          "internal_layer_0_R2_high": 9.072,
+          "internal_layer_0_R3_high": 5.146,
+          "internal_layer_0_R0_high": 4.289
+        }
+      },
+      "final_momentum_bonus": 0.5,
+      "gbc": {
+        "coherence_mean": 0.5492,
+        "coherence_std": 0.0218,
+        "balance_mean": 0.8387,
+        "pass_rate": 0.0,
+        "n_checks": 24,
+        "mechanism_mean_coherence": {
+          "boundary": 0.9054,
+          "self_sustaining": 0.5388,
+          "memory": 0.6694,
+          "replication": 0.6976,
+          "selection": -0.4209,
+          "function": 0.9051
+        }
+      },
+      "amc_summary": {
+        "current_momentum_bonus": 0.5,
+        "final_entropy": 0.9748,
+        "final_institutional_count": 21,
+        "final_institutional_rate": 0.101,
+        "mode": "normal",
+        "n_adjustments": 100,
+        "mean_adjustment": 0.0
+      },
+      "ilp_summary": {
+        "final_institutional_count": 21,
+        "final_floor": 38.0,
+        "n_protection_events": 240,
+        "n_transitions_allowed": 0,
+        "n_transitions_blocked": 240,
+        "mode": "strong"
+      },
+      "elapsed_s": 89.1
+    },
+    {
+      "seed": 342,
+      "steps": 1600,
+      "N0": 72,
+      "narrative_active_steps": 59,
+      "narrative_total_sampled": 240,
+      "civilization_steps": 18,
+      "level_counts": {
+        "MINI": 0,
+        "INSTITUTIONAL": 741,
+        "CIVILIZATION": 601
+      },
+      "odi_max": 0.7315,
+      "odi_mean": 0.0666,
+      "msi_max": 0.2917,
+      "msi_mean": 0.202,
+      "momentum_cache": {
+        "n_categories": 4,
+        "max_heat": 42.8924,
+        "mean_heat": 17.5977,
+        "categories": {
+          "internal_layer_0_R1_high": 42.892,
+          "internal_layer_0_R0_high": 11.566,
+          "internal_layer_0_R2_high": 9.557,
+          "internal_layer_0_R3_high": 6.376
+        }
+      },
+      "final_momentum_bonus": 0.5,
+      "gbc": {
+        "coherence_mean": 0.5517,
+        "coherence_std": 0.0255,
+        "balance_mean": 0.8654,
+        "pass_rate": 0.0417,
+        "n_checks": 24,
+        "mechanism_mean_coherence": {
+          "boundary": 0.9064,
+          "self_sustaining": 0.6019,
+          "memory": 0.6916,
+          "replication": 0.6355,
+          "selection": -0.4311,
+          "function": 0.906
+        }
+      },
+      "amc_summary": {
+        "current_momentum_bonus": 0.5,
+        "final_entropy": 0.9752,
+        "final_institutional_count": 27,
+        "final_institutional_rate": 0.1313,
+        "mode": "normal",
+        "n_adjustments": 100,
+        "mean_adjustment": 0.0
+      },
+      "ilp_summary": {
+        "final_institutional_count": 27,
+        "final_floor": 38.0,
+        "n_protection_events": 240,
+        "n_transitions_allowed": 0,
+        "n_transitions_blocked": 240,
+        "mode": "strong"
+      },
+      "elapsed_s": 68.1
+    },
+    {
+      "seed": 442,
+      "steps": 1600,
+      "N0": 72,
+      "narrative_active_steps": 57,
+      "narrative_total_sampled": 240,
+      "civilization_steps": 11,
+      "level_counts": {
+        "MINI": 0,
+        "INSTITUTIONAL": 725,
+        "CIVILIZATION": 383
+      },
+      "odi_max": 0.7335,
+      "odi_mean": 0.0672,
+      "msi_max": 0.3214,
+      "msi_mean": 0.2084,
+      "momentum_cache": {
+        "n_categories": 4,
+        "max_heat": 3.1149,
+        "mean_heat": 2.0264,
+        "categories": {
+          "internal_layer_0_R2_high": 3.115,
+          "internal_layer_0_R3_high": 2.808,
+          "internal_layer_0_R1_high": 1.205,
+          "internal_layer_0_R0_high": 0.979
+        }
+      },
+      "final_momentum_bonus": 0.5,
+      "gbc": {
+        "coherence_mean": 0.546,
+        "coherence_std": 0.0225,
+        "balance_mean": 0.8869,
+        "pass_rate": 0.0,
+        "n_checks": 24,
+        "mechanism_mean_coherence": {
+          "boundary": 0.9005,
+          "self_sustaining": 0.5754,
+          "memory": 0.6588,
+          "replication": 0.6559,
+          "selection": -0.4148,
+          "function": 0.9002
+        }
+      },
+      "amc_summary": {
+        "current_momentum_bonus": 0.5,
+        "final_entropy": 0.9614,
+        "final_institutional_count": 21,
+        "final_institutional_rate": 0.0909,
+        "mode": "normal",
+        "n_adjustments": 100,
+        "mean_adjustment": 0.0
+      },
+      "ilp_summary": {
+        "final_institutional_count": 21,
+        "final_floor": 38.0,
+        "n_protection_events": 240,
+        "n_transitions_allowed": 0,
+        "n_transitions_blocked": 240,
+        "mode": "strong"
+      },
+      "elapsed_s": 72.2
+    },
+    {
+      "seed": 542,
+      "steps": 1600,
+      "N0": 72,
+      "narrative_active_steps": 62,
+      "narrative_total_sampled": 240,
+      "civilization_steps": 7,
+      "level_counts": {
+        "MINI": 0,
+        "INSTITUTIONAL": 1242,
+        "CIVILIZATION": 311
+      },
+      "odi_max": 0.7297,
+      "odi_mean": 0.0645,
+      "msi_max": 0.2971,
+      "msi_mean": 0.2018,
+      "momentum_cache": {
+        "n_categories": 4,
+        "max_heat": 1.6727,
+        "mean_heat": 1.0472,
+        "categories": {
+          "internal_layer_0_R2_high": 1.673,
+          "internal_layer_0_R3_high": 1.458,
+          "internal_layer_0_R1_high": 0.903,
+          "internal_layer_0_R0_high": 0.155
+        }
+      },
+      "final_momentum_bonus": 0.5,
+      "gbc": {
+        "coherence_mean": 0.5414,
+        "coherence_std": 0.0161,
+        "balance_mean": 0.8263,
+        "pass_rate": 0.0,
+        "n_checks": 24,
+        "mechanism_mean_coherence": {
+          "boundary": 0.9115,
+          "self_sustaining": 0.4463,
+          "memory": 0.5889,
+          "replication": 0.7134,
+          "selection": -0.3226,
+          "function": 0.9111
+        }
+      },
+      "amc_summary": {
+        "current_momentum_bonus": 0.5,
+        "final_entropy": 0.8083,
+        "final_institutional_count": 39,
+        "final_institutional_rate": 0.202,
+        "mode": "normal",
+        "n_adjustments": 100,
+        "mean_adjustment": 0.0
+      },
+      "ilp_summary": {
+        "final_institutional_count": 39,
+        "final_floor": 38.0,
+        "n_protection_events": 240,
+        "n_transitions_allowed": 0,
+        "n_transitions_blocked": 240,
+        "mode": "weak"
+      },
+      "elapsed_s": 64.5
+    },
+    {
+      "seed": 642,
+      "steps": 1600,
+      "N0": 72,
+      "narrative_active_steps": 56,
+      "narrative_total_sampled": 160,
+      "civilization_steps": 5,
+      "level_counts": {
+        "MINI": 0,
+        "INSTITUTIONAL": 370,
+        "CIVILIZATION": 264
+      },
+      "odi_max": 0.8343,
+      "odi_mean": 0.0746,
+      "msi_max": 0.4923,
+      "msi_mean": 0.2649,
+      "momentum_cache": {
+        "n_categories": 4,
+        "max_heat": 0.066,
+        "mean_heat": 0.0413,
+        "categories": {
+          "internal_layer_0_R3_high": 0.066,
+          "internal_layer_0_R2_high": 0.056,
+          "internal_layer_0_R0_high": 0.022,
+          "internal_layer_0_R1_high": 0.021
+        }
+      },
+      "final_momentum_bonus": 0.5,
+      "gbc": {
+        "coherence_mean": 0.5723,
+        "coherence_std": 0.0686,
+        "balance_mean": 0.5746,
+        "pass_rate": 0.6875,
+        "n_checks": 16,
+        "mechanism_mean_coherence": {
+          "boundary": 0.6809,
+          "self_sustaining": 0.4122,
+          "memory": 0.6441,
+          "replication": 0.6279,
+          "selection": 0.3877,
+          "function": 0.6808
+        }
+      },
+      "amc_summary": {
+        "current_momentum_bonus": 0.5,
+        "final_entropy": 0.7585,
+        "final_institutional_count": 12,
+        "final_institutional_rate": 0.0505,
+        "mode": "normal",
+        "n_adjustments": 100,
+        "mean_adjustment": 0.001256
+      },
+      "ilp_summary": {
+        "final_institutional_count": 12,
+        "final_floor": 35.33,
+        "n_protection_events": 160,
+        "n_transitions_allowed": 0,
+        "n_transitions_blocked": 160,
+        "mode": "strong"
+      },
+      "elapsed_s": 56.6
+    },
+    {
+      "seed": 742,
+      "steps": 1600,
+      "N0": 72,
+      "narrative_active_steps": 61,
+      "narrative_total_sampled": 240,
+      "civilization_steps": 17,
+      "level_counts": {
+        "MINI": 0,
+        "INSTITUTIONAL": 937,
+        "CIVILIZATION": 523
+      },
+      "odi_max": 0.7342,
+      "odi_mean": 0.0663,
+      "msi_max": 0.3225,
+      "msi_mean": 0.2024,
+      "momentum_cache": {
+        "n_categories": 4,
+        "max_heat": 19.7256,
+        "mean_heat": 9.8923,
+        "categories": {
+          "internal_layer_0_R1_high": 19.726,
+          "internal_layer_0_R2_high": 13.137,
+          "internal_layer_0_R0_high": 4.561,
+          "internal_layer_0_R3_high": 2.145
+        }
+      },
+      "final_momentum_bonus": 0.5,
+      "gbc": {
+        "coherence_mean": 0.5402,
+        "coherence_std": 0.017,
+        "balance_mean": 0.837,
+        "pass_rate": 0.0,
+        "n_checks": 24,
+        "mechanism_mean_coherence": {
+          "boundary": 0.8938,
+          "self_sustaining": 0.5567,
+          "memory": 0.6334,
+          "replication": 0.6666,
+          "selection": -0.4022,
+          "function": 0.8929
+        }
+      },
+      "amc_summary": {
+        "current_momentum_bonus": 0.5,
+        "final_entropy": 0.9526,
+        "final_institutional_count": 30,
+        "final_institutional_rate": 0.1111,
+        "mode": "normal",
+        "n_adjustments": 100,
+        "mean_adjustment": 0.0
+      },
+      "ilp_summary": {
+        "final_institutional_count": 30,
+        "final_floor": 38.0,
+        "n_protection_events": 240,
+        "n_transitions_allowed": 0,
+        "n_transitions_blocked": 240,
+        "mode": "weak"
+      },
+      "elapsed_s": 64.1
+    }
+  ],
+  "cross_seed": {
+    "civ_mean": 13.875,
+    "civ_std": 6.75347132962005,
+    "civ_min": 5,
+    "civ_max": 28,
+    "odi_max_mean": 0.739525,
+    "msi_max_mean": 0.33745,
+    "gbc_coherence_mean": 0.5465125000000001,
+    "gbc_pass_rate_mean": 0.09115,
+    "final_momentum_bonus_mean": 0.5,
+    "h1_mean_civ_ge_5": true,
+    "h2_gbc_coh_ge_055": false,
+    "h3_gbc_pass_ge_03": false,
+    "h4_all_civ_ge_3": true,
+    "all_hypotheses_passed": false
+  }
+}

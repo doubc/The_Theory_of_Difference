@@ -379,6 +379,13 @@ class InstitutionalLayerProtector:
         self._step_count = 0
         self._current_floor = float(cfg['min_institutional_floor'])
 
+        # 统计追踪（供 get_history 和 exp_91 使用）
+        self._final_institutional_count = 0
+        self._n_protection_events = 0       # protection_level != 'none' 的次数
+        self._n_transitions_allowed = 0
+        self._n_transitions_blocked = 0
+        self._last_mode = 'init'
+
     def step(
         self,
         institutional_count: int,
@@ -406,6 +413,7 @@ class InstitutionalLayerProtector:
         # 1. 积累守护
         rate_limit, protection_level, should_consume = self._accumulation_guard.step(
             institutional_count)
+        self._last_should_consume = should_consume  # 供外部查询（如 evolver 的 encapsulate 门控）
 
         # 2. 多样性强制
         if institutional_categories is not None:
@@ -435,7 +443,17 @@ class InstitutionalLayerProtector:
                 self._current_floor - 0.1,
             )
 
-        # 5. 构建状态
+        # 5. 统计追踪（在 transition_allowed 计算之后）
+        self._final_institutional_count = institutional_count
+        if protection_level != 'none':
+            self._n_protection_events += 1
+        if transition_allowed:
+            self._n_transitions_allowed += 1
+        else:
+            self._n_transitions_blocked += 1
+        self._last_mode = protection_level
+
+        # 6. 构建状态
         state = ProtectionState(
             institutional_count=institutional_count,
             institutional_floor=self._current_floor,
@@ -462,6 +480,11 @@ class InstitutionalLayerProtector:
             state=state,
         )
 
+    @property
+    def should_consume(self) -> bool:
+        """当前是否允许消耗 INSTITUTIONAL（供外部门控查询）"""
+        return getattr(self, '_last_should_consume', True)
+
     def record_consumption(self):
         """记录一次 INSTITUTIONAL 消耗事件"""
         self._accumulation_guard.record_consumption(self._step_count)
@@ -471,12 +494,17 @@ class InstitutionalLayerProtector:
         n_categories, diversity_ok = self._diversity_enforcer.get_diversity()
         return {
             'step_count': self._step_count,
+            'institutional_count': self._final_institutional_count,
             'institutional_floor': self._current_floor,
             'accumulation_trend': self._accumulation_guard.get_trend(),
             'n_transitions': self._transition_gate.get_n_transitions(),
+            'n_protection_events': self._n_protection_events,
+            'n_transitions_allowed': self._n_transitions_allowed,
+            'n_transitions_blocked': self._n_transitions_blocked,
             'n_categories': n_categories,
             'diversity_sufficient': diversity_ok,
             'diversity_entropy': self._diversity_enforcer.get_diversity_entropy(),
+            'mode': self._last_mode,
         }
 
     def reset(self):
