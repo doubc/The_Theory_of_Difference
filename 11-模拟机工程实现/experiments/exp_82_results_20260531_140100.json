@@ -1,0 +1,90 @@
+{
+  "experiment": "exp_82_long_evolution",
+  "timestamp": "20260531_140100",
+  "description": "Long evolution (1600 steps) — CIVILIZATION accumulation observation",
+  "hypothesis": "CIVILIZATION steps will accumulate over longer evolution",
+  "comparison_target": "exp_81 (800 steps, CIVILIZATION=4)",
+  "diagnostic": {
+    "seed": 142,
+    "N0": 72,
+    "steps": 1600,
+    "sample_interval": 10,
+    "elapsed_seconds": 61.5,
+    "n_steps_recorded": 240,
+    "odi": {
+      "odi_min": 0.0,
+      "odi_max": 0.721887,
+      "odi_final": 0.646652,
+      "odi_mean": 0.06584,
+      "odi_q1_mean": 0.060883,
+      "odi_q2_mean": 0.067255,
+      "odi_q3_mean": 0.066922,
+      "odi_q4_mean": 0.068298
+    },
+    "msi": {
+      "msi_min": 0.0,
+      "msi_max": 0.293266,
+      "msi_final": 0.24227,
+      "msi_mean": 0.202101,
+      "msi_q1_mean": 0.058057,
+      "msi_q2_mean": 0.247312,
+      "msi_q3_mean": 0.25047,
+      "msi_q4_mean": 0.252566
+    },
+    "narrative": {
+      "narrative_active_steps": 65,
+      "narrative_active_ratio": 0.2708,
+      "narrative_correction_steps": 65,
+      "msi_at_active_mean": 0.1723,
+      "msi_at_active_max": 0.2933,
+      "odi_at_active_mean": 0.0851,
+      "odi_at_active_max": 0.6992,
+      "mean_correction_norm": 0.6757,
+      "max_correction_norm": 0.6757,
+      "civilization_activated": true,
+      "civilization_steps": [
+        10,
+        20,
+        170,
+        30,
+        50,
+        110
+      ],
+      "civilization_n_steps": 6,
+      "civilization_msi_mean": 0.1307,
+      "civilization_odi_mean": 0.0
+    },
+    "civilization_accumulation": {
+      "cumulative_civ_final": 6,
+      "civ_rate_by_quarter": [
+        3,
+        0,
+        3,
+        0
+      ],
+      "civ_acceleration": "stable_or_decreasing"
+    },
+    "narrative_operator_summary": {
+      "total_narrative_records": 65,
+      "validated_records": 65,
+      "validation_rate": 1.0,
+      "total_actions": 90,
+      "validated_actions": 90,
+      "action_validation_rate": 1.0,
+      "active_narratives": 65,
+      "narrative_level_distribution": {
+        "MINI_NARRATIVE": 37,
+        "INSTITUTIONAL": 22,
+        "CIVILIZATION": 6
+      },
+      "latest_record": "narrative_790_000064"
+    },
+    "narrative_level_distribution": {
+      "MINI": 37,
+      "INSTITUTIONAL": 22,
+      "CIVILIZATION": 6
+    },
+    "gbc_coherence_mean": 0.5381,
+    "gbc_coherence_max": 0.5662
+  }
+}
