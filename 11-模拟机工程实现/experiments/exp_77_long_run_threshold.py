@@ -156,15 +156,17 @@ def analyze_narrative_activation(step_results: List[Dict]) -> Dict:
     msi_at_narrative = []
 
     for entry in step_results:
-        narrative_data = entry.get('narrative', {})
+        # Fix: evolver writes to 'narrative_recursion', not 'narrative'
+        narrative_data = entry.get('narrative_recursion', {})
         msi_data = entry.get('minimal_self', {})
         msi_val = msi_data.get('msi', 0.0) if isinstance(msi_data, dict) else 0.0
 
-        if narrative_data.get('active', False):
+        # Fix: evolver uses 'bias_correction_applied' field, not 'active'
+        if narrative_data.get('bias_correction_applied', False):
             narrative_active_count += 1
             msi_at_narrative.append(msi_val)
 
-        correction = narrative_data.get('correction_magnitude', 0.0)
+        correction = narrative_data.get('correction_norm', 0.0)
         if isinstance(correction, (int, float)) and correction > 0:
             narrative_correction_count += 1
 

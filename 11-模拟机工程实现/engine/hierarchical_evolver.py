@@ -612,7 +612,12 @@ class HierarchicalEvolver:
                     for j in range(i + 1, N_bits, sample_step):
                         mag = D[i, j].item()
                         if mag > 0.05:  # 幅度阈值
-                            direction = (state_float[j] - state_float[i]).unsqueeze(0)
+                            # Fix: encode (i,j) pair as a unique direction vector
+                            # so novelty computation works (scalar diff -> cos_sim
+                            # always 1.0 -> novelty=0 -> filter rejects all)
+                            direction = torch.zeros(1, N_bits, device=state.device)
+                            direction[0, i] = state_float[i]
+                            direction[0, j] = state_float[j]
                             diff_signals.append(DifferenceSignal(
                                 signal_id=f"sig_L{layer_id}_{step}_{signal_idx:03d}",
                                 source_layer=layer_id,
@@ -648,8 +653,33 @@ class HierarchicalEvolver:
                 if narrative_correction is not None and narrative_correction.norm().item() > 1e-8:
                     # 修正方向场
                     if hasattr(constraints, 'direction'):
-                        new_direction = constraints.direction + narrative_correction
-                        constraints.direction = new_direction / new_direction.norm().item()
+                        # Fix: handle dimension mismatch between narrative_correction
+                        # (bias_dimension) and constraints.direction (N)
+                        dir_shape = constraints.direction.shape
+                        corr = narrative_correction
+                        if corr.shape != dir_shape:
+                            # Project to matching dimension via interpolation
+                            corr_flat = corr.flatten()
+                            dir_len = dir_shape[0] if len(dir_shape) > 0 else 1
+                            if len(corr_flat) != dir_len:
+                                # Use linear interpolation to match dimensions
+                                corr_1d = corr_flat.float()
+                                target = torch.zeros(dir_len, device=corr_1d.device)
+                                # Simple repeat or truncate
+                                if len(corr_1d) >= dir_len:
+                                    indices = torch.linspace(0, len(corr_1d) - 1, dir_len).long()
+                                    target = corr_1d[indices]
+                                else:
+                                    repeat_times = (dir_len + len(corr_1d) - 1) // len(corr_1d)
+                                    extended = corr_1d.repeat(repeat_times)
+                                    target = extended[:dir_len]
+                                corr = target
+                            else:
+                                corr = corr_flat
+                        new_direction = constraints.direction + corr
+                        norm_val = new_direction.norm().item()
+                        if norm_val > 1e-8:
+                            constraints.direction = new_direction / norm_val
 
                     # 记录到结果
                     result_entry['narrative_recursion'] = {
