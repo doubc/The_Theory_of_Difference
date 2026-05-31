@@ -706,14 +706,16 @@ class NarrativeRecursionOperator:
     def step(self, signals: List[DifferenceSignal],
              current_bias: torch.Tensor,
              current_odi: float,
-             timestamp: int) -> Optional[torch.Tensor]:
+             timestamp: int,
+             post_odi: Optional[float] = None) -> Optional[torch.Tensor]:
         """执行一次叙事递归步骤
 
         Args:
             signals: 当前时间步的差异信号
             current_bias: 当前累积偏置场
-            current_odi: 当前组织密度指数
+            current_odi: 当前组织密度指数（修正前）
             timestamp: 当前时间戳
+            post_odi: 修正后的 ODI 估计值（若为 None 则自动估算）
 
         Returns:
             narrative_bias_correction: 叙事偏置修正 ΔB_narrative（若无叙事则返回 None）
@@ -762,11 +764,64 @@ class NarrativeRecursionOperator:
 
         # 应用修正后，验证
         post_bias = current_bias + narrative_correction if narrative_correction is not None else current_bias
-        post_odi = current_odi  # 简化：实际应由模拟器计算
+        # 若调用方未提供 post_odi，基于偏置对齐度自动估算
+        if post_odi is None:
+            # 估算逻辑：若叙事修正与现有偏置方向一致，ODI 应略有提升；反之下降
+            bias_float = current_bias.float()
+            if narrative_correction is not None and bias_float.norm().item() > 1e-8:
+                cos_sim = torch.nn.functional.cosine_similarity(
+                    bias_float.flatten().unsqueeze(0),
+                    narrative_correction.flatten().unsqueeze(0),
+                    dim=1
+                ).item()
+                # cos_sim > 0 表示修正强化现有偏置 → ODI 微增；反之微降
+                # 幅度限制在 ±0.05 内，避免单次叙事过度影响 ODI
+                post_odi = current_odi + max(-0.05, min(0.05, cos_sim * 0.05))
+            else:
+                post_odi = current_odi
+
+        # Compute expected total change from all actions
+        # Note: action.bias_correction may have different dimension than post_bias
+        # (bias_dimension vs N0). We compare in flattened space.
+        if actions:
+            expected_total = torch.zeros_like(post_bias)
+            for action in actions:
+                ac = action.bias_correction * action.action_strength
+                # Project ac to post_bias dimension if needed
+                ac_flat = ac.flatten()
+                exp_flat = expected_total.flatten()
+                if len(ac_flat) != len(exp_flat):
+                    if len(ac_flat) >= len(exp_flat):
+                        indices = torch.linspace(0, len(ac_flat) - 1, len(exp_flat)).long()
+                        ac_flat = ac_flat[indices]
+                    else:
+                        repeat_times = (len(exp_flat) + len(ac_flat) - 1) // len(ac_flat)
+                        ac_flat = ac_flat.repeat(repeat_times)[:len(exp_flat)]
+                expected_total = expected_total + ac_flat.reshape(post_bias.shape)
+            actual_change = post_bias - current_bias
+            if expected_total.norm().item() > 1e-8:
+                consistency = max(0.0, torch.nn.functional.cosine_similarity(
+                    expected_total.flatten().unsqueeze(0),
+                    actual_change.flatten().unsqueeze(0),
+                    dim=1
+                ).item())
+            else:
+                consistency = 1.0
+        else:
+            consistency = 1.0
+
+        # ODI stability improvement
+        odi_change = post_odi - current_odi
+        stability_improvement = max(0.0, odi_change)
+
+        verification_score = (
+            consistency * 0.6 +
+            min(stability_improvement / 0.1, 1.0) * 0.4
+        )
 
         for action in actions:
-            action = self.verifier.after_action(
-                action, post_bias, post_odi, timestamp)
+            action.was_validated = verification_score >= self.verifier.consistency_threshold
+            action.validation_score = verification_score
             if action.was_validated:
                 self._validated_actions += 1
 
