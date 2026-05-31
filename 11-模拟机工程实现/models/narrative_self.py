@@ -349,10 +349,11 @@ class NarrativeNamer:
         else:
             region = "R3"
 
-        # 结合幅度级别
-        if signal.magnitude > 0.5:
+        # 结合幅度级别 (adjusted for binary-ish state: most signals ≈ 1.0)
+        # high: strong difference (>0.8), mid: moderate (0.3-0.8), low: weak (<0.3)
+        if signal.magnitude > 0.8:
             intensity = "high"
-        elif signal.magnitude > 0.2:
+        elif signal.magnitude > 0.3:
             intensity = "mid"
         else:
             intensity = "low"
