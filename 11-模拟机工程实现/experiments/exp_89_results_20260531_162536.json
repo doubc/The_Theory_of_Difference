@@ -1,0 +1,210 @@
+{
+  "experiment": "exp_89_gbc_soft_nudge",
+  "timestamp": "20260531_162536",
+  "seeds": [
+    242,
+    442,
+    642,
+    742
+  ],
+  "n_seeds": 4,
+  "config": {
+    "momentum_bonus": 0.3,
+    "momentum_decay": 0.95,
+    "coherence_threshold": 0.5,
+    "gbc_soft_nudge": 0.2,
+    "N0": 72,
+    "steps": 1600
+  },
+  "per_seed": [
+    {
+      "seed": 242,
+      "steps": 1600,
+      "N0": 72,
+      "narrative_active_steps": 37,
+      "narrative_total_sampled": 240,
+      "civilization_steps": 15,
+      "level_counts": {
+        "MINI": 0,
+        "INSTITUTIONAL": 243,
+        "CIVILIZATION": 306
+      },
+      "odi_max": 0.7098,
+      "odi_mean": 0.0644,
+      "msi_max": 0.3251,
+      "msi_mean": 0.1894,
+      "momentum_cache": {
+        "n_categories": 4,
+        "max_heat": 27.9171,
+        "mean_heat": 18.3463,
+        "categories": {
+          "internal_layer_0_R0_high": 27.917,
+          "internal_layer_0_R1_high": 25.342,
+          "internal_layer_0_R2_high": 11.122,
+          "internal_layer_0_R3_high": 9.004
+        }
+      },
+      "gbc": {
+        "coherence_mean": 0.5491,
+        "coherence_std": 0.0165,
+        "balance_mean": 0.8283,
+        "pass_rate": 0.0,
+        "n_checks": 24,
+        "mechanism_mean_coherence": {
+          "boundary": 0.8919,
+          "self_sustaining": 0.5178,
+          "memory": 0.6104,
+          "replication": 0.7149,
+          "selection": -0.332,
+          "function": 0.8916
+        }
+      },
+      "elapsed_s": 56.3
+    },
+    {
+      "seed": 442,
+      "steps": 1600,
+      "N0": 72,
+      "narrative_active_steps": 12,
+      "narrative_total_sampled": 160,
+      "civilization_steps": 4,
+      "level_counts": {
+        "MINI": 0,
+        "INSTITUTIONAL": 20,
+        "CIVILIZATION": 42
+      },
+      "odi_max": 0.8129,
+      "odi_mean": 0.0769,
+      "msi_max": 0.4689,
+      "msi_mean": 0.199,
+      "momentum_cache": {
+        "n_categories": 4,
+        "max_heat": 13.3631,
+        "mean_heat": 6.9827,
+        "categories": {
+          "internal_layer_0_R3_high": 13.363,
+          "internal_layer_0_R2_high": 7.654,
+          "internal_layer_0_R1_high": 4.061,
+          "internal_layer_0_R0_high": 2.853
+        }
+      },
+      "gbc": {
+        "coherence_mean": 0.6365,
+        "coherence_std": 0.029,
+        "balance_mean": 0.7745,
+        "pass_rate": 0.875,
+        "n_checks": 16,
+        "mechanism_mean_coherence": {
+          "boundary": 0.8231,
+          "self_sustaining": 0.4198,
+          "memory": 0.6851,
+          "replication": 0.7123,
+          "selection": 0.3558,
+          "function": 0.8231
+        }
+      },
+      "elapsed_s": 42.9
+    },
+    {
+      "seed": 642,
+      "steps": 1600,
+      "N0": 72,
+      "narrative_active_steps": 35,
+      "narrative_total_sampled": 160,
+      "civilization_steps": 3,
+      "level_counts": {
+        "MINI": 0,
+        "INSTITUTIONAL": 222,
+        "CIVILIZATION": 99
+      },
+      "odi_max": 0.822,
+      "odi_mean": 0.0758,
+      "msi_max": 0.5127,
+      "msi_mean": 0.2724,
+      "momentum_cache": {
+        "n_categories": 4,
+        "max_heat": 0.2572,
+        "mean_heat": 0.1691,
+        "categories": {
+          "internal_layer_0_R2_high": 0.257,
+          "internal_layer_0_R3_high": 0.237,
+          "internal_layer_0_R1_high": 0.113,
+          "internal_layer_0_R0_high": 0.069
+        }
+      },
+      "gbc": {
+        "coherence_mean": 0.5228,
+        "coherence_std": 0.0539,
+        "balance_mean": 0.6019,
+        "pass_rate": 0.25,
+        "n_checks": 16,
+        "mechanism_mean_coherence": {
+          "boundary": 0.7538,
+          "self_sustaining": 0.2404,
+          "memory": 0.6525,
+          "replication": 0.7016,
+          "selection": 0.0347,
+          "function": 0.7538
+        }
+      },
+      "elapsed_s": 44.4
+    },
+    {
+      "seed": 742,
+      "steps": 1600,
+      "N0": 72,
+      "narrative_active_steps": 27,
+      "narrative_total_sampled": 160,
+      "civilization_steps": 3,
+      "level_counts": {
+        "MINI": 0,
+        "INSTITUTIONAL": 48,
+        "CIVILIZATION": 77
+      },
+      "odi_max": 0.8054,
+      "odi_mean": 0.0745,
+      "msi_max": 0.5212,
+      "msi_mean": 0.2781,
+      "momentum_cache": {
+        "n_categories": 4,
+        "max_heat": 0.3045,
+        "mean_heat": 0.146,
+        "categories": {
+          "internal_layer_0_R2_high": 0.304,
+          "internal_layer_0_R3_high": 0.187,
+          "internal_layer_0_R1_high": 0.069,
+          "internal_layer_0_R0_high": 0.024
+        }
+      },
+      "gbc": {
+        "coherence_mean": 0.5272,
+        "coherence_std": 0.0534,
+        "balance_mean": 0.6256,
+        "pass_rate": 0.1875,
+        "n_checks": 16,
+        "mechanism_mean_coherence": {
+          "boundary": 0.7573,
+          "self_sustaining": 0.1859,
+          "memory": 0.6799,
+          "replication": 0.6906,
+          "selection": 0.0921,
+          "function": 0.7573
+        }
+      },
+      "elapsed_s": 44.1
+    }
+  ],
+  "cross_seed": {
+    "civ_mean": 6.25,
+    "civ_std": 5.0682837331783235,
+    "civ_min": 3,
+    "civ_max": 15,
+    "odi_max_mean": 0.787525,
+    "msi_max_mean": 0.456975,
+    "gbc_coherence_mean": 0.5589000000000001,
+    "gbc_pass_rate_mean": 0.328125,
+    "h1_mean_civ_ge_5": true,
+    "h2_gbc_coh_ge_055": true,
+    "h3_gbc_pass_ge_03": true
+  }
+}

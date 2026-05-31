@@ -231,6 +231,8 @@ class HierarchicalEvolver:
                  counterfactual_engine: Optional[CounterfactualEngine] = None,
                  narrative_recursion_operator: Optional[NarrativeRecursionOperator] = None,
                  global_bias_constraint: Optional[GlobalBiasConstraint] = None,
+                 # GBC 软约束：对违反机制施加温和偏置旋转（0=关闭，0.1=轻度，0.3=中度）
+                 gbc_soft_nudge: float = 0.0,
                  # P1 评估间隔（每多少个 P0 检测周期执行一次 P1 评估）
                  p1_eval_interval: int = 5,
                  phase2_verbose: bool = False,
@@ -278,6 +280,7 @@ class HierarchicalEvolver:
         self.counterfactual_engine = counterfactual_engine
         self.narrative_recursion_operator = narrative_recursion_operator
         self.global_bias_constraint = global_bias_constraint
+        self._gbc_soft_nudge = gbc_soft_nudge
         self._p1_eval_interval = p1_eval_interval
         self._phase2_verbose = phase2_verbose
         self._phase3_verbose = phase3_verbose
@@ -888,6 +891,21 @@ class HierarchicalEvolver:
                         if not gbc_result.passed and gbc_result.violating_mechanisms:
                             if self._phase2_verbose:
                                 print(f"    [GBC] 违反机制: {', '.join(gbc_result.violating_mechanisms)}")
+                            # GBC 软约束：对负相干机制施加温和旋转
+                            if self._gbc_soft_nudge > 0 and gbc_result.global_bias is not None:
+                                gb = gbc_result.global_bias
+                                gb_norm = gb / (gb.norm() + 1e-10)
+                                for vname in gbc_result.violating_mechanisms:
+                                    vcoh = gbc_result.coherence_by_mechanism.get(vname, 0.0)
+                                    if vcoh < 0 and vname in local_biases:
+                                        vb = local_biases[vname]
+                                        vb_norm = vb / (vb.norm() + 1e-10)
+                                        # 向全局方向旋转：v' = v + nudge * gb
+                                        nudged = vb + self._gbc_soft_nudge * gb_norm * vb.norm()
+                                        local_biases[vname] = nudged
+                                        if self._phase2_verbose:
+                                            new_coh = float(torch.dot(nudged, gb).item() / (nudged.norm() * gb.norm() + 1e-10))
+                                            print(f"    [GBC-Nudge] {vname}: coh {vcoh:.3f} -> {new_coh:.3f}")
 
                 # 功能分化代理
                 component_contributions = None
