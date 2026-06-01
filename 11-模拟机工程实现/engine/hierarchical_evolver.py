@@ -43,6 +43,7 @@ from engine.functional_signal_coupling import extract_functional_signals
 from engine.adaptive_momentum_controller import AdaptiveMomentumController, DEFAULT_ADAPTIVE_MOMENTUM_CONFIG
 from engine.institutional_layer_protector import InstitutionalLayerProtector, DEFAULT_INSTITUTIONAL_PROTECTOR_CONFIG
 from engine.cross_scale_coupling import CrossScaleCoupling, DEFAULT_CROSS_SCALE_COUPLING_CONFIG
+from engine.narrative_self_emergence import NarrativeSelfEmergence, DEFAULT_NARRATIVE_SELF_EMERGENCE_CONFIG
 
 
 # ──────────────────────────────────────────────────────────
@@ -244,10 +245,12 @@ class HierarchicalEvolver:
                  adaptive_momentum_controller: Optional[AdaptiveMomentumController] = None,
                  institutional_layer_protector: Optional[InstitutionalLayerProtector] = None,
                  cross_scale_coupling: Optional[CrossScaleCoupling] = None,
+                 narrative_self_emergence: Optional[NarrativeSelfEmergence] = None,
                  # Phase 4 配置（可选，覆盖默认配置）
                  adaptive_momentum_config: Optional[Dict] = None,
                  institutional_protector_config: Optional[Dict] = None,
                  cross_scale_coupling_config: Optional[Dict] = None,
+                 narrative_self_emergence_config: Optional[Dict] = None,
                  phase4_verbose: bool = False):
         """
         Args:
@@ -302,9 +305,11 @@ class HierarchicalEvolver:
         self.institutional_layer_protector = institutional_layer_protector
         # Phase 4 P1 组件
         self.cross_scale_coupling = cross_scale_coupling
+        self.narrative_self_emergence = narrative_self_emergence
         self._adaptive_momentum_config = adaptive_momentum_config
         self._institutional_protector_config = institutional_protector_config
         self._cross_scale_coupling_config = cross_scale_coupling_config
+        self._narrative_self_emergence_config = narrative_self_emergence_config
         self._phase2_layer_results: Dict[int, List[Dict]] = {}  # layer -> [step_results]
         # 解封事件记录
         self._unsealing_events: List[UnsealingEvent] = []
@@ -1789,6 +1794,68 @@ class HierarchicalEvolver:
                           f"coherent={csc_result['csci'].is_coherent} "
                           f"narrative_coh={csc_result['narrative_bridge'].coherence:.4f}")
 
+            # 7. NarrativeSelfEmergence (Phase 4 P1)
+            if self.narrative_self_emergence is not None:
+                # Collect narrative themes from narrative recursion operator
+                narrative_themes = []
+                narrative_level_dist = {}
+                institutional_narrative = "silent"
+                institutional_coherence = 0.0
+                if self.narrative_recursion_operator is not None:
+                    narr_summary = self.narrative_recursion_operator.get_summary()
+                    narrative_level_dist = narr_summary.get('narrative_level_distribution', {})
+                    # Extract themes from recent narrative history
+                    recent_narratives = self.narrative_recursion_operator.get_narrative_history(n=5)
+                    for nr in recent_narratives:
+                        narrative_themes.append(nr.get('narrative_level', 'MINI_NARRATIVE'))
+                    # Institutional narrative from level distribution
+                    if narrative_level_dist.get('INSTITUTIONAL', 0) > 0:
+                        institutional_narrative = "institutional_narrative_active"
+                        institutional_coherence = min(1.0, narrative_level_dist.get('INSTITUTIONAL', 0) / 10.0)
+
+                # Get MSI from result_entry
+                msi_mean = 0.0
+                if 'minimal_self' in result_entry and result_entry['minimal_self'] is not None:
+                    msi_mean = result_entry['minimal_self'].get('msi_mean', 0.0)
+
+                # Get ODI
+                odi_val = self._last_odi_value
+
+                # Layer distribution
+                layer_dist = {}
+                if 'level_counts' in result_entry:
+                    layer_dist = result_entry['level_counts']
+
+                nse_result = self.narrative_self_emergence.step(
+                    msi=msi_mean,
+                    odi=odi_val,
+                    narrative_themes=narrative_themes if narrative_themes else ["silent"],
+                    narrative_level_distribution=narrative_level_dist if narrative_level_dist else {"MINI": 0},
+                    institutional_narrative=institutional_narrative,
+                    institutional_coherence=institutional_coherence,
+                    layer_distribution=layer_dist if layer_dist else None,
+                    step=step,
+                )
+                result_entry['narrative_self_emergence'] = {
+                    'nsi': round(nse_result['nsi'].nsi, 4),
+                    'nsi_active': nse_result['nsi'].is_nsi_active,
+                    'temporal_continuity': round(nse_result['nsi'].temporal_continuity, 4),
+                    'narrative_stability': round(nse_result['nsi'].narrative_stability, 4),
+                    'self_history_depth': round(nse_result['nsi'].self_history_depth, 4),
+                    'continuity_score': round(nse_result['continuity'].continuity_score, 4),
+                    'is_continuous': nse_result['continuity'].is_continuous,
+                    'dominant_theme': nse_result['continuity'].dominant_theme,
+                    'stability_score': round(nse_result['stability'].stability_score, 4),
+                    'is_stable': nse_result['stability'].is_stable,
+                    'n_turning_points': nse_result['history'].n_turning_points,
+                }
+                if self._phase4_verbose:
+                    nsi_val = nse_result['nsi'].nsi
+                    print(f"    [NSE] L{layer_id} step={step}: NSI={nsi_val:.4f} "
+                          f"active={nse_result['nsi'].is_nsi_active} "
+                          f"continuity={nse_result['continuity'].continuity_score:.3f} "
+                          f"stability={nse_result['stability'].stability_score:.3f}")
+
             self._phase2_layer_results[layer_id].append(result_entry)
 
         return callback
@@ -2032,12 +2099,20 @@ class HierarchicalEvolver:
             'phase4_summary': {
                 'adaptive_momentum_controller_active': self.adaptive_momentum_controller is not None,
                 'institutional_layer_protector_active': self.institutional_layer_protector is not None,
+                'cross_scale_coupling_active': self.cross_scale_coupling is not None,
+                'narrative_self_emergence_active': self.narrative_self_emergence is not None,
                 'amc_history': (
                     self.adaptive_momentum_controller.get_history()
                     if self.adaptive_momentum_controller else None),
                 'ilp_history': (
                     self.institutional_layer_protector.get_history()
                     if self.institutional_layer_protector else None),
+                'nse_summary': (
+                    self.narrative_self_emergence.get_summary()
+                    if self.narrative_self_emergence else None),
+                'nse_nsi_trend': (
+                    self.narrative_self_emergence.get_nsi_trend()
+                    if self.narrative_self_emergence else None),
             },
             'gbc_checks': [
                 {
