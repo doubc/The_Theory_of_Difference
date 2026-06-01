@@ -1742,11 +1742,14 @@ class HierarchicalEvolver:
                     'structure_vector': constraints.direction.float().clone() if
                         hasattr(constraints, 'direction') and constraints.direction is not None else None,
                 }
-                # P1-B: CIV layer stability = combined interval CV + event density
+                # P1-C: CIV layer stability = combined interval CV + event density (gated)
                 civ_stability = 0.0
                 if not hasattr(self, '_civ_step_history'):
                     self._civ_step_history = []
-                if len(self._civ_step_history) >= 1:
+                n_civ_events = len(self._civ_step_history)
+                # P1-C: CIV stability gating — only compute when events > 10
+                # CIV is a rare-event layer (1-4 events/seed); stability metric unreliable with few events
+                if n_civ_events > 10:
                     recent = self._civ_step_history[-20:]
                     # Interval stability: CV-based
                     interval_stability = 0.0
@@ -1765,6 +1768,9 @@ class HierarchicalEvolver:
                     density_stability = min(1.0, len(recent) / 20.0)
                     # Combined: 60% interval + 40% density
                     civ_stability = 0.6 * interval_stability + 0.4 * density_stability
+                else:
+                    # P1-C: Default stability for sparse CIV — neutral value, don't let noise drive TopDown
+                    civ_stability = 0.3
 
                 for hl in ['INSTITUTIONAL', 'CIVILIZATION']:
                     hl_state = self.hierarchy.get_layer_state_by_name(hl)
@@ -1773,8 +1779,8 @@ class HierarchicalEvolver:
                         # P1: Use CIV event-based stability for CIVILIZATION layer
                         if hl == 'CIVILIZATION' and civ_stability > 0:
                             stab = max(stab, civ_stability)
-                        # P1-B: For INSTITUTIONAL, use ILP's internal stability as fallback
-                        if hl == 'INSTITUTIONAL' and stab < 0.1 and self.institutional_layer_protector is not None:
+                        # P1-C: For INSTITUTIONAL, use ILP's internal stability as fallback (threshold 0.15 for more aggressive boost)
+                        if hl == 'INSTITUTIONAL' and stab < 0.15 and self.institutional_layer_protector is not None:
                             try:
                                 ilp_summary = self.institutional_layer_protector.get_summary()
                                 ilp_stab = ilp_summary.get('stability_score', 0.0)
