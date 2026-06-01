@@ -1821,6 +1821,16 @@ class HierarchicalEvolver:
                 # Get ODI
                 odi_val = self._last_odi_value
 
+                # Get CIV (civilization count) from narrative level distribution
+                civ_count = 0.0
+                if narrative_level_dist:
+                    civ_count = float(narrative_level_dist.get('CIVILIZATION', 0))
+
+                # Get GBC coherence
+                gbc_coherence_val = None
+                if 'global_bias_constraint' in result_entry and result_entry['global_bias_constraint'] is not None:
+                    gbc_coherence_val = result_entry['global_bias_constraint'].get('coherence', None)
+
                 # Layer distribution
                 layer_dist = {}
                 if 'level_counts' in result_entry:
@@ -1835,6 +1845,8 @@ class HierarchicalEvolver:
                     institutional_coherence=institutional_coherence,
                     layer_distribution=layer_dist if layer_dist else None,
                     step=step,
+                    civ=civ_count if civ_count > 0 else None,
+                    gbc_coherence=gbc_coherence_val,
                 )
                 result_entry['narrative_self_emergence'] = {
                     'nsi': round(nse_result['nsi'].nsi, 4),

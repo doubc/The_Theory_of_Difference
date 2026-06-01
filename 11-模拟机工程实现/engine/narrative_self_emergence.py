@@ -60,6 +60,15 @@ DEFAULT_NARRATIVE_SELF_EMERGENCE_CONFIG = {
     'history_max_turning_points': 50,   # 最大关键转折点存储数
     'history_second_deriv_threshold': 0.05,  # 二阶导数极值阈值
     'history_msi_lookback': 20,         # MSI 回望窗口（用于二阶导数）
+    'history_multi_signal': True,       # 启用多信号转折点检测（MSI+ODI+CIV+GBC）
+    'history_civ_lookback': 20,         # CIV 回望窗口
+    'history_gbc_lookback': 20,         # GBC coherence 回望窗口
+    'history_signal_weights': {         # 各信号在转折点检测中的权重
+        'msi': 0.4,
+        'odi': 0.3,
+        'civ': 0.2,
+        'gbc': 0.1,
+    },
 
     # NSI 计算
     'nsi_alpha': 0.4,   # 时间连续性权重
@@ -412,9 +421,17 @@ class SelfHistoryAccumulator:
         self.max_turning_points = cfg['history_max_turning_points']
         self.second_deriv_threshold = cfg['history_second_deriv_threshold']
         self.msi_lookback = cfg['history_msi_lookback']
+        self.multi_signal = cfg.get('history_multi_signal', True)
+        self.civ_lookback = cfg.get('history_civ_lookback', 20)
+        self.gbc_lookback = cfg.get('history_gbc_lookback', 20)
+        self.signal_weights = cfg.get('history_signal_weights', {
+            'msi': 0.4, 'odi': 0.3, 'civ': 0.2, 'gbc': 0.1
+        })
 
         self._msi_history: Deque[Tuple[int, float]] = deque(maxlen=500)
         self._odi_history: Deque[Tuple[int, float]] = deque(maxlen=500)
+        self._civ_history: Deque[Tuple[int, float]] = deque(maxlen=500)
+        self._gbc_history: Deque[Tuple[int, float]] = deque(maxlen=500)
         self._turning_points: List[TurningPoint] = []
         self._step_count = 0
 
@@ -425,6 +442,8 @@ class SelfHistoryAccumulator:
         narrative_theme: str,
         layer_distribution: Optional[Dict[str, int]] = None,
         step: int = 0,
+        civ: Optional[float] = None,
+        gbc_coherence: Optional[float] = None,
     ) -> SelfHistoryResult:
         """更新自我历史积累
 
@@ -440,6 +459,10 @@ class SelfHistoryAccumulator:
             层结构分布快照
         step : int
             当前步数
+        civ : Optional[float]
+            CIVILIZATION 层级值（用于多信号转折点检测）
+        gbc_coherence : Optional[float]
+            GBC coherence 值（用于多信号转折点检测）
 
         Returns
         -------
@@ -450,10 +473,15 @@ class SelfHistoryAccumulator:
 
         self._msi_history.append((actual_step, msi))
         self._odi_history.append((actual_step, odi))
+        if civ is not None:
+            self._civ_history.append((actual_step, civ))
+        if gbc_coherence is not None:
+            self._gbc_history.append((actual_step, gbc_coherence))
 
-        # 检测关键转折点（MSI 二阶导数极值）
+        # 检测关键转折点（多信号二阶导数极值）
         turning_point = self._detect_turning_point(
-            msi, odi, narrative_theme, layer_distribution, actual_step
+            msi, odi, narrative_theme, layer_distribution, actual_step,
+            civ=civ, gbc_coherence=gbc_coherence,
         )
         if turning_point is not None:
             self._turning_points.append(turning_point)
@@ -470,39 +498,95 @@ class SelfHistoryAccumulator:
         narrative_theme: str,
         layer_distribution: Optional[Dict[str, int]],
         step: int,
+        civ: Optional[float] = None,
+        gbc_coherence: Optional[float] = None,
     ) -> Optional[TurningPoint]:
-        """检测关键转折点
+        """检测关键转折点（多信号版本）
 
-        关键转折点 = MSI 二阶导数的绝对值超过阈值的点。
-        使用回望窗口内的 MSI 序列计算二阶导数。
+        关键转折点 = 加权多信号二阶导数组合超过阈值的点。
+        信号包括：MSI、ODI、CIVILIZATION 层级、GBC coherence。
+
+        在已收敛的系统中，MSI 可能平坦（二阶导数≈0），
+        但 ODI、CIV、GBC 仍可能有结构性转折。
+        多信号方法解决单一 MSI 信号在收敛系统中失效的问题。
         """
         if len(self._msi_history) < self.msi_lookback + 2:
             return None
 
-        history_list = list(self._msi_history)
-        recent = history_list[-self.msi_lookback:]
+        w = self.signal_weights
+        threshold = self.second_deriv_threshold
 
-        if len(recent) < 3:
-            return None
+        # --- MSI 二阶导数 ---
+        msi_second_deriv = 0.0
+        msi_history_list = list(self._msi_history)
+        msi_recent = msi_history_list[-self.msi_lookback:]
+        if len(msi_recent) >= 3:
+            msi_values = [v for _, v in msi_recent]
+            msi_first = [msi_values[i + 1] - msi_values[i] for i in range(len(msi_values) - 1)]
+            msi_second = [msi_first[i + 1] - msi_first[i] for i in range(len(msi_first) - 1)]
+            if msi_second:
+                msi_second_deriv = msi_second[-1]
 
-        # 计算 MSI 的二阶导数（离散差分）
-        msi_values = [v for _, v in recent]
-        first_deriv = [msi_values[i + 1] - msi_values[i] for i in range(len(msi_values) - 1)]
-        second_deriv = [first_deriv[i + 1] - first_deriv[i] for i in range(len(first_deriv) - 1)]
+        # --- ODI 二阶导数 ---
+        odi_second_deriv = 0.0
+        if len(self._odi_history) >= self.msi_lookback + 2:
+            odi_history_list = list(self._odi_history)
+            odi_recent = odi_history_list[-self.msi_lookback:]
+            if len(odi_recent) >= 3:
+                odi_values = [v for _, v in odi_recent]
+                odi_first = [odi_values[i + 1] - odi_values[i] for i in range(len(odi_values) - 1)]
+                odi_second = [odi_first[i + 1] - odi_first[i] for i in range(len(odi_first) - 1)]
+                if odi_second:
+                    odi_second_deriv = odi_second[-1]
 
-        if not second_deriv:
-            return None
+        # --- CIV 二阶导数 ---
+        civ_second_deriv = 0.0
+        if civ is not None and len(self._civ_history) >= self.civ_lookback + 2:
+            civ_history_list = list(self._civ_history)
+            civ_recent = civ_history_list[-self.civ_lookback:]
+            if len(civ_recent) >= 3:
+                civ_values = [v for _, v in civ_recent]
+                civ_first = [civ_values[i + 1] - civ_values[i] for i in range(len(civ_values) - 1)]
+                civ_second = [civ_first[i + 1] - civ_first[i] for i in range(len(civ_first) - 1)]
+                if civ_second:
+                    civ_second_deriv = civ_second[-1]
 
-        # 最新点的二阶导数
-        latest_second_deriv = second_deriv[-1]
+        # --- GBC coherence 二阶导数 ---
+        gbc_second_deriv = 0.0
+        if gbc_coherence is not None and len(self._gbc_history) >= self.gbc_lookback + 2:
+            gbc_history_list = list(self._gbc_history)
+            gbc_recent = gbc_history_list[-self.gbc_lookback:]
+            if len(gbc_recent) >= 3:
+                gbc_values = [v for _, v in gbc_recent]
+                gbc_first = [gbc_values[i + 1] - gbc_values[i] for i in range(len(gbc_values) - 1)]
+                gbc_second = [gbc_first[i + 1] - gbc_first[i] for i in range(len(gbc_first) - 1)]
+                if gbc_second:
+                    gbc_second_deriv = gbc_second[-1]
 
-        # 极值检测：二阶导数绝对值超过阈值
-        if abs(latest_second_deriv) >= self.second_deriv_threshold:
+        # --- 加权组合分数 ---
+        combined_score = (
+            w.get('msi', 0.4) * abs(msi_second_deriv) +
+            w.get('odi', 0.3) * abs(odi_second_deriv) +
+            w.get('civ', 0.2) * abs(civ_second_deriv) +
+            w.get('gbc', 0.1) * abs(gbc_second_deriv)
+        )
+
+        # 极值检测：加权组合分数超过阈值
+        if combined_score >= threshold:
+            # 记录主导信号（绝对值最大的二阶导数）
+            signal_contributions = {
+                'msi': abs(msi_second_deriv),
+                'odi': abs(odi_second_deriv),
+                'civ': abs(civ_second_deriv),
+                'gbc': abs(gbc_second_deriv),
+            }
+            dominant_signal = max(signal_contributions, key=signal_contributions.get)
+
             return TurningPoint(
                 step=step,
                 odi_value=odi,
                 msi_value=msi,
-                second_derivative=float(latest_second_deriv),
+                second_derivative=float(combined_score),
                 narrative_theme=narrative_theme,
                 layer_distribution=layer_distribution.copy() if layer_distribution else {},
             )
@@ -587,6 +671,8 @@ class NarrativeSelfEmergence:
         institutional_coherence: float,
         layer_distribution: Optional[Dict[str, int]] = None,
         step: int = 0,
+        civ: Optional[float] = None,
+        gbc_coherence: Optional[float] = None,
     ) -> Dict:
         """执行一步叙事自我涌现
 
@@ -639,6 +725,8 @@ class NarrativeSelfEmergence:
             narrative_theme=continuity_result.dominant_theme,
             layer_distribution=layer_distribution,
             step=actual_step,
+            civ=civ,
+            gbc_coherence=gbc_coherence,
         )
 
         # 4. 计算 NSI
