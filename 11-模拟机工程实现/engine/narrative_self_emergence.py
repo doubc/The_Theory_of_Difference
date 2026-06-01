@@ -66,7 +66,7 @@ DEFAULT_NARRATIVE_SELF_EMERGENCE_CONFIG = {
     'history_signal_weights': {         # 各信号在转折点检测中的权重
         'msi': 0.4,
         'odi': 0.3,
-        'civ': 0.2,
+        'civ': 0.0,                       # exp_98: 禁用 CIV 防止 NSE-CIV 正反馈循环
         'gbc': 0.1,
     },
 
@@ -425,8 +425,12 @@ class SelfHistoryAccumulator:
         self.civ_lookback = cfg.get('history_civ_lookback', 20)
         self.gbc_lookback = cfg.get('history_gbc_lookback', 20)
         self.signal_weights = cfg.get('history_signal_weights', {
-            'msi': 0.4, 'odi': 0.3, 'civ': 0.2, 'gbc': 0.1
+            'msi': 0.4, 'odi': 0.3, 'civ': 0.0, 'gbc': 0.1
         })
+        # CIV weight is 0.0 by default to prevent NSE-CIV positive feedback loop
+        # (exp_98 finding: CIV in turning point detection creates unbounded growth)
+        # AMC can dynamically increase this weight via set_civ_weight() if needed
+        self._civ_weight_override: Optional[float] = None
 
         self._msi_history: Deque[Tuple[int, float]] = deque(maxlen=500)
         self._odi_history: Deque[Tuple[int, float]] = deque(maxlen=500)
@@ -563,11 +567,14 @@ class SelfHistoryAccumulator:
                 if gbc_second:
                     gbc_second_deriv = gbc_second[-1]
 
+        # --- CIV weight: use override if set by AMC, otherwise use config ---
+        civ_weight = self._civ_weight_override if self._civ_weight_override is not None else w.get('civ', 0.0)
+
         # --- 加权组合分数 ---
         combined_score = (
             w.get('msi', 0.4) * abs(msi_second_deriv) +
             w.get('odi', 0.3) * abs(odi_second_deriv) +
-            w.get('civ', 0.2) * abs(civ_second_deriv) +
+            civ_weight * abs(civ_second_deriv) +
             w.get('gbc', 0.1) * abs(gbc_second_deriv)
         )
 
@@ -608,6 +615,19 @@ class SelfHistoryAccumulator:
             odi_range=float(max(odi_values) - min(odi_values)) if odi_values else 0.0,
             msi_range=float(max(msi_values) - min(msi_values)) if msi_values else 0.0,
         )
+
+    def set_civ_weight(self, weight: float) -> None:
+        """动态设置 CIV 在转折点检测中的权重
+
+        由 AdaptiveMomentumController 调用，当检测到 CIV 加速时降低权重，
+        防止 NSE-CIV 正反馈循环（exp_98 发现）。
+
+        Parameters
+        ----------
+        weight : float
+            CIV 权重 [0.0, 0.5]，0.0 = 完全禁用 CIV 信号
+        """
+        self._civ_weight_override = float(np.clip(weight, 0.0, 0.5))
 
     def get_summary(self) -> Dict:
         result = self._build_result()
@@ -805,6 +825,14 @@ class NarrativeSelfEmergence:
             'history': self.history_accumulator.get_summary(),
             'nsi_trend': self.get_nsi_trend(),
         }
+
+    def set_civ_weight(self, weight: float) -> None:
+        """动态设置 CIV 在转折点检测中的权重（委托给 SelfHistoryAccumulator）
+
+        由 AdaptiveMomentumController 调用，当检测到 CIV 加速时降低权重，
+        防止 NSE-CIV 正反馈循环（exp_98 发现）。
+        """
+        self.history_accumulator.set_civ_weight(weight)
 
     def reset(self):
         """重置所有子组件"""
