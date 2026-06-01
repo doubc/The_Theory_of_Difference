@@ -1,0 +1,221 @@
+{
+  "experiment": "exp_108b_ablation_continuation",
+  "timestamp": "20260602_025923",
+  "note": "A0-A2 results from exp_108 partial run. This file contains A3 and A4 only.",
+  "results": {
+    "A3_no_csc": {
+      "per_seed": [
+        {
+          "seed": 42,
+          "elapsed": 63.63331699371338,
+          "n_steps": 240,
+          "sealed": true,
+          "odi_max": 0.8072068720132943,
+          "gbc_coherence_mean": 0.5304833333333333,
+          "gbc_pass_rate": 0.0,
+          "csc_csci_std": 0.0,
+          "topdown_max_active": 0,
+          "nse_nsi_max": 0.6749,
+          "nse_nsi_active_rate": 0.9208333333333333,
+          "nse_continuity_mean": 0.7689629166666665,
+          "nse_history_depth_mean": 0.144,
+          "nse_turning_points_final": 8,
+          "civ_count": 6,
+          "civ_limiter_total_seen": 8
+        },
+        {
+          "seed": 142,
+          "elapsed": 57.28825902938843,
+          "n_steps": 240,
+          "sealed": false,
+          "odi_max": 0.7118718653334111,
+          "gbc_coherence_mean": 0.5530625,
+          "gbc_pass_rate": 0.0,
+          "csc_csci_std": 0.0,
+          "topdown_max_active": 0,
+          "nse_nsi_max": 0.6475,
+          "nse_nsi_active_rate": 0.8375,
+          "nse_continuity_mean": 0.766495,
+          "nse_history_depth_mean": 0.1005,
+          "nse_turning_points_final": 6,
+          "civ_count": 6,
+          "civ_limiter_total_seen": 8
+        },
+        {
+          "seed": 242,
+          "elapsed": 57.79118895530701,
+          "n_steps": 240,
+          "sealed": false,
+          "odi_max": 0.6903051392100336,
+          "gbc_coherence_mean": 0.5928208333333332,
+          "gbc_pass_rate": 0.0,
+          "csc_csci_std": 0.0,
+          "topdown_max_active": 0,
+          "nse_nsi_max": 0.6606,
+          "nse_nsi_active_rate": 0.7541666666666667,
+          "nse_continuity_mean": 0.7688833333333333,
+          "nse_history_depth_mean": 0.14733333333333337,
+          "nse_turning_points_final": 7,
+          "civ_count": 3,
+          "civ_limiter_total_seen": 7
+        },
+        {
+          "seed": 742,
+          "elapsed": 56.79888296127319,
+          "n_steps": 240,
+          "sealed": false,
+          "odi_max": 0.7276470703532094,
+          "gbc_coherence_mean": 0.5594625,
+          "gbc_pass_rate": 0.0,
+          "csc_csci_std": 0.0,
+          "topdown_max_active": 0,
+          "nse_nsi_max": 0.6989,
+          "nse_nsi_active_rate": 0.8791666666666667,
+          "nse_continuity_mean": 0.7659841666666665,
+          "nse_history_depth_mean": 0.21083333333333332,
+          "nse_turning_points_final": 10,
+          "civ_count": 7,
+          "civ_limiter_total_seen": 12
+        }
+      ],
+      "hypotheses": {
+        "H1": true,
+        "H2": true,
+        "H3": true,
+        "H4": true,
+        "H5": true,
+        "H6": true,
+        "H7": false,
+        "H8": false
+      },
+      "summary": {
+        "all_pass": false,
+        "n_pass": 6,
+        "failed": [
+          "H7",
+          "H8"
+        ],
+        "civ_mean": 5.5,
+        "civ_min": 3
+      }
+    },
+    "A4_no_nse": {
+      "per_seed": [
+        {
+          "seed": 42,
+          "elapsed": 61.76012992858887,
+          "n_steps": 240,
+          "sealed": true,
+          "odi_max": 0.8072068720132943,
+          "gbc_coherence_mean": 0.5304833333333333,
+          "gbc_pass_rate": 0.0,
+          "csc_csci_std": 0.03244534720966254,
+          "topdown_max_active": 1,
+          "nse_nsi_max": 0.0,
+          "nse_nsi_active_rate": 0.0,
+          "nse_continuity_mean": 0.0,
+          "nse_history_depth_mean": 0.0,
+          "nse_turning_points_final": 0,
+          "civ_count": 6,
+          "civ_limiter_total_seen": 8
+        },
+        {
+          "seed": 142,
+          "elapsed": 57.112884521484375,
+          "n_steps": 240,
+          "sealed": false,
+          "odi_max": 0.7118718653334111,
+          "gbc_coherence_mean": 0.5530625,
+          "gbc_pass_rate": 0.0,
+          "csc_csci_std": 0.018318025256712455,
+          "topdown_max_active": 1,
+          "nse_nsi_max": 0.0,
+          "nse_nsi_active_rate": 0.0,
+          "nse_continuity_mean": 0.0,
+          "nse_history_depth_mean": 0.0,
+          "nse_turning_points_final": 0,
+          "civ_count": 6,
+          "civ_limiter_total_seen": 8
+        },
+        {
+          "seed": 242,
+          "elapsed": 57.938130617141724,
+          "n_steps": 240,
+          "sealed": false,
+          "odi_max": 0.6903051392100336,
+          "gbc_coherence_mean": 0.5928208333333332,
+          "gbc_pass_rate": 0.0,
+          "csc_csci_std": 0.021403120618784105,
+          "topdown_max_active": 1,
+          "nse_nsi_max": 0.0,
+          "nse_nsi_active_rate": 0.0,
+          "nse_continuity_mean": 0.0,
+          "nse_history_depth_mean": 0.0,
+          "nse_turning_points_final": 0,
+          "civ_count": 3,
+          "civ_limiter_total_seen": 7
+        },
+        {
+          "seed": 742,
+          "elapsed": 56.46241116523743,
+          "n_steps": 240,
+          "sealed": false,
+          "odi_max": 0.7276470703532094,
+          "gbc_coherence_mean": 0.5594625,
+          "gbc_pass_rate": 0.0,
+          "csc_csci_std": 0.019655568478734523,
+          "topdown_max_active": 1,
+          "nse_nsi_max": 0.0,
+          "nse_nsi_active_rate": 0.0,
+          "nse_continuity_mean": 0.0,
+          "nse_history_depth_mean": 0.0,
+          "nse_turning_points_final": 0,
+          "civ_count": 7,
+          "civ_limiter_total_seen": 12
+        }
+      ],
+      "hypotheses": {
+        "H1": false,
+        "H2": false,
+        "H3": false,
+        "H4": false,
+        "H5": true,
+        "H6": true,
+        "H7": true,
+        "H8": true
+      },
+      "summary": {
+        "all_pass": false,
+        "n_pass": 4,
+        "failed": [
+          "H1",
+          "H2",
+          "H3",
+          "H4"
+        ],
+        "civ_mean": 5.5,
+        "civ_min": 3
+      }
+    }
+  },
+  "from_exp_108_partial": {
+    "A0_baseline": {
+      "n_pass": 8,
+      "all_pass": true,
+      "failed": [],
+      "note": "8/8 ALL PASS — baseline replication confirmed"
+    },
+    "A1_no_amc": {
+      "n_pass": 8,
+      "all_pass": true,
+      "failed": [],
+      "note": "8/8 ALL PASS — AMC removal has NO effect on H1-H8"
+    },
+    "A2_no_ilp": {
+      "n_pass": 8,
+      "all_pass": true,
+      "failed": [],
+      "note": "8/8 ALL PASS — ILP removal has NO effect on H1-H8"
+    }
+  }
+}
