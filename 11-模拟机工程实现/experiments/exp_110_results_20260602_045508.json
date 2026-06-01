@@ -1,0 +1,204 @@
+{
+  "experiment": "exp_110_phase4_p3_long_run_stability",
+  "timestamp": "20260602_045508",
+  "note": "Phase 4 P3 — Long-run stability test at 2000 steps with CSC+NSE (reduced from 3200 due to OOM)",
+  "architecture": "CSC+NSE (AMC and ILP removed — redundant per Track A ablation)",
+  "config": {
+    "N0": 72,
+    "steps": 2000,
+    "seeds": [
+      42,
+      142,
+      242
+    ],
+    "sample_interval": 10,
+    "gbc_soft_nudge": 0.2,
+    "csc": "ON (P3_CSC_CONFIG)",
+    "nse": "ON (history_multi_signal, max_tp=25, odi=0.4, msi=0.3)",
+    "amc": "OFF (redundant per Track A)",
+    "ilp": "OFF (redundant per Track A)"
+  },
+  "results": {
+    "per_seed": [
+      {
+        "seed": 42,
+        "elapsed": 49.67163062095642,
+        "n_steps": 200,
+        "sealed": true,
+        "fh_nsi_max": 0.6536,
+        "fh_nsi_mean": 0.41945099999999996,
+        "fh_nsi_active_rate": 0.81,
+        "fh_continuity_mean": 0.456547,
+        "fh_history_depth_mean": 0.1292,
+        "fh_turning_points": 6,
+        "fh_csci_std": 0.01181839227644775,
+        "fh_topdown_max": 1,
+        "fh_civ_count": 4,
+        "sh_nsi_max": 0.7,
+        "sh_nsi_mean": 0.6658810000000003,
+        "sh_nsi_active_rate": 1.0,
+        "sh_continuity_mean": 0.9926609999999999,
+        "sh_history_depth_mean": 0.28079999999999994,
+        "sh_turning_points": 10,
+        "sh_csci_std": 1.1102230246251565e-16,
+        "sh_topdown_max": 1,
+        "sh_civ_count": 0,
+        "full_nsi_max": 0.7,
+        "full_nsi_active_rate": 0.905,
+        "full_continuity_mean": 0.7246039999999999,
+        "full_history_depth_mean": 0.205,
+        "full_turning_points": 16,
+        "full_civ_count": 4,
+        "full_csci_std": 0.008581130403390914,
+        "full_topdown_max": 1
+      },
+      {
+        "seed": 142,
+        "elapsed": 49.22749352455139,
+        "n_steps": 200,
+        "sealed": true,
+        "fh_nsi_max": 0.6485,
+        "fh_nsi_mean": 0.404596,
+        "fh_nsi_active_rate": 0.81,
+        "fh_continuity_mean": 0.448994,
+        "fh_history_depth_mean": 0.09720000000000002,
+        "fh_turning_points": 6,
+        "fh_csci_std": 0.02254905787388909,
+        "fh_topdown_max": 2,
+        "fh_civ_count": 14,
+        "sh_nsi_max": 0.7086,
+        "sh_nsi_mean": 0.6850120000000001,
+        "sh_nsi_active_rate": 1.0,
+        "sh_continuity_mean": 0.9815970000000002,
+        "sh_history_depth_mean": 0.3611999999999999,
+        "sh_turning_points": 11,
+        "sh_csci_std": 0.007354158279504184,
+        "sh_topdown_max": 2,
+        "sh_civ_count": 5,
+        "full_nsi_max": 0.7086,
+        "full_nsi_active_rate": 0.905,
+        "full_continuity_mean": 0.7152955,
+        "full_history_depth_mean": 0.22920000000000001,
+        "full_turning_points": 17,
+        "full_civ_count": 19,
+        "full_csci_std": 0.01712749041015641,
+        "full_topdown_max": 2
+      },
+      {
+        "seed": 242,
+        "elapsed": 50.05787539482117,
+        "n_steps": 200,
+        "sealed": true,
+        "fh_nsi_max": 0.6271,
+        "fh_nsi_mean": 0.40984299999999996,
+        "fh_nsi_active_rate": 0.71,
+        "fh_continuity_mean": 0.45179100000000005,
+        "fh_history_depth_mean": 0.1048,
+        "fh_turning_points": 4,
+        "fh_csci_std": 0.015306876722571458,
+        "fh_topdown_max": 1,
+        "fh_civ_count": 5,
+        "sh_nsi_max": 0.6983,
+        "sh_nsi_mean": 0.664905,
+        "sh_nsi_active_rate": 1.0,
+        "sh_continuity_mean": 0.9908649999999999,
+        "sh_history_depth_mean": 0.28119999999999995,
+        "sh_turning_points": 10,
+        "sh_csci_std": 0.001038583650940062,
+        "sh_topdown_max": 1,
+        "sh_civ_count": 0,
+        "full_nsi_max": 0.6983,
+        "full_nsi_active_rate": 0.855,
+        "full_continuity_mean": 0.7213279999999999,
+        "full_history_depth_mean": 0.19299999999999998,
+        "full_turning_points": 14,
+        "full_civ_count": 5,
+        "full_csci_std": 0.011851446230312982,
+        "full_topdown_max": 1
+      }
+    ],
+    "h1h8": {
+      "H1_nsi_max": {
+        "value": 0.7086,
+        "threshold": ">0.1",
+        "pass": true
+      },
+      "H2_nsi_active_rate": {
+        "value": 0.8883333333333333,
+        "threshold": ">0.3 all",
+        "pass": true
+      },
+      "H3_continuity_mean": {
+        "value": 0.7204091666666667,
+        "threshold": ">0.1",
+        "pass": true
+      },
+      "H4_combined": {
+        "value": "depth=0.2091, tp=15.7",
+        "threshold": "depth>0.05 OR tp>0",
+        "pass": true
+      },
+      "H5_civ_mean": {
+        "value": 9.333333333333334,
+        "threshold": "[3,15]",
+        "pass": true
+      },
+      "H6_civ_min": {
+        "value": 4,
+        "threshold": ">=2",
+        "pass": true
+      },
+      "H7_csci_std_mean": {
+        "value": 0.012520022347953436,
+        "threshold": ">0.005",
+        "pass": true
+      },
+      "H8_topdown_active_seeds": {
+        "value": 3,
+        "threshold": ">=2 seeds",
+        "pass": true
+      },
+      "summary": {
+        "all_pass": true,
+        "n_pass": 8,
+        "failed": []
+      }
+    },
+    "stability_hypotheses": {
+      "H16_nsi_stability": {
+        "description": "NSI mean in second half >= NSI mean in first half",
+        "pass": true,
+        "fh_nsi_mean": 0.41129666666666664,
+        "sh_nsi_mean": 0.6719326666666667
+      },
+      "H17_civ_stability": {
+        "description": "CIV count in second half >= 50% of first half",
+        "pass": false,
+        "fh_civ_mean": 7.666666666666667,
+        "sh_civ_mean": 1.6666666666666667,
+        "ratio": 0.21739130434782608
+      },
+      "H18_csci_stability": {
+        "description": "CSCI std does not collapse to 0 in second half",
+        "pass": true,
+        "fh_csci_std_mean": 0.0165581089576361,
+        "sh_csci_std_mean": 0.0027975806434814526
+      },
+      "H19_topdown_persistence": {
+        "description": "TopDown activates in both halves",
+        "pass": true,
+        "fh_topdown_active_seeds": 3,
+        "sh_topdown_active_seeds": 3
+      },
+      "H20_no_collapse": {
+        "description": "All H1-H8 pass at step 2000",
+        "pass": true,
+        "h1h8_result": {
+          "all_pass": true,
+          "n_pass": 8,
+          "failed": []
+        }
+      }
+    }
+  }
+}
