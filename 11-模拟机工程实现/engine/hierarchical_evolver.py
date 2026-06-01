@@ -735,6 +735,15 @@ class HierarchicalEvolver:
                         'level_distribution_snapshot': level_dist,
                     }
 
+                    # P1: Track CIV event steps for CIV layer stability
+                    if is_civ:
+                        if not hasattr(self, '_civ_step_history'):
+                            self._civ_step_history = []
+                        self._civ_step_history.append(step)
+                        # Keep last 50 entries
+                        if len(self._civ_step_history) > 50:
+                            self._civ_step_history = self._civ_step_history[-50:]
+
             # 5. AdaptiveMomentumController (Phase 4 P0)
             if self.adaptive_momentum_controller is not None:
                 # 获取当前叙事层级计数
@@ -1733,14 +1742,45 @@ class HierarchicalEvolver:
                     'structure_vector': constraints.direction.float().clone() if
                         hasattr(constraints, 'direction') and constraints.direction is not None else None,
                 }
+                # P1: Track CIV layer stability from CIV event history
+                civ_stability = 0.0
+                if hasattr(self, '_civ_step_history'):
+                    # Stability = 1 - (std of recent CIV intervals / mean of recent CIV intervals)
+                    # Low CV → stable periodic CIV → high stability
+                    recent = self._civ_step_history[-10:]
+                    if len(recent) >= 3:
+                        intervals = [recent[i+1] - recent[i] for i in range(len(recent)-1)]
+                        mean_int = sum(intervals) / len(intervals)
+                        if mean_int > 0:
+                            std_int = (sum((x - mean_int)**2 for x in intervals) / len(intervals)) ** 0.5
+                            cv = std_int / mean_int
+                            civ_stability = max(0.0, min(1.0, 1.0 - cv))
+                        else:
+                            civ_stability = 1.0
+                    elif len(recent) >= 1:
+                        civ_stability = 0.3  # some CIV events but not enough for statistics
+                else:
+                    self._civ_step_history = []
+
                 for hl in ['INSTITUTIONAL', 'CIVILIZATION']:
                     hl_state = self.hierarchy.get_layer_state_by_name(hl)
                     if hl_state is not None:
+                        stab = hl_state.get('stability_score', 0.0)
+                        # P1: Use CIV event-based stability for CIVILIZATION layer
+                        if hl == 'CIVILIZATION' and civ_stability > 0:
+                            stab = max(stab, civ_stability)
                         level_states[hl] = {
-                            'stability_score': hl_state.get('stability_score', 0.0),
+                            'stability_score': stab,
                             'odi': hl_state.get('odi', 0.0),
                             'structure_vector': hl_state.get('structure_vector', None),
                         }
+                # Ensure CIV layer exists in level_states even if hierarchy doesn't have L2
+                if 'CIVILIZATION' not in level_states:
+                    level_states['CIVILIZATION'] = {
+                        'stability_score': civ_stability,
+                        'odi': 0.0,
+                        'structure_vector': None,
+                    }
                 narrative_labels = {}
                 if self.narrative_recursion_operator is not None:
                     narr_history = self.narrative_recursion_operator.get_narrative_history(n=1)

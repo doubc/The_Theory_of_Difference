@@ -357,9 +357,14 @@ class InstitutionalNarrativeStabilizer:
         else:
             self._resistance_score = max(0.0, self._resistance_score - self.resistance_rate * 2)
 
-        # 稳定性得分 = 相干度 × 抗扰动能力 × ODI 因子
+        # 非平凡性因子：衡量叙事标签的变化率
+        # 如果叙事标签长期不变（静态收敛），稳定性应被惩罚
+        # 真正的稳定性 = 在变化中保持连贯，而非静止
+        non_triviality = self._compute_non_triviality()
+
+        # 稳定性得分 = 相干度 × 抗扰动能力 × ODI 因子 × 非平凡性因子
         odi_factor = min(1.0, odi / 0.5)  # ODI > 0.5 时达到满分
-        self._stability_score = coherence * self._resistance_score * odi_factor
+        self._stability_score = coherence * self._resistance_score * odi_factor * non_triviality
 
         is_stable = coherence >= self.min_coherence and self._resistance_score >= 0.3
 
@@ -395,6 +400,51 @@ class InstitutionalNarrativeStabilizer:
                 coherence_values.append(intersection / union if union > 0 else 0.0)
 
         return float(np.mean(coherence_values)) if coherence_values else 0.0
+
+    def _compute_non_triviality(self) -> float:
+        """计算非平凡性因子 [0, 1]
+
+        衡量叙事标签在窗口内的变化率。
+        - 如果叙事标签长期不变（静态收敛），返回低值（~0.3-0.5）
+        - 如果叙事标签在变化但保持连贯，返回高值（~0.8-1.0）
+        - 如果叙事标签剧烈变化（碎片化），返回低值（~0.2-0.4）
+
+        非平凡性 = 变化但连贯 = 真正的稳定性
+        理论依据：制度叙事应该在应对扰动时保持连贯，而非静止不动。
+        """
+        if len(self._narrative_history) < 10:
+            return 0.5  # 数据不足时返回中性值
+
+        history_list = list(self._narrative_history)
+        n = len(history_list)
+
+        # 计算相邻步之间的标签变化率
+        change_count = 0
+        for i in range(1, n):
+            if history_list[i]['narrative'] != history_list[i - 1]['narrative']:
+                change_count += 1
+
+        change_rate = change_count / (n - 1)  # [0, 1]
+
+        # 理想变化率：5-20% 的步有标签变化（在变化中保持连贯）
+        # 变化率 = 0 → 静态收敛（平凡稳定）→ 非平凡性低
+        # 变化率 > 0.5 → 碎片化 → 非平凡性低
+        # 变化率在 [0.05, 0.20] → 理想区间 → 非平凡性高
+        if change_rate == 0.0:
+            # 完全静止：平凡稳定，惩罚
+            return 0.4
+        elif 0.05 <= change_rate <= 0.20:
+            # 理想区间：在变化中保持连贯
+            return 1.0
+        elif change_rate < 0.05:
+            # 变化太少：接近静态，轻微惩罚
+            return 0.4 + (change_rate / 0.05) * 0.6  # 0.4→1.0
+        elif change_rate <= 0.35:
+            # 变化偏多：从高到低过渡
+            return 1.0 - ((change_rate - 0.20) / 0.15) * 0.4  # 1.0→0.6
+        else:
+            # 变化太多：碎片化
+            return max(0.2, 0.6 - ((change_rate - 0.35) / 0.65) * 0.4)  # 0.6→0.2
 
     def get_summary(self) -> Dict:
         return {

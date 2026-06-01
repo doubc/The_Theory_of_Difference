@@ -49,6 +49,7 @@ DEFAULT_CROSS_SCALE_COUPLING_CONFIG = {
     'topdown_response_delay': 15,              # 响应延迟步数
     'topdown_decay_rate': 0.97,                # 约束衰减率（每步）
     'topdown_propagation_depth': 2,            # 向下传导的最大层级距离
+    'topdown_stability_threshold': 0.3,        # P1: 高层级稳定性门槛（0.5→0.3，让TopDown激活）
 
     # Bottom-Up 涌现质量评估
     'emergence_min_stability_steps': 50,       # 涌现存活所需最小稳定步数
@@ -148,6 +149,7 @@ class TopDownConstraint:
         self.response_delay = cfg['topdown_response_delay']
         self.decay_rate = cfg['topdown_decay_rate']
         self.propagation_depth = cfg['topdown_propagation_depth']
+        self.stability_threshold = cfg.get('topdown_stability_threshold', 0.5)
 
         self._step_count = 0
         self._active_constraints: Dict[str, TopDownConstraintState] = {}
@@ -192,7 +194,7 @@ class TopDownConstraint:
 
             # 检查高层级是否达到稳态
             stability = high_state.get('stability_score', 0.0)
-            if stability < 0.5:
+            if stability < self.stability_threshold:
                 continue
 
             for low_level in low_levels:
