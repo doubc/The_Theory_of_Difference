@@ -1868,6 +1868,97 @@ class HierarchicalEvolver:
                           f"continuity={nse_result['continuity'].continuity_score:.3f} "
                           f"stability={nse_result['stability'].stability_score:.3f}")
 
+            # ── Phase 4 P0: Adaptive Momentum Controller ──
+            if self.adaptive_momentum_controller is not None:
+                # Collect category heats from narrative recursion operator
+                category_heats = {}
+                if self.narrative_recursion_operator is not None:
+                    narr_summary = self.narrative_recursion_operator.get_summary()
+                    narrative_level_dist = narr_summary.get('narrative_level_distribution', {})
+                    for level_name, count in narrative_level_dist.items():
+                        category_heats[level_name] = float(count)
+                if not category_heats:
+                    category_heats = {'MINI': 0.0}
+
+                # Get INSTITUTIONAL count from hierarchy
+                inst_count = 0
+                hl_state = self.hierarchy.get_layer_state_by_name('INSTITUTIONAL')
+                if hl_state is not None:
+                    inst_count = hl_state.get('institutional_count', 0)
+
+                # Get CIV count
+                civ_count = 0
+                civ_state = self.hierarchy.get_layer_state_by_name('CIVILIZATION')
+                if civ_state is not None:
+                    civ_count = civ_state.get('civilization_count', 0)
+
+                amc_result = self.adaptive_momentum_controller.step(
+                    category_heats=category_heats,
+                    institutional_count=inst_count,
+                    civilization_count=civ_count,
+                )
+                result_entry['adaptive_momentum'] = {
+                    'momentum_bonus': round(amc_result.momentum_bonus, 4),
+                    'entropy': round(amc_result.entropy, 4),
+                    'institutional_count': amc_result.institutional_count,
+                    'institutional_rate': round(amc_result.institutional_rate, 4),
+                    'adjustment': round(amc_result.adjustment, 6),
+                    'mode': amc_result.mode,
+                    'should_diffuse': amc_result.should_diffuse,
+                    'should_focus': amc_result.should_focus,
+                }
+                if self._phase4_verbose:
+                    print(f"    [AMC] L{layer_id} step={step}: "
+                          f"bonus={amc_result.momentum_bonus:.4f} "
+                          f"mode={amc_result.mode} "
+                          f"adj={amc_result.adjustment:.6f}")
+
+            # ── Phase 4 P0: Institutional Layer Protector ──
+            if self.institutional_layer_protector is not None:
+                # Get INSTITUTIONAL count
+                inst_count_ilp = 0
+                hl_state_ilp = self.hierarchy.get_layer_state_by_name('INSTITUTIONAL')
+                if hl_state_ilp is not None:
+                    inst_count_ilp = hl_state_ilp.get('institutional_count', 0)
+
+                # Get ODI
+                odi_ilp = self._last_odi_value
+
+                # Get INSTITUTIONAL diversity (number of categories)
+                n_categories = 0
+                if hasattr(layer.constraints, 'institutional_categories'):
+                    n_categories = len(layer.constraints.institutional_categories)
+                elif 'level_counts' in result_entry and result_entry['level_counts']:
+                    n_categories = len(result_entry['level_counts'])
+
+                # Build institutional categories dict from level counts
+                inst_categories = {}
+                if 'level_counts' in result_entry and result_entry['level_counts']:
+                    inst_categories = {str(k): int(v) for k, v in result_entry['level_counts'].items()}
+
+                ilp_result = self.institutional_layer_protector.step(
+                    institutional_count=inst_count_ilp,
+                    institutional_categories=inst_categories if inst_categories else None,
+                    current_odi=odi_ilp,
+                )
+                result_entry['institutional_protector'] = {
+                    'institutional_count': ilp_result.institutional_count,
+                    'institutional_floor': round(ilp_result.institutional_floor, 4),
+                    'consumption_rate_limit': round(ilp_result.consumption_rate_limit, 4),
+                    'transition_allowed': ilp_result.transition_allowed,
+                    'transition_openness': round(ilp_result.transition_openness, 4),
+                    'n_categories': ilp_result.n_categories,
+                    'diversity_sufficient': ilp_result.diversity_sufficient,
+                    'protection_level': ilp_result.protection_level,
+                    'should_consume': ilp_result.should_consume,
+                }
+                if self._phase4_verbose:
+                    print(f"    [ILP] L{layer_id} step={step}: "
+                          f"count={ilp_result.institutional_count} "
+                          f"floor={ilp_result.institutional_floor:.4f} "
+                          f"level={ilp_result.protection_level} "
+                          f"transition={'OPEN' if ilp_result.transition_allowed else 'CLOSED'}")
+
             self._phase2_layer_results[layer_id].append(result_entry)
 
         return callback
