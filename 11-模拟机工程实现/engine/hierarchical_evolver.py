@@ -1926,8 +1926,8 @@ class HierarchicalEvolver:
 
                 # Get INSTITUTIONAL diversity (number of categories)
                 n_categories = 0
-                if hasattr(layer.constraints, 'institutional_categories'):
-                    n_categories = len(layer.constraints.institutional_categories)
+                if hasattr(constraints, 'institutional_categories'):
+                    n_categories = len(constraints.institutional_categories)
                 elif 'level_counts' in result_entry and result_entry['level_counts']:
                     n_categories = len(result_entry['level_counts'])
 
