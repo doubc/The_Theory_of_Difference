@@ -45,16 +45,17 @@ class AxiomConstraints:
         # 关键：方向一旦设定，永不重置
         # Fix (2026-06-01): 从initial_state派生初始方向，避免全零导致GBC无法激活
         # 规则：state > 0.5 → direction=+1（已持留，只能巩固）；state ≤ 0.5 → direction=-1（待激活）
-        # 若initial_state为全零或None，则统一设为+1（允许0→1，与A1单调性一致）
+        # 若initial_state为全零或None，则随机初始化（50/50 +1/-1），避免全+1导致约束过强
         if initial_state is not None and initial_state.numel() == N:
-            self.direction = torch.where(initial_state > 0.5, 
+            self.direction = torch.where(initial_state > 0.5,
                                           torch.ones(N, dtype=torch.long, device=device),
                                           torch.full((N,), -1, dtype=torch.long, device=device))
-            # 全零状态的特殊情况：全部设为+1，允许系统启动
+            # 全零状态的特殊情况：随机初始化，平衡约束强度
             if self.direction.unique().numel() == 1 and self.direction[0].item() == -1:
-                self.direction.fill_(1)
+                self.direction = torch.randint(0, 2, (N,), dtype=torch.long, device=device) * 2 - 1
         else:
-            self.direction = torch.ones(N, dtype=torch.long, device=device)
+            # 无initial_state时随机初始化（exp_94发现全+1导致GBC约束过强，CIV坍缩）
+            self.direction = torch.randint(0, 2, (N,), dtype=torch.long, device=device) * 2 - 1
 
         # A7 循环检测：记录访问过的状态
         self.visited_states: Set[int] = set()
