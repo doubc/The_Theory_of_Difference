@@ -666,6 +666,85 @@ class NarrativeActionizer:
             return NarrativeLevel.MINI_NARRATIVE
 
 
+class CIVRateLimiter:
+    """CIVILIZATION 叙事速率限制器
+
+    追踪 CIVILIZATION 级叙事的生成速率，当速率超过阈值时，
+    将后续 CIVILIZATION 级叙事降级为 INSTITUTIONAL。
+
+    理论依据：
+    - 差异论 V1.7：文明级叙事是"改写理解世界的基本坐标"，
+      不应以高频涌现。文明级叙事应是稀有事件。
+    - ABA §4.4：前主体态是"范围"而非"开关"。
+      叙事层级的涌现应有时间连续性，不应在单步内爆发。
+    - exp_99 发现：CIV 爆炸是种子依赖的叙事递归生成问题，
+      而非 NSE-CIV 反馈循环。需要在叙事层级分类处设置速率限制。
+
+    设计原则：
+    1. 纯结构性机制 — 无优化目标，无价值判断
+    2. 滑动窗口 — 避免瞬时波动触发限制
+    3. 降级而非禁止 — CIVILIZATION → INSTITUTIONAL（保留叙事活动）
+    4. 自恢复 — 速率回落后自动解除限制
+    """
+
+    def __init__(self, window_size: int = 50, max_civ_rate: float = 0.1,
+                 cooldown_steps: int = 20):
+        self.window_size = window_size
+        self.max_civ_rate = max_civ_rate
+        self.cooldown_steps = cooldown_steps
+        self._civ_events: Deque[int] = deque(maxlen=window_size * 2)
+        self._last_civ_step: int = 0
+        self._cooldown_counter: int = 0
+        self._total_downgrades: int = 0
+        self._total_civ_seen: int = 0
+
+    def record_civ(self, step: int) -> None:
+        """记录一个 CIVILIZATION 级叙事事件"""
+        self._civ_events.append(step)
+        self._last_civ_step = step
+        self._total_civ_seen += 1
+
+    def should_downgrade(self, step: int) -> bool:
+        """判断当前步是否应将 CIVILIZATION 降级为 INSTITUTIONAL"""
+        rate = self._compute_civ_rate(step)
+        if rate > self.max_civ_rate:
+            self._cooldown_counter = self.cooldown_steps
+            return True
+        if self._cooldown_counter > 0:
+            self._cooldown_counter -= 1
+            return True
+        return False
+
+    def _compute_civ_rate(self, current_step: int) -> float:
+        """计算滑动窗口内的 CIV 速率（每步 CIV 事件数）"""
+        if not self._civ_events:
+            return 0.0
+        window_start = current_step - self.window_size
+        events_in_window = sum(1 for s in self._civ_events if s > window_start)
+        return events_in_window / self.window_size
+
+    def maybe_downgrade(self, level: NarrativeLevel, step: int) -> NarrativeLevel:
+        """可能需要降级叙事层级"""
+        if level == NarrativeLevel.CIVILIZATION:
+            if self.should_downgrade(step):
+                self._total_downgrades += 1
+                return NarrativeLevel.INSTITUTIONAL
+        return level
+
+    def get_summary(self) -> Dict:
+        return {
+            'total_civ_seen': self._total_civ_seen,
+            'total_downgrades': self._total_downgrades,
+            'downgrade_rate': (
+                self._total_downgrades / self._total_civ_seen
+                if self._total_civ_seen > 0 else 0.0
+            ),
+            'current_rate': self._compute_civ_rate(self._last_civ_step),
+            'is_limited': self._cooldown_counter > 0,
+            'cooldown_remaining': self._cooldown_counter,
+        }
+
+
 class NarrativeVerifier:
     """叙事递归验证器 — 五中介动作 #5
 
@@ -811,6 +890,11 @@ class NarrativeRecursionOperator:
         self._total_actions = 0
         self._validated_actions = 0
 
+        # CIV 速率限制器（exp_99 发现：CIV 爆炸是叙事递归生成问题）
+        self.civ_rate_limiter = CIVRateLimiter(
+            window_size=50, max_civ_rate=0.1, cooldown_steps=20
+        )
+
     def step(self, signals: List[DifferenceSignal],
              current_bias: torch.Tensor,
              current_odi: float,
@@ -846,6 +930,15 @@ class NarrativeRecursionOperator:
         # 4. 行动化
         node_dict = {n.node_id: n for n in nodes}
         actions = self.actionizer.actionize(chains, node_dict, timestamp)
+
+        # 4b. CIV 速率限制：将超限的 CIVILIZATION 降级为 INSTITUTIONAL
+        for action in actions:
+            original_level = action.narrative_level
+            action.narrative_level = self.civ_rate_limiter.maybe_downgrade(
+                action.narrative_level, timestamp
+            )
+            if action.narrative_level == NarrativeLevel.CIVILIZATION:
+                self.civ_rate_limiter.record_civ(timestamp)
 
         # 5. 验证（记录行动前状态）
         for action in actions:
@@ -1022,6 +1115,7 @@ class NarrativeRecursionOperator:
             'active_narratives': len(self._active_narratives),
             'narrative_level_distribution': level_counts,
             'latest_record': self._records[-1].record_id if self._records else None,
+            'civ_rate_limiter': self.civ_rate_limiter.get_summary(),
         }
 
     def get_narrative_history(self, n: int = 10) -> List[Dict]:
