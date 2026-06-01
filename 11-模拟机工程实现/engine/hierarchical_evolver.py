@@ -821,6 +821,8 @@ class HierarchicalEvolver:
                     institutional_categories=inst_categories if inst_categories else None,
                     current_odi=current_odi,
                 )
+                # P1-D: Store ILP result for CSC TopDown stability fallback
+                self.institutional_layer_protector._last_result = ilp_result
 
                 result_entry['institutional_protector'] = {
                     'institutional_count': ilp_result.institutional_count,
@@ -1779,15 +1781,42 @@ class HierarchicalEvolver:
                         # P1: Use CIV event-based stability for CIVILIZATION layer
                         if hl == 'CIVILIZATION' and civ_stability > 0:
                             stab = max(stab, civ_stability)
-                        # P1-C: For INSTITUTIONAL, use ILP's internal stability as fallback (threshold 0.15 for more aggressive boost)
-                        if hl == 'INSTITUTIONAL' and stab < 0.15 and self.institutional_layer_protector is not None:
+                        # P1-D: For INSTITUTIONAL, use ILP's internal metrics as stability fallback
+                        if hl == 'INSTITUTIONAL' and self.institutional_layer_protector is not None:
                             try:
-                                ilp_summary = self.institutional_layer_protector.get_summary()
-                                ilp_stab = ilp_summary.get('stability_score', 0.0)
+                                ilp_hist = self.institutional_layer_protector.get_history()
+                                # Derive stability from ILP metrics:
+                                # - transition_openness (0-1): higher = more stable
+                                # - diversity_sufficient: boolean, adds 0.1 if true
+                                # - institutional_floor ratio: floor/threshold, capped at 0.3
+                                ilp_stab = 0.0
+                                ilp_result = getattr(self.institutional_layer_protector, '_last_result', None)
+                                if ilp_result is not None:
+                                    ilp_stab = ilp_result.transition_openness * 0.4
+                                    if ilp_result.diversity_sufficient:
+                                        ilp_stab += 0.1
+                                    floor_ratio = ilp_result.institutional_floor / max(1, self.institutional_layer_protector.config.get('min_institutional_threshold', 35))
+                                    ilp_stab += min(0.3, floor_ratio * 0.3)
+                                    ilp_stab = min(1.0, ilp_stab)
                                 if ilp_stab > stab:
                                     stab = ilp_stab
                             except Exception:
                                 pass
+                        # P1-D: INSTITUTIONAL activity-based stability boost
+                        # When INSTITUTIONAL has narrative activity, ensure minimum stability
+                        if hl == 'INSTITUTIONAL':
+                            inst_activity = 0
+                            try:
+                                if self.narrative_recursion_operator is not None:
+                                    narr_summary = self.narrative_recursion_operator.get_summary()
+                                    level_dist = narr_summary.get('narrative_level_distribution', {})
+                                    inst_activity = level_dist.get('INSTITUTIONAL', 0)
+                            except Exception:
+                                pass
+                            if inst_activity > 0:
+                                # Boost stability proportional to INSTITUTIONAL activity
+                                activity_boost = min(0.3, inst_activity * 0.05)
+                                stab = max(stab, activity_boost)
                         level_states[hl] = {
                             'stability_score': stab,
                             'odi': hl_state.get('odi', 0.0),
@@ -1839,11 +1868,12 @@ class HierarchicalEvolver:
                     'structural_coherence': round(csc_result['csci'].structural_coherence, 4),
                     'level_stabilities': {k: round(v, 4) for k, v in csc_result['csci'].level_stabilities.items()},
                     'top_down_constraints': [
-                        {'id': c['id'], 'source': c['source'], 'target': c['target'],
-                         'strength': c['strength'], 'is_active': c['is_active']}
-                        for c in csc_result.get('top_down_constraints', [])
-                        if isinstance(c, dict)
+                        {'id': cid, 'source': c.source_level, 'target': c.target_level,
+                         'strength': round(c.constraint_strength, 4),
+                         'is_active': c.is_active}
+                        for cid, c in csc_result.get('top_down_constraints', {}).items()
                     ],
+                    'topdown_n_active': len([c for c in csc_result.get('top_down_constraints', {}).values() if c.is_active]),
                     'emergence_count': len(csc_result.get('emergence_results', [])),
                     'narrative_bridge_coherence': round(csc_result['narrative_bridge'].coherence, 4),
                 }
