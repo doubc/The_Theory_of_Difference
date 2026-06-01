@@ -2039,6 +2039,16 @@ class HierarchicalEvolver:
                     self.institutional_layer_protector.get_history()
                     if self.institutional_layer_protector else None),
             },
+            'gbc_checks': [
+                {
+                    'passed': r.passed,
+                    'coherence': round(r.coherence, 4),
+                    'balance': round(r.balance, 4),
+                    'violating_mechanisms': r.violating_mechanisms,
+                    'n_mechanisms': len(r.local_biases),
+                }
+                for r in (self.global_bias_constraint.get_history() if self.global_bias_constraint else [])
+            ],
             'phase3_summary': {
                 'minimal_self_detector_active': self.minimal_self_detector is not None,
                 'anticipatory_bias_engine_active': self.anticipatory_bias_engine is not None,
