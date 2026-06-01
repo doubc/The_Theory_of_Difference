@@ -402,49 +402,46 @@ class InstitutionalNarrativeStabilizer:
         return float(np.mean(coherence_values)) if coherence_values else 0.0
 
     def _compute_non_triviality(self) -> float:
-        """计算非平凡性因子 [0, 1]
+        """Calculate non-triviality factor [0, 1]
 
-        衡量叙事标签在窗口内的变化率。
-        - 如果叙事标签长期不变（静态收敛），返回低值（~0.3-0.5）
-        - 如果叙事标签在变化但保持连贯，返回高值（~0.8-1.0）
-        - 如果叙事标签剧烈变化（碎片化），返回低值（~0.2-0.4）
+        Measures the rate of narrative label change in the window.
+        - Static convergence: moderate value (~0.6)
+        - Changing with coherence: high value (1.0)
+        - Fragmented (too much change): moderate value (~0.5)
 
-        非平凡性 = 变化但连贯 = 真正的稳定性
-        理论依据：制度叙事应该在应对扰动时保持连贯，而非静止不动。
+        Non-triviality = changing but coherent = true stability
+
+        P1-B adjustment (exp_102 feedback):
+        - Raised floor from 0.4 to 0.6 to prevent over-penalizing stability
+        - exp_102 found: aggressive non-triviality (floor 0.2-0.4) caused stability
+          to drop from 0.94 to 0.48, weakening CIVRateLimiter control, leading to
+          CIV=194 explosion in seed 742
         """
         if len(self._narrative_history) < 10:
-            return 0.5  # 数据不足时返回中性值
+            return 0.7  # neutral-high when insufficient data
 
         history_list = list(self._narrative_history)
         n = len(history_list)
 
-        # 计算相邻步之间的标签变化率
         change_count = 0
         for i in range(1, n):
             if history_list[i]['narrative'] != history_list[i - 1]['narrative']:
                 change_count += 1
 
-        change_rate = change_count / (n - 1)  # [0, 1]
+        change_rate = change_count / (n - 1)
 
-        # 理想变化率：5-20% 的步有标签变化（在变化中保持连贯）
-        # 变化率 = 0 → 静态收敛（平凡稳定）→ 非平凡性低
-        # 变化率 > 0.5 → 碎片化 → 非平凡性低
-        # 变化率在 [0.05, 0.20] → 理想区间 → 非平凡性高
+        # P1-B: gentler non-triviality curve
+        # Ideal change rate: 5-25% of steps have label changes
         if change_rate == 0.0:
-            # 完全静止：平凡稳定，惩罚
-            return 0.4
-        elif 0.05 <= change_rate <= 0.20:
-            # 理想区间：在变化中保持连贯
+            return 0.6  # P1-B: was 0.4
+        elif 0.05 <= change_rate <= 0.25:  # P1-B: upper bound 0.20 -> 0.25
             return 1.0
         elif change_rate < 0.05:
-            # 变化太少：接近静态，轻微惩罚
-            return 0.4 + (change_rate / 0.05) * 0.6  # 0.4→1.0
-        elif change_rate <= 0.35:
-            # 变化偏多：从高到低过渡
-            return 1.0 - ((change_rate - 0.20) / 0.15) * 0.4  # 1.0→0.6
+            return 0.6 + (change_rate / 0.05) * 0.4  # 0.6 -> 1.0
+        elif change_rate <= 0.40:  # P1-B: transition zone widened
+            return 1.0 - ((change_rate - 0.25) / 0.15) * 0.3  # 1.0 -> 0.7
         else:
-            # 变化太多：碎片化
-            return max(0.2, 0.6 - ((change_rate - 0.35) / 0.65) * 0.4)  # 0.6→0.2
+            return max(0.5, 0.7 - ((change_rate - 0.40) / 0.60) * 0.2)  # P1-B: floor 0.5
 
     def get_summary(self) -> Dict:
         return {
