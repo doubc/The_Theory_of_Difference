@@ -792,7 +792,7 @@ class NarrativeRecursionOperator:
         self.filter = NarrativeFilter(
             magnitude_threshold=filter_magnitude_threshold)
         self.namer = NarrativeNamer()
-        self.connector = NarrativeConnector(
+        self.connector = AdaptiveMomentumConnector(
             strength_threshold=connector_strength_threshold)
         self.actionizer = NarrativeActionizer(
             bias_dimension=bias_dimension)
