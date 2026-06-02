@@ -67,6 +67,16 @@ DEFAULT_CROSS_SCALE_COUPLING_CONFIG = {
     'csci_alpha': 0.4,   # 层级间相干权重
     'csci_beta': 0.3,    # 叙事方向一致性权重
     'csci_gamma': 0.3,   # 结构稳定性权重
+
+    # Phase 5 Track B2: 层级耦合模式
+    # 'parallel': L0→L1 和 L0→L2 并行（原始模式，L1-L2 耦合 r≈0.98）
+    # 'serial':   L0→L1→L2 串行（理论正确模式，L2 从 L1 制度状态派生）
+    'coupling_mode': 'parallel',
+
+    # Serial mode: L1→L2 传导参数
+    'serial_l1_to_l2_delay': 15,              # L1→L2 传导延迟步数
+    'serial_l1_to_l2_attenuation': 0.5,       # L1→L2 信号衰减（0.5 = L2 gets half of L1）
+    'serial_l1_to_l2_noise': 0.15,            # L1→L2 传导噪声（higher = more independent L2）
 }
 
 
@@ -598,6 +608,11 @@ class CrossScaleCoupling:
     3. 评估 Bottom-Up 涌现质量
     4. 更新跨尺度叙事桥梁
     5. 计算 CSCI
+
+    Phase 5 Track B2 新增：
+    - coupling_mode='serial': L0→L1→L2 串行传导
+      L2 不再直接读取 L0 聚簇，而是从 L1 的制度输出派生
+      理论依据："层级不是权力意义上的高低先行，而是结构生成中的组织分层"（差异论 §2.2）
     """
 
     def __init__(self, config: Optional[Dict] = None):
@@ -615,6 +630,18 @@ class CrossScaleCoupling:
 
         # 统计
         self._csci_history: Deque[float] = deque(maxlen=200)
+
+        # Phase 5 Track B2: Serial coupling state
+        self.coupling_mode = cfg.get('coupling_mode', 'parallel')
+        self._serial_l1_l2_delay = cfg.get('serial_l1_to_l2_delay', 15)
+        self._serial_l1_l2_attenuation = cfg.get('serial_l1_to_l2_attenuation', 0.7)
+        self._serial_l1_l2_noise = cfg.get('serial_l1_to_l2_noise', 0.05)
+
+        # L1 state buffer for serial mode: store L1 outputs with timestamps
+        # so L2 can read L1's state from (delay) steps ago
+        self._l1_state_buffer: Deque[Dict] = deque(maxlen=self._serial_l1_l2_delay + 50)
+        # Processed L2 state (computed from L1, not from external input)
+        self._last_serial_l2_state: Optional[Dict] = None
 
     def step(
         self,
@@ -642,6 +669,12 @@ class CrossScaleCoupling:
             跨尺度耦合结果
         """
         self._step_count += 1
+
+        # ── Phase 5 Track B2: Serial coupling mode ──
+        # In serial mode, CIVILIZATION (L2) state is derived from INSTITUTIONAL (L1)
+        # rather than read directly. This breaks the L1-L2 perfect correlation.
+        if self.coupling_mode == 'serial':
+            level_states = self._apply_serial_coupling(level_states)
 
         # 1. Top-Down 约束
         constraints = self.top_down.update(level_states, bias_field)
@@ -685,6 +718,84 @@ class CrossScaleCoupling:
             'csci': csci_result,
             'step': self._step_count,
         }
+
+    def _apply_serial_coupling(self, level_states: Dict[str, Dict]) -> Dict[str, Dict]:
+        """Apply serial coupling: derive L2 state from L1, not from external input.
+
+        Theory: "层级不是权力意义上的高低先行，而是结构生成中的组织分层" (差异论 §2.2)
+        L2 should be a re-organization of L1's institutional output,
+        not a parallel read of L0's clusters.
+
+        Process:
+        1. Store L1's current state in a buffer with timestamp
+        2. Retrieve L1's state from (delay) steps ago
+        3. Derive L2 state from that delayed L1 state, with attenuation and noise
+        4. Replace the externally-provided L2 state with this derived state
+        """
+        # Store L1 state with current step
+        l1_state = level_states.get('INSTITUTIONAL', {})
+        self._l1_state_buffer.append({
+            'step': self._step_count,
+            'stability_score': l1_state.get('stability_score', 0.0),
+            'odi': l1_state.get('odi', 0.0),
+            'structure_vector': l1_state.get('structure_vector'),
+        })
+
+        # Retrieve L1 state from (delay) steps ago
+        target_step = self._step_count - self._serial_l1_l2_delay
+        delayed_l1 = None
+        for entry in self._l1_state_buffer:
+            if entry['step'] == target_step:
+                delayed_l1 = entry
+                break
+
+        if delayed_l1 is None:
+            # Not enough history yet — L2 remains dormant
+            # Use a minimal stability that won't activate TopDown from L2
+            derived_l2 = {
+                'stability_score': 0.05,
+                'odi': 0.0,
+                'structure_vector': None,
+                'serial_derived': True,
+                'serial_source': 'L1_dormant',
+            }
+        else:
+            # Derive L2 from delayed L1 with attenuation + noise
+            l1_stability = delayed_l1['stability_score']
+            l1_odi = delayed_l1['odi']
+            l1_vector = delayed_l1['structure_vector']
+
+            # Attenuation: L2 stability < L1 stability (information loss per layer)
+            l2_stability = l1_stability * self._serial_l1_l2_attenuation
+
+            # Add noise to structure vector (breaks perfect correlation)
+            if l1_vector is not None and l1_vector.numel() > 0:
+                noise = torch.randn_like(l1_vector) * self._serial_l1_l2_noise
+                l2_vector = l1_vector * self._serial_l1_l2_attenuation + noise
+                norm = l2_vector.norm().item()
+                if norm > 1e-8:
+                    l2_vector = l2_vector / norm
+            else:
+                l2_vector = None
+
+            # ODI: L2's organizational density is derived from L1's
+            l2_odi = l1_odi * self._serial_l1_l2_attenuation * 0.8  # extra reduction for L2
+
+            derived_l2 = {
+                'stability_score': float(np.clip(l2_stability, 0.0, 1.0)),
+                'odi': float(np.clip(l2_odi, 0.0, 1.0)),
+                'structure_vector': l2_vector,
+                'serial_derived': True,
+                'serial_source': 'L1_delayed',
+                'serial_delay': self._serial_l1_l2_delay,
+            }
+
+        self._last_serial_l2_state = derived_l2
+
+        # Replace L2 state in level_states with derived state
+        modified_states = dict(level_states)  # shallow copy
+        modified_states['CIVILIZATION'] = derived_l2
+        return modified_states
 
     def _compute_csci(
         self,
@@ -756,7 +867,7 @@ class CrossScaleCoupling:
 
     def get_summary(self) -> Dict:
         """获取跨尺度耦合摘要"""
-        return {
+        summary = {
             'step': self._step_count,
             'top_down': self.top_down.get_summary(),
             'bottom_up': self.bottom_up.get_candidate_stats(),
@@ -766,7 +877,15 @@ class CrossScaleCoupling:
                 self._csci_history[-1] > 0.5
                 if self._csci_history else False
             ),
+            'coupling_mode': self.coupling_mode,
         }
+        if self.coupling_mode == 'serial':
+            summary['serial_l2_state'] = {
+                'stability_score': self._last_serial_l2_state.get('stability_score', 0.0) if self._last_serial_l2_state else 0.0,
+                'serial_source': self._last_serial_l2_state.get('serial_source', 'none') if self._last_serial_l2_state else 'none',
+                'l1_buffer_size': len(self._l1_state_buffer),
+            }
+        return summary
 
     def reset(self):
         """重置所有子组件"""
@@ -777,3 +896,5 @@ class CrossScaleCoupling:
         self._narrative_coherence_history.clear()
         self._csci_history.clear()
         self._step_count = 0
+        self._l1_state_buffer.clear()
+        self._last_serial_l2_state = None

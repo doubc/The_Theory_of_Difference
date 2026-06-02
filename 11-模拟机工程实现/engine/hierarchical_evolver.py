@@ -1963,7 +1963,7 @@ class HierarchicalEvolver:
                           f"active={nse_result['nsi'].is_nsi_active} "
                           f"continuity={nse_result['continuity'].continuity_score:.3f} "
                           f"stability={nse_result['stability'].stability_score:.3f}")
-            # ── Phase 5 Track B1: LayerNarrativeTracker ──
+            # ── Phase 5 Track B1/B2: LayerNarrativeTracker ──
             if self.layer_narrative_tracker is not None:
                 try:
                     # Collect inputs from the current execution context
@@ -1971,6 +1971,30 @@ class HierarchicalEvolver:
                     lnt_odi = odi_val if 'odi_val' in dir() else self._last_odi_value
                     lnt_dist = narrative_level_dist if 'narrative_level_dist' in dir() else {}
                     lnt_level_states = self._last_level_states if hasattr(self, '_last_level_states') else None
+
+                    # Phase 5 Track B2: Serial coupling — modify L2 activity signal
+                    # In serial mode, L2's narrative activity should derive from L1,
+                    # not from the same narrative_level_distribution as L1.
+                    # We modify lnt_dist to reflect serial coupling.
+                    if (self.cross_scale_coupling is not None
+                            and getattr(self.cross_scale_coupling, 'coupling_mode', 'parallel') == 'serial'
+                            and lnt_dist):
+                        lnt_dist = dict(lnt_dist)  # shallow copy
+                        serial_l2_state = getattr(
+                            self.cross_scale_coupling, '_last_serial_l2_state', None)
+                        if serial_l2_state is not None:
+                            # L2 activity is derived from L1 with attenuation and noise
+                            l1_count = lnt_dist.get('INSTITUTIONAL', 0)
+                            attenuation = self.cross_scale_coupling._serial_l1_l2_attenuation
+                            noise_level = self.cross_scale_coupling._serial_l1_l2_noise
+                            # Scale CIVILIZATION count by L2's derived stability
+                            l2_stability = serial_l2_state.get('stability_score', 0.0)
+                            # New L2 count = L1 count * attenuation * stability + noise
+                            # (floor at 0, no negative counts)
+                            base_l2 = l1_count * attenuation * l2_stability
+                            noise = np.random.normal(0, noise_level * max(1, l1_count))
+                            l2_count = max(0, int(round(base_l2 + noise)))
+                            lnt_dist['CIVILIZATION'] = l2_count
 
                     lnt_result = self.layer_narrative_tracker.step(
                         msi=lnt_msi,

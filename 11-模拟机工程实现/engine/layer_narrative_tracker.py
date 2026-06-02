@@ -70,7 +70,12 @@ DEFAULT_LAYER_NARRATIVE_CONFIG = {
     # Layer definitions
     'layer_levels': ['MINI', 'INSTITUTIONAL', 'CIVILIZATION'],
 
-    # NSI computation
+    # Phase 5 Track B2: Serial coupling mode
+    # In serial mode, L2's ODI is derived from L1's stability, not from global ODI.
+    # This breaks the shared-ODI correlation between L1 and L2.
+    'serial_coupling_enabled': False,
+    'serial_l2_odi_scale': 0.6,   # L2 ODI = L1 stability * scale
+    'serial_l2_odi_noise': 0.05,  # L2 ODI noise for independence
     'nsi_alpha': 0.4,   # 时间连续性权重
     'nsi_beta': 0.3,    # 叙事稳定性权重
     'nsi_gamma': 0.3,   # 自我历史深度权重
