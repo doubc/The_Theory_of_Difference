@@ -2253,7 +2253,19 @@ class HierarchicalEvolver:
                   f"max_layers={self.max_layers}")
             print("=" * 70)
 
-        for layer_id in range(self.max_layers):
+        # Phase 5 Track B5 fix: iterate over dynamically created layers
+        # Layers beyond 0 are created via encapsulation during _run_layer.
+        # We process layers sequentially, checking n_layers after each.
+        layer_id = 0
+        while layer_id < self.max_layers:
+            # Check if this layer exists (it may not if previous layer didn't seal)
+            if layer_id >= self.hierarchy.n_layers:
+                if verbose:
+                    print(f"  Layer {layer_id} does not exist yet "
+                          f"(only {self.hierarchy.n_layers} layers). "
+                          f"Stopping — previous layer did not seal.")
+                break
+
             layer = self.hierarchy.get_layer(layer_id)
 
             if verbose:
@@ -2286,6 +2298,9 @@ class HierarchicalEvolver:
                     if verbose:
                         print(f"  Extra {extra_steps} steps: "
                               f"sealed={result2['sealed']}")
+
+            # Move to next layer (created via encapsulation in _run_layer)
+            layer_id += 1
 
         layer_results = []
         for i in range(self.hierarchy.n_layers):

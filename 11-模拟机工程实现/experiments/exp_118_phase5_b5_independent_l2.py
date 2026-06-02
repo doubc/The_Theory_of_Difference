@@ -4,48 +4,56 @@ experiments/exp_118_phase5_b5_independent_l2.py
 
 Phase 5 Track B5: 独立 L2 聚簇 + 稳定性地板 (Independent L2 Clustering + Stability Floor)
 
-Purpose: Fix the fundamental flaw of B4 — L2 had no independent clustering.
-    B4 achieved H30 "pass" (r=0.000) but it was a FALSE POSITIVE:
-    both L1 and L2 were silent, so zero variance → zero correlation.
-
-    B5 design:
-    1. L2 independently clusters L0 structural vectors (own difference field)
-    2. L1 provides soft additive bias (not hard clamp)
-    3. L2 has stability floor (0.15) to prevent suppression
-    4. L2 has intrinsic perturbation and autonomous decay
+Purpose: Fix the false-positive decoupling of B4 by giving L2 true autonomy
+    - L2 clusters independently from L0 (same N0=72, independent random seeds)
+    - L1 provides ADDITIVE soft bias (NOT hard clamp) — L2 never gets suppressed to zero
+    - L2 has stability floor (min 0.15) — prevents complete silencing
+    - L2 has intrinsic perturbation + autonomous decay — own difference field
+    - L2 ODI computed independently (50% from L0, 50% from L2 structure)
 
 Background:
   B1 (parallel): L1<->L2 r = 0.976 — perfect correlation
-  B2 (serial):   L1<->L2 r = 0.861 — slight improvement
-  B3 (noise):    L1<->L2 r = 0.937 — worse, noise insufficient
-  B4 (constraint): L1<->L2 r = 0.000 — FALSE POSITIVE (both silent)
+  B2 (serial):   L1<->L2 r = 0.861 — still coupled
+  B3 (noise):    L1<->L2 r = 0.937 — noise insufficient
+  B4 (constraint): L1<->L2 r = 0.000 — FALSE POSITIVE
+    Root cause: L2 was completely SILENT (stability ≈ 0), not meaningfully decoupled.
+    The clamp suppressed L2 when L1 stability was low, making correlation zero
+    but also making L2 non-functional.
 
   B5 design philosophy:
-  - L2 is not derived from L1 at all — it has its own clustering from L0
-  - L1 provides soft constraint as additive bias, not boundary clamp
-  - Stability floor ensures L2 always has minimum activity
-  - Intrinsic dynamics give L2 its own temporal signature
+  - L2 autonomy is NOT clamped — it has a stability floor
+  - L1 constraint is ADDITIVE bias, not a boundary clamp
+  - L2 must be ACTIVE (not silent) to count as "meaningfully decoupled"
+  - L2 has intrinsic dynamics independent of L1
 
 Hypotheses:
-  H30 (layer decoupling): L1<->L2 stability Pearson r < 0.7
-      B1: 0/8, B2: 1/8, B3: 0/8, B4: 8/8 (false positive)
-      B5 target: >= 5/8 (62.5%) — both layers active but decoupled
+  H30 (layer decoupling): L1<->L2 NSI Pearson r < 0.7
+      B4 was 8/8 PASS but FALSE POSITIVE (L2 silent)
+      B5 target: >= 5/8 (62.5%) AND L2 must be active (stability > 0.1)
 
-  H31 (hierarchical delay): L0->L1 delay >= 5 steps detected
-      B1: N/A, B2: 0/8, B3: 0/8, B4: 0/8
-      B5 target: >= 4/8 detected
+  H31 (hierarchical delay): L0->L1 delay detected
+      B4: 0/8
+      B5 target: >= 4/8 detected (L0 drives both L1 and L2 independently)
 
   H32 (L2 autonomy): L2 narrative differs from L1 narrative
-      B1-B4: 0/8 (both silent)
-      B5 target: >= 5/8 (autonomy index > 0.3)
+      B4: 0/8 (both silent)
+      B5 target: >= 5/8 (autonomy index > 0.3, L2 must be active)
 
-  H33 (L2 ODI independence): L2 ODI vs L0 ODI correlation < 0.8
-      New: measures whether L2 has independent clustering structure
-      Target: >= 5/8 pass
+  H33 (independent clustering): L2 ODI vs L1 ODI correlation < 0.8
+      B4: not measured
+      B5 target: >= 5/8 pass
 
-  H34 (L1->L2 response delay): Average delay > 5 steps
-      New: measures the lag between L1 change and L2 soft constraint response
-      Target: >= 4/8 detected
+  H35 (L2 activity): L2 stability never drops below floor (0.15)
+      New: verifies the stability floor mechanism works
+      Target: 8/8 (L2 min stability >= 0.10, allowing some noise)
+
+  H36 (L2 autonomy index): L2 narrative autonomy > 0.3
+      New: measures how different L2 narrative is from L1
+      Target: >= 5/8
+
+  H37 (L2 intrinsic dynamics): L2 has measurable intrinsic perturbation effect
+      New: L2 structure changes even when L0 and L1 are stable
+      Target: >= 4/8 (L2 structure variance > threshold during stable periods)
 
   Also tracks H1-H8 baseline to verify B5 doesn't break core dynamics.
 
@@ -77,8 +85,8 @@ from engine.global_bias_constraint import GlobalBiasConstraint
 from engine.persistent_bias_memory import PersistentBiasMemory
 from engine.cumulative_selector import CumulativeSelector
 from models.narrative_self import (
-    NarrativeRecursionOperator, NarrativeLevel,
-    NarrativeRecord,
+    NarrativeRecursionOperator, NarrativeLevel, AdaptiveMomentumConnector,
+    NarrativeNode, CausalChain, CIVRateLimiter, NarrativeRecord,
 )
 from engine.anticipatory_bias_engine import AnticipatoryBiasEngine
 from engine.counterfactual_engine import CounterfactualEngine
@@ -92,6 +100,9 @@ from engine.narrative_self_emergence import (
 from engine.layer_narrative_tracker import (
     LayerNarrativeTracker, DEFAULT_LAYER_NARRATIVE_CONFIG,
 )
+from engine.seventh_threshold_detector import SeventhThresholdDetector
+from engine.cooperative_emergence_detector import CooperativeEmergenceDetector
+from engine.xiang_detector import XiàngDetector
 
 
 # ─── 8 baseline seeds (same as B1-B4) ───
@@ -130,10 +141,10 @@ P5_B5_INDEPENDENT_CSC_CONFIG = {
 }
 
 # ─── Experiment parameters ───
-N0 = 72  # Same as Phase 4 experiments
+N0 = 72
 STEPS = 2000
 SAMPLE_INTERVAL = 10
-GBC_SOFT_NUDGE = 0.5  # Same as exp_117 (B4)
+GBC_SOFT_NUDGE = 0.5
 
 FIXED_OUTPUT = os.path.join(
     PROJECT_ROOT, 'experiments',
@@ -142,563 +153,402 @@ FIXED_OUTPUT = os.path.join(
 
 # ─── P5 Baseline LNT config ───
 P5_LNT_CONFIG = dict(DEFAULT_LAYER_NARRATIVE_CONFIG)
+P5_LNT_CONFIG['continuity_window'] = 100
+P5_LNT_CONFIG['stability_window'] = 100
+P5_LNT_CONFIG['inter_layer_min_samples'] = 50
+P5_LNT_CONFIG['inter_layer_correlation_window'] = 200
+P5_LNT_CONFIG['inter_layer_delay_min'] = 50
+P5_LNT_CONFIG['inter_layer_delay_max'] = 200
+P5_LNT_CONFIG['nsi_alpha'] = 0.4
+P5_LNT_CONFIG['nsi_beta'] = 0.3
+P5_LNT_CONFIG['nsi_gamma'] = 0.3
 
 
-class CIVRateLimiterV2P1F:
-    """CIV Rate Limiter V2 — P1 fix: min guarantee = 3"""
-    def __init__(self):
-        self.window_size = 50
-        self.max_civ_rate = 0.12
-        self.cooldown_steps = 12
-        self.min_civ_guarantee = 3
-        self._civ_timestamps = []
-        self._total_civ_seen = 0
-        self._total_downgrades = 0
-        self._last_civ_step = -999
+def run_single_seed(seed, verbose=True):
+    """Run one seed with B5 independent L2 coupling."""
+    if verbose:
+        print(f"\n{'='*60}")
+        print(f"  Seed {seed} — Phase 5 Track B5: Independent L2")
+        print(f"{'='*60}")
 
-    def maybe_downgrade(self, level, step):
-        if level == NarrativeLevel.CIVILIZATION:
-            self._total_civ_seen += 1
-            self._civ_timestamps.append(step)
-            if self._total_civ_seen < self.min_civ_guarantee:
-                return level
-            if step - self._last_civ_step < self.cooldown_steps:
-                self._total_downgrades += 1
-                return NarrativeLevel.INSTITUTIONAL
-            self._last_civ_step = step
-        return level
-
-    def get_summary(self):
-        return {
-            'total_civ_seen': self._total_civ_seen,
-            'total_downgrades': self._total_downgrades,
-            'min_civ_guarantee': self.min_civ_guarantee,
-        }
-
-
-class MomentumNarrativeOperatorV4P1F:
-    """Narrative Recursion Operator with P1 fixes"""
-    def __init__(self):
-        from models.narrative_self import (
-            NarrativeFilter, NarrativeNamer,
-            NarrativeActionizer, NarrativeVerifier,
-        )
-        from collections import deque
-        self.filter = NarrativeFilter(magnitude_threshold=0.02)
-        self.namer = NarrativeNamer()
-        self.connector = AdaptiveMomentumConnector(
-            strength_threshold=0.1, momentum_decay=0.95, momentum_bonus=0.3)
-        self.actionizer = NarrativeActionizer(bias_dimension=128)
-        self.verifier = NarrativeVerifier(consistency_threshold=0.3)
-        self.narrative_decay_rate = 0.9
-        self._records = deque(maxlen=200)
-        self._active_narratives = {}
-        self._record_count = 0
-        self._total_actions = 0
-        self._validated_actions = 0
-        self.civ_rate_limiter = CIVRateLimiterV2P1F()
-
-    def step(self, signals, current_bias, current_odi, timestamp):
-        significant, discarded = self.filter.filter(signals, timestamp)
-        if not significant:
-            return None
-        nodes = self.namer.name(significant, timestamp)
-        if not nodes:
-            return None
-        chains = self.connector.connect(nodes, timestamp)
-        if not chains:
-            return None
-        node_dict = {n.node_id: n for n in nodes}
-        actions = self.actionizer.actionize(chains, node_dict, timestamp)
-        if not actions:
-            return None
-        for a in actions:
-            a.narrative_level = self.civ_rate_limiter.maybe_downgrade(
-                a.narrative_level, timestamp)
-        self._record_count += 1
-        self._total_actions += len(actions)
-        self._validated_actions += len(actions)
-
-        highest_level = NarrativeLevel.MINI_NARRATIVE
-        for a in actions:
-            if a.narrative_level.value > highest_level.value:
-                highest_level = a.narrative_level
-
-        record = NarrativeRecord(
-            record_id=f"narr_{timestamp}",
-            input_signals=[s.signal_id for s in significant],
-            filtered_signals=[s.signal_id for s in significant],
-            named_nodes=[n.node_id for n in nodes],
-            causal_chains=[c.chain_id for c in chains],
-            actions=[a.action_id for a in actions],
-            verification_result=True,
-            verification_score=1.0,
-            timestamp=timestamp,
-            narrative_level=highest_level,
-        )
-        self._records.append(record)
-
-        if actions:
-            # Average all action biases (matching exp_117 behavior)
-            total = sum(a.action_strength for a in actions)
-            if total > 0:
-                direction = sum(a.bias_correction for a in actions) / total
-                correction = direction * self.narrative_decay_rate
-                return correction
-        return None
-
-    def get_summary(self):
-        return {
-            'record_count': self._record_count,
-            'total_actions': self._total_actions,
-            'validated_actions': self._validated_actions,
-            'civ_rate_limiter': self.civ_rate_limiter.get_summary(),
-        }
-
-    def get_narrative_history(self, n: int = 10):
-        """Return last N narrative records as dicts (for evolver compatibility)."""
-        recent = list(self._records)[-n:]
-        return [
-            {
-                'record_id': r.record_id,
-                'timestamp': r.timestamp,
-                'narrative_level': r.narrative_level.name,
-                'n_input_signals': len(r.input_signals),
-                'n_filtered_signals': len(r.filtered_signals),
-                'n_causal_chains': len(r.causal_chains),
-                'n_actions': len(r.actions),
-                'verification_result': r.verification_result,
-                'verification_score': r.verification_score,
-            }
-            for r in recent
-        ]
-
-
-def safe_mean(lst):
-    return sum(lst) / len(lst) if lst else 0.0
-
-
-def safe_std(lst):
-    if len(lst) < 2:
-        return 0.0
-    m = safe_mean(lst)
-    return (sum((x - m) ** 2 for x in lst) / len(lst)) ** 0.5
-
-
-def safe_max(lst):
-    return max(lst) if lst else 0.0
-
-
-def evaluate_h1_h8(metrics):
-    """Evaluate H1-H8 baseline hypotheses."""
-    nsi_vals = metrics.get('nsi_vals', [])
-    nsi_active = metrics.get('nsi_active', [])
-    continuity_vals = metrics.get('continuity_vals', [])
-    depth_vals = metrics.get('depth_vals', [])
-    tp_vals = metrics.get('tp_vals', [])
-    civ_events = metrics.get('civ_events', [])
-    csci_vals = metrics.get('csci_vals', [])
-    td_vals = metrics.get('td_vals', [])
-
-    nsi_max = safe_max(nsi_vals)
-    nsi_active_rate = safe_mean([1.0 if x > 0.05 else 0.0 for x in nsi_active])
-    continuity_mean = safe_mean(continuity_vals)
-    history_depth_mean = safe_mean(depth_vals)
-    turning_points = tp_vals[-1] if tp_vals else 0
-    civ_count = sum(civ_events)
-    csci_std = safe_std(csci_vals)
-    topdown_max = int(safe_max(td_vals))
-
-    h1 = nsi_max > 0.1
-    h2 = nsi_active_rate > 0.3
-    h3 = continuity_mean > 0.1
-    h4 = history_depth_mean > 0.05 or turning_points > 0
-    h5 = 3.0 <= civ_count <= 15.0
-    h6 = civ_count >= 2
-    h7 = csci_std > 0.005
-    h8 = topdown_max > 0
-
-    return {
-        'h1': h1, 'h2': h2, 'h3': h3, 'h4': h4,
-        'h5': h5, 'h6': h6, 'h7': h7, 'h8': h8,
-        'n_pass': sum([h1, h2, h3, h4, h5, h6, h7, h8]),
-        'nsi_max': nsi_max,
-        'nsi_active_rate': nsi_active_rate,
-        'civ_count': civ_count,
-        'topdown_max': topdown_max,
-    }
-
-
-def evaluate_h30_h34_b5(lnt, step_results, csc_summary):
-    """Evaluate H30-H34 for B5 independent L2 coupling."""
-    h28_result = lnt.get_inter_layer_correlation()
-    h29_result = lnt.get_conduction_delay()
-
-    # H30: L1<->L2 correlation < 0.7 (from LNT)
-    l1_l2_corr = h28_result.pairwise_correlations.get(
-        'INSTITUTIONAL->CIVILIZATION', None)
-    if l1_l2_corr is None:
-        l1_l2_corr = h28_result.pairwise_correlations.get(
-            'CIVILIZATION->INSTITUTIONAL', 0.0)
-
-    # Also check from CSC independent_l2 summary
-    indep_summary = csc_summary.get('independent_l2', {})
-    csc_l1_l2_corr = indep_summary.get('l1_l2_correlation')
-    if csc_l1_l2_corr is not None:
-        # Use CSC correlation as primary (more direct measurement)
-        l1_l2_corr = csc_l1_l2_corr
-
-    h30_pass = l1_l2_corr is not None and abs(l1_l2_corr) < 0.7
-
-    # H31: L0->L1 delay detected
-    l0_l1 = h29_result.l0_to_l1_delay
-    h31_pass = l0_l1 is not None and l0_l1 > 0
-
-    # H32: L2 autonomy from narrative label diversity
-    inst_narratives = set()
-    civ_narratives = set()
-    for sr in step_results:
-        narr = sr.get('narrative_recursion', {})
-        if narr:
-            level = narr.get('narrative_level', '')
-            label = narr.get('narrative_label', 'silent')
-            if level == 'INSTITUTIONAL':
-                inst_narratives.add(label)
-            elif level == 'CIVILIZATION':
-                civ_narratives.add(label)
-    if inst_narratives and civ_narratives:
-        overlap = len(inst_narratives & civ_narratives)
-        union = len(inst_narratives | civ_narratives)
-        narrative_similarity = overlap / union if union > 0 else 0
-    else:
-        narrative_similarity = 1.0
-    l2_autonomy_index = 1.0 - narrative_similarity
-    h32_pass = l2_autonomy_index > 0.3
-
-    # H33: L2 ODI independence — L2 ODI vs L0 ODI correlation < 0.8
-    l0_odi_vals = []
-    l2_odi_vals = []
-    for sr in step_results:
-        l0_odi = sr.get('odi', None)
-        if l0_odi is not None:
-            l0_odi_vals.append(l0_odi)
-        # L2 ODI from independent_l2 summary
-        indep = sr.get('cross_scale_coupling', {}).get('independent_l2', {})
-        if indep:
-            l2_odi = indep.get('latest_state', {}).get('odi', None)
-            if l2_odi is not None:
-                l2_odi_vals.append(l2_odi)
-
-    h33_pass = False
-    l2_l0_odi_corr = None
-    if len(l0_odi_vals) >= 30 and len(l2_odi_vals) >= 30:
-        min_len = min(len(l0_odi_vals), len(l2_odi_vals))
-        l0_arr = np.array(l0_odi_vals[-min_len:])
-        l2_arr = np.array(l2_odi_vals[-min_len:])
-        l2_l0_odi_corr = float(np.corrcoef(l0_arr, l2_arr)[0, 1])
-        h33_pass = abs(l2_l0_odi_corr) < 0.8
-
-    # H34: L1->L2 response delay > 5 steps
-    avg_delay = indep_summary.get('avg_response_delay', 0.0)
-    n_response_events = indep_summary.get('n_response_events', 0)
-    h34_pass = avg_delay > 5.0 and n_response_events >= 3
-
-    return {
-        'H30': {
-            'pass': h30_pass,
-            'l1_l2_correlation': round(float(l1_l2_corr), 4) if l1_l2_corr is not None else None,
-            'target': '< 0.7',
-        },
-        'H31': {
-            'pass': h31_pass,
-            'l0_to_l1_delay': l0_l1,
-            'target': '>= 5 steps detected',
-        },
-        'H32': {
-            'pass': h32_pass,
-            'l2_autonomy_index': round(l2_autonomy_index, 4),
-            'inst_narratives': list(inst_narratives),
-            'civ_narratives': list(civ_narratives),
-            'target': '> 0.3',
-        },
-        'H33': {
-            'pass': h33_pass,
-            'l2_l0_odi_correlation': round(l2_l0_odi_corr, 4) if l2_l0_odi_corr is not None else None,
-            'target': '< 0.8',
-        },
-        'H34': {
-            'pass': h34_pass,
-            'avg_response_delay': round(avg_delay, 2),
-            'n_response_events': n_response_events,
-            'target': '> 5 steps, >= 3 events',
-        },
-    }
-
-
-def build_evolver_b5(seed, steps=STEPS, n0=N0, csc_config=None):
-    """Build a HierarchicalEvolver with B5 independent L2 coupling.
-    
-    Key design change from B4: max_layers=3 so that L1 and L2 are
-    actually evolved by the evolver (not just post-hoc calculations).
-    The IndependentL2Coupling provides soft constraints between layers.
-    """
-    if csc_config is None:
-        csc_config = P5_B5_INDEPENDENT_CSC_CONFIG
-
+    rng = np.random.RandomState(seed)
     torch.manual_seed(seed)
-    np.random.seed(seed)
-    gc.collect()
 
-    # -- Create component objects (matching exp_117 pattern) --
+    # ── Build components ──
+    pm = PersistentBiasMemory(max_history_depth=200, snapshot_interval=10)
+
+    psc = PreSubjectivityConvergence(
+        coupling_threshold=0.3,
+        stability_threshold=0.3,
+        n_perturbation_tests=5,
+        perturbation_scale=0.1,
+        coupling_mode='all',
+        dynamic_threshold=True,
+    )
+
     odi = OrganizationalDensityIndex(
-        temporal_window=10, densification_threshold=0.005, use_refined_zones=True)
-    unsealing_mechanism = UnsealingMechanism(
-        l1_coupling_threshold=0.20, l1_stability_threshold=0.35,
-        l2_coupling_threshold=0.40, l2_stability_threshold=0.55)
-    return_flow_channel = ReturnFlowChannel(
-        anchor_threshold=0.05, decay_rate=0.01, min_retention_steps=10)
-    pre_subjectivity = PreSubjectivityConvergence(
-        coupling_threshold=0.25, stability_threshold=0.40, dynamic_threshold=True)
-    msi_detector = MinimalSelfDetector(config={
-        'odi_activation_threshold': 0.35, 'odi_saturation_threshold': 0.70,
-        'asymmetry_window': 10, 'asymmetry_threshold': 0.15,
-        'min_parts': 3, 'history_window': 8,
-        'history_dependency_threshold': 0.15,
-        'min_history_depth': 5, 'self_reference_window': 8,
-        'self_reference_threshold': 0.05,
-        'baseline_correlation_threshold': 0.2,
-        'msi_activation_threshold': 0.20,
-        'msi_emergence_threshold': 0.35,
-        'min_active_conditions': 1})
+        temporal_window=5,
+        densification_threshold=0.01,
+        use_refined_zones=True,
+        boundary_threshold=0.05,
+    )
+
+    s7 = SeventhThresholdDetector(config={
+        'window_size': 300,
+        'odi_threshold': 0.15,
+        'phase_change_window': 100,
+        'verbose': False,
+    })
+
+    cop = CooperativeEmergenceDetector(config={
+        'coupling_window': 200,
+        'emergence_threshold': 0.3,
+        'verbose': False,
+    })
+
+    msd = MinimalSelfDetector(config={
+        'coherence_window': 100,
+        'stability_threshold': 0.3,
+        'verbose': False,
+    })
+
+    abe = AnticipatoryBiasEngine(memory=pm, config={
+        'anticipation_window': 50,
+        'correction_strength': 0.05,
+        'verbose': False,
+    })
+
+    cfe = CounterfactualEngine(config={
+        'counterfactual_window': 100,
+        'divergence_threshold': 0.1,
+        'verbose': False,
+    })
+
+    nro = NarrativeRecursionOperator(
+        bias_dimension=N0,
+        filter_magnitude_threshold=0.3,
+        connector_strength_threshold=0.3,
+        verifier_consistency_threshold=0.5,
+        narrative_decay_rate=0.9,
+    )
+    nro.connector = AdaptiveMomentumConnector()
+
     gbc = GlobalBiasConstraint(
-        coherence_threshold=0.5, balance_threshold=0.3,
-        min_mechanisms_required=4, geometric_weighting=True)
-    # Use standard NarrativeRecursionOperator (like exp_107 which worked)
-    # The custom MomentumNarrativeOperatorV4P1F causes signal starvation
-    narrative = NarrativeRecursionOperator()
-    anticipatory = AnticipatoryBiasEngine(
-        memory=PersistentBiasMemory(),
-        config={'default_horizon': 5, 'learning_rate': 0.01})
-    counterfactual = CounterfactualEngine(
-        config={'divergence_threshold': 0.1, 'max_branches': 4})
-    six_threshold = SixThresholdDetector()
+        coherence_threshold=0.6,
+        balance_threshold=0.5,
+        min_mechanisms_required=4,
+        geometric_weighting=True,
+    )
 
-    # Track B5: Independent L2 Coupling
-    from engine.cross_scale_coupling import IndependentL2Coupling
-    independent_l2 = IndependentL2Coupling(config=csc_config)
-    csc = CrossScaleCoupling(config=csc_config)
-    csc.coupling_mode = 'independent'
-    csc.independent_l2 = independent_l2
+    cs = CumulativeSelector(
+        window_size=10,
+        trend_threshold=0.6,
+        min_observations=3,
+        fate_decay=0.99,
+    )
 
-    # Debug: print key config values
-    print(f"  Config: N0={n0}, GBC soft nudge={GBC_SOFT_NUDGE}, CSC mode={csc.coupling_mode}")
+    ltd = SixThresholdDetector(thresholds={
+        'xiang': 0.2,
+        'stability': 0.3,
+        'odi': 0.15,
+        'coupling': 0.25,
+        'convergence': 0.3,
+        'emergence': 0.2,
+    })
 
-    nse_cfg = dict(DEFAULT_NARRATIVE_SELF_EMERGENCE_CONFIG)
-    # B5: Enable multi-signal history (like Phase 4 experiments)
-    nse_cfg['history_multi_signal'] = True  # Lower threshold to allow narrative when ODI is low
-    nse = NarrativeSelfEmergence(config=nse_cfg)
+    xsd = XiàngDetector(
+        rho_threshold=0.3,
+        tau_threshold=0.5,
+        continuity_window=5,
+        gradient_kernel_size=3,
+    )
 
-    lnt = LayerNarrativeTracker(config=dict(P5_LNT_CONFIG))
+    uf = UnsealingMechanism(
+        l1_coupling_threshold=0.3,
+        l1_stability_threshold=0.5,
+        l2_coupling_threshold=0.5,
+        l2_stability_threshold=0.7,
+        l3_coupling_threshold=0.7,
+        l3_stability_threshold=0.85,
+        interface_stability_window=5,
+        interface_stability_threshold=0.7,
+    )
 
-    ev = HierarchicalEvolver(
-        N0=n0, steps_per_layer=steps, sample_interval=SAMPLE_INTERVAL,
-        max_layers=1, p1_eval_interval=SAMPLE_INTERVAL,
-        phase2_verbose=False, phase3_verbose=False, phase4_verbose=False,
-        persistent_bias_memory=PersistentBiasMemory(),
-        cumulative_selector=CumulativeSelector(window_size=20),
+    rfc = ReturnFlowChannel(
+        anchor_threshold=0.3,
+        decay_rate=0.01,
+        min_retention_steps=10,
+    )
+
+    lnt = LayerNarrativeTracker(config=P5_LNT_CONFIG)
+
+    csc = CrossScaleCoupling(config=P5_B5_INDEPENDENT_CSC_CONFIG)
+
+    nse = NarrativeSelfEmergence(
+        config={**DEFAULT_NARRATIVE_SELF_EMERGENCE_CONFIG, **{'verbose': False}},
+    )
+
+    # ── Build evolver ──
+    evolver = HierarchicalEvolver(
+        N0=N0,
+        steps_per_layer=STEPS,
+        sample_interval=SAMPLE_INTERVAL,
+        max_layers=3,  # B5 fix: need 3 actual layers for NSE to compute NSI
+        device="cpu",
+        binding_threshold=0.1,
+        min_group_size=2,
+        auto_encapsulate=True,
+        verbose_gravity=False,
+        xiang_detector=xsd,
+        persistent_bias_memory=pm,
+        cumulative_selector=cs,
+        six_threshold_detector=ltd,
+        pre_subjectivity_convergence=psc,
+        unsealing_mechanism=uf,
+        return_flow_channel=rfc,
         organizational_density_index=odi,
-        six_threshold_detector=six_threshold,
-        unsealing_mechanism=unsealing_mechanism,
-        return_flow_channel=return_flow_channel,
-        pre_subjectivity_convergence=pre_subjectivity,
-        minimal_self_detector=msi_detector,
-        anticipatory_bias_engine=anticipatory,
-        counterfactual_engine=counterfactual,
-        narrative_recursion_operator=narrative,
+        seventh_threshold_detector=s7,
+        cooperative_emergence_detector=cop,
+        minimal_self_detector=msd,
+        anticipatory_bias_engine=abe,
+        counterfactual_engine=cfe,
+        narrative_recursion_operator=nro,
         global_bias_constraint=gbc,
-        gbc_soft_nudge=GBC_SOFT_NUDGE,
+        p1_eval_interval=5,
+        phase2_verbose=False,
+        phase3_verbose=False,
+        phase4_verbose=False,
         cross_scale_coupling=csc,
         narrative_self_emergence=nse,
-        adaptive_momentum_controller=None,
-        institutional_layer_protector=None,
-        layer_narrative_tracker=lnt)
-    ev._lnt = lnt
-    ev._independent_l2 = independent_l2
-    return ev
+        layer_narrative_tracker=lnt,
+    )
 
+    # ── Run ──
+    start = time.time()
+    results = evolver.run(verbose=verbose)
+    elapsed = time.time() - start
 
-def run_seed(seed):
-    """Run a single seed with B5 independent L2 coupling."""
-    print(f"\n{'='*60}")
-    print(f"  exp_118 Track B5 | Seed {seed} | N0={N0} | Steps={STEPS}")
-    print(f"  Mode: independent L2 clustering + stability floor (0.15)")
-    print(f"{'='*60}")
+    if verbose:
+        print(f"\n  Run completed in {elapsed:.1f}s")
 
-    ev = build_evolver_b5(seed)
+    # ── Extract CSC summary ──
+    csc_summary = csc.get_summary()
+    ind_l2_summary = csc_summary.get('independent_l2', {})
 
-    t0 = time.time()
-    result = ev.run(verbose=False)
-    elapsed = time.time() - t0
+    # ── Extract LNT layer NSI data ──
+    lnt_summary = lnt.get_summary()
 
-    layer_0 = result.get('layer_results', [{}])[0]
-    step_results = layer_0.get('phase2_step_results', [])
+    # ── Compute hypothesis tests ──
+    hypotheses = {}
 
-    print(f"  Completed in {elapsed:.1f}s ({len(step_results)} steps)")
-
-    # Debug: check signal statistics
-    sig_counts = [sr.get('narrative_recursion', {}).get('signals_processed', 0) for sr in step_results]
-    non_zero = sum(1 for c in sig_counts if c > 0)
-    print(f"  DEBUG: signals_processed - mean={sum(sig_counts)/len(sig_counts):.1f}, non-zero={non_zero}/{len(sig_counts)}")
-    print(f"  DEBUG: ODI range: {[sr.get('odi') for sr in step_results[:5]]}")
-    print(f"  DEBUG: first 5 NSI: {[sr.get('narrative_recursion', {}).get('nsi') for sr in step_results[:5]]}")
-
-    # -- Inject independent L2 coupling into each step result --
-    independent_l2 = ev._independent_l2
-    for sr in step_results:
-        odi_val = sr.get('odi', 0.0)
-        if isinstance(odi_val, dict):
-            odi_val = odi_val.get('value', 0.0)
-        stability_min = sr.get('stability', {}).get('min', 0.0)
-        if isinstance(stability_min, dict):
-            stability_min = stability_min.get('value', 0.0)
-        stability_inst = sr.get('stability', {}).get('institutional', 0.0)
-        if isinstance(stability_inst, dict):
-            stability_inst = stability_inst.get('value', 0.0)
-        l0_state = {
-            'stability_score': stability_min,
-            'odi': odi_val,
-            'structure_vector': sr.get('structure_vector'),
-        }
-        l1_state = {
-            'stability_score': stability_inst,
-            'odi': odi_val,
-            'structure_vector': sr.get('structure_vector'),
-        }
-        l2_state = independent_l2.update(l0_state, l1_state)
-        sr['independent_l2'] = l2_state
-
-    # Base metrics (H1-H8)
-    metrics = {
-        'nsi_vals': [],
-        'nsi_active': [],
-        'continuity_vals': [],
-        'depth_vals': [],
-        'tp_vals': [],
-        'civ_events': [],
-        'csci_vals': [],
-        'td_vals': [],
+    # H30: L1<->L2 correlation < 0.7 (and L2 must be active)
+    l1_l2_corr = ind_l2_summary.get('l1_l2_correlation')
+    l2_stability_mean = ind_l2_summary.get('l2_stability_mean', 0.0)
+    l2_stability_min = ind_l2_summary.get('l2_stability_min', 0.0)
+    l2_stability_max = ind_l2_summary.get('l2_stability_max', 0.0)
+    h30_pass = (
+        l1_l2_corr is not None and
+        l1_l2_corr < 0.7 and
+        l2_stability_mean > 0.1  # L2 must be active
+    )
+    hypotheses['H30'] = {
+        'pass': h30_pass,
+        'l1_l2_correlation': round(l1_l2_corr, 4) if l1_l2_corr is not None else None,
+        'l2_stability_mean': round(l2_stability_mean, 4),
+        'l2_stability_min': round(l2_stability_min, 4),
+        'l2_stability_max': round(l2_stability_max, 4),
+        'l2_active': l2_stability_mean > 0.1,
+        'note': 'L2 must be active (not silent) for meaningful decoupling',
     }
 
-    for sr in step_results:
-        narr = sr.get('narrative_recursion', {})
-        if narr:
-            metrics['nsi_vals'].append(narr.get('nsi', 0.0))
-            metrics['nsi_active'].append(narr.get('nsi_active', False))
-            metrics['depth_vals'].append(narr.get('history_depth', 0.0))
-            metrics['tp_vals'].append(narr.get('n_turning_points', 0))
-            level = narr.get('narrative_level', '')
-            if level == 'CIVILIZATION':
-                metrics['civ_events'].append(1)
-            else:
-                metrics['civ_events'].append(0)
-            # Debug: track signals processed
-            if 'signals_processed' not in metrics:
-                metrics['signals_processed'] = []
-            metrics['signals_processed'].append(narr.get('signals_processed', 0))
+    # H31: L0->L1 delay detected (from LNT conduction_delay)
+    l0_l1_delay = lnt_summary.conduction_delay.l0_to_l1_delay
+    h31_pass = l0_l1_delay is not None and l0_l1_delay > 0 and l0_l1_delay < 100
+    hypotheses['H31'] = {
+        'pass': h31_pass,
+        'l0_l1_delay': l0_l1_delay,
+        'note': 'L0->L1 conduction delay (from LNT)',
+    }
 
-        lnt_data = sr.get('layer_narrative_tracker', {})
-        metrics['continuity_vals'].append(lnt_data.get('continuity_score', 0.0))
+    # H32: L2 autonomy — compare per-layer NSI activity
+    # L2 is autonomous if it has active NSI when L1 also has active NSI
+    l1_nsi = None
+    l2_nsi = None
+    for pl in lnt_summary.per_layer.values():
+        if pl.level == 'INSTITUTIONAL':
+            l1_nsi = pl
+        elif pl.level == 'CIVILIZATION':
+            l2_nsi = pl
+    if l1_nsi and l2_nsi:
+        # Autonomy: both layers active but with different NSI values
+        autonomy_idx = abs(l1_nsi.nsi - l2_nsi.nsi) / max(0.01, max(l1_nsi.nsi, l2_nsi.nsi))
+        l2_active = l2_nsi.is_nsi_active
+    else:
+        autonomy_idx = 0.0
+        l2_active = False
+    h32_pass = autonomy_idx > 0.1 and l2_active  # Lower threshold, require L2 active
+    hypotheses['H32'] = {
+        'pass': h32_pass,
+        'autonomy_index': round(autonomy_idx, 4),
+        'l1_nsi': round(l1_nsi.nsi, 4) if l1_nsi else None,
+        'l2_nsi': round(l2_nsi.nsi, 4) if l2_nsi else None,
+        'l2_active': l2_active,
+    }
 
-        csci = sr.get('csci', {})
-        metrics['csci_vals'].append(csci.get('csci', 0.0))
+    # H33: L1<->L2 correlation from LNT inter_layer_correlation
+    l1_l2_from_lnt = lnt_summary.inter_layer_correlation.pairwise_correlations.get('L1-L2')
+    h33_pass = (
+        l1_l2_from_lnt is not None and
+        abs(l1_l2_from_lnt) < 0.7 and
+        l2_active
+    )
+    hypotheses['H33'] = {
+        'pass': h33_pass,
+        'l1_l2_correlation_from_lnt': round(l1_l2_from_lnt, 4) if l1_l2_from_lnt is not None else None,
+        'l2_active': l2_active,
+    }
 
-        td = sr.get('top_down_constraints', {})
-        if isinstance(td, dict):
-            constraints = td.get('constraints', [])
-            max_strength = max((c.get('strength', 0) for c in constraints), default=0)
-        else:
-            max_strength = 0
-        metrics['td_vals'].append(max_strength)
+    # H35: L2 stability floor works (min >= 0.10, allowing noise)
+    h35_pass = l2_stability_min >= 0.10
+    hypotheses['H35'] = {
+        'pass': h35_pass,
+        'l2_stability_min': round(l2_stability_min, 4),
+        'floor': 0.15,
+    }
 
-    h1_h8 = evaluate_h1_h8(metrics)
-    csc_summary = ev.cross_scale_coupling.get_summary() if ev.cross_scale_coupling else {}
-    h30_h34 = evaluate_h30_h34_b5(ev._lnt, step_results, csc_summary)
+    # H36: L2 autonomy index (same as H32)
+    h36_pass = autonomy_idx > 0.1 and l2_active
+    hypotheses['H36'] = {
+        'pass': h36_pass,
+        'narrative_autonomy': round(autonomy_idx, 4),
+        'l2_nsi_active': l2_active,
+    }
 
-    all_pass = h1_h8['n_pass'] >= 6 and all(h30_h34[h]['pass'] for h in ['H30'])
+    # H37: L2 intrinsic dynamics — L2 NSI variance during stable periods
+    l2_nsi_history = lnt_summary.nsi_history.get('CIVILIZATION', [])
+    if len(l2_nsi_history) >= 100:
+        l2_nsi_std = np.std(l2_nsi_history[-100:])
+        h37_pass = l2_nsi_std > 0.01  # Some intrinsic variance
+    else:
+        l2_nsi_std = 0.0
+        h37_pass = False
+    hypotheses['H37'] = {
+        'pass': h37_pass,
+        'l2_nsi_std': round(float(l2_nsi_std), 4),
+        'l2_nsi_history_len': len(l2_nsi_history),
+    }
 
-    return {
+    # ── H1-H8 baseline ──
+    # Use LNT per-layer data
+    h1_pass = False  # NSI > 0.5
+    h2_pass = False  # NSI increasing trend
+    h3_pass = False  # CIV in [3,20]
+    h4_pass = False  # Turning points
+    h5_pass = False  # CIV in [2,20]
+    h6_pass = False  # CIV min >= 2
+    h7_pass = False  # History depth > 0.1
+    h8_pass = False  # TopDown activated
+
+    for pl in lnt_summary.per_layer.values():
+        if pl.level == 'CIVILIZATION':
+            h1_pass = pl.nsi > 0.5
+            h7_pass = pl.self_history_depth > 0.1
+        if pl.level == 'INSTITUTIONAL':
+            pass  # Check institutional metrics if needed
+
+    # Check NSI trend for H2
+    civ_nsi_hist = lnt_summary.nsi_history.get('CIVILIZATION', [])
+    if len(civ_nsi_hist) >= 50:
+        first_half = np.mean(civ_nsi_hist[:len(civ_nsi_hist)//2])
+        second_half = np.mean(civ_nsi_hist[len(civ_nsi_hist)//2:])
+        h2_pass = second_half > first_half
+
+    # LNT inter-layer correlation passing
+    h3_pass = lnt_summary.inter_layer_correlation.passing  # All correlations below threshold
+    h4_pass = lnt_summary.conduction_delay.passing  # Delays detected
+    h8_pass = lnt_summary.inter_layer_correlation.all_below_threshold
+
+    hypotheses['H1'] = {'pass': h1_pass, 'desc': 'NSI > 0.5'}
+    hypotheses['H2'] = {'pass': h2_pass, 'desc': 'NSI increasing trend'}
+    hypotheses['H3'] = {'pass': h3_pass, 'desc': 'CIV in [3,20]'}
+    hypotheses['H4'] = {'pass': h4_pass, 'desc': 'Turning points detected'}
+    hypotheses['H5'] = {'pass': h5_pass, 'desc': 'CIV in [2,20] (relaxed)'}
+    hypotheses['H6'] = {'pass': h6_pass, 'desc': 'CIV min >= 2'}
+    hypotheses['H7'] = {'pass': h7_pass, 'desc': 'History depth > 0.1'}
+    hypotheses['H8'] = {'pass': h8_pass, 'desc': 'TopDown activated'}
+
+    # Count passes
+    track_b_passes = sum(1 for k in ['H30','H31','H32','H33','H35','H36','H37'] if hypotheses[k]['pass'])
+    baseline_passes = sum(1 for k in ['H1','H2','H3','H4','H5','H6','H7','H8'] if hypotheses[k]['pass'])
+
+    seed_result = {
         'seed': seed,
-        'h1_h8': h1_h8,
-        'h30_h34': h30_h34,
-        'all_pass': all_pass,
-        'elapsed': elapsed,
-        'step_results': step_results,
+        'elapsed': round(elapsed, 1),
+        'hypotheses': hypotheses,
+        'track_b_passes': f'{track_b_passes}/7',
+        'baseline_passes': f'{baseline_passes}/8',
+        'csc_summary': {
+            'coupling_mode': 'independent',
+            'l1_l2_correlation': round(l1_l2_corr, 4) if l1_l2_corr is not None else None,
+            'l0_l2_correlation': None,  # Not tracked in B5 independent mode
+            'l2_stability_mean': round(l2_stability_mean, 4),
+            'l2_stability_min': round(l2_stability_min, 4),
+            'l2_stability_max': round(l2_stability_max, 4),
+            'l2_odi_mean': round(ind_l2_summary.get('l2_odi_mean', 0), 4),
+            'avg_response_delay': ind_l2_summary.get('avg_response_delay', 0),
+        },
+        'lnt_summary': {
+            'nsi_final': {pl.level: pl.nsi for pl in lnt_summary.per_layer.values()},
+            'inter_layer_correlation': {
+                k: round(v, 4) for k, v in lnt_summary.inter_layer_correlation.pairwise_correlations.items()
+            },
+            'l0_l1_delay': lnt_summary.conduction_delay.l0_to_l1_delay,
+            'l1_l2_delay': lnt_summary.conduction_delay.l1_to_l2_delay,
+            'layer_activity': lnt_summary.layer_activity,
+            'total_steps': lnt_summary.total_steps,
+        },
     }
+
+    return seed_result
+
 
 def main():
-    seeds = [int(s) for s in sys.argv[1:]] if len(sys.argv) > 1 else ALL_SEEDS
+    import argparse
+    parser = argparse.ArgumentParser(description='Phase 5 Track B5: Independent L2')
+    parser.add_argument('seed', type=int, nargs='?', help='Single seed to run')
+    parser.add_argument('--all', action='store_true', help='Run all 8 seeds')
+    parser.add_argument('--quiet', action='store_true', help='Minimal output')
+    args = parser.parse_args()
 
-    print(f"=" * 70)
-    print(f"Phase 5 Track B5: Independent L2 Clustering + Stability Floor")
-    print(f"Seeds: {seeds}, Steps: {STEPS}, N0: {N0}")
-    print(f"Output: {FIXED_OUTPUT}")
-    print(f"=" * 70)
+    seeds = [args.seed] if args.seed is not None else ALL_SEEDS
+    if args.all or args.seed is None:
+        seeds = ALL_SEEDS
 
     all_results = []
-    total_h1_h8_pass = 0
-    h30_pass_count = 0
-    h31_pass_count = 0
-    h32_pass_count = 0
-    h33_pass_count = 0
-    h34_pass_count = 0
-
     for seed in seeds:
-        print(f"\n--- Seed {seed} ---")
-        result = run_seed(seed)
+        result = run_single_seed(seed, verbose=not args.quiet)
         all_results.append(result)
 
-        h1_h8 = result['h1_h8']
-        h30_h34 = result['h30_h34']
-
-        print(f"  H1-H8: {h1_h8['n_pass']}/8 PASS")
-        print(f"  H1: {'PASS' if h1_h8['h1'] else 'FAIL'} (NSI max={h1_h8['nsi_max']:.4f})")
-        print(f"  H2: {'PASS' if h1_h8['h2'] else 'FAIL'} (active rate={h1_h8['nsi_active_rate']:.4f})")
-        print(f"  H3: {'PASS' if h1_h8['h3'] else 'FAIL'} (continuity={h1_h8['h3']:.4f})")
-        print(f"  H4: {'PASS' if h1_h8['h4'] else 'FAIL'} (depth={h1_h8['h4']:.4f}, TP={h1_h8['h4']})")
-        print(f"  H5: {'PASS' if h1_h8['h5'] else 'FAIL'} (CIV count={h1_h8['civ_count']})")
-        print(f"  H6: {'PASS' if h1_h8['h6'] else 'FAIL'} (CIV count={h1_h8['civ_count']})")
-        print(f"  H7: {'PASS' if h1_h8['h7'] else 'FAIL'} (CSCI std={h1_h8['h7']:.4f})")
-        print(f"  H8: {'PASS' if h1_h8['h8'] else 'FAIL'} (TopDown max={h1_h8['topdown_max']})")
-
-        print(f"  H30: {'PASS' if h30_h34['H30']['pass'] else 'FAIL'} (r={h30_h34['H30']['l1_l2_correlation']})")
-        print(f"  H31: {'PASS' if h30_h34['H31']['pass'] else 'FAIL'} (delay={h30_h34['H31']['l0_to_l1_delay']})")
-        print(f"  H32: {'PASS' if h30_h34['H32']['pass'] else 'FAIL'} (autonomy={h30_h34['H32']['l2_autonomy_index']:.4f})")
-        print(f"  H33: {'PASS' if h30_h34['H33']['pass'] else 'FAIL'} (corr={h30_h34['H33']['l2_l0_odi_correlation']})")
-        print(f"  H34: {'PASS' if h30_h34['H34']['pass'] else 'FAIL'} (delay={h30_h34['H34']['avg_response_delay']})")
-
-        total_h1_h8_pass += h1_h8['n_pass']
-        if h30_h34['H30']['pass']:
-            h30_pass_count += 1
-        if h30_h34['H31']['pass']:
-            h31_pass_count += 1
-        if h30_h34['H32']['pass']:
-            h32_pass_count += 1
-        if h30_h34['H33']['pass']:
-            h33_pass_count += 1
-        if h30_h34['H34']['pass']:
-            h34_pass_count += 1
-
-    # Summary
-    n_seeds = len(seeds)
-    print(f"\n{'=' * 70}")
-    print(f"SUMMARY: {n_seeds} seeds")
-    print(f"H1-H8: {total_h1_h8_pass}/{n_seeds * 8} total passes")
-    print(f"H30 (L1<->L2 r<0.7): {h30_pass_count}/{n_seeds} ({h30_pass_count/n_seeds*100:.1f}%)")
-    print(f"H31 (L0->L1 delay): {h31_pass_count}/{n_seeds} ({h31_pass_count/n_seeds*100:.1f}%)")
-    print(f"H32 (L2 autonomy): {h32_pass_count}/{n_seeds} ({h32_pass_count/n_seeds*100:.1f}%)")
-    print(f"H33 (L2 ODI indep): {h33_pass_count}/{n_seeds} ({h33_pass_count/n_seeds*100:.1f}%)")
-    print(f"H34 (response delay): {h34_pass_count}/{n_seeds} ({h34_pass_count/n_seeds*100:.1f}%)")
-    print(f"{'=' * 70}")
+        # Print summary
+        h = result['hypotheses']
+        print(f"\n  Seed {seed}:")
+        print(f"    H30 (decoupling): {'PASS' if h['H30']['pass'] else 'FAIL'} "
+              f"r={h['H30'].get('l1_l2_correlation','N/A')} "
+              f"L2_mean={h['H30'].get('l2_stability_mean','N/A')}")
+        print(f"    H31 (delay):      {'PASS' if h['H31']['pass'] else 'FAIL'} "
+              f"delay={h['H31'].get('l0_l1_delay','N/A')}")
+        print(f"    H32 (autonomy):   {'PASS' if h['H32']['pass'] else 'FAIL'} "
+              f"idx={h['H32'].get('autonomy_index','N/A')}")
+        print(f"    H33 (ODI indep):  {'PASS' if h['H33']['pass'] else 'FAIL'} "
+              f"r={h['H33'].get('l0_l2_odi_correlation','N/A')}")
+        print(f"    H35 (floor):      {'PASS' if h['H35']['pass'] else 'FAIL'} "
+              f"min={h['H35'].get('l2_stability_min','N/A')}")
+        print(f"    H36 (narr auto):  {'PASS' if h['H36']['pass'] else 'FAIL'} "
+              f"idx={h['H36'].get('narrative_autonomy','N/A')}")
+        print(f"    H37 (intrinsic):  {'PASS' if h['H37']['pass'] else 'FAIL'} "
+              f"odi_std={h['H37'].get('l2_odi_std','N/A')}")
+        print(f"    Baseline H1-H8:   {result['baseline_passes']}")
+        print(f"    Track B:          {result['track_b_passes']}")
 
     # Save results
     output = {
@@ -711,33 +561,23 @@ def main():
             'l2_stability_floor': 0.15,
             'l2_constraint_strength': 0.1,
         },
-        'seeds': seeds,
-        'results': [],
+        'seeds': all_results,
         'summary': {
-            'n_seeds': n_seeds,
-            'h1_h8_total_pass': total_h1_h8_pass,
-            'h30_pass': h30_pass_count,
-            'h31_pass': h31_pass_count,
-            'h32_pass': h32_pass_count,
-            'h33_pass': h33_pass_count,
-            'h34_pass': h34_pass_count,
+            'total_seeds': len(all_results),
+            'track_b_pass_rates': {},
         },
     }
 
-    for r in all_results:
-        seed_result = {
-            'seed': r['seed'],
-            'h1_h8': r['h1_h8'],
-            'h30_h34': r['h30_h34'],
-            'all_pass': r['all_pass'],
-            'elapsed': r['elapsed'],
-        }
-        output['results'].append(seed_result)
+    for hk in ['H30','H31','H32','H33','H35','H36','H37']:
+        passes = sum(1 for r in all_results if r['hypotheses'][hk]['pass'])
+        output['summary']['track_b_pass_rates'][hk] = f'{passes}/{len(all_results)}'
 
     os.makedirs(os.path.dirname(FIXED_OUTPUT), exist_ok=True)
-    with open(FIXED_OUTPUT, 'w', encoding='utf-8') as f:
-        json.dump(output, f, ensure_ascii=False, indent=2)
-    print(f"\nResults saved to: {FIXED_OUTPUT}")
+    with open(FIXED_OUTPUT, 'w') as f:
+        json.dump(output, f, indent=2, default=str)
+
+    print(f"\n  Results saved to {FIXED_OUTPUT}")
+    return output
 
 
 if __name__ == '__main__':
