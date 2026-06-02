@@ -79,6 +79,13 @@ class AxiomConstraints:
         # 新设计: active_bits 记录每个比特的最近活跃步数，密封时只统计窗口内活跃的比特
         self.active_bits: Dict[int, int] = {}  # bit_idx -> last_active_step
         self.active_window = max(N // 2, 100)  # 滑动窗口大小（步数），默认 N/2 或 100
+        # FIX (2026-06-03 Track B7): 独立追踪总唯一活跃比特数，用于触发密封
+        # 原 bug: 密封触发条件 active_in_window >= N 太严格 — 早期活跃的比特若滑出窗口
+        # 则永远无法凑齐 N 个，导致密封永远无法触发。
+        # FIX v2: 使用百分比阈值而非 100% — 当 total_unique_active >= sealing_threshold
+        # 时触发密封。sealing_threshold = max(0.75*N, 30)，确保在合理步数内可触发。
+        self.total_unique_active: Set[int] = set()  # 所有曾经活跃过的比特
+        self.sealing_activation_threshold = max(int(0.75 * N), 30)  # 触发密封的最低活跃比特数
         self.sealed = False  # 封口标志
         self.sealed_bits: Set[int] = set()  # 被封口的比特
         # P0 fix (2026-05-30): 提高最少活跃比特数，降低系统密封率
@@ -335,15 +342,15 @@ class AxiomConstraints:
           - 冻结多余比特（低于阈值的被冻结）
           - 保留最少 min_active_bits 个比特
         """
-        # 阶段1：激活阶段 — 统计窗口内活跃的比特数
+        # 阶段1：激活阶段 — 统计总唯一活跃比特数（用于触发密封）
         current_step = self._step_counter()
-        active_in_window = self._count_active_in_window(current_step)
+        self.total_unique_active.add(flip_idx)
 
-        if active_in_window < self.N:
+        if len(self.total_unique_active) < self.sealing_activation_threshold:
             self.active_bits[flip_idx] = current_step
             return True, "ok"
 
-        # 阶段2：封口
+        # 阶段2：封口 — 当活跃比特达到阈值，触发密封
         if not self.sealed:
             self._seal(current_step)
 
@@ -414,6 +421,7 @@ class AxiomConstraints:
         """记录比特活跃 — 更新其最近活跃时间戳"""
         current_step = self._step_counter()
         self.active_bits[flip_idx] = current_step
+        self.total_unique_active.add(flip_idx)  # FIX Track B7
 
     def set_current_step(self, step: int):
         """由外层 evolver 每步调用，更新步数计数器"""
@@ -502,10 +510,10 @@ class AxiomConstraints:
             d = self.direction[i].item()
             if d < 0:
                 continue
-            # A9：自由度封口 — FIX: 使用滑动窗口判断
-            current_step = self._step_counter()
-            active_in_window = self._get_active_in_window(current_step)
-            if len(active_in_window) >= self.N and i not in active_in_window:
+            # A9：自由度封口 — 只检查 sealed_bits（由_seal() 决定冻结哪些）
+            # FIX Track B7: 移除冗余的窗口判断，密封决策统一在_seal() 中完成
+            # FIX Track B7 v2: 使用百分比阈值触发密封
+            if self.sealed and i in self.sealed_bits:
                 continue
             allowed.append(i)
         return allowed

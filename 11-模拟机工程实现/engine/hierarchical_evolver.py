@@ -433,16 +433,16 @@ class HierarchicalEvolver:
 
         # ── 修复：先清理过期引力场，再为所有层计算新引力场 ──
         # 不清理会导致 fields 无限累积， stale 场干扰调制结果并占用内存
+        # FIX Track B7: 只遍历已存在的层（而非 max_layers）
         total_steps = sum(
             self.hierarchy.get_layer(lid).step_count
-            for lid in range(self.max_layers)
-            if self.hierarchy.get_layer(lid).state is not None
+            for lid in range(self.hierarchy.n_layers)
         )
         self.gravity_modulator.clear_old_fields(
             max_age_steps=200, current_step=total_steps
         )
 
-        for lid in range(self.max_layers):
+        for lid in range(self.hierarchy.n_layers):
             layer = self.hierarchy.get_layer(lid)
             if layer.state is None or layer.state.numel() == 0:
                 continue

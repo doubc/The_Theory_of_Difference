@@ -402,6 +402,7 @@ class HierarchyManager:
             'total_lateral': total_lateral,
             'sealed': constraints.sealed,
             'active_bits': constraints._count_active_in_window(constraints._step_counter()),
+            'total_unique_active': len(constraints.total_unique_active),
             'cycle_states': len(constraints.cycle_states),
         }
 
