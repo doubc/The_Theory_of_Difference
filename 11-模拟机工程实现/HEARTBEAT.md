@@ -91,3 +91,20 @@ when the threshold is reachable. The 100% requirement was the blocker.
 **Next**: Track B8 — multi-layer dynamics (L1 autonomous behavior, L1→L2 coupling)
 - **Git**: commit 53d55c8 → origin/main
 - **Analysis**: docs/exp_121_track_b7_analysis.md
+
+#### 2026-06-03 05:10 — Phase 5 Track B8: L1 Autonomous Dynamics — Design Complete ✅
+- **Design document**: docs/exp_122_track_b8_design.md
+- **Experiment script**: experiments/exp_122_phase5_b8_l1_autonomous_dynamics.py
+- **Hypotheses**:
+  - H46: L1 NSI autonomy (rolling corr L0↔L1 < 0.5, ≥6/8)
+  - H47: L1 CIV independence (hamming corr < 0.6, ≥5/8)
+  - H48: L1 sealing potential (ratio > 0.8, ≥3/8)
+  - H49: L1 theme divergence (Jaccard < 0.4, ≥5/8)
+- **Config**: N0=48, steps=10000 (extended from B7's 5000), same seeds
+- **Key design choices**:
+  - Post-hoc analysis from snapshots (no invasive evolver modification)
+  - Rolling correlation window=200 for H46/H47
+  - Jaccard similarity on active bit sets for H49
+  - L1 sealing ratio = total_unique_active / threshold for H48
+- **Status**: Script imports clean, ready to run
+- **Git**: pending commit
