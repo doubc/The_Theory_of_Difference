@@ -68,3 +68,26 @@
 - Next: Re-run exp_120 (B6 fallback) with fix, then B1-B5
 - Artifact: task-summary_2026-06-03_0406.md
 - Doc updated: docs/exp_120_b6_fallback_critical_finding.md
+
+#### 2026-06-03 04:45 — Phase 5 Track B7: A9 Sealing Fix COMPLETE ✅
+- **exp_121 B7**: 8 seeds × 5000 steps, N0=48, sealing_activation_threshold=75%
+- **H41 Sealing rate: 8/8 = 100%** ✅ (was 3/8 in exp_120)
+- **H43 L1 formation: 8/8 = 100%** ✅ (was 0/8 in exp_120)
+- **H44 Partial freeze: 8/8** ✅ — all seeds froze 19 bits, kept 16-23
+- **Sealing steps**: 16-73 (avg ~30, very fast)
+- **L0→L1**: 48→18-24 bits consistently
+
+**Two bugs fixed**:
+1. **A9 sealing trigger**: Original required 100% activation (48/48 bits). Fixed with
+   percentage-based threshold: `sealing_activation_threshold = max(0.75*N, 30)`.
+   Also added `total_unique_active` (all-time) to track activations, sliding window
+   only decides WHICH bits to freeze, not WHETHER to seal.
+2. **Cross-layer gravity crash**: `_apply_cross_layer_gravity_modulation` iterated over
+   `max_layers` instead of `n_layers`, crashing on non-existent layers.
+
+**Key insight**: Sealing was never a dynamics problem — the system seals in ~30 steps
+when the threshold is reachable. The 100% requirement was the blocker.
+
+**Next**: Track B8 — multi-layer dynamics (L1 autonomous behavior, L1→L2 coupling)
+- **Git**: commit 53d55c8 → origin/main
+- **Analysis**: docs/exp_121_track_b7_analysis.md
