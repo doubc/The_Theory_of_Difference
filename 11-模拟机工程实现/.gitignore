@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.dll
+*.egg-info/
+dist/
+build/
+experiments/*.json
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
