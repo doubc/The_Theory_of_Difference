@@ -39,3 +39,21 @@
 - H28 0/8, H29 2/8, H1-H8 8/8 — 与初版完全一致
 - 分析 doc: docs/exp_114_track_b1_analysis.md (50e21d2)
 - Git push 失败 (SIGKILL) — 待手动: git push origin main
+
+#### 2026-06-03 03:04 — Phase 5 Track B6 Fallback (exp_120) + 关键发现：封口机制 Bug
+- **exp_120 B6 Fallback**: N0=48 L0 + N0=72 L2, 单种子测试 (seed 42)
+- **结果**: L0 仍未封口 (0 bits sealed after 7500 steps)
+- **核心发现**: 封口失败**不是规模问题**，而是 `AxiomConstraints.active_bits` 的**根本性 Bug**
+  - `active_bits` 只增不减（`record_active()` 只 add 从不 remove）
+  - 封口条件 `len(active_bits) <= min_active_bits` 在早期步骤后永远无法满足
+  - N0=48: min_active_bits=16, 但 step 2500 时 active=44 → 44 > 16
+  - N0=72: min_active_bits=24, 但 step 2500 时 active=41 → 41 > 24
+- **影响**: B1-B6 所有多层实验的封口都受此 Bug 影响
+  - B6 中 seed 542 的 12.5% 封口率是统计异常，非可靠机制
+- **修复方案**: 
+  - Option A (推荐): `active_bits` 改为滑动窗口，追踪最近活跃的 bits
+  - Option B: 改用其他封口指标（当前活动率、绑定强度集中度、空间聚类）
+  - Option C: 添加 decay 机制，移除长时间未活跃的 bits
+- **文档**: docs/exp_120_b6_fallback_critical_finding.md
+- **下一步**: 修复 `acl/axioms_v2.py` 的 active_bits 机制，然后重跑 B1-B6
+- **Git**: exp_120 脚本已写，待修复后 commit + push
