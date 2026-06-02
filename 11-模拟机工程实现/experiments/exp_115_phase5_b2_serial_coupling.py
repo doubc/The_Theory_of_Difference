@@ -627,14 +627,14 @@ def evaluate_h30_h31_aggregate(all_results):
 
 def load_existing_results():
     if os.path.exists(FIXED_OUTPUT):
-        with open(FIXED_OUTPUT, 'r') as f:
+        with open(FIXED_OUTPUT, 'r', encoding='utf-8') as f:
             d = json.load(f)
             return d, FIXED_OUTPUT
     pattern = os.path.join(
         PROJECT_ROOT, 'experiments', 'exp_115_b2_results_*.json')
     files = sorted(glob.glob(pattern), reverse=True)
     if files:
-        with open(files[0], 'r') as f:
+        with open(files[0], 'r', encoding='utf-8') as f:
             d = json.load(f)
             return d, files[0]
     return None, None
@@ -742,14 +742,14 @@ def run_batch():
     final_analysis = evaluate_h30_h31_aggregate(valid)
 
     print("\n" + "=" * 70)
-    print("EXP_115 FINAL RESULTS — Track B2: Serial CSC Coupling (L0→L1→L2)")
+    print("EXP_115 FINAL RESULTS -- Track B2: Serial CSC Coupling (L0->L1->L2)")
     print("=" * 70)
 
     print_analysis(final_analysis, valid)
 
     # Add final analysis to output
     if os.path.exists(FIXED_OUTPUT):
-        with open(FIXED_OUTPUT, 'r') as f:
+        with open(FIXED_OUTPUT, 'r', encoding='utf-8') as f:
             output = json.load(f)
         output['results']['final_analysis'] = final_analysis
         with open(FIXED_OUTPUT, 'w', encoding='utf-8') as f:
@@ -790,17 +790,17 @@ def print_analysis(final_analysis, valid):
               f"H30={'PASS' if h30_pass else 'FAIL'}(r={l1_l2:.3f}) "
               f"H31={'PASS' if h31_pass else 'FAIL'}  "
               f"NSI(L0={l0_mean:.3f} L1={l1_mean:.3f} L2={l2_mean:.3f})  "
-              f"delays(L0→L1={h31['l0_to_l1_delay']} L1→L2={h31['l1_to_l2_delay']} L0→L2={h31['l0_to_l2_delay']})")
+              f"delays(L0->L1={h31['l0_to_l1_delay']} L1->L2={h31['l1_to_l2_delay']} L0->L2={h31['l0_to_l2_delay']})")
 
     # H30
-    print("\n--- H30 (Layer Decoupling: L1↔L2 r < 0.7) ---")
+    print("\n--- H30 (Layer Decoupling: L1<->L2 r < 0.7) ---")
     h30_info = final_analysis['H30']
     print(f"  Result: {'PASS' if h30_info['pass'] else 'FAIL'}")
     print(f"  Pass rate: {h30_info['pass_rate']:.1%} "
           f"({h30_info['n_pass']}/{h30_info['n_total']})")
     l1_l2_stats = h30_info['l1_l2_correlation_stats']
     if l1_l2_stats['mean'] is not None:
-        print(f"  L1↔L2 correlation: {l1_l2_stats['mean']:.4f} ± {l1_l2_stats['std']:.4f}  "
+        print(f"  L1<->L2 correlation: {l1_l2_stats['mean']:.4f} +/- {l1_l2_stats['std']:.4f}  "
               f"[{l1_l2_stats['min']:.4f}, {l1_l2_stats['max']:.4f}]")
         print(f"  All values: {l1_l2_stats['all_values']}")
     print(f"\n  Per-pair correlations (mean ± std):")
@@ -810,31 +810,31 @@ def print_analysis(final_analysis, valid):
 
     # Comparison with B1
     print(f"\n  Comparison with B1 (parallel):")
-    print(f"    B1 L1↔L2: r = 0.976 ± 0.003 (near-perfect coupling)")
+    print(f"    B1 L1<->L2: r = 0.976 +/- 0.003 (near-perfect coupling)")
     if l1_l2_stats['mean'] is not None:
-        print(f"    B2 L1↔L2: r = {l1_l2_stats['mean']:.4f} ± {l1_l2_stats['std']:.4f} (serial coupling)")
+        print(f"    B2 L1<->L2: r = {l1_l2_stats['mean']:.4f} +/- {l1_l2_stats['std']:.4f} (serial coupling)")
         reduction = (1.0 - l1_l2_stats['mean'] / 0.976) * 100
         print(f"    Correlation reduction: {reduction:.1f}%")
 
     # H31
-    print("\n--- H31 (Hierarchical Delay: L0→L1 + L1→L2 > L0→L2) ---")
+    print("\n--- H31 (Hierarchical Delay: L0->L1 + L1->L2 > L0->L2) ---")
     h31_info = final_analysis['H31']
     print(f"  Result: {'PASS' if h31_info['pass'] else 'FAIL'}")
     print(f"  Pass rate: {h31_info['pass_rate']:.1%} "
           f"({h31_info['n_pass']}/{h31_info['n_total']})")
     ds = h31_info['delay_stats']
     if ds['l0_l1']['mean'] is not None:
-        print(f"  L0→L1 delay: {ds['l0_l1']['mean']:.1f} steps  {ds['l0_l1']['all']}")
+        print(f"  L0->L1 delay: {ds['l0_l1']['mean']:.1f} steps  {ds['l0_l1']['all']}")
     else:
-        print(f"  L0→L1 delay: insufficient data")
+        print(f"  L0->L1 delay: insufficient data")
     if ds['l1_l2']['mean'] is not None:
-        print(f"  L1→L2 delay: {ds['l1_l2']['mean']:.1f} steps  {ds['l1_l2']['all']}")
+        print(f"  L1->L2 delay: {ds['l1_l2']['mean']:.1f} steps  {ds['l1_l2']['all']}")
     else:
-        print(f"  L1→L2 delay: insufficient data")
+        print(f"  L1->L2 delay: insufficient data")
     if ds['l0_l2']['mean'] is not None:
-        print(f"  L0→L2 delay: {ds['l0_l2']['mean']:.1f} steps  {ds['l0_l2']['all']}")
+        print(f"  L0->L2 delay: {ds['l0_l2']['mean']:.1f} steps  {ds['l0_l2']['all']}")
     else:
-        print(f"  L0→L2 delay: insufficient data")
+        print(f"  L0->L2 delay: insufficient data")
 
     # Per-layer NSI aggregate
     print("\n--- Per-Layer NSI (Aggregate) ---")
