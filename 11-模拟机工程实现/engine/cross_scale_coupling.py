@@ -380,8 +380,10 @@ class IndependentL2Coupling:
         self._l0_stability_history = deque(maxlen=500)
         self._l2_odi_history = deque(maxlen=500)
         self._l0_odi_history = deque(maxlen=500)
+        self._l1_odi_history = deque(maxlen=500)  # B6: track L1 ODI for L1-L2 ODI correlation
         self._l1_l2_correlation_window = deque(maxlen=200)
         self._l0_l2_correlation_window = deque(maxlen=200)
+        self._l1_l2_odi_correlation_window = deque(maxlen=200)  # B6: L1-L2 ODI correlation
         self._response_delays = deque(maxlen=100)
         self._last_l2_state = None
         self._l2_structure_vector = None
@@ -418,6 +420,7 @@ class IndependentL2Coupling:
         self._l0_stability_history.append(l0_stability)
         self._l1_stability_history.append(l1_stability)
         self._l0_odi_history.append(l0_odi)
+        self._l1_odi_history.append(l1_odi)  # B6: track L1 ODI
 
         # ── Step 1: Generate L2 autonomous stability (独立于 L1) ──
         # L2 自主稳定性来自 L0 的直接映射 + 内在动力学
@@ -497,6 +500,15 @@ class IndependentL2Coupling:
                 corr = np.corrcoef(l0_vals[-min_len:], l2_vals[-min_len:])[0, 1]
                 self._l0_l2_correlation_window.append(float(corr) if not np.isnan(corr) else 0.0)
 
+        # B6: Track L1-L2 ODI correlation
+        if len(self._l0_odi_history) >= 30 and len(self._l2_odi_history) >= 30:
+            l1_odi_vals = np.array(list(self._l1_odi_history)[-100:])
+            l2_odi_vals = np.array(list(self._l2_odi_history)[-100:])
+            min_len = min(len(l1_odi_vals), len(l2_odi_vals))
+            if min_len >= 30:
+                corr = np.corrcoef(l1_odi_vals[-min_len:], l2_odi_vals[-min_len:])[0, 1]
+                self._l1_l2_odi_correlation_window.append(float(corr) if not np.isnan(corr) else 0.0)
+
         # ── Step 7: Detect response delay (L1→L2) ──
         response_delay = self._detect_response_delay(l1_stability, l2_stability)
         if response_delay is not None:
@@ -512,6 +524,7 @@ class IndependentL2Coupling:
             'stability_floor': self.stability_floor,
             'l1_l2_correlation': self.get_l1_l2_correlation(),
             'l0_l2_correlation': self.get_l0_l2_correlation(),
+            'l1_l2_odi_correlation': self.get_l1_l2_odi_correlation(),  # B6
             'avg_response_delay': self.get_avg_response_delay(),
             'step': self._step_count,
         }
@@ -557,6 +570,12 @@ class IndependentL2Coupling:
             return None
         return float(np.mean(vals))
 
+    def get_l1_l2_odi_correlation(self):  # B6: L1-L2 ODI correlation
+        vals = list(self._l1_l2_odi_correlation_window)
+        if not vals:
+            return None
+        return float(np.mean(vals))
+
     def get_avg_response_delay(self):
         delays = [d for d in self._response_delays if d > 0]
         return float(np.mean(delays)) if delays else 0.0
@@ -569,6 +588,7 @@ class IndependentL2Coupling:
             'l2_odi_mean': float(np.mean(self._l2_odi_history)) if self._l2_odi_history else 0.0,
             'l1_l2_correlation': self.get_l1_l2_correlation(),
             'l0_l2_correlation': self.get_l0_l2_correlation(),
+            'l1_l2_odi_correlation': self.get_l1_l2_odi_correlation(),  # B6
             'avg_response_delay': self.get_avg_response_delay(),
             'n_response_events': len(self._response_delays),
             'latest_state': self._last_l2_state,
@@ -581,8 +601,10 @@ class IndependentL2Coupling:
         self._l0_stability_history.clear()
         self._l2_odi_history.clear()
         self._l0_odi_history.clear()
+        self._l1_odi_history.clear()  # B6
         self._l1_l2_correlation_window.clear()
         self._l0_l2_correlation_window.clear()
+        self._l1_l2_odi_correlation_window.clear()  # B6
         self._response_delays.clear()
         self._last_l2_state = None
         self._l2_structure_vector = None

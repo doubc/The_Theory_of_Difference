@@ -21,6 +21,19 @@
 - **下一步**: 修复 max_layers=1→3 + HierarchyManager 初始化，改进 IndependentL2Coupling
 - **Git**: commit d314dfc → origin/main (amended from a0fbb08)
 
+#### 2026-06-03 00:40 — Phase 5 Track B6 Design + Implementation
+- **Git**: commit 4362b1c → exp_118 B5 results + check_b5.py cleanup (pushed)
+- **Track B6 design**: `docs/exp_119_track_b6_design.md` — combine B5 independent coupling with sealing-enabling parameters
+- **Experiment script**: `experiments/exp_119_phase5_b6_true_multilayer.py` — 8 seeds × 5000 steps
+  - B6 changes vs B5: steps 3000→5000, binding_threshold 0.1→0.05, ILP floor 20→15, consumption_rate 0.05→0.10
+- **CSC modification**: Added L1-L2 ODI correlation tracking to `IndependentL2Coupling`
+  - Added `_l1_odi_history`, `_l1_l2_odi_correlation_window` deques
+  - Added `get_l1_l2_odi_correlation()` method
+  - Updated `get_summary()`, `reset()`
+- **Hypotheses**: H30/H32/H35/H36 target maintained; H31/H33/H37/H1-H8 target ≥4/8
+- **Primary metric**: Sealing rate ≥4/8 seeds (L0 seals within 5000 steps)
+- **Next**: Run exp_119 batch, analyze sealing results
+
 #### 2026-06-02 13:56 — Phase 5 Track B1 exp_114 确认运行
 - 完整的 8 seeds × 2000 steps 确认运行
 - H28 0/8, H29 2/8, H1-H8 8/8 — 与初版完全一致
