@@ -1,0 +1,58 @@
+{
+  "experiment": "exp_112_phase5_a2_csc_coupling_sensitivity",
+  "timestamp": "20260602_074250",
+  "v": 1,
+  "architecture": "CSC+NSE (simplified, no AMC/ILP)",
+  "config": {
+    "coupling_strengths": [
+      0.05,
+      0.1,
+      0.2,
+      0.3,
+      0.5,
+      0.7,
+      0.9
+    ],
+    "seeds": [
+      42,
+      142,
+      242,
+      342
+    ],
+    "N0": 72,
+    "steps": 1600,
+    "sample_interval": 10,
+    "gbc_soft_nudge": 0.2
+  },
+  "results": {
+    "per_run": [
+      {
+        "seed": 42,
+        "coupling_strength": 0.05,
+        "elapsed": 57.45967984199524,
+        "n_steps": 240,
+        "sealed": false,
+        "nsi_max": 0.671,
+        "nsi_active_rate": 0.8791666666666667,
+        "continuity_mean": 0.7527312500000001,
+        "history_depth_mean": 0.18066666666666667,
+        "turning_points": 8,
+        "civ_count": 5,
+        "csci_std": 0.01932684495559221,
+        "topdown_max": 0,
+        "h1h8": {
+          "H1": true,
+          "H2": true,
+          "H3": true,
+          "H4": true,
+          "H5": true,
+          "H6": true,
+          "H7": true,
+          "H8": false,
+          "n_pass": 7,
+          "all_pass": false
+        }
+      }
+    ]
+  }
+}
