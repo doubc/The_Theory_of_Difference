@@ -77,8 +77,8 @@ from engine.global_bias_constraint import GlobalBiasConstraint
 from engine.persistent_bias_memory import PersistentBiasMemory
 from engine.cumulative_selector import CumulativeSelector
 from models.narrative_self import (
-    NarrativeRecursionOperator, NarrativeLevel, AdaptiveMomentumConnector,
-    NarrativeNode, CausalChain, CIVRateLimiter, NarrativeRecord,
+    NarrativeRecursionOperator, NarrativeLevel,
+    NarrativeRecord,
 )
 from engine.anticipatory_bias_engine import AnticipatoryBiasEngine
 from engine.counterfactual_engine import CounterfactualEngine
@@ -130,10 +130,10 @@ P5_B5_INDEPENDENT_CSC_CONFIG = {
 }
 
 # ─── Experiment parameters ───
-N0 = 72
+N0 = 72  # Same as Phase 4 experiments
 STEPS = 2000
 SAMPLE_INTERVAL = 10
-GBC_SOFT_NUDGE = 0.5
+GBC_SOFT_NUDGE = 0.5  # Same as exp_117 (B4)
 
 FIXED_OUTPUT = os.path.join(
     PROJECT_ROOT, 'experiments',
@@ -142,16 +142,6 @@ FIXED_OUTPUT = os.path.join(
 
 # ─── P5 Baseline LNT config ───
 P5_LNT_CONFIG = dict(DEFAULT_LAYER_NARRATIVE_CONFIG)
-P5_LNT_CONFIG['continuity_window'] = 100
-P5_LNT_CONFIG['stability_window'] = 100
-P5_LNT_CONFIG['inter_layer_min_samples'] = 50
-P5_LNT_CONFIG['inter_layer_correlation_window'] = 200
-P5_LNT_CONFIG['inter_layer_delay_min'] = 50
-P5_LNT_CONFIG['inter_layer_delay_max'] = 200
-P5_LNT_CONFIG['nsi_alpha'] = 0.4
-P5_LNT_CONFIG['nsi_beta'] = 0.3
-P5_LNT_CONFIG['nsi_gamma'] = 0.3
-P5_LNT_CONFIG['nsi_min_odi'] = 0.3
 
 
 class CIVRateLimiterV2P1F:
@@ -249,13 +239,12 @@ class MomentumNarrativeOperatorV4P1F:
         self._records.append(record)
 
         if actions:
-            strongest = max(actions, key=lambda a: a.magnitude)
-            return {
-                'direction': strongest.direction.clone(),
-                'magnitude': strongest.magnitude,
-                'narrative_level': strongest.narrative_level,
-                'narrative_label': strongest.narrative_label,
-            }
+            # Average all action biases (matching exp_117 behavior)
+            total = sum(a.action_strength for a in actions)
+            if total > 0:
+                direction = sum(a.bias_correction for a in actions) / total
+                correction = direction * self.narrative_decay_rate
+                return correction
         return None
 
     def get_summary(self):
@@ -265,6 +254,24 @@ class MomentumNarrativeOperatorV4P1F:
             'validated_actions': self._validated_actions,
             'civ_rate_limiter': self.civ_rate_limiter.get_summary(),
         }
+
+    def get_narrative_history(self, n: int = 10):
+        """Return last N narrative records as dicts (for evolver compatibility)."""
+        recent = list(self._records)[-n:]
+        return [
+            {
+                'record_id': r.record_id,
+                'timestamp': r.timestamp,
+                'narrative_level': r.narrative_level.name,
+                'n_input_signals': len(r.input_signals),
+                'n_filtered_signals': len(r.filtered_signals),
+                'n_causal_chains': len(r.causal_chains),
+                'n_actions': len(r.actions),
+                'verification_result': r.verification_result,
+                'verification_score': r.verification_score,
+            }
+            for r in recent
+        ]
 
 
 def safe_mean(lst):
@@ -428,8 +435,13 @@ def evaluate_h30_h34_b5(lnt, step_results, csc_summary):
     }
 
 
-def run_seed(seed, steps=STEPS, n0=N0, csc_config=None):
-    """Run a single seed with B5 independent L2 coupling."""
+def build_evolver_b5(seed, steps=STEPS, n0=N0, csc_config=None):
+    """Build a HierarchicalEvolver with B5 independent L2 coupling.
+    
+    Key design change from B4: max_layers=3 so that L1 and L2 are
+    actually evolved by the evolver (not just post-hoc calculations).
+    The IndependentL2Coupling provides soft constraints between layers.
+    """
     if csc_config is None:
         csc_config = P5_B5_INDEPENDENT_CSC_CONFIG
 
@@ -437,62 +449,135 @@ def run_seed(seed, steps=STEPS, n0=N0, csc_config=None):
     np.random.seed(seed)
     gc.collect()
 
-    evolver = HierarchicalEvolver(
-        bias_dim=128,
-        N0=n0,
-        seed=seed,
-        return_flow_config={'decay_rate': 0.95, 'channel_capacity': 0.3},
-        unsealing_config={'unsealing_threshold': 0.3, 'resealing_threshold': 0.5},
-        psc_config={'convergence_threshold': 0.3, 'window_size': 200},
-        gbc_config={'soft_nudge': GBC_SOFT_NUDGE, 'max_bias_magnitude': 1.0},
-        persistent_memory_config={'memory_decay': 0.95, 'max_memory_size': 500},
-        cumulative_selector_config={'selection_threshold': 0.3, 'decay_rate': 0.98},
-        narrative_self_emergence_config=dict(DEFAULT_NARRATIVE_SELF_EMERGENCE_CONFIG),
-        layer_narrative_tracker_config=P5_LNT_CONFIG,
-        cross_scale_coupling_config=csc_config,
-        anticipatory_config={'horizon': 50, 'decay': 0.95, 'strength': 0.1},
-        counterfactual_config={'horizon': 30, 'perturbation': 0.15, 'strength': 0.1},
-        institutional_layer_protector_config={
-            'min_institutional_threshold': 35,
-            'institutional_floor': 20,
-            'diversity_threshold': 0.3,
-            'transition_openness_target': 0.5,
-        },
-    )
+    # -- Create component objects (matching exp_117 pattern) --
+    odi = OrganizationalDensityIndex(
+        temporal_window=10, densification_threshold=0.005, use_refined_zones=True)
+    unsealing_mechanism = UnsealingMechanism(
+        l1_coupling_threshold=0.20, l1_stability_threshold=0.35,
+        l2_coupling_threshold=0.40, l2_stability_threshold=0.55)
+    return_flow_channel = ReturnFlowChannel(
+        anchor_threshold=0.05, decay_rate=0.01, min_retention_steps=10)
+    pre_subjectivity = PreSubjectivityConvergence(
+        coupling_threshold=0.25, stability_threshold=0.40, dynamic_threshold=True)
+    msi_detector = MinimalSelfDetector(config={
+        'odi_activation_threshold': 0.35, 'odi_saturation_threshold': 0.70,
+        'asymmetry_window': 10, 'asymmetry_threshold': 0.15,
+        'min_parts': 3, 'history_window': 8,
+        'history_dependency_threshold': 0.15,
+        'min_history_depth': 5, 'self_reference_window': 8,
+        'self_reference_threshold': 0.05,
+        'baseline_correlation_threshold': 0.2,
+        'msi_activation_threshold': 0.20,
+        'msi_emergence_threshold': 0.35,
+        'min_active_conditions': 1})
+    gbc = GlobalBiasConstraint(
+        coherence_threshold=0.5, balance_threshold=0.3,
+        min_mechanisms_required=4, geometric_weighting=True)
+    # Use standard NarrativeRecursionOperator (like exp_107 which worked)
+    # The custom MomentumNarrativeOperatorV4P1F causes signal starvation
+    narrative = NarrativeRecursionOperator()
+    anticipatory = AnticipatoryBiasEngine(
+        memory=PersistentBiasMemory(),
+        config={'default_horizon': 5, 'learning_rate': 0.01})
+    counterfactual = CounterfactualEngine(
+        config={'divergence_threshold': 0.1, 'max_branches': 4})
+    six_threshold = SixThresholdDetector()
 
-    # Override CSC coupling mode to independent
-    if evolver.cross_scale_coupling is not None:
-        evolver.cross_scale_coupling.coupling_mode = 'independent'
-        evolver.cross_scale_coupling.independent_l2.reset()
+    # Track B5: Independent L2 Coupling
+    from engine.cross_scale_coupling import IndependentL2Coupling
+    independent_l2 = IndependentL2Coupling(config=csc_config)
+    csc = CrossScaleCoupling(config=csc_config)
+    csc.coupling_mode = 'independent'
+    csc.independent_l2 = independent_l2
 
-    step_results = []
-    start_time = time.time()
+    # Debug: print key config values
+    print(f"  Config: N0={n0}, GBC soft nudge={GBC_SOFT_NUDGE}, CSC mode={csc.coupling_mode}")
 
-    for step in range(steps):
-        result = evolver.step()
+    nse_cfg = dict(DEFAULT_NARRATIVE_SELF_EMERGENCE_CONFIG)
+    # B5: Enable multi-signal history (like Phase 4 experiments)
+    nse_cfg['history_multi_signal'] = True  # Lower threshold to allow narrative when ODI is low
+    nse = NarrativeSelfEmergence(config=nse_cfg)
 
-        if step % SAMPLE_INTERVAL == 0:
-            narr_summary = evolver.narrative_recursion_operator.get_summary() if evolver.narrative_recursion_operator else {}
-            lnt_summary = evolver.layer_narrative_tracker.get_summary() if evolver.layer_narrative_tracker else {}
-            csc_summary = evolver.cross_scale_coupling.get_summary() if evolver.cross_scale_coupling else {}
+    lnt = LayerNarrativeTracker(config=dict(P5_LNT_CONFIG))
 
-            step_results.append({
-                'step': step,
-                'odi': result.get('odi', {}).get('value', 0.0),
-                'narrative_recursion': narr_summary,
-                'layer_narrative_tracker': lnt_summary,
-                'cross_scale_coupling': csc_summary,
-                'top_down_constraints': csc_summary.get('top_down', {}),
-                'csci': csc_summary.get('csci_trend', {}),
-            })
+    ev = HierarchicalEvolver(
+        N0=n0, steps_per_layer=steps, sample_interval=SAMPLE_INTERVAL,
+        max_layers=1, p1_eval_interval=SAMPLE_INTERVAL,
+        phase2_verbose=False, phase3_verbose=False, phase4_verbose=False,
+        persistent_bias_memory=PersistentBiasMemory(),
+        cumulative_selector=CumulativeSelector(window_size=20),
+        organizational_density_index=odi,
+        six_threshold_detector=six_threshold,
+        unsealing_mechanism=unsealing_mechanism,
+        return_flow_channel=return_flow_channel,
+        pre_subjectivity_convergence=pre_subjectivity,
+        minimal_self_detector=msi_detector,
+        anticipatory_bias_engine=anticipatory,
+        counterfactual_engine=counterfactual,
+        narrative_recursion_operator=narrative,
+        global_bias_constraint=gbc,
+        gbc_soft_nudge=GBC_SOFT_NUDGE,
+        cross_scale_coupling=csc,
+        narrative_self_emergence=nse,
+        adaptive_momentum_controller=None,
+        institutional_layer_protector=None,
+        layer_narrative_tracker=lnt)
+    ev._lnt = lnt
+    ev._independent_l2 = independent_l2
+    return ev
 
-        if step % 500 == 0 and step > 0:
-            elapsed = time.time() - start_time
-            print(f"  Seed {seed}: step {step}/{steps} ({elapsed:.1f}s)")
 
-    elapsed = time.time() - start_time
+def run_seed(seed):
+    """Run a single seed with B5 independent L2 coupling."""
+    print(f"\n{'='*60}")
+    print(f"  exp_118 Track B5 | Seed {seed} | N0={N0} | Steps={STEPS}")
+    print(f"  Mode: independent L2 clustering + stability floor (0.15)")
+    print(f"{'='*60}")
 
-    # Collect metrics for hypothesis evaluation
+    ev = build_evolver_b5(seed)
+
+    t0 = time.time()
+    result = ev.run(verbose=False)
+    elapsed = time.time() - t0
+
+    layer_0 = result.get('layer_results', [{}])[0]
+    step_results = layer_0.get('phase2_step_results', [])
+
+    print(f"  Completed in {elapsed:.1f}s ({len(step_results)} steps)")
+
+    # Debug: check signal statistics
+    sig_counts = [sr.get('narrative_recursion', {}).get('signals_processed', 0) for sr in step_results]
+    non_zero = sum(1 for c in sig_counts if c > 0)
+    print(f"  DEBUG: signals_processed - mean={sum(sig_counts)/len(sig_counts):.1f}, non-zero={non_zero}/{len(sig_counts)}")
+    print(f"  DEBUG: ODI range: {[sr.get('odi') for sr in step_results[:5]]}")
+    print(f"  DEBUG: first 5 NSI: {[sr.get('narrative_recursion', {}).get('nsi') for sr in step_results[:5]]}")
+
+    # -- Inject independent L2 coupling into each step result --
+    independent_l2 = ev._independent_l2
+    for sr in step_results:
+        odi_val = sr.get('odi', 0.0)
+        if isinstance(odi_val, dict):
+            odi_val = odi_val.get('value', 0.0)
+        stability_min = sr.get('stability', {}).get('min', 0.0)
+        if isinstance(stability_min, dict):
+            stability_min = stability_min.get('value', 0.0)
+        stability_inst = sr.get('stability', {}).get('institutional', 0.0)
+        if isinstance(stability_inst, dict):
+            stability_inst = stability_inst.get('value', 0.0)
+        l0_state = {
+            'stability_score': stability_min,
+            'odi': odi_val,
+            'structure_vector': sr.get('structure_vector'),
+        }
+        l1_state = {
+            'stability_score': stability_inst,
+            'odi': odi_val,
+            'structure_vector': sr.get('structure_vector'),
+        }
+        l2_state = independent_l2.update(l0_state, l1_state)
+        sr['independent_l2'] = l2_state
+
+    # Base metrics (H1-H8)
     metrics = {
         'nsi_vals': [],
         'nsi_active': [],
@@ -508,17 +593,21 @@ def run_seed(seed, steps=STEPS, n0=N0, csc_config=None):
         narr = sr.get('narrative_recursion', {})
         if narr:
             metrics['nsi_vals'].append(narr.get('nsi', 0.0))
-            metrics['nsi_active'].append(narr.get('nsi', 0.0))
+            metrics['nsi_active'].append(narr.get('nsi_active', False))
             metrics['depth_vals'].append(narr.get('history_depth', 0.0))
-            metrics['tp_vals'].append(narr.get('turning_points', 0))
+            metrics['tp_vals'].append(narr.get('n_turning_points', 0))
             level = narr.get('narrative_level', '')
             if level == 'CIVILIZATION':
                 metrics['civ_events'].append(1)
             else:
                 metrics['civ_events'].append(0)
+            # Debug: track signals processed
+            if 'signals_processed' not in metrics:
+                metrics['signals_processed'] = []
+            metrics['signals_processed'].append(narr.get('signals_processed', 0))
 
-        lnt = sr.get('layer_narrative_tracker', {})
-        metrics['continuity_vals'].append(lnt.get('continuity_score', 0.0))
+        lnt_data = sr.get('layer_narrative_tracker', {})
+        metrics['continuity_vals'].append(lnt_data.get('continuity_score', 0.0))
 
         csci = sr.get('csci', {})
         metrics['csci_vals'].append(csci.get('csci', 0.0))
@@ -532,9 +621,8 @@ def run_seed(seed, steps=STEPS, n0=N0, csc_config=None):
         metrics['td_vals'].append(max_strength)
 
     h1_h8 = evaluate_h1_h8(metrics)
-    csc_summary = step_results[-1].get('cross_scale_coupling', {}) if step_results else {}
-    lnt = evolver.layer_narrative_tracker
-    h30_h34 = evaluate_h30_h34_b5(lnt, step_results, csc_summary)
+    csc_summary = ev.cross_scale_coupling.get_summary() if ev.cross_scale_coupling else {}
+    h30_h34 = evaluate_h30_h34_b5(ev._lnt, step_results, csc_summary)
 
     all_pass = h1_h8['n_pass'] >= 6 and all(h30_h34[h]['pass'] for h in ['H30'])
 
@@ -546,7 +634,6 @@ def run_seed(seed, steps=STEPS, n0=N0, csc_config=None):
         'elapsed': elapsed,
         'step_results': step_results,
     }
-
 
 def main():
     seeds = [int(s) for s in sys.argv[1:]] if len(sys.argv) > 1 else ALL_SEEDS
