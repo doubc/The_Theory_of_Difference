@@ -204,7 +204,13 @@ class HierarchyManager:
         # 使用 constraints.sealed_bits 作为冻结比特
         # active 比特 = 所有激活过的比特 - 被封口的比特
         frozen = layer.constraints.sealed_bits if layer.constraints.sealed_bits else layer.frozen_bits
-        all_active = layer.constraints.active_bits if layer.constraints.active_bits else layer.active_bits
+        # FIX (2026-06-03): constraints.active_bits is now Dict[int, int] (sliding window)
+        # Use the window-restricted active bits as a set
+        if layer.constraints.active_bits:
+            current_step = layer.constraints._step_counter()
+            all_active = layer.constraints._get_active_in_window(current_step)
+        else:
+            all_active = layer.active_bits
         active = all_active - frozen
 
         # 执行封装
@@ -287,6 +293,7 @@ class HierarchyManager:
         total_lateral = 0
 
         for step in range(n_steps):
+            constraints.set_current_step(step)
             w_before = state.sum().long().item()
 
             # 1. 源注入
@@ -394,7 +401,7 @@ class HierarchyManager:
             'total_absorb': total_absorb,
             'total_lateral': total_lateral,
             'sealed': constraints.sealed,
-            'active_bits': len(constraints.active_bits),
+            'active_bits': constraints._count_active_in_window(constraints._step_counter()),
             'cycle_states': len(constraints.cycle_states),
         }
 
@@ -533,7 +540,9 @@ class HierarchyManager:
         # 提取低层活跃比特的空间模式
         # 活跃比特 = 被注入过或发生过翻转的比特
         active_pattern = torch.zeros(source.n_bits, device=self.device)
-        for idx in source.constraints.active_bits:
+        # FIX (2026-06-03): use window-restricted active bits
+        current_step = source.constraints._step_counter()
+        for idx in source.constraints._get_active_in_window(current_step):
             active_pattern[idx] = 1.0
 
         # 如果低层没有活跃模式，不生成偏置

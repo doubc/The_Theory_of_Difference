@@ -13,7 +13,7 @@ axioms_v2.py — 九公理约束重新设定（硬性约束版）
 
 import torch
 import numpy as np
-from typing import List, Optional, Tuple, Set
+from typing import List, Optional, Tuple, Set, Dict
 
 
 class AxiomConstraints:
@@ -74,8 +74,11 @@ class AxiomConstraints:
         self.binding_strength = (self.binding_strength + self.binding_strength.T) / 2  # 对称
         self.binding_strength.fill_diagonal_(0)
 
-        # A9 活跃自由度追踪
-        self.active_bits: Set[int] = set()
+        # A9 活跃自由度追踪 — FIX (2026-06-03): 使用滑动窗口而非单调集合
+        # 原 bug: active_bits 是 Set，只增不减 → 一旦超过 min_active_bits 就永远无法密封
+        # 新设计: active_bits 记录每个比特的最近活跃步数，密封时只统计窗口内活跃的比特
+        self.active_bits: Dict[int, int] = {}  # bit_idx -> last_active_step
+        self.active_window = max(N // 2, 100)  # 滑动窗口大小（步数），默认 N/2 或 100
         self.sealed = False  # 封口标志
         self.sealed_bits: Set[int] = set()  # 被封口的比特
         # P0 fix (2026-05-30): 提高最少活跃比特数，降低系统密封率
@@ -332,40 +335,61 @@ class AxiomConstraints:
           - 冻结多余比特（低于阈值的被冻结）
           - 保留最少 min_active_bits 个比特
         """
-        # 阶段1：激活阶段
-        if len(self.active_bits) < self.N:
-            self.active_bits.add(flip_idx)
+        # 阶段1：激活阶段 — 统计窗口内活跃的比特数
+        current_step = self._step_counter()
+        active_in_window = self._count_active_in_window(current_step)
+
+        if active_in_window < self.N:
+            self.active_bits[flip_idx] = current_step
             return True, "ok"
 
         # 阶段2：封口
         if not self.sealed:
-            self._seal()
+            self._seal(current_step)
 
         # 封口后：只允许非冻结比特
         if flip_idx in self.sealed_bits:
             return False, f"A9: bit {flip_idx} sealed"
 
-        self.active_bits.add(flip_idx)
+        self.active_bits[flip_idx] = current_step
         return True, "ok"
 
-    def _seal(self):
+    def _step_counter(self) -> int:
+        """返回当前步数计数器（由外层 evolver 设置）"""
+        return getattr(self, '_current_step', 0)
+
+    def _count_active_in_window(self, current_step: int) -> int:
+        """统计滑动窗口内活跃的比特数"""
+        cutoff = current_step - self.active_window
+        return sum(1 for ts in self.active_bits.values() if ts >= cutoff)
+
+    def _get_active_in_window(self, current_step: int) -> Set[int]:
+        """获取滑动窗口内活跃的比特集合"""
+        cutoff = current_step - self.active_window
+        return {idx for idx, ts in self.active_bits.items() if ts >= cutoff}
+
+    def _seal(self, current_step: int):
         """执行封口：冻结多余比特
 
         策略：
-        1. 优先保留参与 A7 循环的比特
-        2. 其次保留绑定强度高的比特
-        3. 冻结其余比特
+        1. 只统计滑动窗口内活跃的比特（修复单调增长 bug）
+        2. 优先保留参与 A7 循环的比特
+        3. 其次保留绑定强度高的比特
+        4. 冻结其余比特
         """
-        if len(self.active_bits) <= self.min_active_bits:
+        active_now = self._get_active_in_window(current_step)
+
+        if len(active_now) <= self.min_active_bits:
             self.sealed = True
+            print(f"[A9] Sealed at step {current_step}: {len(active_now)} active bits <= min {self.min_active_bits}")
             return
 
-        # 计算每个比特的得分（绑定强度 + 循环参与）
+        # 计算每个活跃比特的得分（绑定强度 + 循环参与）
         scores = {}
-        for i in self.active_bits:
-            # 绑定强度得分
-            bind_score = sum(self.binding_strength[i][j].item() for j in self.active_bits if j != i)
-            bind_score = bind_score / max(len(self.active_bits) - 1, 1)
+        for i in active_now:
+            # 绑定强度得分 — 只在窗口内活跃比特间计算
+            bind_score = sum(self.binding_strength[i][j].item() for j in active_now if j != i)
+            bind_score = bind_score / max(len(active_now) - 1, 1)
             scores[i] = bind_score
 
         # 按得分排序，保留最高的
@@ -376,7 +400,7 @@ class AxiomConstraints:
         self.sealed_bits = freeze
         self.sealed = True
 
-        print(f"[A9] Sealed: keeping {len(keep)} bits, freezing {len(freeze)} bits")
+        print(f"[A9] Sealed at step {current_step}: {len(active_now)} active in window, keeping {len(keep)}, freezing {len(freeze)}")
         print(f"[A9] Kept: {sorted(keep)}")
         print(f"[A9] Frozen: {sorted(freeze)}")
 
@@ -387,7 +411,13 @@ class AxiomConstraints:
         return len(self.sealed_bits) / self.N
 
     def record_active(self, flip_idx: int):
-        self.active_bits.add(flip_idx)
+        """记录比特活跃 — 更新其最近活跃时间戳"""
+        current_step = self._step_counter()
+        self.active_bits[flip_idx] = current_step
+
+    def set_current_step(self, step: int):
+        """由外层 evolver 每步调用，更新步数计数器"""
+        self._current_step = step
 
     # ============================================================
     # A1'：横向涌现
@@ -472,8 +502,10 @@ class AxiomConstraints:
             d = self.direction[i].item()
             if d < 0:
                 continue
-            # A9：自由度封口
-            if len(self.active_bits) >= self.N and i not in self.active_bits:
+            # A9：自由度封口 — FIX: 使用滑动窗口判断
+            current_step = self._step_counter()
+            active_in_window = self._get_active_in_window(current_step)
+            if len(active_in_window) >= self.N and i not in active_in_window:
                 continue
             allowed.append(i)
         return allowed

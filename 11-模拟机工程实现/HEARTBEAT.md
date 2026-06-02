@@ -57,3 +57,14 @@
 - **文档**: docs/exp_120_b6_fallback_critical_finding.md
 - **下一步**: 修复 `acl/axioms_v2.py` 的 active_bits 机制，然后重跑 B1-B6
 - **Git**: exp_120 脚本已写，待修复后 commit + push
+
+
+#### 2026-06-03 04:04 — Phase 5 Track B6: A9 Sealing Bug FIXED
+- Root cause: active_bits was a monotonically-growing Set, sealing impossible after ~3 steps
+- Fix: Sliding window Dict[int, int] (bit_idx -> last_active_step)
+- Files: axioms_v2.py (core), spatial_evolver_v2.py, long_range_evolver_v2.py, hierarchy_manager.py
+- Verification: Smoke test PASSED - seals at step 29, keeps 16 bits, freezes 32 (N=48)
+- Impact: All B1-B6 experiments need re-run with the fix
+- Next: Re-run exp_120 (B6 fallback) with fix, then B1-B5
+- Artifact: task-summary_2026-06-03_0406.md
+- Doc updated: docs/exp_120_b6_fallback_critical_finding.md

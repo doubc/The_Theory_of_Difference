@@ -101,3 +101,40 @@ def step_decay(self, step: int, inactive_threshold: int = 100):
 ## Git Status
 
 - exp_120 script committed but not pushed (need to add this analysis doc first)
+
+
+---
+
+## FIX IMPLEMENTED (2026-06-03 04:04)
+
+### Root Cause Confirmed
+The sealing bug is **not a scale problem** -- it is a fundamental design flaw in AxiomConstraints.
+
+### Fix Applied
+Replaced monotonically-growing Set[int] with a sliding window Dict[int, int] (bit_idx to last_active_step):
+
+Files modified:
+1. acl/axioms_v2.py -- Core fix:
+   - active_bits: Set[int] to Dict[int, int]
+   - Added active_window = max(N//2, 100) sliding window parameter
+   - Added _count_active_in_window(), _get_active_in_window(), _step_counter()
+   - _seal() now uses window-restricted active bits
+   - Added set_current_step() for outer evolver to update step counter
+
+2. engine/spatial_evolver_v2.py -- Added self.constraints.set_current_step(step) in run() loop
+3. engine/long_range_evolver_v2.py -- Same fix
+4. engine/hierarchy_manager.py -- Same fix + compatibility fixes for active_bits usage:
+   - encapsulate_current_layer(): uses _get_active_in_window() instead of raw active_bits
+   - step_layer(): added set_current_step(step) in loop
+   - _apply_cross_layer_gravity_modulation(): uses _get_active_in_window() for active pattern
+   - step_layer() return dict: uses _count_active_in_window() for active_bits count
+
+### Verification
+Smoke test (test_sealing_fix.py) confirms:
+- Old mechanism: sealing impossible after ~3 steps (active_bits=48 > min_active=16)
+- New mechanism: seals at step 29, keeps 16 bits, freezes 32 bits [PASS]
+
+### Next Steps
+1. Re-run exp_120 (B6 fallback) with the fix to validate multi-layer sealing
+2. Re-run B1-B5 experiments with the fix
+3. Proceed with Track B7 (L2 autonomous dynamics parameter sweep)

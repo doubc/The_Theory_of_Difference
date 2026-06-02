@@ -80,6 +80,7 @@ class LongRangeEvolverV2:
                   f"Lateral bits: {self.constraints.n_lateral}")
 
         for step in range(self.total_steps):
+            self.constraints.set_current_step(step)
             w_before = state.sum().long().item()
 
             # ====== 1. 源注入（A1 + A8 调制）======
