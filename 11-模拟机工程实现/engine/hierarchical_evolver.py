@@ -251,7 +251,9 @@ class HierarchicalEvolver:
                  institutional_protector_config: Optional[Dict] = None,
                  cross_scale_coupling_config: Optional[Dict] = None,
                  narrative_self_emergence_config: Optional[Dict] = None,
-                 phase4_verbose: bool = False):
+                 phase4_verbose: bool = False,
+                 # Phase 5 Track B1 组件
+                 layer_narrative_tracker: Optional['LayerNarrativeTracker'] = None):
         """
         Args:
             N0: 第 0 层比特数
@@ -306,6 +308,9 @@ class HierarchicalEvolver:
         # Phase 4 P1 组件
         self.cross_scale_coupling = cross_scale_coupling
         self.narrative_self_emergence = narrative_self_emergence
+        # Phase 5 Track B1 组件
+        self.layer_narrative_tracker = layer_narrative_tracker
+        self._last_level_states = None
         self._adaptive_momentum_config = adaptive_momentum_config
         self._institutional_protector_config = institutional_protector_config
         self._cross_scale_coupling_config = cross_scale_coupling_config
@@ -1860,6 +1865,8 @@ class HierarchicalEvolver:
                     bias_field=constraints.direction.float() if
                         hasattr(constraints, 'direction') and constraints.direction is not None else None,
                 )
+                # Store for LayerNarrativeTracker (Phase 5 Track B1)
+                self._last_level_states = level_states
                 result_entry['cross_scale_coupling'] = {
                     'csci': round(csc_result['csci'].csci, 4),
                     'csci_coherent': csc_result['csci'].is_coherent,
@@ -1956,6 +1963,36 @@ class HierarchicalEvolver:
                           f"active={nse_result['nsi'].is_nsi_active} "
                           f"continuity={nse_result['continuity'].continuity_score:.3f} "
                           f"stability={nse_result['stability'].stability_score:.3f}")
+            # ── Phase 5 Track B1: LayerNarrativeTracker ──
+            if self.layer_narrative_tracker is not None:
+                try:
+                    # Collect inputs from the current execution context
+                    lnt_msi = msi_mean if 'msi_mean' in dir() else self._last_odi_value
+                    lnt_odi = odi_val if 'odi_val' in dir() else self._last_odi_value
+                    lnt_dist = narrative_level_dist if 'narrative_level_dist' in dir() else {}
+                    lnt_level_states = self._last_level_states if hasattr(self, '_last_level_states') else None
+
+                    lnt_result = self.layer_narrative_tracker.step(
+                        msi=lnt_msi,
+                        odi=lnt_odi,
+                        narrative_level_distribution=lnt_dist,
+                        step=step,
+                        level_states=lnt_level_states,
+                    )
+                    result_entry['layer_narrative'] = {
+                        level: {
+                            'nsi': round(r.nsi, 4),
+                            'continuity': round(r.temporal_continuity, 4),
+                            'stability': round(r.narrative_stability, 4),
+                            'history_depth': round(r.self_history_depth, 4),
+                            'active': r.is_nsi_active,
+                        }
+                        for level, r in lnt_result.items()
+                    }
+                except Exception as e:
+                    if self._phase4_verbose:
+                        print(f"    [LNT] ERROR: {e}")
+
 
             # ── Phase 4 P0: Adaptive Momentum Controller ──
             if self.adaptive_momentum_controller is not None:
