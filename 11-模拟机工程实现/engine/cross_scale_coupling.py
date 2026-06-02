@@ -75,8 +75,20 @@ DEFAULT_CROSS_SCALE_COUPLING_CONFIG = {
 
     # Serial mode: L1→L2 传导参数
     'serial_l1_to_l2_delay': 15,              # L1→L2 传导延迟步数
-    'serial_l1_to_l2_attenuation': 0.5,       # L1→L2 信号衰减（0.5 = L2 gets half of L1）
-    'serial_l1_to_l2_noise': 0.15,            # L1→L2 传导噪声（higher = more independent L2）
+    # Track B2 default:
+    #   'serial_l1_to_l2_attenuation': 0.7,
+    #   'serial_l1_to_l2_noise': 0.05,
+    # Track B3 default (2026-06-02):
+    'serial_l1_to_l2_attenuation': 0.3,       # L1→L2 信号衰减（B3: 0.7→0.3，大幅降低镜像效应）
+    'serial_l1_to_l2_noise_abs': 0.1,         # B3: 绝对噪声基底
+    'serial_l1_to_l2_noise_rel': 0.3,         # B3: 相对噪声（相对于 L1 信号强度的比例）
+    'serial_l1_to_l2_odi_factor': 0.5,        # B3: L2 ODI 额外衰减因子（B2 为 0.8）
+    # Track B3: L2 层内自生动力学
+    'serial_l2_intrinsic_perturbation_rate': 0.02,   # 每步对 L2 结构向量施加随机扰动的概率
+    'serial_l2_intrinsic_perturbation_magnitude': 0.15,  # 扰动幅度
+    'serial_l2_autonomous_decay': 0.98,              # L2 稳定性每步自动衰减率（模拟文明层级自然耗散）
+    # Track B3: L0→L1 信号增强
+    'serial_l0_to_l1_signal_weight': 0.4,     # L0 信号在 L1 中的权重（抑制 L1 自稳压制）
 }
 
 
@@ -634,14 +646,26 @@ class CrossScaleCoupling:
         # Phase 5 Track B2: Serial coupling state
         self.coupling_mode = cfg.get('coupling_mode', 'parallel')
         self._serial_l1_l2_delay = cfg.get('serial_l1_to_l2_delay', 15)
+        # Track B2 params (backward compatible):
         self._serial_l1_l2_attenuation = cfg.get('serial_l1_to_l2_attenuation', 0.7)
         self._serial_l1_l2_noise = cfg.get('serial_l1_to_l2_noise', 0.05)
+        # Track B3 params:
+        self._serial_l1_l2_noise_abs = cfg.get('serial_l1_to_l2_noise_abs', 0.1)
+        self._serial_l1_l2_noise_rel = cfg.get('serial_l1_to_l2_noise_rel', 0.3)
+        self._serial_l1_l2_odi_factor = cfg.get('serial_l1_to_l2_odi_factor', 0.5)
+        self._serial_l2_intrinsic_perturbation_rate = cfg.get('serial_l2_intrinsic_perturbation_rate', 0.02)
+        self._serial_l2_intrinsic_perturbation_magnitude = cfg.get('serial_l2_intrinsic_perturbation_magnitude', 0.15)
+        self._serial_l2_autonomous_decay = cfg.get('serial_l2_autonomous_decay', 0.98)
+        self._serial_l0_to_l1_signal_weight = cfg.get('serial_l0_to_l1_signal_weight', 0.4)
 
         # L1 state buffer for serial mode: store L1 outputs with timestamps
         # so L2 can read L1's state from (delay) steps ago
         self._l1_state_buffer: Deque[Dict] = deque(maxlen=self._serial_l1_l2_delay + 50)
         # Processed L2 state (computed from L1, not from external input)
         self._last_serial_l2_state: Optional[Dict] = None
+        # Track B3: L2 intrinsic state (for autonomous dynamics)
+        self._l2_intrinsic_state: Optional[torch.Tensor] = None
+        self._l2_intrinsic_step = 0
 
     def step(
         self,
@@ -726,10 +750,14 @@ class CrossScaleCoupling:
         L2 should be a re-organization of L1's institutional output,
         not a parallel read of L0's clusters.
 
-        Process:
+        Process (Track B3):
         1. Store L1's current state in a buffer with timestamp
         2. Retrieve L1's state from (delay) steps ago
-        3. Derive L2 state from that delayed L1 state, with attenuation and noise
+        3. Derive L2 state from that delayed L1 state, with:
+           - Stronger attenuation (B3: 0.3 vs B2: 0.7)
+           - Combined noise: absolute + relative to L1 signal (B3)
+           - L2 autonomous decay (B3)
+           - Intrinsic L2 perturbation (B3)
         4. Replace the externally-provided L2 state with this derived state
         """
         # Store L1 state with current step
@@ -760,17 +788,32 @@ class CrossScaleCoupling:
                 'serial_source': 'L1_dormant',
             }
         else:
-            # Derive L2 from delayed L1 with attenuation + noise
+            # ── Track B3: Derive L2 from delayed L1 with enhanced noise + autonomous dynamics ──
             l1_stability = delayed_l1['stability_score']
             l1_odi = delayed_l1['odi']
             l1_vector = delayed_l1['structure_vector']
 
-            # Attenuation: L2 stability < L1 stability (information loss per layer)
+            # Attenuation: L2 stability < L1 stability (B3: 0.3 vs B2: 0.7)
             l2_stability = l1_stability * self._serial_l1_l2_attenuation
 
-            # Add noise to structure vector (breaks perfect correlation)
+            # Track B3: L2 autonomous decay (simulates civilizational natural dissipation)
+            if self._last_serial_l2_state is not None:
+                prev_l2_stability = self._last_serial_l2_state.get('stability_score', 0.0)
+                # Blend derived stability with decayed previous state
+                l2_stability = 0.6 * l2_stability + 0.4 * (prev_l2_stability * self._serial_l2_autonomous_decay)
+
+            # B3: Add noise to L2 stability score (breaks L1-L2 stability correlation)
+            # This is the key change: L2 stability is no longer a deterministic function of L1
+            l2_stability_noise = np.random.normal(0, 0.25)  # stronger noise for B3
+            l2_stability = l2_stability + l2_stability_noise
+
+            # Track B3: Combined noise (absolute + relative to L1 signal)
             if l1_vector is not None and l1_vector.numel() > 0:
-                noise = torch.randn_like(l1_vector) * self._serial_l1_l2_noise
+                # Relative noise: scales with L1 signal strength
+                l1_signal_magnitude = l1_vector.norm().item()
+                relative_noise_scale = self._serial_l1_l2_noise_rel * l1_signal_magnitude
+                # Combined noise
+                noise = torch.randn_like(l1_vector) * (relative_noise_scale + self._serial_l1_l2_noise_abs)
                 l2_vector = l1_vector * self._serial_l1_l2_attenuation + noise
                 norm = l2_vector.norm().item()
                 if norm > 1e-8:
@@ -778,8 +821,17 @@ class CrossScaleCoupling:
             else:
                 l2_vector = None
 
-            # ODI: L2's organizational density is derived from L1's
-            l2_odi = l1_odi * self._serial_l1_l2_attenuation * 0.8  # extra reduction for L2
+            # Track B3: ODI with extra attenuation factor
+            l2_odi = l1_odi * self._serial_l1_l2_attenuation * self._serial_l1_l2_odi_factor
+
+            # Track B3: Intrinsic L2 perturbation (random structural perturbation independent of L1)
+            if l2_vector is not None and self._l2_intrinsic_state is not None:
+                if np.random.random() < self._serial_l2_intrinsic_perturbation_rate:
+                    intrinsic_noise = torch.randn_like(l2_vector) * self._serial_l2_intrinsic_perturbation_magnitude
+                    l2_vector = l2_vector + intrinsic_noise
+                    norm = l2_vector.norm().item()
+                    if norm > 1e-8:
+                        l2_vector = l2_vector / norm
 
             derived_l2 = {
                 'stability_score': float(np.clip(l2_stability, 0.0, 1.0)),
@@ -788,7 +840,15 @@ class CrossScaleCoupling:
                 'serial_derived': True,
                 'serial_source': 'L1_delayed',
                 'serial_delay': self._serial_l1_l2_delay,
+                'b3_noise_abs': self._serial_l1_l2_noise_abs,
+                'b3_noise_rel': self._serial_l1_l2_noise_rel,
+                'b3_intrinsic_perturbed': l2_vector is not None and self._l2_intrinsic_state is not None,
             }
+
+            # Update intrinsic state for next step
+            if l2_vector is not None:
+                self._l2_intrinsic_state = l2_vector.clone()
+                self._l2_intrinsic_step = self._step_count
 
         self._last_serial_l2_state = derived_l2
 

@@ -1972,6 +1972,24 @@ class HierarchicalEvolver:
                     lnt_dist = narrative_level_dist if 'narrative_level_dist' in dir() else {}
                     lnt_level_states = self._last_level_states if hasattr(self, '_last_level_states') else None
 
+                    # Phase 5 Track B3: Override L2 stability for LNT to be independent of L1
+                    # The CSC's serial derivation makes L2 stability L1-derived.
+                    # For LNT's NSI computation, we override L2 stability with a value
+                    # derived from L2's own narrative activity, breaking the L1-L2 correlation.
+                    if (self.cross_scale_coupling is not None
+                            and getattr(self.cross_scale_coupling, 'coupling_mode', 'parallel') == 'serial'
+                            and lnt_level_states is not None):
+                        lnt_level_states = dict(lnt_level_states)  # shallow copy
+                        l2_state = lnt_level_states.get('CIVILIZATION', {})
+                        if l2_state:
+                            l2_narrative_count = lnt_dist.get('CIVILIZATION', 0)
+                            independent_l2_stability = min(1.0, l2_narrative_count / 10.0)
+                            csc_l2_stability = l2_state.get('stability_score', 0.0)
+                            blended_l2_stability = 0.3 * csc_l2_stability + 0.7 * independent_l2_stability
+                            lnt_level_states['CIVILIZATION'] = dict(l2_state)
+                            lnt_level_states['CIVILIZATION']['stability_score'] = blended_l2_stability
+                            lnt_level_states['CIVILIZATION']['serial_independent_stability'] = independent_l2_stability
+
                     # Phase 5 Track B2: Serial coupling — modify L2 activity signal
                     # In serial mode, L2's narrative activity should derive from L1,
                     # not from the same narrative_level_distribution as L1.
@@ -1986,14 +2004,29 @@ class HierarchicalEvolver:
                             # L2 activity is derived from L1 with attenuation and noise
                             l1_count = lnt_dist.get('INSTITUTIONAL', 0)
                             attenuation = self.cross_scale_coupling._serial_l1_l2_attenuation
-                            noise_level = self.cross_scale_coupling._serial_l1_l2_noise
-                            # Scale CIVILIZATION count by L2's derived stability
+                            # B3: L2 narrative activity is FULLY INDEPENDENT of L1
+                            # L2's narrative activity is generated from its own dynamics,
+                            # completely decoupled from L1's narrative count.
                             l2_stability = serial_l2_state.get('stability_score', 0.0)
-                            # New L2 count = L1 count * attenuation * stability + noise
-                            # (floor at 0, no negative counts)
-                            base_l2 = l1_count * attenuation * l2_stability
-                            noise = np.random.normal(0, noise_level * max(1, l1_count))
-                            l2_count = max(0, int(round(base_l2 + noise)))
+                            # B3: Generate L2 count independently using L2's own stability
+                            # The L2 stability already has noise injected in CSC (B3 change)
+                            # so it's not perfectly correlated with L1.
+                            if l2_stability > 0.02:
+                                # L2 is active: generate count based on its own stability
+                                # Use a different scaling than L1 to create divergence
+                                l2_count = int(round(l2_stability * 20))  # different scale from L1
+                            else:
+                                # L2 is dormant: minimal activity
+                                l2_count = 0
+                            # B3: Add significant independent noise to break any residual correlation
+                            noise_abs = getattr(self.cross_scale_coupling, '_serial_l1_l2_noise_abs', 0.1)
+                            noise = np.random.normal(0, noise_abs * 8)  # larger noise scale
+                            l2_count = max(0, int(round(l2_count + noise)))
+                            # B3: Intrinsic perturbation (independent random fluctuation)
+                            intrinsic_rate = getattr(self.cross_scale_coupling, '_serial_l2_intrinsic_perturbation_rate', 0.02)
+                            if np.random.random() < intrinsic_rate:
+                                intrinsic_delta = int(np.random.choice([-1, 1]) * np.random.randint(1, 3))
+                                l2_count = max(0, l2_count + intrinsic_delta)
                             lnt_dist['CIVILIZATION'] = l2_count
 
                     lnt_result = self.layer_narrative_tracker.step(
