@@ -103,6 +103,18 @@ DEFAULT_CROSS_SCALE_COUPLING_CONFIG = {
     'l0_to_l1_response_delay': 10,            # L0→L1 响应延迟步数
     'l2_narrative_threshold': 0.01,           # 降低 L2 叙事阈值
     'constraint_response_tracking_window': 200,  # 约束响应延迟追踪窗口
+
+    # ─── Phase 5 Track B5: Independent L2 Clustering + Stability Floor ───
+    'l2_independent_N0': 72,                   # L2 独立聚簇规模
+    'l2_stability_floor': 0.15,                # L2 最小稳定性（防止被 clamp 到零）
+    'l2_constraint_strength': 0.1,             # L1→L2 软约束强度（additive）
+    'l2_perturbation_rate': 0.03,              # L2 每步结构扰动概率
+    'l2_perturbation_magnitude': 0.2,          # L2 扰动幅度
+    'l2_autonomous_decay': 0.97,               # L2 稳定性自衰减率
+    'l2_odi_independence_weight': 0.5,         # L2 ODI 独立计算权重
+    'l2_clustering_noise': 0.15,               # L2 聚簇生成噪声
+    'l2_constraint_bias_type': 'additive',     # 'additive' 或 'multiplicative'
+    'l2_min_active_objects': 10,               # L2 最小活动对象数（用于叙事激活）
 }
 
 
@@ -332,6 +344,250 @@ class ConstraintConduction:
         self._l2_constrained_history.clear()
         self._constraint_response_delays.clear()
         self._last_state = None
+
+
+class IndependentL2Coupling:
+    """独立 L2 聚簇 + 软约束 (Track B5)
+
+    核心设计：
+    1. L2 独立聚簇：从 L0 结构向量生成 L2 自己的聚簇，而非从 L1 派生
+    2. 软约束：L1 提供 additive 偏置，而非 hard clamp
+    3. 稳定性地板：L2 有最小稳定性，防止被压制到零
+    4. 内在动力学：L2 有自己的扰动和衰减机制
+
+    理论依据：
+    - 差异论 §2.2: "层级不是信息的逐级传递，而是差异在不同尺度上的重新组织"
+    - 差异论 §2.3: "制度是文明的约束，但不是文明的决定者"
+    """
+
+    def __init__(self, config=None):
+        cfg = dict(DEFAULT_CROSS_SCALE_COUPLING_CONFIG)
+        cfg.update(config or {})
+        self.N0 = cfg.get('l2_independent_N0', 72)
+        self.stability_floor = cfg.get('l2_stability_floor', 0.15)
+        self.constraint_strength = cfg.get('l2_constraint_strength', 0.1)
+        self.perturbation_rate = cfg.get('l2_perturbation_rate', 0.03)
+        self.perturbation_magnitude = cfg.get('l2_perturbation_magnitude', 0.2)
+        self.autonomous_decay = cfg.get('l2_autonomous_decay', 0.97)
+        self.odi_independence_weight = cfg.get('l2_odi_independence_weight', 0.5)
+        self.clustering_noise = cfg.get('l2_clustering_noise', 0.15)
+        self.bias_type = cfg.get('l2_constraint_bias_type', 'additive')
+        self.min_active_objects = cfg.get('l2_min_active_objects', 10)
+
+        self._step_count = 0
+        self._l2_stability_history = deque(maxlen=500)
+        self._l1_stability_history = deque(maxlen=500)
+        self._l0_stability_history = deque(maxlen=500)
+        self._l2_odi_history = deque(maxlen=500)
+        self._l0_odi_history = deque(maxlen=500)
+        self._l1_l2_correlation_window = deque(maxlen=200)
+        self._l0_l2_correlation_window = deque(maxlen=200)
+        self._response_delays = deque(maxlen=100)
+        self._last_l2_state = None
+        self._l2_structure_vector = None
+        self._l2_autonomous_stability = 0.0
+
+    def update(self, l0_state, l1_state, l2_seed=None):
+        """执行一步独立 L2 耦合
+
+        Parameters
+        ----------
+        l0_state : dict
+            MINI 层级状态 {stability_score, odi, structure_vector}
+        l1_state : dict
+            INSTITUTIONAL 层级状态 {stability_score, odi, structure_vector}
+        l2_seed : int, optional
+            L2 聚簇随机种子
+
+        Returns
+        -------
+        dict
+            L2 独立耦合结果
+        """
+        self._step_count += 1
+
+        l0_stability = l0_state.get('stability_score', 0.0)
+        l0_odi = l0_state.get('odi', 0.0)
+        l0_vector = l0_state.get('structure_vector')
+
+        l1_stability = l1_state.get('stability_score', 0.0)
+        l1_odi = l1_state.get('odi', 0.0)
+        l1_vector = l1_state.get('structure_vector')
+
+        # Record histories
+        self._l0_stability_history.append(l0_stability)
+        self._l1_stability_history.append(l1_stability)
+        self._l0_odi_history.append(l0_odi)
+
+        # ── Step 1: Generate L2 autonomous stability (独立于 L1) ──
+        # L2 自主稳定性来自 L0 的直接映射 + 内在动力学
+        if l0_stability > 0:
+            # L2 从 L0 继承基础稳定性，但经过衰减
+            l2_auto_base = l0_stability * 0.6
+        else:
+            # L0 无活动时，L2 依靠内在动力学维持最低活动
+            l2_auto_base = 0.05
+
+        # 应用自主衰减
+        if self._l2_autonomous_stability > 0:
+            l2_auto_base = 0.7 * l2_auto_base + 0.3 * (self._l2_autonomous_stability * self.autonomous_decay)
+
+        # ── Step 2: Generate L2 structure vector (独立聚簇) ──
+        if l0_vector is not None and l0_vector.numel() > 0:
+            # 从 L0 向量生成 L2 向量：添加聚类噪声以模拟独立差异场
+            noise = torch.randn_like(l0_vector) * self.clustering_noise
+            l2_vector = l0_vector + noise
+
+            # 内在扰动
+            if np.random.random() < self.perturbation_rate:
+                perturbation = torch.randn_like(l2_vector) * self.perturbation_magnitude
+                l2_vector = l2_vector + perturbation
+
+            norm = l2_vector.norm().item()
+            if norm > 1e-8:
+                l2_vector = l2_vector / norm
+        else:
+            l2_vector = None
+
+        self._l2_structure_vector = l2_vector
+
+        # ── Step 3: Compute L2 independent ODI ──
+        # L2 ODI = L0 ODI * independence_weight + 独立噪声
+        l2_odi = l0_odi * self.odi_independence_weight
+        if l2_vector is not None:
+            # 基于 L2 向量的幅度添加独立 ODI 分量
+            vec_magnitude = l2_vector.norm().item()
+            l2_odi = l2_odi + vec_magnitude * (1 - self.odi_independence_weight) * 0.3
+        l2_odi = float(np.clip(l2_odi, 0.0, 1.0))
+
+        # ── Step 4: Apply soft constraint from L1 (非 hard clamp) ──
+        if self.bias_type == 'additive':
+            # Additive: L1 提供偏置，不改变 L2 的基础值范围
+            l1_constraint_bias = (l1_stability - l2_auto_base) * self.constraint_strength
+            l2_stability = l2_auto_base + l1_constraint_bias
+        else:
+            # Multiplicative: L1 按比例调节 L2
+            if l2_auto_base > 0:
+                ratio = l1_stability / l2_auto_base
+                l2_stability = l2_auto_base * (0.7 + 0.3 * ratio)
+            else:
+                l2_stability = l1_stability * self.constraint_strength
+
+        # ── Step 5: Apply stability floor ──
+        l2_stability = float(np.clip(l2_stability, self.stability_floor, 1.0))
+
+        self._l2_autonomous_stability = l2_auto_base
+        self._l2_stability_history.append(l2_stability)
+        self._l2_odi_history.append(l2_odi)
+
+        # ── Step 6: Track correlations ──
+        if len(self._l1_stability_history) >= 30:
+            l1_vals = np.array(list(self._l1_stability_history)[-100:])
+            l2_vals = np.array(list(self._l2_stability_history)[-100:])
+            min_len = min(len(l1_vals), len(l2_vals))
+            if min_len >= 30:
+                corr = np.corrcoef(l1_vals[-min_len:], l2_vals[-min_len:])[0, 1]
+                self._l1_l2_correlation_window.append(float(corr) if not np.isnan(corr) else 0.0)
+
+        if len(self._l0_stability_history) >= 30:
+            l0_vals = np.array(list(self._l0_stability_history)[-100:])
+            l2_vals = np.array(list(self._l2_stability_history)[-100:])
+            min_len = min(len(l0_vals), len(l2_vals))
+            if min_len >= 30:
+                corr = np.corrcoef(l0_vals[-min_len:], l2_vals[-min_len:])[0, 1]
+                self._l0_l2_correlation_window.append(float(corr) if not np.isnan(corr) else 0.0)
+
+        # ── Step 7: Detect response delay (L1→L2) ──
+        response_delay = self._detect_response_delay(l1_stability, l2_stability)
+        if response_delay is not None:
+            self._response_delays.append(response_delay)
+
+        state = {
+            'stability_score': l2_stability,
+            'odi': l2_odi,
+            'structure_vector': l2_vector,
+            'independent_l2': True,
+            'l2_autonomous_stability': l2_auto_base,
+            'l1_constraint_bias': l1_constraint_bias if self.bias_type == 'additive' else 0.0,
+            'stability_floor': self.stability_floor,
+            'l1_l2_correlation': self.get_l1_l2_correlation(),
+            'l0_l2_correlation': self.get_l0_l2_correlation(),
+            'avg_response_delay': self.get_avg_response_delay(),
+            'step': self._step_count,
+        }
+        self._last_l2_state = state
+        return state
+
+    def _detect_response_delay(self, l1_stability, l2_stability):
+        """检测 L1→L2 的响应延迟"""
+        if len(self._l1_stability_history) < 10:
+            return None
+        recent_l1 = list(self._l1_stability_history)[-20:]
+        l1_changes = []
+        for i in range(1, len(recent_l1)):
+            delta = abs(recent_l1[i] - recent_l1[i - 1])
+            if delta > 0.1:
+                l1_changes.append(i)
+        if not l1_changes:
+            return None
+        recent_l2 = list(self._l2_stability_history)[-20:]
+        l2_changes = []
+        for i in range(1, len(recent_l2)):
+            delta = abs(recent_l2[i] - recent_l2[i - 1])
+            if delta > 0.05:
+                l2_changes.append(i)
+        if not l2_changes:
+            return None
+        # 简单匹配：找到最近的 L1 变化后 L2 变化的延迟
+        for l1_idx in l1_changes[-3:]:
+            for l2_idx in l2_changes:
+                if l2_idx > l1_idx and (l2_idx - l1_idx) <= 20:
+                    return l2_idx - l1_idx
+        return None
+
+    def get_l1_l2_correlation(self):
+        vals = list(self._l1_l2_correlation_window)
+        if not vals:
+            return None
+        return float(np.mean(vals))
+
+    def get_l0_l2_correlation(self):
+        vals = list(self._l0_l2_correlation_window)
+        if not vals:
+            return None
+        return float(np.mean(vals))
+
+    def get_avg_response_delay(self):
+        delays = [d for d in self._response_delays if d > 0]
+        return float(np.mean(delays)) if delays else 0.0
+
+    def get_summary(self):
+        return {
+            'l2_stability_mean': float(np.mean(self._l2_stability_history)) if self._l2_stability_history else 0.0,
+            'l2_stability_min': float(np.min(self._l2_stability_history)) if self._l2_stability_history else 0.0,
+            'l2_stability_max': float(np.max(self._l2_stability_history)) if self._l2_stability_history else 0.0,
+            'l2_odi_mean': float(np.mean(self._l2_odi_history)) if self._l2_odi_history else 0.0,
+            'l1_l2_correlation': self.get_l1_l2_correlation(),
+            'l0_l2_correlation': self.get_l0_l2_correlation(),
+            'avg_response_delay': self.get_avg_response_delay(),
+            'n_response_events': len(self._response_delays),
+            'latest_state': self._last_l2_state,
+        }
+
+    def reset(self):
+        self._step_count = 0
+        self._l2_stability_history.clear()
+        self._l1_stability_history.clear()
+        self._l0_stability_history.clear()
+        self._l2_odi_history.clear()
+        self._l0_odi_history.clear()
+        self._l1_l2_correlation_window.clear()
+        self._l0_l2_correlation_window.clear()
+        self._response_delays.clear()
+        self._last_l2_state = None
+        self._l2_structure_vector = None
+        self._l2_autonomous_stability = 0.0
+
 
 class TopDownConstraint:
     """高层级对低层级的约束
@@ -847,6 +1103,8 @@ class CrossScaleCoupling:
 
         # Track B4: Constraint Conduction
         self.constraint_conduction = ConstraintConduction(cfg)
+        # Track B5: Independent L2 Coupling
+        self.independent_l2 = IndependentL2Coupling(cfg)
 
     def step(
         self,
@@ -880,6 +1138,8 @@ class CrossScaleCoupling:
             level_states = self._apply_serial_coupling(level_states)
         elif self.coupling_mode == 'constraint':
             level_states = self._apply_constraint_coupling(level_states)
+        elif self.coupling_mode == 'independent':
+            level_states = self._apply_independent_coupling(level_states)
 
         # 1. Top-Down 约束
         constraints = self.top_down.update(level_states, bias_field)
@@ -1071,6 +1331,45 @@ class CrossScaleCoupling:
         modified_states['CIVILIZATION'] = constrained_l2
         return modified_states
 
+    def _apply_independent_coupling(self, level_states: Dict[str, Dict]) -> Dict[str, Dict]:
+        """Apply independent L2 coupling (Track B5).
+
+        L2 has truly independent clustering from L0, with L1 providing soft constraints.
+        Key differences from constraint mode:
+        1. L2 autonomy is not clamped by L1 — it has a stability floor
+        2. L2 ODI is independently computed, not shared
+        3. L2 has intrinsic perturbation and decay dynamics
+
+        Process:
+        1. Extract L0 and L1 states
+        2. Run independent L2 coupling: L2 = f(L0_direct, L1_soft_bias, intrinsic)
+        3. Apply stability floor to prevent suppression
+        4. Return modified level_states with independent L2
+        """
+        l0_state = level_states.get('MINI', {})
+        l1_state = level_states.get('INSTITUTIONAL', {})
+
+        # Run independent L2 coupling
+        l2_result = self.independent_l2.update(l0_state, l1_state)
+
+        # Build independent L2 state
+        independent_l2 = {
+            'stability_score': l2_result['stability_score'],
+            'odi': l2_result['odi'],
+            'structure_vector': l2_result['structure_vector'],
+            'independent_l2': True,
+            'l2_autonomous_stability': l2_result['l2_autonomous_stability'],
+            'l1_constraint_bias': l2_result.get('l1_constraint_bias', 0.0),
+            'stability_floor': l2_result.get('stability_floor', 0.15),
+            'l1_l2_correlation': l2_result.get('l1_l2_correlation'),
+            'l0_l2_correlation': l2_result.get('l0_l2_correlation'),
+            'constraint_response_delay': l2_result.get('avg_response_delay', 0),
+        }
+
+        modified_states = dict(level_states)
+        modified_states['CIVILIZATION'] = independent_l2
+        return modified_states
+
     def _compute_csci(
         self,
         level_stabilities: Dict[str, float],
@@ -1161,6 +1460,8 @@ class CrossScaleCoupling:
             }
         if self.coupling_mode == 'constraint':
             summary['constraint_conduction'] = self.constraint_conduction.get_summary()
+        if self.coupling_mode == 'independent':
+            summary['independent_l2'] = self.independent_l2.get_summary()
         return summary
 
     def reset(self):
@@ -1169,9 +1470,12 @@ class CrossScaleCoupling:
         self.bottom_up = BottomUpEmergenceEvaluator(self.config)
         self.narrator = ScaleBridgingNarrator(self.config)
         self.constraint_conduction.reset()
+        self.independent_l2.reset()
         self._level_stabilities.clear()
         self._narrative_coherence_history.clear()
         self._csci_history.clear()
         self._step_count = 0
         self._l1_state_buffer.clear()
         self._last_serial_l2_state = None
+        self._l2_intrinsic_state = None
+        self._l2_intrinsic_step = 0
