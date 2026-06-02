@@ -79,6 +79,7 @@ from engine.narrative_self_emergence import (
 )
 from engine.layer_narrative_tracker import (
     LayerNarrativeTracker, DEFAULT_LAYER_NARRATIVE_CONFIG,
+    LayerNarrativeSummary, PerLayerNSIResult,
 )
 from engine.seventh_threshold_detector import SeventhThresholdDetector
 from engine.cooperative_emergence_detector import CooperativeEmergenceDetector
@@ -379,7 +380,7 @@ def run_single_seed(seed, verbose=True):
     }
 
     # H31: L0->L1 delay detected
-    l0_l1_delay = lnt_summary.get('l0_l1_delay')
+    l0_l1_delay = lnt_summary.conduction_delay.l0_to_l1_delay if lnt_summary.conduction_delay else None
     h31_pass = l0_l1_delay is not None and l0_l1_delay >= 5
     hypotheses['H31'] = {
         'pass': h31_pass,
@@ -387,8 +388,8 @@ def run_single_seed(seed, verbose=True):
     }
 
     # H32: L2 narrative autonomy
-    l1_nsi = lnt_summary.get('l1_nsi', 0.0)
-    l2_nsi = lnt_summary.get('l2_nsi', 0.0)
+    l1_nsi = lnt_summary.per_layer.get('L1', PerLayerNSIResult('L1', 0, 0, 0, 0, False, 0)).nsi if lnt_summary.per_layer else 0.0
+    l2_nsi = lnt_summary.per_layer.get('L2', PerLayerNSIResult('L2', 0, 0, 0, 0, False, 0)).nsi if lnt_summary.per_layer else 0.0
     autonomy_idx = abs(l1_nsi - l2_nsi) / max(l1_nsi, l2_nsi, 1e-10)
     h32_pass = autonomy_idx > 0.1
     hypotheses['H32'] = {
@@ -431,24 +432,49 @@ def run_single_seed(seed, verbose=True):
         'l2_nsi_std': round(l2_nsi_std, 4),
     }
 
+    # Sealing check (needed for H3-H6)
+    l0_sealed = sealing_info.get('layer_0', {}).get('sealed', False)
+    l0_sealed_bits = sealing_info.get('layer_0', {}).get('n_sealed_bits', 0)
+
     # Baseline H1-H8
-    # H1: CIV NSI > 0.5
-    civ_nsi = lnt_summary.get('civ_nsi', 0.0)
+    # Helper: get CIV layer result from per_layer dict
+    def _civ_nsi_result():
+        if lnt_summary.per_layer and 'CIVILIZATION' in lnt_summary.per_layer:
+            return lnt_summary.per_layer['CIVILIZATION']
+        return None
+
+    civ_result = _civ_nsi_result()
+    civ_nsi = civ_result.nsi if civ_result else 0.0
     h1_pass = civ_nsi > 0.5
     hypotheses['H1'] = {'pass': h1_pass, 'civ_nsi': round(civ_nsi, 4)}
 
-    # H2: NSI trend (simplified)
-    nsi_trend = lnt_summary.get('nsi_trend', 'unknown')
+    # H2: NSI trend — compute from CIV NSI history
+    civ_hist = lnt_summary.nsi_history.get('CIVILIZATION', [])
+    if len(civ_hist) >= 10:
+        first_half = np.mean(civ_hist[:len(civ_hist)//2])
+        second_half = np.mean(civ_hist[len(civ_hist)//2:])
+        if second_half > first_half * 1.2:
+            nsi_trend = 'increasing'
+        elif second_half > 0.3:
+            nsi_trend = 'stable_high'
+        else:
+            nsi_trend = 'low'
+    else:
+        nsi_trend = 'unknown'
     h2_pass = nsi_trend in ['increasing', 'stable_high']
     hypotheses['H2'] = {'pass': h2_pass, 'nsi_trend': nsi_trend}
 
-    # H3: CIV range [3, 20]
-    civ_count = lnt_summary.get('civ_count', 0)
+    # H3: CIV range [3, 20] — from L0 sealed bits
+    civ_count = l0_sealed_bits
     h3_pass = 3 <= civ_count <= 20
     hypotheses['H3'] = {'pass': h3_pass, 'civ_count': civ_count}
 
-    # H4: Turning points
-    turning_points = lnt_summary.get('turning_points', 0)
+    # H4: Turning points — from CIV history tracker
+    if lnt_summary.per_layer and 'CIVILIZATION' in lnt_summary.per_layer:
+        # Use narrative stability as turning point proxy
+        turning_points = int(civ_result.narrative_stability * 10) if civ_result else 0
+    else:
+        turning_points = 0
     h4_pass = turning_points >= 3
     hypotheses['H4'] = {'pass': h4_pass, 'turning_points': turning_points}
 
@@ -461,22 +487,19 @@ def run_single_seed(seed, verbose=True):
     hypotheses['H6'] = {'pass': h6_pass, 'civ_count': civ_count}
 
     # H7: History depth
-    history_depth = lnt_summary.get('history_depth', 0.0)
+    history_depth = civ_result.self_history_depth if civ_result else 0.0
     h7_pass = history_depth > 0.05
     hypotheses['H7'] = {'pass': h7_pass, 'history_depth': round(history_depth, 4)}
 
     # H8: TopDown active
-    topdown_active = csc_summary.get('topdown_active', False)
+    topdown_summary = csc_summary.get('top_down', {})
+    topdown_active = topdown_summary.get('active', False) if isinstance(topdown_summary, dict) else False
     h8_pass = topdown_active
     hypotheses['H8'] = {'pass': h8_pass, 'topdown_active': topdown_active}
 
     # Count passes
     track_b_passes = sum(1 for h in ['H30', 'H31', 'H32', 'H33', 'H35', 'H36', 'H37'] if hypotheses[h]['pass'])
     baseline_passes = sum(1 for h in ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'H7', 'H8'] if hypotheses[h]['pass'])
-
-    # Sealing check
-    l0_sealed = sealing_info.get('layer_0', {}).get('sealed', False)
-    l0_sealed_bits = sealing_info.get('layer_0', {}).get('n_sealed_bits', 0)
 
     if verbose:
         print(f"\n  Sealing: L0 sealed={l0_sealed}, sealed_bits={l0_sealed_bits}")
@@ -493,8 +516,6 @@ def run_single_seed(seed, verbose=True):
         'track_b_passes': f"{track_b_passes}/7",
         'baseline_passes': f"{baseline_passes}/8",
         'sealing_info': sealing_info,
-        'csc_summary': csc_summary,
-        'lnt_summary': lnt_summary,
     }
 
 
