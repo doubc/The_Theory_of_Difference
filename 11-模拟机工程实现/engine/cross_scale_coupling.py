@@ -89,6 +89,20 @@ DEFAULT_CROSS_SCALE_COUPLING_CONFIG = {
     'serial_l2_autonomous_decay': 0.98,              # L2 稳定性每步自动衰减率（模拟文明层级自然耗散）
     # Track B3: L0→L1 信号增强
     'serial_l0_to_l1_signal_weight': 0.4,     # L0 信号在 L1 中的权重（抑制 L1 自稳压制）
+
+    # ─── Phase 5 Track B4: Constraint Conduction Mode ───
+    # coupling_mode='constraint': L2 有独立聚簇，L1 提供软约束边界
+    'l2_N0': 72,                              # L2 独立聚簇规模
+    'constraint_stability_weight': 0.2,       # L1 稳定性约束权重
+    'constraint_activity_weight': 0.15,       # L1 叙事活动约束权重
+    'constraint_structure_weight': 0.1,       # L1 聚簇结构约束权重
+    'constraint_tolerance': 0.3,              # 约束容差（软边界）
+    'l0_direct_to_l2_weight': 0.4,            # L0 直接输入 L2 权重
+    'l0_to_l1_signal_weight': 0.5,            # 增强 L0→L1 信号权重（B4: 0.4→0.5）
+    'l1_autonomous_stability_weight': 0.5,    # 降低 L1 制度自稳权重（B4: ~0.8→0.5）
+    'l0_to_l1_response_delay': 10,            # L0→L1 响应延迟步数
+    'l2_narrative_threshold': 0.01,           # 降低 L2 叙事阈值
+    'constraint_response_tracking_window': 200,  # 约束响应延迟追踪窗口
 }
 
 
@@ -154,6 +168,170 @@ class CrossScaleCoherenceResult:
     step: int                         # 当前步数
     is_coherent: bool                 # CSCI 是否达标（> 0.5）
 
+
+# ─── Constraint Conduction (Track B4) ───
+
+@dataclass
+class ConstraintConductionState:
+    """约束传导状态"""
+    l1_stability_constraint: float       # L1 稳定性约束值
+    l1_activity_constraint: float        # L1 叙事活动约束值
+    l1_structure_constraint: float       # L1 聚簇结构约束值
+    l2_autonomous_stability: float       # L2 自主演化稳定性
+    l2_constrained_stability: float      # L2 受约束后的稳定性
+    l2_independent_odi: float            # L2 独立 ODI
+    constraint_response_delay: int       # 约束响应延迟（步）
+    step: int
+
+
+class ConstraintConduction:
+    """层间约束传导 (Track B4)
+
+    核心转变：从"状态派生"到"约束传导"
+    - L2 不直接从 L1 派生状态，而是从 L0 独立聚簇 + L1 约束边界演化
+    - L1 提供软边界约束（clamp），而非硬派生
+    - L2 有独立的差异场和动力学
+
+    理论依据：
+    - 差异论 §2.2: "层级不是信息的逐级传递，而是差异在不同尺度上的重新组织"
+    - 差异论 §2.3: "制度是文明的约束，但不是文明的决定者"
+    """
+
+    def __init__(self, config=None):
+        from collections import deque
+        import numpy as np
+        cfg = dict(DEFAULT_CROSS_SCALE_COUPLING_CONFIG)
+        cfg.update(config or {})
+        self.stability_weight = cfg.get('constraint_stability_weight', 0.2)
+        self.activity_weight = cfg.get('constraint_activity_weight', 0.15)
+        self.structure_weight = cfg.get('constraint_structure_weight', 0.1)
+        self.tolerance = cfg.get('constraint_tolerance', 0.3)
+        self.l0_direct_weight = cfg.get('l0_direct_to_l2_weight', 0.4)
+        self.l0_to_l1_signal_weight = cfg.get('l0_to_l1_signal_weight', 0.5)
+        self.l1_autonomous_weight = cfg.get('l1_autonomous_stability_weight', 0.5)
+        self.l0_to_l1_response_delay = cfg.get('l0_to_l1_response_delay', 10)
+        self.l2_narrative_threshold = cfg.get('l2_narrative_threshold', 0.01)
+        self.response_tracking_window = cfg.get('constraint_response_tracking_window', 200)
+
+        self._step_count = 0
+        self._l1_state_buffer = deque(maxlen=self.response_tracking_window)
+        self._l2_autonomous_history = deque(maxlen=self.response_tracking_window)
+        self._l2_constrained_history = deque(maxlen=self.response_tracking_window)
+        self._constraint_response_delays = deque(maxlen=100)
+        self._last_state = None
+
+    def update(self, l0_state, l1_state, l2_autonomous_state):
+        self._step_count += 1
+        self._l1_state_buffer.append({
+            'step': self._step_count,
+            'stability_score': l1_state.get('stability_score', 0.0),
+            'odi': l1_state.get('odi', 0.0),
+            'narrative_count': l1_state.get('narrative_count', 0),
+        })
+
+        l1_stability = l1_state.get('stability_score', 0.0)
+        l1_odi = l1_state.get('odi', 0.0)
+        l1_narrative_count = l1_state.get('narrative_count', 0)
+
+        l1_stability_constraint = l1_stability
+        l1_activity_constraint = l1_narrative_count / 100.0
+        l1_structure_constraint = l1_odi
+
+        l2_auto_stability = l2_autonomous_state.get('stability_score', 0.0)
+        l2_auto_odi = l2_autonomous_state.get('odi', 0.0)
+
+        l0_stability = l0_state.get('stability_score', 0.0)
+
+        l2_base_stability = (
+            l2_auto_stability * (1.0 - self.l0_direct_weight) +
+            l0_stability * self.l0_direct_weight
+        )
+
+        lower_bound = l1_stability_constraint * (1.0 - self.tolerance)
+        upper_bound = l1_stability_constraint * (1.0 + self.tolerance)
+        if l1_stability_constraint < 0.1:
+            lower_bound = 0.0
+            upper_bound = 1.0
+
+        l2_constrained_stability = float(np.clip(l2_base_stability, lower_bound, upper_bound))
+
+        response_delay = self._detect_response_delay(l1_stability, l2_constrained_stability)
+        if response_delay is not None:
+            self._constraint_response_delays.append(response_delay)
+
+        self._l2_autonomous_history.append(l2_base_stability)
+        self._l2_constrained_history.append(l2_constrained_stability)
+
+        state = ConstraintConductionState(
+            l1_stability_constraint=l1_stability_constraint,
+            l1_activity_constraint=l1_activity_constraint,
+            l1_structure_constraint=l1_structure_constraint,
+            l2_autonomous_stability=l2_base_stability,
+            l2_constrained_stability=l2_constrained_stability,
+            l2_independent_odi=l2_auto_odi,
+            constraint_response_delay=response_delay if response_delay is not None else -1,
+            step=self._step_count,
+        )
+        self._last_state = state
+        return state
+
+    def _detect_response_delay(self, l1_stability, l2_stability):
+        if len(self._l1_state_buffer) < 5:
+            return None
+        recent_l1 = list(self._l1_state_buffer)[-10:]
+        l1_changes = []
+        for i in range(1, len(recent_l1)):
+            delta = abs(recent_l1[i]['stability_score'] - recent_l1[i-1]['stability_score'])
+            if delta > 0.15:
+                l1_changes.append((recent_l1[i-1]['step'], recent_l1[i]['step'], delta))
+        if not l1_changes:
+            return None
+        if len(self._l2_constrained_history) >= 5:
+            l2_values = list(self._l2_constrained_history)
+            for i in range(1, len(l2_values)):
+                if abs(l2_values[i] - l2_values[i-1]) > 0.1:
+                    estimated_delay = max(1, i)
+                    if 1 <= estimated_delay <= 100:
+                        return estimated_delay
+        return None
+
+    def get_l1_l2_correlation(self):
+        auto_vals = list(self._l2_autonomous_history)
+        constrained_vals = list(self._l2_constrained_history)
+        if len(auto_vals) < 30 or len(constrained_vals) < 30:
+            return None
+        min_len = min(len(auto_vals), len(constrained_vals))
+        auto_arr = np.array(auto_vals[-min_len:])
+        constrained_arr = np.array(constrained_vals[-min_len:])
+        return float(np.corrcoef(auto_arr, constrained_arr)[0, 1])
+
+    def get_avg_response_delay(self):
+        delays = [d for d in self._constraint_response_delays if d > 0]
+        return float(np.mean(delays)) if delays else 0.0
+
+    def get_summary(self):
+        import numpy as np
+        return {
+            'l2_autonomous_mean': float(np.mean(self._l2_autonomous_history)) if self._l2_autonomous_history else 0.0,
+            'l2_constrained_mean': float(np.mean(self._l2_constrained_history)) if self._l2_constrained_history else 0.0,
+            'l1_l2_correlation': self.get_l1_l2_correlation(),
+            'avg_response_delay': self.get_avg_response_delay(),
+            'n_response_events': len(self._constraint_response_delays),
+            'latest_state': {
+                'l1_stability_constraint': self._last_state.l1_stability_constraint if self._last_state else 0.0,
+                'l2_autonomous_stability': self._last_state.l2_autonomous_stability if self._last_state else 0.0,
+                'l2_constrained_stability': self._last_state.l2_constrained_stability if self._last_state else 0.0,
+                'l2_independent_odi': self._last_state.l2_independent_odi if self._last_state else 0.0,
+            }
+        }
+
+    def reset(self):
+        self._step_count = 0
+        self._l1_state_buffer.clear()
+        self._l2_autonomous_history.clear()
+        self._l2_constrained_history.clear()
+        self._constraint_response_delays.clear()
+        self._last_state = None
 
 class TopDownConstraint:
     """高层级对低层级的约束
@@ -667,6 +845,9 @@ class CrossScaleCoupling:
         self._l2_intrinsic_state: Optional[torch.Tensor] = None
         self._l2_intrinsic_step = 0
 
+        # Track B4: Constraint Conduction
+        self.constraint_conduction = ConstraintConduction(cfg)
+
     def step(
         self,
         level_states: Dict[str, Dict],
@@ -694,11 +875,11 @@ class CrossScaleCoupling:
         """
         self._step_count += 1
 
-        # ── Phase 5 Track B2: Serial coupling mode ──
-        # In serial mode, CIVILIZATION (L2) state is derived from INSTITUTIONAL (L1)
-        # rather than read directly. This breaks the L1-L2 perfect correlation.
+        # ── Phase 5 Track B2/B4: Coupling mode dispatch ──
         if self.coupling_mode == 'serial':
             level_states = self._apply_serial_coupling(level_states)
+        elif self.coupling_mode == 'constraint':
+            level_states = self._apply_constraint_coupling(level_states)
 
         # 1. Top-Down 约束
         constraints = self.top_down.update(level_states, bias_field)
@@ -857,6 +1038,39 @@ class CrossScaleCoupling:
         modified_states['CIVILIZATION'] = derived_l2
         return modified_states
 
+    def _apply_constraint_coupling(self, level_states: Dict[str, Dict]) -> Dict[str, Dict]:
+        """Apply constraint conduction coupling (Track B4).
+
+        L2 has independent clustering from L0, with L1 providing soft constraints.
+        Unlike serial mode (state derivation), constraint mode uses soft boundaries.
+
+        Process:
+        1. Extract L0, L1, and L2 autonomous states
+        2. Run constraint conduction: L2 = f(L0_direct, L1_constraint_boundary)
+        3. Return modified level_states with constrained L2
+        """
+        l0_state = level_states.get('MINI', {})
+        l1_state = level_states.get('INSTITUTIONAL', {})
+        l2_auto_state = level_states.get('CIVILIZATION', {})
+
+        # Run constraint conduction
+        cc_result = self.constraint_conduction.update(l0_state, l1_state, l2_auto_state)
+
+        # Build constrained L2 state
+        constrained_l2 = {
+            'stability_score': cc_result.l2_constrained_stability,
+            'odi': cc_result.l2_independent_odi,
+            'structure_vector': l2_auto_state.get('structure_vector'),
+            'constraint_conduction': True,
+            'constraint_source': 'L1_soft_boundary',
+            'l2_autonomous_stability': cc_result.l2_autonomous_stability,
+            'constraint_response_delay': cc_result.constraint_response_delay,
+        }
+
+        modified_states = dict(level_states)
+        modified_states['CIVILIZATION'] = constrained_l2
+        return modified_states
+
     def _compute_csci(
         self,
         level_stabilities: Dict[str, float],
@@ -945,6 +1159,8 @@ class CrossScaleCoupling:
                 'serial_source': self._last_serial_l2_state.get('serial_source', 'none') if self._last_serial_l2_state else 'none',
                 'l1_buffer_size': len(self._l1_state_buffer),
             }
+        if self.coupling_mode == 'constraint':
+            summary['constraint_conduction'] = self.constraint_conduction.get_summary()
         return summary
 
     def reset(self):
@@ -952,6 +1168,7 @@ class CrossScaleCoupling:
         self.top_down = TopDownConstraint(self.config)
         self.bottom_up = BottomUpEmergenceEvaluator(self.config)
         self.narrator = ScaleBridgingNarrator(self.config)
+        self.constraint_conduction.reset()
         self._level_stabilities.clear()
         self._narrative_coherence_history.clear()
         self._csci_history.clear()
