@@ -212,6 +212,7 @@ class HierarchicalEvolver:
                  n_hierarchy_bits: int = None,
                  L: float = 1.0,
                  auto_encapsulate: bool = True,
+                 partial_sealing: bool = False,  # Track B7: lateral/hierarchy seal independently
                  verbose_gravity: bool = False,
                  # Phase 2 P0 组件（可选，用于演化时实时检测）
                  xiang_detector: Optional[XiàngDetector] = None,
@@ -274,6 +275,7 @@ class HierarchicalEvolver:
         self.max_layers = max_layers
         self.device = device
         self.auto_encapsulate = auto_encapsulate
+        self.partial_sealing = partial_sealing  # Track B7
         self._verbose_gravity = verbose_gravity
 
         # Phase 2 P0 组件
@@ -2165,7 +2167,8 @@ class HierarchicalEvolver:
             sample_interval=self.sample_interval,
             device=self.device,
             n_hierarchy_bits=layer.constraints.n_hierarchy,
-            L=self.spatial_layers[layer_id].L
+            L=self.spatial_layers[layer_id].L,
+            partial_sealing=self.partial_sealing  # Track B7
         )
 
         evolver.constraints = layer.constraints
@@ -2219,11 +2222,23 @@ class HierarchicalEvolver:
 
         just_sealed = evolver.constraints.sealed and not layer.is_sealed
 
+        # Track B7: Check for partial sealing (lateral-only)
+        partial_seal_info = None
+        if self.partial_sealing and evolver.constraints.sealed and not layer.is_sealed:
+            sealing_status = evolver.constraints.get_sealing_status()
+            if sealing_status['sealed_lateral'] and not sealing_status['sealed_hierarchy']:
+                # Lateral sealed but hierarchy not yet — partial seal
+                partial_seal_info = sealing_status
+                if verbose:
+                    print(f"  [PARTIAL SEAL] L{layer_id}: lateral sealed ({sealing_status['n_sealed_lateral']}/{sealing_status['n_lateral_total']}), "
+                          f"hierarchy not yet ({sealing_status['n_sealed_hierarchy']}/{sealing_status['n_hierarchy_total']})")
+
         # ILP gating: check if InstitutionalLayerProtector allows consumption
         ilp_allows_consume = True
         if self.institutional_layer_protector is not None:
             ilp_allows_consume = self.institutional_layer_protector.should_consume
 
+        # ── Full seal: encapsulate all frozen bits ──
         if self.auto_encapsulate and just_sealed and ilp_allows_consume:
             enc_info = self.hierarchy.check_and_encapsulate()
             if enc_info is not None:
@@ -2236,6 +2251,36 @@ class HierarchicalEvolver:
                 self._init_spatial_layer(
                     enc_info['to_layer'], new_layer.n_bits, L=1.0)
                 self.hierarchy.update_base_encapsulated_values()
+
+        # ── Track B7: Partial seal (lateral-only) → create L1 with lateral bits only ──
+        elif self.auto_encapsulate and partial_seal_info and ilp_allows_consume:
+            # Create L1 using only the sealed lateral bits
+            lateral_sealed = partial_seal_info['sealed_bits']
+            lateral_frozen = set(i for i in lateral_sealed if i in evolver.constraints.lateral_indices)
+            active = set(range(layer.n_bits)) - lateral_frozen
+
+            enc_info = self.hierarchy.encapsulate_with_bits(
+                layer_id=layer_id,
+                frozen_bits=lateral_frozen,
+                active_bits=active,
+                state=layer.state,
+                binding_strength=evolver.constraints.binding_strength,
+            )
+            if enc_info is not None:
+                self.encapsulation_events.append(enc_info)
+                if verbose:
+                    print(f"  [PARTIAL ENCAP] L{enc_info['from_layer']} -> "
+                          f"L{enc_info['to_layer']}: "
+                          f"{enc_info['n_bits_before']} -> {enc_info['n_bits_after']} bits "
+                          f"(lateral only: {enc_info['n_encapsulated']} enc bits)")
+                new_layer = self.hierarchy.get_layer(enc_info['to_layer'])
+                self._init_spatial_layer(
+                    enc_info['to_layer'], new_layer.n_bits, L=1.0)
+                self.hierarchy.update_base_encapsulated_values()
+                # Mark lateral bits as sealed on current layer but keep hierarchy bits active
+                layer.is_sealed = True
+                # Update constraints.sealed_bits to only lateral frozen bits
+                evolver.constraints.sealed_bits = lateral_frozen
 
         layer.is_sealed = evolver.constraints.sealed
 
@@ -2298,6 +2343,29 @@ class HierarchicalEvolver:
                     if verbose:
                         print(f"  Extra {extra_steps} steps: "
                               f"sealed={result2['sealed']}")
+
+            # Track B7: Handle partial sealing — if lateral sealed but hierarchy not,
+            # continue running L0 with only hierarchy bits until they seal
+            if self.partial_sealing and layer.is_sealed:
+                sealing_status = layer.constraints.get_sealing_status()
+                if sealing_status['sealed_lateral'] and not sealing_status['sealed_hierarchy']:
+                    if verbose:
+                        print(f"  [PARTIAL] L{layer_id}: hierarchy bits still active "
+                              f"({sealing_status['n_hierarchy_total'] - sealing_status['n_sealed_hierarchy']} remaining), "
+                              f"running extra steps to seal hierarchy...")
+                    # Run extra steps focused on hierarchy bits
+                    extra_steps = self.steps_per_layer
+                    result2 = self._run_layer(
+                        layer_id, extra_steps, verbose=verbose)
+                    if verbose:
+                        print(f"  Extra {extra_steps} steps for hierarchy: "
+                              f"sealed={result2['sealed']}")
+                    # Re-check sealing status
+                    sealing_status2 = layer.constraints.get_sealing_status()
+                    if sealing_status2['sealed_hierarchy']:
+                        if verbose:
+                            print(f"  [PARTIAL] L{layer_id}: hierarchy now sealed, "
+                                  f"full encapsulation ready")
 
             # Move to next layer (created via encapsulation in _run_layer)
             layer_id += 1

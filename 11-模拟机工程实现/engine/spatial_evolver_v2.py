@@ -43,7 +43,8 @@ class SpatialLongRangeEvolver:
                  sample_interval: int = 100,
                  device: str = "cpu",
                  n_hierarchy_bits: int = None,
-                 L: float = 1.0):
+                 L: float = 1.0,
+                 partial_sealing: bool = False):
         # 自动对齐到 3 的倍数
         if N % 3 != 0:
             N = N + (3 - N % 3)
@@ -51,6 +52,7 @@ class SpatialLongRangeEvolver:
         self.total_steps = total_steps
         self.sample_interval = sample_interval
         self.device = device
+        self.partial_sealing = partial_sealing  # Track B7
 
         # 空间嵌入层
         self.spatial_layer = ThreeDimHammingLattice(N=N, L=L, device=device)
@@ -193,7 +195,7 @@ class SpatialLongRangeEvolver:
                         indices = torch.multinomial(candidate_weights, n_choose, replacement=False)
                         chosen = [all_candidates[idx.item()] for idx in indices]
                         for idx in chosen:
-                            a9_ok, _ = self.constraints.check_A9(idx)
+                            a9_ok, _ = self.constraints.check_A9(idx, partial_sealing=self.partial_sealing)
                             if not a9_ok:
                                 continue
                             state[idx] = 1.0
@@ -215,7 +217,7 @@ class SpatialLongRangeEvolver:
                 allowed_weights = weights[allowed]
                 allowed_weights = allowed_weights / allowed_weights.sum()
                 flip_idx = allowed[torch.multinomial(allowed_weights, 1).item()]
-                a9_ok, _ = self.constraints.check_A9(flip_idx)
+                a9_ok, _ = self.constraints.check_A9(flip_idx, partial_sealing=self.partial_sealing)
                 if a9_ok:
                     old_val = state[flip_idx].item()
                     state[flip_idx] = 1.0 - state[flip_idx]
@@ -232,8 +234,8 @@ class SpatialLongRangeEvolver:
             n_lateral = 0
             for (i, j) in lateral_pairs:
                 if state[i] > 0.5 and state[j] < 0.5:
-                    a9_ok_i, _ = self.constraints.check_A9(i)
-                    a9_ok_j, _ = self.constraints.check_A9(j)
+                    a9_ok_i, _ = self.constraints.check_A9(i, partial_sealing=self.partial_sealing)
+                    a9_ok_j, _ = self.constraints.check_A9(j, partial_sealing=self.partial_sealing)
                     if not a9_ok_i or not a9_ok_j:
                         continue
                     state[i] = 0.0

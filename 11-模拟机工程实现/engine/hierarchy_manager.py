@@ -192,6 +192,86 @@ class HierarchyManager:
             'structure_vector': layer.state.float().clone(),
         }
 
+    def encapsulate_with_bits(self, layer_id: int, frozen_bits: Set[int],
+                               active_bits: Set[int], state: torch.Tensor,
+                               binding_strength: torch.Tensor) -> Optional[Dict]:
+        """使用指定冻结/活跃比特集合执行封装（Track B7 部分封口支持）
+
+        Args:
+            layer_id: 要封装的层 ID
+            frozen_bits: 要冻结/封装的比特集合
+            active_bits: 保持活跃的比特集合
+            state: 当前层状态
+            binding_strength: 绑定强度矩阵
+
+        Returns:
+            封装信息字典，如果封装失败则返回 None
+        """
+        layer = self.get_layer(layer_id)
+
+        # 执行封装
+        new_state, enc_bits, mapping = self.encap_engine.encapsulate(
+            state=state,
+            frozen_bits=frozen_bits,
+            binding_strength=binding_strength,
+            active_bits=active_bits,
+            layer=layer_id
+        )
+
+        n_active = len(active_bits)
+        n_enc = len(enc_bits)
+        n_new = len(new_state)
+
+        # 确保 N 是 3 的倍数（SpatialLongRangeEvolver 要求）
+        if n_new % 3 != 0:
+            pad = 3 - (n_new % 3)
+            new_state = torch.cat([new_state, torch.zeros(pad, device=self.device)])
+            n_new = len(new_state)
+
+        # 为新层创建约束器
+        new_n_hierarchy = max(1, n_new // 3)
+        new_constraints = AxiomConstraints(
+            n_new,
+            n_hierarchy_bits=new_n_hierarchy,
+            device=self.device,
+            initial_state=new_state,
+        )
+
+        # 新层的活跃比特 = 全部（初始都活跃）
+        new_active = set(range(n_new))
+        new_frozen = set()
+
+        # 标记当前层为已封口（部分封口：只标记 lateral 部分）
+        layer.is_sealed = True
+
+        # 创建新层
+        new_layer = LayerState(
+            layer_id=layer.layer_id + 1,
+            state=new_state,
+            constraints=new_constraints,
+            active_bits=new_active,
+            frozen_bits=new_frozen
+        )
+
+        self.layers.append(new_layer)
+        self.current_layer = new_layer.layer_id
+
+        info = {
+            'from_layer': layer.layer_id,
+            'to_layer': new_layer.layer_id,
+            'n_bits_before': layer.n_bits,
+            'n_bits_after': n_new,
+            'n_active_preserved': n_active,
+            'n_encapsulated': n_enc,
+            'n_frozen_discarded': len(frozen_bits) - sum(
+                len(e.source_bits) for e in enc_bits),
+            'encapsulated_bits': enc_bits,
+            'mapping': mapping,
+            'partial': True,  # Track B7: this is a partial encapsulation
+        }
+
+        return info
+
     def encapsulate_current_layer(self) -> Tuple[LayerState, Dict]:
         """对当前层执行封装，创建新层
 

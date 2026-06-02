@@ -333,7 +333,7 @@ class AxiomConstraints:
     # A9：自由度封口
     # ============================================================
 
-    def check_A9(self, flip_idx: int) -> Tuple[bool, str]:
+    def check_A9(self, flip_idx: int, partial_sealing: bool = False) -> Tuple[bool, str]:
         """A9：自由度封口
 
         阶段1（未封口）：所有比特都可以激活
@@ -341,6 +341,11 @@ class AxiomConstraints:
           - 基于绑定强度选择最活跃的比特
           - 冻结多余比特（低于阈值的被冻结）
           - 保留最少 min_active_bits 个比特
+
+        partial_sealing=True（Track B7）：部分封口模式
+          - 横向和层级比特独立封口
+          - 横向封口后，层级比特仍可继续演化
+          - 用于支持 L0 横向封口 → 触发 L1 创建，但层级比特继续积累
         """
         # 阶段1：激活阶段 — 统计总唯一活跃比特数（用于触发密封）
         current_step = self._step_counter()
@@ -352,7 +357,10 @@ class AxiomConstraints:
 
         # 阶段2：封口 — 当活跃比特达到阈值，触发密封
         if not self.sealed:
-            self._seal(current_step)
+            if partial_sealing:
+                self._seal(current_step, partial=True)
+            else:
+                self._seal(current_step)
 
         # 封口后：只允许非冻结比特
         if flip_idx in self.sealed_bits:
@@ -375,20 +383,29 @@ class AxiomConstraints:
         cutoff = current_step - self.active_window
         return {idx for idx, ts in self.active_bits.items() if ts >= cutoff}
 
-    def _seal(self, current_step: int):
+    def _seal(self, current_step: int, partial: bool = False):
         """执行封口：冻结多余比特
 
-        策略：
+        策略（Track B7 重构）：
         1. 只统计滑动窗口内活跃的比特（修复单调增长 bug）
         2. 优先保留参与 A7 循环的比特
         3. 其次保留绑定强度高的比特
         4. 冻结其余比特
+
+        partial=True（Track B7）：部分封口模式
+          - 横向比特和层级比特独立评估
+          - 横向比特：按绑定强度排序，冻结底部 N_lateral/2
+          - 层级比特：按绑定强度排序，冻结底部 N_hierarchy/2
+          - 允许横向比特先封口，层级比特后封口
+          - 返回 (sealed_lateral, sealed_hierarchy, sealed_bits)
         """
         active_now = self._get_active_in_window(current_step)
 
         if len(active_now) <= self.min_active_bits:
             self.sealed = True
             print(f"[A9] Sealed at step {current_step}: {len(active_now)} active bits <= min {self.min_active_bits}")
+            if partial:
+                return True, True, set()
             return
 
         # 计算每个活跃比特的得分（绑定强度 + 循环参与）
@@ -397,25 +414,115 @@ class AxiomConstraints:
             # 绑定强度得分 — 只在窗口内活跃比特间计算
             bind_score = sum(self.binding_strength[i][j].item() for j in active_now if j != i)
             bind_score = bind_score / max(len(active_now) - 1, 1)
+            # 循环参与加成
+            if i in self.cycle_participants:
+                bind_score += 0.5
             scores[i] = bind_score
 
-        # 按得分排序，保留最高的
-        sorted_bits = sorted(scores.keys(), key=lambda x: scores[x], reverse=True)
-        keep = set(sorted_bits[:self.min_active_bits])
-        freeze = set(sorted_bits[self.min_active_bits:])
+        if partial:
+            # ── 部分封口模式：横向和层级独立 ──
+            lateral_active = [i for i in active_now if i in self.lateral_indices]
+            hierarchy_active = [i for i in active_now if i in self.hierarchy_indices]
 
-        self.sealed_bits = freeze
-        self.sealed = True
+            sealed_lateral = False
+            sealed_hierarchy = False
+            freeze = set()
 
-        print(f"[A9] Sealed at step {current_step}: {len(active_now)} active in window, keeping {len(keep)}, freezing {len(freeze)}")
-        print(f"[A9] Kept: {sorted(keep)}")
-        print(f"[A9] Frozen: {sorted(freeze)}")
+            # 横向比特封口：冻结绑定强度最低的 50%
+            if len(lateral_active) >= 4:
+                lateral_sorted = sorted(lateral_active, key=lambda x: scores.get(x, 0), reverse=True)
+                n_freeze_lat = max(1, len(lateral_active) // 2)
+                freeze_lat = set(lateral_sorted[n_freeze_lat:])
+                freeze |= freeze_lat
+                sealed_lateral = True
+                print(f"[A9 PARTIAL] Lateral: {len(lateral_active)} active, freezing {len(freeze_lat)}")
+            else:
+                print(f"[A9 PARTIAL] Lateral: only {len(lateral_active)} active, not enough to seal")
+
+            # 层级比特封口：冻结绑定强度最低的 50%
+            if len(hierarchy_active) >= 2:
+                hierarchy_sorted = sorted(hierarchy_active, key=lambda x: scores.get(x, 0), reverse=True)
+                n_freeze_hier = max(1, len(hierarchy_active) // 2)
+                freeze_hier = set(hierarchy_sorted[n_freeze_hier:])
+                freeze |= freeze_hier
+                sealed_hierarchy = True
+                print(f"[A9 PARTIAL] Hierarchy: {len(hierarchy_active)} active, freezing {len(freeze_hier)}")
+            else:
+                print(f"[A9 PARTIAL] Hierarchy: only {len(hierarchy_active)} active, not enough to seal")
+
+            self.sealed_bits = freeze
+            self.sealed = True
+            print(f"[A9 PARTIAL] Sealed at step {current_step}: lateral={sealed_lateral}, hierarchy={sealed_hierarchy}, total frozen={len(freeze)}")
+            return sealed_lateral, sealed_hierarchy, freeze
+        else:
+            # ── 全封口模式（原始行为） ──
+            sorted_bits = sorted(scores.keys(), key=lambda x: scores[x], reverse=True)
+            keep = set(sorted_bits[:self.min_active_bits])
+            freeze = set(sorted_bits[self.min_active_bits:])
+
+            self.sealed_bits = freeze
+            self.sealed = True
+
+            print(f"[A9] Sealed at step {current_step}: {len(active_now)} active in window, keeping {len(keep)}, freezing {len(freeze)}")
+            print(f"[A9] Kept: {sorted(keep)}")
+            print(f"[A9] Frozen: {sorted(freeze)}")
 
     def get_sealed_ratio(self) -> float:
         """获取封口比例"""
         if not self.sealed:
             return 0.0
         return len(self.sealed_bits) / self.N
+
+    def get_sealing_status(self) -> Dict:
+        """获取详细封口状态（Track B7 部分封口支持）
+
+        Returns:
+            {
+                'sealed': bool,
+                'sealed_lateral': bool,       # 横向比特是否已封口
+                'sealed_hierarchy': bool,     # 层级比特是否已封口
+                'sealed_bits': Set[int],
+                'n_sealed_lateral': int,
+                'n_sealed_hierarchy': int,
+                'n_sealed_total': int,
+                'n_lateral_total': int,
+                'n_hierarchy_total': int,
+            }
+        """
+        if not self.sealed:
+            return {
+                'sealed': False,
+                'sealed_lateral': False,
+                'sealed_hierarchy': False,
+                'sealed_bits': set(),
+                'n_sealed_lateral': 0,
+                'n_sealed_hierarchy': 0,
+                'n_sealed_total': 0,
+                'n_lateral_total': len(self.lateral_indices),
+                'n_hierarchy_total': len(self.hierarchy_indices),
+            }
+
+        sealed_lat = set(i for i in self.sealed_bits if i in self.lateral_indices)
+        sealed_hier = set(i for i in self.sealed_bits if i in self.hierarchy_indices)
+        lateral_total = len(self.lateral_indices)
+        hierarchy_total = len(self.hierarchy_indices)
+
+        # 横向封口：超过 50% 横向比特被冻结
+        sealed_lateral = len(sealed_lat) >= lateral_total * 0.4
+        # 层级封口：超过 50% 层级比特被冻结
+        sealed_hierarchy = len(sealed_hier) >= hierarchy_total * 0.4
+
+        return {
+            'sealed': True,
+            'sealed_lateral': sealed_lateral,
+            'sealed_hierarchy': sealed_hierarchy,
+            'sealed_bits': self.sealed_bits,
+            'n_sealed_lateral': len(sealed_lat),
+            'n_sealed_hierarchy': len(sealed_hier),
+            'n_sealed_total': len(self.sealed_bits),
+            'n_lateral_total': lateral_total,
+            'n_hierarchy_total': hierarchy_total,
+        }
 
     def record_active(self, flip_idx: int):
         """记录比特活跃 — 更新其最近活跃时间戳"""
