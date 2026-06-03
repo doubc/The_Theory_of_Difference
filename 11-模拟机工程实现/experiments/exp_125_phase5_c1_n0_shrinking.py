@@ -425,9 +425,9 @@ def evaluate_track_c_hypotheses(config_hypotheses):
         'description': f'Exists N0* ∈ [16,32] where H1-H8 fail. N0* = {n0_star}',
         'pass': h32,
         'n0_star': n0_star,
-        'n32_pass': n32_pass,
+        'n32_pass': n30_pass,
         'n24_pass': n24_pass,
-        'n16_pass': n16_pass,
+        'n16_pass': n18_pass,
     }
     results['H33_scale_quality_tradeoff'] = {
         'description': 'N0 decreases → NSI decreases & continuity increases',
@@ -532,7 +532,7 @@ def main():
         summary = hypotheses['summary']
         print(f"\n  >> {label}: {summary['n_pass']}/8 pass", end="")
         if summary['all_pass']:
-            print(" — ALL PASS ✅")
+            print(" - ALL PASS [OK]")
         else:
             print(f" — Failed: {', '.join(summary['failed'])}")
 
@@ -559,7 +559,7 @@ def main():
     print("TRACK C1 HYPOTHESES (H32-H35)")
     print("─" * 70)
     for h_name, h_info in c1_hypotheses.items():
-        status = "PASS ✅" if h_info['pass'] else "FAIL ❌"
+        status = "PASS [OK]" if h_info['pass'] else "FAIL [XX]"
         print(f"  {h_name}: {status}")
         print(f"    {h_info['description']}")
 

@@ -871,7 +871,7 @@ class HierarchicalEvolver:
                 if self.cumulative_selector is not None:
                     sealed_set = constraints.sealed_bits
                     all_active = constraints.active_bits
-                    truly_active = sorted(all_active.keys() - sealed_set)
+                    truly_active = sorted(set(all_active.keys()) - sealed_set)
                     frozen_bits = sorted(sealed_set)
                     probs = {}
                     # 活跃变体（真正活跃的，非封口）
