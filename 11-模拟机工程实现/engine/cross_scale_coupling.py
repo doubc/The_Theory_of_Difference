@@ -1501,3 +1501,320 @@ class CrossScaleCoupling:
         self._last_serial_l2_state = None
         self._l2_intrinsic_state = None
         self._l2_intrinsic_step = 0
+
+
+class ConstraintBiasedCoupling:
+    """约束偏置耦合 (Track B9)
+
+    核心设计（基于 B8 结论重新设计）：
+    1. L1 是被动投影（B8 发现），没有自主动态
+    2. L2 需要独立 bit 空间 + 受 L1 冻结结构的偏置约束
+    3. 不是 hard clamp，而是 soft biased sampling
+
+    理论依据：
+    - 差异论 §2.2: "层级不是信息的逐级传递，而是差异在不同尺度上的重新组织"
+    - B8 结论: L1 是制度记忆的被动投影，L2 需要独立聚类才能产生自主动态
+    - 约束偏置 = L1 冻结结构作为 L2 聚类的「引力中心」，但不决定 L2 的具体状态
+
+    与 B5 (IndependentL2Coupling) 的区别：
+    - B5: L2 完全独立，L1 仅提供 additive bias（权重 0.1）
+    - B9: L2 独立聚类，但 L1 冻结结构作为「偏置场」影响 L2 的演化方向（权重 0.3-0.5）
+    - B9 新增: L1 冻结 bits 的「引力效应」— L2 的 active bits 倾向于聚集在 L1 冻结 bits 附近
+    """
+
+    def __init__(self, config=None):
+        cfg = dict(DEFAULT_CROSS_SCALE_COUPLING_CONFIG)
+        cfg.update(config or {})
+
+        # L2 独立聚类参数
+        self.l2_n0 = cfg.get('l2_independent_N0', 72)  # L2 独立 bit 空间规模
+        self.l2_stability_floor = cfg.get('l2_stability_floor', 0.15)  # 稳定性地板
+        self.l2_perturbation_rate = cfg.get('l2_perturbation_rate', 0.03)
+        self.l2_perturbation_magnitude = cfg.get('l2_perturbation_magnitude', 0.2)
+        self.l2_autonomous_decay = cfg.get('l2_autonomous_decay', 0.97)
+        self.l2_odi_independence_weight = cfg.get('l2_odi_independence_weight', 0.5)
+        self.l2_clustering_noise = cfg.get('l2_clustering_noise', 0.15)
+        # Track B9 v2: L2 autonomous base noise (creates L1-L2 divergence for H50)
+        self.l2_auto_noise = cfg.get('l2_auto_noise', 0.0)  # Gaussian noise on L2 auto base
+
+        # L1 约束偏置参数（B9 核心）
+        self.l1_bias_strength = cfg.get('l1_bias_strength', 0.4)  # L1 对 L2 的偏置强度
+        self.l1_frozen_gravity = cfg.get('l1_frozen_gravity', 0.3)  # L1 冻结 bits 的「引力」强度
+        self.l1_bias_decay = cfg.get('l1_bias_decay', 0.98)  # 偏置随步数衰减
+        self.l1_min_bias = cfg.get('l1_min_bias', 0.05)  # 最小偏置（避免完全独立）
+
+        # L0 直接输入权重
+        self.l0_to_l2_weight = cfg.get('l0_direct_to_l2_weight', 0.4)
+
+        # 内部状态
+        self._step_count = 0
+        self._l2_stability_history = deque(maxlen=500)
+        self._l1_stability_history = deque(maxlen=500)
+        self._l0_stability_history = deque(maxlen=500)
+        self._l2_odi_history = deque(maxlen=500)
+        self._l0_odi_history = deque(maxlen=500)
+        self._l1_odi_history = deque(maxlen=500)
+        self._l1_l2_correlation_window = deque(maxlen=200)
+        self._l0_l2_correlation_window = deque(maxlen=200)
+        self._l1_l2_odi_correlation_window = deque(maxlen=200)
+        self._response_delays = deque(maxlen=100)
+        self._l1_bias_strength_history = deque(maxlen=500)  # 新增：追踪 L1 偏置强度
+        self._last_l2_state = None
+        self._l2_structure_vector = None
+        self._l2_autonomous_stability = 0.0
+        self._l1_frozen_bits = None  # L1 冻结 bits（用于偏置场）
+        self._l1_bias_field = None  # L1 偏置场（gravity center）
+
+    def update(self, l0_state, l1_state, l2_seed=None):
+        """执行一步约束偏置耦合
+
+        Parameters
+        ----------
+        l0_state : dict
+            MINI 层级状态 {stability_score, odi, structure_vector, active_bits}
+        l1_state : dict
+            INSTITUTIONAL 层级状态 {stability_score, odi, structure_vector, frozen_bits}
+        l2_seed : int, optional
+            L2 聚簇随机种子
+
+        Returns
+        -------
+        dict
+            L2 约束偏置耦合结果
+        """
+        self._step_count += 1
+
+        l0_stability = l0_state.get('stability_score', 0.0)
+        l0_odi = l0_state.get('odi', 0.0)
+        l0_vector = l0_state.get('structure_vector')
+        l0_active_bits = l0_state.get('active_bits', set())
+
+        l1_stability = l1_state.get('stability_score', 0.0)
+        l1_odi = l1_state.get('odi', 0.0)
+        l1_vector = l1_state.get('structure_vector')
+        l1_frozen_bits = l1_state.get('frozen_bits', set())  # L1 冻结 bits（关键！）
+
+        # Record histories
+        self._l0_stability_history.append(l0_stability)
+        self._l1_stability_history.append(l1_stability)
+        self._l0_odi_history.append(l0_odi)
+        self._l1_odi_history.append(l1_odi)
+
+        # ── Step 1: 更新 L1 偏置场（基于 L1 冻结 bits） ──
+        if l1_frozen_bits and len(l1_frozen_bits) > 0:
+            self._l1_frozen_bits = l1_frozen_bits
+            # 偏置场强度随 L1 稳定性变化
+            bias_strength = self.l1_bias_strength * (0.5 + 0.5 * l1_stability)
+            bias_strength = max(bias_strength, self.l1_min_bias)
+            self._l1_bias_field = {'frozen_bits': l1_frozen_bits, 'strength': bias_strength}
+        else:
+            # L1 未冻结时，偏置场衰减
+            if self._l1_bias_field is not None:
+                self._l1_bias_field['strength'] *= self.l1_bias_decay
+                if self._l1_bias_field['strength'] < self.l1_min_bias:
+                    self._l1_bias_field = None
+
+        # ── Step 2: 生成 L2 自主稳定性（独立于 L1） ──
+        if l0_stability > 0:
+            l2_auto_base = l0_stability * 0.6
+        else:
+            l2_auto_base = 0.05
+
+        # Track B9 v2: 添加独立噪声，使 L2 自主基底与 L0 解耦
+        # 这样 L1-L2 可以有更大的差异，产生可测量的 bias_effect (H50)
+        if self.l2_auto_noise > 0:
+            l2_auto_base += np.random.randn() * self.l2_auto_noise
+            l2_auto_base = np.clip(l2_auto_base, 0.0, 1.0)
+
+        # 应用自主衰减
+        if self._l2_autonomous_stability > 0:
+            l2_auto_base = 0.7 * l2_auto_base + 0.3 * (self._l2_autonomous_stability * self.l2_autonomous_decay)
+
+        # ── Step 3: 应用 L1 约束偏置（B9 核心机制） ──
+        l1_bias_effect = 0.0
+        if self._l1_bias_field is not None:
+            # L1 冻结结构的「引力效应」：
+            # L2 稳定性向 L1 稳定性靠拢，但保留独立性
+            l1_bias_strength = self._l1_bias_field['strength']
+            l1_bias_effect = (l1_stability - l2_auto_base) * l1_bias_strength
+
+        # L2 最终稳定性 = 自主基底 + L1 偏置 + L0 直接输入
+        l0_direct = l0_stability * self.l0_to_l2_weight
+        l2_stability = l2_auto_base + l1_bias_effect + l0_direct
+
+        # ── Step 4: 应用稳定性地板 ──
+        l2_stability = float(np.clip(l2_stability, self.l2_stability_floor, 1.0))
+
+        # ── Step 5: 生成 L2 独立结构向量 ──
+        if l0_vector is not None and l0_vector.numel() > 0:
+            # 从 L0 向量生成 L2 向量：添加聚类噪声以模拟独立差异场
+            noise = torch.randn_like(l0_vector) * self.l2_clustering_noise
+            l2_vector = l0_vector + noise
+
+            # 应用 L1 偏置场：L2 向量向 L1 冻结 bits 方向偏移（但不完全对齐）
+            if self._l1_bias_field is not None and l1_vector is not None:
+                l1_bias_direction = l1_vector / (l1_vector.norm() + 1e-8)
+                bias_magnitude = self._l1_bias_field['strength'] * self.l1_frozen_gravity
+                l2_vector = l2_vector + l1_bias_direction * bias_magnitude
+
+            # 内在扰动
+            if np.random.random() < self.l2_perturbation_rate:
+                perturbation = torch.randn_like(l2_vector) * self.l2_perturbation_magnitude
+                l2_vector = l2_vector + perturbation
+
+            norm = l2_vector.norm().item()
+            if norm > 1e-8:
+                l2_vector = l2_vector / norm
+        else:
+            l2_vector = None
+
+        self._l2_structure_vector = l2_vector
+
+        # ── Step 6: 计算 L2 独立 ODI ──
+        l2_odi = l0_odi * self.l2_odi_independence_weight
+        if l2_vector is not None:
+            vec_magnitude = l2_vector.norm().item()
+            l2_odi = l2_odi + vec_magnitude * (1 - self.l2_odi_independence_weight) * 0.3
+        l2_odi = float(np.clip(l2_odi, 0.0, 1.0))
+
+        # ── Step 7: 记录历史 ──
+        self._l2_autonomous_stability = l2_auto_base
+        self._l2_stability_history.append(l2_stability)
+        self._l2_odi_history.append(l2_odi)
+        # 追踪 L1 偏置强度
+        if self._l1_bias_field is not None:
+            self._l1_bias_strength_history.append(self._l1_bias_field.get('strength', 0.0))
+        else:
+            self._l1_bias_strength_history.append(0.0)
+
+        # ── Step 8: 追踪相关性（用于假设检验） ──
+        if len(self._l1_stability_history) >= 30:
+            l1_vals = np.array(list(self._l1_stability_history)[-100:])
+            l2_vals = np.array(list(self._l2_stability_history)[-100:])
+            min_len = min(len(l1_vals), len(l2_vals))
+            if min_len >= 30:
+                corr = np.corrcoef(l1_vals[-min_len:], l2_vals[-min_len:])[0, 1]
+                self._l1_l2_correlation_window.append(float(corr) if not np.isnan(corr) else 0.0)
+
+        if len(self._l0_stability_history) >= 30:
+            l0_vals = np.array(list(self._l0_stability_history)[-100:])
+            l2_vals = np.array(list(self._l2_stability_history)[-100:])
+            min_len = min(len(l0_vals), len(l2_vals))
+            if min_len >= 30:
+                corr = np.corrcoef(l0_vals[-min_len:], l2_vals[-min_len:])[0, 1]
+                self._l0_l2_correlation_window.append(float(corr) if not np.isnan(corr) else 0.0)
+
+        if len(self._l1_odi_history) >= 30 and len(self._l2_odi_history) >= 30:
+            l1_odi_vals = np.array(list(self._l1_odi_history)[-100:])
+            l2_odi_vals = np.array(list(self._l2_odi_history)[-100:])
+            min_len = min(len(l1_odi_vals), len(l2_odi_vals))
+            if min_len >= 30:
+                corr = np.corrcoef(l1_odi_vals[-min_len:], l2_odi_vals[-min_len:])[0, 1]
+                self._l1_l2_odi_correlation_window.append(float(corr) if not np.isnan(corr) else 0.0)
+
+        # ── Step 9: 检测响应延迟（L1→L2） ──
+        response_delay = self._detect_response_delay(l1_stability, l2_stability)
+        if response_delay is not None:
+            self._response_delays.append(response_delay)
+
+        state = {
+            'stability_score': l2_stability,
+            'odi': l2_odi,
+            'structure_vector': l2_vector,
+            'independent_l2': True,
+            'l2_autonomous_stability': l2_auto_base,
+            'l1_bias_strength': self._l1_bias_field['strength'] if self._l1_bias_field else 0.0,
+            'l1_bias_effect': l1_bias_effect,
+            'l1_frozen_bits_count': len(l1_frozen_bits) if l1_frozen_bits else 0,
+            'stability_floor': self.l2_stability_floor,
+            'l1_l2_correlation': self.get_l1_l2_correlation(),
+            'l0_l2_correlation': self.get_l0_l2_correlation(),
+            'l1_l2_odi_correlation': self.get_l1_l2_odi_correlation(),
+            'avg_response_delay': self.get_avg_response_delay(),
+            'step': self._step_count,
+        }
+        self._last_l2_state = state
+        return state
+
+    def _detect_response_delay(self, l1_stability, l2_stability):
+        """检测 L1→L2 的响应延迟"""
+        if len(self._l1_stability_history) < 10:
+            return None
+        recent_l1 = list(self._l1_stability_history)[-20:]
+        l1_changes = []
+        for i in range(1, len(recent_l1)):
+            delta = abs(recent_l1[i] - recent_l1[i - 1])
+            if delta > 0.1:
+                l1_changes.append(i)
+        if not l1_changes:
+            return None
+        recent_l2 = list(self._l2_stability_history)[-20:]
+        l2_changes = []
+        for i in range(1, len(recent_l2)):
+            delta = abs(recent_l2[i] - recent_l2[i - 1])
+            if delta > 0.05:
+                l2_changes.append(i)
+        if not l2_changes:
+            return None
+        for l1_idx in l1_changes[-3:]:
+            for l2_idx in l2_changes:
+                if l2_idx > l1_idx and (l2_idx - l1_idx) <= 20:
+                    return l2_idx - l1_idx
+        return None
+
+    def get_l1_l2_correlation(self):
+        vals = list(self._l1_l2_correlation_window)
+        if not vals:
+            return None
+        return float(np.mean(vals))
+
+    def get_l0_l2_correlation(self):
+        vals = list(self._l0_l2_correlation_window)
+        if not vals:
+            return None
+        return float(np.mean(vals))
+
+    def get_l1_l2_odi_correlation(self):
+        vals = list(self._l1_l2_odi_correlation_window)
+        if not vals:
+            return None
+        return float(np.mean(vals))
+
+    def get_avg_response_delay(self):
+        delays = [d for d in self._response_delays if d > 0]
+        return float(np.mean(delays)) if delays else 0.0
+
+    def get_summary(self):
+        return {
+            'l2_stability_mean': float(np.mean(self._l2_stability_history)) if self._l2_stability_history else 0.0,
+            'l2_stability_min': float(np.min(self._l2_stability_history)) if self._l2_stability_history else 0.0,
+            'l2_stability_max': float(np.max(self._l2_stability_history)) if self._l2_stability_history else 0.0,
+            'l2_odi_mean': float(np.mean(self._l2_odi_history)) if self._l2_odi_history else 0.0,
+            'l1_l2_correlation': self.get_l1_l2_correlation(),
+            'l0_l2_correlation': self.get_l0_l2_correlation(),
+            'l1_l2_odi_correlation': self.get_l1_l2_odi_correlation(),
+            'avg_response_delay': self.get_avg_response_delay(),
+            'n_response_events': len(self._response_delays),
+            'l1_bias_strength_mean': (
+                float(np.mean(list(self._l1_bias_strength_history))) if self._l1_bias_strength_history else 0.0
+            ),
+            'latest_state': self._last_l2_state,
+        }
+
+    def reset(self):
+        self._step_count = 0
+        self._l2_stability_history.clear()
+        self._l1_stability_history.clear()
+        self._l0_stability_history.clear()
+        self._l2_odi_history.clear()
+        self._l0_odi_history.clear()
+        self._l1_odi_history.clear()
+        self._l1_l2_correlation_window.clear()
+        self._l0_l2_correlation_window.clear()
+        self._l1_l2_odi_correlation_window.clear()
+        self._response_delays.clear()
+        self._last_l2_state = None
+        self._l2_structure_vector = None
+        self._l2_autonomous_stability = 0.0
+        self._l1_frozen_bits = None
+        self._l1_bias_field = None
