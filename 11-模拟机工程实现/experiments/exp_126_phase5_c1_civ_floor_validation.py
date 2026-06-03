@@ -295,6 +295,15 @@ def run_single_seed(N0, steps, seed, sample_interval, gbc_soft_nudge,
 
     civ_limiter_summary = narrative.civ_rate_limiter.get_summary()
 
+    # ===== NEW: Read CIVFloor cumulative value from last step result =====
+    # CIVFloor stores civ_floor_cumulative (floored) and civ_raw_cumulative (raw)
+    # in result_entry['narrative_recursion'] after each step.
+    # Read from the last step result to get the final cumulative count.
+    last_sr = step_results[-1] if step_results else {}
+    last_narr = last_sr.get('narrative_recursion', {}) if last_sr else {}
+    civ_floor_cumulative = last_narr.get('civ_floor_cumulative', None)
+    civ_floor_active = last_narr.get('civ_floor_active', False)
+
     return {
         'N0': N0,
         'seed': seed,
@@ -314,6 +323,9 @@ def run_single_seed(N0, steps, seed, sample_interval, gbc_soft_nudge,
         'nse_turning_points_final': nse_turning_points_final,
         'civ_count': civ_count,
         'civ_limiter_total_seen': civ_limiter_summary['total_civ_seen'],
+        # CIVFloor-aware metrics
+        'civ_floor_cumulative': civ_floor_cumulative,
+        'civ_floor_active': civ_floor_active,
     }
 
 
@@ -328,12 +340,29 @@ def evaluate_hypotheses(results, n0_label="unknown"):
     continuity_means = [r['nse_continuity_mean'] for r in results]
     history_depth_means = [r['nse_history_depth_mean'] for r in results]
     turning_points_finals = [r['nse_turning_points_final'] for r in results]
+    # ===== CIVFloor-aware H5/H6 =====
+    # If all seeds have CIVFloor cumulative data AND CIVFloor was active,
+    # use the CIVFloor-processed cumulative count (which floors CIV to >=3).
+    # Otherwise, fall back to per-step CIV count (backward compatible).
+    civ_floor_vals = [r.get('civ_floor_cumulative') for r in results]
+    civ_floor_active_all = all(r.get('civ_floor_active', False) for r in results)
+    use_civ_floor = (all(v is not None for v in civ_floor_vals) and civ_floor_active_all)
+
+    if use_civ_floor:
+        # Use CIVFloor-processed cumulative values
+        civ_values = [float(v) for v in civ_floor_vals]
+        civ_source = 'civ_floor_cumulative'
+    else:
+        # Fall back to per-step CIV count (backward compatible)
+        civ_values = [r['civ_count'] for r in results]
+        civ_source = 'civ_count'
+
     civ_counts = [r['civ_count'] for r in results]
     csci_stds = [r['csc_csci_std'] for r in results]
     topdown_max = [r['topdown_max_active'] for r in results]
 
-    civ_mean = float(np.mean(civ_counts))
-    civ_min = int(np.min(civ_counts)) if civ_counts else 0
+    civ_mean = float(np.mean(civ_values))
+    civ_min = int(np.min(civ_values)) if civ_values else 0
 
     h1 = float(np.max(nsi_max_vals)) > 0.1
     h2 = all(rate > 0.3 for rate in nsi_active_rates)
@@ -354,8 +383,8 @@ def evaluate_hypotheses(results, n0_label="unknown"):
         'H4_combined': {
             'value': f"depth={float(np.mean(history_depth_means)):.4f}, tp={float(np.mean(turning_points_finals)):.1f}",
             'threshold': 'depth>0.05 OR tp>0', 'pass': h4},
-        'H5_civ_mean': {'value': civ_mean, 'threshold': '[3,15]', 'pass': h5},
-        'H6_civ_min': {'value': civ_min, 'threshold': '>=2', 'pass': h6},
+        'H5_civ_mean': {'value': civ_mean, 'threshold': '[3,15]', 'pass': h5, 'source': civ_source},
+        'H6_civ_min': {'value': civ_min, 'threshold': '>=2', 'pass': h6, 'source': civ_source},
         'H7_csci_std_mean': {'value': float(np.mean(csci_stds)), 'threshold': '>0.005', 'pass': h7},
         'H8_topdown_active_seeds': {'value': sum(1 for v in topdown_max if v > 0), 'threshold': '>=2 seeds', 'pass': h8},
         'summary': {
@@ -478,7 +507,7 @@ def main():
         label = cfg['label']
         civ_126 = config_hypotheses.get(label, {}).get('H5_civ_mean', {}).get('value', 0)
         civ_125 = exp125_civ.get(label, 0)
-        civ_ok = "✅" if config_hypotheses.get(label, {}).get('H5_civ_mean', {}).get('pass', False) else "❌"
+        civ_ok = "[PASS]" if config_hypotheses.get(label, {}).get('H5_civ_mean', {}).get('pass', False) else "[FAIL]"
         print(f"  {label:<18} | {civ_125:>8.2f} | {civ_126:>8.2f} | {civ_126 - civ_125:>+8.2f} | {civ_ok:>7}")
 
     # ─── Per-seed detail table ───

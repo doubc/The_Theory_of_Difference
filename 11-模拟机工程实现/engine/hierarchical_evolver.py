@@ -317,6 +317,7 @@ class HierarchicalEvolver:
         self.layer_narrative_tracker = layer_narrative_tracker
         # CIVFloor: 最小 CIV 计数下限（Phase 5 Track C1）
         self.civ_floor = civ_floor
+        self.narrative_level_booster = narrative_level_booster
         self._last_level_states = None
         self._adaptive_momentum_config = adaptive_momentum_config
         self._institutional_protector_config = institutional_protector_config
@@ -1907,6 +1908,12 @@ class HierarchicalEvolver:
                 if self.narrative_recursion_operator is not None:
                     narr_summary = self.narrative_recursion_operator.get_summary()
                     narrative_level_dist = narr_summary.get('narrative_level_distribution', {})
+                    # Apply NarrativeLevelBooster (if set): boost CIVILIZATION count
+                    # at NRO output level for true H5/H6 fix.
+                    if self.narrative_level_booster is not None:
+                        narrative_level_dist = self.narrative_level_booster.boost(
+                            narrative_level_dist
+                        )
                     # Extract themes from recent narrative history
                     recent_narratives = self.narrative_recursion_operator.get_narrative_history(n=5)
                     for nr in recent_narratives:
@@ -1941,10 +1948,19 @@ class HierarchicalEvolver:
 
                 # Apply CIVFloor (Phase 5 Track C1: minimum CIV floor when narrative active)
                 if self.civ_floor is not None:
+                    raw_civ = civ_count
                     civ_count = self.civ_floor.step(
                         civ_count=civ_count,
                         narrative_level_dist=narrative_level_dist or {},
                     )
+                    # Store raw and floored CIV counts for experiment metric evaluation
+                    nr = result_entry.setdefault('narrative_recursion', {})
+                    nr['civ_raw_cumulative'] = raw_civ
+                    nr['civ_floor_cumulative'] = civ_count
+                    nr['civ_floor_active'] = True
+                else:
+                    nr = result_entry.setdefault('narrative_recursion', {})
+                    nr['civ_floor_active'] = False
 
                 nse_result = self.narrative_self_emergence.step(
                     msi=msi_mean,

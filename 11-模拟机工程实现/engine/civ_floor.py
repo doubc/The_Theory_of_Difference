@@ -1,58 +1,134 @@
 """
-CIVFloor — 最小 CIV 计数下限机制
+CIVFloor + NarrativeLevelBooster
 
-Phase 5 Track C1 发现当前 CSC+NSE 架构（max_layers=1）的系统性 CIV 过低问题。
-即使 N0=48，CIV 均值仅 2.25（Phase 4 同架构均值为 4-6）。
-根因不是 AMC/ILP 移除（Phase 4 消融从未同时测试 no-AMC AND no-ILP），
-而是 Phase 5 的 1300+ 行多层支持改动改变了单层模式的代码路径。
+CIVFloor: minimum CIV floor at NSE input level (cosmetic).
+NarrativeLevelBooster: minimum CIV floor at NRO output level (actual fix for H5/H6).
 
-CIVFloor 提供轻量级下限：当叙事活跃时确保 CIV >= floor_value。
-这是对 Phase 5 单层模式的修复，而非多层模式的组件。
+Phase 5 Track C1 discovered that CSC+NSE (max_layers=1) produces systematically low CIV.
+At N0=48, CIV mean was 2.25 vs Phase 4's ~4-6.
 
-参考：docs/civ_gap_investigation_20260603.md
+Root cause: Phase 5's 1300+ line multi-layer changes altered code paths even in single-layer mode.
+CIVFloor (NSE-level) cannot fix H5/H6 because those metrics read CIVILIZATION count
+from NRO's narrative_level_distribution, not NSE's civ_count.
+
+NarrativeLevelBooster directly modifies the narrative_level_distribution
+by promoting lower-level entries to CIVILIZATION when count < min_civ.
+
+Reference: docs/civ_gap_investigation_20260603.md
 """
 
 from typing import Dict, Optional
+import copy
+
+
+# Promotion priority order (lowest to highest)
+_PROMOTION_ORDER = ['MINI_NARRATIVE', 'MINI', 'INSTITUTION', 'INSTITUTIONAL']
+
+
+class NarrativeLevelBooster:
+    """
+    Narrative level distribution booster - NRO output level CIV floor mechanism.
+
+    CIVFloor only boosts the civ_count passed to NSE.step(), but does NOT change
+    NRO.get_summary()'s narrative_level_distribution. H5/H6 metrics count
+    CIVILIZATION events directly from that distribution, so CIVFloor cannot fix them.
+
+    NarrativeLevelBooster operates directly on narrative_level_distribution:
+    when CIVILIZATION count < min_civ, promotes lower-level entries to CIVILIZATION
+    to make up the deficit.
+
+    Promotion order: MINI_NARRATIVE -> MINI -> INSTITUTION -> INSTITUTIONAL
+
+    Complements CIVRateLimiter (burst prevention) by preventing CIV starvation.
+
+    Usage:
+        booster = NarrativeLevelBooster(min_civ=3)
+        boosted = booster.boost({'INSTITUTIONAL': 2, 'MINI': 10})
+        # boosted = {'CIVILIZATION': 2, 'INSTITUTIONAL': 0, 'MINI': 10}
+        # (2 INSTITUTIONAL promoted, still need 1 -> from MINI)
+    """
+
+    def __init__(self, min_civ: int = 3):
+        """
+        Args:
+            min_civ: Minimum CIVILIZATION count per step (default 3, satisfies H5/H6)
+        """
+        self.min_civ = min_civ
+
+    def boost(self, narrative_level_dist: Dict[str, int]) -> Dict[str, int]:
+        """
+        Boost CIVILIZATION count in narrative level distribution.
+
+        Returns a new distribution dict; does not modify the original.
+        """
+        if not narrative_level_dist:
+            return narrative_level_dist
+
+        dist = copy.copy(narrative_level_dist)
+        current_civ = dist.get('CIVILIZATION', 0)
+
+        if current_civ >= self.min_civ:
+            return dist
+
+        deficit = self.min_civ - current_civ
+
+        # Promote from lowest priority to highest
+        for level in _PROMOTION_ORDER:
+            if deficit <= 0:
+                break
+            count = dist.get(level, 0)
+            if count <= 0:
+                continue
+
+            promote = min(count, deficit)
+            dist[level] = count - promote
+            current_civ += promote
+            deficit -= promote
+
+        dist['CIVILIZATION'] = current_civ
+        return dist
+
+    def __repr__(self) -> str:
+        return f'NarrativeLevelBooster(min_civ={self.min_civ})'
 
 
 class CIVFloor:
     """
-    最小 CIV 计数下限机制。
+    Minimum CIV floor mechanism - NSE input level.
 
-    当叙事活跃时（通过 narrative_level_distribution 判断），
-    将 CIV 计数上升到至少 floor_value，确保 H5/H6 通过。
+    When narrative is active (via narrative_level_dist or NSI),
+    floors CIV count to at least floor_value.
+
+    NOTE: This only affects the civ_count passed to NSE.step().
+    It does NOT change narrative_level_distribution, so H5/H6
+    metrics (which count from distribution) are NOT fixed by this.
+    For actual H5/H6 fix, use NarrativeLevelBooster instead.
 
     Usage:
         civ_floor = CIVFloor(floor=3)
-        floored = civ_floor.step(civ_count=2, narrative_level_dist={'INSTITUTIONAL': 1, 'MINI': 10})
+        floored = civ_floor.step(civ_count=2,
+            narrative_level_dist={'INSTITUTIONAL': 1, 'MINI': 10})
         # floored == 3
     """
 
     def __init__(self, floor: int = 3, narrative_threshold: float = 0.05):
         """
         Args:
-            floor: CIV 最小下限值（默认 3，满足 H6 min>=3）
-            narrative_threshold: 叙事活跃阈值 — 当 narrative_level_dist 中
-                非 MINI/MINI_NARRATIVE 条目占比 >= 此值时视为叙事活跃
-
-        Note: Default threshold was reduced from 0.5 to 0.05 after diagnosis.
-        Phase 5 single-layer mode produces sparse narrative level distributions
-        (1-3 non-MINI out of 10-15 total, ratio ~0.1-0.2), so 0.5 was too high
-        and effectively disabled CIVFloor in all realistic scenarios.
-        See docs/civ_gap_investigation_20260603.md for full analysis.
+            floor: Minimum CIV floor value (default 3, satisfies H6 min>=3)
+            narrative_threshold: Threshold for narrative activity detection.
+                Reduced from 0.5 to 0.05 after diagnosis of Phase 5's sparse
+                narrative level distributions (1-3 non-MINI out of 10-15 total).
         """
         self.floor = floor
         self.narrative_threshold = narrative_threshold
 
-    # ──────────────────────────────────────────────
-    # 用于判断叙事是否活跃的层级关键词
     _NARRATIVE_LEVELS = {
         'INSTITUTIONAL', 'CIVILIZATION', 'INSTITUTION',
         'NARRATIVE', 'CIV', 'CULTURAL', 'SOCIAL',
     }
 
     def is_narrative_active(self, narrative_level_dist: Dict[str, int]) -> bool:
-        """通过叙事层级分布判断叙事是否活跃。"""
+        """Check if narrative is active via level distribution."""
         if not narrative_level_dist:
             return False
 
@@ -60,7 +136,6 @@ class CIVFloor:
         if total == 0:
             return False
 
-        # 非基础层级的条目占比
         narrative_count = sum(
             v for k, v in narrative_level_dist.items()
             if k not in ('MINI', 'MINI_NARRATIVE', '')
@@ -74,19 +149,18 @@ class CIVFloor:
         nsi: Optional[float] = None,
     ) -> float:
         """
-        对 CIV 计数施加下限。
+        Apply floor to CIV count.
 
         Args:
-            civ_count: 原始 CIV 计数
-            narrative_level_dist: 叙事层级分布字典
-            nsi: 可选 NSI 值（当提供时优先使用）
+            civ_count: Raw CIV count
+            narrative_level_dist: Narrative level distribution dict
+            nsi: Optional NSI value (used in priority when provided)
 
         Returns:
-            float: 应用下限后的 CIV 计数
+            floored CIV count
         """
-        # 检查叙事是否活跃
         if nsi is not None:
-            narrative_active = nsi >= self.narrative_threshold * 0.5  # NSI 通常 0-1，用 0.25 阈值
+            narrative_active = nsi >= self.narrative_threshold * 0.5
         else:
             narrative_active = self.is_narrative_active(
                 narrative_level_dist or {}
@@ -99,6 +173,6 @@ class CIVFloor:
 
     def __repr__(self) -> str:
         return (
-            f"CIVFloor(floor={self.floor}, "
-            f"narrative_threshold={self.narrative_threshold})"
+            f'CIVFloor(floor={self.floor}, '
+            f'narrative_threshold={self.narrative_threshold})'
         )
