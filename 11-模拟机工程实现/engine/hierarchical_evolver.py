@@ -259,7 +259,9 @@ class HierarchicalEvolver:
                  # CIVFloor: 最小 CIV 计数下限（Phase 5 Track C1 CIV gap 修复）
                  civ_floor: Optional[CIVFloor] = None,
                  # NarrativeLevelBooster: NRO输出级CIV保障（Phase 5 Track C2 H5/H6修复）
-                 narrative_level_booster: Optional['NarrativeLevelBooster'] = None):
+                 narrative_level_booster: Optional['NarrativeLevelBooster'] = None,
+                 # Phase 6: Narrative Recursive Closure（NRC, 叙事递归闭环）
+                 narrative_recursive_closure: Optional['NarrativeRecursiveClosure'] = None):
         """
         Args:
             N0: 第 0 层比特数
@@ -331,6 +333,12 @@ class HierarchicalEvolver:
         # 回流事件记录
         self._return_flow_events: List[ReturnFlowEvent] = []
         # P1 fix (2026-05-30): ODI 滑动窗口（用于 p3_active 门控）
+        # Phase 6: Narrative Recursive Closure
+        self.narrative_recursive_closure = narrative_recursive_closure
+        self._nrc_rewritten_space = None
+        self._nrc_basin_width = 0.5
+        self._nrc_basin_floor = 0.1
+        self._nrc_cycle_results: List[Dict] = []
         self._odi_window: List[float] = []
         self._last_odi_value: float = 0.0
         # Phase 2 自维持环路 & 复制模式（可选，未实现时默认为 None）
@@ -556,7 +564,13 @@ class HierarchicalEvolver:
                   self.counterfactual_engine is not None or
                   self.narrative_recursion_operator is not None)
         has_p4 = (self.adaptive_momentum_controller is not None or
-                  self.institutional_layer_protector is not None)
+                  self.institutional_layer_protector is not None or
+                  self.cross_scale_coupling is not None or
+                  self.narrative_self_emergence is not None or
+                  self.civ_floor is not None or
+                  self.narrative_level_booster is not None or
+                  self.layer_narrative_tracker is not None or
+                  self.narrative_recursive_closure is not None)
         if not has_p2 and not has_p3 and not has_p4:
             return None
 
@@ -1868,6 +1882,25 @@ class HierarchicalEvolver:
                             'structure_vector': constraints.direction.float().clone() if
                                 hasattr(constraints, 'direction') and constraints.direction is not None else None,
                         })
+                # Phase 6: Apply NRC rewritten space to modulate level states
+                if self._nrc_rewritten_space is not None:
+                    rw = self._nrc_rewritten_space
+                    # Modulate stability scores by basin width/floor
+                    for lev in level_states:
+                        base_stab = level_states[lev].get('stability_score', 0.0)
+                        # Basin width: wider basin = more room for variation
+                        w_mod = (rw.stability_basin_width - 0.5) * 0.1
+                        # Floor shift: higher floor = higher minimum stability
+                        f_mod = (rw.stability_basin_floor - 0.1) * 0.2
+                        level_states[lev]['stability_score'] = max(0.0, min(1.0,
+                            base_stab * (1.0 + w_mod) + f_mod))
+                    # Modulate ODI with level_transition_weights
+                    for lev, weight in rw.level_transition_weights.items():
+                        if lev in level_states:
+                            base_odi = level_states[lev].get('odi', 0.0)
+                            nrc_mod = (weight - 0.5) * 0.05
+                            level_states[lev]['odi'] = max(0.0, min(1.0,
+                                base_odi + nrc_mod))
                 csc_result = self.cross_scale_coupling.step(
                     level_states=level_states,
                     narrative_labels=narrative_labels,
@@ -1998,6 +2031,88 @@ class HierarchicalEvolver:
                           f"active={nse_result['nsi'].is_nsi_active} "
                           f"continuity={nse_result['continuity'].continuity_score:.3f} "
                           f"stability={nse_result['stability'].stability_score:.3f}")
+            # ── Phase 6: Narrative Recursive Closure ──
+            if self.narrative_recursive_closure is not None:
+                try:
+                    # Get NSE result in dict format (must be defined first)
+                    nsi_dict = {
+                        'nsi': nse_result['nsi'].nsi,
+                        'narrative_stability': nse_result['nsi'].narrative_stability,
+                        'temporal_continuity': nse_result['nsi'].temporal_continuity,
+                        'self_history_depth': nse_result['nsi'].self_history_depth,
+                    }
+                    
+                    # Build level weights from available data
+                    # Use narrative_level_dist if available, otherwise derive from NSE + ODI
+                    if narrative_level_dist and len(narrative_level_dist) > 0:
+                        nld = narrative_level_dist
+                    else:
+                        # Derive a basic distribution from NSE/ODI/CIV data
+                        # Use ODI for INSTITUTIONAL strength (dynamic)
+                        odi_inst = int(50 * self._last_odi_value)
+                        civ_val = result_entry.get('narrative_self_emergence', {}).get('civ_count', 0)
+                        nld = {'MINI': 50}
+                        if odi_inst > 3:
+                            nld['INSTITUTIONAL'] = odi_inst
+                        if civ_val >= 3:
+                            nld['CIVILIZATION'] = int(civ_val * 10)
+                        # Add small variation based on NSI trajectory
+                        nsi_val = nsi_dict.get('nsi', 0.0)
+                        tp = result_entry.get('narrative_self_emergence', {}).get('n_turning_points', 0)
+                        # Turning points cause structural shifts
+                        if tp > 0 and nsi_val > 0.3:
+                            nld['CIVILIZATION'] = max(nld.get('CIVILIZATION', 0), int(15 * nsi_val))
+                    
+                    total_nld = max(sum(nld.values()), 1)
+                    level_weights = {k: v / total_nld for k, v in nld.items()}
+                    
+                    
+                    nrc_result = self.narrative_recursive_closure.process(
+                        step=step,
+                        narrative_level_distribution=nld,
+                        current_level_weights=level_weights,
+                        nsi_result=nsi_dict,
+                        nsi_history_snapshot=None,
+                        current_n_bits=N,
+                        stability_basin_width=self._nrc_basin_width,
+                        stability_basin_floor=self._nrc_basin_floor,
+                    )
+                    
+                    # Store cycle result
+                    self._nrc_cycle_results.append({
+                        'step': step,
+                        'n_events': len(nrc_result['events']),
+                        'cycle_complete': nrc_result['cycle_complete'],
+                        'nrc_cycles': nrc_result['nrc_cycles_completed'],
+                    })
+                    
+                    # Store rewritten space for next iteration
+                    if nrc_result['rewritten_space'] is not None:
+                        self._nrc_rewritten_space = nrc_result['rewritten_space']
+                        self._nrc_basin_width = nrc_result['rewritten_space'].stability_basin_width
+                        self._nrc_basin_floor = nrc_result['rewritten_space'].stability_basin_floor
+                    
+                    # Store in result_entry for metrics
+                    result_entry['narrative_recursive_closure'] = {
+                        'n_events': len(nrc_result['events']),
+                        'cycle_complete': nrc_result['cycle_complete'],
+                        'nrc_cycles_completed': nrc_result['nrc_cycles_completed'],
+                        'r2_triggered': (nrc_result['recursion_output'].r2_triggered
+                                         if nrc_result['recursion_output'] else False),
+                        'events': [str(e) for e in nrc_result['events']],
+                    }
+                    
+                    if self._phase4_verbose:
+                        r2_flag = (nrc_result['recursion_output'].r2_triggered
+                                   if nrc_result['recursion_output'] else False)
+                        print(f"    [NRC] step={step}: events={len(nrc_result['events'])}, "
+                              f"R2={r2_flag}, cycles={nrc_result['nrc_cycles_completed']}")
+                except Exception as nrc_err:
+                    # Don't crash the evolver if NRC fails
+                    print(f"    [NRC] WARNING: step={step}: {nrc_err}")
+                    result_entry['narrative_recursive_closure'] = {
+                        'error': str(nrc_err),
+                    }
             # ── Phase 5 Track B1/B2: LayerNarrativeTracker ──
             if self.layer_narrative_tracker is not None:
                 try:
@@ -2576,9 +2691,24 @@ class HierarchicalEvolver:
                 'nse_summary': (
                     self.narrative_self_emergence.get_summary()
                     if self.narrative_self_emergence else None),
+        'nrc_summary': (
+                    self.narrative_recursive_closure.get_summary()
+                    if self.narrative_recursive_closure else None),
                 'nse_nsi_trend': (
                     self.narrative_self_emergence.get_nsi_trend()
                     if self.narrative_self_emergence else None),
+                # Phase 6: Narrative Recursive Closure
+                'narrative_recursive_closure_active': self.narrative_recursive_closure is not None,
+                'nrc_n_cycles': len(self._nrc_cycle_results),
+                'nrc_r2_events': (
+                    self.narrative_recursive_closure.recursor.get_r2_event_count()
+                    if self.narrative_recursive_closure else 0),
+                'nrc_rewrites': (
+                    self.narrative_recursive_closure.rewriter.get_rewrite_count()
+                    if self.narrative_recursive_closure else 0),
+                'nrc_rewritten_space_active': self._nrc_rewritten_space is not None,
+                'nrc_basin_width': round(self._nrc_basin_width, 4),
+                'nrc_basin_floor': round(self._nrc_basin_floor, 4),
             },
             'gbc_checks': [
                 {
