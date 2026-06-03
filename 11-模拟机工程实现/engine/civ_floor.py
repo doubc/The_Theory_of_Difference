@@ -28,12 +28,18 @@ class CIVFloor:
         # floored == 3
     """
 
-    def __init__(self, floor: int = 3, narrative_threshold: float = 0.5):
+    def __init__(self, floor: int = 3, narrative_threshold: float = 0.05):
         """
         Args:
             floor: CIV 最小下限值（默认 3，满足 H6 min>=3）
             narrative_threshold: 叙事活跃阈值 — 当 narrative_level_dist 中
                 非 MINI/MINI_NARRATIVE 条目占比 >= 此值时视为叙事活跃
+
+        Note: Default threshold was reduced from 0.5 to 0.05 after diagnosis.
+        Phase 5 single-layer mode produces sparse narrative level distributions
+        (1-3 non-MINI out of 10-15 total, ratio ~0.1-0.2), so 0.5 was too high
+        and effectively disabled CIVFloor in all realistic scenarios.
+        See docs/civ_gap_investigation_20260603.md for full analysis.
         """
         self.floor = floor
         self.narrative_threshold = narrative_threshold

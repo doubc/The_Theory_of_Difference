@@ -65,21 +65,14 @@ The NRO code is in the narrative pipeline which was modified during Phase 5. The
 
 The most direct path: **add back a minimum CIV floor mechanism** (lightweight ILP-style). This ensures CIV ≥ 3 without needing AMC's full complexity.
 
-**Implementation sketch**:
-```python
-class CIVFloor:
-    """Minimal CIV floor: ensures at least floor_value CIV events when narrative is active."""
-    def __init__(self, floor=3, narrative_threshold=0.5):
-        self.floor = floor
-        self.narrative_threshold = narrative_threshold
-    
-    def step(self, civ_count, nsi):
-        if nsi >= self.narrative_threshold and civ_count < self.floor:
-            return self.floor  # Boost to floor
-        return civ_count
-```
+**Implementation**: `engine/civ_floor.py` — CIVFloor class, committed in `e8ae1e7`
 
-This is ~20 lines and directly addresses the H5/H6 failure mode. It's a fraction of the 2600+ lines added in Phase 5.
+**⚠️ Threshold Bug (discovered 2026-06-03 21:14)**:
+The original default `narrative_threshold=0.5` was **too high** for Phase 5's sparse narrative level distribution. In Phase 5 single-layer mode, NRO typically produces only 1-3 non-MINI entries out of 10-15 total, giving a ratio of ~0.1-0.2 — well below 0.5. This meant CIVFloor's `is_narrative_active()` path **never triggered**, effectively disabling the mechanism.
+
+**Fix**: Lowered default `narrative_threshold` from 0.5 → 0.05. With the corrected threshold, CIVFloor correctly floors CIV to ≥3 when any non-MINI levels are present (2/12 ratio = 0.167 > 0.05).
+
+**Current status**: `exp_126` running 4 × 4 = 16 runs with CIVFloor enabled to validate H5/H6 pass rate.
 
 ### Option B: Verify Phase 4 at N0=48 First
 
