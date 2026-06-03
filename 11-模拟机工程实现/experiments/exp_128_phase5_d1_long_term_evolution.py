@@ -380,12 +380,11 @@ def run_single_seed(N0, steps, seed, sample_interval, gbc_soft_nudge,
         adaptive_momentum_controller=None,
         institutional_layer_protector=None,
         narrative_level_booster=narrative_level_booster,
-        tracking_callback=tracking_callback,
     )
 
     print(f"    [seed={seed}] Running 5000 steps...", flush=True)
     start = time.time()
-    result = evolver.run()
+    result = evolver.run(tracking_callback=tracking_callback)
     elapsed = time.time() - start
     print(f"    [seed={seed}] Done in {elapsed:.1f}s", flush=True)
 
@@ -642,10 +641,11 @@ def main():
     print("=" * 70)
 
     # Create PerLayerMetricsCollector as tracking callback
-    tracking_callback = PerLayerMetricsCollector(
-        n_layers=3,
-        history_size=500,
-    )
+    tracking_callback = PerLayerMetricsCollector(config={
+        'nsi_rolling_window': 500,
+        'civ_rolling_window': 500,
+        'theme_jaccard_window': 500,
+    })
 
     all_results = []
 
