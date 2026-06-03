@@ -299,7 +299,7 @@ def compute_nsi_stability(nsi_phase, nsi_step_2000):
 
 
 def run_single_seed(N0, steps, seed, sample_interval, gbc_soft_nudge,
-                    csc_config=None, tracking_callback=None):
+                    csc_config=None, tracking_collector=None):
     """Run a single seed with CSC+NSE+NarrativeLevelBooster stack."""
     torch.manual_seed(seed)
     np.random.seed(seed)
@@ -384,7 +384,8 @@ def run_single_seed(N0, steps, seed, sample_interval, gbc_soft_nudge,
 
     print(f"    [seed={seed}] Running 5000 steps...", flush=True)
     start = time.time()
-    result = evolver.run(tracking_callback=tracking_callback)
+    evolver_tracking_cb = tracking_collector.step if tracking_collector is not None else None
+    result = evolver.run(tracking_callback=evolver_tracking_cb)
     elapsed = time.time() - start
     print(f"    [seed={seed}] Done in {elapsed:.1f}s", flush=True)
 
@@ -470,9 +471,9 @@ def run_single_seed(N0, steps, seed, sample_interval, gbc_soft_nudge,
 
     # ─── PerLayerMetrics analysis ───
     multi_layer_active = False
-    if tracking_callback is not None:
+    if tracking_collector is not None:
         try:
-            analysis = tracking_callback.analyze()
+            analysis = tracking_collector.analyze()
             multi_layer_active = analysis.get('layers_tracked', 0) > 0
         except Exception:
             multi_layer_active = False
@@ -641,7 +642,7 @@ def main():
     print("=" * 70)
 
     # Create PerLayerMetricsCollector as tracking callback
-    tracking_callback = PerLayerMetricsCollector(config={
+    tracking_collector = PerLayerMetricsCollector(config={
         'nsi_rolling_window': 500,
         'civ_rolling_window': 500,
         'theme_jaccard_window': 500,
@@ -656,7 +657,7 @@ def main():
                 sample_interval=SAMPLE_INTERVAL,
                 gbc_soft_nudge=GBC_SOFT_NUDGE,
                 csc_config=TRACK_D_CSC_CONFIG,
-                tracking_callback=tracking_callback,
+                tracking_collector=tracking_collector,
             )
             all_results.append(result)
             nsi_phases = result.get('nsi_trajectory', {})
@@ -702,9 +703,9 @@ def main():
     summary = hypotheses['summary']
     print(f"\n  H1-H8 at step 5000 [{summary['n_pass']}/8 pass]:")
     if summary['all_pass']:
-        print(f"    ALL CORE HYPOTHESES PASS ✅")
+        print(f"    ALL CORE HYPOTHESES PASS [OK]")
     else:
-        print(f"    Failed: {', '.join(summary['failed'])} ❌")
+        print(f"    Failed: {', '.join(summary['failed'])} [X]")
 
     d1_summary = hypotheses['track_d1_summary']
     print(f"\n  Track D1 [{d1_summary['n_pass']}/5 pass]:")
@@ -712,7 +713,7 @@ def main():
                  'H38_narrative_maturity', 'H39_nsi_stability',
                  'H_D1_1_multi_layer_persistence']:
         h = hypotheses.get(name, {})
-        status = "✅" if h.get('pass') else "❌"
+        status = "[OK]" if h.get('pass') else "[X]"
         print(f"    {name}: {h.get('value', '?')} {status}")
 
     # NSI trajectory
@@ -786,16 +787,16 @@ def main():
 
     track_d1_n_pass = sum([h36_pass, h37_pass, h38_pass, h39_pass, h_d1_pass])
     print(f"\n  Track D1: {track_d1_n_pass}/5 PASS")
-    print(f"    H36 (long-term stability): {'PASS ✅' if h36_pass else 'FAIL ❌'}")
-    print(f"    H37 (secondary transition): {'PASS ✅' if h37_pass else 'FAIL ❌'}")
-    print(f"    H38 (narrative maturity): {'PASS ✅' if h38_pass else 'FAIL ❌'}")
-    print(f"    H39 (NSI stability): {'PASS ✅' if h39_pass else 'FAIL ❌'}")
-    print(f"    H-D1-1 (multi-layer): {'PASS ✅' if h_d1_pass else 'FAIL ❌'}")
+    print(f"    H36 (long-term stability): {'PASS [OK]' if h36_pass else 'FAIL [X]'}")
+    print(f"    H37 (secondary transition): {'PASS [OK]' if h37_pass else 'FAIL [X]'}")
+    print(f"    H38 (narrative maturity): {'PASS [OK]' if h38_pass else 'FAIL [X]'}")
+    print(f"    H39 (NSI stability): {'PASS [OK]' if h39_pass else 'FAIL [X]'}")
+    print(f"    H-D1-1 (multi-layer): {'PASS [OK]' if h_d1_pass else 'FAIL [X]'}")
 
     core_pass = summary['n_pass']
     print(f"\n  Core H1-H8 at 5000 steps: {core_pass}/8")
     if core_pass >= 6:
-        print(f"    → Long-term architecture STABLE ✅")
+        print(f"    → Long-term architecture STABLE [OK]")
     else:
         print(f"    → Long-term architecture DEGRADED ⚠️")
 
