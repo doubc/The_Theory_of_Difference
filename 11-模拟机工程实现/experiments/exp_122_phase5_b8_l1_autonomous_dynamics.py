@@ -153,15 +153,13 @@ def run_single_seed(seed: int, config: dict) -> dict:
     l0_seal_step = collector._l0_seal_step
     l1_formed_step = collector._l1_formed_step
 
-    # If collector seal_step is not set (e.g. -1), estimate from hierarchy
-    if l0_seal_step <= 0 and l0_sealed:
-        # Use first snapshot step where sealed appears
-        for snap in snapshots:
-            if snap.layer == 0 and snap.sealed:
+    # ⭐ Fix: Always scan snapshots for first sealed snapshot
+    # (collector may not capture l0_sealed if callback runs at different frequency)
+    for snap in snapshots:
+        if snap.layer == 0 and snap.sealed:
+            if l0_seal_step <= 0 or snap.step < l0_seal_step:
                 l0_seal_step = snap.step
                 break
-        if l0_seal_step <= 0:
-            l0_seal_step = snapshots[-1].step if snapshots else 0
 
     # Get active bits from final layer state
     l0_active_final = set(layer_results[0].get('active_bits', [])) if len(layer_results) >= 1 else set()

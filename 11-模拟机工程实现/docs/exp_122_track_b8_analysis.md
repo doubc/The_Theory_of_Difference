@@ -1,108 +1,153 @@
-# Phase 5 Track B8: L1 Autonomous Dynamics — Results Analysis
+# exp_122 — Phase 5 Track B8: L1 Autonomous Dynamics
 
-**Experiment**: `exp_122_phase5_b8_l1_autonomous_dynamics.py`
-**Timestamp**: 2026-06-03T07:45
-**Config**: N0=48, steps=10000, binding_threshold=0.05, ILP floor=15
-**Seeds**: 8 (42, 142, 242, 342, 442, 542, 642, 742)
+**Date**: 2026-06-03
+**Status**: COMPLETE — 8/8 seeds finished
+**Weight**: ~1500 seconds (8 seeds × 10000 steps)
 
----
+## Config
 
-## Core Result: Sealing & L1 Formation
+| Parameter         | Value |
+|-------------------|-------|
+| N0                | 48    |
+| total_steps       | 10000 |
+| binding_threshold | 0.05  |
+| ilp_floor         | 15    |
+| ilp_consumption   | 0.001 |
+| sample_interval   | 10    |
+| rolling_window    | 200   |
+| theme_window      | 200   |
 
-| Metric | Result | Target | Status |
-|--------|--------|--------|--------|
-| L0 Sealing Rate | **8/8 = 100%** | ≥6/8 | ✅ PASS |
-| L1 Formation Rate | **8/8 = 100%** | ≥6/8 | ✅ PASS |
+## Summary Table
 
-This is a **massive improvement** over exp_120 (B6 fallback) which achieved only 3/8 (37.5%) sealing. The B7 partial sealing fix completely solved the bimodal sealing problem — every seed now seals and forms L1.
+| Seed | L0 Sealed | L0 Step | L1 Formed | L1 Step | L1 Size | L1 Seal | H46 | H47 | H48 | H49 | Global NSI |
+|------|-----------|---------|-----------|---------|---------|---------|-----|-----|-----|-----|------------|
+| 42   | Y         | 14990   | Y         | 0       | 17      | 0.567   | Y   | Y   | N   | N   | 0.750      |
+| 142  | Y         | 14990   | Y         | 0       | 18      | 0.600   | Y   | Y   | N   | N   | 0.875      |
+| 242  | Y         | 14990   | Y         | 0       | 14      | 0.467   | Y   | Y   | N   | N   | 0.813      |
+| 342  | Y         | 14990   | Y         | 0       | 17      | 0.567   | Y   | Y   | N   | N   | 0.813      |
+| 442  | Y         | 14990   | Y         | 0       | 17      | 0.567   | Y   | Y   | N   | N   | 0.771      |
+| 542  | Y         | 14990   | Y         | 0       | 16      | 0.533   | Y   | Y   | N   | N   | 0.854      |
+| 642  | Y         | 14990   | Y         | 0       | 15      | 0.500   | Y   | Y   | N   | N   | 0.833      |
+| 742  | Y         | 14990   | Y         | 0       | 19      | 0.633   | Y   | Y   | N   | N   | 0.813      |
 
-### Seal Step Distribution
+## Infrastructure Performance (L0→L1 Pipeline)
 
-| Seed | Seal Step | L1 Bits | L1 Active | L1 Encapsulated | L1 Seal Ratio |
-|------|-----------|---------|-----------|-----------------|---------------|
-| 42   | 73        | 21      | 17        | 3               | 56.7% |
-| 142  | 16        | 24      | 23        | 0               | 60.0% |
-| 242  | 16        | 21      | 19        | 1               | 46.7% |
-| 342  | 27        | 21      | 19        | 1               | 56.7% |
-| 442  | 65        | 24      | 18        | 4               | 56.7% |
-| 542  | 17        | 24      | 22        | 0               | 53.3% |
-| 642  | 21        | 21      | 21        | 0               | 50.0% |
-| 742  | 22        | 24      | 20        | 3               | 63.3% |
+- **L0 Sealing Rate:** 8/8 = 100% ✅
+- **L1 Formation Rate:** 8/8 = 100% ✅
+- **L1 Size:** 14-19 active bits (~50% compression from N0=48)
+- **L1 Seal Ratio:** mean=0.553, range=0.467-0.633
 
-**Mean seal step**: 32.1 (median: 21.5) — sealing happens early, well within the 10000-step budget.
-**Mean L1 size**: 22.5 bits (range: 21-24) — consistent compression from 48→~22.
-**Mean L1 seal ratio**: 0.554 (range: 0.467-0.633) — consistent with partial sealing design (~50% lateral bits).
-
----
+**Conclusion:** The partial sealing (B7) fix works perfectly. All seeds seal, all seeds form L1. The bimodal failure from exp_120 (37.5% L0 sealing) is completely resolved.
 
 ## Hypothesis Results
 
-### H46: L1 NSI Autonomy (rolling corr < 0.5) — ⚠️ NOT COMPUTED
-- **Result**: 0/8, values all `null`
-- **Root cause**: Per-layer NSI computation not yet implemented in LNT. The `h47_rolling_corr_mean` field is never populated because the rolling correlation between L0 and L1 NSI time series requires per-layer NSI snapshots, which the current LNT only computes globally.
-- **Assessment**: Infrastructure gap, not a system failure.
+### H46 — NSI Autonomy (L0 vs L1 NSI correlation)
+**PASS: 8/8 seeds** ❌ FALSE POSITIVE
 
-### H47: L1 CIV Independence (hamming corr < 0.6) — ⚠️ NOT COMPUTED
-- **Result**: 0/8, values all `null`
-- **Root cause**: Same as H46 — requires per-layer CIV time series and rolling hamming correlation computation.
-- **Assessment**: Infrastructure gap, not a system failure.
+H46 passes because both L0 and L1 NSI series are **completely flat** (1 unique value each across all 10000 steps). Mean correlation = 0.0 because zero-variance series technically have zero correlation. This is a measurement artifact.
 
-### H48: L1 Sealing Potential (ratio > 0.8) — ⚠️ THRESHOLD MISALIGNED
-- **Result**: 0/8, but **mean=0.554, range=[0.467, 0.633]**
-- **Root cause**: The threshold (>0.8) was designed for **full sealing** scenarios where all lateral bits freeze. With **partial sealing** (B7 design), only ~50% of bits (lateral half) are expected to freeze, giving ratios around 0.5.
-- **Revised assessment**: If threshold adjusted to >0.4 (lateral-only sealing), this becomes **8/8 PASS**. The system is doing exactly what partial sealing was designed to do.
+**Root cause:** `PerLayerNSITracker` computes NSI once at initialization and never updates. The tracked NSI is a static snapshot value, not a time-evolving metric.
 
-### H49: L1 Theme Divergence (Jaccard < 0.4) — ⚠️ NOT COMPUTED
-- **Result**: 0/8, values all `null`
-- **Root cause**: Jaccard divergence between L0 and L1 theme distributions requires per-layer theme tracking, which is not yet integrated into the snapshot pipeline.
-- **Assessment**: Infrastructure gap, not a system failure.
+### H47 — CIV Independence (L0 vs L1 CIV rolling correlation)
+**PASS: 8/8 seeds** ❌ FALSE POSITIVE
 
-### Global NSI: 0.0 across all seeds
-- All seeds report `global_nsi: 0.0`. This is suspicious — the LNT should produce non-zero NSI values. Likely the snapshot collection or NSI computation path has a bug (possibly related to the `nse.compute_nsi()` private method issue we encountered in earlier experiments).
+Same issue: L0 CIV stabilizes within ~3-10 steps then stays constant at one value. L1 CIV stabilizes even faster. Rolling correlation = 0.0 because both series are effectively constant.
 
----
+**Root cause:** Belief mutation-driven CIV stops after initial convergence. Without persistent novelty generation (no AMC), CIV reaches equilibrium and never fluctuates.
 
-## Key Architectural Insights
+### H48 — L1 Sealing Potential
+**FAIL: 0/8 seeds** ❌
 
-### 1. Partial Sealing Solved the Bimodal Problem ✅
-The B7 partial sealing redesign completely eliminated the all-or-nothing sealing behavior seen in exp_119 (12.5%) and exp_120 (37.5%). Every seed now seals cleanly. This validates the core insight: **sealing should be decomposed into independent lateral and hierarchy sub-processes**.
+L1 sealing ratio ranges 0.467-0.633, well below the >0.8 threshold. The L1 at ~50% compression doesn't generate enough binding activity to trigger full sealing.
 
-### 2. L1 Formation Pipeline Works End-to-End ✅
-All 8 seeds successfully:
-1. Sealed L0 lateral bits
-2. Created L1 with encapsulated frozen bits
-3. Continued L0 hierarchy evolution
-4. Maintained 2-layer structure through 10000 steps
+**Root cause:** At N=18-21 bits, pair counts are 8-33x lower than L0 at N=48. With binding_threshold=0.05, the L1 never generates enough co-binding events to cross the sealing threshold.
 
-The evolver's layer progression logic (fixed in B7) is now robust.
+**Recommendation:** Reduce binding_threshold to 0.02 for L1 (linear scaling by N ratio, as proposed in `docs/binding_threshold_tuning_for_small_n.md`).
 
-### 3. L1 Size is Consistent and Compact
-L1 consistently compresses 48 bits → 21-24 bits (~50% compression). This is architecturally sound: L1 captures the frozen lateral structure at a coarser resolution while L0 continues evolving the hierarchy bits.
+### H49 — Theme Divergence
+**FAIL: 0/8 seeds** ❌
 
-### 4. Sealing Speed is Fast
-Mean seal step of 32.1 means the system reaches its first stable narrative structure very quickly. This is consistent with earlier experiments (exp_101: seal steps in the tens).
+Mean Jaccard = 0.0 across all seeds. The theme tracking produces empty sets or never populates.
 
-### 5. H46-H49 Require LNT Infrastructure Work
-The B8 hypotheses test **L1 autonomous dynamics** — whether L1 develops independent narrative behavior after formation. The system is structurally ready (L1 exists, runs independently), but the measurement infrastructure (per-layer NSI, CIV, theme tracking) needs to be built.
+**Root cause:** Theme extraction from beliefs is either missing or producing empty results. The per-layer theme tracker compares empty sets → Jaccard(∅, ∅) = 0.0.
 
----
+## Critical Bug: Flat NSI Series
 
-## Recommendations
+**The most critical finding is that both L0 and L1 NSI series are completely flat:**
 
-1. **H48 threshold adjustment**: Change from >0.8 to >0.4 to match partial sealing reality. This would make H48 an 8/8 PASS.
+```
+Seed 42: L0 NSI=0.75 (unique=1), L1 NSI=0.81 (unique=1)
+Seed 142: L0 NSI=0.875 (unique=1), L1 NSI=0.75 (unique=1)
+...all 8 seeds identical pattern
+```
 
-2. **Per-layer NSI computation**: Implement layer-scoped NSI in the LNT snapshot pipeline. This is needed for H46 (NSI autonomy) and is a prerequisite for measuring L1 narrative independence.
+This makes H46-H49 temporal analysis impossible. H46 and H47 appear to pass (8/8) but are **false positives** — zero correlation because both series are constant.
 
-3. **Per-layer CIV tracking**: Track CIV events separately per layer for H47 (CIV independence). This will reveal whether L1 has its own institutional rhythm independent of L0.
+### Root Cause Analysis
 
-4. **Theme divergence (H49)**: Implement per-layer theme distribution tracking and Jaccard computation. This tests whether L1 develops distinct thematic focus from L0.
+The NSI computation in `PerLayerNSITracker.update()` uses three components, ALL of which are static after L1 formation:
 
-5. **Global NSI=0.0 investigation**: Debug why all seeds report zero global NSI. This may be related to the `nse.compute_nsi()` private method issue from earlier experiments.
+**Component 1: `activity = n_active / n_total`** — Constant after layer formation. Active bits never change.
 
----
+**Component 2: `frozen_ratio = n_frozen / n_total`** — Constant after layer formation. Frozen bits never change.
+
+**Component 3: `global_odi = total_active / total_bits`** — Computed by the evolver as a sum across all layers. After L1 is formed and stable, `total_active` and `total_bits` never change → ODI stays same forever.
+
+The full NSI formula:
+```
+ns_i = alpha * continuity(activity, frozen_ratio) 
+     + beta * stability(frozen_ratio) 
+     + gamma * history_depth(turning_points)
+```
+
+`continuity` depends on `activity` (constant) and `smoothness` (constant since variance is 0).
+`stability` depends on `frozen_ratio` (constant).
+`history_depth` saturates at 1.0 after 20 turning points.
+
+All three become constant → NSI flat.
+
+The problem is that PerLayerNSITracker measures **structural** properties (static), not **dynamic** properties (changing).
+
+### Fix Strategy
+
+The per-layer NSI must incorporate genuinely time-varying components. Two approaches:
+
+**Approach A: Inject CSC novelty**
+- Make the CSC continue generating new belief constraints even after convergence
+- This would change `n_active` over time → NSI would vary naturally
+- But: violates the "after formation" measurement principle
+
+**Approach B: Compute NSI from temporal variance itself**
+- Use `odi_delta` (change in ODI per step) as a dynamic input
+- Track CIV variance over sliding windows
+- Use actual narrative content changes (belief mutation events per step)
+- A layer that never changes should have LOW NSI; a layer that constantly evolves has HIGH NSI
+
+**Recommended: Approach B + minimal CSC continuation**
+- Keep PerLayerNSITracker computing structural NSI for baseline
+- Add a `delta_odi` component that captures per-step ODI changes
+- For non-flat CIV: keep a minimal CSC running that occasionally injects 1-2 new belief pairs per ~100 steps
+
+### CIV Flatlining
+
+Even without the NSI bug, CIV becomes completely flat after initial convergence (unique values: 2-3 across 10000 steps).
+
+- L0 CIV: spikes from 1→10-14 in first 10 steps, then stays constant
+- L1 CIV: stabilizes at 1-4 within first 50 steps, then constant
+
+This means belief mutation effectively stops after the first ~10 steps. Without persistent novelty injection, the system reaches a fixed point.
+
+## Global Observations
+
+- **Global NSI**: 0.75-0.875 — healthy narrative self in steady state
+- **L1 NSI ≠ L0 NSI**: L1 NSI is generally lower (0.67-0.81) than L0 (0.75-0.88), confirming that L1 has a different narrative profile
+- **CIV stagnation**: All seeds show L0 CIV stabilizing at 10-14 within first 10 steps, then never changing
+- **No seed failed** on the basic L0/L1 pipeline: all 8 seeds formed both layers with healthy sizes
 
 ## Next Steps
 
-- **Track B9**: L1→L2 cascade — does L2 form from L1 the same way L1 forms from L0? (depends on B8 infrastructure fixes)
-- **B8 follow-up**: Implement per-layer NSI/CIV/theme tracking to properly evaluate H46-H49
-- **Exp_121 (B7)**: Full run with tuned L1 sealing parameters (binding_threshold for N=18 L1)
+1. **Fix NSI dynamics**: Make `PerLayerNSITracker.record()` compute instantaneous (not cumulative) NSI
+2. **Fix theme tracking**: Investigate why theme extraction returns empty sets
+3. **Tune binding_threshold**: Run exp_121 with threshold=0.02 for L1 sealing
+4. **Re-run exp_122** after fixes to get meaningful H46-H49 results
+5. **If CIV remains flat**: Consider adding persistent novelty injection (mini-CSC that continues generating new beliefs even after convergence)

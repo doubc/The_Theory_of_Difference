@@ -108,3 +108,15 @@ when the threshold is reachable. The 100% requirement was the blocker.
   - L1 sealing ratio = total_unique_active / threshold for H48
 - **Status**: Script imports clean, ready to run
 - **Git**: pending commit
+
+#### 2026-06-03 09:14 — Heartbeat: exp_122 bug fixes + re-launch with per-layer metrics
+
+- **Bug fixes** in exp_122 script:
+  - Fixed undefined variables: l0_seal_step, l1_formed_step, snapshots (referenced but never defined)
+  - Fixed NSI computation: was using nonexistent odi_final/msi_final/turning_points from evolver return dict
+  - Used collector internal state + fallback snapshot inspection instead
+- **Denser sampling**: Added sample_interval=10 (was default 500, now ~1000 data points per layer)
+- **exp_122 re-launched**: 8 seeds x 10000 steps, PID 5428, background
+  - Seed 42: sealed at step 73, L1 formed with 21 bits
+  - Estimated 1-2 hours runtime
+- **Pending**: H46-H49 analysis after completion; exp_121 re-run with binding_threshold=0.02; Track B9

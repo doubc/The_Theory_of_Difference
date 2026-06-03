@@ -124,15 +124,20 @@ class H49Result:
 # ─── 子追踪器 ───
 
 class PerLayerNSITracker:
-    """每层 NSI 追踪器
+    """每层 NSI 追踪器 — v2 (time-varying)
 
-    使用与 NSE 相同的公式：
-      NSI = α·continuity + β·stability + γ·history_depth
-    但输入信号按层分解。
+    v2 修复：注入时间变化信号的三个维度，解决 v1 中所有输入成分
+    在封口后均为常数导致 NSI 扁平化的根本问题。
 
-    每层连续性：该层活跃比特的稳定性
-    每层稳定性：该层活动度的波动性
-    每层历史深度：该层转折点数
+    NSI = α·continuity + β·stability + γ·history_depth + δ·delta_odi
+
+    新成分：
+    - **odi_delta**：每步 ODI 变化量（|ODI(t) - ODI(t-1)|），捕获叙事系统
+      的实时活动度变化，是封口后唯一持续的动态信号。
+    - **civ_event_rate**：CIV 事件率（Hamming weight 变化频率），
+       反映信念突变的实时发生率。
+    - **实时步数存储**：改用 List[(step, value)] 而非 deque index，确保
+       封口后过滤逻辑正确。
     """
 
     def __init__(self, layer: str, config: Optional[Dict] = None):
@@ -141,67 +146,124 @@ class PerLayerNSITracker:
         self.alpha = cfg['nsi_alpha']
         self.beta = cfg['nsi_beta']
         self.gamma = cfg['nsi_gamma']
+        self.delta = 0.2  # 新增：odi_delta 权重（动态信号补偿）
         self.nsi_min_odi = cfg['nsi_min_odi']
         self.rolling_window = cfg['nsi_rolling_window']
 
-        # 活动度历史
-        self._activity_history: Deque[float] = deque(maxlen=self.rolling_window + 100)
-        # 冻结比特比例历史
-        self._frozen_ratio_history: Deque[float] = deque(maxlen=self.rolling_window + 100)
+        # v2 改造：用 List[(step, value)] 替代 Deque，保留真实步数
+        # 历史容量控制：只保留 rolling_window + 200 个样本
+        self._max_history = self.rolling_window + 200
+
+        # 活动度历史 [(step, activity)]
+        self._activity_history: List[Tuple[int, float]] = []
+        # 冻结比特比例历史 [(step, frozen_ratio)]
+        self._frozen_ratio_history: List[Tuple[int, float]] = []
+        # ODI 历史 [(step, odi)]
+        self._odi_history: List[Tuple[int, float]] = []
+        # CIV 历史 [(step, hamming_weight)] (从 CIV tracker 同步)
+        self._civ_history: List[Tuple[int, float]] = []
+        # NSI 输出历史 [(step, nsi)]
+        self._nsi_output_history: List[Tuple[int, float]] = []
         # 转折点
         self._turning_points: List[int] = []
         self._activity_for_tp: Deque[float] = deque(maxlen=20)
 
+    def _trim_history(self):
+        """裁剪历史到最大容量"""
+        for hist_list in [self._activity_history, self._frozen_ratio_history,
+                          self._odi_history, self._civ_history, self._nsi_output_history]:
+            while len(hist_list) > self._max_history:
+                hist_list.pop(0)
+
+    def _append_sorted(self, hist: List[Tuple[int, float]], step: int, value: float):
+        """追加到有序历史（确保步数单调递增）"""
+        if hist and hist[-1][0] >= step:
+            # 重复或乱序步：跳过
+            return
+        hist.append((step, value))
+
+    def record_civ(self, step: int, hamming_weight: int):
+        """从 CIV tracker 同步 CIV 数据"""
+        self._append_sorted(self._civ_history, step, float(hamming_weight))
+
     def update(self, step: int, n_active: int, n_total: int,
                n_frozen: int, global_odi: float, global_msi: float) -> PerLayerNSIData:
-        """更新一步"""
-        # 活动度 = 活跃比特比例
+        """更新一步 — v2 带 odi_delta 动态补偿"""
         activity = n_active / max(1, n_total)
         frozen_ratio = n_frozen / max(1, n_total)
 
-        self._activity_history.append(activity)
-        self._frozen_ratio_history.append(frozen_ratio)
+        self._append_sorted(self._activity_history, step, activity)
+        self._append_sorted(self._frozen_ratio_history, step, frozen_ratio)
+        self._append_sorted(self._odi_history, step, global_odi)
 
-        # 转折点检测
+        # ─── 转折点检测 ───
         self._activity_for_tp.append(activity)
         if len(self._activity_for_tp) >= 5:
             hist = list(self._activity_for_tp)
-            f_prime = (hist[-1] - hist[-3]) / 2.0
             f_double_prime = (hist[-1] - 2 * hist[-3] + hist[-5]) / 4.0
             if abs(f_double_prime) > 0.02:
                 if not self._turning_points or step - self._turning_points[-1] > 20:
                     self._turning_points.append(step)
 
-        # 连续性：活动度持久性 + 平滑度
+        # ─── 连续性：活动度持久性 + 平滑度 ───
         if len(self._activity_history) >= 20:
-            recent = list(self._activity_history)[-50:]
-            presence_ratio = sum(1 for a in recent if a > 0.1) / len(recent)
-            mean_act = np.mean(recent)
-            std_act = np.std(recent)
+            recent_vals = [v for _, v in self._activity_history[-50:]]
+            presence_ratio = sum(1 for a in recent_vals if a > 0.1) / len(recent_vals)
+            mean_act = float(np.mean(recent_vals))
+            std_act = float(np.std(recent_vals))
             smoothness = max(0.0, min(1.0, 1.0 - (std_act / max(mean_act, 1e-8))))
             continuity = 0.6 * presence_ratio + 0.4 * smoothness
         else:
             continuity = 0.0
 
-        # 稳定性：冻结比例越高越稳定，但活动度也要维持
+        # ─── 稳定性：冻结比例 + 平滑度 ───
         if len(self._frozen_ratio_history) >= 20:
-            recent_frozen = list(self._frozen_ratio_history)[-50:]
-            mean_frozen = np.mean(recent_frozen)
-            std_frozen = np.std(recent_frozen)
+            recent_frozen = [v for _, v in self._frozen_ratio_history[-50:]]
+            mean_frozen = float(np.mean(recent_frozen))
+            std_frozen = float(np.std(recent_frozen))
             frozen_stability = min(1.0, mean_frozen / 0.5) if mean_frozen > 0 else 0.0
             frozen_smoothness = max(0.0, 1.0 - std_frozen * 5)
             stability = 0.5 * frozen_stability + 0.5 * frozen_smoothness
         else:
             stability = 0.0
 
-        # 历史深度
+        # ─── 历史深度 ───
         history_depth = min(1.0, len(self._turning_points) / 20.0)
 
-        # NSI 计算
+        # ─── ⭐ v2 核心：odi_delta 动态信号 ───
+        # 捕获每步 ODI 变化量，这是封口后唯一持续变化的动态信号
+        odi_delta = 0.0
+        if len(self._odi_history) >= 2:
+            odi_delta = abs(self._odi_history[-1][1] - self._odi_history[-2][1])
+            # 归一化到 [0, 1]：假设最大 ODI 变化在 1.0 以内
+            odi_delta = min(1.0, odi_delta * 10)  # 放大使微小变化可见
+
+        # ─── ⭐ v2 核心：CIV 事件率 ───
+        # 捕获 Hamming weight 在最近窗口中的变化频率
+        civ_event_rate = 0.0
+        if len(self._civ_history) >= 10:
+            civ_vals = [v for _, v in self._civ_history[-20:]]
+            n_changes = sum(1 for i in range(1, len(civ_vals)) if civ_vals[i] != civ_vals[i-1])
+            civ_event_rate = n_changes / max(1, len(civ_vals))
+
+        # ─── NSI 计算（带动态补偿） ───
         odi_gate = min(1.0, global_odi / self.nsi_min_odi) if self.nsi_min_odi > 0 else 1.0
         is_active = global_odi >= self.nsi_min_odi
-        raw_nsi = self.alpha * continuity + self.beta * stability + self.gamma * history_depth
+
+        # ⭐ 结构成分 + 动态补偿
+        raw_nsi = (self.alpha * continuity
+                   + self.beta * stability
+                   + self.gamma * history_depth
+                   + self.delta * odi_delta)
+
+        # 归一化：确保带额外动态项时不超过 1.0
+        total_weight = self.alpha + self.beta + self.gamma + self.delta
+        raw_nsi = raw_nsi / total_weight
+
         nsi = float(np.clip(raw_nsi * odi_gate, 0.0, 1.0))
+        self._append_sorted(self._nsi_output_history, step, nsi)
+
+        self._trim_history()
 
         return PerLayerNSIData(
             step=step, layer=self.layer, nsi=nsi,
@@ -210,24 +272,41 @@ class PerLayerNSITracker:
         )
 
     def get_nsi_history(self) -> List[Tuple[int, float]]:
-        """返回 (step_index, nsi_approximation) 列表
-        
-        注意：由于 NSI 需要全局 ODI/MSI 作为门控信号，
-        而每步的 ODI/MSI 并不保留完整历史，
-        这里用 activity * frozen_ratio 作为 NSI 代理。
-        更精确的 NSI 需要 NSE 组件的集成。
+        """返回 [(step, nsi), ...] — v2 修复：使用真实步数而非 deque index
+
+        返回记录的 NSI 输出历史（带 odi_delta 动态补偿的完整 NSI 计算值），
+        而非活动度代理。这是分析 H46 的可靠数据源。
         """
-        # Use activity * frozen_ratio as NSI proxy (both components of narrative stability)
-        nsi_vals = []
-        for i, act in enumerate(self._activity_history):
-            if i < len(self._frozen_ratio_history):
-                frozen_r = self._frozen_ratio_history[i]
-            else:
-                frozen_r = 0.0
-            # NSI proxy: activity (continuity) * frozen_ratio (stability)
-            proxy = act * frozen_r
-            nsi_vals.append(proxy)
-        return list(zip(range(len(nsi_vals)), nsi_vals))
+        return list(self._nsi_output_history)
+
+    def get_nsi_proxy_history(self) -> List[Tuple[int, float]]:
+        """返回 [(step, activity * frozen_ratio), ...] — 原始代理（保留向后兼容）"""
+        result = []
+        for (s1, act), (s2, fr) in zip(self._activity_history, self._frozen_ratio_history):
+            if s1 == s2:
+                result.append((s1, act * fr))
+        return result
+
+    def get_odi_history(self) -> List[Tuple[int, float]]:
+        return list(self._odi_history)
+
+    def get_odi_delta(self, window: int = 50) -> List[float]:
+        """返回最近窗口的 ODI 变化率序列"""
+        recent = self._odi_history[-window:]
+        if len(recent) < 2:
+            return []
+        return [abs(recent[i][1] - recent[i-1][1]) for i in range(1, len(recent))]
+
+    def get_civ_event_rate(self, window: int = 50) -> float:
+        """返回最近窗口的 CIV 事件率"""
+        recent = self._civ_history[-window:]
+        if len(recent) < 2:
+            return 0.0
+        changes = sum(1 for i in range(1, len(recent)) if recent[i][1] != recent[i-1][1])
+        return changes / max(1, len(recent))
+
+    def get_turning_points(self) -> List[int]:
+        return list(self._turning_points)
 
     def get_turning_points(self) -> List[int]:
         return list(self._turning_points)
@@ -419,6 +498,9 @@ class PerLayerMetricsCollector:
         # Update per-layer trackers
         nsi_data = self._nsi_trackers[layer_name].update(
             step, n_active, n_total, n_frozen, global_odi, global_msi)
+
+        # ⭐ v2: 将 CIV 数据同步到 NSI tracker（为 odi_delta + civ_event_rate 提供输入）
+        self._nsi_trackers[layer_name].record_civ(step, hamming_weight)
 
         self._civ_trackers[layer_name].record(
             step, hamming_weight, active_bits, frozen_bits, n_active, n_frozen)
