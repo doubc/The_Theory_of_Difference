@@ -1,4 +1,4 @@
-﻿"""
+"""
 engine/hierarchical_evolver.py — 跨层级演化器
 
 将 SpatialLongRangeEvolver 与 HierarchyManager 整合，
@@ -44,6 +44,7 @@ from engine.adaptive_momentum_controller import AdaptiveMomentumController, DEFA
 from engine.institutional_layer_protector import InstitutionalLayerProtector, DEFAULT_INSTITUTIONAL_PROTECTOR_CONFIG
 from engine.cross_scale_coupling import CrossScaleCoupling, DEFAULT_CROSS_SCALE_COUPLING_CONFIG
 from engine.narrative_self_emergence import NarrativeSelfEmergence, DEFAULT_NARRATIVE_SELF_EMERGENCE_CONFIG
+from engine.civ_floor import CIVFloor
 
 
 # ──────────────────────────────────────────────────────────
@@ -254,7 +255,9 @@ class HierarchicalEvolver:
                  narrative_self_emergence_config: Optional[Dict] = None,
                  phase4_verbose: bool = False,
                  # Phase 5 Track B1 组件
-                 layer_narrative_tracker: Optional['LayerNarrativeTracker'] = None):
+                 layer_narrative_tracker: Optional['LayerNarrativeTracker'] = None,
+                 # CIVFloor: 最小 CIV 计数下限（Phase 5 Track C1 CIV gap 修复）
+                 civ_floor: Optional[CIVFloor] = None):
         """
         Args:
             N0: 第 0 层比特数
@@ -312,6 +315,8 @@ class HierarchicalEvolver:
         self.narrative_self_emergence = narrative_self_emergence
         # Phase 5 Track B1 组件
         self.layer_narrative_tracker = layer_narrative_tracker
+        # CIVFloor: 最小 CIV 计数下限（Phase 5 Track C1）
+        self.civ_floor = civ_floor
         self._last_level_states = None
         self._adaptive_momentum_config = adaptive_momentum_config
         self._institutional_protector_config = institutional_protector_config
@@ -1933,6 +1938,13 @@ class HierarchicalEvolver:
                 layer_dist = {}
                 if 'level_counts' in result_entry:
                     layer_dist = result_entry['level_counts']
+
+                # Apply CIVFloor (Phase 5 Track C1: minimum CIV floor when narrative active)
+                if self.civ_floor is not None:
+                    civ_count = self.civ_floor.step(
+                        civ_count=civ_count,
+                        narrative_level_dist=narrative_level_dist or {},
+                    )
 
                 nse_result = self.narrative_self_emergence.step(
                     msi=msi_mean,
