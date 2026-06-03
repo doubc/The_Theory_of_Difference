@@ -257,7 +257,9 @@ class HierarchicalEvolver:
                  # Phase 5 Track B1 组件
                  layer_narrative_tracker: Optional['LayerNarrativeTracker'] = None,
                  # CIVFloor: 最小 CIV 计数下限（Phase 5 Track C1 CIV gap 修复）
-                 civ_floor: Optional[CIVFloor] = None):
+                 civ_floor: Optional[CIVFloor] = None,
+                 # NarrativeLevelBooster: NRO输出级CIV保障（Phase 5 Track C2 H5/H6修复）
+                 narrative_level_booster: Optional['NarrativeLevelBooster'] = None):
         """
         Args:
             N0: 第 0 层比特数
@@ -1974,9 +1976,12 @@ class HierarchicalEvolver:
                     civ=civ_count if civ_count > 0 else None,
                     gbc_coherence=gbc_coherence_val,
                 )
+                # Store boosted CIV count and distribution for Track C2 diagnostics
                 result_entry['narrative_self_emergence'] = {
                     'nsi': round(nse_result['nsi'].nsi, 4),
                     'nsi_active': nse_result['nsi'].is_nsi_active,
+                    'civ_count': int(civ_count),
+                    'narrative_level_distribution': narrative_level_dist.copy(),
                     'temporal_continuity': round(nse_result['nsi'].temporal_continuity, 4),
                     'narrative_stability': round(nse_result['nsi'].narrative_stability, 4),
                     'self_history_depth': round(nse_result['nsi'].self_history_depth, 4),

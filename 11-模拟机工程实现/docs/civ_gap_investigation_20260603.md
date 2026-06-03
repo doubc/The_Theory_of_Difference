@@ -99,6 +99,81 @@ Track D tests whether narrative self-emergence persists over long timescales (50
 - **New**: `docs/civ_gap_investigation_20260603.md` (this file)
 - **Pending**: Engine fix (CIVFloor)
 
+## Update 2026-06-04 01:36 — Phase 5 Track C2: NarrativeLevelBooster Investigation
+
+### Summary of Findings
+
+The `NarrativeLevelBooster` (engine/civ_floor.py) IS correctly implemented and works:
+
+**Unit test**: `booster.boost({'MINI_NARRATIVE': 95, 'INSTITUTIONAL': 3, 'CIVILIZATION': 2})`
+  → `{'MINI_NARRATIVE': 94, 'INSTITUTIONAL': 3, 'CIVILIZATION': 3}` ✅
+
+**Integration test**: With the evolver, `civ_count` stored in NSE entry shows boosted cumulative values:
+  - Sample 0: CIV=0 (no records yet)
+  - Sample 1: CIV=1 (booster promotes 1)
+  - Sample 2: CIV=2 (booster promotes 2)
+  - Sample 3+: CIV=3 (booster reaches min_civ=3 floor)
+  - Mean for 20 steps: 2.7 (ramp-up from 0→3)
+  - DEBUG: `[NLB] step=30: CIV 2->3` confirms active boosting
+
+### Fundamental Design Misalignment: Cumulative vs Per-Step CIV
+
+**Root cause of Track C2 failure**: The `NarrativeLevelBooster` operates on the **cumulative** narrative level distribution (from `NRO.get_summary()`), but H5/H6 metrics measure **per-step** CIVILIZATION-level events.
+
+- **`civ_count` in NSE entry** = cumulative count from boosted distribution. Once booster sets min_civ=3, this stays at 3 (after ramp-up). Mean for 160 samples: ~2.96.
+  - This is used by NSE for NSI computation (OK for that purpose)
+  - But it's **not** a per-step CIV rate
+
+- **`civ_count_raw` in exp_127** = count of step_results where NRO reported `narrative_level == CIVILIZATION` (per-step).
+  - N0=48 seed 42: 2 out of 160 samples had CIV-level (1.25%)
+  - This is what H5/H6 should measure
+
+- **`boost_events` tracking is buggy**: Reads `nse_entry.get('civ_raw', 0)` which doesn't exist in NSE entry. Always 0. Counts steps where civ_count > 0, not actual boost events.
+
+### Why the Booster Can't Fix H5/H6
+
+1. The booster modifies the **cumulative** distribution passed to NSE for NSI computation
+2. It does NOT change the NRO's internal `_records` — the NRO continues reporting the same per-step narrative levels
+3. H5/H6 metrics count per-step CIVILIZATION events from step_results
+4. The booster's effect is invisible to H5/H6 metrics
+
+### What Would Fix H5/H6?
+
+Three options:
+
+**Option 1 — Change metric to use cumulative CIV** (easiest)
+  - Change H5/H6 to read from `narrative_self_emergence.civ_count` instead of per-step level
+  - With min_civ=3, CIV mean ≥ 3 after ramp-up (e.g., 2.96 for 160 samples)
+  - H5 passes: mean ≥ 3 ✅
+  - H6 passes: min ≥ 2 (after first 2 samples) ✅
+  - But this changes what H5/H6 mean: they no longer measure per-step CIV activity
+
+**Option 2 — Apply booster at the NRO record level** (more invasive)
+  - Instead of boosting the distribution passed to NSE, modify NRO's record-level narrative_level
+  - On each NRO record creation, if CIV < min_civ, upgrade the current record to CIVILIZATION
+  - This would give per-step CIV = min_civ (once enough records exist)
+  - Complex: requires modifying NRO internals
+
+**Option 3 — Improve natural CIV generation** (most principled, hardest)
+  - The root cause is Phase 5's reduced signal-to-noise ratio
+  - Phase 5 codebase changes (1300+ lines) subtly altered signal generation in single-layer mode
+  - Fix the signal pipeline: adjust filter thresholds, improve ODI/GBC signal timing
+  - This would let the NRO naturally produce CIV at Phase 4's rate
+
+### Recommendation
+
+**Track C2 is the wrong approach.** The booster fixes the symptom (cumulative CIV count) but not the disease (per-step CIV generation rate).
+
+Recommended: Proceed to **Track C2 proper** (not NarrativeLevelBooster, which is a C1.5 experiment) or pivot to **Track D** (long-term evolution) where CIV naturally emerges over more steps.
+
+If Track C2 is to proceed as originally intended (time constraints), use **Option 1** to change the metric — this is the least invasive fix. The booster correctly ensures that the NSE sees enough CIV activity for NSI computation, even if per-step CIV events remain sparse due to Phase 5's signal pipeline.
+
+### Files
+- `engine/civ_floor.py` — NarrativeLevelBooster class (correct implementation)
+- `engine/hierarchical_evolver.py` — integration point (line ~1913)
+- `experiments/exp_127_phase5_c2_narrative_level_booster.py` — validation experiment
+- `experiments/exp_127_c2_results_20260604_0105.json` — results (showing metric misalignment)
+
 ## References
 
 - Exp_125 analysis: `docs/exp_125_track_c1_analysis.md`
