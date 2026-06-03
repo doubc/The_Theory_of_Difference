@@ -54,6 +54,10 @@ from engine.cross_scale_coupling import (
 from engine.narrative_self_emergence import (
     NarrativeSelfEmergence, DEFAULT_NARRATIVE_SELF_EMERGENCE_CONFIG,
 )
+from engine.per_layer_metrics import (
+    PerLayerMetricsCollector, DEFAULT_PER_LAYER_METRICS_CONFIG,
+    H46Result, H47Result, H48Result, H49Result,
+)
 
 
 # ─── 8 baseline seeds ───
@@ -128,31 +132,13 @@ def run_single_seed(seed: int, config: dict) -> dict:
     ilp_config['max_consumption_rate_per_step'] = config['ilp_consumption_rate']
     constraints.institutional_protector = InstitutionalLayerProtector(ilp_config)
 
-    # Initialize tracking components
-    lnt_config = DEFAULT_LAYER_NARRATIVE_CONFIG.copy()
-    lnt = LayerNarrativeTracker(lnt_config)
+    # Initialize per-layer metrics collector for H46-H49
+    plm_config = DEFAULT_PER_LAYER_METRICS_CONFIG.copy()
+    collector = PerLayerMetricsCollector(plm_config)
 
-    # Initialize NSE for global NSI
-    nse_config = DEFAULT_NARRATIVE_SELF_EMERGENCE_CONFIG.copy()
-    nse = NarrativeSelfEmergence(nse_config)
-
-    # Storage for post-hoc analysis
-    l0_hamming_history: List[int] = []
-    l1_hamming_history: List[int] = []
-    l0_active_history: List[set] = []
-    l1_active_history: List[set] = []
-    l0_nsi_history: List[float] = []
-    l1_nsi_history: List[float] = []
-    l0_seal_step: int = -1
-    l1_formed_step: int = -1
-
-    # Run with step-level monitoring
+    # Run with step-level monitoring via tracking callback
     start_time = time.time()
-
-    # We need to run layer by layer to capture per-step data
-    # The evolver.run() runs all layers; we'll intercept via snapshots
-    result = evolver.run(verbose=False)
-
+    result = evolver.run(verbose=False, tracking_callback=collector.step)
     elapsed = time.time() - start_time
 
     # Extract layer results
@@ -160,66 +146,16 @@ def run_single_seed(seed: int, config: dict) -> dict:
     l0_sealed = layer_results[0]['sealed'] if len(layer_results) >= 1 else False
     l1_formed = len(layer_results) >= 2
 
-    # Find seal step from snapshots
-    snapshots = result.get('snapshots', [])
-    for snap in snapshots:
-        if snap.layer == 0:
-            l0_hamming_history.append(int(snap.state.sum().item()))
-            # Try to get active bits from constraints at that step
-        elif snap.layer == 1:
-            l1_hamming_history.append(int(snap.state.sum().item()))
-
-    # Get seal step from layer results
-    if l0_sealed:
-        l0_result = layer_results[0]
-        l0_seal_step = l0_result.get('seal_step', -1)
-
-    if l1_formed:
-        l1_result = layer_results[1]
-        l1_formed_step = l1_result.get('formation_step', -1)
-
     # Get active bits from final layer state
-    if len(layer_results) >= 1:
-        l0_active_final = set(layer_results[0].get('active_bits', []))
-    else:
-        l0_active_final = set()
+    l0_active_final = set(layer_results[0].get('active_bits', [])) if len(layer_results) >= 1 else set()
+    l1_active_final = set(layer_results[1].get('active_bits', [])) if len(layer_results) >= 2 else set()
 
-    if len(layer_results) >= 2:
-        l1_active_final = set(layer_results[1].get('active_bits', []))
-    else:
-        l1_active_final = set()
-
-    # Compute H47: hamming weight correlation (post-seal)
-    h47_rolling_corr = []
-    if l0_sealed and l1_formed and l0_seal_step > 0:
-        # Find indices where step >= seal_step
-        post_seal_l0 = []
-        post_seal_l1 = []
-        for i, snap in enumerate(snapshots):
-            if snap.layer == 0 and i >= l0_seal_step:
-                post_seal_l0.append(int(snap.state.sum().item()))
-            elif snap.layer == 1 and i >= l0_seal_step:
-                post_seal_l1.append(int(snap.state.sum().item()))
-        if len(post_seal_l0) >= rolling_window and len(post_seal_l1) >= rolling_window:
-            h47_rolling_corr = compute_rolling_correlation(
-                post_seal_l0, post_seal_l1, rolling_window)
-
-    # Compute H49: theme Jaccard (post-seal)
-    h49_jaccard = []
-    if l0_sealed and l1_formed and l0_seal_step > 0:
-        # Use active bits from final state as proxy for themes
-        # (full per-step theme tracking would require deeper integration)
-        if len(l0_active_final) > 0 and len(l1_active_final) > 0:
-            jaccard_val = compute_jaccard(l0_active_final, l1_active_final)
-            h49_jaccard = [jaccard_val]  # single value for now
-
-    # L1 sealing progress (H48)
-    l1_sealing_ratio = 0.0
-    if l1_formed and len(layer_results) >= 2:
-        l1_constraints = evolver.hierarchy.get_layer(1).constraints
-        l1_unique_active = len(getattr(l1_constraints, 'total_unique_active', set()))
-        l1_threshold = getattr(l1_constraints, 'sealing_activation_threshold', N0 // 2)
-        l1_sealing_ratio = l1_unique_active / l1_threshold if l1_threshold > 0 else 0.0
+    # Analyze per-layer metrics for H46-H49
+    plm_analysis = collector.analyze(post_seal_only=True)
+    h46 = plm_analysis['h46']
+    h47 = plm_analysis['h47']
+    h48 = plm_analysis['h48']
+    h49 = plm_analysis['h49']
 
     # Compute NSI from available metrics (NSE was not stepped during run)
     # NSI = alpha*continuity + beta*stability + gamma*history_depth, gated by ODI
@@ -251,16 +187,32 @@ def run_single_seed(seed: int, config: dict) -> dict:
         'l1_active_count': len(l1_active_final),
         'l0_active_final': sorted(list(l0_active_final))[:20],  # sample
         'l1_active_final': sorted(list(l1_active_final))[:20],
-        'h47_rolling_corr_mean': float(np.mean(h47_rolling_corr)) if h47_rolling_corr else None,
-        'h47_rolling_corr_min': float(np.min(h47_rolling_corr)) if h47_rolling_corr else None,
-        'h47_rolling_corr_max': float(np.max(h47_rolling_corr)) if h47_rolling_corr else None,
-        'h47_samples': len(h47_rolling_corr),
-        'h49_jaccard': h49_jaccard[0] if h49_jaccard else None,
-        'l1_sealing_ratio': round(l1_sealing_ratio, 4),
-        'l1_unique_active': len(getattr(evolver.hierarchy.get_layer(1).constraints, 'total_unique_active', set())) if l1_formed else 0,
-        'l1_sealing_threshold': getattr(evolver.hierarchy.get_layer(1).constraints, 'sealing_activation_threshold', 0) if l1_formed else 0,
+        # H46: NSI autonomy
+        'h46_mean_corr': h46.mean_corr,
+        'h46_min_corr': h46.min_corr,
+        'h46_max_corr': h46.max_corr,
+        'h46_pass_rate': h46.pass_count,
+        'h46_passing': h46.passing,
+        # H47: CIV independence
+        'h47_rolling_corr_mean': h47.mean_corr,
+        'h47_rolling_corr_min': h47.min_corr,
+        'h47_rolling_corr_max': h47.max_corr,
+        'h47_passing': h47.passing,
+        # H48: L1 sealing potential
+        'l1_sealing_ratio': h48.mean_ratio,
+        'l1_sealing_max_ratio': h48.max_ratio,
+        'h48_passing': h48.passing,
+        # H49: Theme divergence
+        'h49_jaccard_mean': h49.mean_jaccard,
+        'h49_jaccard_min': h49.min_jaccard,
+        'h49_passing': h49.passing,
         'global_nsi': round(global_nsi, 4),
         'snapshots_count': len(snapshots),
+        # Raw time series for plotting
+        'l0_nsi_series': plm_analysis.get('l0_nsi_history', []),
+        'l1_nsi_series': plm_analysis.get('l1_nsi_history', []),
+        'l0_civ_series': plm_analysis.get('l0_civ_history', []),
+        'l1_civ_series': plm_analysis.get('l1_civ_history', []),
     }
 
 
@@ -268,40 +220,40 @@ def analyze_results(results: list) -> dict:
     """Analyze batch results and check B8 hypotheses."""
     n = len(results)
 
-    # H46: L1 NSI autonomy (rolling corr < 0.5)
-    # Note: H46 needs per-layer NSI which requires deeper LNT integration
-    # For now, use hamming correlation as proxy
+    # H46: L1 NSI autonomy (rolling corr < 0.5) — from PerLayerMetricsCollector
     h46_pass_count = 0
     h46_details = []
     for r in results:
-        if r.get('h47_rolling_corr_mean') is not None:
-            # Using hamming corr as proxy for NSI autonomy
-            if r['h47_rolling_corr_mean'] < 0.5:
+        corr = r.get('h46_mean_corr')
+        if corr is not None:
+            if abs(corr) < 0.5:
                 h46_pass_count += 1
-            h46_details.append(r['h47_rolling_corr_mean'])
+            h46_details.append(corr)
 
     # H47: L1 CIV independence (hamming corr < 0.6)
     h47_pass_count = 0
     h47_details = []
     for r in results:
-        if r.get('h47_rolling_corr_mean') is not None:
-            if r['h47_rolling_corr_mean'] < 0.6:
+        corr = r.get('h47_rolling_corr_mean')
+        if corr is not None:
+            if abs(corr) < 0.6:
                 h47_pass_count += 1
-            h47_details.append(r['h47_rolling_corr_mean'])
+            h47_details.append(corr)
 
     # H48: L1 sealing potential (ratio > 0.8)
     h48_pass_count = 0
     h48_details = []
     for r in results:
-        if r.get('l1_sealing_ratio', 0) > 0.8:
+        ratio = r.get('l1_sealing_ratio', 0)
+        if ratio > 0.8:
             h48_pass_count += 1
-        h48_details.append(r.get('l1_sealing_ratio', 0))
+        h48_details.append(ratio)
 
     # H49: L1 theme divergence (Jaccard < 0.4)
     h49_pass_count = 0
     h49_details = []
     for r in results:
-        j = r.get('h49_jaccard')
+        j = r.get('h49_jaccard_mean')
         if j is not None and j < 0.4:
             h49_pass_count += 1
         if j is not None:
@@ -376,18 +328,19 @@ def main():
 
     # Per-seed detail
     print(f"\n{'Seed':>4} | {'L0 sealed':>9} | {'Seal step':>9} | {'L1 formed':>9} | "
-          f"{'L0→L1 corr':>10} | {'Jaccard':>7} | {'L1 seal%':>8} | {'NSI':>6}")
-    print("-" * 80)
+          f"{'H46 NSI r':>9} | {'H47 CIV r':>9} | {'H49 Jac':>7} | {'L1 seal%':>8} | {'NSI':>6}")
+    print("-" * 95)
     for r in results:
         l0_sealed = 'SEALED' if r['l0_sealed'] else 'no'
         seal_step = str(r['l0_seal_step']) if r['l0_seal_step'] > 0 else 'N/A'
         l1_formed = 'yes' if r['l1_formed'] else 'no'
-        corr = f"{r['h47_rolling_corr_mean']:.3f}" if r.get('h47_rolling_corr_mean') is not None else 'N/A'
-        jacc = f"{r['h49_jaccard']:.3f}" if r.get('h49_jaccard') is not None else 'N/A'
-        seal_pct = f"{r['l1_sealing_ratio']*100:.1f}%"
+        h46_corr = f"{r['h46_mean_corr']:.3f}" if r.get('h46_mean_corr') is not None else 'N/A'
+        h47_corr = f"{r['h47_rolling_corr_mean']:.3f}" if r.get('h47_rolling_corr_mean') is not None else 'N/A'
+        jacc = f"{r['h49_jaccard_mean']:.3f}" if r.get('h49_jaccard_mean') is not None else 'N/A'
+        seal_pct = f"{r['l1_sealing_ratio']*100:.1f}%" if r.get('l1_sealing_ratio') else 'N/A'
         nsi = f"{r['global_nsi']:.3f}"
         print(f"{r['seed']:4d} | {l0_sealed:>9} | {seal_step:>9} | {l1_formed:>9} | "
-              f"{corr:>10} | {jacc:>7} | {seal_pct:>8} | {nsi:>6}")
+              f"{h46_corr:>9} | {h47_corr:>9} | {jacc:>7} | {seal_pct:>8} | {nsi:>6}")
 
     # Save results
     output = {

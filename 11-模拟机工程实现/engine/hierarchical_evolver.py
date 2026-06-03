@@ -2218,6 +2218,56 @@ class HierarchicalEvolver:
             )
             self.snapshots.append(h_snap)
 
+            # Invoke tracking callback if provided
+            if self._tracking_callback is not None:
+                # Check sealing/formation status
+                l0_sealed = self.hierarchy.get_layer(0).is_sealed if self.hierarchy.n_layers > 0 else False
+                l1_formed = self.hierarchy.n_layers > 1
+
+                # L1 sealing info
+                l1_unique_active = 0
+                l1_sealing_threshold = 0
+                if self.hierarchy.n_layers > 1:
+                    l1_layer = self.hierarchy.get_layer(1)
+                    l1_unique_active = len(getattr(
+                        l1_layer.constraints, 'total_unique_active', set()))
+                    l1_sealing_threshold = getattr(
+                        l1_layer.constraints, 'sealing_activation_threshold', 0)
+
+                # Approximate global ODI from organizational density
+                # (full computation is expensive; use active/frozen ratio as proxy)
+                total_active = sum(
+                    self.hierarchy.get_layer(i).constraints.active_bits.__len__() 
+                    for i in range(self.hierarchy.n_layers)
+                )
+                total_bits = sum(self.hierarchy.get_layer(i).n_bits 
+                                for i in range(self.hierarchy.n_layers))
+                global_odi = total_active / max(1, total_bits)
+
+                # Approximate global MSI from minimal self detector if available
+                global_msi = 0.0
+                if self.minimal_self_detector is not None:
+                    # Use the detector's latest result if available
+                    global_msi = getattr(self.minimal_self_detector, '_latest_msi', 0.0)
+
+                self._tracking_callback(
+                    step=h_snap.step,
+                    layer_id=layer_id,
+                    n_active=h_snap.n_active,
+                    n_total=layer.n_bits,
+                    n_frozen=h_snap.n_frozen,
+                    hamming_weight=h_snap.w,
+                    active_bits=set(evolver.constraints.active_bits),
+                    frozen_bits=set(evolver.constraints.sealed_bits),
+                    global_odi=global_odi,
+                    global_msi=global_msi,
+                    l0_sealed=l0_sealed,
+                    l1_formed=l1_formed,
+                    l1_unique_active=l1_unique_active,
+                    l1_sealing_threshold=l1_sealing_threshold,
+                )
+
+        # Restore layer.step_count after callback may have modified constraints
         layer.step_count += steps
 
         just_sealed = evolver.constraints.sealed and not layer.is_sealed
@@ -2286,10 +2336,24 @@ class HierarchicalEvolver:
 
         return result
 
-    def run(self, verbose: bool = True) -> Dict:
-        """运行完整的跨层级演化"""
+    def run(self, verbose: bool = True,
+            tracking_callback: Optional[Callable] = None) -> Dict:
+        """运行完整的跨层级演化
+
+        Parameters
+        ----------
+        verbose : bool
+            是否打印详细日志
+        tracking_callback : Optional[Callable]
+            每步追踪回调，签名：
+            callback(step, layer_id, n_active, n_total, n_frozen,
+                     hamming_weight, active_bits, frozen_bits,
+                     global_odi, global_msi, l0_sealed, l1_formed,
+                     l1_unique_active, l1_sealing_threshold)
+        """
         self.snapshots = []
         self.encapsulation_events = []
+        self._tracking_callback = tracking_callback
 
         if verbose:
             print("=" * 70)
