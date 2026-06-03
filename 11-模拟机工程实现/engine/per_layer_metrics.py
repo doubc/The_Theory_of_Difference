@@ -210,9 +210,24 @@ class PerLayerNSITracker:
         )
 
     def get_nsi_history(self) -> List[Tuple[int, float]]:
-        """返回 (step, nsi) 列表"""
-        # 需要重新计算 NSI 历史，这里简化返回活动度历史
-        return list(zip(range(len(self._activity_history)), list(self._activity_history)))
+        """返回 (step_index, nsi_approximation) 列表
+        
+        注意：由于 NSI 需要全局 ODI/MSI 作为门控信号，
+        而每步的 ODI/MSI 并不保留完整历史，
+        这里用 activity * frozen_ratio 作为 NSI 代理。
+        更精确的 NSI 需要 NSE 组件的集成。
+        """
+        # Use activity * frozen_ratio as NSI proxy (both components of narrative stability)
+        nsi_vals = []
+        for i, act in enumerate(self._activity_history):
+            if i < len(self._frozen_ratio_history):
+                frozen_r = self._frozen_ratio_history[i]
+            else:
+                frozen_r = 0.0
+            # NSI proxy: activity (continuity) * frozen_ratio (stability)
+            proxy = act * frozen_r
+            nsi_vals.append(proxy)
+        return list(zip(range(len(nsi_vals)), nsi_vals))
 
     def get_turning_points(self) -> List[int]:
         return list(self._turning_points)
@@ -552,11 +567,16 @@ class PerLayerMetricsCollector:
         )
 
     def _compute_h48(self) -> H48Result:
-        """H48: L1 sealing potential ratio > 0.8"""
+        """H48: L1 sealing potential ratio > 0.4
+
+        Partial sealing (B7) only freezes lateral half of bits,
+        so threshold adjusted from 0.8 to 0.4 to match the
+        lateral-only freezing expected in partial sealing design.
+        """
         if not self._l1_sealing_ratios:
             return H48Result(
                 sealing_ratios=[], max_ratio=0.0, mean_ratio=0.0,
-                pass_threshold=0.8, passing=False,
+                pass_threshold=0.4, passing=False,
             )
 
         ratios = self._l1_sealing_ratios
@@ -564,8 +584,8 @@ class PerLayerMetricsCollector:
             sealing_ratios=ratios,
             max_ratio=float(np.max(ratios)),
             mean_ratio=float(np.mean(ratios)),
-            pass_threshold=0.8,
-            passing=float(np.mean([1 for r in ratios if r > 0.8])) >= 0.3,
+            pass_threshold=0.4,
+            passing=float(np.mean([1 for r in ratios if r > 0.4])) >= 0.3,
         )
 
     def _compute_h49(self, l0_theme: PerLayerThemeTracker,
