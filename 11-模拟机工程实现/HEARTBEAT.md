@@ -120,3 +120,15 @@ when the threshold is reachable. The 100% requirement was the blocker.
   - Seed 42: sealed at step 73, L1 formed with 21 bits
   - Estimated 1-2 hours runtime
 - **Pending**: H46-H49 analysis after completion; exp_121 re-run with binding_threshold=0.02; Track B9
+
+
+#### 2026-06-03 10:44 -- Heartbeat: exp_122 v3 relaunched + Theory reading
+- **exp_122 v3 launched** (background, PID 7792): 8 seeds x 10000 steps, N0=48
+  - Uses PerLayerMetricsCollector with PerLayerNSITracker v2
+  - Seed 42: sealed at step 73, L1 created 21 bits (17 active + 3 enc)
+  - Estimated ~2-4 hours
+- **Theory reading**: Theory of Difference v1.0 SS1.1-SS1.3
+  - Wrote theory-to-engineering mapping: docs/theory_note_l0_l1_reorganization_20260603.md
+  - Pre-v3 predictions: H46 PASS, H47 PASS, H48 FAIL/marginal, H49 PASS
+- **Old results backed up**: exp_122_b8_results_v2_backup.json
+- **Pending**: exp_122 v3 results analysis; Track B9 design; exp_121 tuning

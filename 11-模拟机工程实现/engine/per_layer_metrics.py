@@ -230,13 +230,25 @@ class PerLayerNSITracker:
         # ─── 历史深度 ───
         history_depth = min(1.0, len(self._turning_points) / 20.0)
 
-        # ─── ⭐ v2 核心：odi_delta 动态信号 ───
-        # 捕获每步 ODI 变化量，这是封口后唯一持续变化的动态信号
+        # ─── ⭐ v3 核心：动态信号来自 CIV 变化而非活动度 ───
+        # v2 使用了全局 ODI（封口后恒定）和 per-layer 活动度（封口后稳定），
+        # 两者都导致 odi_delta ≈ 0 和 NSI 平坦。
+        # v3 改为使用 CIV（Hamming weight）变化作为核心动态信号：
+        # - 活动比特数量恒定，但 WHICH 比特活跃不断变化（迁移）
+        # - CIV 追踪这些迁移导致的 Hamming weight 波动
+        # - CIV 事件率也作为次要动态信号
         odi_delta = 0.0
-        if len(self._odi_history) >= 2:
-            odi_delta = abs(self._odi_history[-1][1] - self._odi_history[-2][1])
-            # 归一化到 [0, 1]：假设最大 ODI 变化在 1.0 以内
-            odi_delta = min(1.0, odi_delta * 10)  # 放大使微小变化可见
+        if len(self._civ_history) >= 2:
+            # 使用 CIV 变化量作为核心动态信号
+            civ_delta = abs(self._civ_history[-1][1] - self._civ_history[-2][1])
+            # 归一化：CIV 最大变化约为 n_total/2，取 n_total 作为分母
+            max_civ = max(self.nsi_min_odi * 10, 1.0)  # safe fallback
+            if len(self._civ_history) > 10:
+                # 使用历史最大值作为归一化基准
+                max_civ = max(abs(self._civ_history[i][1] - self._civ_history[i-1][1])
+                             for i in range(1, len(self._civ_history)))
+            max_civ = max(max_civ, 1.0)
+            odi_delta = min(1.0, civ_delta / max_civ)
 
         # ─── ⭐ v2 核心：CIV 事件率 ───
         # 捕获 Hamming weight 在最近窗口中的变化频率
@@ -250,14 +262,15 @@ class PerLayerNSITracker:
         odi_gate = min(1.0, global_odi / self.nsi_min_odi) if self.nsi_min_odi > 0 else 1.0
         is_active = global_odi >= self.nsi_min_odi
 
-        # ⭐ 结构成分 + 动态补偿
+        # ⭐ 结构成分 + 动态补偿（CIV 事件率 + CIV delta）
         raw_nsi = (self.alpha * continuity
                    + self.beta * stability
                    + self.gamma * history_depth
-                   + self.delta * odi_delta)
+                   + self.delta * odi_delta
+                   + 0.1 * civ_event_rate)  # v3: add civ_event_rate as explicit dynamic term
 
         # 归一化：确保带额外动态项时不超过 1.0
-        total_weight = self.alpha + self.beta + self.gamma + self.delta
+        total_weight = self.alpha + self.beta + self.gamma + self.delta + 0.1
         raw_nsi = raw_nsi / total_weight
 
         nsi = float(np.clip(raw_nsi * odi_gate, 0.0, 1.0))
