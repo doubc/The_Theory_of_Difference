@@ -221,13 +221,19 @@ def run_single_seed(seed: int, config: dict) -> dict:
         l1_threshold = getattr(l1_constraints, 'sealing_activation_threshold', N0 // 2)
         l1_sealing_ratio = l1_unique_active / l1_threshold if l1_threshold > 0 else 0.0
 
-    # Per-layer NSI from LNT (if available from snapshots)
-    # For now, use global NSI as proxy; full per-layer NSI needs deeper integration
-    global_nsi = nse.compute_nsi(
-        msi=result.get('msi_final', 0),
-        odi=result.get('odi_final', 0),
-        turning_points=result.get('turning_points', 0),
-    )
+    # Compute NSI from available metrics (NSE was not stepped during run)
+    # NSI = alpha*continuity + beta*stability + gamma*history_depth, gated by ODI
+    nsi_alpha, nsi_beta, nsi_gamma, nsi_min_odi = 0.4, 0.3, 0.3, 0.6
+    odi_final = result.get('odi_final', 0.0)
+    msi_final = result.get('msi_final', 0.0)
+    turning_points = result.get('turning_points', 0)
+    # Approximate continuity from MSI stability, stability from ODI, history from turning points
+    continuity_approx = min(1.0, msi_final)  # proxy
+    stability_approx = min(1.0, odi_final)    # proxy
+    history_depth_approx = min(1.0, turning_points / 10.0) if turning_points > 0 else 0.0
+    odi_gate = min(1.0, odi_final / nsi_min_odi) if nsi_min_odi > 0 else 1.0
+    raw_nsi = nsi_alpha * continuity_approx + nsi_beta * stability_approx + nsi_gamma * history_depth_approx
+    global_nsi = float(np.clip(raw_nsi * odi_gate, 0.0, 1.0))
 
     return {
         'seed': seed,
@@ -363,7 +369,7 @@ def main():
     for h_id in ['h46', 'h47', 'h48', 'h49']:
         h = analysis[h_id]
         mark = '[PASS]' if h['pass'] else '[FAIL]'
-        print(f"{h['name']}: {h['pass_count']}/{h['total_seeds']} = {h['pass_rate']} {mark}")
+        print(f"{h['name']}: {h['pass_count']}/{analysis['total_seeds']} = {h['pass_rate']} {mark}")
         if h['values']:
             vals = h['values']
             print(f"  Values: mean={np.mean(vals):.4f}, min={np.min(vals):.4f}, max={np.max(vals):.4f}")
