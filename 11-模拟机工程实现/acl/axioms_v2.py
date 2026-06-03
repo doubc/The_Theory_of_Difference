@@ -399,14 +399,27 @@ class AxiomConstraints:
           - 允许横向比特先封口，层级比特后封口
           - 返回 (sealed_lateral, sealed_hierarchy, sealed_bits)
         """
-        active_now = self._get_active_in_window(current_step)
+        # ── Root cause fix (2026-06-04): Separate size check from active set ──
+        # Phase 5 added `set_current_step(step)` to SpatialLongRangeEvolver.run(),
+        # which correctly timestamps active_bits entries. But _seal()
+        # used active_window=100 to filter active_now, giving only 16-20 recent
+        # bits at typical seal time (step 500-800). This hit the min_active_bits
+        # threshold → premature sealing → reduced state diversity → CIV collapse.
+        #
+        # Fix: use ALL ever-active bits for the size check (prevents premature
+        # sealing shortcut), but still freeze recently-active bits.
+        all_active_bits = set(self.active_bits.keys())
+        active_recent = self._get_active_in_window(current_step)
 
-        if len(active_now) <= self.min_active_bits:
+        if len(all_active_bits) <= self.min_active_bits:
             self.sealed = True
-            print(f"[A9] Sealed at step {current_step}: {len(active_now)} active bits <= min {self.min_active_bits}")
+            print(f"[A9] Sealed at step {current_step}: {len(all_active_bits)} total active bits <= min {self.min_active_bits}")
             if partial:
                 return True, True, set()
             return
+
+        # Use recently active bits for scoring/freezing
+        active_now = active_recent if active_recent else all_active_bits
 
         # 计算每个活跃比特的得分（绑定强度 + 循环参与）
         scores = {}

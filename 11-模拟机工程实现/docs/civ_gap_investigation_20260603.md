@@ -174,9 +174,51 @@ If Track C2 is to proceed as originally intended (time constraints), use **Optio
 - `experiments/exp_127_phase5_c2_narrative_level_booster.py` — validation experiment
 - `experiments/exp_127_c2_results_20260604_0105.json` — results (showing metric misalignment)
 
+---
+
+## Root Cause Identified: `set_current_step` + `active_window` Mismatch (2026-06-04 02:21)
+
+### Discovery
+
+The CIV gap is **not** caused by AMC/ILP removal or CSC changes. It's a sealing-timing bug introduced by the `set_current_step(step)` call added to `spatial_evolver_v2.py` line 174.
+
+### Root Cause Chain
+
+1. **Phase 5 added `self.constraints.set_current_step(step)`** at the start of each evolver step loop (spatial_evolver_v2.py:174). This correctly records the actual step number in `active_bits[bit_idx] = step`.
+
+2. In Phase 4, this call was absent → `_step_counter()` returned 0 → ALL `active_bits` had timestamp 0.
+
+3. `_seal()` calls `_get_active_in_window(current_step)` to compute `active_now`:
+   - **Phase 4**: `cutoff = 0 - active_window(100) = -100` → all bits with timestamp 0 >= -100 → ALL active bits ever recorded were included → `active_now ≈ 36-48` → always exceeded `min_active_bits=16` → went through full scoring path → **late sealing, rich state diversity**
+   - **Phase 5**: `cutoff = 500 - 100 = 400` → only bits active in last 100 steps → `active_now ≈ 16-20` → `16 <= min_active_bits=16` → **EARLY SEALING SHORTCUT** → system frozen prematurely → reduced state diversity → CIV collapse
+
+4. The `active_window=100` was calibrated for the buggy Phase 4 behavior. With correct step tracking, it's too tight for Phase 5's 1600-step runs.
+
+### Fix Applied (2026-06-04 02:21)
+
+**File**: `acl/axioms_v2.py` — `_seal()` method
+
+**Change**: Decoupled the sealing **size check** from the **freezing operation**:
+- Size check: uses `all_active_bits = set(self.active_bits.keys())` — ALL bits ever active
+- Freezing: uses `active_recent = self._get_active_in_window(current_step)` — only recently active bits
+
+**Rationale**: The sealing shortcut (`len(active_now) <= min_active_bits`) should measure the system's total engagement, not just recent engagement. A bit that was active 500 steps ago still represents the system's structural capacity. Using only recent activity undercounts the system's true engagement and triggers premature sealing.
+
+**Verification**:
+- ✅ `axioms_v2.py` compiles cleanly
+- ✅ _get_active_in_window preserved for hierarchy_manager.py (lines 291, 626)
+- ✅ Partial sealing (Track B7) uses `active_now = active_recent` for correct per-type freezing
+
+### Expected Impact
+
+Restoring proper sealing timing should increase `active_now` at seal time from 16-20 back to 36-48 (for N0=48), keeping the system in the scoring path instead of the early-sealing shortcut. This should restore CIV to Phase 4 levels (~4-6). Post-fix runs of exp_125 will confirm.
+
+---
+
 ## References
 
 - Exp_125 analysis: `docs/exp_125_track_c1_analysis.md`
 - Phase 4 P2 Track A: `experiments/exp_108_ablation_study.py`
 - Phase 4 P2 Track B: `experiments/exp_109_track_b_scaling.py`
 - Phase 5 code diff: `e24cc70..HEAD` (1300+ lines in evolver + CSC)
+- Root cause diff: `git diff e24cc70..HEAD -- engine/spatial_evolver_v2.py` (13 lines: `set_current_step` added)
