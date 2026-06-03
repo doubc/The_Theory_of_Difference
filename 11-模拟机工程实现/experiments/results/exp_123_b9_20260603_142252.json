@@ -1,0 +1,20 @@
+{
+  "hypotheses": {
+    "H50": {
+      "pass": 1,
+      "total": 8,
+      "detail": [
+        {
+          "seed": 0,
+          "mean_bias": 0.0,
+          "pass": false
+        },
+        {
+          "seed": 1,
+          "mean_bias": 0.0,
+          "pass": false
+        },
+        {
+          "seed": 2,
+          "mean_bias": 0.1186735629932793,
+          "pass": 
