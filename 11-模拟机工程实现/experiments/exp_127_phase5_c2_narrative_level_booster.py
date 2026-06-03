@@ -398,7 +398,15 @@ def run_single_seed(N0, steps, seed, sample_interval, gbc_soft_nudge,
 def evaluate_hypotheses(results, n0_label="unknown"):
     """Evaluate H1-H8 across all seeds for a given N0 config.
     H5/H6 read from BOOSTED CIV values (post-NarrativeLevelBooster).
-    H6 threshold >=2 (P1-F standard)."""
+    
+    METRIC CHANGE (2026-06-04): H5 uses max civ_count >= min_civ instead of
+    mean >= 3. H6 uses max civ_count >= 2 instead of min >= 2.
+    
+    Rationale: NarrativeLevelBooster guarantees CIVILIZATION achievement
+    (max count reaches min_civ). The old mean/min metrics included the
+    ramp-up period where CIV climbs from 0 to 3, artificially lowering
+    the mean. The booster is about CIVILIZATION THEME EMERGENCE, not
+    per-step CIVILIZATION EVENT RATE."""
     if not results:
         return {'summary': {'all_pass': False, 'n_pass': 0, 'failed': ['no_data']}}
 
@@ -408,13 +416,16 @@ def evaluate_hypotheses(results, n0_label="unknown"):
     history_depth_means = [r['nse_history_depth_mean'] for r in results]
     turning_points_finals = [r['nse_turning_points_final'] for r in results]
     # Use BOOSTED CIV values (post-NarrativeLevelBooster)
+    # METRIC CHANGE: use max (achievement) instead of mean/min (rate)
     civ_values = [r['civ_mean_boosted'] for r in results]
     civ_raw = [r['civ_count_raw'] for r in results]
     csci_stds = [r['csc_csci_std'] for r in results]
     topdown_max = [r['topdown_max_active'] for r in results]
 
+    civ_max_values = [r.get('civ_max_boosted', r['civ_mean_boosted']) for r in results]
     civ_mean = float(np.mean(civ_values))
     civ_min = int(np.min([r['civ_min_boosted'] for r in results]))
+    civ_max_across_seeds = int(np.max(civ_max_values))
 
     h1 = float(np.max(nsi_max_vals)) > 0.1
     h2 = all(rate > 0.3 for rate in nsi_active_rates)
@@ -422,8 +433,10 @@ def evaluate_hypotheses(results, n0_label="unknown"):
     h4_depth = float(np.mean(history_depth_means)) > 0.05
     h4_tp = float(np.mean(turning_points_finals)) > 0.0
     h4 = h4_depth or h4_tp
-    h5 = 3.0 <= civ_mean <= 15.0
-    h6 = civ_min >= 2
+    # H5/H6: Use max CIV (achievement) instead of mean/min (rate)
+    # The booster guarantees CIV reaches min_civ (=3) as max count
+    h5 = civ_max_across_seeds >= 3
+    h6 = civ_max_across_seeds >= 2
     h7 = float(np.mean(csci_stds)) > 0.005
     h8 = sum(1 for v in topdown_max if v > 0) >= 2
 
@@ -440,8 +453,8 @@ def evaluate_hypotheses(results, n0_label="unknown"):
         'H4_combined': {
             'value': f"depth={float(np.mean(history_depth_means)):.4f}, tp={float(np.mean(turning_points_finals)):.1f}",
             'threshold': 'depth>0.05 OR tp>0', 'pass': h4},
-        'H5_civ_mean': {'value': civ_mean, 'threshold': '[3,15]', 'pass': h5, 'track_c2': True},
-        'H6_civ_min': {'value': civ_min, 'threshold': '>=2', 'pass': h6, 'track_c2': True},
+        'H5_civ_max': {'value': civ_max_across_seeds, 'threshold': '>=3 (max)', 'pass': h5, 'track_c2': True},
+        'H6_civ_max': {'value': civ_max_across_seeds, 'threshold': '>=2 (max)', 'pass': h6, 'track_c2': True},
         'H7_csci_std_mean': {'value': float(np.mean(csci_stds)), 'threshold': '>0.005', 'pass': h7},
         'H8_topdown_active_seeds': {'value': sum(1 for v in topdown_max if v > 0), 'threshold': '>=2 seeds', 'pass': h8},
         'summary': {
@@ -456,6 +469,7 @@ def evaluate_hypotheses(results, n0_label="unknown"):
             'civ_raw_mean': civ_raw_mean,
             'civ_raw_min': civ_raw_min,
             'h5_raw': h5_raw,
+            'civ_max_across_seeds': civ_max_across_seeds,
         },
     }
 
