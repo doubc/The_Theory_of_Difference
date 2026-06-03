@@ -168,10 +168,14 @@ class PerLayerNSITracker:
         self._turning_points: List[int] = []
         self._activity_for_tp: Deque[float] = deque(maxlen=20)
 
+        # ⭐ v4: 活跃比特集合历史 [(step, frozenset(active_bits))] — 用于 Jaccard flux 计算
+        self._active_set_history: List[Tuple[int, frozenset]] = []
+
     def _trim_history(self):
         """裁剪历史到最大容量"""
         for hist_list in [self._activity_history, self._frozen_ratio_history,
-                          self._odi_history, self._civ_history, self._nsi_output_history]:
+                          self._odi_history, self._civ_history, self._nsi_output_history,
+                          self._active_set_history]:
             while len(hist_list) > self._max_history:
                 hist_list.pop(0)
 
@@ -187,14 +191,32 @@ class PerLayerNSITracker:
         self._append_sorted(self._civ_history, step, float(hamming_weight))
 
     def update(self, step: int, n_active: int, n_total: int,
-               n_frozen: int, global_odi: float, global_msi: float) -> PerLayerNSIData:
-        """更新一步 — v2 带 odi_delta 动态补偿"""
+               n_frozen: int, global_odi: float, global_msi: float,
+               active_bits: Optional[set] = None) -> PerLayerNSIData:
+        """更新一步 — v4 带 Jaccard flux 动态补偿
+
+        v4 修复：用活跃比特集合的 Jaccard 距离（身份更替率）替代 CIV delta
+        （Hamming weight 变化），解决 v3 中封口后 CIV 只有 3 个唯一值
+        导致 odi_delta ≈ 0 → NSI 平坦 → H46/H47 假阴性的根本问题。
+
+        Jaccard flux = 1 - |A(t) ∩ A(t-1)| / |A(t) ∪ A(t-1)|
+        捕获活跃比特的身份周转，即使 Hamming weight 恒定也能持续产生动态信号。
+        这是 v4 最关键的修复：用身份更替率替代数量变化率。
+        """
         activity = n_active / max(1, n_total)
         frozen_ratio = n_frozen / max(1, n_total)
 
         self._append_sorted(self._activity_history, step, activity)
         self._append_sorted(self._frozen_ratio_history, step, frozen_ratio)
         self._append_sorted(self._odi_history, step, global_odi)
+
+        # ⭐ v4: 记录活跃比特集合（用于 Jaccard flux 计算）
+        if active_bits is not None:
+            self._active_set_history.append((step, frozenset(active_bits)))
+            # 不需要 _append_sorted 因为 frozenset 不能 float 转换
+            # 手动清理防止无限增长
+            while len(self._active_set_history) > self._max_history:
+                self._active_set_history.pop(0)
 
         # ─── 转折点检测 ───
         self._activity_for_tp.append(activity)
@@ -230,47 +252,54 @@ class PerLayerNSITracker:
         # ─── 历史深度 ───
         history_depth = min(1.0, len(self._turning_points) / 20.0)
 
-        # ─── ⭐ v3 核心：动态信号来自 CIV 变化而非活动度 ───
-        # v2 使用了全局 ODI（封口后恒定）和 per-layer 活动度（封口后稳定），
-        # 两者都导致 odi_delta ≈ 0 和 NSI 平坦。
-        # v3 改为使用 CIV（Hamming weight）变化作为核心动态信号：
-        # - 活动比特数量恒定，但 WHICH 比特活跃不断变化（迁移）
-        # - CIV 追踪这些迁移导致的 Hamming weight 波动
-        # - CIV 事件率也作为次要动态信号
-        odi_delta = 0.0
-        if len(self._civ_history) >= 2:
-            # 使用 CIV 变化量作为核心动态信号
-            civ_delta = abs(self._civ_history[-1][1] - self._civ_history[-2][1])
-            # 归一化：CIV 最大变化约为 n_total/2，取 n_total 作为分母
-            max_civ = max(self.nsi_min_odi * 10, 1.0)  # safe fallback
-            if len(self._civ_history) > 10:
-                # 使用历史最大值作为归一化基准
-                max_civ = max(abs(self._civ_history[i][1] - self._civ_history[i-1][1])
-                             for i in range(1, len(self._civ_history)))
-            max_civ = max(max_civ, 1.0)
-            odi_delta = min(1.0, civ_delta / max_civ)
+        # ─── ⭐ v4 核心：Jaccard flux（活跃比特身份更替率） ───
+        # v3 使用 CIV delta (Hamming weight 变化量) 作为动态信号，但封口后
+        # CIV 仅 3 个唯一值 → odi_delta ≈ 0 → NSI 平坦 → H46/H47 假阴性。
+        #
+        # v4 改用活跃比特集合的 Jaccard 距离捕获身份周转：
+        #   Jaccard(A(t), A(t-1)) = |A(t) ∩ A(t-1)| / |A(t) ∪ A(t-1)|
+        #   Jaccard flux = 1 - Jaccard(A(t), A(t-1))
+        #
+        # 直观含义：即使活跃比特数量恒定（封口后），每次演化使 SEVERAL 比特
+        # 翻转——新比特激活、旧比特冻结——Jaccard 距离捕捉这些身份置换。
+        # 这是 CIV delta 无法捕获的核心动力学维度。
+        jaccard_flux = 0.0
+        if len(self._active_set_history) >= 2:
+            _, prev_set = self._active_set_history[-2]
+            _, curr_set = self._active_set_history[-1]
+            if len(prev_set) == 0 and len(curr_set) == 0:
+                jaccard_flux = 0.0
+            else:
+                intersection = len(prev_set & curr_set)
+                union = len(prev_set | curr_set)
+                jaccard = intersection / union if union > 0 else 0.0
+                jaccard_flux = 1.0 - jaccard  # 0=完全重叠, 1=完全不重叠
 
-        # ─── ⭐ v2 核心：CIV 事件率 ───
-        # 捕获 Hamming weight 在最近窗口中的变化频率
+        # ─── 次要动态信号：CIV 事件率（保留但不作为主信号） ───
         civ_event_rate = 0.0
         if len(self._civ_history) >= 10:
             civ_vals = [v for _, v in self._civ_history[-20:]]
             n_changes = sum(1 for i in range(1, len(civ_vals)) if civ_vals[i] != civ_vals[i-1])
             civ_event_rate = n_changes / max(1, len(civ_vals))
 
-        # ─── NSI 计算（带动态补偿） ───
+        # ─── NSI 计算（Jaccard flux 作为主动态信号） ───
         odi_gate = min(1.0, global_odi / self.nsi_min_odi) if self.nsi_min_odi > 0 else 1.0
         is_active = global_odi >= self.nsi_min_odi
 
-        # ⭐ 结构成分 + 动态补偿（CIV 事件率 + CIV delta）
+        # v4: Jaccard flux 替代 CIV delta 作为动态补偿项
+        # jaccard_weight = 0.3  (比 v3 的 odi_delta 权重大 50%，因为身份更替率
+        #  是比 Hamming 变化更丰富的信号)
+        jaccard_weight = 0.3
+        civ_event_weight = 0.1
+
         raw_nsi = (self.alpha * continuity
                    + self.beta * stability
                    + self.gamma * history_depth
-                   + self.delta * odi_delta
-                   + 0.1 * civ_event_rate)  # v3: add civ_event_rate as explicit dynamic term
+                   + jaccard_weight * jaccard_flux
+                   + civ_event_weight * civ_event_rate)
 
-        # 归一化：确保带额外动态项时不超过 1.0
-        total_weight = self.alpha + self.beta + self.gamma + self.delta + 0.1
+        # 归一化
+        total_weight = self.alpha + self.beta + self.gamma + jaccard_weight + civ_event_weight
         raw_nsi = raw_nsi / total_weight
 
         nsi = float(np.clip(raw_nsi * odi_gate, 0.0, 1.0))
@@ -509,10 +538,12 @@ class PerLayerMetricsCollector:
         self._global_msi_history.append((step, global_msi))
 
         # Update per-layer trackers
+        # ⭐ v4: 传递 active_bits 给 NSI tracker 用于 Jaccard flux 计算
         nsi_data = self._nsi_trackers[layer_name].update(
-            step, n_active, n_total, n_frozen, global_odi, global_msi)
+            step, n_active, n_total, n_frozen, global_odi, global_msi,
+            active_bits=active_bits)
 
-        # ⭐ v2: 将 CIV 数据同步到 NSI tracker（为 odi_delta + civ_event_rate 提供输入）
+        # ⭐ v4: 仍同步 CIV 数据（civ_event_rate 作为次要动态信号）
         self._nsi_trackers[layer_name].record_civ(step, hamming_weight)
 
         self._civ_trackers[layer_name].record(
