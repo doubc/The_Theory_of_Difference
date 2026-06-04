@@ -686,13 +686,19 @@ def main():
     print(f"\n{'=' * 70}")
     print("COMPARISON: Phase 5 D1 (N0=72, no NRC) vs Phase 7 (N0=72, full spiral)")
     print(f"{'=' * 70}")
+    # Extract values from hypothesis results (fix NameError: variables are in function scope)
+    h83_data = h.get('H83_nsi_improvement', {})
+    baseline_nsi_72 = h83_data.get('baseline_nsi', 0.50)
+    h83_overall_mean = float(h83_data.get('value', 'mean_nsi=0.0000').split('mean_nsi=')[1].split(' ')[0]) if 'mean_nsi=' in str(h83_data.get('value', '')) else 0.0
+    nsi_max_vals = [r.get('nse_nsi_max', 0) for r in results]
+    nrc_r2_total = nrc_agg.get('nrc_r2_total', 0)
     print(f"  Phase 5 D1 baseline NSI: ~{baseline_nsi_72:.2f} (estimated)")
     print(f"  Phase 7 NSI (mid-phase): {h83_overall_mean:.4f}")
     print(f"  Phase 7 NSI (max): {float(np.max(nsi_max_vals)):.4f}")
     print(f"  Delta: {h83_overall_mean - baseline_nsi_72:+.4f} "
           f"{'[GOAL: >=+0.02]' if h83_overall_mean >= baseline_nsi_72 + 0.02 else '[BELOW]'}")
 
-    print(f"\n  Phase 6 exp_135 (N0=48): {nrc_r2_total if 'nrc_r2_total' in locals() else 'N/A'} R2 events")
+    print(f"\n  Phase 6 exp_135 (N0=48): 12 R2 events (from Phase 6 final report)")
     print(f"  Phase 7 (N0=72): {nrc_r2_total} R2 events")
 
 
