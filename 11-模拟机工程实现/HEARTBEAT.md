@@ -564,3 +564,18 @@ Phase 4 P1 完成（2026-06-02）：
   4. Cascade convergence: coupling 0.50→0.75→0.87→~0.95 (natural limit at L4)
 - **Recommendation**: Track C (resource constraints) next → then Track D (long-term evolution)
 - **Git**: committing summary + updating HEARTBEAT.md
+
+#### 2026-06-04 11:50 — Phase 6 P3: Booster-Free NRC Validation (5000 steps) — COMPLETE ❌
+- **Experiment**: exp_130_p3_booster_free_5000
+- **Config**: 8 seeds × 5000 steps, N0=48, CSC+NSE+NRC (NO Booster)
+- **Verdict: 0/4 PASS** — H62a (R2 natural), H63a (convergence), H64a (completeness), H65a (natural CIV) all failed
+- **R2 still dormant**: 0 events across 40,000 seed-steps (8 seeds × 5000 steps)
+- **Key finding**: 6/8 seeds hit NSI >= 0.85 (threshold), yet R2 never fires — blocked by cycle_count > 5 condition
+- **Key finding**: Cycles cluster in first ~200 steps, then go silent — system stabilizes too quickly
+- **Key finding**: Removing booster paradoxically IMPROVED NSI (0.53→0.70) and convergence (1/8→4/8)
+- **Key finding**: R2 is a scale problem, not a time problem — 5000 steps at N0=48 insufficient
+- **Root cause**: cycle_count > 5 condition never met because NRC exhausts early tension
+- **Structural insight**: N0=48 may be below R2 critical threshold; civilizational crisis requires larger field
+- **Analysis**: `docs/exp_130_phase6_p3_analysis.md`
+- **Git**: pending commit
+- **Next**: Phase 6 P4 — R2 threshold tuning (0.85→0.80) or N0=72 scaling test, or redefine R2 as epochal

@@ -311,27 +311,35 @@ class NarrativeRecursor:
     """
 
     def __init__(self, r0_weight=0.4, r1_weight=0.35, r2_weight=0.25,
-                 r2_threshold_nsi=0.85, r2_cooldown=200, max_r2_bits_pct=0.10):
+                 r2_threshold_nsi=0.85, r2_cooldown=200, max_r2_bits_pct=0.10,
+                 r2_tension_threshold=2.0, r2_use_tension=True):
         self.r0_weight = r0_weight
         self.r1_weight = r1_weight
         self.r2_weight = r2_weight
         self.r2_threshold_nsi = r2_threshold_nsi
         self.r2_cooldown = r2_cooldown
         self.max_r2_bits_pct = max_r2_bits_pct
+        self.r2_tension_threshold = r2_tension_threshold
+        self.r2_use_tension = r2_use_tension
         self._r2_last_step = -1000
         self._cycle_count = 0
         self._total_r2_events = 0
+        self._cumulative_tension = 0.0
+        self._peak_nsi = 0.0
 
     def reset(self):
         self._r2_last_step = -1000
         self._cycle_count = 0
         self._total_r2_events = 0
+        self._cumulative_tension = 0.0
+        self._peak_nsi = 0.0
 
     def get_r2_event_count(self):
         return self._total_r2_events
 
     def recurse(self, settled_state, current_level_weights,
-                nsi_history, current_step, current_n_bits):
+                nsi_history, current_step, current_n_bits,
+                cycle_events=None):
         self._cycle_count += 1
 
         # R0: Micro-recursion
@@ -352,16 +360,39 @@ class NarrativeRecursor:
         floor_shift = self.r1_weight * (inst_dom - 0.5) * 0.02
 
         # R2: Civilizational recursion (conditional, rare)
+        # FIX: Use cumulative narrative tension instead of current NSI.
+        # The old condition (current_nsi >= threshold AND cycle_count > 5)
+        # was structurally impossible: NSI peaks early then decays, so
+        # by the time cycle_count > 5, NSI is always below threshold.
+        # New condition: cumulative tension from accumulated events.
         r2_triggered = False
         r2_new_bits = 0
         current_nsi = nsi_history[-1] if nsi_history else 0.0
         cooldown_ok = (current_step - self._r2_last_step) >= self.r2_cooldown
 
-        if current_nsi >= self.r2_threshold_nsi and cooldown_ok and self._cycle_count > 5:
-            r2_triggered = True
-            self._total_r2_events += 1
-            self._r2_last_step = current_step
-            r2_new_bits = max(1, int(current_n_bits * self.max_r2_bits_pct))
+        # Track peak NSI and cumulative tension
+        self._peak_nsi = max(self._peak_nsi, current_nsi)
+        if cycle_events is None:
+            cycle_events = []
+        cycle_event_magnitude = sum(e.magnitude for e in cycle_events) if cycle_events else 0.0
+        self._cumulative_tension += cycle_event_magnitude
+
+        if self.r2_use_tension:
+            # Tension-based: trigger when accumulated narrative change is high
+            tension_ok = self._cumulative_tension >= self.r2_tension_threshold
+            if tension_ok and cooldown_ok:
+                r2_triggered = True
+                self._total_r2_events += 1
+                self._r2_last_step = current_step
+                self._cumulative_tension = 0.0  # reset after trigger
+                r2_new_bits = max(1, int(current_n_bits * self.max_r2_bits_pct))
+        else:
+            # Legacy NSI-based (kept for comparison)
+            if current_nsi >= self.r2_threshold_nsi and cooldown_ok and self._cycle_count > 5:
+                r2_triggered = True
+                self._total_r2_events += 1
+                self._r2_last_step = current_step
+                r2_new_bits = max(1, int(current_n_bits * self.max_r2_bits_pct))
 
         return RecursionOutput(
             r0_adjustments=r0_adj,
@@ -448,7 +479,8 @@ class NarrativeRecursiveClosure:
     def __init__(self, event_window=20, collapse_threshold=0.15,
                  settling_rate=0.3, r0_weight=0.4, r1_weight=0.35,
                  r2_weight=0.25, r2_threshold_nsi=0.85,
-                 r2_cooldown=200, verbose=False):
+                 r2_cooldown=200, verbose=False,
+                 r2_tension_threshold=1.5, r2_use_tension=True):
         self.verbose = verbose
         self.compressor = EventCompressor(window=event_window,
                                           collapse_threshold=collapse_threshold)
@@ -457,6 +489,8 @@ class NarrativeRecursiveClosure:
         self.recursor = NarrativeRecursor(
             r0_weight=r0_weight, r1_weight=r1_weight, r2_weight=r2_weight,
             r2_threshold_nsi=r2_threshold_nsi, r2_cooldown=r2_cooldown,
+            r2_tension_threshold=r2_tension_threshold,
+            r2_use_tension=r2_use_tension,
         )
         self.rewriter = SpaceRewriter()
         self._cycles = []
@@ -490,6 +524,7 @@ class NarrativeRecursiveClosure:
                 self._nsi_history.append(nsi_val)
 
         self._current_level_weights = current_level_weights.copy()
+        self._current_events = []  # store for tension computation in recurse()
 
         # E: Event Compression
         events = self.compressor.compute_events(
@@ -503,6 +538,7 @@ class NarrativeRecursiveClosure:
         cycle_result = None
 
         if events:
+            self._current_events = events
             # M: Minimum Variation Selection
             selected_path, path_adjustments = self.selector.select_path(
                 events=events, current_level_weights=current_level_weights,
@@ -521,6 +557,7 @@ class NarrativeRecursiveClosure:
                 current_level_weights=current_level_weights,
                 nsi_history=self._nsi_history,
                 current_step=step, current_n_bits=current_n_bits,
+                cycle_events=events,
             )
 
             # Rewrite: bridge R output back to P_{t+1}
@@ -580,6 +617,9 @@ class NarrativeRecursiveClosure:
             'cycle_stats': cycle_stats,
             'current_level_weights': self._current_level_weights.copy(),
             'last_r2_step': self.recursor._r2_last_step,
+            'cumulative_tension': round(self.recursor._cumulative_tension, 4),
+            'peak_nsi': round(self.recursor._peak_nsi, 4),
+            'r2_use_tension': self.recursor.r2_use_tension,
         }
 
     def get_cycle_history(self):
