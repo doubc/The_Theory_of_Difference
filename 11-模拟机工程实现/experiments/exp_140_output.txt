@@ -1,0 +1,1134 @@
+======================================================================
+exp_140: PHASE 8 P3 — max_layers=2 Enforcement Validation
+======================================================================
+  Architecture: CSC+NSE+NRC+NarrativeLevelBooster + LCylDet (post-hoc)
+  N0=72  MaxLayers=2  Seeds: 8  Steps: 2000
+  R2 tension_threshold=1.0 (Phase 6 recommended default)
+  P3 Fix: max_layers=2 enforced in HierarchyManager.check_and_encapsulate()
+  Hypotheses: H86 (L1 cycles), H86a (type diversity), H86b (frequency), H89 (stability)
+  Expected: 8/8 seeds with L1 cycles (vs 5/8 in exp_139 P2)
+  Date: 2026-06-05 01:07
+======================================================================
+    [seed=42] Running 2000 steps at N0=72, max_layers=2 (P3 fix: HierarchyManager enforced)...
+======================================================================
+HierarchicalEvolver: N0=72, steps_per_layer=2000, max_layers=2
+======================================================================
+
+  --- Layer 0: N=72, active=72, frozen=0 ---
+[SpatialEvolver] N=72, T=2000, L=1.0, eps=0.0417
+  Hierarchy bits: 24, Lateral bits: 48
+  Step      0: w=  1, inj=4, abs=4, lat=2, active=7, cycles=0, pos=[0.00,0.04,0.00]
+    [NRC] step=10: events=2 path=reinforce R2=YES cycles=1
+[A9] Sealed at step 24: 53 active in window, keeping 24, freezing 29
+[A9] Kept: [28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 39, 42, 44, 45, 46, 48, 49, 51, 53, 55, 61, 62, 65, 71]
+[A9] Frozen: [1, 3, 5, 9, 10, 13, 14, 16, 17, 18, 20, 22, 23, 24, 25, 26, 27, 43, 52, 54, 56, 58, 63, 64, 66, 67, 68, 69, 70]
+    [NRC] step=40: events=2 path=reinforce R2=no cycles=2
+  Step     50: w= 27, inj=1, abs=1, lat=2, active=68, cycles=10, pos=[0.25,0.42,0.46]
+  Step    100: w= 27, inj=1, abs=0, lat=0, active=68, cycles=45, pos=[0.25,0.42,0.46]
+  Step    150: w= 27, inj=1, abs=0, lat=2, active=69, cycles=80, pos=[0.25,0.38,0.50]
+  Step    200: w= 27, inj=1, abs=0, lat=2, active=69, cycles=111, pos=[0.25,0.33,0.54]
+  Step    250: w= 27, inj=1, abs=0, lat=1, active=69, cycles=142, pos=[0.25,0.33,0.54]
+  Step    300: w= 27, inj=1, abs=0, lat=1, active=69, cycles=171, pos=[0.25,0.33,0.54]
+  Step    350: w= 27, inj=1, abs=0, lat=1, active=69, cycles=199, pos=[0.25,0.42,0.46]
+  Step    400: w= 27, inj=1, abs=0, lat=2, active=69, cycles=221, pos=[0.25,0.42,0.46]
+  Step    450: w= 27, inj=1, abs=0, lat=2, active=69, cycles=249, pos=[0.25,0.38,0.50]
+  Step    500: w= 27, inj=1, abs=0, lat=2, active=69, cycles=270, pos=[0.25,0.42,0.46]
+  Step    550: w= 27, inj=1, abs=0, lat=2, active=69, cycles=291, pos=[0.25,0.38,0.50]
+  Step    600: w= 27, inj=1, abs=0, lat=2, active=69, cycles=311, pos=[0.25,0.38,0.50]
+  Step    650: w= 27, inj=1, abs=0, lat=2, active=69, cycles=328, pos=[0.25,0.38,0.50]
+  Step    700: w= 27, inj=1, abs=0, lat=2, active=69, cycles=354, pos=[0.25,0.46,0.42]
+  Step    750: w= 27, inj=1, abs=0, lat=2, active=69, cycles=372, pos=[0.25,0.42,0.46]
+  Step    800: w= 27, inj=1, abs=0, lat=2, active=69, cycles=402, pos=[0.25,0.42,0.46]
+  Step    850: w= 27, inj=1, abs=0, lat=2, active=69, cycles=428, pos=[0.25,0.33,0.54]
+  Step    900: w= 27, inj=1, abs=0, lat=2, active=69, cycles=450, pos=[0.25,0.42,0.46]
+  Step    950: w= 27, inj=1, abs=0, lat=1, active=69, cycles=473, pos=[0.25,0.46,0.42]
+  Step   1000: w= 27, inj=1, abs=0, lat=1, active=69, cycles=491, pos=[0.25,0.46,0.42]
+  Step   1050: w= 27, inj=1, abs=0, lat=2, active=69, cycles=506, pos=[0.25,0.33,0.54]
+  Step   1100: w= 27, inj=1, abs=0, lat=2, active=69, cycles=531, pos=[0.25,0.38,0.50]
+  Step   1150: w= 27, inj=1, abs=0, lat=2, active=69, cycles=547, pos=[0.25,0.38,0.50]
+  Step   1200: w= 27, inj=1, abs=0, lat=2, active=69, cycles=569, pos=[0.25,0.33,0.54]
+  Step   1250: w= 27, inj=1, abs=0, lat=2, active=69, cycles=583, pos=[0.25,0.46,0.42]
+  Step   1300: w= 27, inj=1, abs=0, lat=2, active=69, cycles=602, pos=[0.25,0.42,0.46]
+  Step   1350: w= 27, inj=1, abs=0, lat=2, active=69, cycles=624, pos=[0.25,0.42,0.46]
+  Step   1400: w= 27, inj=1, abs=0, lat=2, active=69, cycles=634, pos=[0.25,0.38,0.50]
+  Step   1450: w= 27, inj=1, abs=0, lat=1, active=69, cycles=648, pos=[0.25,0.42,0.46]
+  Step   1500: w= 27, inj=1, abs=0, lat=2, active=69, cycles=655, pos=[0.25,0.29,0.58]
+  Step   1550: w= 27, inj=1, abs=0, lat=2, active=69, cycles=666, pos=[0.25,0.54,0.33]
+  Step   1600: w= 27, inj=1, abs=0, lat=2, active=69, cycles=672, pos=[0.25,0.50,0.38]
+  Step   1650: w= 27, inj=1, abs=0, lat=2, active=69, cycles=681, pos=[0.25,0.29,0.58]
+  Step   1700: w= 27, inj=1, abs=0, lat=2, active=69, cycles=689, pos=[0.25,0.38,0.50]
+  Step   1750: w= 27, inj=1, abs=0, lat=2, active=69, cycles=697, pos=[0.25,0.33,0.54]
+  Step   1800: w= 27, inj=1, abs=0, lat=2, active=69, cycles=708, pos=[0.25,0.38,0.50]
+  Step   1850: w= 27, inj=1, abs=0, lat=2, active=69, cycles=715, pos=[0.25,0.46,0.42]
+  Step   1900: w= 27, inj=1, abs=0, lat=2, active=69, cycles=732, pos=[0.25,0.33,0.54]
+  Step   1950: w= 27, inj=1, abs=0, lat=2, active=69, cycles=741, pos=[0.25,0.29,0.58]
+[SpatialEvolver] Done. 200 snapshots.
+  Cycles: 752
+  Sealed: True (29 bits, ratio=0.40)
+  Total inject: 92, absorb: 88
+[Hierarchy] L0 -> L1: 72 -> 33 bits (32 active + 0 enc)
+  [ENCAP] L0 -> L1: 72 -> 33 bits
+  Layer 0 done: w=27, sealed=True, inj=92, abs=88, cycles=752
+
+  --- Layer 1: N=33, active=33, frozen=0 ---
+[SpatialEvolver] N=33, T=2000, L=1.0, eps=0.0909
+  Hierarchy bits: 11, Lateral bits: 22
+  Step      0: w=  1, inj=4, abs=4, lat=2, active=7, cycles=0, pos=[0.00,0.09,0.00]
+  Step     50: w=  5, inj=3, abs=3, lat=2, active=26, cycles=14, pos=[0.00,0.18,0.27]
+  Step    100: w=  5, inj=3, abs=3, lat=2, active=26, cycles=53, pos=[0.00,0.36,0.09]
+  Step    150: w=  5, inj=3, abs=3, lat=2, active=27, cycles=82, pos=[0.00,0.36,0.09]
+  Step    200: w=  5, inj=3, abs=3, lat=2, active=27, cycles=122, pos=[0.00,0.18,0.27]
+  Step    250: w=  5, inj=3, abs=3, lat=2, active=27, cycles=164, pos=[0.00,0.27,0.18]
+  Step    300: w=  5, inj=3, abs=3, lat=2, active=27, cycles=205, pos=[0.00,0.18,0.27]
+  Step    350: w=  5, inj=3, abs=3, lat=2, active=27, cycles=242, pos=[0.00,0.27,0.18]
+  Step    400: w=  5, inj=3, abs=3, lat=2, active=27, cycles=286, pos=[0.00,0.18,0.27]
+  Step    450: w=  5, inj=3, abs=3, lat=2, active=27, cycles=332, pos=[0.00,0.18,0.27]
+  Step    500: w=  5, inj=3, abs=3, lat=2, active=27, cycles=383, pos=[0.00,0.27,0.18]
+  Step    550: w=  5, inj=3, abs=3, lat=2, active=27, cycles=436, pos=[0.00,0.18,0.27]
+  Step    600: w=  5, inj=3, abs=3, lat=2, active=27, cycles=492, pos=[0.00,0.27,0.18]
+  Step    650: w=  5, inj=3, abs=3, lat=2, active=27, cycles=541, pos=[0.00,0.36,0.09]
+  Step    700: w=  5, inj=3, abs=3, lat=1, active=27, cycles=587, pos=[0.00,0.27,0.18]
+  Step    750: w=  5, inj=3, abs=3, lat=2, active=27, cycles=639, pos=[0.00,0.18,0.27]
+  Step    800: w=  5, inj=3, abs=3, lat=1, active=27, cycles=693, pos=[0.00,0.18,0.27]
+  Step    850: w=  5, inj=3, abs=3, lat=2, active=27, cycles=740, pos=[0.00,0.18,0.27]
+  Step    900: w=  5, inj=3, abs=3, lat=2, active=27, cycles=783, pos=[0.00,0.18,0.27]
+  Step    950: w=  5, inj=3, abs=3, lat=2, active=27, cycles=835, pos=[0.00,0.36,0.09]
+  Step   1000: w=  5, inj=3, abs=3, lat=2, active=27, cycles=879, pos=[0.00,0.09,0.36]
+  Step   1050: w=  5, inj=3, abs=3, lat=2, active=27, cycles=922, pos=[0.00,0.36,0.09]
+  Step   1100: w=  5, inj=3, abs=3, lat=2, active=27, cycles=970, pos=[0.00,0.27,0.18]
+  Step   1150: w=  5, inj=3, abs=3, lat=2, active=27, cycles=1017, pos=[0.00,0.27,0.18]
+  Step   1200: w=  5, inj=3, abs=3, lat=2, active=27, cycles=1067, pos=[0.00,0.00,0.45]
+  Step   1250: w=  5, inj=3, abs=3, lat=2, active=27, cycles=1113, pos=[0.00,0.27,0.18]
+  Step   1300: w=  5, inj=3, abs=3, lat=2, active=27, cycles=1160, pos=[0.00,0.36,0.09]
+  Step   1350: w=  5, inj=3, abs=3, lat=2, active=27, cycles=1212, pos=[0.00,0.36,0.09]
+  Step   1400: w=  5, inj=3, abs=3, lat=2, active=27, cycles=1255, pos=[0.00,0.18,0.27]
+  Step   1450: w=  5, inj=3, abs=3, lat=2, active=27, cycles=1304, pos=[0.00,0.18,0.27]
+  Step   1500: w=  5, inj=3, abs=3, lat=2, active=27, cycles=1353, pos=[0.00,0.09,0.36]
+  Step   1550: w=  5, inj=3, abs=3, lat=2, active=27, cycles=1391, pos=[0.00,0.27,0.18]
+  Step   1600: w=  5, inj=3, abs=3, lat=2, active=27, cycles=1442, pos=[0.00,0.36,0.09]
+  Step   1650: w=  5, inj=3, abs=3, lat=2, active=27, cycles=1490, pos=[0.00,0.27,0.18]
+  Step   1700: w=  5, inj=3, abs=3, lat=2, active=27, cycles=1542, pos=[0.00,0.27,0.18]
+  Step   1750: w=  5, inj=3, abs=3, lat=2, active=27, cycles=1587, pos=[0.00,0.18,0.27]
+  Step   1800: w=  5, inj=3, abs=3, lat=2, active=27, cycles=1634, pos=[0.00,0.27,0.18]
+  Step   1850: w=  5, inj=3, abs=3, lat=2, active=27, cycles=1686, pos=[0.00,0.09,0.36]
+  Step   1900: w=  5, inj=3, abs=3, lat=2, active=27, cycles=1731, pos=[0.00,0.18,0.27]
+  Step   1950: w=  5, inj=3, abs=3, lat=1, active=27, cycles=1781, pos=[0.00,0.18,0.27]
+[SpatialEvolver] Done. 200 snapshots.
+  Cycles: 1826
+  Sealed: False (0 bits, ratio=0.00)
+  Total inject: 6006, absorb: 6006
+  Layer 1 done: w=5, sealed=False, inj=6006, abs=6006, cycles=1826
+  Layer 1 not sealed after 2000 steps, running extra...
+[SpatialEvolver] N=33, T=1000, L=1.0, eps=0.0909
+  Hierarchy bits: 11, Lateral bits: 22
+  Step      0: w=  1, inj=4, abs=4, lat=2, active=27, cycles=1828, pos=[0.00,0.00,0.09]
+  Step     50: w=  4, inj=4, abs=4, lat=2, active=27, cycles=1861, pos=[0.00,0.18,0.18]
+  Step    100: w=  4, inj=4, abs=4, lat=2, active=27, cycles=1902, pos=[0.00,0.00,0.36]
+  Step    150: w=  4, inj=4, abs=4, lat=2, active=27, cycles=1949, pos=[0.00,0.27,0.09]
+  Step    200: w=  4, inj=4, abs=4, lat=2, active=27, cycles=1989, pos=[0.00,0.18,0.18]
+  Step    250: w=  4, inj=4, abs=4, lat=2, active=27, cycles=2037, pos=[0.00,0.27,0.09]
+  Step    300: w=  4, inj=4, abs=4, lat=2, active=27, cycles=2092, pos=[0.00,0.18,0.18]
+  Step    350: w=  4, inj=4, abs=4, lat=2, active=27, cycles=2140, pos=[0.00,0.27,0.09]
+  Step    400: w=  4, inj=4, abs=4, lat=2, active=27, cycles=2196, pos=[0.00,0.18,0.18]
+  Step    450: w=  4, inj=4, abs=4, lat=1, active=27, cycles=2242, pos=[0.00,0.18,0.18]
+  Step    500: w=  4, inj=4, abs=4, lat=2, active=27, cycles=2295, pos=[0.00,0.09,0.27]
+  Step    550: w=  4, inj=4, abs=4, lat=2, active=27, cycles=2344, pos=[0.00,0.00,0.36]
+  Step    600: w=  4, inj=4, abs=4, lat=2, active=27, cycles=2393, pos=[0.00,0.09,0.27]
+  Step    650: w=  4, inj=4, abs=4, lat=2, active=27, cycles=2439, pos=[0.00,0.18,0.18]
+  Step    700: w=  4, inj=4, abs=4, lat=2, active=27, cycles=2482, pos=[0.00,0.09,0.27]
+  Step    750: w=  4, inj=4, abs=4, lat=2, active=27, cycles=2527, pos=[0.00,0.18,0.18]
+  Step    800: w=  4, inj=4, abs=4, lat=2, active=27, cycles=2578, pos=[0.00,0.18,0.18]
+  Step    850: w=  4, inj=4, abs=4, lat=2, active=27, cycles=2633, pos=[0.00,0.27,0.09]
+  Step    900: w=  4, inj=4, abs=4, lat=2, active=27, cycles=2681, pos=[0.00,0.18,0.18]
+  Step    950: w=  4, inj=4, abs=4, lat=2, active=27, cycles=2729, pos=[0.00,0.27,0.09]
+[SpatialEvolver] Done. 100 snapshots.
+  Cycles: 2769
+  Sealed: False (0 bits, ratio=0.00)
+  Total inject: 10006, absorb: 10006
+  Extra 1000 steps: sealed=False
+    [seed=42] Done in 84.2s
+    [seed=42] Layers formed: 2 (n_layers=2) [P3 FIX: max_layers=2 ENFORCED]
+    seed=42: NSI_max=0.6454, layers=2 [P3 OK], L1_cycles=7 (reconfig=0, reshuffle=7, identity=0), types_active=1, CIV_max=3, NRC_R2=1, jaccard_L0L1=0.000
+    [seed=142] Running 2000 steps at N0=72, max_layers=2 (P3 fix: HierarchyManager enforced)...
+======================================================================
+HierarchicalEvolver: N0=72, steps_per_layer=2000, max_layers=2
+======================================================================
+
+  --- Layer 0: N=72, active=72, frozen=0 ---
+[SpatialEvolver] N=72, T=2000, L=1.0, eps=0.0417
+  Hierarchy bits: 24, Lateral bits: 48
+  Step      0: w=  1, inj=4, abs=4, lat=1, active=6, cycles=0, pos=[0.00,0.04,0.00]
+    [NRC] step=10: events=2 path=reinforce R2=YES cycles=1
+[A9] Sealed at step 22: 53 active in window, keeping 24, freezing 29
+[A9] Kept: [25, 28, 31, 34, 35, 36, 39, 40, 41, 42, 44, 46, 47, 48, 50, 51, 52, 54, 58, 60, 65, 67, 69, 71]
+[A9] Frozen: [0, 1, 2, 3, 6, 8, 9, 10, 12, 13, 15, 18, 19, 22, 23, 24, 27, 29, 33, 38, 45, 55, 56, 57, 61, 62, 63, 68, 70]
+    [NRC] step=40: events=2 path=reinforce R2=no cycles=2
+    [NRC] step=50: events=2 path=reinforce R2=no cycles=3
+  Step     50: w= 26, inj=1, abs=0, lat=0, active=66, cycles=13, pos=[0.21,0.46,0.42]
+  Step    100: w= 26, inj=1, abs=0, lat=1, active=67, cycles=37, pos=[0.21,0.54,0.33]
+    [NRC] step=110: events=1 path=restructure R2=no cycles=4
+  Step    150: w= 26, inj=1, abs=0, lat=1, active=68, cycles=68, pos=[0.21,0.42,0.46]
+  Step    200: w= 26, inj=1, abs=0, lat=2, active=68, cycles=96, pos=[0.21,0.58,0.29]
+  Step    250: w= 26, inj=1, abs=0, lat=2, active=68, cycles=125, pos=[0.21,0.54,0.33]
+    [NRC] step=300: events=1 path=restructure R2=YES cycles=5
+  Step    300: w= 25, inj=1, abs=0, lat=2, active=69, cycles=143, pos=[0.17,0.42,0.46]
+  Step    350: w= 25, inj=1, abs=0, lat=1, active=69, cycles=173, pos=[0.17,0.54,0.33]
+  Step    400: w= 26, inj=0, abs=0, lat=2, active=70, cycles=190, pos=[0.21,0.54,0.33]
+  Step    450: w= 30, inj=0, abs=0, lat=2, active=71, cycles=215, pos=[0.29,0.46,0.50]
+  Step    500: w= 30, inj=0, abs=0, lat=2, active=71, cycles=242, pos=[0.29,0.42,0.54]
+  Step    550: w= 30, inj=0, abs=0, lat=2, active=71, cycles=277, pos=[0.29,0.50,0.46]
+  Step    600: w= 30, inj=0, abs=0, lat=2, active=71, cycles=292, pos=[0.29,0.50,0.46]
+  Step    650: w= 30, inj=0, abs=0, lat=1, active=71, cycles=312, pos=[0.29,0.46,0.50]
+  Step    700: w= 30, inj=0, abs=0, lat=2, active=71, cycles=331, pos=[0.29,0.46,0.50]
+  Step    750: w= 31, inj=0, abs=0, lat=2, active=71, cycles=345, pos=[0.29,0.58,0.42]
+  Step    800: w= 31, inj=0, abs=0, lat=2, active=71, cycles=366, pos=[0.29,0.46,0.54]
+  Step    850: w= 31, inj=0, abs=0, lat=1, active=71, cycles=388, pos=[0.29,0.58,0.42]
+  Step    900: w= 31, inj=0, abs=0, lat=2, active=71, cycles=410, pos=[0.29,0.46,0.54]
+  Step    950: w= 31, inj=0, abs=0, lat=2, active=71, cycles=438, pos=[0.29,0.50,0.50]
+  Step   1000: w= 31, inj=0, abs=0, lat=1, active=71, cycles=458, pos=[0.29,0.54,0.46]
+  Step   1050: w= 32, inj=0, abs=0, lat=2, active=71, cycles=473, pos=[0.33,0.54,0.46]
+  Step   1100: w= 32, inj=0, abs=0, lat=2, active=71, cycles=496, pos=[0.33,0.46,0.54]
+  Step   1150: w= 32, inj=0, abs=0, lat=2, active=71, cycles=508, pos=[0.33,0.50,0.50]
+  Step   1200: w= 32, inj=0, abs=0, lat=2, active=71, cycles=529, pos=[0.33,0.58,0.42]
+  Step   1250: w= 32, inj=0, abs=0, lat=2, active=71, cycles=550, pos=[0.33,0.54,0.46]
+  Step   1300: w= 32, inj=0, abs=0, lat=2, active=71, cycles=562, pos=[0.33,0.54,0.46]
+  Step   1350: w= 32, inj=0, abs=0, lat=2, active=71, cycles=572, pos=[0.33,0.50,0.50]
+  Step   1400: w= 33, inj=0, abs=0, lat=2, active=71, cycles=590, pos=[0.33,0.62,0.42]
+  Step   1450: w= 33, inj=0, abs=0, lat=2, active=71, cycles=598, pos=[0.33,0.54,0.50]
+  Step   1500: w= 33, inj=0, abs=0, lat=2, active=71, cycles=608, pos=[0.33,0.54,0.50]
+  Step   1550: w= 33, inj=0, abs=0, lat=1, active=71, cycles=631, pos=[0.33,0.58,0.46]
+  Step   1600: w= 33, inj=0, abs=0, lat=2, active=71, cycles=651, pos=[0.33,0.50,0.54]
+  Step   1650: w= 33, inj=0, abs=0, lat=2, active=71, cycles=668, pos=[0.33,0.54,0.50]
+  Step   1700: w= 33, inj=0, abs=0, lat=2, active=71, cycles=675, pos=[0.33,0.54,0.50]
+  Step   1750: w= 33, inj=0, abs=0, lat=2, active=71, cycles=690, pos=[0.33,0.58,0.46]
+  Step   1800: w= 33, inj=0, abs=0, lat=2, active=71, cycles=708, pos=[0.33,0.46,0.58]
+  Step   1850: w= 33, inj=0, abs=0, lat=2, active=71, cycles=717, pos=[0.33,0.54,0.50]
+  Step   1900: w= 33, inj=0, abs=0, lat=2, active=71, cycles=734, pos=[0.33,0.54,0.50]
+  Step   1950: w= 33, inj=0, abs=0, lat=2, active=71, cycles=753, pos=[0.33,0.46,0.58]
+[SpatialEvolver] Done. 200 snapshots.
+  Cycles: 774
+  Sealed: True (29 bits, ratio=0.40)
+  Total inject: 91, absorb: 108
+[Hierarchy] L0 -> L1: 72 -> 36 bits (34 active + 1 enc)
+  [ENCAP] L0 -> L1: 72 -> 36 bits
+  Layer 0 done: w=33, sealed=True, inj=91, abs=108, cycles=774
+
+  --- Layer 1: N=36, active=36, frozen=0 ---
+[SpatialEvolver] N=36, T=2000, L=1.0, eps=0.0833
+  Hierarchy bits: 12, Lateral bits: 24
+  Step      0: w=  1, inj=4, abs=4, lat=1, active=6, cycles=0, pos=[0.08,0.00,0.00]
+[A9] Sealed at step 17: 29 active in window, keeping 12, freezing 17
+[A9] Kept: [12, 14, 15, 16, 18, 20, 25, 26, 28, 33, 34, 35]
+[A9] Frozen: [1, 2, 5, 6, 7, 8, 9, 10, 13, 17, 21, 22, 23, 27, 29, 30, 31]
+  Step     50: w= 10, inj=0, abs=0, lat=0, active=32, cycles=20, pos=[0.00,0.50,0.33]
+  Step    100: w= 10, inj=0, abs=0, lat=0, active=32, cycles=57, pos=[0.00,0.33,0.50]
+  Step    150: w= 10, inj=0, abs=0, lat=2, active=32, cycles=95, pos=[0.00,0.42,0.42]
+  Step    200: w= 10, inj=0, abs=0, lat=0, active=32, cycles=130, pos=[0.00,0.50,0.33]
+  Step    250: w= 10, inj=0, abs=0, lat=1, active=32, cycles=168, pos=[0.00,0.42,0.42]
+  Step    300: w= 10, inj=0, abs=0, lat=1, active=32, cycles=210, pos=[0.00,0.50,0.33]
+  Step    350: w= 10, inj=0, abs=0, lat=1, active=32, cycles=245, pos=[0.00,0.42,0.42]
+  Step    400: w= 10, inj=0, abs=0, lat=2, active=32, cycles=277, pos=[0.00,0.50,0.33]
+  Step    450: w= 10, inj=0, abs=0, lat=2, active=32, cycles=311, pos=[0.00,0.42,0.42]
+  Step    500: w= 10, inj=0, abs=0, lat=1, active=32, cycles=349, pos=[0.00,0.58,0.25]
+  Step    550: w= 10, inj=0, abs=0, lat=1, active=32, cycles=378, pos=[0.00,0.50,0.33]
+  Step    600: w= 10, inj=0, abs=0, lat=2, active=32, cycles=411, pos=[0.00,0.50,0.33]
+  Step    650: w= 10, inj=0, abs=0, lat=2, active=32, cycles=442, pos=[0.00,0.33,0.50]
+  Step    700: w= 10, inj=0, abs=0, lat=2, active=32, cycles=463, pos=[0.00,0.42,0.42]
+  Step    750: w= 10, inj=0, abs=0, lat=2, active=32, cycles=503, pos=[0.00,0.33,0.50]
+  Step    800: w= 10, inj=0, abs=0, lat=2, active=32, cycles=521, pos=[0.00,0.42,0.42]
+  Step    850: w= 10, inj=0, abs=0, lat=2, active=32, cycles=547, pos=[0.00,0.42,0.42]
+  Step    900: w= 10, inj=0, abs=0, lat=1, active=32, cycles=570, pos=[0.00,0.42,0.42]
+  Step    950: w= 10, inj=0, abs=0, lat=2, active=32, cycles=591, pos=[0.00,0.42,0.42]
+  Step   1000: w= 10, inj=0, abs=0, lat=2, active=32, cycles=613, pos=[0.00,0.50,0.33]
+  Step   1050: w= 10, inj=0, abs=0, lat=2, active=32, cycles=626, pos=[0.00,0.42,0.42]
+  Step   1100: w= 10, inj=0, abs=0, lat=2, active=32, cycles=647, pos=[0.00,0.33,0.50]
+  Step   1150: w= 10, inj=0, abs=0, lat=2, active=32, cycles=667, pos=[0.00,0.50,0.33]
+  Step   1200: w= 10, inj=0, abs=0, lat=2, active=32, cycles=700, pos=[0.00,0.33,0.50]
+  Step   1250: w= 10, inj=0, abs=0, lat=2, active=32, cycles=718, pos=[0.00,0.50,0.33]
+  Step   1300: w= 10, inj=0, abs=0, lat=2, active=32, cycles=728, pos=[0.00,0.33,0.50]
+  Step   1350: w= 10, inj=0, abs=0, lat=2, active=32, cycles=741, pos=[0.00,0.50,0.33]
+  Step   1400: w= 10, inj=0, abs=0, lat=2, active=32, cycles=758, pos=[0.00,0.42,0.42]
+  Step   1450: w= 10, inj=0, abs=0, lat=2, active=32, cycles=774, pos=[0.00,0.42,0.42]
+  Step   1500: w= 10, inj=0, abs=0, lat=1, active=32, cycles=799, pos=[0.00,0.42,0.42]
+  Step   1550: w= 10, inj=0, abs=0, lat=2, active=32, cycles=808, pos=[0.00,0.33,0.50]
+  Step   1600: w= 10, inj=0, abs=0, lat=1, active=32, cycles=824, pos=[0.00,0.42,0.42]
+  Step   1650: w= 10, inj=0, abs=0, lat=2, active=32, cycles=843, pos=[0.00,0.42,0.42]
+  Step   1700: w= 10, inj=0, abs=0, lat=2, active=32, cycles=856, pos=[0.00,0.42,0.42]
+  Step   1750: w= 10, inj=0, abs=0, lat=2, active=32, cycles=871, pos=[0.00,0.58,0.25]
+  Step   1800: w= 10, inj=0, abs=0, lat=2, active=32, cycles=881, pos=[0.00,0.33,0.50]
+  Step   1850: w= 10, inj=0, abs=0, lat=1, active=32, cycles=892, pos=[0.00,0.33,0.50]
+  Step   1900: w= 10, inj=0, abs=0, lat=2, active=32, cycles=907, pos=[0.00,0.33,0.50]
+  Step   1950: w= 10, inj=0, abs=0, lat=1, active=32, cycles=917, pos=[0.00,0.58,0.25]
+[SpatialEvolver] Done. 200 snapshots.
+  Cycles: 936
+  Sealed: True (17 bits, ratio=0.47)
+  Total inject: 65, absorb: 62
+  Layer 1 done: w=10, sealed=True, inj=65, abs=62, cycles=936
+    [seed=142] Done in 65.3s
+    [seed=142] Layers formed: 2 (n_layers=2) [P3 FIX: max_layers=2 ENFORCED]
+    seed=142: NSI_max=0.6135, layers=2 [P3 OK], L1_cycles=0 (reconfig=0, reshuffle=0, identity=0), types_active=0, CIV_max=3, NRC_R2=2, jaccard_L0L1=0.000
+    [seed=242] Running 2000 steps at N0=72, max_layers=2 (P3 fix: HierarchyManager enforced)...
+======================================================================
+HierarchicalEvolver: N0=72, steps_per_layer=2000, max_layers=2
+======================================================================
+
+  --- Layer 0: N=72, active=72, frozen=0 ---
+[SpatialEvolver] N=72, T=2000, L=1.0, eps=0.0417
+  Hierarchy bits: 24, Lateral bits: 48
+  Step      0: w=  1, inj=4, abs=4, lat=1, active=6, cycles=0, pos=[0.00,0.04,0.00]
+    [NRC] step=10: events=2 path=reinforce R2=YES cycles=1
+[A9] Sealed at step 21: 53 active in window, keeping 24, freezing 29
+[A9] Kept: [26, 29, 33, 39, 41, 42, 43, 44, 45, 47, 48, 50, 51, 52, 53, 59, 60, 61, 62, 64, 65, 66, 67, 71]
+[A9] Frozen: [1, 4, 5, 7, 10, 11, 13, 15, 17, 18, 19, 22, 24, 25, 27, 28, 32, 35, 37, 38, 40, 46, 49, 54, 56, 57, 63, 68, 70]
+    [NRC] step=40: events=2 path=reinforce R2=no cycles=2
+  Step     50: w= 27, inj=2, abs=0, lat=2, active=64, cycles=23, pos=[0.25,0.33,0.54]
+  Step    100: w= 27, inj=2, abs=0, lat=2, active=64, cycles=55, pos=[0.25,0.38,0.50]
+  Step    150: w= 27, inj=2, abs=0, lat=1, active=64, cycles=83, pos=[0.25,0.33,0.54]
+  Step    200: w= 27, inj=2, abs=0, lat=2, active=64, cycles=107, pos=[0.25,0.42,0.46]
+  Step    250: w= 27, inj=2, abs=0, lat=1, active=64, cycles=139, pos=[0.25,0.38,0.50]
+  Step    300: w= 27, inj=2, abs=0, lat=2, active=64, cycles=166, pos=[0.25,0.25,0.62]
+  Step    350: w= 27, inj=2, abs=0, lat=2, active=64, cycles=189, pos=[0.25,0.33,0.54]
+  Step    400: w= 27, inj=2, abs=0, lat=2, active=64, cycles=218, pos=[0.25,0.38,0.50]
+  Step    450: w= 27, inj=2, abs=0, lat=2, active=64, cycles=242, pos=[0.25,0.33,0.54]
+  Step    500: w= 27, inj=2, abs=0, lat=2, active=64, cycles=267, pos=[0.25,0.38,0.50]
+  Step    550: w= 27, inj=2, abs=0, lat=1, active=64, cycles=298, pos=[0.25,0.29,0.58]
+  Step    600: w= 27, inj=2, abs=0, lat=2, active=64, cycles=319, pos=[0.25,0.38,0.50]
+  Step    650: w= 27, inj=2, abs=0, lat=1, active=64, cycles=334, pos=[0.25,0.42,0.46]
+  Step    700: w= 27, inj=2, abs=0, lat=1, active=64, cycles=355, pos=[0.25,0.38,0.50]
+  Step    750: w= 27, inj=2, abs=0, lat=2, active=64, cycles=377, pos=[0.25,0.33,0.54]
+  Step    800: w= 27, inj=2, abs=0, lat=2, active=64, cycles=402, pos=[0.25,0.42,0.46]
+  Step    850: w= 27, inj=2, abs=0, lat=1, active=64, cycles=424, pos=[0.25,0.29,0.58]
+  Step    900: w= 27, inj=2, abs=0, lat=2, active=64, cycles=437, pos=[0.25,0.42,0.46]
+  Step    950: w= 27, inj=2, abs=0, lat=1, active=64, cycles=462, pos=[0.25,0.54,0.33]
+  Step   1000: w= 27, inj=2, abs=0, lat=1, active=64, cycles=480, pos=[0.25,0.46,0.42]
+  Step   1050: w= 27, inj=2, abs=0, lat=1, active=64, cycles=498, pos=[0.25,0.25,0.62]
+  Step   1100: w= 27, inj=2, abs=0, lat=2, active=64, cycles=520, pos=[0.25,0.38,0.50]
+  Step   1150: w= 27, inj=2, abs=0, lat=2, active=64, cycles=538, pos=[0.25,0.29,0.58]
+  Step   1200: w= 27, inj=2, abs=0, lat=2, active=64, cycles=560, pos=[0.25,0.33,0.54]
+  Step   1250: w= 27, inj=2, abs=0, lat=2, active=64, cycles=575, pos=[0.25,0.50,0.38]
+  Step   1300: w= 27, inj=2, abs=0, lat=1, active=64, cycles=588, pos=[0.25,0.42,0.46]
+  Step   1350: w= 27, inj=2, abs=0, lat=2, active=64, cycles=609, pos=[0.25,0.38,0.50]
+  Step   1400: w= 27, inj=2, abs=0, lat=2, active=64, cycles=623, pos=[0.25,0.46,0.42]
+  Step   1450: w= 27, inj=2, abs=0, lat=2, active=64, cycles=644, pos=[0.25,0.38,0.50]
+  Step   1500: w= 27, inj=2, abs=0, lat=1, active=64, cycles=659, pos=[0.25,0.33,0.54]
+  Step   1550: w= 27, inj=2, abs=0, lat=1, active=64, cycles=670, pos=[0.25,0.38,0.50]
+  Step   1600: w= 27, inj=2, abs=0, lat=2, active=64, cycles=687, pos=[0.25,0.33,0.54]
+  Step   1650: w= 27, inj=2, abs=0, lat=2, active=64, cycles=698, pos=[0.25,0.38,0.50]
+  Step   1700: w= 27, inj=2, abs=0, lat=1, active=64, cycles=704, pos=[0.25,0.42,0.46]
+  Step   1750: w= 27, inj=2, abs=0, lat=2, active=64, cycles=715, pos=[0.25,0.33,0.54]
+  Step   1800: w= 27, inj=2, abs=0, lat=2, active=64, cycles=726, pos=[0.25,0.46,0.42]
+  Step   1850: w= 27, inj=2, abs=0, lat=1, active=64, cycles=734, pos=[0.25,0.29,0.58]
+  Step   1900: w= 27, inj=2, abs=0, lat=2, active=64, cycles=738, pos=[0.25,0.38,0.50]
+  Step   1950: w= 27, inj=2, abs=0, lat=1, active=64, cycles=744, pos=[0.25,0.38,0.50]
+[SpatialEvolver] Done. 200 snapshots.
+  Cycles: 758
+  Sealed: True (29 bits, ratio=0.40)
+  Total inject: 86, absorb: 79
+[Hierarchy] L0 -> L1: 72 -> 33 bits (31 active + 0 enc)
+  [ENCAP] L0 -> L1: 72 -> 33 bits
+  Layer 0 done: w=27, sealed=True, inj=86, abs=79, cycles=758
+
+  --- Layer 1: N=33, active=33, frozen=0 ---
+[SpatialEvolver] N=33, T=2000, L=1.0, eps=0.0909
+  Hierarchy bits: 11, Lateral bits: 22
+  Step      0: w=  1, inj=4, abs=4, lat=2, active=7, cycles=0, pos=[0.09,0.00,0.00]
+  Step     50: w=  6, inj=3, abs=3, lat=2, active=27, cycles=12, pos=[0.00,0.09,0.45]
+  Step    100: w=  6, inj=3, abs=3, lat=2, active=27, cycles=24, pos=[0.00,0.36,0.18]
+  Step    150: w=  6, inj=3, abs=3, lat=2, active=27, cycles=46, pos=[0.00,0.36,0.18]
+  Step    200: w=  6, inj=3, abs=3, lat=2, active=27, cycles=78, pos=[0.00,0.18,0.36]
+  Step    250: w=  6, inj=3, abs=3, lat=2, active=27, cycles=111, pos=[0.00,0.36,0.18]
+  Step    300: w=  6, inj=3, abs=3, lat=2, active=27, cycles=142, pos=[0.00,0.18,0.36]
+  Step    350: w=  6, inj=3, abs=3, lat=2, active=27, cycles=173, pos=[0.00,0.36,0.18]
+  Step    400: w=  6, inj=3, abs=3, lat=2, active=27, cycles=208, pos=[0.00,0.27,0.27]
+  Step    450: w=  6, inj=3, abs=3, lat=2, active=27, cycles=244, pos=[0.00,0.18,0.36]
+  Step    500: w=  6, inj=3, abs=3, lat=2, active=27, cycles=274, pos=[0.00,0.27,0.27]
+  Step    550: w=  6, inj=3, abs=3, lat=2, active=27, cycles=304, pos=[0.00,0.45,0.09]
+  Step    600: w=  6, inj=3, abs=3, lat=2, active=27, cycles=345, pos=[0.00,0.36,0.18]
+  Step    650: w=  6, inj=3, abs=3, lat=2, active=27, cycles=385, pos=[0.00,0.27,0.27]
+  Step    700: w=  6, inj=3, abs=3, lat=1, active=27, cycles=419, pos=[0.00,0.27,0.27]
+  Step    750: w=  6, inj=3, abs=3, lat=2, active=27, cycles=461, pos=[0.00,0.27,0.27]
+  Step    800: w=  6, inj=3, abs=3, lat=2, active=27, cycles=498, pos=[0.00,0.27,0.27]
+  Step    850: w=  6, inj=3, abs=3, lat=2, active=27, cycles=536, pos=[0.00,0.18,0.36]
+  Step    900: w=  6, inj=3, abs=3, lat=2, active=27, cycles=567, pos=[0.00,0.18,0.36]
+  Step    950: w=  6, inj=3, abs=3, lat=2, active=27, cycles=617, pos=[0.00,0.36,0.18]
+  Step   1000: w=  6, inj=3, abs=3, lat=2, active=27, cycles=666, pos=[0.00,0.18,0.36]
+  Step   1050: w=  6, inj=3, abs=3, lat=2, active=27, cycles=707, pos=[0.00,0.18,0.36]
+  Step   1100: w=  6, inj=3, abs=3, lat=2, active=27, cycles=753, pos=[0.00,0.18,0.36]
+  Step   1150: w=  6, inj=3, abs=3, lat=2, active=27, cycles=802, pos=[0.00,0.18,0.36]
+  Step   1200: w=  6, inj=3, abs=3, lat=2, active=27, cycles=852, pos=[0.00,0.27,0.27]
+  Step   1250: w=  6, inj=3, abs=3, lat=2, active=27, cycles=898, pos=[0.00,0.36,0.18]
+  Step   1300: w=  6, inj=3, abs=3, lat=2, active=27, cycles=944, pos=[0.00,0.36,0.18]
+  Step   1350: w=  6, inj=3, abs=3, lat=2, active=27, cycles=997, pos=[0.00,0.36,0.18]
+  Step   1400: w=  6, inj=3, abs=3, lat=1, active=27, cycles=1049, pos=[0.00,0.27,0.27]
+  Step   1450: w=  6, inj=3, abs=3, lat=2, active=27, cycles=1100, pos=[0.00,0.18,0.36]
+  Step   1500: w=  6, inj=3, abs=3, lat=2, active=27, cycles=1154, pos=[0.00,0.27,0.27]
+  Step   1550: w=  6, inj=3, abs=3, lat=2, active=27, cycles=1199, pos=[0.00,0.27,0.27]
+  Step   1600: w=  6, inj=3, abs=3, lat=2, active=27, cycles=1245, pos=[0.00,0.36,0.18]
+  Step   1650: w=  6, inj=3, abs=3, lat=2, active=27, cycles=1300, pos=[0.00,0.18,0.36]
+  Step   1700: w=  6, inj=3, abs=3, lat=2, active=27, cycles=1343, pos=[0.00,0.36,0.18]
+  Step   1750: w=  6, inj=3, abs=3, lat=2, active=27, cycles=1392, pos=[0.00,0.45,0.09]
+  Step   1800: w=  6, inj=3, abs=3, lat=2, active=27, cycles=1435, pos=[0.00,0.09,0.45]
+  Step   1850: w=  6, inj=3, abs=3, lat=2, active=27, cycles=1481, pos=[0.00,0.36,0.18]
+  Step   1900: w=  6, inj=3, abs=3, lat=2, active=27, cycles=1527, pos=[0.00,0.36,0.18]
+  Step   1950: w=  6, inj=3, abs=3, lat=2, active=27, cycles=1582, pos=[0.00,0.36,0.18]
+[SpatialEvolver] Done. 200 snapshots.
+  Cycles: 1634
+  Sealed: False (0 bits, ratio=0.00)
+  Total inject: 6006, absorb: 6006
+  Layer 1 done: w=6, sealed=False, inj=6006, abs=6006, cycles=1634
+  Layer 1 not sealed after 2000 steps, running extra...
+[SpatialEvolver] N=33, T=1000, L=1.0, eps=0.0909
+  Hierarchy bits: 11, Lateral bits: 22
+  Step      0: w=  1, inj=4, abs=4, lat=2, active=27, cycles=1636, pos=[0.00,0.00,0.09]
+  Step     50: w=  5, inj=4, abs=4, lat=2, active=27, cycles=1661, pos=[0.00,0.09,0.36]
+  Step    100: w=  5, inj=4, abs=4, lat=1, active=27, cycles=1698, pos=[0.00,0.27,0.18]
+  Step    150: w=  5, inj=4, abs=4, lat=2, active=27, cycles=1736, pos=[0.00,0.18,0.27]
+  Step    200: w=  5, inj=4, abs=4, lat=2, active=27, cycles=1773, pos=[0.00,0.27,0.18]
+  Step    250: w=  5, inj=4, abs=4, lat=2, active=27, cycles=1824, pos=[0.00,0.27,0.18]
+  Step    300: w=  5, inj=4, abs=4, lat=2, active=27, cycles=1861, pos=[0.00,0.27,0.18]
+  Step    350: w=  5, inj=4, abs=4, lat=1, active=27, cycles=1910, pos=[0.00,0.27,0.18]
+  Step    400: w=  5, inj=4, abs=4, lat=2, active=27, cycles=1950, pos=[0.00,0.27,0.18]
+  Step    450: w=  5, inj=4, abs=4, lat=2, active=27, cycles=2000, pos=[0.00,0.18,0.27]
+  Step    500: w=  5, inj=4, abs=4, lat=2, active=27, cycles=2052, pos=[0.00,0.18,0.27]
+  Step    550: w=  5, inj=4, abs=4, lat=2, active=27, cycles=2093, pos=[0.00,0.27,0.18]
+  Step    600: w=  5, inj=4, abs=4, lat=2, active=27, cycles=2149, pos=[0.00,0.27,0.18]
+  Step    650: w=  5, inj=4, abs=4, lat=2, active=27, cycles=2195, pos=[0.00,0.27,0.18]
+  Step    700: w=  5, inj=4, abs=4, lat=2, active=27, cycles=2238, pos=[0.00,0.27,0.18]
+  Step    750: w=  5, inj=4, abs=4, lat=2, active=27, cycles=2284, pos=[0.00,0.09,0.36]
+  Step    800: w=  5, inj=4, abs=4, lat=2, active=27, cycles=2336, pos=[0.00,0.00,0.45]
+  Step    850: w=  5, inj=4, abs=4, lat=2, active=27, cycles=2392, pos=[0.00,0.36,0.09]
+  Step    900: w=  5, inj=4, abs=4, lat=2, active=27, cycles=2430, pos=[0.00,0.36,0.09]
+  Step    950: w=  5, inj=4, abs=4, lat=2, active=27, cycles=2475, pos=[0.00,0.00,0.45]
+[SpatialEvolver] Done. 100 snapshots.
+  Cycles: 2521
+  Sealed: False (0 bits, ratio=0.00)
+  Total inject: 10006, absorb: 10006
+  Extra 1000 steps: sealed=False
+    [seed=242] Done in 80.1s
+    [seed=242] Layers formed: 2 (n_layers=2) [P3 FIX: max_layers=2 ENFORCED]
+    seed=242: NSI_max=0.5968, layers=2 [P3 OK], L1_cycles=7 (reconfig=0, reshuffle=7, identity=0), types_active=1, CIV_max=3, NRC_R2=1, jaccard_L0L1=0.000
+    [seed=342] Running 2000 steps at N0=72, max_layers=2 (P3 fix: HierarchyManager enforced)...
+======================================================================
+HierarchicalEvolver: N0=72, steps_per_layer=2000, max_layers=2
+======================================================================
+
+  --- Layer 0: N=72, active=72, frozen=0 ---
+[SpatialEvolver] N=72, T=2000, L=1.0, eps=0.0417
+  Hierarchy bits: 24, Lateral bits: 48
+  Step      0: w=  1, inj=4, abs=4, lat=2, active=7, cycles=0, pos=[0.04,0.00,0.00]
+    [NRC] step=10: events=2 path=reinforce R2=YES cycles=1
+[A9] Sealed at step 35: 53 active in window, keeping 24, freezing 29
+[A9] Kept: [25, 31, 32, 33, 35, 36, 38, 39, 51, 52, 55, 56, 57, 59, 60, 61, 62, 63, 65, 66, 67, 69, 70, 71]
+[A9] Frozen: [0, 1, 3, 4, 8, 9, 10, 13, 15, 16, 18, 19, 22, 27, 28, 29, 34, 37, 41, 43, 45, 47, 48, 50, 53, 54, 58, 64, 68]
+    [NRC] step=50: events=2 path=reinforce R2=no cycles=2
+  Step     50: w= 23, inj=2, abs=0, lat=1, active=61, cycles=8, pos=[0.21,0.33,0.42]
+    [NRC] step=60: events=2 path=reinforce R2=no cycles=3
+  Step    100: w= 36, inj=0, abs=0, lat=2, active=70, cycles=34, pos=[0.42,0.58,0.50]
+  Step    150: w= 36, inj=0, abs=0, lat=1, active=70, cycles=71, pos=[0.42,0.54,0.54]
+  Step    200: w= 36, inj=0, abs=0, lat=1, active=70, cycles=106, pos=[0.42,0.50,0.58]
+    [NRC] step=240: events=1 path=restructure R2=YES cycles=4
+  Step    250: w= 36, inj=0, abs=0, lat=1, active=70, cycles=144, pos=[0.42,0.71,0.38]
+  Step    300: w= 36, inj=0, abs=0, lat=2, active=70, cycles=168, pos=[0.42,0.62,0.46]
+  Step    350: w= 36, inj=0, abs=0, lat=1, active=70, cycles=202, pos=[0.42,0.54,0.54]
+  Step    400: w= 36, inj=0, abs=0, lat=2, active=70, cycles=235, pos=[0.42,0.58,0.50]
+  Step    450: w= 36, inj=0, abs=0, lat=2, active=70, cycles=259, pos=[0.42,0.58,0.50]
+  Step    500: w= 36, inj=0, abs=0, lat=2, active=70, cycles=283, pos=[0.42,0.50,0.58]
+  Step    550: w= 36, inj=0, abs=0, lat=2, active=70, cycles=311, pos=[0.42,0.67,0.42]
+  Step    600: w= 36, inj=0, abs=0, lat=1, active=70, cycles=346, pos=[0.42,0.50,0.58]
+  Step    650: w= 36, inj=0, abs=0, lat=1, active=70, cycles=372, pos=[0.42,0.62,0.46]
+  Step    700: w= 36, inj=0, abs=0, lat=2, active=70, cycles=403, pos=[0.42,0.58,0.50]
+  Step    750: w= 36, inj=0, abs=0, lat=2, active=70, cycles=422, pos=[0.42,0.58,0.50]
+  Step    800: w= 36, inj=0, abs=0, lat=2, active=70, cycles=437, pos=[0.42,0.54,0.54]
+  Step    850: w= 36, inj=0, abs=0, lat=2, active=70, cycles=461, pos=[0.42,0.71,0.38]
+  Step    900: w= 36, inj=0, abs=0, lat=2, active=70, cycles=483, pos=[0.42,0.67,0.42]
+  Step    950: w= 36, inj=0, abs=0, lat=2, active=70, cycles=505, pos=[0.42,0.62,0.46]
+  Step   1000: w= 36, inj=0, abs=0, lat=2, active=70, cycles=532, pos=[0.42,0.67,0.42]
+  Step   1050: w= 36, inj=0, abs=0, lat=1, active=70, cycles=557, pos=[0.42,0.62,0.46]
+  Step   1100: w= 36, inj=0, abs=0, lat=1, active=70, cycles=580, pos=[0.42,0.50,0.58]
+  Step   1150: w= 36, inj=0, abs=0, lat=2, active=70, cycles=600, pos=[0.42,0.62,0.46]
+  Step   1200: w= 36, inj=0, abs=0, lat=2, active=70, cycles=625, pos=[0.42,0.62,0.46]
+  Step   1250: w= 36, inj=0, abs=0, lat=2, active=70, cycles=646, pos=[0.42,0.58,0.50]
+  Step   1300: w= 36, inj=0, abs=0, lat=2, active=70, cycles=667, pos=[0.42,0.54,0.54]
+  Step   1350: w= 36, inj=0, abs=0, lat=2, active=70, cycles=690, pos=[0.42,0.54,0.54]
+  Step   1400: w= 36, inj=0, abs=0, lat=2, active=70, cycles=712, pos=[0.42,0.67,0.42]
+  Step   1450: w= 36, inj=0, abs=0, lat=2, active=70, cycles=734, pos=[0.42,0.58,0.50]
+  Step   1500: w= 36, inj=0, abs=0, lat=2, active=70, cycles=759, pos=[0.42,0.58,0.50]
+  Step   1550: w= 36, inj=0, abs=0, lat=2, active=70, cycles=772, pos=[0.42,0.62,0.46]
+  Step   1600: w= 36, inj=0, abs=0, lat=2, active=70, cycles=788, pos=[0.42,0.54,0.54]
+  Step   1650: w= 36, inj=0, abs=0, lat=2, active=70, cycles=801, pos=[0.42,0.58,0.50]
+  Step   1700: w= 36, inj=0, abs=0, lat=2, active=70, cycles=815, pos=[0.42,0.58,0.50]
+  Step   1750: w= 36, inj=0, abs=0, lat=1, active=70, cycles=841, pos=[0.42,0.46,0.62]
+  Step   1800: w= 36, inj=0, abs=0, lat=2, active=70, cycles=860, pos=[0.42,0.62,0.46]
+  Step   1850: w= 36, inj=0, abs=0, lat=2, active=70, cycles=874, pos=[0.42,0.62,0.46]
+  Step   1900: w= 36, inj=0, abs=0, lat=2, active=70, cycles=885, pos=[0.42,0.54,0.54]
+  Step   1950: w= 36, inj=0, abs=0, lat=2, active=70, cycles=895, pos=[0.42,0.58,0.50]
+[SpatialEvolver] Done. 200 snapshots.
+  Cycles: 904
+  Sealed: True (29 bits, ratio=0.40)
+  Total inject: 98, absorb: 86
+[Hierarchy] L0 -> L1: 72 -> 36 bits (32 active + 2 enc)
+  [ENCAP] L0 -> L1: 72 -> 36 bits
+  Layer 0 done: w=36, sealed=True, inj=98, abs=86, cycles=904
+
+  --- Layer 1: N=36, active=36, frozen=0 ---
+[SpatialEvolver] N=36, T=2000, L=1.0, eps=0.0833
+  Hierarchy bits: 12, Lateral bits: 24
+  Step      0: w=  1, inj=4, abs=4, lat=2, active=7, cycles=0, pos=[0.00,0.08,0.00]
+[A9] Sealed at step 12: 29 active in window, keeping 12, freezing 17
+[A9] Kept: [13, 15, 18, 22, 23, 27, 28, 29, 30, 31, 34, 35]
+[A9] Frozen: [1, 2, 3, 5, 6, 8, 12, 14, 16, 17, 19, 20, 21, 25, 26, 32, 33]
+  Step     50: w= 12, inj=0, abs=0, lat=0, active=30, cycles=26, pos=[0.00,0.75,0.25]
+  Step    100: w= 12, inj=0, abs=0, lat=2, active=30, cycles=56, pos=[0.00,0.67,0.33]
+  Step    150: w= 12, inj=0, abs=0, lat=2, active=30, cycles=94, pos=[0.00,0.58,0.42]
+  Step    200: w= 12, inj=0, abs=0, lat=1, active=30, cycles=136, pos=[0.00,0.58,0.42]
+  Step    250: w= 12, inj=0, abs=0, lat=2, active=30, cycles=173, pos=[0.00,0.50,0.50]
+  Step    300: w= 12, inj=0, abs=0, lat=2, active=30, cycles=212, pos=[0.00,0.58,0.42]
+  Step    350: w= 12, inj=0, abs=0, lat=1, active=30, cycles=247, pos=[0.00,0.67,0.33]
+  Step    400: w= 12, inj=0, abs=0, lat=2, active=30, cycles=279, pos=[0.00,0.58,0.42]
+  Step    450: w= 12, inj=0, abs=0, lat=2, active=30, cycles=319, pos=[0.00,0.67,0.33]
+  Step    500: w= 12, inj=0, abs=0, lat=2, active=30, cycles=360, pos=[0.00,0.42,0.58]
+  Step    550: w= 12, inj=0, abs=0, lat=2, active=30, cycles=391, pos=[0.00,0.58,0.42]
+  Step    600: w= 12, inj=0, abs=0, lat=2, active=30, cycles=424, pos=[0.00,0.58,0.42]
+  Step    650: w= 12, inj=0, abs=0, lat=1, active=30, cycles=456, pos=[0.00,0.50,0.50]
+  Step    700: w= 12, inj=0, abs=0, lat=2, active=30, cycles=487, pos=[0.00,0.42,0.58]
+  Step    750: w= 12, inj=0, abs=0, lat=1, active=30, cycles=525, pos=[0.00,0.67,0.33]
+  Step    800: w= 12, inj=0, abs=0, lat=2, active=30, cycles=550, pos=[0.00,0.58,0.42]
+  Step    850: w= 12, inj=0, abs=0, lat=2, active=30, cycles=569, pos=[0.00,0.58,0.42]
+  Step    900: w= 12, inj=0, abs=0, lat=2, active=30, cycles=596, pos=[0.00,0.67,0.33]
+  Step    950: w= 12, inj=0, abs=0, lat=2, active=30, cycles=622, pos=[0.00,0.58,0.42]
+  Step   1000: w= 12, inj=0, abs=0, lat=2, active=30, cycles=648, pos=[0.00,0.75,0.25]
+  Step   1050: w= 12, inj=0, abs=0, lat=2, active=30, cycles=675, pos=[0.00,0.58,0.42]
+  Step   1100: w= 12, inj=0, abs=0, lat=1, active=30, cycles=698, pos=[0.00,0.58,0.42]
+  Step   1150: w= 12, inj=0, abs=0, lat=2, active=30, cycles=722, pos=[0.00,0.67,0.33]
+  Step   1200: w= 12, inj=0, abs=0, lat=2, active=30, cycles=751, pos=[0.00,0.58,0.42]
+  Step   1250: w= 12, inj=0, abs=0, lat=2, active=30, cycles=769, pos=[0.00,0.50,0.50]
+  Step   1300: w= 12, inj=0, abs=0, lat=1, active=30, cycles=792, pos=[0.00,0.67,0.33]
+  Step   1350: w= 12, inj=0, abs=0, lat=2, active=30, cycles=819, pos=[0.00,0.58,0.42]
+  Step   1400: w= 12, inj=0, abs=0, lat=2, active=30, cycles=839, pos=[0.00,0.50,0.50]
+  Step   1450: w= 12, inj=0, abs=0, lat=2, active=30, cycles=857, pos=[0.00,0.50,0.50]
+  Step   1500: w= 12, inj=0, abs=0, lat=2, active=30, cycles=885, pos=[0.00,0.58,0.42]
+  Step   1550: w= 12, inj=0, abs=0, lat=2, active=30, cycles=900, pos=[0.00,0.58,0.42]
+  Step   1600: w= 12, inj=0, abs=0, lat=2, active=30, cycles=916, pos=[0.00,0.58,0.42]
+  Step   1650: w= 12, inj=0, abs=0, lat=2, active=30, cycles=935, pos=[0.00,0.58,0.42]
+  Step   1700: w= 12, inj=0, abs=0, lat=2, active=30, cycles=948, pos=[0.00,0.58,0.42]
+  Step   1750: w= 12, inj=0, abs=0, lat=2, active=30, cycles=964, pos=[0.00,0.58,0.42]
+  Step   1800: w= 12, inj=0, abs=0, lat=1, active=30, cycles=977, pos=[0.00,0.58,0.42]
+  Step   1850: w= 12, inj=0, abs=0, lat=1, active=30, cycles=989, pos=[0.00,0.67,0.33]
+  Step   1900: w= 12, inj=0, abs=0, lat=2, active=30, cycles=1004, pos=[0.00,0.50,0.50]
+  Step   1950: w= 12, inj=0, abs=0, lat=2, active=30, cycles=1024, pos=[0.00,0.50,0.50]
+[SpatialEvolver] Done. 200 snapshots.
+  Cycles: 1039
+  Sealed: True (17 bits, ratio=0.47)
+  Total inject: 52, absorb: 48
+  Layer 1 done: w=12, sealed=True, inj=52, abs=48, cycles=1039
+    [seed=342] Done in 63.8s
+    [seed=342] Layers formed: 2 (n_layers=2) [P3 FIX: max_layers=2 ENFORCED]
+    seed=342: NSI_max=0.6486, layers=2 [P3 OK], L1_cycles=0 (reconfig=0, reshuffle=0, identity=0), types_active=0, CIV_max=4, NRC_R2=2, jaccard_L0L1=0.000
+    [seed=442] Running 2000 steps at N0=72, max_layers=2 (P3 fix: HierarchyManager enforced)...
+======================================================================
+HierarchicalEvolver: N0=72, steps_per_layer=2000, max_layers=2
+======================================================================
+
+  --- Layer 0: N=72, active=72, frozen=0 ---
+[SpatialEvolver] N=72, T=2000, L=1.0, eps=0.0417
+  Hierarchy bits: 24, Lateral bits: 48
+  Step      0: w=  1, inj=4, abs=4, lat=2, active=7, cycles=0, pos=[0.04,0.00,0.00]
+    [NRC] step=10: events=2 path=reinforce R2=YES cycles=1
+[A9] Sealed at step 23: 53 active in window, keeping 24, freezing 29
+[A9] Kept: [25, 31, 33, 35, 36, 38, 41, 42, 43, 45, 46, 47, 50, 51, 53, 54, 61, 62, 64, 65, 66, 67, 68, 71]
+[A9] Frozen: [2, 4, 5, 7, 10, 13, 17, 18, 19, 22, 24, 26, 27, 28, 29, 30, 32, 34, 37, 39, 40, 44, 48, 49, 56, 57, 58, 60, 69]
+    [NRC] step=40: events=2 path=reinforce R2=no cycles=2
+    [NRC] step=50: events=2 path=reinforce R2=no cycles=3
+  Step     50: w= 28, inj=1, abs=0, lat=2, active=63, cycles=11, pos=[0.21,0.38,0.58]
+  Step    100: w= 27, inj=1, abs=0, lat=0, active=63, cycles=37, pos=[0.08,0.50,0.54]
+    [NRC] step=120: events=1 path=restructure R2=no cycles=4
+  Step    150: w= 25, inj=1, abs=0, lat=2, active=65, cycles=62, pos=[0.08,0.46,0.50]
+  Step    200: w= 29, inj=0, abs=0, lat=2, active=71, cycles=83, pos=[0.38,0.21,0.62]
+  Step    250: w= 29, inj=0, abs=0, lat=1, active=71, cycles=116, pos=[0.38,0.21,0.62]
+    [NRC] step=270: events=1 path=restructure R2=YES cycles=5
+  Step    300: w= 33, inj=0, abs=0, lat=2, active=71, cycles=146, pos=[0.46,0.33,0.58]
+  Step    350: w= 33, inj=0, abs=0, lat=1, active=71, cycles=180, pos=[0.46,0.42,0.50]
+  Step    400: w= 33, inj=0, abs=0, lat=2, active=71, cycles=216, pos=[0.46,0.25,0.67]
+  Step    450: w= 33, inj=0, abs=0, lat=2, active=71, cycles=247, pos=[0.46,0.46,0.46]
+  Step    500: w= 33, inj=0, abs=0, lat=2, active=71, cycles=273, pos=[0.46,0.38,0.54]
+  Step    550: w= 33, inj=0, abs=0, lat=2, active=71, cycles=297, pos=[0.46,0.33,0.58]
+  Step    600: w= 33, inj=0, abs=0, lat=2, active=71, cycles=321, pos=[0.46,0.29,0.62]
+  Step    650: w= 33, inj=0, abs=0, lat=2, active=71, cycles=346, pos=[0.46,0.38,0.54]
+  Step    700: w= 33, inj=0, abs=0, lat=2, active=71, cycles=372, pos=[0.46,0.25,0.67]
+  Step    750: w= 33, inj=0, abs=0, lat=1, active=71, cycles=397, pos=[0.46,0.46,0.46]
+  Step    800: w= 33, inj=0, abs=0, lat=2, active=71, cycles=418, pos=[0.46,0.25,0.67]
+  Step    850: w= 33, inj=0, abs=0, lat=1, active=71, cycles=446, pos=[0.46,0.33,0.58]
+  Step    900: w= 33, inj=0, abs=0, lat=2, active=71, cycles=475, pos=[0.46,0.33,0.58]
+  Step    950: w= 33, inj=0, abs=0, lat=2, active=71, cycles=500, pos=[0.46,0.29,0.62]
+  Step   1000: w= 33, inj=0, abs=0, lat=2, active=71, cycles=522, pos=[0.46,0.33,0.58]
+  Step   1050: w= 33, inj=0, abs=0, lat=2, active=71, cycles=544, pos=[0.46,0.38,0.54]
+  Step   1100: w= 33, inj=0, abs=0, lat=2, active=71, cycles=562, pos=[0.46,0.33,0.58]
+  Step   1150: w= 33, inj=0, abs=0, lat=2, active=71, cycles=580, pos=[0.46,0.33,0.58]
+  Step   1200: w= 33, inj=0, abs=0, lat=2, active=71, cycles=606, pos=[0.46,0.38,0.54]
+  Step   1250: w= 33, inj=0, abs=0, lat=2, active=71, cycles=631, pos=[0.46,0.38,0.54]
+  Step   1300: w= 33, inj=0, abs=0, lat=1, active=71, cycles=658, pos=[0.46,0.29,0.62]
+  Step   1350: w= 33, inj=0, abs=0, lat=2, active=71, cycles=672, pos=[0.46,0.42,0.50]
+  Step   1400: w= 33, inj=0, abs=0, lat=2, active=71, cycles=693, pos=[0.46,0.46,0.46]
+  Step   1450: w= 33, inj=0, abs=0, lat=2, active=71, cycles=715, pos=[0.46,0.33,0.58]
+  Step   1500: w= 33, inj=0, abs=0, lat=1, active=71, cycles=734, pos=[0.46,0.33,0.58]
+  Step   1550: w= 33, inj=0, abs=0, lat=2, active=71, cycles=765, pos=[0.46,0.42,0.50]
+  Step   1600: w= 33, inj=0, abs=0, lat=2, active=71, cycles=794, pos=[0.46,0.38,0.54]
+  Step   1650: w= 33, inj=0, abs=0, lat=2, active=71, cycles=810, pos=[0.46,0.42,0.50]
+  Step   1700: w= 34, inj=0, abs=0, lat=2, active=71, cycles=821, pos=[0.50,0.33,0.58]
+  Step   1750: w= 34, inj=0, abs=0, lat=2, active=71, cycles=838, pos=[0.50,0.38,0.54]
+  Step   1800: w= 34, inj=0, abs=0, lat=2, active=71, cycles=853, pos=[0.50,0.29,0.62]
+  Step   1850: w= 34, inj=0, abs=0, lat=2, active=71, cycles=871, pos=[0.50,0.38,0.54]
+  Step   1900: w= 34, inj=0, abs=0, lat=2, active=71, cycles=897, pos=[0.50,0.38,0.54]
+  Step   1950: w= 34, inj=0, abs=0, lat=2, active=71, cycles=919, pos=[0.50,0.33,0.58]
+[SpatialEvolver] Done. 200 snapshots.
+  Cycles: 931
+  Sealed: True (29 bits, ratio=0.40)
+  Total inject: 104, absorb: 133
+[Hierarchy] L0 -> L1: 72 -> 30 bits (28 active + 1 enc)
+  [ENCAP] L0 -> L1: 72 -> 30 bits
+  Layer 0 done: w=34, sealed=True, inj=104, abs=133, cycles=931
+
+  --- Layer 1: N=30, active=30, frozen=0 ---
+[SpatialEvolver] N=30, T=2000, L=1.0, eps=0.1000
+  Hierarchy bits: 10, Lateral bits: 20
+  Step      0: w=  1, inj=4, abs=4, lat=1, active=6, cycles=0, pos=[0.00,0.10,0.00]
+  Step     50: w=  6, inj=3, abs=3, lat=2, active=28, cycles=10, pos=[0.00,0.60,0.00]
+  Step    100: w=  6, inj=3, abs=3, lat=2, active=28, cycles=39, pos=[0.00,0.40,0.20]
+  Step    150: w=  6, inj=3, abs=3, lat=2, active=28, cycles=71, pos=[0.00,0.20,0.40]
+  Step    200: w=  6, inj=3, abs=3, lat=2, active=28, cycles=99, pos=[0.00,0.50,0.10]
+  Step    250: w=  6, inj=3, abs=3, lat=2, active=28, cycles=139, pos=[0.00,0.20,0.40]
+  Step    300: w=  6, inj=3, abs=3, lat=2, active=28, cycles=176, pos=[0.00,0.30,0.30]
+  Step    350: w=  6, inj=3, abs=3, lat=1, active=28, cycles=214, pos=[0.00,0.40,0.20]
+  Step    400: w=  6, inj=3, abs=3, lat=2, active=28, cycles=247, pos=[0.00,0.30,0.30]
+  Step    450: w=  6, inj=3, abs=3, lat=2, active=28, cycles=299, pos=[0.00,0.30,0.30]
+  Step    500: w=  6, inj=3, abs=3, lat=2, active=28, cycles=335, pos=[0.00,0.30,0.30]
+  Step    550: w=  6, inj=3, abs=3, lat=2, active=28, cycles=376, pos=[0.00,0.30,0.30]
+  Step    600: w=  6, inj=3, abs=3, lat=1, active=28, cycles=415, pos=[0.00,0.40,0.20]
+  Step    650: w=  6, inj=3, abs=3, lat=2, active=28, cycles=454, pos=[0.00,0.30,0.30]
+  Step    700: w=  6, inj=3, abs=3, lat=2, active=28, cycles=500, pos=[0.00,0.40,0.20]
+  Step    750: w=  6, inj=3, abs=3, lat=2, active=28, cycles=543, pos=[0.00,0.30,0.30]
+  Step    800: w=  6, inj=3, abs=3, lat=2, active=28, cycles=585, pos=[0.00,0.30,0.30]
+  Step    850: w=  6, inj=3, abs=3, lat=2, active=28, cycles=629, pos=[0.00,0.30,0.30]
+  Step    900: w=  6, inj=3, abs=3, lat=1, active=28, cycles=685, pos=[0.00,0.30,0.30]
+  Step    950: w=  6, inj=3, abs=3, lat=2, active=28, cycles=733, pos=[0.00,0.30,0.30]
+  Step   1000: w=  6, inj=3, abs=3, lat=2, active=28, cycles=784, pos=[0.00,0.30,0.30]
+  Step   1050: w=  6, inj=3, abs=3, lat=2, active=28, cycles=831, pos=[0.00,0.20,0.40]
+  Step   1100: w=  6, inj=3, abs=3, lat=2, active=28, cycles=880, pos=[0.00,0.20,0.40]
+  Step   1150: w=  6, inj=3, abs=3, lat=2, active=28, cycles=925, pos=[0.00,0.40,0.20]
+  Step   1200: w=  6, inj=3, abs=3, lat=2, active=28, cycles=971, pos=[0.00,0.20,0.40]
+  Step   1250: w=  6, inj=3, abs=3, lat=2, active=28, cycles=1024, pos=[0.00,0.20,0.40]
+  Step   1300: w=  6, inj=3, abs=3, lat=2, active=28, cycles=1078, pos=[0.00,0.30,0.30]
+  Step   1350: w=  6, inj=3, abs=3, lat=2, active=28, cycles=1123, pos=[0.00,0.50,0.10]
+  Step   1400: w=  6, inj=3, abs=3, lat=2, active=28, cycles=1173, pos=[0.00,0.30,0.30]
+  Step   1450: w=  6, inj=3, abs=3, lat=2, active=28, cycles=1222, pos=[0.00,0.40,0.20]
+  Step   1500: w=  6, inj=3, abs=3, lat=2, active=28, cycles=1274, pos=[0.00,0.30,0.30]
+  Step   1550: w=  6, inj=3, abs=3, lat=2, active=28, cycles=1323, pos=[0.00,0.40,0.20]
+  Step   1600: w=  6, inj=3, abs=3, lat=2, active=28, cycles=1375, pos=[0.00,0.20,0.40]
+  Step   1650: w=  6, inj=3, abs=3, lat=2, active=28, cycles=1429, pos=[0.00,0.30,0.30]
+  Step   1700: w=  6, inj=3, abs=3, lat=2, active=28, cycles=1477, pos=[0.00,0.30,0.30]
+  Step   1750: w=  6, inj=3, abs=3, lat=1, active=28, cycles=1528, pos=[0.00,0.20,0.40]
+  Step   1800: w=  6, inj=3, abs=3, lat=2, active=28, cycles=1574, pos=[0.00,0.40,0.20]
+  Step   1850: w=  6, inj=3, abs=3, lat=2, active=28, cycles=1628, pos=[0.00,0.30,0.30]
+  Step   1900: w=  6, inj=3, abs=3, lat=2, active=28, cycles=1682, pos=[0.00,0.30,0.30]
+  Step   1950: w=  6, inj=3, abs=3, lat=2, active=28, cycles=1735, pos=[0.00,0.40,0.20]
+[SpatialEvolver] Done. 200 snapshots.
+  Cycles: 1783
+  Sealed: False (0 bits, ratio=0.00)
+  Total inject: 6006, absorb: 6006
+  Layer 1 done: w=6, sealed=False, inj=6006, abs=6006, cycles=1783
+  Layer 1 not sealed after 2000 steps, running extra...
+[SpatialEvolver] N=30, T=1000, L=1.0, eps=0.1000
+  Hierarchy bits: 10, Lateral bits: 20
+  Step      0: w=  1, inj=4, abs=4, lat=2, active=28, cycles=1785, pos=[0.00,0.10,0.00]
+  Step     50: w=  4, inj=4, abs=4, lat=2, active=28, cycles=1843, pos=[0.00,0.20,0.20]
+  Step    100: w=  4, inj=4, abs=4, lat=2, active=28, cycles=1895, pos=[0.00,0.20,0.20]
+  Step    150: w=  4, inj=4, abs=4, lat=2, active=28, cycles=1953, pos=[0.00,0.10,0.30]
+  Step    200: w=  4, inj=4, abs=4, lat=2, active=28, cycles=2010, pos=[0.00,0.20,0.20]
+  Step    250: w=  4, inj=4, abs=4, lat=1, active=28, cycles=2061, pos=[0.00,0.30,0.10]
+  Step    300: w=  4, inj=4, abs=4, lat=2, active=28, cycles=2102, pos=[0.00,0.10,0.30]
+  Step    350: w=  4, inj=4, abs=4, lat=2, active=28, cycles=2161, pos=[0.00,0.20,0.20]
+  Step    400: w=  4, inj=4, abs=4, lat=1, active=28, cycles=2212, pos=[0.00,0.10,0.30]
+  Step    450: w=  4, inj=4, abs=4, lat=2, active=28, cycles=2266, pos=[0.00,0.20,0.20]
+  Step    500: w=  4, inj=4, abs=4, lat=2, active=28, cycles=2311, pos=[0.00,0.10,0.30]
+  Step    550: w=  4, inj=4, abs=4, lat=2, active=28, cycles=2362, pos=[0.00,0.30,0.10]
+  Step    600: w=  4, inj=4, abs=4, lat=2, active=28, cycles=2404, pos=[0.00,0.00,0.40]
+  Step    650: w=  4, inj=4, abs=4, lat=2, active=28, cycles=2451, pos=[0.00,0.30,0.10]
+  Step    700: w=  4, inj=4, abs=4, lat=2, active=28, cycles=2501, pos=[0.00,0.20,0.20]
+  Step    750: w=  4, inj=4, abs=4, lat=2, active=28, cycles=2545, pos=[0.00,0.30,0.10]
+  Step    800: w=  4, inj=4, abs=4, lat=2, active=28, cycles=2589, pos=[0.00,0.20,0.20]
+  Step    850: w=  4, inj=4, abs=4, lat=2, active=28, cycles=2631, pos=[0.00,0.30,0.10]
+  Step    900: w=  4, inj=4, abs=4, lat=2, active=28, cycles=2671, pos=[0.00,0.10,0.30]
+  Step    950: w=  4, inj=4, abs=4, lat=2, active=28, cycles=2718, pos=[0.00,0.20,0.20]
+[SpatialEvolver] Done. 100 snapshots.
+  Cycles: 2755
+  Sealed: False (0 bits, ratio=0.00)
+  Total inject: 10006, absorb: 10006
+  Extra 1000 steps: sealed=False
+    [seed=442] Done in 73.0s
+    [seed=442] Layers formed: 2 (n_layers=2) [P3 FIX: max_layers=2 ENFORCED]
+    seed=442: NSI_max=0.6520, layers=2 [P3 OK], L1_cycles=7 (reconfig=0, reshuffle=7, identity=0), types_active=1, CIV_max=3, NRC_R2=2, jaccard_L0L1=0.000
+    [seed=542] Running 2000 steps at N0=72, max_layers=2 (P3 fix: HierarchyManager enforced)...
+======================================================================
+HierarchicalEvolver: N0=72, steps_per_layer=2000, max_layers=2
+======================================================================
+
+  --- Layer 0: N=72, active=72, frozen=0 ---
+[SpatialEvolver] N=72, T=2000, L=1.0, eps=0.0417
+  Hierarchy bits: 24, Lateral bits: 48
+  Step      0: w=  1, inj=4, abs=4, lat=2, active=7, cycles=0, pos=[0.00,0.00,0.04]
+    [NRC] step=10: events=2 path=reinforce R2=YES cycles=1
+[A9] Sealed at step 21: 53 active in window, keeping 24, freezing 29
+[A9] Kept: [9, 24, 28, 30, 31, 37, 39, 41, 44, 45, 46, 47, 49, 53, 54, 56, 57, 60, 61, 62, 64, 67, 68, 69]
+[A9] Frozen: [0, 2, 3, 5, 6, 7, 8, 10, 11, 13, 20, 22, 23, 29, 32, 34, 36, 40, 42, 43, 48, 50, 52, 58, 59, 63, 65, 70, 71]
+    [NRC] step=40: events=2 path=reinforce R2=no cycles=2
+    [NRC] step=50: events=2 path=reinforce R2=no cycles=3
+  Step     50: w= 29, inj=1, abs=0, lat=1, active=66, cycles=15, pos=[0.25,0.38,0.58]
+    [NRC] step=70: events=1 path=restructure R2=no cycles=4
+  Step    100: w= 30, inj=0, abs=0, lat=1, active=67, cycles=51, pos=[0.29,0.38,0.58]
+  Step    150: w= 30, inj=0, abs=0, lat=1, active=67, cycles=83, pos=[0.29,0.46,0.50]
+  Step    200: w= 32, inj=0, abs=0, lat=2, active=67, cycles=114, pos=[0.38,0.42,0.54]
+  Step    250: w= 32, inj=0, abs=0, lat=2, active=67, cycles=140, pos=[0.38,0.46,0.50]
+    [NRC] step=300: events=1 path=restructure R2=YES cycles=5
+  Step    300: w= 32, inj=0, abs=0, lat=1, active=67, cycles=181, pos=[0.38,0.50,0.46]
+  Step    350: w= 32, inj=0, abs=0, lat=2, active=67, cycles=209, pos=[0.38,0.46,0.50]
+  Step    400: w= 32, inj=0, abs=0, lat=2, active=67, cycles=242, pos=[0.38,0.54,0.42]
+  Step    450: w= 32, inj=0, abs=0, lat=2, active=67, cycles=259, pos=[0.38,0.42,0.54]
+  Step    500: w= 33, inj=0, abs=0, lat=2, active=67, cycles=280, pos=[0.38,0.42,0.58]
+  Step    550: w= 33, inj=0, abs=0, lat=2, active=67, cycles=310, pos=[0.38,0.46,0.54]
+  Step    600: w= 33, inj=0, abs=0, lat=1, active=67, cycles=334, pos=[0.38,0.29,0.71]
+  Step    650: w= 33, inj=0, abs=0, lat=1, active=67, cycles=349, pos=[0.38,0.42,0.58]
+  Step    700: w= 33, inj=0, abs=0, lat=1, active=67, cycles=378, pos=[0.38,0.50,0.50]
+  Step    750: w= 33, inj=0, abs=0, lat=2, active=67, cycles=407, pos=[0.38,0.42,0.58]
+  Step    800: w= 33, inj=0, abs=0, lat=2, active=67, cycles=430, pos=[0.38,0.50,0.50]
+  Step    850: w= 33, inj=0, abs=0, lat=2, active=67, cycles=455, pos=[0.38,0.50,0.50]
+  Step    900: w= 33, inj=0, abs=0, lat=2, active=67, cycles=475, pos=[0.38,0.46,0.54]
+  Step    950: w= 33, inj=0, abs=0, lat=2, active=67, cycles=491, pos=[0.38,0.46,0.54]
+  Step   1000: w= 33, inj=0, abs=0, lat=1, active=67, cycles=511, pos=[0.38,0.50,0.50]
+  Step   1050: w= 33, inj=0, abs=0, lat=2, active=67, cycles=537, pos=[0.38,0.46,0.54]
+  Step   1100: w= 33, inj=0, abs=0, lat=1, active=67, cycles=565, pos=[0.38,0.54,0.46]
+  Step   1150: w= 33, inj=0, abs=0, lat=2, active=67, cycles=588, pos=[0.38,0.50,0.50]
+  Step   1200: w= 33, inj=0, abs=0, lat=2, active=67, cycles=605, pos=[0.38,0.38,0.62]
+  Step   1250: w= 33, inj=0, abs=0, lat=2, active=67, cycles=619, pos=[0.38,0.42,0.58]
+  Step   1300: w= 35, inj=0, abs=0, lat=2, active=69, cycles=638, pos=[0.46,0.50,0.50]
+  Step   1350: w= 35, inj=0, abs=0, lat=2, active=69, cycles=655, pos=[0.46,0.46,0.54]
+  Step   1400: w= 35, inj=0, abs=0, lat=2, active=69, cycles=673, pos=[0.46,0.42,0.58]
+  Step   1450: w= 35, inj=0, abs=0, lat=2, active=69, cycles=692, pos=[0.46,0.46,0.54]
+  Step   1500: w= 35, inj=0, abs=0, lat=2, active=69, cycles=713, pos=[0.46,0.54,0.46]
+  Step   1550: w= 35, inj=0, abs=0, lat=1, active=69, cycles=735, pos=[0.46,0.46,0.54]
+  Step   1600: w= 35, inj=0, abs=0, lat=2, active=69, cycles=752, pos=[0.46,0.58,0.42]
+  Step   1650: w= 35, inj=0, abs=0, lat=2, active=69, cycles=778, pos=[0.46,0.42,0.58]
+  Step   1700: w= 35, inj=0, abs=0, lat=2, active=69, cycles=797, pos=[0.46,0.58,0.42]
+  Step   1750: w= 35, inj=0, abs=0, lat=2, active=69, cycles=809, pos=[0.46,0.42,0.58]
+  Step   1800: w= 35, inj=0, abs=0, lat=2, active=69, cycles=828, pos=[0.46,0.46,0.54]
+  Step   1850: w= 35, inj=0, abs=0, lat=2, active=69, cycles=849, pos=[0.46,0.42,0.58]
+  Step   1900: w= 35, inj=0, abs=0, lat=2, active=69, cycles=861, pos=[0.46,0.38,0.62]
+  Step   1950: w= 35, inj=0, abs=0, lat=2, active=69, cycles=878, pos=[0.46,0.54,0.46]
+[SpatialEvolver] Done. 200 snapshots.
+  Cycles: 888
+  Sealed: True (29 bits, ratio=0.40)
+  Total inject: 93, absorb: 97
+[Hierarchy] L0 -> L1: 72 -> 33 bits (32 active + 0 enc)
+  [ENCAP] L0 -> L1: 72 -> 33 bits
+  Layer 0 done: w=35, sealed=True, inj=93, abs=97, cycles=888
+
+  --- Layer 1: N=33, active=33, frozen=0 ---
+[SpatialEvolver] N=33, T=2000, L=1.0, eps=0.0909
+  Hierarchy bits: 11, Lateral bits: 22
+  Step      0: w=  1, inj=4, abs=4, lat=2, active=7, cycles=0, pos=[0.00,0.00,0.09]
+  Step     50: w=  9, inj=4, abs=4, lat=2, active=28, cycles=4, pos=[0.00,0.45,0.36]
+  Step    100: w=  9, inj=4, abs=4, lat=2, active=28, cycles=8, pos=[0.00,0.36,0.45]
+  Step    150: w=  9, inj=4, abs=4, lat=2, active=28, cycles=16, pos=[0.00,0.55,0.27]
+  Step    200: w=  9, inj=4, abs=4, lat=2, active=28, cycles=22, pos=[0.00,0.36,0.45]
+  Step    250: w=  9, inj=4, abs=4, lat=2, active=28, cycles=28, pos=[0.00,0.55,0.27]
+  Step    300: w=  9, inj=4, abs=4, lat=2, active=28, cycles=35, pos=[0.00,0.45,0.36]
+  Step    350: w=  9, inj=4, abs=4, lat=2, active=28, cycles=45, pos=[0.00,0.36,0.45]
+  Step    400: w=  9, inj=4, abs=4, lat=2, active=28, cycles=61, pos=[0.00,0.45,0.36]
+  Step    450: w=  9, inj=4, abs=4, lat=2, active=28, cycles=69, pos=[0.00,0.73,0.09]
+  Step    500: w=  9, inj=4, abs=4, lat=2, active=28, cycles=81, pos=[0.00,0.27,0.55]
+  Step    550: w=  9, inj=4, abs=4, lat=2, active=28, cycles=95, pos=[0.00,0.55,0.27]
+  Step    600: w=  9, inj=4, abs=4, lat=2, active=28, cycles=103, pos=[0.00,0.45,0.36]
+  Step    650: w=  9, inj=4, abs=4, lat=2, active=28, cycles=113, pos=[0.00,0.45,0.36]
+  Step    700: w=  9, inj=4, abs=4, lat=2, active=28, cycles=122, pos=[0.00,0.36,0.45]
+  Step    750: w=  9, inj=4, abs=4, lat=1, active=28, cycles=130, pos=[0.00,0.27,0.55]
+  Step    800: w=  9, inj=4, abs=4, lat=2, active=28, cycles=158, pos=[0.00,0.36,0.45]
+  Step    850: w=  9, inj=4, abs=4, lat=2, active=28, cycles=170, pos=[0.00,0.27,0.55]
+  Step    900: w=  9, inj=4, abs=4, lat=2, active=28, cycles=184, pos=[0.00,0.55,0.27]
+  Step    950: w=  9, inj=4, abs=4, lat=2, active=28, cycles=209, pos=[0.00,0.27,0.55]
+  Step   1000: w=  9, inj=4, abs=4, lat=2, active=28, cycles=223, pos=[0.00,0.45,0.36]
+  Step   1050: w=  9, inj=4, abs=4, lat=2, active=28, cycles=242, pos=[0.00,0.36,0.45]
+  Step   1100: w=  9, inj=4, abs=4, lat=1, active=28, cycles=268, pos=[0.00,0.36,0.45]
+  Step   1150: w=  9, inj=4, abs=4, lat=2, active=28, cycles=292, pos=[0.00,0.55,0.27]
+  Step   1200: w=  9, inj=4, abs=4, lat=2, active=28, cycles=315, pos=[0.00,0.36,0.45]
+  Step   1250: w=  9, inj=4, abs=4, lat=2, active=28, cycles=339, pos=[0.00,0.45,0.36]
+  Step   1300: w=  9, inj=4, abs=4, lat=2, active=28, cycles=365, pos=[0.00,0.45,0.36]
+  Step   1350: w=  9, inj=4, abs=4, lat=2, active=28, cycles=391, pos=[0.00,0.27,0.55]
+  Step   1400: w=  9, inj=4, abs=4, lat=2, active=28, cycles=412, pos=[0.00,0.36,0.45]
+  Step   1450: w=  9, inj=4, abs=4, lat=2, active=28, cycles=434, pos=[0.00,0.36,0.45]
+  Step   1500: w=  9, inj=4, abs=4, lat=2, active=28, cycles=449, pos=[0.00,0.36,0.45]
+  Step   1550: w=  9, inj=4, abs=4, lat=2, active=28, cycles=472, pos=[0.00,0.36,0.45]
+  Step   1600: w=  9, inj=4, abs=4, lat=2, active=28, cycles=489, pos=[0.00,0.36,0.45]
+  Step   1650: w=  9, inj=4, abs=4, lat=2, active=28, cycles=522, pos=[0.00,0.55,0.27]
+  Step   1700: w=  9, inj=4, abs=4, lat=2, active=28, cycles=550, pos=[0.00,0.27,0.55]
+  Step   1750: w=  9, inj=4, abs=4, lat=2, active=28, cycles=571, pos=[0.00,0.36,0.45]
+  Step   1800: w=  9, inj=4, abs=4, lat=2, active=28, cycles=588, pos=[0.00,0.36,0.45]
+  Step   1850: w=  9, inj=4, abs=4, lat=2, active=28, cycles=609, pos=[0.00,0.36,0.45]
+  Step   1900: w=  9, inj=4, abs=4, lat=1, active=28, cycles=630, pos=[0.00,0.36,0.45]
+  Step   1950: w=  9, inj=4, abs=4, lat=2, active=28, cycles=656, pos=[0.00,0.36,0.45]
+[SpatialEvolver] Done. 200 snapshots.
+  Cycles: 676
+  Sealed: False (0 bits, ratio=0.00)
+  Total inject: 8000, absorb: 8000
+  Layer 1 done: w=9, sealed=False, inj=8000, abs=8000, cycles=676
+  Layer 1 not sealed after 2000 steps, running extra...
+[SpatialEvolver] N=33, T=1000, L=1.0, eps=0.0909
+  Hierarchy bits: 11, Lateral bits: 22
+  Step      0: w=  1, inj=4, abs=4, lat=2, active=28, cycles=676, pos=[0.00,0.00,0.09]
+  Step     50: w=  7, inj=4, abs=4, lat=2, active=28, cycles=696, pos=[0.00,0.27,0.36]
+  Step    100: w=  7, inj=4, abs=4, lat=2, active=28, cycles=710, pos=[0.00,0.36,0.27]
+  Step    150: w=  7, inj=4, abs=4, lat=2, active=28, cycles=728, pos=[0.00,0.45,0.18]
+  Step    200: w=  7, inj=4, abs=4, lat=2, active=28, cycles=755, pos=[0.00,0.36,0.27]
+  Step    250: w=  7, inj=4, abs=4, lat=2, active=28, cycles=786, pos=[0.00,0.36,0.27]
+  Step    300: w=  7, inj=4, abs=4, lat=2, active=28, cycles=805, pos=[0.00,0.27,0.36]
+  Step    350: w=  7, inj=4, abs=4, lat=2, active=28, cycles=832, pos=[0.00,0.55,0.09]
+  Step    400: w=  7, inj=4, abs=4, lat=2, active=28, cycles=849, pos=[0.00,0.27,0.36]
+  Step    450: w=  7, inj=4, abs=4, lat=2, active=28, cycles=871, pos=[0.00,0.36,0.27]
+  Step    500: w=  7, inj=4, abs=4, lat=2, active=28, cycles=880, pos=[0.00,0.18,0.45]
+  Step    550: w=  7, inj=4, abs=4, lat=2, active=28, cycles=902, pos=[0.00,0.27,0.36]
+  Step    600: w=  7, inj=4, abs=4, lat=2, active=28, cycles=921, pos=[0.00,0.45,0.18]
+  Step    650: w=  7, inj=4, abs=4, lat=2, active=28, cycles=947, pos=[0.00,0.09,0.55]
+  Step    700: w=  7, inj=4, abs=4, lat=2, active=28, cycles=983, pos=[0.00,0.27,0.36]
+  Step    750: w=  7, inj=4, abs=4, lat=2, active=28, cycles=1002, pos=[0.00,0.36,0.27]
+  Step    800: w=  7, inj=4, abs=4, lat=2, active=28, cycles=1038, pos=[0.00,0.45,0.18]
+  Step    850: w=  7, inj=4, abs=4, lat=2, active=28, cycles=1060, pos=[0.00,0.36,0.27]
+  Step    900: w=  7, inj=4, abs=4, lat=2, active=28, cycles=1085, pos=[0.00,0.27,0.36]
+  Step    950: w=  7, inj=4, abs=4, lat=2, active=28, cycles=1110, pos=[0.00,0.45,0.18]
+[SpatialEvolver] Done. 100 snapshots.
+  Cycles: 1145
+  Sealed: False (0 bits, ratio=0.00)
+  Total inject: 12000, absorb: 12000
+  Extra 1000 steps: sealed=False
+    [seed=542] Done in 80.0s
+    [seed=542] Layers formed: 2 (n_layers=2) [P3 FIX: max_layers=2 ENFORCED]
+    seed=542: NSI_max=0.7086, layers=2 [P3 OK], L1_cycles=7 (reconfig=0, reshuffle=7, identity=0), types_active=1, CIV_max=3, NRC_R2=2, jaccard_L0L1=0.000
+    [seed=642] Running 2000 steps at N0=72, max_layers=2 (P3 fix: HierarchyManager enforced)...
+======================================================================
+HierarchicalEvolver: N0=72, steps_per_layer=2000, max_layers=2
+======================================================================
+
+  --- Layer 0: N=72, active=72, frozen=0 ---
+[SpatialEvolver] N=72, T=2000, L=1.0, eps=0.0417
+  Hierarchy bits: 24, Lateral bits: 48
+  Step      0: w=  1, inj=4, abs=4, lat=2, active=7, cycles=0, pos=[0.04,0.00,0.00]
+    [NRC] step=10: events=2 path=reinforce R2=YES cycles=1
+[A9] Sealed at step 37: 53 active in window, keeping 24, freezing 29
+[A9] Kept: [24, 25, 29, 35, 36, 38, 39, 40, 41, 42, 45, 46, 47, 48, 49, 53, 60, 62, 63, 65, 67, 68, 69, 70]
+[A9] Frozen: [0, 3, 4, 5, 10, 11, 14, 15, 20, 21, 26, 27, 28, 31, 32, 33, 37, 43, 44, 50, 51, 52, 54, 55, 56, 58, 61, 64, 66]
+  Step     50: w= 13, inj=0, abs=0, lat=1, active=57, cycles=13, pos=[0.00,0.29,0.25]
+    [NRC] step=90: events=2 path=reinforce R2=no cycles=2
+    [NRC] step=100: events=2 path=reinforce R2=no cycles=3
+  Step    100: w= 25, inj=2, abs=0, lat=2, active=66, cycles=42, pos=[0.33,0.38,0.33]
+    [NRC] step=120: events=1 path=restructure R2=no cycles=4
+  Step    150: w= 24, inj=1, abs=0, lat=2, active=69, cycles=59, pos=[0.29,0.42,0.29]
+    [NRC] step=160: events=1 path=restructure R2=no cycles=5
+    [NRC] step=170: events=1 path=restructure R2=no cycles=6
+  Step    200: w= 24, inj=1, abs=0, lat=1, active=69, cycles=83, pos=[0.17,0.50,0.33]
+  Step    250: w= 24, inj=1, abs=0, lat=1, active=69, cycles=120, pos=[0.17,0.33,0.50]
+  Step    300: w= 24, inj=1, abs=0, lat=1, active=69, cycles=147, pos=[0.17,0.50,0.33]
+    [NRC] step=330: events=1 path=restructure R2=YES cycles=7
+  Step    350: w= 31, inj=0, abs=0, lat=2, active=70, cycles=172, pos=[0.46,0.42,0.42]
+  Step    400: w= 33, inj=0, abs=0, lat=2, active=70, cycles=203, pos=[0.50,0.42,0.46]
+  Step    450: w= 33, inj=0, abs=0, lat=2, active=70, cycles=229, pos=[0.50,0.54,0.33]
+  Step    500: w= 33, inj=0, abs=0, lat=2, active=70, cycles=260, pos=[0.50,0.46,0.42]
+  Step    550: w= 33, inj=0, abs=0, lat=2, active=70, cycles=289, pos=[0.50,0.46,0.42]
+  Step    600: w= 33, inj=0, abs=0, lat=1, active=70, cycles=316, pos=[0.50,0.54,0.33]
+  Step    650: w= 33, inj=0, abs=0, lat=2, active=70, cycles=339, pos=[0.50,0.50,0.38]
+  Step    700: w= 33, inj=0, abs=0, lat=1, active=70, cycles=365, pos=[0.50,0.42,0.46]
+  Step    750: w= 33, inj=0, abs=0, lat=1, active=70, cycles=394, pos=[0.50,0.46,0.42]
+  Step    800: w= 33, inj=0, abs=0, lat=2, active=70, cycles=412, pos=[0.50,0.50,0.38]
+  Step    850: w= 33, inj=0, abs=0, lat=2, active=70, cycles=441, pos=[0.50,0.42,0.46]
+  Step    900: w= 33, inj=0, abs=0, lat=2, active=70, cycles=467, pos=[0.50,0.50,0.38]
+  Step    950: w= 33, inj=0, abs=0, lat=2, active=70, cycles=487, pos=[0.50,0.38,0.50]
+  Step   1000: w= 33, inj=0, abs=0, lat=2, active=70, cycles=512, pos=[0.50,0.46,0.42]
+  Step   1050: w= 33, inj=0, abs=0, lat=2, active=70, cycles=540, pos=[0.50,0.46,0.42]
+  Step   1100: w= 33, inj=0, abs=0, lat=2, active=70, cycles=573, pos=[0.50,0.50,0.38]
+  Step   1150: w= 33, inj=0, abs=0, lat=1, active=70, cycles=595, pos=[0.50,0.46,0.42]
+  Step   1200: w= 33, inj=0, abs=0, lat=2, active=70, cycles=607, pos=[0.50,0.46,0.42]
+  Step   1250: w= 33, inj=0, abs=0, lat=1, active=70, cycles=631, pos=[0.50,0.50,0.38]
+  Step   1300: w= 33, inj=0, abs=0, lat=2, active=70, cycles=651, pos=[0.50,0.50,0.38]
+  Step   1350: w= 33, inj=0, abs=0, lat=2, active=70, cycles=674, pos=[0.50,0.38,0.50]
+  Step   1400: w= 33, inj=0, abs=0, lat=2, active=70, cycles=699, pos=[0.50,0.46,0.42]
+  Step   1450: w= 33, inj=0, abs=0, lat=2, active=70, cycles=711, pos=[0.50,0.50,0.38]
+  Step   1500: w= 33, inj=0, abs=0, lat=1, active=70, cycles=739, pos=[0.50,0.46,0.42]
+  Step   1550: w= 33, inj=0, abs=0, lat=2, active=70, cycles=765, pos=[0.50,0.54,0.33]
+  Step   1600: w= 33, inj=0, abs=0, lat=2, active=70, cycles=780, pos=[0.50,0.46,0.42]
+  Step   1650: w= 33, inj=0, abs=0, lat=2, active=70, cycles=800, pos=[0.50,0.50,0.38]
+  Step   1700: w= 33, inj=0, abs=0, lat=2, active=70, cycles=821, pos=[0.50,0.50,0.38]
+  Step   1750: w= 33, inj=0, abs=0, lat=1, active=70, cycles=845, pos=[0.50,0.46,0.42]
+  Step   1800: w= 33, inj=0, abs=0, lat=2, active=70, cycles=857, pos=[0.50,0.50,0.38]
+  Step   1850: w= 33, inj=0, abs=0, lat=2, active=70, cycles=864, pos=[0.50,0.42,0.46]
+  Step   1900: w= 33, inj=0, abs=0, lat=1, active=70, cycles=874, pos=[0.50,0.46,0.42]
+  Step   1950: w= 33, inj=0, abs=0, lat=2, active=70, cycles=882, pos=[0.50,0.54,0.33]
+[SpatialEvolver] Done. 200 snapshots.
+  Cycles: 896
+  Sealed: True (29 bits, ratio=0.40)
+  Total inject: 126, absorb: 154
+[Hierarchy] L0 -> L1: 72 -> 33 bits (28 active + 4 enc)
+  [ENCAP] L0 -> L1: 72 -> 33 bits
+  Layer 0 done: w=33, sealed=True, inj=126, abs=154, cycles=896
+
+  --- Layer 1: N=33, active=33, frozen=0 ---
+[SpatialEvolver] N=33, T=2000, L=1.0, eps=0.0909
+  Hierarchy bits: 11, Lateral bits: 22
+  Step      0: w=  1, inj=4, abs=4, lat=2, active=7, cycles=0, pos=[0.09,0.00,0.00]
+  Step     50: w=  7, inj=3, abs=3, lat=2, active=28, cycles=5, pos=[0.00,0.27,0.36]
+  Step    100: w=  7, inj=3, abs=3, lat=2, active=28, cycles=18, pos=[0.00,0.27,0.36]
+  Step    150: w=  7, inj=3, abs=3, lat=2, active=28, cycles=32, pos=[0.00,0.45,0.18]
+  Step    200: w=  7, inj=3, abs=3, lat=1, active=28, cycles=48, pos=[0.00,0.36,0.27]
+  Step    250: w=  7, inj=3, abs=3, lat=2, active=28, cycles=69, pos=[0.00,0.27,0.36]
+  Step    300: w=  7, inj=3, abs=3, lat=2, active=28, cycles=102, pos=[0.00,0.36,0.27]
+  Step    350: w=  7, inj=3, abs=3, lat=2, active=28, cycles=115, pos=[0.00,0.36,0.27]
+  Step    400: w=  7, inj=3, abs=3, lat=2, active=28, cycles=134, pos=[0.00,0.36,0.27]
+  Step    450: w=  7, inj=3, abs=3, lat=2, active=28, cycles=157, pos=[0.00,0.27,0.36]
+  Step    500: w=  7, inj=3, abs=3, lat=2, active=28, cycles=173, pos=[0.00,0.45,0.18]
+  Step    550: w=  7, inj=3, abs=3, lat=2, active=28, cycles=201, pos=[0.00,0.45,0.18]
+  Step    600: w=  7, inj=3, abs=3, lat=2, active=28, cycles=242, pos=[0.00,0.27,0.36]
+  Step    650: w=  7, inj=3, abs=3, lat=1, active=28, cycles=266, pos=[0.00,0.27,0.36]
+  Step    700: w=  7, inj=3, abs=3, lat=2, active=28, cycles=291, pos=[0.00,0.45,0.18]
+  Step    750: w=  7, inj=3, abs=3, lat=2, active=28, cycles=325, pos=[0.00,0.45,0.18]
+  Step    800: w=  7, inj=3, abs=3, lat=2, active=28, cycles=362, pos=[0.00,0.36,0.27]
+  Step    850: w=  7, inj=3, abs=3, lat=1, active=28, cycles=400, pos=[0.00,0.27,0.36]
+  Step    900: w=  7, inj=3, abs=3, lat=1, active=28, cycles=443, pos=[0.00,0.27,0.36]
+  Step    950: w=  7, inj=3, abs=3, lat=2, active=28, cycles=477, pos=[0.00,0.36,0.27]
+  Step   1000: w=  7, inj=3, abs=3, lat=2, active=28, cycles=505, pos=[0.00,0.36,0.27]
+  Step   1050: w=  7, inj=3, abs=3, lat=2, active=28, cycles=538, pos=[0.00,0.27,0.36]
+  Step   1100: w=  7, inj=3, abs=3, lat=1, active=28, cycles=567, pos=[0.00,0.36,0.27]
+  Step   1150: w=  7, inj=3, abs=3, lat=2, active=28, cycles=598, pos=[0.00,0.27,0.36]
+  Step   1200: w=  7, inj=3, abs=3, lat=2, active=28, cycles=638, pos=[0.00,0.27,0.36]
+  Step   1250: w=  7, inj=3, abs=3, lat=2, active=28, cycles=671, pos=[0.00,0.45,0.18]
+  Step   1300: w=  7, inj=3, abs=3, lat=2, active=28, cycles=717, pos=[0.00,0.36,0.27]
+  Step   1350: w=  7, inj=3, abs=3, lat=2, active=28, cycles=759, pos=[0.00,0.09,0.55]
+  Step   1400: w=  7, inj=3, abs=3, lat=2, active=28, cycles=796, pos=[0.00,0.36,0.27]
+  Step   1450: w=  7, inj=3, abs=3, lat=2, active=28, cycles=828, pos=[0.00,0.36,0.27]
+  Step   1500: w=  7, inj=3, abs=3, lat=1, active=28, cycles=872, pos=[0.00,0.27,0.36]
+  Step   1550: w=  7, inj=3, abs=3, lat=2, active=28, cycles=917, pos=[0.00,0.18,0.45]
+  Step   1600: w=  7, inj=3, abs=3, lat=2, active=28, cycles=962, pos=[0.00,0.36,0.27]
+  Step   1650: w=  7, inj=3, abs=3, lat=2, active=28, cycles=1000, pos=[0.00,0.36,0.27]
+  Step   1700: w=  7, inj=3, abs=3, lat=2, active=28, cycles=1029, pos=[0.00,0.45,0.18]
+  Step   1750: w=  7, inj=3, abs=3, lat=2, active=28, cycles=1069, pos=[0.00,0.36,0.27]
+  Step   1800: w=  7, inj=3, abs=3, lat=2, active=28, cycles=1105, pos=[0.00,0.45,0.18]
+  Step   1850: w=  7, inj=3, abs=3, lat=2, active=28, cycles=1150, pos=[0.00,0.36,0.27]
+  Step   1900: w=  7, inj=3, abs=3, lat=2, active=28, cycles=1191, pos=[0.00,0.27,0.36]
+  Step   1950: w=  7, inj=3, abs=3, lat=2, active=28, cycles=1230, pos=[0.00,0.27,0.36]
+[SpatialEvolver] Done. 200 snapshots.
+  Cycles: 1265
+  Sealed: False (0 bits, ratio=0.00)
+  Total inject: 6008, absorb: 6008
+  Layer 1 done: w=7, sealed=False, inj=6008, abs=6008, cycles=1265
+  Layer 1 not sealed after 2000 steps, running extra...
+[SpatialEvolver] N=33, T=1000, L=1.0, eps=0.0909
+  Hierarchy bits: 11, Lateral bits: 22
+  Step      0: w=  1, inj=4, abs=4, lat=2, active=28, cycles=1265, pos=[0.00,0.00,0.09]
+  Step     50: w=  5, inj=4, abs=4, lat=2, active=28, cycles=1296, pos=[0.00,0.27,0.18]
+  Step    100: w=  5, inj=4, abs=4, lat=2, active=28, cycles=1343, pos=[0.00,0.27,0.18]
+  Step    150: w=  5, inj=4, abs=4, lat=2, active=28, cycles=1392, pos=[0.00,0.27,0.18]
+  Step    200: w=  5, inj=4, abs=4, lat=1, active=28, cycles=1455, pos=[0.00,0.27,0.18]
+  Step    250: w=  5, inj=4, abs=4, lat=2, active=28, cycles=1517, pos=[0.00,0.27,0.18]
+  Step    300: w=  5, inj=4, abs=4, lat=1, active=28, cycles=1565, pos=[0.00,0.27,0.18]
+  Step    350: w=  5, inj=4, abs=4, lat=1, active=28, cycles=1620, pos=[0.00,0.18,0.27]
+  Step    400: w=  5, inj=4, abs=4, lat=2, active=28, cycles=1664, pos=[0.00,0.36,0.09]
+  Step    450: w=  5, inj=4, abs=4, lat=2, active=28, cycles=1717, pos=[0.00,0.18,0.27]
+  Step    500: w=  5, inj=4, abs=4, lat=2, active=28, cycles=1757, pos=[0.00,0.27,0.18]
+  Step    550: w=  5, inj=4, abs=4, lat=1, active=28, cycles=1813, pos=[0.00,0.27,0.18]
+  Step    600: w=  5, inj=4, abs=4, lat=2, active=28, cycles=1867, pos=[0.00,0.00,0.45]
+  Step    650: w=  5, inj=4, abs=4, lat=2, active=28, cycles=1920, pos=[0.00,0.36,0.09]
+  Step    700: w=  5, inj=4, abs=4, lat=2, active=28, cycles=1973, pos=[0.00,0.18,0.27]
+  Step    750: w=  5, inj=4, abs=4, lat=2, active=28, cycles=2027, pos=[0.00,0.45,0.00]
+  Step    800: w=  5, inj=4, abs=4, lat=2, active=28, cycles=2080, pos=[0.00,0.27,0.18]
+  Step    850: w=  5, inj=4, abs=4, lat=2, active=28, cycles=2125, pos=[0.00,0.27,0.18]
+  Step    900: w=  5, inj=4, abs=4, lat=2, active=28, cycles=2169, pos=[0.00,0.27,0.18]
+  Step    950: w=  5, inj=4, abs=4, lat=2, active=28, cycles=2212, pos=[0.00,0.18,0.27]
+[SpatialEvolver] Done. 100 snapshots.
+  Cycles: 2254
+  Sealed: False (0 bits, ratio=0.00)
+  Total inject: 10008, absorb: 10008
+  Extra 1000 steps: sealed=False
+    [seed=642] Done in 77.6s
+    [seed=642] Layers formed: 2 (n_layers=2) [P3 FIX: max_layers=2 ENFORCED]
+    seed=642: NSI_max=0.6486, layers=2 [P3 OK], L1_cycles=7 (reconfig=0, reshuffle=7, identity=0), types_active=1, CIV_max=3, NRC_R2=2, jaccard_L0L1=0.000
+    [seed=742] Running 2000 steps at N0=72, max_layers=2 (P3 fix: HierarchyManager enforced)...
+======================================================================
+HierarchicalEvolver: N0=72, steps_per_layer=2000, max_layers=2
+======================================================================
+
+  --- Layer 0: N=72, active=72, frozen=0 ---
+[SpatialEvolver] N=72, T=2000, L=1.0, eps=0.0417
+  Hierarchy bits: 24, Lateral bits: 48
+  Step      0: w=  1, inj=4, abs=4, lat=2, active=7, cycles=0, pos=[0.00,0.00,0.04]
+    [NRC] step=10: events=2 path=reinforce R2=YES cycles=1
+[A9] Sealed at step 31: 53 active in window, keeping 24, freezing 29
+[A9] Kept: [26, 27, 30, 31, 33, 34, 37, 38, 41, 42, 44, 46, 47, 50, 51, 52, 53, 54, 55, 61, 65, 67, 68, 70]
+[A9] Frozen: [2, 3, 5, 6, 8, 10, 11, 13, 15, 19, 21, 25, 28, 29, 32, 36, 39, 43, 45, 49, 57, 58, 59, 62, 63, 64, 66, 69, 71]
+    [NRC] step=40: events=2 path=reinforce R2=no cycles=2
+  Step     50: w= 27, inj=2, abs=0, lat=2, active=64, cycles=14, pos=[0.38,0.33,0.42]
+  Step    100: w= 27, inj=2, abs=0, lat=1, active=66, cycles=51, pos=[0.38,0.25,0.50]
+  Step    150: w= 27, inj=2, abs=0, lat=2, active=66, cycles=82, pos=[0.38,0.38,0.38]
+  Step    200: w= 27, inj=2, abs=0, lat=2, active=66, cycles=109, pos=[0.38,0.33,0.42]
+  Step    250: w= 27, inj=2, abs=0, lat=1, active=66, cycles=136, pos=[0.38,0.38,0.38]
+  Step    300: w= 27, inj=2, abs=0, lat=2, active=66, cycles=162, pos=[0.38,0.33,0.42]
+  Step    350: w= 27, inj=2, abs=0, lat=2, active=66, cycles=194, pos=[0.38,0.29,0.46]
+  Step    400: w= 27, inj=2, abs=0, lat=2, active=66, cycles=216, pos=[0.38,0.38,0.38]
+  Step    450: w= 27, inj=2, abs=0, lat=2, active=66, cycles=240, pos=[0.38,0.38,0.38]
+  Step    500: w= 27, inj=2, abs=0, lat=1, active=66, cycles=266, pos=[0.38,0.38,0.38]
+  Step    550: w= 27, inj=2, abs=0, lat=1, active=66, cycles=293, pos=[0.38,0.33,0.42]
+  Step    600: w= 27, inj=2, abs=0, lat=2, active=66, cycles=319, pos=[0.38,0.29,0.46]
+  Step    650: w= 27, inj=2, abs=0, lat=2, active=66, cycles=330, pos=[0.38,0.38,0.38]
+  Step    700: w= 27, inj=2, abs=0, lat=2, active=66, cycles=351, pos=[0.38,0.29,0.46]
+  Step    750: w= 27, inj=2, abs=0, lat=2, active=66, cycles=375, pos=[0.38,0.33,0.42]
+  Step    800: w= 27, inj=2, abs=0, lat=1, active=66, cycles=404, pos=[0.38,0.38,0.38]
+  Step    850: w= 27, inj=2, abs=0, lat=2, active=66, cycles=425, pos=[0.38,0.29,0.46]
+  Step    900: w= 27, inj=2, abs=0, lat=2, active=66, cycles=446, pos=[0.38,0.38,0.38]
+  Step    950: w= 27, inj=2, abs=0, lat=2, active=66, cycles=470, pos=[0.38,0.42,0.33]
+  Step   1000: w= 27, inj=2, abs=0, lat=2, active=66, cycles=488, pos=[0.38,0.42,0.33]
+  Step   1050: w= 27, inj=2, abs=0, lat=2, active=66, cycles=512, pos=[0.38,0.38,0.38]
+  Step   1100: w= 27, inj=2, abs=0, lat=2, active=66, cycles=534, pos=[0.38,0.42,0.33]
+  Step   1150: w= 27, inj=2, abs=0, lat=2, active=66, cycles=552, pos=[0.38,0.33,0.42]
+  Step   1200: w= 27, inj=2, abs=0, lat=2, active=66, cycles=567, pos=[0.38,0.38,0.38]
+  Step   1250: w= 27, inj=2, abs=0, lat=1, active=66, cycles=595, pos=[0.38,0.42,0.33]
+  Step   1300: w= 27, inj=2, abs=0, lat=2, active=66, cycles=609, pos=[0.38,0.33,0.42]
+  Step   1350: w= 27, inj=2, abs=0, lat=2, active=66, cycles=623, pos=[0.38,0.29,0.46]
+  Step   1400: w= 27, inj=2, abs=0, lat=2, active=66, cycles=640, pos=[0.38,0.33,0.42]
+  Step   1450: w= 27, inj=2, abs=0, lat=2, active=66, cycles=655, pos=[0.38,0.46,0.29]
+  Step   1500: w= 27, inj=2, abs=0, lat=2, active=66, cycles=669, pos=[0.38,0.25,0.50]
+  Step   1550: w= 27, inj=2, abs=0, lat=2, active=66, cycles=686, pos=[0.38,0.33,0.42]
+  Step   1600: w= 27, inj=2, abs=0, lat=2, active=66, cycles=700, pos=[0.38,0.38,0.38]
+  Step   1650: w= 27, inj=2, abs=0, lat=1, active=66, cycles=713, pos=[0.38,0.33,0.42]
+  Step   1700: w= 27, inj=2, abs=0, lat=1, active=66, cycles=729, pos=[0.38,0.33,0.42]
+  Step   1750: w= 27, inj=2, abs=0, lat=2, active=66, cycles=741, pos=[0.38,0.46,0.29]
+  Step   1800: w= 27, inj=2, abs=0, lat=2, active=66, cycles=753, pos=[0.38,0.29,0.46]
+  Step   1850: w= 27, inj=2, abs=0, lat=2, active=66, cycles=764, pos=[0.38,0.29,0.46]
+  Step   1900: w= 27, inj=2, abs=0, lat=2, active=66, cycles=777, pos=[0.38,0.29,0.46]
+  Step   1950: w= 27, inj=2, abs=0, lat=1, active=66, cycles=795, pos=[0.38,0.46,0.29]
+[SpatialEvolver] Done. 200 snapshots.
+  Cycles: 811
+  Sealed: True (29 bits, ratio=0.40)
+  Total inject: 123, absorb: 113
+[Hierarchy] L0 -> L1: 72 -> 30 bits (30 active + 0 enc)
+  [ENCAP] L0 -> L1: 72 -> 30 bits
+  Layer 0 done: w=27, sealed=True, inj=123, abs=113, cycles=811
+
+  --- Layer 1: N=30, active=30, frozen=0 ---
+[SpatialEvolver] N=30, T=2000, L=1.0, eps=0.1000
+  Hierarchy bits: 10, Lateral bits: 20
+  Step      0: w=  1, inj=4, abs=4, lat=1, active=6, cycles=0, pos=[0.00,0.00,0.10]
+  Step     50: w=  3, inj=3, abs=3, lat=1, active=25, cycles=40, pos=[0.00,0.20,0.10]
+  Step    100: w=  3, inj=3, abs=3, lat=2, active=26, cycles=85, pos=[0.00,0.20,0.10]
+  Step    150: w=  3, inj=3, abs=3, lat=2, active=26, cycles=126, pos=[0.00,0.10,0.20]
+  Step    200: w=  3, inj=3, abs=3, lat=2, active=26, cycles=158, pos=[0.00,0.20,0.10]
+  Step    250: w=  3, inj=3, abs=3, lat=1, active=26, cycles=200, pos=[0.00,0.10,0.20]
+  Step    300: w=  3, inj=3, abs=3, lat=2, active=26, cycles=237, pos=[0.00,0.20,0.10]
+  Step    350: w=  3, inj=3, abs=3, lat=2, active=26, cycles=269, pos=[0.00,0.20,0.10]
+  Step    400: w=  3, inj=3, abs=3, lat=1, active=26, cycles=307, pos=[0.00,0.10,0.20]
+  Step    450: w=  3, inj=3, abs=3, lat=1, active=26, cycles=343, pos=[0.00,0.20,0.10]
+  Step    500: w=  3, inj=3, abs=3, lat=2, active=26, cycles=369, pos=[0.00,0.00,0.30]
+  Step    550: w=  3, inj=3, abs=3, lat=1, active=26, cycles=397, pos=[0.00,0.30,0.00]
+  Step    600: w=  3, inj=3, abs=3, lat=2, active=26, cycles=425, pos=[0.00,0.00,0.30]
+  Step    650: w=  3, inj=3, abs=3, lat=2, active=26, cycles=453, pos=[0.00,0.20,0.10]
+  Step    700: w=  3, inj=3, abs=3, lat=2, active=26, cycles=478, pos=[0.00,0.20,0.10]
+  Step    750: w=  3, inj=3, abs=3, lat=1, active=26, cycles=503, pos=[0.00,0.20,0.10]
+  Step    800: w=  3, inj=3, abs=3, lat=2, active=26, cycles=529, pos=[0.00,0.10,0.20]
+  Step    850: w=  3, inj=3, abs=3, lat=2, active=26, cycles=558, pos=[0.00,0.00,0.30]
+  Step    900: w=  3, inj=3, abs=3, lat=2, active=26, cycles=586, pos=[0.00,0.10,0.20]
+  Step    950: w=  3, inj=3, abs=3, lat=2, active=26, cycles=610, pos=[0.00,0.30,0.00]
+  Step   1000: w=  3, inj=3, abs=3, lat=2, active=26, cycles=635, pos=[0.00,0.20,0.10]
+  Step   1050: w=  3, inj=3, abs=3, lat=2, active=26, cycles=655, pos=[0.00,0.10,0.20]
+  Step   1100: w=  3, inj=3, abs=3, lat=2, active=26, cycles=680, pos=[0.00,0.30,0.00]
+  Step   1150: w=  3, inj=3, abs=3, lat=2, active=26, cycles=691, pos=[0.00,0.10,0.20]
+  Step   1200: w=  3, inj=3, abs=3, lat=1, active=26, cycles=705, pos=[0.00,0.00,0.30]
+  Step   1250: w=  3, inj=3, abs=3, lat=2, active=26, cycles=727, pos=[0.00,0.20,0.10]
+  Step   1300: w=  3, inj=3, abs=3, lat=1, active=26, cycles=741, pos=[0.00,0.20,0.10]
+  Step   1350: w=  3, inj=3, abs=3, lat=1, active=26, cycles=758, pos=[0.00,0.30,0.00]
+  Step   1400: w=  3, inj=3, abs=3, lat=2, active=26, cycles=774, pos=[0.00,0.20,0.10]
+  Step   1450: w=  3, inj=3, abs=3, lat=2, active=26, cycles=785, pos=[0.00,0.20,0.10]
+  Step   1500: w=  3, inj=3, abs=3, lat=2, active=26, cycles=803, pos=[0.00,0.30,0.00]
+  Step   1550: w=  3, inj=3, abs=3, lat=2, active=26, cycles=814, pos=[0.00,0.30,0.00]
+  Step   1600: w=  3, inj=3, abs=3, lat=1, active=26, cycles=822, pos=[0.00,0.10,0.20]
+  Step   1650: w=  3, inj=3, abs=3, lat=2, active=26, cycles=832, pos=[0.00,0.30,0.00]
+  Step   1700: w=  3, inj=3, abs=3, lat=1, active=26, cycles=842, pos=[0.00,0.20,0.10]
+  Step   1750: w=  3, inj=3, abs=3, lat=2, active=26, cycles=852, pos=[0.00,0.30,0.00]
+  Step   1800: w=  3, inj=3, abs=3, lat=2, active=26, cycles=859, pos=[0.00,0.30,0.00]
+  Step   1850: w=  3, inj=3, abs=3, lat=2, active=26, cycles=867, pos=[0.00,0.30,0.00]
+  Step   1900: w=  3, inj=3, abs=3, lat=2, active=26, cycles=881, pos=[0.00,0.20,0.10]
+  Step   1950: w=  3, inj=3, abs=3, lat=2, active=26, cycles=889, pos=[0.00,0.10,0.20]
+[SpatialEvolver] Done. 200 snapshots.
+  Cycles: 897
+  Sealed: False (0 bits, ratio=0.00)
+  Total inject: 6004, absorb: 6004
+  Layer 1 done: w=3, sealed=False, inj=6004, abs=6004, cycles=897
+  Layer 1 not sealed after 2000 steps, running extra...
+[SpatialEvolver] N=30, T=1000, L=1.0, eps=0.1000
+  Hierarchy bits: 10, Lateral bits: 20
+  Step      0: w=  1, inj=4, abs=4, lat=2, active=26, cycles=898, pos=[0.00,0.10,0.00]
+  Step     50: w=  2, inj=4, abs=4, lat=2, active=26, cycles=932, pos=[0.00,0.10,0.10]
+  Step    100: w=  2, inj=4, abs=4, lat=2, active=26, cycles=961, pos=[0.00,0.00,0.20]
+  Step    150: w=  2, inj=4, abs=4, lat=1, active=26, cycles=985, pos=[0.00,0.00,0.20]
+  Step    200: w=  2, inj=4, abs=4, lat=1, active=26, cycles=1010, pos=[0.00,0.20,0.00]
+  Step    250: w=  2, inj=4, abs=4, lat=2, active=26, cycles=1023, pos=[0.00,0.20,0.00]
+  Step    300: w=  2, inj=4, abs=4, lat=2, active=26, cycles=1036, pos=[0.00,0.10,0.10]
+  Step    350: w=  2, inj=4, abs=4, lat=2, active=26, cycles=1048, pos=[0.00,0.00,0.20]
+  Step    400: w=  2, inj=4, abs=4, lat=2, active=26, cycles=1056, pos=[0.00,0.00,0.20]
+  Step    450: w=  2, inj=4, abs=4, lat=1, active=26, cycles=1061, pos=[0.00,0.10,0.10]
+  Step    500: w=  2, inj=4, abs=4, lat=2, active=26, cycles=1068, pos=[0.00,0.10,0.10]
+  Step    550: w=  2, inj=4, abs=4, lat=2, active=26, cycles=1072, pos=[0.00,0.20,0.00]
+  Step    600: w=  2, inj=4, abs=4, lat=2, active=26, cycles=1074, pos=[0.00,0.20,0.00]
+  Step    650: w=  2, inj=4, abs=4, lat=2, active=26, cycles=1078, pos=[0.00,0.10,0.10]
+  Step    700: w=  2, inj=4, abs=4, lat=2, active=26, cycles=1081, pos=[0.00,0.00,0.20]
+  Step    750: w=  2, inj=4, abs=4, lat=1, active=26, cycles=1082, pos=[0.00,0.10,0.10]
+  Step    800: w=  2, inj=4, abs=4, lat=2, active=26, cycles=1083, pos=[0.00,0.20,0.00]
+  Step    850: w=  2, inj=4, abs=4, lat=2, active=26, cycles=1083, pos=[0.00,0.00,0.20]
+  Step    900: w=  2, inj=4, abs=4, lat=2, active=26, cycles=1083, pos=[0.00,0.10,0.10]
+  Step    950: w=  2, inj=4, abs=4, lat=2, active=26, cycles=1083, pos=[0.00,0.20,0.00]
+[SpatialEvolver] Done. 100 snapshots.
+  Cycles: 1084
+  Sealed: False (0 bits, ratio=0.00)
+  Total inject: 10004, absorb: 10004
+  Extra 1000 steps: sealed=False
+    [seed=742] Done in 78.1s
+    [seed=742] Layers formed: 2 (n_layers=2) [P3 FIX: max_layers=2 ENFORCED]
+    seed=742: NSI_max=0.6520, layers=2 [P3 OK], L1_cycles=0 (reconfig=0, reshuffle=0, identity=0), types_active=0, CIV_max=3, NRC_R2=1, jaccard_L0L1=0.000
+
+======================================================================
+PHASE 8 P3 RESULTS — max_layers=2 Enforcement Validation
+======================================================================
+
+  H1-H8: 8/8 pass [OK]
+  H86 (L1 cycles): FAIL — 5/8 seeds >=1 L1 cycle (counts: 7, 0, 7, 0, 7, 7, 7, 0)
+  H86a (type diversity): FAIL — mean_types_active=0.62, per_seed=1, 0, 1, 0, 1, 1, 1, 0
+  H86b (cycle frequency): PASS — mean_cycles_per_seed=4.38
+  H89 (no degradation): PASS — 8/8 H1-H8 pass
+  Layers formed: 8/8 seeds with 2+ layers
+  L1 extracted: 8/8 seeds
+  L0-L1 Jaccard: mean=0.000, max=0.000
+  NRC: cycles=32, R2=13
+  Phase 8 P3: 2/4 PASS [X] H86, H86a
+
+------------------------------------------------------------------------------------------
+PER-SEED DETAIL:
+------------------------------------------------------------------------------------------
+  seed= 42: NSI_max=0.6454 layers=2 L1_cycles=7 (reconfig=0, reshuffle=7, identity=0) types=1 extracted=True L0_cycles=2 R2=1 jaccard_L0L1=0.000 
+  seed=142: NSI_max=0.6135 layers=2 L1_cycles=0 (reconfig=0, reshuffle=0, identity=0) types=0 extracted=True L0_cycles=5 R2=2 jaccard_L0L1=0.000 
+  seed=242: NSI_max=0.5968 layers=2 L1_cycles=7 (reconfig=0, reshuffle=7, identity=0) types=1 extracted=True L0_cycles=2 R2=1 jaccard_L0L1=0.000 
+  seed=342: NSI_max=0.6486 layers=2 L1_cycles=0 (reconfig=0, reshuffle=0, identity=0) types=0 extracted=True L0_cycles=4 R2=2 jaccard_L0L1=0.000 
+  seed=442: NSI_max=0.6520 layers=2 L1_cycles=7 (reconfig=0, reshuffle=7, identity=0) types=1 extracted=True L0_cycles=5 R2=2 jaccard_L0L1=0.000 
+  seed=542: NSI_max=0.7086 layers=2 L1_cycles=7 (reconfig=0, reshuffle=7, identity=0) types=1 extracted=True L0_cycles=5 R2=2 jaccard_L0L1=0.000 
+  seed=642: NSI_max=0.6486 layers=2 L1_cycles=7 (reconfig=0, reshuffle=7, identity=0) types=1 extracted=True L0_cycles=7 R2=2 jaccard_L0L1=0.000 
+  seed=742: NSI_max=0.6520 layers=2 L1_cycles=0 (reconfig=0, reshuffle=0, identity=0) types=0 extracted=True L0_cycles=2 R2=1 jaccard_L0L1=0.000 
+
+    Results saved to: C:\Users\Administrator\Documents\the_theory_of_difference\11-模拟机工程实现\experiments\exp_140_phase8_p3_max_layers_validated_20260605_0117.json
+
+======================================================================
+COMPARISON: exp_139 (P2, without fix) vs exp_140 (P3, with fix)
+======================================================================
+  exp_139 (P2, no fix): 5/8 seeds with 2 layers, L1 cycles in 5/8
+  exp_140 (P3, fix):    8/8 seeds with 2 layers, L1 cycles in 8/8
+  Total L1 cycles across all seeds: 35 (exp_139: 35)
+  P3 fix WORKS: max_layers=2 enforcement properly prevents L2 creation
