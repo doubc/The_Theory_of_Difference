@@ -480,3 +480,116 @@ def compute_cycle_delay_distribution(l0_cycle_steps: List[int],
         'l0_before_l1': l0_before,
         'l1_before_l0': l1_before,
     }
+
+
+# ─── Phase 8 P1: Encapsulation-Aware Callback ───
+
+class L1AwareLCylDetCallback:
+    """
+    Encapsulation-aware tracking callback for L1 cycle detection.
+
+    Phase 8 P1 workaround: With max_layers=1, the evolver never fires the
+    tracking callback for layer_id=1 because the run loop iterates only
+    up to max_layers. However, the hierarchy DOES contain L1 data after
+    encapsulation (via check_and_encapsulate()).
+
+    This callback extracts L1 metrics from the hierarchy when l1_formed
+    is detected, feeding them to an L1CycleDetector for cycle detection.
+
+    Usage:
+        detector = L1CycleDetector()
+        collector = PerLayerMetricsCollector(config)
+        hierarchy_getter = lambda: evolver.hierarchy
+        cb = L1AwareLCylDetCallback(collector, detector, hierarchy_getter)
+        result = evolver.run(tracking_callback=cb.step)
+    """
+
+    def __init__(self, collector, l1_detector, hierarchy_getter):
+        self.collector = collector
+        self.l1_detector = l1_detector
+        self.hierarchy_getter = hierarchy_getter  # callable -> HierarchyManager
+        self._last_l1_nsi = 0.0
+        self._last_l1_civ = 0
+        self._last_l1_active_bits = set()
+        self._l1_extracted = False
+
+    def step(self, step, layer_id, n_active, n_total, n_frozen,
+             hamming_weight, active_bits, frozen_bits,
+             global_odi, global_msi,
+             l0_sealed=False, l1_formed=False, l1_unique_active=0,
+             l1_sealing_threshold=0,
+             **kwargs):
+        """
+        Called by HierarchicalEvolver for each layer snapshot.
+        Forwards to collector, then extracts L1 data from hierarchy
+        when l1_formed is True (regardless of layer_id).
+        """
+        # Forward to collector first
+        if self.collector:
+            self.collector.step(
+                step, layer_id, n_active, n_total, n_frozen,
+                hamming_weight, active_bits, frozen_bits,
+                global_odi, global_msi,
+                l0_sealed=l0_sealed, l1_formed=l1_formed,
+                l1_unique_active=l1_unique_active,
+                l1_sealing_threshold=l1_sealing_threshold,
+            )
+
+        # Extract L1 data when available
+        if l1_formed and layer_id == 0 and self.l1_detector:
+            hierarchy = self.hierarchy_getter()
+            if hierarchy and hierarchy.n_layers > 1:
+                l1_layer = hierarchy.get_layer(1)
+
+                # Compute L1 metrics from LayerState
+                l1_active = len(l1_layer.active_bits)
+                l1_total = l1_layer.n_bits
+                l1_nsi = l1_active / max(l1_total, 1)
+                l1_civ = l1_active
+                l1_stability = 1.0 - (len(l1_layer.frozen_bits) / max(l1_total, 1))
+
+                self._last_l1_nsi = l1_nsi
+                self._last_l1_civ = l1_civ
+                self._last_l1_active_bits = set(l1_layer.active_bits)
+                self._l1_extracted = True
+
+                # Feed to L1CycleDetector
+                self.l1_detector.update(
+                    step=step,
+                    l1_nsi=l1_nsi,
+                    l1_civ=l1_civ,
+                    l1_active_bits=l1_layer.active_bits,
+                    l1_stability=l1_stability,
+                )
+            elif self._l1_extracted:
+                # L1 was formed but now hierarchy lost? feed last known
+                self.l1_detector.update(
+                    step=step,
+                    l1_nsi=self._last_l1_nsi,
+                    l1_civ=self._last_l1_civ,
+                    l1_active_bits=self._last_l1_active_bits,
+                    l1_stability=0.5,
+                )
+
+    def get_l1_metrics(self) -> Dict:
+        """Get L1 cycle metrics from the detector."""
+        if not self.l1_detector:
+            return {'l1_detector': {'total_cycles': 0}, 'l1_extracted': False}
+
+        summary = self.l1_detector.get_summary()
+        cycle_times = self.l1_detector.get_cycle_times()
+        types_active = sum(1 for v in cycle_times.values() if len(v) > 0)
+        # Exclude 'all' key from type count
+        type_count = {'reconfiguration': cycle_times.get('reconfiguration', []),
+                      'reshuffle': cycle_times.get('reshuffle', []),
+                      'identity_shift': cycle_times.get('identity_shift', [])}
+        n_types = sum(1 for v in type_count.values() if len(v) > 0)
+
+        return {
+            'l1_detector': summary,
+            'l1_cycle_times': cycle_times,
+            'n_cycle_types_active': n_types,
+            'l1_last_nsi': self._last_l1_nsi,
+            'l1_last_civ': self._last_l1_civ,
+            'l1_extracted': self._l1_extracted,
+        }
