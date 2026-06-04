@@ -584,6 +584,7 @@ class HierarchicalEvolver:
                      constraints) -> None:
             """Phase 2 步骤回调"""
             result_entry = {'step': step, 'layer': layer_id}
+            ts = layer_id * 10000 + step  # Universal timestamp for all Phase 3/4 components
 
             # Ensure odi_result is always defined (used by Phase 3 components)
             odi_result = None
@@ -653,7 +654,11 @@ class HierarchicalEvolver:
                 }
 
             # 4. NarrativeRecursionOperator (Phase 3)
-            if self.narrative_recursion_operator is not None:
+            # NOTE: Layer 0 only — higher layers have different dimensions (N < N0)
+            # and would cause tensor size mismatch in the narrative operator's filter.
+            # L1's per-layer dynamics are tracked by PerLayerMetricsCollector;
+            # the generative narrative pipeline is L0-only.
+            if layer_id == 0 and self.narrative_recursion_operator is not None:
                 # 构建差异信号列表
                 ts = layer_id * 10000 + step
                 diff_signals = []
@@ -1524,7 +1529,7 @@ class HierarchicalEvolver:
 
                 # 12. MinimalSelfDetector — 最小自我检测
                 msi_result = None
-                if self.minimal_self_detector is not None and p3_active:
+                if layer_id == 0 and self.minimal_self_detector is not None and p3_active:
                     # P2 fix (2026-05-30): 改进敏感度图构建 — 解决密封后 Gini=0 问题
                     # 根因：旧代码只使用 18 个活跃比特（密封后），且 bind_sens*100 使分布同质化
                     # 修复：(a) 使用全部 72 比特 (b) 移除 *100 同质化 (c) Z-score 归一化
@@ -1690,9 +1695,9 @@ class HierarchicalEvolver:
                               f"MSI={msi_result.msi:.3f}, "
                               f"conditions={msi_result.n_active_conditions}/3")
 
-                # 13. AnticipatoryBiasEngine — 预期偏置
+                # 13. AnticipatoryBiasEngine — 预期偏置 (L0 only — L1 has different N)
                 anticipation_result = None
-                if self.anticipatory_bias_engine is not None and p3_active:
+                if layer_id == 0 and self.anticipatory_bias_engine is not None and p3_active:
                     target_layer = layer_id + 1
                     horizon = self.anticipatory_bias_engine.config.get('default_horizon', 1)
                     anticipation_result = self.anticipatory_bias_engine.predict(
@@ -1721,9 +1726,9 @@ class HierarchicalEvolver:
                         horizon=horizon,
                     )
 
-                # 14. CounterfactualEngine — 反事实探索
+                # 14. CounterfactualEngine — 反事实探索 (L0 only — L1 has different N)
                 cf_result = None
-                if self.counterfactual_engine is not None and p3_active:
+                if layer_id == 0 and self.counterfactual_engine is not None and p3_active:
                     # 探索分岔
                     cf_result = self.counterfactual_engine.explore(
                         current_state=state.float(),
