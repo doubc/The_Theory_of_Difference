@@ -103,7 +103,8 @@ class HierarchyManager:
     def __init__(self, N0: int, device: str = "cpu",
                  binding_threshold: float = 0.1,
                  min_group_size: int = 2,
-                 n_hierarchy_bits: int = None):
+                 n_hierarchy_bits: int = None,
+                 max_layers: int = 3):
         """
         Args:
             N0: 第 0 层比特数
@@ -111,7 +112,9 @@ class HierarchyManager:
             binding_threshold: 封装绑定强度阈值
             min_group_size: 最小组大小
             n_hierarchy_bits: 层级比特数（传给 AxiomConstraints）
+            max_layers: 最大层数上限（默认 3，与 evolver 默认一致）
         """
+        self.max_layers = max_layers
         self.device = device
         self.binding_threshold = binding_threshold
         self.min_group_size = min_group_size
@@ -492,13 +495,15 @@ class HierarchyManager:
         Returns:
             封装信息字典，如果未触发封装则返回 None
         """
+        # 达到最大层数上限 → 不再封装
+        if self.n_layers >= self.max_layers:
+            return None
         layer = self.current
         if layer.constraints.sealed and not layer.is_sealed:
             new_layer, info = self.encapsulate_current_layer()
-            if self.current_layer < 3:  # 最多 3 层
-                print(f"[Hierarchy] L{info['from_layer']} -> L{info['to_layer']}: "
-                      f"{info['n_bits_before']} -> {info['n_bits_after']} bits "
-                      f"({info['n_active_preserved']} active + {info['n_encapsulated']} enc)")
+            print(f"[Hierarchy] L{info['from_layer']} -> L{info['to_layer']}: "
+                  f"{info['n_bits_before']} -> {info['n_bits_after']} bits "
+                  f"({info['n_active_preserved']} active + {info['n_encapsulated']} enc)")
             return info
         return None
 

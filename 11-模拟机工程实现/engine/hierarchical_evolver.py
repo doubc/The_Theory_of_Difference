@@ -353,7 +353,8 @@ class HierarchicalEvolver:
             device=device,
             binding_threshold=binding_threshold,
             min_group_size=min_group_size,
-            n_hierarchy_bits=n_hierarchy_bits
+            n_hierarchy_bits=n_hierarchy_bits,
+            max_layers=self.max_layers
         )
 
         # 空间嵌入层（每层一个）
