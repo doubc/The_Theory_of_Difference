@@ -579,3 +579,15 @@ Phase 4 P1 完成（2026-06-02）：
 - **Analysis**: `docs/exp_130_phase6_p3_analysis.md`
 - **Git**: pending commit
 - **Next**: Phase 6 P4 — R2 threshold tuning (0.85→0.80) or N0=72 scaling test, or redefine R2 as epochal
+
+#### 2026-06-04 19:44 — Phase 8 P0: exp_137 L1 Cycle Baseline — LAUNCHED 🚀
+- **Read HEARTBEAT.md** → confirmed next action: Phase 8 P0 (exp_137 L1 cycle baseline)
+- **Read Phase 8 design doc** — confirmed P0 scope (L1 baseline with LCylDet, monitor only)
+- **Existing code verified**: engine/l1_cycle_detector.py already implemented ✅
+- **New script**: experiments/exp_137_phase8_p0_l1_cycle_baseline.py (28KB, 630+ lines)
+  - LCylDetTrackingCallback class: bridges PerLayerMetricsCollector → L1CycleDetector at each snapshot
+  - Hypotheses: H86 (L1 cycles >=6/8 seeds), H86a (type diversity >=2 types), H86b (freq >=3.0/seed), H89 (no degradation)
+  - Config: N0=72, 8 seeds × 5000 steps, tension=1.0
+- **Launched** (PID 7520, 8h timeout, exp_137_run.log): seed 42 sealed at step 25, NRC R2 active ✅
+- **Next**: Monitor progress → analyze H86 → Phase 8 P1 (exp_138, BICouple Direction A) if H86 passes
+- **Task summary**: ~/.qclaw/workspace/task-summary_2026-06-04_1944.md
