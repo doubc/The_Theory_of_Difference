@@ -591,3 +591,10 @@ Phase 4 P1 完成（2026-06-02）：
 - **Launched** (PID 7520, 8h timeout, exp_137_run.log): seed 42 sealed at step 25, NRC R2 active ✅
 - **Next**: Monitor progress → analyze H86 → Phase 8 P1 (exp_138, BICouple Direction A) if H86 passes
 - **Task summary**: ~/.qclaw/workspace/task-summary_2026-06-04_1944.md
+
+#### 2026-06-05 14:20 — Phase 9 P3-A CRASH FIXED + RELAUNCHED 🚀
+- **Bug**: N0=26→N=27 alignment caused GBC tensor size mismatch (26 vs 27)
+- **Fix**: Use consistent bias_dim from constraints.direction across all 6 bias extractions
+- **Commit**: \89ed2c2\ — GBC tensor size mismatch fix
+- **Relaunched**: amber-gulf (PID 4036), 112 runs, ~1h
+- **Prior results**: cool-crustacean had 8/16 N0=24 seeds complete before crash
