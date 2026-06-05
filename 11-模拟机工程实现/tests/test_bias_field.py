@@ -29,7 +29,7 @@ def _setup_two_layer_hierarchy():
                 layer0.constraints.binding_strength[i, j] = 0.5
     layer0.constraints.sealed = True
     layer0.constraints.sealed_bits = {0, 1, 2, 3}
-    layer0.constraints.active_bits = set(range(12))
+    layer0.constraints.active_bits = {i: 0 for i in range(12)}
 
     hm.check_and_encapsulate()
     return hm
@@ -85,7 +85,7 @@ class TestPropagateBiasUp:
         assert hm.n_layers == 2
 
         layer0 = hm.get_layer(0)
-        layer0.constraints.active_bits = {4, 5, 6, 7, 8, 9}
+        layer0.constraints.active_bits = {i: 0 for i in [4, 5, 6, 7, 8, 9]}
 
         bias = hm.propagate_bias_up(source_layer_id=0, bias_strength=0.2)
         assert bias is not None
@@ -99,7 +99,7 @@ class TestPropagateBiasUp:
         hm = _setup_two_layer_hierarchy()
 
         layer0 = hm.get_layer(0)
-        layer0.constraints.active_bits = set()
+        layer0.constraints.active_bits = {}
 
         bias = hm.propagate_bias_up(0)
         assert bias is None
@@ -129,7 +129,7 @@ class TestPropagateBiasUp:
         # 封装组：{0,1,2,3} -> L1 的封装比特 0
         # 活跃比特：4-11 直接映射到 L1 的位置 0-7
         # L1 总比特数 = 8 活跃 + 1 封装 = 9
-        layer0.constraints.active_bits = {4, 5, 6, 7, 8, 9, 10, 11}
+        layer0.constraints.active_bits = {i: 0 for i in range(4, 12)}
 
         bias = hm.propagate_bias_up(source_layer_id=0, bias_strength=0.2)
         assert bias is not None
@@ -162,7 +162,7 @@ class TestPropagateBiasUp:
         #   未被封装的比特 = [4,5,6,7,8,9,10,11]（排序后）
         #   L1 pos 0 <- L0 bit 4 (active=1), pos 1 <- L0 bit 5 (active=1)
         #   pos 2-7 <- L0 bit 6-11 (all inactive=0)
-        layer0.constraints.active_bits = {0, 1, 4, 5}
+        layer0.constraints.active_bits = {i: 0 for i in [0, 1, 4, 5]}
 
         bias = hm.propagate_bias_up(source_layer_id=0, bias_strength=0.2)
         assert bias is not None

@@ -94,7 +94,7 @@ class TestHierarchyManager:
         # 手动设置封口状态
         layer.constraints.sealed = True
         layer.constraints.sealed_bits = {0, 1, 2, 3}
-        layer.constraints.active_bits = set(range(12))
+        layer.constraints.active_bits = {i: 0 for i in range(12)}
 
         info = hm.check_and_encapsulate()
         assert info is not None
@@ -118,7 +118,7 @@ class TestHierarchyManager:
                     layer.constraints.binding_strength[i, j] = 0.5
         layer.constraints.sealed = True
         layer.constraints.sealed_bits = {0, 1, 2, 3}
-        layer.constraints.active_bits = set(range(8))
+        layer.constraints.active_bits = {i: 0 for i in range(8)}
 
         info = hm.check_and_encapsulate()
 
@@ -153,7 +153,7 @@ class TestHierarchyManager:
                     layer0.constraints.binding_strength[i, j] = 0.5
         layer0.constraints.sealed = True
         layer0.constraints.sealed_bits = {0, 1, 2, 3, 4, 5}
-        layer0.constraints.active_bits = set(range(12))
+        layer0.constraints.active_bits = {i: 0 for i in range(12)}
 
         info1 = hm.check_and_encapsulate()
         assert info1 is not None
@@ -171,7 +171,7 @@ class TestHierarchyManager:
                         layer1.constraints.binding_strength[i, j] = 0.5
             layer1.constraints.sealed = True
             layer1.constraints.sealed_bits = set(range(half))
-            layer1.constraints.active_bits = set(range(n1))
+            layer1.constraints.active_bits = {i: 0 for i in range(n1)}
 
             info2 = hm.check_and_encapsulate()
             if info2 is not None:
@@ -195,7 +195,7 @@ class TestHierarchyManager:
         layer.active_bits = {2, 3, 4, 5, 6, 7}
         layer.constraints.sealed = True
         layer.constraints.sealed_bits = {0, 1}
-        layer.constraints.active_bits = set(range(8))
+        layer.constraints.active_bits = {i: 0 for i in range(8)}
 
         result = hm.step_layer(0, n_steps=10)
         assert result['steps'] == 10

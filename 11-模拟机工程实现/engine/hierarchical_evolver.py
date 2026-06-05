@@ -341,6 +341,9 @@ class HierarchicalEvolver:
         self._nrc_cycle_results: List[Dict] = []
         self._odi_window: List[float] = []
         self._last_odi_value: float = 0.0
+        # Cumulative step offset per layer for monotonic timestamps across
+        # multiple _run_layer calls (e.g. initial run + extra steps when not sealed)
+        self._layer_step_offset: Dict[int, int] = {}
         # Phase 2 自维持环路 & 复制模式（可选，未实现时默认为 None）
         self.self_sustaining_circulation = None
         self.replicate_pattern = None
@@ -579,13 +582,17 @@ class HierarchicalEvolver:
             self._phase2_layer_results[layer_id] = []
 
         p1_counter = {'value': 0}
+        # Capture current cumulative step offset for this layer so that
+        # timestamps remain monotonically increasing across multiple
+        # _run_layer invocations (e.g. initial run + extra steps).
+        step_offset = self._layer_step_offset.get(layer_id, 0)
 
         def callback(step: int, state: torch.Tensor,
                      snapshot: 'SpatialSnapshot',
                      constraints) -> None:
             """Phase 2 步骤回调"""
             result_entry = {'step': step, 'layer': layer_id}
-            ts = layer_id * 10000 + step  # Universal timestamp for all Phase 3/4 components
+            ts = layer_id * 10000 + step_offset + step  # Universal timestamp for all Phase 3/4 components
 
             # Ensure odi_result is always defined (used by Phase 3 components)
             odi_result = None
@@ -605,7 +612,7 @@ class HierarchicalEvolver:
                 if D_max > 1e-8:
                     D = D / D_max
                 xiang_result = self.xiang_detector.detect(
-                    D, timestamp=layer_id * 10000 + step)
+                    D, timestamp=ts)
                 result_entry['xiang'] = {
                     'formed': xiang_result.xiang_formed,
                     'density': xiang_result.organization_density,
@@ -626,10 +633,10 @@ class HierarchicalEvolver:
                     target_layer=layer_id,
                     bias_vector=direction.float(),
                     strength=min(1.0, len(constraints.active_bits) / max(1, N)),
-                    origin_step=layer_id * 10000 + step,
+                    origin_step=ts,
                 )
                 self.persistent_bias_memory.record(
-                    bf, timestamp=layer_id * 10000 + step,
+                    bf, timestamp=ts,
                     metadata={'layer': layer_id, 'step': step}
                 )
                 result_entry['bias_memory'] = {
@@ -661,7 +668,6 @@ class HierarchicalEvolver:
             # the generative narrative pipeline is L0-only.
             if layer_id == 0 and self.narrative_recursion_operator is not None:
                 # 构建差异信号列表
-                ts = layer_id * 10000 + step
                 diff_signals = []
                 # 从状态重建差异矩阵
                 state_float = state.float()
@@ -885,7 +891,6 @@ class HierarchicalEvolver:
                 active_count = len(constraints.active_bits)
                 frozen_count = len(constraints.sealed_bits)
                 total_bits = max(1, active_count + frozen_count)
-                ts = layer_id * 10000 + step
 
                 # 保持深度
                 bias_depth = 0.0
@@ -1757,7 +1762,7 @@ class HierarchicalEvolver:
             # ── 重建循环结束：评估保持深度的可重调用性 ──
             if self.persistent_bias_memory is not None:
                 reinvocation_results = self.persistent_bias_memory.end_reconstruction_cycle(
-                    timestamp=layer_id * 10000 + step)
+                    timestamp=ts)
                 result_entry['reinvocation_results'] = reinvocation_results
                 result_entry['n_cycles_tracked'] = (
                     self.persistent_bias_memory.n_cycles_tracked)
@@ -2315,6 +2320,15 @@ class HierarchicalEvolver:
         """在指定层运行空间演化"""
         layer = self.hierarchy.get_layer(layer_id)
         N = layer.n_bits
+        # Save original direction size before any padding, so we can restore
+        # it after the run.  SpatialLongRangeEvolver may round N up to a
+        # multiple of 3, which pads direction/state internally.  External
+        # consumers should see the original logical dimension.
+        original_direction_size = (
+            layer.constraints.direction.shape[0]
+            if layer.constraints is not None and layer.constraints.direction is not None
+            else N
+        )
 
         if layer_id not in self.spatial_layers:
             self._init_spatial_layer(layer_id, N, L=1.0)
@@ -2385,6 +2399,17 @@ class HierarchicalEvolver:
         layer.state = result['final_state']
         layer.constraints = evolver.constraints
 
+        # ── Restore original logical dimension after spatial padding ──
+        # The spatial evolver may have padded direction/state to a multiple
+        # of 3.  Trim back so external consumers see the original N.
+        if (layer.constraints is not None
+                and layer.constraints.direction is not None
+                and layer.constraints.direction.shape[0] > original_direction_size):
+            layer.constraints.direction = layer.constraints.direction[:original_direction_size]
+        if layer.state is not None and layer.state.shape[0] > original_direction_size:
+            layer.state = layer.state[:original_direction_size]
+            layer.n_bits = original_direction_size
+
         gravity_potential = getattr(layer, 'gravity_potential', None)
         for snap in result.get('snapshots', []):
             h_snap = HierarchicalSnapshot(
@@ -2454,6 +2479,10 @@ class HierarchicalEvolver:
 
         # Restore layer.step_count after callback may have modified constraints
         layer.step_count += steps
+
+        # Update cumulative step offset so subsequent _run_layer calls for this
+        # layer produce monotonically increasing timestamps in callbacks.
+        self._layer_step_offset[layer_id] = layer.step_count
 
         just_sealed = evolver.constraints.sealed and not layer.is_sealed
 

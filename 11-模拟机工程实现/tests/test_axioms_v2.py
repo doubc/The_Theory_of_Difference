@@ -24,8 +24,9 @@ class TestAxiomConstraints:
 
     def test_A6_direction_cumulative(self):
         c = AxiomConstraints(N=8)
-        # 初始方向为 0
-        assert c.direction[0].item() == 0
+        # 初始方向为随机 +1 或 -1（不再为 0）
+        initial_dir = c.direction[0].item()
+        assert initial_dir in (-1, 1), f"Expected random init, got {initial_dir}"
         # 0→1 翻转后方向变为 +1
         c.update_A6_direction(0, 0.0, 1.0)
         assert c.direction[0].item() == 1
@@ -96,15 +97,18 @@ class TestAxiomConstraints:
         assert s == 0
 
     def test_A9_active_bits(self):
-        c = AxiomConstraints(N=8)
-        # 前 8 步：所有比特可激活
-        for i in range(8):
+        c = AxiomConstraints(N=40)
+        # sealing_activation_threshold = max(int(0.75*40), 30) = 30
+        # min_active_bits = min(40, max(40//3, 12)) = 24
+        # 激活所有 40 个比特（前 30 个触发密封）
+        for i in range(40):
             ok, _ = c.check_A9(i)
             assert ok
-        # 触发封口（第 9 次调用）
-        ok, _ = c.check_A9(0)
+        # 验证 active_bits 是 Dict[int, int]（bit_idx -> last_active_step）
+        assert isinstance(c.active_bits, dict)
+        assert len(c.active_bits) == 40
         # 封口后：检查未冻结的比特可以通过
-        unsealed = c.active_bits - c.sealed_bits
+        unsealed = set(c.active_bits.keys()) - c.sealed_bits
         assert len(unsealed) >= c.min_active_bits
         for i in unsealed:
             ok, _ = c.check_A9(i)

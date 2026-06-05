@@ -30,6 +30,22 @@ Phase 3 组件（前主体态→最小自我）：
 - minimal_self_detector.py: 最小自我检测器 (Phase 3 P0)
 - anticipatory_bias_engine.py: 预期偏置引擎 (Phase 3 P1)
 - counterfactual_engine.py: 反事实引擎 (Phase 3 P2)
+- global_bias_constraint.py: 全局偏置约束 (Phase 3 P2)
+
+Phase 4 组件（叙事自我涌现 + 跨尺度耦合）：
+- cross_scale_coupling.py: 跨尺度双向耦合 ★ 关键组件
+- narrative_self_emergence.py: 叙事自我涌现 ★ 关键组件
+- layer_narrative_tracker.py: 分层叙事追踪
+
+Phase 5 组件（压力测试 + 多层级动力学）：
+- civ_floor.py: CIV 下限机制
+- per_layer_metrics.py: 分层指标追踪
+
+Phase 6 组件（叙事递归闭合 NRC）：
+- narrative_recursive_closure.py: P_{t+1} = R(S(M(E(P_t)))) 螺旋闭合
+
+Phase 8 组件（跨尺度螺旋耦合）：
+- l1_cycle_detector.py: L1 循环检测器
 
 探测器：
 - detectors/statistics.py: 统计量探测器
@@ -108,6 +124,29 @@ from engine.counterfactual_engine import (
     DEFAULT_COUNTERFACTUAL_CONFIG,
 )
 
+# Phase 3: 全局偏置
+from engine.global_bias_constraint import GlobalBiasConstraint, GlobalBiasConstraintResult
+
+# Phase 4: 叙事自我与跨尺度耦合
+from engine.cross_scale_coupling import CrossScaleCoupling, DEFAULT_CROSS_SCALE_COUPLING_CONFIG
+from engine.narrative_self_emergence import NarrativeSelfEmergence, DEFAULT_NARRATIVE_SELF_EMERGENCE_CONFIG
+
+# Phase 5: 层级指标与 CIV 机制
+from engine.civ_floor import CIVFloor
+from engine.per_layer_metrics import PerLayerMetricsCollector
+
+# Phase 6: 叙事递归闭合
+from engine.narrative_recursive_closure import NarrativeRecursiveClosure
+
+# Phase 8: L1 循环检测
+from engine.l1_cycle_detector import L1CycleDetector
+
+# 探测器
+from engine.detectors.statistics import (
+    HammingDistributionDetector, ReturnTimeDetector, BitClusteringDetector,
+    DAGDirectionDetector, EffectiveDOFDetector,
+)
+
 __all__ = [
     # Phase 2: 层级封装
     'EncapsulationEngine', 'EncapsulatedBit', 'IndexMapping',
@@ -150,4 +189,19 @@ __all__ = [
     'TrajectoryNode', 'TrajectoryBranch', 'TrajectoryState', 'DivergenceType', 'ProjectionMethod',
     'DivergencePoint', 'ConsequenceEstimate', 'ContrastResult', 'CounterfactualResult',
     'DEFAULT_COUNTERFACTUAL_CONFIG',
+    # Phase 3: 全局偏置
+    'GlobalBiasConstraint', 'GlobalBiasConstraintResult',
+    # Phase 4: 叙事自我与跨尺度耦合
+    'CrossScaleCoupling', 'DEFAULT_CROSS_SCALE_COUPLING_CONFIG',
+    'NarrativeSelfEmergence', 'DEFAULT_NARRATIVE_SELF_EMERGENCE_CONFIG',
+    # Phase 5: 层级指标与 CIV 机制
+    'CIVFloor',
+    'PerLayerMetricsCollector',
+    # Phase 6: 叙事递归闭合
+    'NarrativeRecursiveClosure',
+    # Phase 8: L1 循环检测
+    'L1CycleDetector',
+    # 探测器
+    'HammingDistributionDetector', 'ReturnTimeDetector', 'BitClusteringDetector',
+    'DAGDirectionDetector', 'EffectiveDOFDetector',
 ]
