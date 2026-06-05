@@ -967,6 +967,10 @@ class HierarchicalEvolver:
                 if self.global_bias_constraint is not None:
                     local_biases = {}
                     coupling_strengths = {}
+                    # Use constraint direction dimension (actual boundary size) not evolver.N
+                    # because SpatialLongRangeEvolver auto-aligns N to multiples of 3,
+                    # padding state but NOT constraints.direction. GBC needs consistent dim.
+                    bias_dim = constraints.direction.shape[0] if hasattr(constraints, 'direction') and constraints.direction is not None else N
 
                     # 1. boundary: 从 constraints.direction 提取
                     if hasattr(constraints, 'direction') and constraints.direction is not None:
@@ -990,7 +994,7 @@ class HierarchicalEvolver:
 
                     # 3. memory: 从 PersistentBiasMemory 获取当前层的累积偏置场
                     if self.persistent_bias_memory is not None:
-                        memory_field = self.persistent_bias_memory.get_accumulated(layer_id, n_bits=N)
+                        memory_field = self.persistent_bias_memory.get_accumulated(layer_id, n_bits=bias_dim)
                         if memory_field is not None:
                             memory_field = memory_field.float()
                             if memory_field.norm() > 1e-8:
@@ -1002,6 +1006,9 @@ class HierarchicalEvolver:
                     # 使用 state 向量本身作为复制偏好：正值=应激活，负值=应抑制
                     if state is not None:
                         rep_vec = state.float().clone()
+                        # Truncate to bias_dim if state was padded by SpatialLongRangeEvolver alignment
+                        if rep_vec.shape[0] != bias_dim:
+                            rep_vec = rep_vec[:bias_dim]
                         if rep_vec.norm() > 1e-8:
                             # 中心化：减去均值使偏置向量以 0 为中心
                             rep_vec = rep_vec - rep_vec.mean()
@@ -1011,12 +1018,12 @@ class HierarchicalEvolver:
 
                     # 5. selection: 从 CumulativeSelector 的保留率构建偏置
                     if self.cumulative_selector is not None and variant_probs is not None:
-                        sel_vec = torch.zeros(N, device=self.device, dtype=torch.float)
+                        sel_vec = torch.zeros(bias_dim, device=self.device, dtype=torch.float)
                         for vid, prob in variant_probs.items():
                             if vid.startswith('L' + str(layer_id) + '_b'):
                                 try:
                                     bit_id = int(vid.split('_b')[1])
-                                    if 0 <= bit_id < N:
+                                    if 0 <= bit_id < bias_dim:
                                         sel_vec[bit_id] = float(prob)
                                 except (IndexError, ValueError):
                                     pass
@@ -1031,7 +1038,7 @@ class HierarchicalEvolver:
                     if functional_signals is not None:
                         fs = functional_signals
                         if fs.get('direction_agreement', 0) > 0:
-                            func_vec = torch.zeros(N, device=self.device, dtype=torch.float)
+                            func_vec = torch.zeros(bias_dim, device=self.device, dtype=torch.float)
                             active_indices_sorted = sorted(constraints.active_bits)
                             if len(active_indices_sorted) > 0:
                                 dir_vals = constraints.direction.float()
@@ -2337,6 +2344,10 @@ class HierarchicalEvolver:
             layer.n_bits = evolver.N
 
         step_callback = self._make_phase2_callback(layer_id, evolver.N)
+        # NOTE: evolver.N may differ from layer.n_bits due to SpatialLongRangeEvolver
+        # auto-aligning to multiples of 3. The callback captures evolver.N for
+        # get_accumulated() calls, but stored bias_entry vectors use evolver.N size.
+        # PersistentBiasMemory.get_accumulated() handles any mismatch defensively.
 
         if initial_state is not None:
             if evolver.N > initial_state.shape[0]:

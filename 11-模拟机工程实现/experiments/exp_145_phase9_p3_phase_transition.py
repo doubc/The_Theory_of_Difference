@@ -556,7 +556,44 @@ def main():
     print('  H111: Logistic fit (fallback if graded, R2>=0.85)')
     print('  H112: NSI(24) > NSI(36) but continuity/civ lower')
     print(f'  {datetime.now().strftime("%Y-%m-%d %H:%M")}')
+
+    # ── Run experiments ──
+    results_by_n0 = {n0: [] for n0 in N0_SWEEP}
+    total = len(N0_SWEEP) * len(SEEDS)
+    done = 0
+    for n0 in N0_SWEEP:
+        print(f'\n  --- N0={n0} ---')
+        for s, seed in enumerate(SEEDS):
+            t0 = time.time()
+            result = run_single_seed(n0, STEPS, seed, SI, GSN, ML)
+            elapsed = time.time() - t0
+            results_by_n0[n0].append(result)
+            done += 1
+            l1ok = 'OK' if result.get('l1_metrics', {}).get('l1_formed', False) else 'NO'
+            print(f'    [{done}/{total}] seed={seed}: L1:{l1ok} NSI={result.get("nse_nsi_max",0):.3f} '
+                  f'CIV={result.get("civ_max",0)} R2={result.get("nrc_metrics",{}).get("n_r2_events",0)} '
+                  f'[{elapsed:.0f}s]')
+
+    # ── Evaluate ──
+    evaluation = evaluate_N0_boundary(results_by_n0)
+    h110 = evaluation['H110']
     h111 = evaluation['H111']
+    h112 = evaluation['H112']
+
+    # ── Report ──
+    print(f'\n{"="*75}')
+    print('  HYPOTHESIS RESULTS')
+    print(f'{"="*75}')
+
+    # H110
+    pass_str = 'PASS' if h110['pass'] else 'FAIL'
+    print(f'\n  H110 (Sharp transition >=12/16 in <=2 N0 steps): {pass_str}')
+    print(f'    Max adjacent swing: {h110["max_swing_adjacent"]}/16')
+    if h110['sharp_window']:
+        a, b, fa, fb = h110['sharp_window']
+        print(f'    Sharp window: N0={a}->{b} ({fa}/16 -> {fb}/16)')
+
+    # H111
     if h111['logistic_fit']:
         k, x0, r2 = h111['logistic_fit']
         pass_str = 'PASS' if h111['pass'] else 'FAIL'

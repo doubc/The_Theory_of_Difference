@@ -537,7 +537,18 @@ class PersistentBiasMemory:
             # 先衰减
             effective_strength = entry.decay()
             if entry.is_active:
-                accumulated += entry.bias_vector * effective_strength
+                vec = entry.bias_vector
+                # 防御：如果存储的偏置向量长度与目标 n_bits 不一致，自动调整
+                # 场景：空间演化器将 N 对齐到 3 的倍数后，存储的偏置向量长度可能变化
+                if vec.shape[0] != n_bits:
+                    if vec.shape[0] > n_bits:
+                        vec = vec[:n_bits]  # 截断
+                    else:
+                        # 补零到目标长度
+                        padded = torch.zeros(n_bits, device=vec.device, dtype=vec.dtype)
+                        padded[:vec.shape[0]] = vec
+                        vec = padded
+                accumulated += vec * effective_strength
                 total_strength += effective_strength
 
         # 归一化
