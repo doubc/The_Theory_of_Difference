@@ -47,6 +47,9 @@ Phase 6 组件（叙事递归闭合 NRC）：
 Phase 8 组件（跨尺度螺旋耦合）：
 - l1_cycle_detector.py: L1 循环检测器
 
+Phase 9 组件（A9 多隶属封口重设计）：
+- multi_membership_seal.py: 多隶属封口引擎（渐进封口 + 多组织参与）
+
 探测器：
 - detectors/statistics.py: 统计量探测器
 """
@@ -141,6 +144,17 @@ from engine.narrative_recursive_closure import NarrativeRecursiveClosure
 # Phase 8: L1 循环检测
 from engine.l1_cycle_detector import L1CycleDetector
 
+# Phase 9: A9 多隶属封口机制
+from engine.multi_membership_seal import (
+    MultiMembershipSeal, OrgInfo, MembershipSnapshot,
+)
+
+# 差异密度追踪
+from engine.difference_density_tracker import (
+    DifferenceDensityTracker, DensitySnapshot, PhaseTransitionSignal,
+    DEFAULT_DENSITY_CONFIG,
+)
+
 # 探测器
 from engine.detectors.statistics import (
     HammingDistributionDetector, ReturnTimeDetector, BitClusteringDetector,
@@ -201,6 +215,11 @@ __all__ = [
     'NarrativeRecursiveClosure',
     # Phase 8: L1 循环检测
     'L1CycleDetector',
+    # Phase 9: A9 多隶属封口
+    'MultiMembershipSeal', 'OrgInfo', 'MembershipSnapshot',
+    # 差异密度追踪
+    'DifferenceDensityTracker', 'DensitySnapshot', 'PhaseTransitionSignal',
+    'DEFAULT_DENSITY_CONFIG',
     # 探测器
     'HammingDistributionDetector', 'ReturnTimeDetector', 'BitClusteringDetector',
     'DAGDirectionDetector', 'EffectiveDOFDetector',
