@@ -2319,6 +2319,26 @@ class HierarchicalEvolver:
         if layer_id not in self.spatial_layers:
             self._init_spatial_layer(layer_id, N, L=1.0)
 
+        # ── Track B7: Pad binding_strength & direction if N was rounded up ──
+        # _init_spatial_layer rounds N to a multiple of 3, but layer.constraints
+        # was initialized with the original N. Pad them before gravity modulation
+        # accesses binding_strength (which iterates range(n) where n = padded size).
+        spatial_N = self.spatial_layers[layer_id].N
+        if spatial_N > N and layer.constraints is not None:
+            bs = layer.constraints.binding_strength
+            if bs is not None and bs.shape[0] < spatial_N:
+                pad = spatial_N - bs.shape[0]
+                pad_row = torch.zeros(pad, bs.shape[1], device=bs.device)
+                pad_col = torch.zeros(bs.shape[0] + pad, pad, device=bs.device)
+                layer.constraints.binding_strength = torch.cat([bs, pad_row], dim=0)
+                layer.constraints.binding_strength = torch.cat(
+                    [layer.constraints.binding_strength, pad_col], dim=1)
+            d = layer.constraints.direction
+            if d is not None and d.shape[0] < spatial_N:
+                pad = spatial_N - d.shape[0]
+                layer.constraints.direction = torch.cat(
+                    [d, torch.zeros(pad, device=d.device)], dim=0)
+
         if layer_id > 0:
             self._apply_cross_layer_gravity_modulation(layer_id)
 
