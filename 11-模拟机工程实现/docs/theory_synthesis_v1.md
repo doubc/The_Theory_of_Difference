@@ -234,11 +234,11 @@ Grassberger-Procaccia D_2:  D_eff ≈ 2.59    ← 非线性维数
 
 1. **L0/L1 跨尺度循环一致性未自然涌现**：L0 和 L1 之间存在信息传递，但未形成完整的闭合反馈循环。这可能意味着需要更复杂的层级间耦合机制，或者这是"涌现意识"的必要条件。
 
-2. **A9 多隶属需要 Phase 2 整合**：多隶属封口的理论设计已存在（`docs/a9_multi_membership_design.md`），但尚未整合到主演化路径中。当前 Phase 1 的验证使用了独立的实验文件。
+2. **A9 多隶属已整合到主演化路径**：`enable_multi_membership()` 已整合到 `acl/axioms_v2.py`，通过 `_sync_from_mms()` 向后兼容 legacy sealing 路径。995 测试全部通过，零回归。参见 `docs/a9_multi_membership_design.md` 获得设计详情。
 
 3. **封口度量提取仍有改善空间**：虽然 `test_sealing_fix.py` 引入的滑动窗口修复了旧 bug，但在边界条件（N0 接近 30）下，封口时序的准确度量仍对窗口参数敏感。
 
-4. **维度测量协议统一**：虽然 V2 检测器解决了方法论问题，但旧的分析文档仍然散落着 V1 的结论，需要系统性地更新。
+4. **维度测量协议统一（清理中）**：V2 检测器（`engine/detectors/dimension_locking_v2.py`）已解决方法论问题并验证通过。旧的分析文档仍散落 V1 结论待清理。
 
 ---
 
