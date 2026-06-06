@@ -157,6 +157,13 @@ from engine.subspace_field import (
     make_uniform_field, make_static_field, make_interleaved_field, make_random_field,
 )
 
+# Phase 11 P3: 子空间演化器
+from engine.subspace_evolver import (
+    SubspaceSolver, CouplingEngine, LayerCoordinator,
+    SubspaceAwareEvolver,
+    run_subspace_experiment,
+)
+
 # 差异密度追踪
 from engine.difference_density_tracker import (
     DifferenceDensityTracker, DensitySnapshot, PhaseTransitionSignal,
@@ -181,6 +188,10 @@ __all__ = [
     'CouplingTopology', 'CouplingDirection',
     'allocate_static', 'allocate_interleaved', 'allocate_random',
     'make_uniform_field', 'make_static_field', 'make_interleaved_field', 'make_random_field',
+    # Phase 11 P3: 子空间演化器
+    'SubspaceSolver', 'CouplingEngine', 'LayerCoordinator',
+    'SubspaceAwareEvolver',
+    'run_subspace_experiment',
     # Phase 2: 层级封装
     'EncapsulationEngine', 'EncapsulatedBit', 'IndexMapping',
     'HierarchyManager', 'LayerState', 'BiasField',
