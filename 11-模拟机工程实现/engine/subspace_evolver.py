@@ -488,7 +488,7 @@ class SubspaceAwareEvolver:
 
             # Layer summary
             sealed_str = ", ".join(
-                f"{n}: {'✓' if s.is_sealed else '✗'}"
+                f"{n}: {'[Y]' if s.is_sealed else '[N]'}"
                 for n, s in layer_solvers.items()
             )
             layer_summary = {

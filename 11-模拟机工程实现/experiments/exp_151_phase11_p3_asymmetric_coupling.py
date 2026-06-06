@@ -65,6 +65,7 @@ Hypotheses:
 """
 
 import sys, os, time, json
+import numpy as np
 from datetime import datetime
 from collections import OrderedDict
 
@@ -386,6 +387,27 @@ def main():
             }
             per_seed_clean[key].append(entry)
 
+    # Convert numpy types to native Python types for JSON serialization
+    def convert_numpy_types(obj):
+        if isinstance(obj, dict):
+            return {k: convert_numpy_types(v) for k, v in obj.items()}
+        elif isinstance(obj, (list, tuple)):
+            return [convert_numpy_types(v) for v in obj]
+        elif isinstance(obj, np.integer):
+            return int(obj)
+        elif isinstance(obj, np.floating):
+            return float(obj)
+        elif isinstance(obj, np.bool_):
+            return bool(obj)
+        elif isinstance(obj, np.ndarray):
+            return convert_numpy_types(obj.tolist())
+        else:
+            return obj
+
+    # Deep convert evaluation and per_seed_clean
+    evaluation_clean = convert_numpy_types(evaluation)
+    per_seed_clean = convert_numpy_types(per_seed_clean)
+
     with open(rf, 'w', encoding='utf-8') as f:
         json.dump({
             "experiment": "exp_151_phase11_p3",
@@ -403,13 +425,13 @@ def main():
             },
             "hypotheses": {
                 hk: {
-                    "pass": evaluation[hk]["pass"],
-                    "description": evaluation[hk].get("description", ""),
+                    "pass": evaluation_clean[hk]["pass"],
+                    "description": evaluation_clean[hk].get("description", ""),
                 }
                 for hk in ["H151_1", "H151_2", "H151_3", "H151_4"]
             },
-            "n_pass": evaluation["n_hypotheses_passed"],
-            "aggregates": {str(k): v for k, v in evaluation["aggregates"].items()},
+            "n_pass": evaluation_clean["n_hypotheses_passed"],
+            "aggregates": {str(k): v for k, v in evaluation_clean["aggregates"].items()},
             "per_seed": per_seed_clean,
         }, f, indent=2)
 
