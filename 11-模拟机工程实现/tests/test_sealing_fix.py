@@ -45,10 +45,10 @@ def test_sealing_with_window():
             print(f"  [PASS] Sealed at step {step}!")
             print(f"  Sealed (frozen) bits: {sorted(constraints.sealed_bits)}")
             print(f"  Kept (active) bits: {N - len(constraints.sealed_bits)}")
-            return True
+            return  # pytest-compatible: no return value
     
     print(f"  [FAIL] Did not seal after 500 steps")
-    return False
+    assert False, "Did not seal after 500 steps"
 
 
 def test_old_bug_is_fixed():
@@ -71,25 +71,38 @@ def test_old_bug_is_fixed():
     print(f"  Old bug check: after 500 steps, active_bits={len(old_active_bits)} > min_active={min_active}")
     print(f"  Old sealing condition would NEVER be true after step ~3")
     print(f"  [PASS] Confirmed: old mechanism is broken, new sliding window fixes it")
-    return True
 
 
 if __name__ == "__main__":
     print("=" * 60)
     print("Test 1: Sealing with sliding window (activity drops)")
     print("=" * 60)
-    result1 = test_sealing_with_window()
+    passed = 0
+    failed = 0
+    
+    try:
+        test_sealing_with_window()
+        passed += 1
+    except AssertionError as e:
+        print(f"  Test 1 FAILED: {e}")
+        failed += 1
     
     print()
     print("=" * 60)
     print("Test 2: Verify old bug is indeed fixed")
     print("=" * 60)
-    result2 = test_old_bug_is_fixed()
+    try:
+        test_old_bug_is_fixed()
+        passed += 1
+    except AssertionError as e:
+        print(f"  Test 2 FAILED: {e}")
+        failed += 1
     
     print()
     print("=" * 60)
-    if result1 and result2:
-        print("ALL TESTS PASSED")
+    total = passed + failed
+    if failed == 0:
+        print(f"ALL {total} TESTS PASSED")
     else:
-        print("SOME TESTS FAILED")
+        print(f"{passed}/{total} PASSED, {failed}/{total} FAILED")
     print("=" * 60)
