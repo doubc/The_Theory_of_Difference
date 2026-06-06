@@ -152,15 +152,13 @@ class CouplingEngine:
                 # Normalize to [-1, 1] and scale
                 injection = conn.strength * (src_mean - 0.5) * 2.0 * 0.1
 
-                # Apply to target's binding_strength diagonal
+                # Apply to target's binding_strength OFF-DIAGONAL
+                # (original code modified diagonal which is always 0 and never read)
                 bs = constraints.binding_strength
                 if bs is not None and bs.numel() > 0:
-                    n = bs.shape[0]
-                    diag = torch.arange(n, device=bs.device)
-                    bs[diag, diag] = torch.clamp(
-                        bs[diag, diag] + injection,
-                        0.0, 2.0,
-                    )
+                    # Add injection uniformly to ALL elements, then zero diagonal
+                    bs.add_(injection)
+                    bs.fill_diagonal_(0)
 
         return _coupling_callback
 
@@ -313,14 +311,15 @@ class SubspaceAwareEvolver:
                         layer_id: int) -> SpatialLongRangeEvolver:
         """Create a SpatialLongRangeEvolver for one subspace.
 
-        Sets up the evolver with Rules-scaled constraints.
+        Sets up the evolver with proper hierarchy/lateral bit ratio
+        (default N//3 hierarchy bits) and rules-scaled constraints.
         """
         evolver = SpatialLongRangeEvolver(
             N=N_sub,
             total_steps=self.steps_per_layer,
             sample_interval=self.sample_interval,
             device=self.device,
-            n_hierarchy_bits=N_sub,
+            n_hierarchy_bits=None,  # default N//3 hierarchy bits
             L=1.0,
             partial_sealing=self.partial_sealing,
         )
