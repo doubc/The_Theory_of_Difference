@@ -149,6 +149,14 @@ from engine.multi_membership_seal import (
     MultiMembershipSeal, OrgInfo, MembershipSnapshot,
 )
 
+# Phase 11 P1: 子空间分解
+from engine.subspace_field import (
+    Rules, SubspaceSpec, SubspaceField,
+    CouplingTopology, CouplingDirection,
+    allocate_static, allocate_interleaved, allocate_random,
+    make_uniform_field, make_static_field, make_interleaved_field, make_random_field,
+)
+
 # 差异密度追踪
 from engine.difference_density_tracker import (
     DifferenceDensityTracker, DensitySnapshot, PhaseTransitionSignal,
@@ -168,6 +176,11 @@ from engine.detectors.dimension_locking_v2 import (
 )
 
 __all__ = [
+    # Phase 11 P1: 子空间分解
+    'Rules', 'SubspaceSpec', 'SubspaceField',
+    'CouplingTopology', 'CouplingDirection',
+    'allocate_static', 'allocate_interleaved', 'allocate_random',
+    'make_uniform_field', 'make_static_field', 'make_interleaved_field', 'make_random_field',
     # Phase 2: 层级封装
     'EncapsulationEngine', 'EncapsulatedBit', 'IndexMapping',
     'HierarchyManager', 'LayerState', 'BiasField',
