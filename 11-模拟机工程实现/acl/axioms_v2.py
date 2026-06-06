@@ -712,12 +712,19 @@ class AxiomConstraints:
         return allowed
 
     def get_allowed_absorbs(self, state: torch.Tensor) -> List[int]:
-        """获取所有被公理允许的吸收位置（1→0）"""
+        """获取所有被公理允许的吸收位置（1→0）
+
+        A6 全覆盖断言：方向为 +1（仅允许上升）的位禁止吸收（不允许逆向反转）。
+        Fix (2026-06-06 Phase 11 P0): 此前仅检查 state[i] ≥ 0.5，未检查方向，
+        导致 direction=+1 的位可通过汇吸收实现 1→0 逆向，破坏 DAG 不可逆保证。
+        """
         allowed = []
         for i in range(self.N):
             if state[i] < 0.5:
                 continue
-            # A6：DAG方向约束（汇可以覆盖）
-            # 汇作为外部力量，可以覆盖 A6 约束
+            # A6：DAG方向约束 — 方向为+1的位不能吸收（不允许逆向于DAG方向）
+            d = self.direction[i].item()
+            if d > 0:
+                continue
             allowed.append(i)
         return allowed

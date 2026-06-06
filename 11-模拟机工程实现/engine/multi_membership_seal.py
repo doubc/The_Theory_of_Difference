@@ -119,6 +119,7 @@ class MultiMembershipSeal:
         
         # ── 历史记录 ──
         self.formation_history: List[Dict] = []  # 每次组织形成的记录
+        self._first_seal_step: int = -1  # 首次达到密封阈值时的步数（-1=未密封）
     
     # ================================================================
     # 锁定水平计算
@@ -320,6 +321,9 @@ class MultiMembershipSeal:
                     1 for i in range(self.N) if self.is_partially_locked(i)
                 ),
             })
+            # 首次达到密封阈值时记录步数
+            if self._first_seal_step < 0 and self.sealed:
+                self._first_seal_step = current_step
     
     # ================================================================
     # 活跃记录（由 check_A9 调用）
@@ -484,5 +488,6 @@ class MultiMembershipSeal:
             'avg_org_binding': round(
                 sum(snap.org_bindings) / max(len(snap.org_bindings), 1), 4
             ),
+            'first_seal_step': self._first_seal_step,
             'formation_events': len(self.formation_history),
         }
