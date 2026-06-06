@@ -1,12 +1,13 @@
 """
 engine/detectors/ — 涌现统计量探测器集
 
-hamming_distribution.py — 汉明重量分布 P(w)
-return_time.py         — 返回时间分布 τ
-bit_clustering.py      — 活跃比特聚类
-dag_direction.py       — DAG方向一致性
-effective_dof.py       — 有效自由度
-control_experiment.py  — 对照实验框架
+hamming_distribution.py    — 汉明重量分布 P(w)
+return_time.py             — 返回时间分布 τ
+bit_clustering.py          — 活跃比特聚类
+dag_direction.py           — DAG方向一致性
+effective_dof.py           — 有效自由度
+dimension_locking_v2.py    — V2 维度锁定（3D 坐标 PCA + 关联维 D_2 + 零模型比较）
+control_experiment.py      — 对照实验框架
 """
 
 # ============================================================

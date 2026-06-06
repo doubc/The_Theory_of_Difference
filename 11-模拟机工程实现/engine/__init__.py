@@ -160,6 +160,12 @@ from engine.detectors.statistics import (
     HammingDistributionDetector, ReturnTimeDetector, BitClusteringDetector,
     DAGDirectionDetector, EffectiveDOFDetector,
 )
+from engine.detectors.dimension_locking_v2 import (
+    DimensionLockingDetectorV2,
+    correlation_dimension_3d,
+    dimension_null_comparison,
+    full_dimension_analysis,
+)
 
 __all__ = [
     # Phase 2: 层级封装
@@ -223,4 +229,8 @@ __all__ = [
     # 探测器
     'HammingDistributionDetector', 'ReturnTimeDetector', 'BitClusteringDetector',
     'DAGDirectionDetector', 'EffectiveDOFDetector',
+    'DimensionLockingDetectorV2',
+    'correlation_dimension_3d',
+    'dimension_null_comparison',
+    'full_dimension_analysis',
 ]
