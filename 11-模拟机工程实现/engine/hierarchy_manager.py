@@ -18,6 +18,9 @@ from typing import List, Optional, Dict, Tuple, Set
 from engine.encapsulation_engine import EncapsulationEngine, EncapsulatedBit, IndexMapping
 from acl.axioms_v2 import AxiomConstraints
 
+# Type alias for MMS kwargs
+MMSKwargs = Optional[Dict[str, object]]
+
 
 class BiasField:
     """回流偏置场 — 跨层级状态偏置的载体
@@ -104,7 +107,9 @@ class HierarchyManager:
                  binding_threshold: float = 0.1,
                  min_group_size: int = 2,
                  n_hierarchy_bits: int = None,
-                 max_layers: int = 3):
+                 max_layers: int = 3,
+                 use_mms: bool = False,
+                 mms_kwargs: MMSKwargs = None):
         """
         Args:
             N0: 第 0 层比特数
@@ -113,12 +118,16 @@ class HierarchyManager:
             min_group_size: 最小组大小
             n_hierarchy_bits: 层级比特数（传给 AxiomConstraints）
             max_layers: 最大层数上限（默认 3，与 evolver 默认一致）
+            use_mms: 是否启用多隶属封口（MMS, Phase 10 P1）
+            mms_kwargs: 传递给 MultiMembershipSeal 的额外参数
         """
         self.max_layers = max_layers
         self.device = device
         self.binding_threshold = binding_threshold
         self.min_group_size = min_group_size
         self.n_hierarchy_bits_init = n_hierarchy_bits
+        self.use_mms = use_mms
+        self.mms_kwargs = mms_kwargs or {}
 
         # 封装引擎
         self.encap_engine = EncapsulationEngine(
@@ -132,9 +141,10 @@ class HierarchyManager:
         self.current_layer: int = 0
 
         # 初始化第 0 层
-        self._init_layer0(N0, n_hierarchy_bits)
+        self._init_layer0(N0, n_hierarchy_bits, use_mms, self.mms_kwargs)
 
-    def _init_layer0(self, N0: int, n_hierarchy_bits: Optional[int]):
+    def _init_layer0(self, N0: int, n_hierarchy_bits: Optional[int],
+                      use_mms: bool = False, mms_kwargs: Dict = None):
         """初始化第 0 层"""
         state = torch.zeros(N0, device=self.device)
         constraints = AxiomConstraints(
@@ -143,6 +153,11 @@ class HierarchyManager:
             device=self.device,
             initial_state=state,  # Fix (2026-06-01): 派生初始方向，激活GBC
         )
+
+        # Phase 10 P1: 启用多隶属封口
+        if use_mms:
+            constraints.enable_multi_membership(**(mms_kwargs or {}))
+
         active = set(range(N0))  # 初始所有比特都活跃
         frozen = set()
 
@@ -240,6 +255,10 @@ class HierarchyManager:
             initial_state=new_state,
         )
 
+        # Phase 10 P1: 传播 MMS 到新层
+        if self.use_mms:
+            new_constraints.enable_multi_membership(**self.mms_kwargs)
+
         # 新层的活跃比特 = 全部（初始都活跃）
         new_active = set(range(n_new))
         new_frozen = set()
@@ -324,6 +343,10 @@ class HierarchyManager:
             device=self.device,
             initial_state=new_state,  # Fix (2026-06-01): 从封装状态派生初始方向
         )
+
+        # Phase 10 P1: 传播 MMS 到新层
+        if self.use_mms:
+            new_constraints.enable_multi_membership(**self.mms_kwargs)
 
         # 新层的活跃比特 = 全部（初始都活跃）
         new_active = set(range(n_new))
