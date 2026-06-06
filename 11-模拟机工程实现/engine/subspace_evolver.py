@@ -98,8 +98,9 @@ class CouplingEngine:
     dynamics, not a per-step fine-tuning.
     """
 
-    def __init__(self, field: SubspaceField):
+    def __init__(self, field: SubspaceField, coupling_scale: float = 0.1):
         self.field = field
+        self.coupling_scale = coupling_scale
         self._step_counter: Dict[str, int] = {}
 
     def make_callback(
@@ -150,7 +151,9 @@ class CouplingEngine:
 
                 src_mean = float(src_dir.to(dtype=torch.float32).mean().item())
                 # Normalize to [-1, 1] and scale
-                injection = conn.strength * (src_mean - 0.5) * 2.0 * 0.1
+                # coupling_scale: configurable (default 0.1 for backward compat;
+                #   increase to 1.0+ for stronger coupling, per exp_150 analysis)
+                injection = conn.strength * (src_mean - 0.5) * 2.0 * self.coupling_scale
 
                 # Apply to target's binding_strength OFF-DIAGONAL
                 # (original code modified diagonal which is always 0 and never read)
@@ -296,7 +299,9 @@ class SubspaceAwareEvolver:
         self.coupling_enabled = coupling_enabled
         self.verbose = verbose
 
-        self.coupling_engine = CouplingEngine(subspace_field)
+        # coupling_scale: 0.1 = original (weak), 1.0 = stronger (per exp_150 finding)
+        self.coupling_engine = CouplingEngine(subspace_field,
+                                                 coupling_scale=1.0)
         self.coordinator = LayerCoordinator(strategy=coordination_strategy,
                                              step_timeout=steps_per_layer)
 
