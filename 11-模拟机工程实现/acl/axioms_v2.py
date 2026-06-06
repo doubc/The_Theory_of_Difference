@@ -97,6 +97,10 @@ class AxiomConstraints:
         self.bias_profile: Optional[torch.Tensor] = None
         # 初始状态引用（用于调试/分析）
         self._initial_state = initial_state
+
+        # ── A9 多隶属封口（可选，替代二元封口） ──
+        self.mms: Optional[MultiMembershipSeal] = None  # Phase 10 P1 集成
+        self._mms_setup_done = False
     # ============================================================
 
     def check_A1(self, state: torch.Tensor, flip_idx: int) -> Tuple[bool, str]:
@@ -333,22 +337,91 @@ class AxiomConstraints:
     # A9：自由度封口
     # ============================================================
 
+    def enable_multi_membership(self, **mms_kwargs):
+        """启用多隶属封口（Phase 10 P1 集成）
+
+        替代二元 sealed_bits: Set[int]，改用 MultiMembershipSeal 的渐进式组织形成。
+        - 比特同时隶属多个组织，锁定水平渐进增加
+        - 未被完全锁定的比特持续参与演化
+        - 向后兼容：self.sealed_bits / self.sealed 自动从 MMS 同步
+
+        Args:
+            **mms_kwargs: 传递给 MultiMembershipSeal 的额外参数
+                (org_formation_interval, org_join_threshold, lock_threshold 等)
+
+        Returns:
+            MultiMembershipSeal 实例
+        """
+        if self.mms is not None:
+            return self.mms
+
+        # Lazy import to avoid circular dependency:
+        # engine/__init__ → hierarchy_manager → axioms_v2 → engine/multi_membership_seal
+        from engine.multi_membership_seal import MultiMembershipSeal
+
+        self.mms = MultiMembershipSeal(
+            N=self.N,
+            binding_strength=self.binding_strength,
+            **mms_kwargs
+        )
+        self._mms_setup_done = True
+        return self.mms
+
+    def _sync_from_mms(self):
+        """将 MMS 状态同步到 legacy sealed 字段
+
+        MultiMembershipSeal 的 sealed_bits 是计算属性（由 bit_memberships 派生），
+        sealed 由 fully locked 比特数 >= threshold 决定。同步后，所有读取
+        self.sealed_bits / self.sealed 的现有代码（hierarchy_manager、A3/A4/A8 等）
+        无需修改即可使用多隶属封口的结果。
+        """
+        if self.mms is not None:
+            self.sealed_bits = self.mms.sealed_bits
+            self.sealed = self.mms.sealed
+
     def check_A9(self, flip_idx: int, partial_sealing: bool = False) -> Tuple[bool, str]:
         """A9：自由度封口
 
-        阶段1（未封口）：所有比特都可以激活
-        阶段2（封口后）：只允许活跃比特中的一部分参与演化
-          - 基于绑定强度选择最活跃的比特
-          - 冻结多余比特（低于阈值的被冻结）
-          - 保留最少 min_active_bits 个比特
+        阶段1（激活）：所有比特都可以激活
+        阶段2（封口后）：只允许未被完全锁定的比特参与演化
 
-        partial_sealing=True（Track B7）：部分封口模式
-          - 横向和层级比特独立封口
-          - 横向封口后，层级比特仍可继续演化
-          - 用于支持 L0 横向封口 → 触发 L1 创建，但层级比特继续积累
+        MMS 多隶属封口模式（Phase 10 P1）：
+        - 使用 self.mms 判断比特是否完全锁定
+        - MMS 的渐进式组织形成替代 _seal() 的二元冻结
+        - 向后兼容：其他代码通过 self.sealed_bits / self.sealed 无缝读取
+
+        Legacy 二元封口模式（当 self.mms is None）：
+        - 激活阶段统计总唯一活跃比特数，达到阈值后触发 _seal()
+        - 冻结绑定强度最低的比特，保留 min_active_bits
         """
-        # 阶段1：激活阶段 — 统计总唯一活跃比特数（用于触发密封）
         current_step = self._step_counter()
+
+        # ════════════════════════════════════════════════
+        # MMS 多隶属封口路径
+        # ════════════════════════════════════════════════
+        if self.mms is not None:
+            self.mms.record_active(flip_idx, current_step)
+
+            # 定期执行组织形成（渐进封口，非一次性 _seal()）
+            if current_step % self.mms.org_formation_interval == 0:
+                self.mms.form_organizations(current_step)
+                self._sync_from_mms()
+
+            # 比特完全锁定 → 禁止翻转
+            if self.mms.is_fully_locked(flip_idx):
+                return False, f"A9: bit {flip_idx} fully locked (MMS multi-membership)"
+
+            # 同时更新 legacy fields（保障下游读取一致性）
+            self.total_unique_active.add(flip_idx)
+            self.active_bits[flip_idx] = current_step
+            self._sync_from_mms()
+            return True, "ok"
+
+        # ════════════════════════════════════════════════
+        # Legacy 二元封口路径（原始行为，完全不变）
+        # ════════════════════════════════════════════════
+
+        # 阶段1：激活阶段 — 统计总唯一活跃比特数（用于触发密封）
         self.total_unique_active.add(flip_idx)
 
         if len(self.total_unique_active) < self.sealing_activation_threshold:
