@@ -1,0 +1,42 @@
+exp_152 Phase 11 P4 Fixed Coupling
+Timestamp: 20260607_085317
+N0=40, N1=40, k=2
+n_runs=5
+coupling_levels=[0.0, 0.3, 0.6, 1.0, 2.0, 5.0]
+
+strength=0.0
+  {'coupling_strength': 0.0, 'S0_L1': True, 'S1_L1': True, 'S0_final_w': 18.0, 'S1_final_w': 19.0, 'S0_N': 40, 'S1_N': 40, 'l1_rate': 1.0, 'layers_executed': 1}
+  {'coupling_strength': 0.0, 'S0_L1': True, 'S1_L1': True, 'S0_final_w': 22.0, 'S1_final_w': 16.0, 'S0_N': 40, 'S1_N': 40, 'l1_rate': 1.0, 'layers_executed': 1}
+  {'coupling_strength': 0.0, 'S0_L1': True, 'S1_L1': True, 'S0_final_w': 19.0, 'S1_final_w': 23.0, 'S0_N': 40, 'S1_N': 40, 'l1_rate': 1.0, 'layers_executed': 1}
+  {'coupling_strength': 0.0, 'S0_L1': True, 'S1_L1': True, 'S0_final_w': 16.0, 'S1_final_w': 22.0, 'S0_N': 40, 'S1_N': 40, 'l1_rate': 1.0, 'layers_executed': 1}
+  {'coupling_strength': 0.0, 'S0_L1': True, 'S1_L1': True, 'S0_final_w': 18.0, 'S1_final_w': 22.0, 'S0_N': 40, 'S1_N': 40, 'l1_rate': 1.0, 'layers_executed': 1}
+strength=0.3
+  {'coupling_strength': 0.3, 'S0_L1': True, 'S1_L1': True, 'S0_final_w': 18.0, 'S1_final_w': 19.0, 'S0_N': 40, 'S1_N': 40, 'l1_rate': 1.0, 'layers_executed': 1}
+  {'coupling_strength': 0.3, 'S0_L1': True, 'S1_L1': True, 'S0_final_w': 22.0, 'S1_final_w': 16.0, 'S0_N': 40, 'S1_N': 40, 'l1_rate': 1.0, 'layers_executed': 1}
+  {'coupling_strength': 0.3, 'S0_L1': True, 'S1_L1': True, 'S0_final_w': 19.0, 'S1_final_w': 23.0, 'S0_N': 40, 'S1_N': 40, 'l1_rate': 1.0, 'layers_executed': 1}
+  {'coupling_strength': 0.3, 'S0_L1': True, 'S1_L1': True, 'S0_final_w': 16.0, 'S1_final_w': 22.0, 'S0_N': 40, 'S1_N': 40, 'l1_rate': 1.0, 'layers_executed': 1}
+  {'coupling_strength': 0.3, 'S0_L1': True, 'S1_L1': True, 'S0_final_w': 18.0, 'S1_final_w': 22.0, 'S0_N': 40, 'S1_N': 40, 'l1_rate': 1.0, 'layers_executed': 1}
+strength=0.6
+  {'coupling_strength': 0.6, 'S0_L1': True, 'S1_L1': True, 'S0_final_w': 18.0, 'S1_final_w': 19.0, 'S0_N': 40, 'S1_N': 40, 'l1_rate': 1.0, 'layers_executed': 1}
+  {'coupling_strength': 0.6, 'S0_L1': True, 'S1_L1': True, 'S0_final_w': 22.0, 'S1_final_w': 16.0, 'S0_N': 40, 'S1_N': 40, 'l1_rate': 1.0, 'layers_executed': 1}
+  {'coupling_strength': 0.6, 'S0_L1': True, 'S1_L1': True, 'S0_final_w': 19.0, 'S1_final_w': 23.0, 'S0_N': 40, 'S1_N': 40, 'l1_rate': 1.0, 'layers_executed': 1}
+  {'coupling_strength': 0.6, 'S0_L1': True, 'S1_L1': True, 'S0_final_w': 16.0, 'S1_final_w': 22.0, 'S0_N': 40, 'S1_N': 40, 'l1_rate': 1.0, 'layers_executed': 1}
+  {'coupling_strength': 0.6, 'S0_L1': True, 'S1_L1': True, 'S0_final_w': 18.0, 'S1_final_w': 22.0, 'S0_N': 40, 'S1_N': 40, 'l1_rate': 1.0, 'layers_executed': 1}
+strength=1.0
+  {'coupling_strength': 1.0, 'S0_L1': True, 'S1_L1': True, 'S0_final_w': 18.0, 'S1_final_w': 19.0, 'S0_N': 40, 'S1_N': 40, 'l1_rate': 1.0, 'layers_executed': 1}
+  {'coupling_strength': 1.0, 'S0_L1': True, 'S1_L1': True, 'S0_final_w': 22.0, 'S1_final_w': 16.0, 'S0_N': 40, 'S1_N': 40, 'l1_rate': 1.0, 'layers_executed': 1}
+  {'coupling_strength': 1.0, 'S0_L1': True, 'S1_L1': True, 'S0_final_w': 19.0, 'S1_final_w': 23.0, 'S0_N': 40, 'S1_N': 40, 'l1_rate': 1.0, 'layers_executed': 1}
+  {'coupling_strength': 1.0, 'S0_L1': True, 'S1_L1': True, 'S0_final_w': 16.0, 'S1_final_w': 22.0, 'S0_N': 40, 'S1_N': 40, 'l1_rate': 1.0, 'layers_executed': 1}
+  {'coupling_strength': 1.0, 'S0_L1': True, 'S1_L1': True, 'S0_final_w': 18.0, 'S1_final_w': 22.0, 'S0_N': 40, 'S1_N': 40, 'l1_rate': 1.0, 'layers_executed': 1}
+strength=2.0
+  {'coupling_strength': 2.0, 'S0_L1': True, 'S1_L1': True, 'S0_final_w': 18.0, 'S1_final_w': 19.0, 'S0_N': 40, 'S1_N': 40, 'l1_rate': 1.0, 'layers_executed': 1}
+  {'coupling_strength': 2.0, 'S0_L1': True, 'S1_L1': True, 'S0_final_w': 22.0, 'S1_final_w': 16.0, 'S0_N': 40, 'S1_N': 40, 'l1_rate': 1.0, 'layers_executed': 1}
+  {'coupling_strength': 2.0, 'S0_L1': True, 'S1_L1': True, 'S0_final_w': 19.0, 'S1_final_w': 23.0, 'S0_N': 40, 'S1_N': 40, 'l1_rate': 1.0, 'layers_executed': 1}
+  {'coupling_strength': 2.0, 'S0_L1': True, 'S1_L1': True, 'S0_final_w': 16.0, 'S1_final_w': 22.0, 'S0_N': 40, 'S1_N': 40, 'l1_rate': 1.0, 'layers_executed': 1}
+  {'coupling_strength': 2.0, 'S0_L1': True, 'S1_L1': True, 'S0_final_w': 18.0, 'S1_final_w': 22.0, 'S0_N': 40, 'S1_N': 40, 'l1_rate': 1.0, 'layers_executed': 1}
+strength=5.0
+  {'coupling_strength': 5.0, 'S0_L1': True, 'S1_L1': True, 'S0_final_w': 18.0, 'S1_final_w': 19.0, 'S0_N': 40, 'S1_N': 40, 'l1_rate': 1.0, 'layers_executed': 1}
+  {'coupling_strength': 5.0, 'S0_L1': True, 'S1_L1': True, 'S0_final_w': 22.0, 'S1_final_w': 16.0, 'S0_N': 40, 'S1_N': 40, 'l1_rate': 1.0, 'layers_executed': 1}
+  {'coupling_strength': 5.0, 'S0_L1': True, 'S1_L1': True, 'S0_final_w': 19.0, 'S1_final_w': 23.0, 'S0_N': 40, 'S1_N': 40, 'l1_rate': 1.0, 'layers_executed': 1}
+  {'coupling_strength': 5.0, 'S0_L1': True, 'S1_L1': True, 'S0_final_w': 16.0, 'S1_final_w': 22.0, 'S0_N': 40, 'S1_N': 40, 'l1_rate': 1.0, 'layers_executed': 1}
+  {'coupling_strength': 5.0, 'S0_L1': True, 'S1_L1': True, 'S0_final_w': 18.0, 'S1_final_w': 22.0, 'S0_N': 40, 'S1_N': 40, 'l1_rate': 1.0, 'layers_executed': 1}
