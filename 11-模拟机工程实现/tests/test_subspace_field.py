@@ -250,7 +250,8 @@ class TestSubspaceField:
             coupling_strength=0.3,
         )
         pairs = field.coupled_pairs()
-        assert len(pairs) == 3  # C(3,2) = 3
+        # BIDIRECTIONAL creates 2 connections per pair (S0->S1 and S1->S0)
+        assert len(pairs) == 6  # C(3,2) * 2 = 6
         strengths = [s for _, _, s in pairs]
         assert all(s == 0.3 for s in strengths)
 
@@ -262,8 +263,8 @@ class TestSubspaceField:
         assert field.get_bits("S0") == indices[0]
         assert isinstance(field.get_bits("S0"), set)
 
-    def test_connection_unique(self):
-        """全局耦合模式下，每对子空间只有一条连接。"""
+    def test_connection_bidirectional(self):
+        """全局耦合模式下，每对子空间有双向连接。"""
         indices = allocate_static(30, 3)
         field = SubspaceField(
             {
@@ -273,7 +274,7 @@ class TestSubspaceField:
             },
             coupling_strength=0.5,
         )
-        assert len(field.connections) == 3  # C(3,2) 不重复
+        assert len(field.connections) == 6  # C(3,2) * 2 = 6 (bidirectional)
 
     def test_summary(self):
         field = SubspaceField(

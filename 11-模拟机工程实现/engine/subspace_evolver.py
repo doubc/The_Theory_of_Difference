@@ -87,21 +87,35 @@ class SubspaceSolver:
 class CouplingEngine:
     """Applies cross-subspace coupling at each sample interval.
 
-    Mechanism: During a subspace's evolution, the step_callback is called
-    every sample_interval steps. At that point, CouplingEngine injects
-    a bias derived from other subspaces' direction fields into this
-    subspace's binding_strength diagonal.
+    Phase 11 P4 FIX: writes into coupling_bias (direction bias) instead of
+    binding_strength. binding_strength is only read by get_A1_prime_candidates()
+    (lateral pair weighting via strengthen_binding) and not by source injection,
+    sink absorption, or flip selection. Uniform binding_strength injection was
+    degenerate — all elements get the same offset, so relative order unchanged.
 
-    This creates a slow modulation: coupling influences accumulate across
-    sample intervals rather than every single step. For P3 this is
-    sufficient — coupling is a meta-parameter that shifts the effective
-    dynamics, not a per-step fine-tuning.
+    New mechanism: coupling_bias[i] > 0 → bit i is biased toward 0→1
+    (source subspace is "energized", transfer energy to this bit).
+    coupling_bias[i] < 0 → bit i is biased toward 1→0
+    (source is "saturated", deprioritize this bit).
+
+    Coupling signal: difference between source and target hamming weight,
+    multiplied by connection strength and coupling_scale.
     """
 
-    def __init__(self, field: SubspaceField, coupling_scale: float = 0.1):
+    def __init__(self, field: SubspaceField, coupling_scale: float = 1.0):
         self.field = field
         self.coupling_scale = coupling_scale
-        self._step_counter: Dict[str, int] = {}
+        # solver_states: accumulated solvers from all previous layers + current layer
+        # (enables reading source results regardless of evaluation order)
+        self.solver_states: Dict[str, SubspaceSolver] = {}
+
+    def update_solver_states(self, solvers: Dict[str, SubspaceSolver]):
+        """Update the accumulated solver state cache.
+
+        Call before each layer's run so that coupling callbacks can reference
+        source subspace results even if the source ran in a previous layer.
+        """
+        self.solver_states.update(solvers)
 
     def make_callback(
         self,
@@ -124,12 +138,22 @@ class CouplingEngine:
             snapshot: object,
             constraints: object,
         ) -> None:
-            """Modify target subspace's constraints based on source signals.
+            """Write coupling_bias into target constraints based on source signals.
 
             For each incoming connection to this subspace:
-                bias += connection.strength * source_mean_direction * scale_factor
-            The bias is applied to the diagonal of binding_strength.
+                bias_signal = strength * (src_hw_norm - target_hw_norm)
+
+            Where src_hw_norm = source hamming_weight / source N (normalized [0,1]).
+            When source is more active than target → positive bias (energize).
+            When source is less active than target → negative bias (deprioritize).
+
+            Uses self.solver_states as fallback for source results from previous
+            layers (fixes the chicken-egg Bug 2 where coupling never fires before
+            L1 forms).
             """
+            # Merge current-layer solvers into accumulated state
+            merged = {**self.solver_states, **all_solvers}
+
             for conn in self.field.connections:
                 if conn.target != solver_name:
                     continue
@@ -137,31 +161,31 @@ class CouplingEngine:
                     continue
 
                 src_name = conn.source
-                if src_name not in all_solvers:
+                if src_name not in merged:
                     continue
 
-                src_solver = all_solvers[src_name]
+                src_solver = merged[src_name]
                 if src_solver.layer_result is None:
-                    continue  # source hasn't run yet this layer
+                    continue  # source hasn't run yet
 
-                # Read source's final direction mean
-                src_dir = src_solver.layer_result.get("direction")
-                if src_dir is None:
-                    continue
+                # Signal: source's normalized hamming weight
+                src_hw_norm = src_solver.hamming_weight / max(src_solver.N, 1)
+                target_hw_norm = snapshot.w / max(snapshot.state.numel(), 1)
 
-                src_mean = float(src_dir.to(dtype=torch.float32).mean().item())
-                # Normalize to [-1, 1] and scale
-                # coupling_scale: configurable (default 0.1 for backward compat;
-                #   increase to 1.0+ for stronger coupling, per exp_150 analysis)
-                injection = conn.strength * (src_mean - 0.5) * 2.0 * self.coupling_scale
+                # Coupling bias: if source is more active, energize target
+                # Range: [-strength, +strength] before clamping
+                bias_signal = conn.strength * (src_hw_norm - target_hw_norm)
 
-                # Apply to target's binding_strength OFF-DIAGONAL
-                # (original code modified diagonal which is always 0 and never read)
-                bs = constraints.binding_strength
-                if bs is not None and bs.numel() > 0:
-                    # Add injection uniformly to ALL elements, then zero diagonal
-                    bs.add_(injection)
-                    bs.fill_diagonal_(0)
+                # Write into coupling_bias for ALL bits in target
+                N_target = snapshot.state.numel()
+                bias_tensor = torch.full(
+                    (N_target,),
+                    float(bias_signal * self.coupling_scale),
+                    device=constraints.coupling_bias.device,
+                    dtype=constraints.coupling_bias.dtype,
+                )
+                bias_tensor.clamp_(-1.0, 1.0)
+                constraints.coupling_bias.copy_(bias_tensor)
 
         return _coupling_callback
 
@@ -361,6 +385,12 @@ class SubspaceAwareEvolver:
         """
         layer_solvers: Dict[str, SubspaceSolver] = {}
 
+        # Phase 11 P4 FIX: update coupling engine's solver cache before each layer.
+        # This propagates previous-layer results so that even the first subspace
+        # in the current layer can receive coupling from previous-layer results.
+        if self.coupling_enabled and not self.field.is_isolated():
+            self.coupling_engine.update_solver_states(self.solvers)
+
         for order, name in enumerate(self.field.space_names):
             spec = self.field.get_spec(name)
             N_sub = spec.size
@@ -376,12 +406,14 @@ class SubspaceAwareEvolver:
             # Apply Rules scaling
             self._apply_rules(evolver, spec.rules)
 
-            # Create coupling callback (only for non-first subspaces in coupled mode)
+            # Create coupling callback (for ALL subspaces in coupled mode)
+            # Phase 11 P4 FIX: coupling now works for all subspaces, not just order>0.
+            # The CouplingEngine's solver_states cache provides previous-layer results
+            # so even the first subspace (order=0) can receive coupling.
             coupling_callback = None
-            if self.coupling_enabled and not self.field.is_isolated() and order > 0:
-                # Only later subspaces receive coupling from earlier ones in this layer
+            if self.coupling_enabled and not self.field.is_isolated():
                 coupling_callback = self.coupling_engine.make_callback(
-                    name, layer_solvers  # layer_solvers contains already-completed subspaces
+                    name, layer_solvers  # layer_solvers contains already-completed subspaces from this layer
                 )
 
             # Run evolver
@@ -565,7 +597,8 @@ class SubspaceAwareEvolver:
             "coupling_enabled": self.coupling_enabled,
             "coupling_strength": (
                 self.field._global_strength
-                if hasattr(self.field, '_global_coupling') and self.field._global_coupling
+                if (hasattr(self.field, '_global_coupling') and self.field._global_coupling
+                    and hasattr(self.field, '_global_strength'))
                 else None
             ),
         }

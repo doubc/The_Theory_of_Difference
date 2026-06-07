@@ -64,6 +64,15 @@ class SpatialLongRangeEvolver:
         self._seal_triggered = False
         self._source_multiplier = 1.0  # H155-3: post-seal injection boost
 
+        # Phase 14 P1: 时间结构化注入模式
+        self._post_seal_injection_mode = 'constant'  # 'constant' | 'pulse' | 'ramp' | 'random'
+        self._pulse_burst_steps = 10
+        self._pulse_silent_steps = 20
+        self._ramp_period = 100
+        self._ramp_max_mult = 5.0
+        self._random_avg_interval = 10
+        self._post_seal_step_offset = 0  # step offset after sealing
+
         # 空间嵌入层
         self.spatial_layer = ThreeDimHammingLattice(N=N, L=L, device=device)
 
@@ -188,7 +197,90 @@ class SpatialLongRangeEvolver:
             self.constraints.min_active_bits = max(old_min, int(self.N * 0.25))
             print(f"  [PostSeal] Adjusted min_active_bits: {old_min} -> {self.constraints.min_active_bits}")
 
+        # ── Phase 14 P1: 时间结构化注入模式 ──
+        if 'injection_mode' in cfg:
+            mode = cfg['injection_mode']
+            self._post_seal_injection_mode = mode
+            # 记录密封时的 step 作为时间参考点
+            self._post_seal_step_offset = step
+
+            if mode == 'pulse':
+                self._pulse_burst_steps = cfg.get('burst_steps', 10)
+                self._pulse_silent_steps = cfg.get('silent_steps', 20)
+                print(f"  [PostSeal] Injection mode: PULSE (burst={self._pulse_burst_steps}, "
+                      f"silent={self._pulse_silent_steps})")
+
+            elif mode == 'ramp':
+                self._ramp_period = cfg.get('ramp_period', 100)
+                self._ramp_max_mult = cfg.get('ramp_max_mult', 5.0)
+                print(f"  [PostSeal] Injection mode: RAMP (period={self._ramp_period}, "
+                      f"max_mult={self._ramp_max_mult})")
+
+            elif mode == 'random':
+                self._random_avg_interval = cfg.get('avg_interval', 10)
+                print(f"  [PostSeal] Injection mode: RANDOM (avg_interval={self._random_avg_interval})")
+
+            elif mode == 'constant':
+                print(f"  [PostSeal] Injection mode: CONSTANT (default baseline)")
+
+            else:
+                print(f"  [PostSeal] WARNING: unknown injection_mode '{mode}', falling back to constant")
+                self._post_seal_injection_mode = 'constant'
+
         print(f"  [PostSeal] Step {step}: config applied {cfg}")
+
+    def _get_post_seal_source_strength_modifier(self, step: int,
+                                                  base_strength: int) -> int:
+        """根据后密封注入模式，修改源注入强度。
+
+        返回修改后的有效注入强度（0 或正数）。
+        """
+        if not self._seal_triggered:
+            return base_strength
+
+        mode = self._post_seal_injection_mode
+        if mode == 'constant':
+            return base_strength
+
+        # 密封后的步数偏移
+        post_step = step - self._post_seal_step_offset
+
+        if mode == 'pulse':
+            period = self._pulse_burst_steps + self._pulse_silent_steps
+            phase = post_step % period
+            if phase < self._pulse_burst_steps:
+                # Burst phase: force strong injection
+                burst_force = max(4, base_strength * 3)
+                return burst_force
+            else:
+                # Silent phase: zero injection
+                return 0
+
+        elif mode == 'ramp':
+            period = self._ramp_period
+            phase = post_step % period
+            # Ramp: linear 0→1 (0 to ramp_period/2), then 1→0 (ramp_period/2 to period)
+            half = period // 2
+            if phase < half:
+                ramp_frac = phase / half  # 0 → 1
+            else:
+                ramp_frac = 1.0 - (phase - half) / half  # 1 → 0
+            # Apply ramp: base * (1 + ramp_mult * ramp_frac)
+            ramped = int(base_strength * (1.0 + (self._ramp_max_mult - 1.0) * ramp_frac))
+            return max(0, ramped)
+
+        elif mode == 'random':
+            # Poisson-like: inject if a random draw at each step falls within
+            # the activation probability derived from avg_interval
+            # p_inject = 1 / avg_interval
+            p_inject = 1.0 / max(1, self._random_avg_interval)
+            if np.random.random() < p_inject:
+                # Injection step: force strong
+                return max(4, base_strength * 2)
+            else:
+                return 0
+
+        return base_strength
 
     def run(self, initial_state: Optional[torch.Tensor] = None,
             verbose: bool = True,
@@ -251,6 +343,8 @@ class SpatialLongRangeEvolver:
             # H155-3: post-seal source multiplier (boost injection)
             if self._source_multiplier != 1.0:
                 source_strength = max(1, int(source_strength * self._source_multiplier))
+            # Phase 14 P1: post-seal injection mode (pulse/ramp/random)
+            source_strength = self._get_post_seal_source_strength_modifier(step, source_strength)
             actual_inject = 0
             if source_strength > 0:
                 h_candidates = [i for i in self.constraints.hierarchy_indices

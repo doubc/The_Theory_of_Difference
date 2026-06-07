@@ -74,6 +74,12 @@ class AxiomConstraints:
         self.binding_strength = (self.binding_strength + self.binding_strength.T) / 2  # 对称
         self.binding_strength.fill_diagonal_(0)
 
+        # Phase 11 P4: cross-subspace coupling bias (written by CouplingEngine)
+        # coupling_bias[i] > 0 → bias toward 0→1 (energized by source subspace)
+        # coupling_bias[i] < 0 → bias toward 1→0 (source saturated, deprioritize)
+        # Range: [-1.0, +1.0], written at each sample_interval by step_callback
+        self.coupling_bias = torch.zeros(N, device=self.device)
+
         # A9 活跃自由度追踪 — FIX (2026-06-03): 使用滑动窗口而非单调集合
         # 原 bug: active_bits 是 Set，只增不减 → 一旦超过 min_active_bits 就永远无法密封
         # 新设计: active_bits 记录每个比特的最近活跃步数，密封时只统计窗口内活跃的比特
@@ -272,6 +278,19 @@ class AxiomConstraints:
         for i in self.lateral_indices:
             weights[i] = 1.0  # 均匀权重
 
+        # Phase 11 P4: coupling_bias modulation of flip weights
+        # coupling_bias[i] > 0 → boost injection weight (source energized)
+        # coupling_bias[i] < 0 → reduce injection weight (source saturated)
+        if self.coupling_bias.abs().sum().item() > 1e-6:
+            w = weights.clone()
+            for i in range(self.N):
+                b = self.coupling_bias[i].item()
+                if b > 0:
+                    w[i] = w[i] * (1.0 + b)
+                elif b < 0:
+                    w[i] = w[i] * (1.0 - abs(b) * 0.5)
+            weights = w
+
         return weights
 
     def get_A8_source_strength(self, state: torch.Tensor) -> int:
@@ -377,6 +396,11 @@ class AxiomConstraints:
         new_binding = (new_binding + new_binding.T) / 2
         new_binding.fill_diagonal_(0)
         self.binding_strength = new_binding
+
+        # Expand coupling_bias: new bits start with 0 bias
+        new_coupling_bias = torch.zeros(new_N, device=self.device)
+        new_coupling_bias[:old_N] = self.coupling_bias
+        self.coupling_bias = new_coupling_bias
 
         # Update N
         self.N = new_N
@@ -752,7 +776,12 @@ class AxiomConstraints:
     # ============================================================
 
     def get_allowed_flips(self, state: torch.Tensor) -> List[int]:
-        """获取所有被公理允许的翻转位置"""
+        """获取所有被公理允许的翻转位置
+
+        Phase 11 P4: coupling_bias modulation.
+        coupling_bias[i] < -0.5 → source strongly opposes injection here,
+        bit is deprioritized (removed from allowed list if others exist).
+        """
         allowed = []
         for i in range(self.N):
             # A1：只允许 0→1
@@ -763,11 +792,16 @@ class AxiomConstraints:
             if d < 0:
                 continue
             # A9：自由度封口 — 只检查 sealed_bits（由_seal() 决定冻结哪些）
-            # FIX Track B7: 移除冗余的窗口判断，密封决策统一在_seal() 中完成
-            # FIX Track B7 v2: 使用百分比阈值触发密封
             if self.sealed and i in self.sealed_bits:
                 continue
             allowed.append(i)
+
+        # coupling_bias: filter out bits strongly opposed by source
+        if allowed and self.coupling_bias.abs().sum().item() > 1e-6:
+            filtered = [i for i in allowed if self.coupling_bias[i].item() >= -0.5]
+            if filtered:  # fallback to original if all would be filtered
+                allowed = filtered
+
         return allowed
 
     def get_allowed_absorbs(self, state: torch.Tensor) -> List[int]:

@@ -322,7 +322,13 @@ class SubspaceField:
             # 全局耦合：所有子空间之间按 global 配置连接
             for i, src in enumerate(names):
                 for j, tgt in enumerate(names):
-                    if i >= j:
+                    if i == j:
+                        continue
+                    # i < j: FWD direction; i > j: REV direction
+                    # For BIDIRECTIONAL or UNIDIRECTIONAL direction, determine behavior
+                    if self._global_direction == CouplingDirection.UNIDIRECTIONAL_FWD and i > j:
+                        continue
+                    if self._global_direction == CouplingDirection.UNIDIRECTIONAL_REV and i < j:
                         continue
                     self._connections.append(_CouplingConnection(
                         source=src, target=tgt,
