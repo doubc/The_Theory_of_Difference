@@ -598,3 +598,15 @@ Phase 4 P1 完成（2026-06-02）：
 - **Commit**: \89ed2c2\ — GBC tensor size mismatch fix
 - **Relaunched**: amber-gulf (PID 4036), 112 runs, ~1h
 - **Prior results**: cool-crustacean had 8/16 N0=24 seeds complete before crash
+
+
+#### 2026-06-07 15:18 — Phase 12: Clustering Spatio-Temporal Dynamics — COMPLETE ✅
+- **P1 (exp_153)**: 49/50 sealed, single-shot cascade phase transition discovered
+- **P2 (exp_154)**: N-sweep 24-96 (70 runs) — universal scaling law cascade_size = 0.40 × N, N0* ~ 34 (revised from 30.5), 100% single-event cascade at ALL N
+- **Theory**: 12-聚簇时空动力学_v2.md written (P1+P2), git commit d0887ae pushed
+- **Core findings**:
+  1. Sealing = first-order phase transition at ALL N, not N=48 artifact
+  2. Scaling law: 0.40 × N frozen bits (elimination ratio is system constant)
+  3. N0* ~ 34 (more precise than L1 formation rate-based 30.5)
+  4. N%3 bug discovered in SpatialLongRangeEvolver
+- **Phase 13 candidates**: post-seal persistence dynamics, multi-world evolution, entropy/difference flow

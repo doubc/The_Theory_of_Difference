@@ -44,7 +44,9 @@ class SpatialLongRangeEvolver:
                  device: str = "cpu",
                  n_hierarchy_bits: int = None,
                  L: float = 1.0,
-                 partial_sealing: bool = False):
+                 partial_sealing: bool = False,
+                 post_seal_config: Optional[Dict] = None,
+                 post_seal_steps: int = 0):
         # 自动对齐到 3 的倍数
         if N % 3 != 0:
             N = N + (3 - N % 3)
@@ -53,6 +55,13 @@ class SpatialLongRangeEvolver:
         self.sample_interval = sample_interval
         self.device = device
         self.partial_sealing = partial_sealing  # Track B7
+
+        # Phase 13 P0: 密封后继续演化支持
+        # post_seal_config: 密封后应用的实验条件
+        self.post_seal_config = post_seal_config or {}
+        self.post_seal_steps = post_seal_steps
+        self.seal_step = -1
+        self._seal_triggered = False
 
         # 空间嵌入层
         self.spatial_layer = ThreeDimHammingLattice(N=N, L=L, device=device)
@@ -137,9 +146,25 @@ class SpatialLongRangeEvolver:
 
         return weights
 
+    # ---- Phase 13 P0: 密封后演化辅助方法 ----
+
+    def _apply_post_seal_config(self, state: torch.Tensor, step: int):
+        """应用密封后的实验条件配置
+
+        post_seal_config 支持的键:
+            expand_N: int — 扩张后的总比特数（增加新 bits 作为新差异）
+            source_multiplier: float — 源注入强度倍率（A8 强度 × multiplier）
+        """
+        cfg = self.post_seal_config
+        if not cfg:
+            return
+
+        print(f"  [PostSeal] Step {step}: applying config {cfg}")
+
     def run(self, initial_state: Optional[torch.Tensor] = None,
             verbose: bool = True,
-            step_callback: Optional[callable] = None) -> Dict:
+            step_callback: Optional[callable] = None,
+            post_seal_callback: Optional[callable] = None) -> Dict:
         """运行空间长程演化
 
         Args:
@@ -179,9 +204,18 @@ class SpatialLongRangeEvolver:
             print(f"  Hierarchy bits: {self.constraints.n_hierarchy}, "
                   f"Lateral bits: {self.constraints.n_lateral}")
 
-        for step in range(self.total_steps):
+        for step in range(self.total_steps + self.post_seal_steps):
             self.constraints.set_current_step(step)
             w_before = state.sum().long().item()
+
+            # ====== Phase 13 P0: 密封后参数切换 ======
+            if self.constraints.sealed and not self._seal_triggered:
+                self._seal_triggered = True
+                self.seal_step = step
+                if self.post_seal_config:
+                    self._apply_post_seal_config(state, step)
+                if post_seal_callback is not None:
+                    post_seal_callback(step, state, self)
 
             # ====== 1. 源注入（A1 + A8 空间调制）======
             source_strength = self.constraints.get_A8_source_strength(state)

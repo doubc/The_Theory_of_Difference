@@ -1,0 +1,123 @@
+{
+  "phase": 12,
+  "description": "Clustering spatio-temporal dynamics — Phase boundary, cascade scaling, universality",
+  "experiments": [
+    "exp_153",
+    "exp_154"
+  ],
+  "date_analyzed": "2026-06-07 17:09 CST",
+  "exp_153": {
+    "n": 48,
+    "runs": 50,
+    "sealed": 49,
+    "seal_rate": 0.98,
+    "cascade_analysis": {
+      "events_per_run": {
+        "1": 49
+      },
+      "single_cascade_ratio": 1.0,
+      "size_distribution": {
+        "19": 48,
+        "15": 1
+      },
+      "mean_cascade_size": 19.0,
+      "mean_seal_step": 19.1,
+      "seal_step_std": 15.4,
+      "seal_step_range": [
+        6,
+        110
+      ],
+      "seal_step_median": 16
+    },
+    "bit_role_stability": {
+      "never_frozen": [],
+      "always_frozen": [],
+      "all_mixed": true,
+      "interpretation": "No bit is inherently sealer or keeper — role depends on initial conditions"
+    }
+  },
+  "exp_154": {
+    "n_sweep": [
+      24,
+      30,
+      36,
+      42,
+      48,
+      54,
+      60,
+      72,
+      84,
+      96
+    ],
+    "seal_rates": [
+      0.0,
+      0.0,
+      0.4,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "phase_boundary": {
+      "n0_star": 34,
+      "notes": "Revised upward from Phase 9 estimate of 30.5"
+    },
+    "cascade_scaling": {
+      "N=36": {
+        "mean": 17.0,
+        "std": 0.0,
+        "fraction": 0.472
+      },
+      "N=42": {
+        "mean": 16.0,
+        "std": 0.0,
+        "fraction": 0.381
+      },
+      "N=48": {
+        "mean": 19.0,
+        "std": 0.0,
+        "fraction": 0.396
+      },
+      "N=54": {
+        "mean": 21.0,
+        "std": 0.0,
+        "fraction": 0.389
+      },
+      "N=60": {
+        "mean": 24.0,
+        "std": 0.0,
+        "fraction": 0.4
+      },
+      "N=72": {
+        "mean": 27.6,
+        "std": 2.8,
+        "fraction": 0.383
+      },
+      "N=84": {
+        "mean": 34.0,
+        "std": 0.0,
+        "fraction": 0.405
+      },
+      "N=96": {
+        "mean": 39.0,
+        "std": 0.0,
+        "fraction": 0.406
+      },
+      "weighted_avg_fraction": 0.4
+    },
+    "universal_scaling_law": "cascade_size = 0.40 * N",
+    "all_single_cascade": true,
+    "single_cascade_ratio": 1.0,
+    "conclusion": "Cascade is a first-order phase transition at ALL N. Scaling law universal across N=36 to N=96."
+  },
+  "key_findings": [
+    "Sealing is a first-order phase transition — instantaneous cascade, not gradual freezing",
+    "Cascade size = 0.40 * N — universal scaling, independent of system size",
+    "Phase boundary N0* ≈ 34 (revised up from 30.5)",
+    "100% single-cascade events across all N — no multi-cascade dynamics",
+    "No bit is inherently sealer or keeper — roles are emergent from initial conditions"
+  ]
+}

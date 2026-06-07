@@ -243,3 +243,25 @@ Phase 12 的结果数据仍在 `observations/`（未跟踪目录）中。
 
 *作者：QClaw Agent (Heartbeat)*
 *状态：规划初稿，等待用户审核与方向确认*
+
+
+---
+
+## 进度更新 (2026-06-07 17:09 CST)
+
+### ✅ 已完成（本次心跳）
+- **P4 部分完成：Phase 12 理论回写至 theory_synthesis_v2.md** ✅
+- **结果规范化：创建 results/phase12/results_normalized.json** ✅
+- 在 theory_synthesis_v2.md 中新增了完整的 Phase 12 章节（第 五节），覆盖：
+  - exp_153 密封一次性相变与无固有角色发现
+  - exp_154 N 值扫描与普适标度律 0.40×N
+  - N0* 相边界修订至 ~34
+  - 对差异论「事件」与「共同反差」的量化定义深化
+- 更新了「当前状态与下一步」及「结论」部分
+
+### 待完成
+- P0: 密封后继续运行支持（修改 SpatialLongRangeEvolver）
+- P1: exp_155 编写 + 运行
+- P2: exp_156 编写 + 运行
+- P3: exp_157 编写 + 运行
+- P4 剩余：Phase 13 结果回写
