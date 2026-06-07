@@ -155,6 +155,15 @@ class SpatialLongRangeEvolver:
             state = torch.zeros(self.N, device=self.device)
         else:
             state = initial_state.clone().to(self.device)
+            # N%3 bug fix: Rounding N to multiple of 3 in __init__ may have
+            # changed N, leaving initial_state with the pre-rounded size.
+            # If sizes differ, pad with zeros (too short) or truncate (too long).
+            if state.numel() != self.N:
+                if state.numel() < self.N:
+                    pad = torch.zeros(self.N - state.numel(), device=self.device)
+                    state = torch.cat([state, pad], dim=0)
+                else:
+                    state = state[:self.N]
 
         self.snapshots = []
         self.flip_history = []
