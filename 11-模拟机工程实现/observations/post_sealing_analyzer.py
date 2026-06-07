@@ -444,7 +444,7 @@ class PostSealingAnalyzer:
             f"    {h155_1['detail']}",
         ]
 
-        if weight['post_n_steps'] if 'post_n_steps' in weight else activity.get('post_seal_n_steps', 0) > 0:
+        if activity.get('post_seal_n_steps', 0) > 0:
             summary_parts.extend([
                 f"  [残余活跃度]",
                 f"    密封后翻转率: {activity['post_seal_free_flip_rate']:.4f}/步",

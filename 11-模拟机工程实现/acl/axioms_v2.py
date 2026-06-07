@@ -337,6 +337,65 @@ class AxiomConstraints:
     # A9：自由度封口
     # ============================================================
 
+    # ============================================================
+    # Expand N (post-seal growth)
+    # ============================================================
+
+    def expand_to(self, new_N: int):
+        """Expand system to new_N bits (post-seal growth, H155-2)
+
+        Preserves sealed_bits, direction, and binding_strength for existing bits.
+        New bits start with direction=-1 (can activate upward), zero binding,
+        unsealed — representing fresh difference capacity entering the system.
+
+        All existing invariant state (direction, sealed, cycle tracking) for old
+        bits is untouched. New indices are appended, not interleaved.
+        """
+        old_N = self.N
+        if new_N <= old_N:
+            return
+
+        # Adjust hierarchy/lateral split proportionally to maintain ratio
+        old_ratio = self.n_hierarchy / old_N
+        self.n_hierarchy = max(1, int(new_N * old_ratio))
+        self.n_lateral = new_N - self.n_hierarchy
+
+        # Expand index lists
+        self.hierarchy_indices = list(range(self.n_hierarchy))
+        self.lateral_indices = list(range(self.n_hierarchy, new_N))
+
+        # Expand direction: new bits start with -1 (can activate 0→1)
+        new_direction = torch.full((new_N,), -1, dtype=torch.long, device=self.device)
+        new_direction[:old_N] = self.direction
+        self.direction = new_direction
+
+        # Expand binding_strength matrix (small random init for new couplings)
+        new_binding = torch.zeros(new_N, new_N, device=self.device)
+        new_binding[:old_N, :old_N] = self.binding_strength
+        new_binding[old_N:, :] = torch.randn(new_N - old_N, new_N, device=self.device) * 0.01
+        new_binding[:, old_N:] += torch.randn(new_N, new_N - old_N, device=self.device) * 0.01
+        new_binding = (new_binding + new_binding.T) / 2
+        new_binding.fill_diagonal_(0)
+        self.binding_strength = new_binding
+
+        # Update N
+        self.N = new_N
+
+        # Update sealing thresholds for new system size
+        self.min_active_bits = min(new_N, max(new_N // 3, 12))
+        self.sealing_activation_threshold = max(int(0.75 * new_N), 30)
+
+        # New bits are NOT sealed (they represent fresh difference capacity).
+        # self.sealed_bits remains unchanged — old sealed bits stay sealed.
+        # The new bits inherit the current sealing status but are not frozen.
+        # I.e., sealed_bits only contains indices < old_N.
+
+        # Expand A9 sliding window proportionally
+        self.active_window = max(new_N // 2, 100)
+
+        print(f"[AxiomConstraints] Expanded: {old_N} -> {new_N} "
+              f"(H={self.n_hierarchy}, L={self.n_lateral}, sealed={len(self.sealed_bits)})")
+
     def enable_multi_membership(self, **mms_kwargs):
         """启用多隶属封口（Phase 10 P1 集成）
 

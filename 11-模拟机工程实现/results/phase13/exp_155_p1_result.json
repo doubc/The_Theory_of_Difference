@@ -1,0 +1,54 @@
+{
+  "experiment": "exp_155_phase13_p1_seal_persistence",
+  "date": "2026-06-07",
+  "status": "completed",
+  "configuration": {
+    "N": 48,
+    "total_steps": 2000,
+    "sample_interval": 1,
+    "condition": "A (standard post-seal injection, no parameter change)"
+  },
+  "results": {
+    "seal": {
+      "seal_step": 6,
+      "n_sealed_bits": 19,
+      "cascade_steps": 1,
+      "pre_seal_steps": 6,
+      "post_seal_steps": 1993
+    },
+    "h155_1": {
+      "verdict": "H155-1 成立 (确实单向不可逆)",
+      "confidence": "high",
+      "detail": "100.0% 的密封比特始终保持密封",
+      "always_sealed_fraction": 1.0,
+      "n_always_sealed": 19,
+      "n_pre_sealed_bits": 19,
+      "unseal_events": 0
+    },
+    "residual_activity": {
+      "post_seal_free_flip_rate": 0.0,
+      "post_seal_injection_rate": 0.0,
+      "vs_pre_injection_ratio": 0.0,
+      "post_seal_n_steps": 1993
+    },
+    "weight_trend": {
+      "pre_mean_w": 16.3,
+      "post_mean_w": 26.0,
+      "post_w_slope": 0.0,
+      "post_w_drift": 0.0
+    }
+  },
+  "conclusions": [
+    "H155-1 definitively confirmed: sealing is one-way irreversible",
+    "100% of sealed bits remained sealed for 1993 steps (0 unseal events)",
+    "Post-seal dynamics completely quiescent (zero flip rate, zero injection)",
+    "Weight flatlined completely after seal (drift=0.0, slope=0.0)",
+    "No meaningful post-seal dynamics observed in condition A",
+    "Suggests need for condition B/C (N-expansion, increased injection) to observe any post-seal activity"
+  ],
+  "next_steps": [
+    "Run condition B: increased injection intensity (2x/5x/10x) post-seal",
+    "Run condition C: N expansion from 48→96 post-seal",
+    "Plan exp_156 (P2: L2 emergence conditions)"
+  ]
+}

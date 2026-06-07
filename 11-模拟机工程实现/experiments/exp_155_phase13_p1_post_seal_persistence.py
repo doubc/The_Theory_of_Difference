@@ -46,6 +46,9 @@ CONDITIONS = {
     'B_inject_2x': {         # H155-3：2x 注入
         'post_seal_config': {'source_multiplier': 2.0},
     },
+    'B_inject_5x': {         # H155-3：5x 注入（Phase 13 P0 Test C 验证通过）
+        'post_seal_config': {'source_multiplier': 5.0},
+    },
     'C_expand_72': {         # H155-2：N 扩张至 72
         'post_seal_config': {'expand_N': 72},
     },
@@ -219,6 +222,8 @@ def run_experiment():
 
     all_metrics = []
     t_start = time.time()
+    total_runs = len(CONDITIONS) * N_RUNS
+    run_count = 0
 
     for cond_idx, (cond_name, config) in enumerate(CONDITIONS.items()):
         print(f"\n[{cond_name}] ", end="", flush=True)
@@ -227,10 +232,16 @@ def run_experiment():
         for run_id in range(N_RUNS):
             metrics = run_single(cond_name, config, run_id)
             all_metrics.append(metrics)
+            run_count += 1
+
+            # 进度指示：每 10 次运行打印一个点
+            if run_count % 10 == 0:
+                pct = run_count / total_runs * 100
+                print(f" {run_count}/{total_runs} ({pct:.0f}%)", end="", flush=True)
 
         t_cond = time.time() - t_cond_start
         per_run = t_cond / N_RUNS
-        print(f"{N_RUNS} runs, {t_cond:.0f}s ({per_run:.1f}s/run)")
+        print(f" {N_RUNS} runs, {t_cond:.0f}s ({per_run:.1f}s/run)")
 
     t_total = time.time() - t_start
     print(f"\n总时间: {t_total:.0f}s ({t_total/60:.1f}min)")
@@ -271,7 +282,7 @@ def run_experiment():
             'total_steps': TOTAL_STEPS,
             'post_seal_steps': POST_SEAL_STEPS,
             'n_runs': N_RUNS,
-            'conditions': CONDITIONS,
+            'conditions': list(CONDITIONS.keys()),
             'timestamp': timestamp,
             'experiment': 'exp_155_phase13_p1_post_seal_persistence',
         },
@@ -279,10 +290,37 @@ def run_experiment():
         'metrics': all_metrics,
     }
 
-    with open(result_file, 'w') as f:
-        json.dump(save_data, f, indent=2, default=str)
+    try:
+        with open(result_file, 'w', encoding='utf-8') as f:
+            json.dump(save_data, f, indent=2, default=str)
+        print(f"\n结果保存至: {result_file}")
+    except Exception as e:
+        print(f"\n⚠️ 保存结果失败: {e}")
+        # 尝试保存到备用位置
+        backup_file = os.path.join(os.path.expanduser('~'), f'exp155_backup_{timestamp}.json')
+        try:
+            with open(backup_file, 'w', encoding='utf-8') as f:
+                json.dump(save_data, f, indent=2, default=str)
+            print(f"  已保存到备用位置: {backup_file}")
+        except Exception as e2:
+            print(f"  备用保存也失败: {e2}")
 
-    print(f"\n结果保存至: {result_file}")
+    # ---- 总结 ----
+    print(f"\n{'=' * 70}")
+    print("实验总结")
+    print('=' * 70)
+    print(f"  总运行数: {len(all_metrics)}")
+    print(f"  条件数: {len(CONDITIONS)}")
+    print(f"  总耗时: {t_total:.0f}s ({t_total/60:.1f}min)")
+    
+    # H155 假设验证状态
+    print(f"\n假设验证状态:")
+    for cond in sorted(analysis['by_condition'].keys()):
+        cs = analysis['by_condition'][cond]
+        active_pct = cs['post_seal_active_ratio'] * 100
+        status = '[ACTIVE]' if active_pct > 10 else '[STABLE]'
+        print(f"  {cond:20s}: {status} (post-seal active {active_pct:.1f}%)")
+
     return save_data
 
 

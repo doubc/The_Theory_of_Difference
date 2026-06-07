@@ -62,6 +62,7 @@ class SpatialLongRangeEvolver:
         self.post_seal_steps = post_seal_steps
         self.seal_step = -1
         self._seal_triggered = False
+        self._source_multiplier = 1.0  # H155-3: post-seal injection boost
 
         # 空间嵌入层
         self.spatial_layer = ThreeDimHammingLattice(N=N, L=L, device=device)
@@ -159,7 +160,35 @@ class SpatialLongRangeEvolver:
         if not cfg:
             return
 
-        print(f"  [PostSeal] Step {step}: applying config {cfg}")
+        # ── H155-2: Expand N (add fresh difference capacity) ──
+        if 'expand_N' in cfg:
+            new_N = cfg['expand_N']
+            if new_N > self.N:
+                old_N = self.N
+                # Resize state tensor in-place: append zeros for new bits
+                expanded = torch.zeros(new_N, device=state.device)
+                expanded[:old_N] = state.clone()
+                state.data = expanded.data
+
+                # Expand axiom constraints (preserves sealed_bits, direction etc.)
+                self.constraints.expand_to(new_N)
+
+                # Update evolver's N (spatial weights recompute coords dynamically)
+                self.N = new_N
+
+                print(f"  [PostSeal] Expanded N: {old_N} -> {new_N} at step {step}")
+
+        # ── H155-3: Boost source injection strength ──
+        if 'source_multiplier' in cfg:
+            mult = cfg['source_multiplier']
+            self._source_multiplier = mult
+            print(f"  [PostSeal] Source multiplier: {mult}x at step {step}")
+            # Also boost the min_active_bits to prevent immediate re-sealing
+            old_min = self.constraints.min_active_bits
+            self.constraints.min_active_bits = max(old_min, int(self.N * 0.25))
+            print(f"  [PostSeal] Adjusted min_active_bits: {old_min} -> {self.constraints.min_active_bits}")
+
+        print(f"  [PostSeal] Step {step}: config applied {cfg}")
 
     def run(self, initial_state: Optional[torch.Tensor] = None,
             verbose: bool = True,
@@ -219,6 +248,9 @@ class SpatialLongRangeEvolver:
 
             # ====== 1. 源注入（A1 + A8 空间调制）======
             source_strength = self.constraints.get_A8_source_strength(state)
+            # H155-3: post-seal source multiplier (boost injection)
+            if self._source_multiplier != 1.0:
+                source_strength = max(1, int(source_strength * self._source_multiplier))
             actual_inject = 0
             if source_strength > 0:
                 h_candidates = [i for i in self.constraints.hierarchy_indices
