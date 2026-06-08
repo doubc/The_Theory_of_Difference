@@ -1,0 +1,352 @@
+﻿================================================================================
+exp_171 �� Phase 16 Path A2: Energy Flow Extension
+================================================================================
+Grid size: 48x48
+Total steps: 2000
+Runs per config: 3
+Configs: 4
+Total experiments: 12
+================================================================================
+
+Starting experiment exp_171 (Phase 16 Path A2)...
+Testing energy flow extension...
+
+
+[1/4] Config: no_energy_flow
+  Run 1 (seed=0)... [A9] Sealed at step 13: 35 active in window, keeping 16, freezing 19
+[A9] Kept: [9, 16, 18, 24, 25, 26, 28, 30, 33, 36, 37, 38, 40, 41, 44, 45]
+[A9] Frozen: [1, 2, 4, 5, 6, 7, 8, 10, 13, 19, 21, 22, 27, 32, 34, 35, 43, 46, 47]
+done (13.7s)
+  Run 2 (seed=1)... [A9] Sealed at step 13: 35 active in window, keeping 16, freezing 19
+[A9] Kept: [19, 20, 21, 22, 24, 26, 29, 33, 38, 39, 40, 41, 42, 44, 46, 47]
+[A9] Frozen: [0, 1, 4, 5, 6, 7, 8, 11, 13, 14, 17, 28, 31, 32, 34, 35, 36, 43, 45]
+done (13.3s)
+  Run 3 (seed=2)... [A9] Sealed at step 9: 35 active in window, keeping 16, freezing 19
+[A9] Kept: [1, 18, 19, 22, 24, 26, 27, 29, 32, 36, 37, 39, 41, 42, 45, 46]
+[A9] Frozen: [2, 5, 7, 9, 11, 12, 13, 14, 15, 16, 17, 23, 25, 28, 30, 33, 38, 43, 44]
+done (13.3s)
+
+[2/4] Config: weak_energy_flow
+  Run 1 (seed=1000)... [EnvironmentBits] Initialized with 9 bits (ratio=0.2), flip_prob=0.1
+    [EnergyFlow] Environment bits initialized: 9 bits
+    [EnergyFlow] Step 0: energy=99.1, flips=0, threshold=N/A
+[A9] Sealed at step 26: 35 active in window, keeping 16, freezing 19
+[A9] Kept: [19, 20, 21, 25, 28, 29, 31, 33, 34, 35, 38, 42, 43, 45, 46, 47]
+[A9] Frozen: [0, 1, 2, 4, 7, 8, 10, 11, 13, 15, 18, 22, 26, 27, 30, 37, 39, 40, 44]
+    [EnergyFlow] Step 100: energy=98.2, flips=0, threshold=N/A
+    [EnergyFlow] Step 200: energy=97.3, flips=0, threshold=N/A
+    [EnergyFlow] Step 300: energy=96.4, flips=0, threshold=N/A
+    [EnergyFlow] Step 400: energy=95.6, flips=0, threshold=N/A
+    [EnergyFlow] Step 500: energy=94.7, flips=0, threshold=N/A
+    [EnergyFlow] Step 600: energy=93.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 700: energy=93.0, flips=0, threshold=N/A
+    [EnergyFlow] Step 800: energy=92.2, flips=0, threshold=N/A
+    [EnergyFlow] Step 900: energy=91.4, flips=0, threshold=N/A
+    [EnergyFlow] Step 1000: energy=90.6, flips=0, threshold=N/A
+    [EnergyFlow] Step 1100: energy=89.8, flips=0, threshold=N/A
+    [EnergyFlow] Step 1200: energy=89.0, flips=0, threshold=N/A
+    [EnergyFlow] Step 1300: energy=88.2, flips=0, threshold=N/A
+    [EnergyFlow] Step 1400: energy=87.4, flips=0, threshold=N/A
+    [EnergyFlow] Step 1500: energy=86.6, flips=0, threshold=N/A
+    [EnergyFlow] Step 1600: energy=85.8, flips=0, threshold=N/A
+    [EnergyFlow] Step 1700: energy=85.1, flips=0, threshold=N/A
+    [EnergyFlow] Step 1800: energy=84.3, flips=0, threshold=N/A
+    [EnergyFlow] Step 1900: energy=83.6, flips=0, threshold=N/A
+done (12.7s)
+  Run 2 (seed=1001)... [EnvironmentBits] Initialized with 9 bits (ratio=0.2), flip_prob=0.1
+    [EnergyFlow] Environment bits initialized: 9 bits
+    [EnergyFlow] Step 0: energy=99.1, flips=0, threshold=N/A
+[A9] Sealed at step 19: 35 active in window, keeping 16, freezing 19
+[A9] Kept: [20, 21, 25, 26, 27, 30, 31, 32, 35, 36, 37, 38, 39, 42, 44, 47]
+[A9] Frozen: [0, 1, 2, 5, 9, 10, 11, 14, 15, 16, 17, 18, 19, 22, 24, 33, 34, 40, 46]
+    [EnergyFlow] Step 100: energy=98.2, flips=0, threshold=N/A
+    [EnergyFlow] Step 200: energy=97.3, flips=0, threshold=N/A
+    [EnergyFlow] Step 300: energy=96.4, flips=0, threshold=N/A
+    [EnergyFlow] Step 400: energy=95.6, flips=0, threshold=N/A
+    [EnergyFlow] Step 500: energy=94.7, flips=0, threshold=N/A
+    [EnergyFlow] Step 600: energy=93.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 700: energy=93.0, flips=0, threshold=N/A
+    [EnergyFlow] Step 800: energy=92.2, flips=0, threshold=N/A
+    [EnergyFlow] Step 900: energy=91.4, flips=0, threshold=N/A
+    [EnergyFlow] Step 1000: energy=90.6, flips=0, threshold=N/A
+    [EnergyFlow] Step 1100: energy=89.8, flips=0, threshold=N/A
+    [EnergyFlow] Step 1200: energy=89.0, flips=0, threshold=N/A
+    [EnergyFlow] Step 1300: energy=88.2, flips=0, threshold=N/A
+    [EnergyFlow] Step 1400: energy=87.4, flips=0, threshold=N/A
+    [EnergyFlow] Step 1500: energy=86.6, flips=0, threshold=N/A
+    [EnergyFlow] Step 1600: energy=85.8, flips=0, threshold=N/A
+    [EnergyFlow] Step 1700: energy=85.1, flips=0, threshold=N/A
+    [EnergyFlow] Step 1800: energy=84.3, flips=0, threshold=N/A
+    [EnergyFlow] Step 1900: energy=83.6, flips=0, threshold=N/A
+done (13.2s)
+  Run 3 (seed=1002)... [EnvironmentBits] Initialized with 9 bits (ratio=0.2), flip_prob=0.1
+    [EnergyFlow] Environment bits initialized: 9 bits
+    [EnergyFlow] Step 0: energy=99.1, flips=0, threshold=N/A
+[A9] Sealed at step 26: 35 active in window, keeping 16, freezing 19
+[A9] Kept: [16, 17, 18, 20, 21, 22, 27, 30, 31, 35, 37, 38, 41, 43, 46, 47]
+[A9] Frozen: [0, 1, 2, 10, 11, 12, 19, 23, 24, 26, 29, 32, 33, 34, 36, 39, 40, 44, 45]
+    [EnergyFlow] Step 100: energy=98.2, flips=0, threshold=N/A
+    [EnergyFlow] Step 200: energy=97.3, flips=0, threshold=N/A
+    [EnergyFlow] Step 300: energy=96.4, flips=0, threshold=N/A
+    [EnergyFlow] Step 400: energy=95.6, flips=0, threshold=N/A
+    [EnergyFlow] Step 500: energy=94.7, flips=0, threshold=N/A
+    [EnergyFlow] Step 600: energy=93.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 700: energy=93.0, flips=0, threshold=N/A
+    [EnergyFlow] Step 800: energy=92.2, flips=0, threshold=N/A
+    [EnergyFlow] Step 900: energy=91.4, flips=0, threshold=N/A
+    [EnergyFlow] Step 1000: energy=90.6, flips=0, threshold=N/A
+    [EnergyFlow] Step 1100: energy=89.8, flips=0, threshold=N/A
+    [EnergyFlow] Step 1200: energy=89.0, flips=0, threshold=N/A
+    [EnergyFlow] Step 1300: energy=88.2, flips=0, threshold=N/A
+    [EnergyFlow] Step 1400: energy=87.4, flips=0, threshold=N/A
+    [EnergyFlow] Step 1500: energy=86.6, flips=0, threshold=N/A
+    [EnergyFlow] Step 1600: energy=85.8, flips=0, threshold=N/A
+    [EnergyFlow] Step 1700: energy=85.1, flips=0, threshold=N/A
+    [EnergyFlow] Step 1800: energy=84.3, flips=0, threshold=N/A
+    [EnergyFlow] Step 1900: energy=83.6, flips=0, threshold=N/A
+done (13.3s)
+
+[3/4] Config: medium_energy_flow
+  Run 1 (seed=2000)... [EnvironmentBits] Initialized with 9 bits (ratio=0.2), flip_prob=0.1
+    [EnergyFlow] Environment bits initialized: 9 bits
+    [EnergyFlow] Step 0: energy=99.5, flips=0, threshold=N/A
+[A9] Sealed at step 72: 35 active in window, keeping 16, freezing 19
+[A9] Kept: [17, 21, 24, 25, 26, 28, 29, 34, 35, 36, 37, 41, 42, 43, 45, 46]
+[A9] Frozen: [3, 5, 10, 13, 14, 16, 18, 19, 20, 22, 23, 27, 30, 31, 32, 33, 39, 44, 47]
+    [EnergyFlow] Step 100: energy=99.0, flips=0, threshold=N/A
+    [EnergyFlow] Step 200: energy=98.5, flips=0, threshold=N/A
+    [EnergyFlow] Step 300: energy=98.0, flips=0, threshold=N/A
+    [EnergyFlow] Step 400: energy=97.5, flips=0, threshold=N/A
+    [EnergyFlow] Step 500: energy=97.0, flips=0, threshold=N/A
+    [EnergyFlow] Step 600: energy=96.6, flips=0, threshold=N/A
+    [EnergyFlow] Step 700: energy=96.1, flips=0, threshold=N/A
+    [EnergyFlow] Step 800: energy=95.6, flips=0, threshold=N/A
+    [EnergyFlow] Step 900: energy=95.2, flips=0, threshold=N/A
+    [EnergyFlow] Step 1000: energy=94.7, flips=0, threshold=N/A
+    [EnergyFlow] Step 1100: energy=94.3, flips=0, threshold=N/A
+    [EnergyFlow] Step 1200: energy=93.8, flips=0, threshold=N/A
+    [EnergyFlow] Step 1300: energy=93.4, flips=0, threshold=N/A
+    [EnergyFlow] Step 1400: energy=92.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 1500: energy=92.5, flips=0, threshold=N/A
+    [EnergyFlow] Step 1600: energy=92.1, flips=0, threshold=N/A
+    [EnergyFlow] Step 1700: energy=91.6, flips=0, threshold=N/A
+    [EnergyFlow] Step 1800: energy=91.2, flips=0, threshold=N/A
+    [EnergyFlow] Step 1900: energy=90.8, flips=0, threshold=N/A
+done (13.7s)
+  Run 2 (seed=2001)... [EnvironmentBits] Initialized with 9 bits (ratio=0.2), flip_prob=0.1
+    [EnergyFlow] Environment bits initialized: 9 bits
+    [EnergyFlow] Step 0: energy=99.5, flips=0, threshold=N/A
+[A9] Sealed at step 32: 35 active in window, keeping 16, freezing 19
+[A9] Kept: [19, 20, 21, 23, 26, 27, 29, 32, 33, 34, 35, 36, 39, 40, 46, 47]
+[A9] Frozen: [6, 8, 12, 15, 16, 17, 18, 22, 24, 25, 28, 30, 31, 37, 38, 41, 42, 43, 44]
+    [EnergyFlow] Step 100: energy=99.0, flips=0, threshold=N/A
+    [EnergyFlow] Step 200: energy=98.5, flips=0, threshold=N/A
+    [EnergyFlow] Step 300: energy=98.0, flips=0, threshold=N/A
+    [EnergyFlow] Step 400: energy=97.5, flips=0, threshold=N/A
+    [EnergyFlow] Step 500: energy=97.0, flips=0, threshold=N/A
+    [EnergyFlow] Step 600: energy=96.6, flips=0, threshold=N/A
+    [EnergyFlow] Step 700: energy=96.1, flips=0, threshold=N/A
+    [EnergyFlow] Step 800: energy=95.6, flips=0, threshold=N/A
+    [EnergyFlow] Step 900: energy=95.2, flips=0, threshold=N/A
+    [EnergyFlow] Step 1000: energy=94.7, flips=0, threshold=N/A
+    [EnergyFlow] Step 1100: energy=94.3, flips=0, threshold=N/A
+    [EnergyFlow] Step 1200: energy=93.8, flips=0, threshold=N/A
+    [EnergyFlow] Step 1300: energy=93.4, flips=0, threshold=N/A
+    [EnergyFlow] Step 1400: energy=92.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 1500: energy=92.5, flips=0, threshold=N/A
+    [EnergyFlow] Step 1600: energy=92.1, flips=0, threshold=N/A
+    [EnergyFlow] Step 1700: energy=91.6, flips=0, threshold=N/A
+    [EnergyFlow] Step 1800: energy=91.2, flips=0, threshold=N/A
+    [EnergyFlow] Step 1900: energy=90.8, flips=0, threshold=N/A
+done (13.2s)
+  Run 3 (seed=2002)... [EnvironmentBits] Initialized with 9 bits (ratio=0.2), flip_prob=0.1
+    [EnergyFlow] Environment bits initialized: 9 bits
+    [EnergyFlow] Step 0: energy=99.5, flips=0, threshold=N/A
+[A9] Sealed at step 6: 35 active in window, keeping 16, freezing 19
+[A9] Kept: [16, 18, 20, 23, 24, 25, 26, 29, 30, 31, 36, 37, 38, 39, 46, 47]
+[A9] Frozen: [0, 3, 6, 7, 9, 10, 11, 12, 13, 14, 17, 19, 22, 28, 33, 35, 42, 44, 45]
+    [EnergyFlow] Step 100: energy=99.0, flips=0, threshold=N/A
+    [EnergyFlow] Step 200: energy=98.5, flips=0, threshold=N/A
+    [EnergyFlow] Step 300: energy=98.0, flips=0, threshold=N/A
+    [EnergyFlow] Step 400: energy=97.5, flips=0, threshold=N/A
+    [EnergyFlow] Step 500: energy=97.0, flips=0, threshold=N/A
+    [EnergyFlow] Step 600: energy=96.6, flips=0, threshold=N/A
+    [EnergyFlow] Step 700: energy=96.1, flips=0, threshold=N/A
+    [EnergyFlow] Step 800: energy=95.6, flips=0, threshold=N/A
+    [EnergyFlow] Step 900: energy=95.2, flips=0, threshold=N/A
+    [EnergyFlow] Step 1000: energy=94.7, flips=0, threshold=N/A
+    [EnergyFlow] Step 1100: energy=94.3, flips=0, threshold=N/A
+    [EnergyFlow] Step 1200: energy=93.8, flips=0, threshold=N/A
+    [EnergyFlow] Step 1300: energy=93.4, flips=0, threshold=N/A
+    [EnergyFlow] Step 1400: energy=92.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 1500: energy=92.5, flips=0, threshold=N/A
+    [EnergyFlow] Step 1600: energy=92.1, flips=0, threshold=N/A
+    [EnergyFlow] Step 1700: energy=91.6, flips=0, threshold=N/A
+    [EnergyFlow] Step 1800: energy=91.2, flips=0, threshold=N/A
+    [EnergyFlow] Step 1900: energy=90.8, flips=0, threshold=N/A
+done (13.3s)
+
+[4/4] Config: strong_energy_flow
+  Run 1 (seed=3000)... [EnvironmentBits] Initialized with 9 bits (ratio=0.2), flip_prob=0.1
+    [EnergyFlow] Environment bits initialized: 9 bits
+    [EnergyFlow] Step 0: energy=100.0, flips=0, threshold=N/A
+[A9] Sealed at step 31: 35 active in window, keeping 16, freezing 19
+[A9] Kept: [16, 18, 19, 20, 23, 24, 25, 29, 30, 32, 34, 38, 39, 40, 44, 45]
+[A9] Frozen: [1, 3, 5, 8, 10, 15, 17, 21, 22, 26, 27, 28, 31, 33, 35, 36, 41, 42, 43]
+    [EnergyFlow] Step 100: energy=100.0, flips=0, threshold=N/A
+    [EnergyFlow] Step 200: energy=100.0, flips=0, threshold=N/A
+    [EnergyFlow] Step 300: energy=100.0, flips=0, threshold=N/A
+    [EnergyFlow] Step 400: energy=100.0, flips=0, threshold=N/A
+    [EnergyFlow] Step 500: energy=99.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 600: energy=99.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 700: energy=99.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 800: energy=99.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 900: energy=99.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 1000: energy=99.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 1100: energy=99.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 1200: energy=99.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 1300: energy=99.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 1400: energy=99.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 1500: energy=99.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 1600: energy=99.8, flips=0, threshold=N/A
+    [EnergyFlow] Step 1700: energy=99.8, flips=0, threshold=N/A
+    [EnergyFlow] Step 1800: energy=99.8, flips=0, threshold=N/A
+    [EnergyFlow] Step 1900: energy=99.8, flips=0, threshold=N/A
+done (12.9s)
+  Run 2 (seed=3001)... [EnvironmentBits] Initialized with 9 bits (ratio=0.2), flip_prob=0.1
+    [EnergyFlow] Environment bits initialized: 9 bits
+    [EnergyFlow] Step 0: energy=100.0, flips=0, threshold=N/A
+[A9] Sealed at step 24: 35 active in window, keeping 16, freezing 19
+[A9] Kept: [17, 21, 22, 25, 28, 29, 30, 33, 35, 36, 38, 39, 40, 41, 42, 44]
+[A9] Frozen: [1, 2, 4, 5, 11, 13, 16, 19, 23, 24, 26, 27, 31, 32, 34, 37, 43, 46, 47]
+    [EnergyFlow] Step 100: energy=100.0, flips=0, threshold=N/A
+    [EnergyFlow] Step 200: energy=100.0, flips=0, threshold=N/A
+    [EnergyFlow] Step 300: energy=100.0, flips=0, threshold=N/A
+    [EnergyFlow] Step 400: energy=100.0, flips=0, threshold=N/A
+    [EnergyFlow] Step 500: energy=99.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 600: energy=99.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 700: energy=99.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 800: energy=99.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 900: energy=99.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 1000: energy=99.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 1100: energy=99.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 1200: energy=99.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 1300: energy=99.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 1400: energy=99.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 1500: energy=99.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 1600: energy=99.8, flips=0, threshold=N/A
+    [EnergyFlow] Step 1700: energy=99.8, flips=0, threshold=N/A
+    [EnergyFlow] Step 1800: energy=99.8, flips=0, threshold=N/A
+    [EnergyFlow] Step 1900: energy=99.8, flips=0, threshold=N/A
+done (13.6s)
+  Run 3 (seed=3002)... [EnvironmentBits] Initialized with 9 bits (ratio=0.2), flip_prob=0.1
+    [EnergyFlow] Environment bits initialized: 9 bits
+    [EnergyFlow] Step 0: energy=100.0, flips=0, threshold=N/A
+[A9] Sealed at step 20: 35 active in window, keeping 16, freezing 19
+[A9] Kept: [16, 19, 20, 21, 23, 24, 29, 33, 34, 35, 37, 38, 40, 43, 45, 47]
+[A9] Frozen: [0, 4, 5, 7, 8, 10, 12, 13, 14, 17, 18, 22, 25, 30, 31, 36, 39, 41, 46]
+    [EnergyFlow] Step 100: energy=100.0, flips=0, threshold=N/A
+    [EnergyFlow] Step 200: energy=100.0, flips=0, threshold=N/A
+    [EnergyFlow] Step 300: energy=100.0, flips=0, threshold=N/A
+    [EnergyFlow] Step 400: energy=100.0, flips=0, threshold=N/A
+    [EnergyFlow] Step 500: energy=99.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 600: energy=99.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 700: energy=99.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 800: energy=99.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 900: energy=99.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 1000: energy=99.9, flips=0, threshold=N/A
+python : Traceback (most recent call last):
+所在位置 行:1 字符: 164
++ ... 1-模拟机工程实现"; python experiments/exp_171_phase16_energy_flow.py 2>&1 |  ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last)::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+    [EnergyFlow] Step 1100: energy=99.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 1200: energy=99.9, flips=0, threshold=N/A
+  File "C:\Users\Administrator\Documents\the_theory_of_difference\11-ģ�������ʵ��\experiments\exp_171_phase16_energy_flo
+w.py", line 648, in <module>
+    [EnergyFlow] Step 1300: energy=99.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 1400: energy=99.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 1500: energy=99.9, flips=0, threshold=N/A
+    [EnergyFlow] Step 1600: energy=99.8, flips=0, threshold=N/A
+    [EnergyFlow] Step 1700: energy=99.8, flips=0, threshold=N/A
+    [EnergyFlow] Step 1800: energy=99.8, flips=0, threshold=N/A
+    [EnergyFlow] Step 1900: energy=99.8, flips=0, threshold=N/A
+done (13.3s)
+
+================================================================================
+Analysis Results
+================================================================================
+
+no_energy_flow:
+  Valid runs: 3/3
+  Seal rate: 3/3 = 100.0%
+  Avg HW final: 24.7
+  Avg post-seal flips (std): 0.0000
+  Avg post-seal HW change (slope): 0.0000
+
+weak_energy_flow:
+  Valid runs: 3/3
+  Seal rate: 3/3 = 100.0%
+  Avg HW final: 21.3
+  Avg post-seal flips (std): 0.0000
+  Avg post-seal HW change (slope): 0.0000
+  Avg final energy: 83.6
+  Note: Energy flow enabled (injection_rate=0.1)
+
+medium_energy_flow:
+  Valid runs: 3/3
+  Seal rate: 3/3 = 100.0%
+  Avg HW final: 21.3
+  Avg post-seal flips (std): 0.0000
+  Avg post-seal HW change (slope): 0.0000
+  Avg final energy: 90.8
+  Note: Energy flow enabled (injection_rate=0.5)
+
+strong_energy_flow:
+  Valid runs: 3/3
+  Seal rate: 3/3 = 100.0%
+  Avg HW final: 20.3
+  Avg post-seal flips (std): 0.0000
+  Avg post-seal HW change (slope): 0.0000
+  Avg final energy: 99.8
+  Note: Energy flow enabled (injection_rate=1.0)
+
+================================================================================
+Experiment complete! Total time: 159.6s
+Results saved to: C:\Users\Administrator\Documents\the_theory_of_difference\11-ģ�������ʵ��\experiments\results\exp_171_results_20260608_154047.json
+================================================================================
+
+Preliminary Conclusions:
+----------------------------------------
+No energy flow:
+  Seal rate: 100.0%
+  Post-seal flips: 0.0000
+
+Weak energy flow:
+  Seal rate: 100.0%
+  Post-seal flips: 0.0000
+  Post-seal HW change: 0.0000
+  Final energy: 83.6
+
+Medium energy flow:
+  Seal rate: 100.0%
+  Post-seal flips: 0.0000
+  Post-seal HW change: 0.0000
+  Final energy: 90.8
+
+Strong energy flow:
+  Seal rate: 100.0%
+  Post-seal flips: 0.0000
+  Post-seal HW change: 0.0000
+  Final energy: 99.8
+
+================================================================================
+Hypothesis Test:
+----------------------------------------
+    main()
+  File "C:\Users\Administrator\Documents\the_theory_of_difference\11-ģ�������ʵ��\experiments\exp_171_phase16_energy_flo
+w.py", line 639, in main
+    print("\u2717 Energy flow does NOT significantly increase post-seal evolution")
+UnicodeEncodeError: 'gbk' codec can't encode character '\u2717' in position 0: illegal multibyte sequence
