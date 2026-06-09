@@ -610,3 +610,82 @@ Phase 4 P1 完成（2026-06-02）：
   3. N0* ~ 34 (more precise than L1 formation rate-based 30.5)
   4. N%3 bug discovered in SpatialLongRangeEvolver
 - **Phase 13 candidates**: post-seal persistence dynamics, multi-world evolution, entropy/difference flow
+
+---
+
+## Phase 16: 多层级涌现理论扩展 (2026-06-08 ~ 2026-06-09)
+
+### Phase 16 当前状态 (2026-06-09 01:23 CST 更新)
+
+| Path | 实验 | 状态 | 假设 |
+|------|------|------|------|
+| A1 | exp_170 | ✅ COMPLETE | H16-A1 REJECTED |
+| A2 | exp_171 | ✅ COMPLETE | H16-A2 REJECTED |
+| A3 | exp_172 | ❌ FAILED (实现失败) | H16-A3 未测试 |
+| B1 | exp_173 | ✅ COMPLETE | H16-B1 REJECTED |
+| B2 | exp_174 | ✅ COMPLETE | H16-B2 CONFIRMED ✅ |
+| B3 | exp_175 | ✅ COMPLETE | H16-B3 REJECTED |
+
+**开放系统扩展 (Path A) 状态**: ❌ **Path A 整体失败** (2/2 rejected, 1 failed)
+
+**非局部交互扩展 (Path B) 状态**: 1/3 CONFIRMED, 2/3 rejected
+
+---
+
+### ✅ exp_175 (小世界网络) — COMPLETE (2026-06-09 01:17)
+
+**假设 H16-B3**: 小世界网络能使 L1 结构反映 L0 的全局特征。
+
+**结果**: ❌ **H16-B3 REJECTED**
+
+| Config | p | Reflection (mean±std) | Range |
+|--------|---|----------------------|-------|
+| p00_baseline | 0.0 | 0.537±0.225 | 0.250-0.833 |
+| p01_weak | 0.1 | 0.724±0.168 | 0.396-0.868 |
+| p03_medium | 0.3 | 0.734±0.204 | 0.417-0.972 |
+| p05_strong | 0.5 | 0.696±0.256 | 0.240-1.000 |
+| p07_stronger | 0.7 | 0.514±0.277 | 0.160-0.769 |
+| p09_random | 0.9 | 0.689±0.270 | 0.360-0.981 |
+
+**Key findings**:
+- 100% L0/L1 sealing across ALL 30 trials
+- Best mean reflection at p=0.3 (0.734) — ~37% improvement over baseline
+- But very high variance (std~0.17-0.28) — inconsistent
+- Individual trials hit near-perfect reflection (1.000, 0.981, 0.972)
+- No monotonic trend with rewiring probability p
+- Significantly weaker than global field (exp_174: 1.000±0.000)
+
+**Analysis doc**: `docs/exp_175_results_analysis.md` (full statistical analysis + comparison with exp_173/174)
+
+---
+
+### Path B Summary
+
+| Experiment | Method | Best Mean Reflection | Verdict |
+|-----------|--------|---------------------|---------|
+| exp_173 | Long-range connections | ~0.65 | H16-B1 REJECTED |
+| exp_174 | Global field | 1.000±0.000 | H16-B2 CONFIRMED ✅ |
+| exp_175 | Small-world network | 0.734±0.204 | H16-B3 REJECTED |
+
+**Core insight**: System-level collective bias (global field) >> any pairwise topology modification (long-range, small-world) for cross-layer structure reflection.
+
+**Phase 16 Path B final**: 1/3 CONFIRMED (B2-global field), 2/3 REJECTED. Global field is the only approach across all of Phase 16 that improves L1 reflection.
+
+---
+
+### exp_175 Key Statistical Findings (post-analysis, 01:23)
+
+1. ❌ **No monotonic trend**: Reflection fluctuates 0.514-0.734 with no relationship to p
+2. ❌ **No structure entropy reduction**: All configs = 0.000, identical to baseline
+3. ⚠️ **High variance**: std=0.19-0.31 swamps any mean differences
+4. ❌ **No dose-response**: None of 5 metrics (L0 HW, L1 HW, clusters, seal steps) show a trend
+5. ⚠️ **Max reflection 0.734** vs global field 1.000 — topology modification is fundamentally weaker than system-wide bias
+
+---
+
+### 下一步 (2026-06-09 01:23)
+
+1. 📋 **开始 Path C (可变密封阈值)** — exp_176, exp_177, exp_178
+2. 📋 exp_176: 动态密封阈值 (Dynamic Threshold)
+3. 📋 exp_177: 层级解封 (Layer Unsealing)
+4. 📋 exp_178: 多稳态 (Multi-stability)

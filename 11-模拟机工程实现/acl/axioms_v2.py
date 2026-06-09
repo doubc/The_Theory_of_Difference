@@ -13,6 +13,7 @@ axioms_v2.py — 九公理约束重新设定（硬性约束版）
 
 import torch
 import numpy as np
+import math
 from typing import List, Optional, Tuple, Set, Dict
 
 
@@ -267,9 +268,9 @@ class AxiomConstraints:
 
         # 对于层级比特：偏好达到中截面
         for i in self.hierarchy_indices:
-            if w < target and state[i] < 0.5:
+            if w < target and state[i].item() < 0.5:
                 weights[i] = 2.0  # 增强注入
-            elif w > target and state[i] > 0.5:
+            elif w > target and state[i].item() > 0.5:
                 weights[i] = 0.5  # 抑制
             elif abs(w - target) < 1.0:
                 weights[i] = 1.0  # 平衡
@@ -785,7 +786,7 @@ class AxiomConstraints:
         allowed = []
         for i in range(self.N):
             # A1：只允许 0→1
-            if state[i] > 0.5:
+            if state[i].item() > 0.5:
                 continue
             # A6：DAG方向约束
             d = self.direction[i].item()
@@ -813,7 +814,7 @@ class AxiomConstraints:
         """
         allowed = []
         for i in range(self.N):
-            if state[i] < 0.5:
+            if state[i].item() < 0.5:
                 continue
             # A6：DAG方向约束 — 方向为+1的位不能吸收（不允许逆向于DAG方向）
             d = self.direction[i].item()
