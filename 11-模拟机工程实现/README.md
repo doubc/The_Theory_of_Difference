@@ -36,7 +36,12 @@ WorldBase（差异学会存在）
     ↓ 制度·叙事·身份·锁定
 ```
 
-模拟机当前覆盖范围：**WorldBase + 差异即世界**（第一阶段），正在向**象界**（第二阶段）推进。
+模拟机当前覆盖范围：**WorldBase + 差异即世界**（第一阶段），象界机制（Phase 2-16）。
+**当前状态**: Phase 17 — engine_v2 自指闭环深度验证。
+
+> **重要更正 (2026-06-09)**: Phase 16 的「死秩序不可打破」归档结论已被推翻。
+> 根因是 A9 自指动作缺失。engine_v2 补回后，L2 涌现率 0%→95%。
+> 详见 `engine_v2/README.md` 和 `docs/纠偏_A9自指缺失与过早归档.md`。
 
 ---
 
@@ -74,31 +79,20 @@ A1(源,+1) → A6(流向) → A3(局域) → A4(最小变易)
 
 ```
 11-模拟机工程实现/
+├── engine_v2/              ← ★ 新主引擎（自指闭环版，2026-06-09 起）
+│   ├── diffsim/
+│   │   ├── core.py         ← DifferenceField：差异场
+│   │   ├── mechanisms.py   ← 九个机制作为显式齿轮 (m1-m9)
+│   │   ├── world.py        ← Layer + RecursiveWorld
+│   │   ├── metrics.py      ← Jaccard flux 活/死秩序指标
+│   │   └── tests/test_closure.py
+│   ├── run_experiment.py   ← 基线 vs 自指闭环对比实验
+│   └── README.md
+├── engine/                 ← Phase 1-16 历史引擎（保留参考）
 ├── acl/                    ← 公理约束语言（Axiomatic Constraint Language）
 │   ├── axioms_v2.py        ← ★ 九公理硬性约束检查器（当前主版本）
 │   ├── axioms_strict.py    ← 严格化九公理
 │   └── axioms_v3.py        ← 实验性（引入排除历史）
-├── engine/                 ← 演化引擎
-│   ├── long_range_evolver_v2.py  ← ★ 长程演化器（当前主版本）
-│   ├── world_engine.py           ← 世界引擎（集成象界检测）
-│   ├── reactor.py                ← 差异反应堆
-│   ├── hamming_engine.py         ← 汉明几何引擎
-│   ├── mid_surface_analyzer.py   ← 中截面分析器
-│   ├── first_order_algebra.py    ← 一阶变易代数
-│   ├── spatial_evolver_v2.py     ← 空间长程演化器
-│   ├── encapsulation_engine.py   ← ★ 封装引擎（批次11a）
-│   ├── hierarchy_manager.py      ← ★ 层级管理器（批次11b）
-│   ├── hierarchical_evolver.py   ← ★ 跨层级演化器（批次11c）
-│   ├── events.py                 ← 底图事件系统
-│   ├── difference_layers.py      ← 差异分层 D0-D4
-│   └── detectors/                ← 涌现探测器
-│       ├── statistics.py         ← 统计量探测器
-│       ├── gauge_field.py        ← 规范场探测器
-│       ├── dimension_locking.py  ← 维度锁定探测器
-│       ├── gravitational_potential.py ← 引力势探测器
-│       ├── mutual_info.py        ← 互信息探测器
-│       ├── spatial_correlation.py← 空间关联探测器
-│       └── trajectory_recorder.py← 轨迹记录器
 ├── layers/                 ← 层级世界规格
 │   ├── hamming_layer.py    ← ★ {0,1}^N 二值状态空间层
 │   ├── three_dim_hamming.py← 三维汉明格点
@@ -184,8 +178,11 @@ A1(源,+1) → A6(流向) → A3(局域) → A4(最小变易)
 | M4 批次10b | 2026-05-17 | ✅ | A9 封口触发（N=48, T=20000，75% 比特冻结） |
 | M4 批次11 | 2026-05-19 | ✅ | 分层封装（封装引擎 + 层级管理器 + 跨层级演化器，43 测试） |
 | M4 批次12 | 2026-05-24 | ✅ | 回流偏置场修复（propagate_bias_up 三 bug + 键统一） |
+| Phase 1-16 | 2026-05-24 ~ 2026-06-09 | ✅ | 象界机制全量实现，170+实验，发现N0*≈30.5相变 |
+| Phase 16 归档 | 2026-06-09 | ❌ 撤回 | 过早归档，A9自指缺失导致"死秩序"误判 |
+| Phase 17 | 2026-06-09 ~ | 🔄 | engine_v2 自指闭环，L2涌现率95%，深度验证中 |
 
-**当前状态**：第一阶段核心完成，准备进入第二阶段（象界→前主体态）。
+**当前状态**：Phase 17 — engine_v2 自指闭环深度验证。
 
 ---
 
@@ -202,6 +199,7 @@ A1(源,+1) → A6(流向) → A3(局域) → A4(最小变易)
 | **规范场**（WorldBase §5） | su(3) 代数结构 | 🔄 探测器已实现 |
 | **层级封装**（批次11） | 48→15→3→3 比特涌现 | ✅ |
 | **回流偏置场**（批次12） | 双向跨层级耦合 | ✅ |
+| **自指闭环**（engine_v2） | A9封装自身，L1 flux=0.2123，L2涌现率95% | ✅ |
 
 ---
 
@@ -232,10 +230,18 @@ cd 11-模拟机工程实现
 pip install -r requirements.txt  # numpy, torch, pytest
 ```
 
-### 运行实验
+### 运行实验（engine_v2，推荐）
 
 ```bash
-python run_experiment.py --exp exp_40_hierarchical
+cd engine_v2
+python3 run_experiment.py --seeds 20      # 自指闭环 vs 基线对比
+PYTHONPATH=. python3 diffsim/tests/test_closure.py  # 单元测试
+```
+
+### 运行实验（engine v1，历史）
+
+```bash
+python scripts/_archive_phase16/run_experiment_v1.py --exp exp_40_hierarchical
 ```
 
 ### 运行测试
