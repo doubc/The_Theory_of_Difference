@@ -1,0 +1,1767 @@
+{
+  "config": {
+    "n_worlds": 4,
+    "N0": 48,
+    "n_seeds": 8
+  },
+  "results": [
+    {
+      "seed_group": 0,
+      "world_id": 0,
+      "seed": 89250,
+      "depth": 5,
+      "report": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 22,
+          "n_orgs": 2,
+          "autonomous_flux": 0.1809,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 69,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4924,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 87,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7443,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 197,
+          "n_orgs": 1,
+          "autonomous_flux": 0.775,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "L2_emerged": true,
+      "mean_flux": 0.44051999999999997
+    },
+    {
+      "seed_group": 0,
+      "world_id": 1,
+      "seed": 773955,
+      "depth": 5,
+      "report": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 23,
+          "n_orgs": 1,
+          "autonomous_flux": 0.2275,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 105,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7092,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 79,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6905,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 197,
+          "n_orgs": 1,
+          "autonomous_flux": 0.775,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "L2_emerged": true,
+      "mean_flux": 0.48244
+    },
+    {
+      "seed_group": 0,
+      "world_id": 2,
+      "seed": 654570,
+      "depth": 5,
+      "report": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 23,
+          "n_orgs": 2,
+          "autonomous_flux": 0.1886,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 71,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4987,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 89,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7612,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 197,
+          "n_orgs": 1,
+          "autonomous_flux": 0.775,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "L2_emerged": true,
+      "mean_flux": 0.4467
+    },
+    {
+      "seed_group": 0,
+      "world_id": 3,
+      "seed": 438878,
+      "depth": 5,
+      "report": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 24,
+          "n_orgs": 2,
+          "autonomous_flux": 0.1921,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 71,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4588,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 90,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7661,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 197,
+          "n_orgs": 1,
+          "autonomous_flux": 0.775,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "L2_emerged": true,
+      "mean_flux": 0.4404
+    },
+    {
+      "seed_group": 1,
+      "world_id": 0,
+      "seed": 502625,
+      "depth": 5,
+      "report": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 20,
+          "n_orgs": 1,
+          "autonomous_flux": 0.226,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 98,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6925,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 87,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7557,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 197,
+          "n_orgs": 1,
+          "autonomous_flux": 0.775,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "L2_emerged": true,
+      "mean_flux": 0.49184
+    },
+    {
+      "seed_group": 1,
+      "world_id": 1,
+      "seed": 905603,
+      "depth": 5,
+      "report": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 21,
+          "n_orgs": 2,
+          "autonomous_flux": 0.2279,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 68,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4461,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 102,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7779,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 197,
+          "n_orgs": 1,
+          "autonomous_flux": 0.775,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "L2_emerged": true,
+      "mean_flux": 0.44738
+    },
+    {
+      "seed_group": 1,
+      "world_id": 2,
+      "seed": 219391,
+      "depth": 6,
+      "report": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 20,
+          "n_orgs": 2,
+          "autonomous_flux": 0.1905,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 44,
+          "n_orgs": 1,
+          "autonomous_flux": 0.411,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 110,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7172,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 90,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7328,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 5,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 197,
+          "n_orgs": 1,
+          "autonomous_flux": 0.775,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "L2_emerged": true,
+      "mean_flux": 0.47275
+    },
+    {
+      "seed_group": 1,
+      "world_id": 3,
+      "seed": 77226,
+      "depth": 6,
+      "report": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 20,
+          "n_orgs": 3,
+          "autonomous_flux": 0.1801,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 12,
+          "sealed": true,
+          "seal_step": 35,
+          "n_orgs": 1,
+          "autonomous_flux": 0.3908,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 99,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6663,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 91,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7753,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 5,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 197,
+          "n_orgs": 1,
+          "autonomous_flux": 0.775,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "L2_emerged": true,
+      "mean_flux": 0.46625
+    },
+    {
+      "seed_group": 2,
+      "world_id": 0,
+      "seed": 781332,
+      "depth": 4,
+      "report": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 11,
+          "n_orgs": 6,
+          "autonomous_flux": 0.0091,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 12,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 2,
+          "autonomous_flux": 0.0258,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 7,
+          "sealed": true,
+          "seal_step": 49,
+          "n_orgs": 1,
+          "autonomous_flux": 0.449,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 5,
+          "sealed": true,
+          "seal_step": 111,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6892,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 3,
+          "sealed": false,
+          "seal_step": null,
+          "n_orgs": 0,
+          "autonomous_flux": 1.0,
+          "mode": "self_reference"
+        }
+      ],
+      "L2_emerged": true,
+      "mean_flux": 0.43461999999999995
+    },
+    {
+      "seed_group": 2,
+      "world_id": 1,
+      "seed": 787421,
+      "depth": 3,
+      "report": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 22,
+          "n_orgs": 1,
+          "autonomous_flux": 0.2151,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 118,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7152,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "L2_emerged": true,
+      "mean_flux": 0.3134333333333333
+    },
+    {
+      "seed_group": 2,
+      "world_id": 2,
+      "seed": 714567,
+      "depth": 5,
+      "report": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 20,
+          "n_orgs": 3,
+          "autonomous_flux": 0.1857,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 12,
+          "sealed": true,
+          "seal_step": 37,
+          "n_orgs": 1,
+          "autonomous_flux": 0.3562,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 117,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7191,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 197,
+          "n_orgs": 1,
+          "autonomous_flux": 0.775,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "L2_emerged": true,
+      "mean_flux": 0.40919999999999995
+    },
+    {
+      "seed_group": 2,
+      "world_id": 3,
+      "seed": 833668,
+      "depth": 5,
+      "report": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 23,
+          "n_orgs": 2,
+          "autonomous_flux": 0.2055,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 67,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4266,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 77,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6617,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 197,
+          "n_orgs": 1,
+          "autonomous_flux": 0.775,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "L2_emerged": true,
+      "mean_flux": 0.41575999999999996
+    },
+    {
+      "seed_group": 3,
+      "world_id": 0,
+      "seed": 310472,
+      "depth": 5,
+      "report": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 5,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 16,
+          "sealed": true,
+          "seal_step": 26,
+          "n_orgs": 1,
+          "autonomous_flux": 0.2574,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 90,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6611,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 76,
+          "n_orgs": 1,
+          "autonomous_flux": 0.652,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 197,
+          "n_orgs": 1,
+          "autonomous_flux": 0.775,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "L2_emerged": true,
+      "mean_flux": 0.4711
+    },
+    {
+      "seed_group": 3,
+      "world_id": 1,
+      "seed": 222451,
+      "depth": 4,
+      "report": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 11,
+          "n_orgs": 6,
+          "autonomous_flux": 0.0091,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 12,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 2,
+          "autonomous_flux": 0.0258,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 7,
+          "sealed": true,
+          "seal_step": 49,
+          "n_orgs": 1,
+          "autonomous_flux": 0.449,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 5,
+          "sealed": true,
+          "seal_step": 111,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6892,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 3,
+          "sealed": false,
+          "seal_step": null,
+          "n_orgs": 0,
+          "autonomous_flux": 1.0,
+          "mode": "self_reference"
+        }
+      ],
+      "L2_emerged": true,
+      "mean_flux": 0.43461999999999995
+    },
+    {
+      "seed_group": 3,
+      "world_id": 2,
+      "seed": 302918,
+      "depth": 5,
+      "report": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 22,
+          "n_orgs": 2,
+          "autonomous_flux": 0.2323,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 66,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4508,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 83,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6765,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 197,
+          "n_orgs": 1,
+          "autonomous_flux": 0.775,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "L2_emerged": true,
+      "mean_flux": 0.42892
+    },
+    {
+      "seed_group": 3,
+      "world_id": 3,
+      "seed": 518579,
+      "depth": 4,
+      "report": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 22,
+          "n_orgs": 2,
+          "autonomous_flux": 0.2144,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 67,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4876,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 104,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7149,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "L2_emerged": true,
+      "mean_flux": 0.35672499999999996
+    },
+    {
+      "seed_group": 4,
+      "world_id": 0,
+      "seed": 510095,
+      "depth": 5,
+      "report": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 5,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 16,
+          "sealed": true,
+          "seal_step": 28,
+          "n_orgs": 1,
+          "autonomous_flux": 0.2764,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 108,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7702,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 74,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6588,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 197,
+          "n_orgs": 1,
+          "autonomous_flux": 0.775,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "L2_emerged": true,
+      "mean_flux": 0.49808
+    },
+    {
+      "seed_group": 4,
+      "world_id": 1,
+      "seed": 309011,
+      "depth": 5,
+      "report": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 24,
+          "n_orgs": 2,
+          "autonomous_flux": 0.2247,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 69,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4203,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 84,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7161,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 197,
+          "n_orgs": 1,
+          "autonomous_flux": 0.775,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "L2_emerged": true,
+      "mean_flux": 0.42922000000000005
+    },
+    {
+      "seed_group": 4,
+      "world_id": 2,
+      "seed": 567804,
+      "depth": 5,
+      "report": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 24,
+          "n_orgs": 1,
+          "autonomous_flux": 0.2301,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 105,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6933,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 90,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7817,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 197,
+          "n_orgs": 1,
+          "autonomous_flux": 0.775,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "L2_emerged": true,
+      "mean_flux": 0.49802
+    },
+    {
+      "seed_group": 4,
+      "world_id": 3,
+      "seed": 879832,
+      "depth": 4,
+      "report": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 11,
+          "n_orgs": 6,
+          "autonomous_flux": 0.0091,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 12,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 2,
+          "autonomous_flux": 0.0258,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 7,
+          "sealed": true,
+          "seal_step": 49,
+          "n_orgs": 1,
+          "autonomous_flux": 0.449,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 5,
+          "sealed": true,
+          "seal_step": 111,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6892,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 3,
+          "sealed": false,
+          "seal_step": null,
+          "n_orgs": 0,
+          "autonomous_flux": 1.0,
+          "mode": "self_reference"
+        }
+      ],
+      "L2_emerged": true,
+      "mean_flux": 0.43461999999999995
+    },
+    {
+      "seed_group": 5,
+      "world_id": 0,
+      "seed": 447649,
+      "depth": 4,
+      "report": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 11,
+          "n_orgs": 6,
+          "autonomous_flux": 0.0091,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 12,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 2,
+          "autonomous_flux": 0.0258,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 7,
+          "sealed": true,
+          "seal_step": 49,
+          "n_orgs": 1,
+          "autonomous_flux": 0.449,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 5,
+          "sealed": true,
+          "seal_step": 111,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6892,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 3,
+          "sealed": false,
+          "seal_step": null,
+          "n_orgs": 0,
+          "autonomous_flux": 1.0,
+          "mode": "self_reference"
+        }
+      ],
+      "L2_emerged": true,
+      "mean_flux": 0.43461999999999995
+    },
+    {
+      "seed_group": 5,
+      "world_id": 1,
+      "seed": 609319,
+      "depth": 4,
+      "report": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 11,
+          "n_orgs": 6,
+          "autonomous_flux": 0.0091,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 12,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 2,
+          "autonomous_flux": 0.0258,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 7,
+          "sealed": true,
+          "seal_step": 49,
+          "n_orgs": 1,
+          "autonomous_flux": 0.449,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 5,
+          "sealed": true,
+          "seal_step": 111,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6892,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 3,
+          "sealed": false,
+          "seal_step": null,
+          "n_orgs": 0,
+          "autonomous_flux": 1.0,
+          "mode": "self_reference"
+        }
+      ],
+      "L2_emerged": true,
+      "mean_flux": 0.43461999999999995
+    },
+    {
+      "seed_group": 5,
+      "world_id": 2,
+      "seed": 567059,
+      "depth": 5,
+      "report": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 22,
+          "n_orgs": 1,
+          "autonomous_flux": 0.2297,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 101,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7222,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 89,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7478,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 197,
+          "n_orgs": 1,
+          "autonomous_flux": 0.775,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "L2_emerged": true,
+      "mean_flux": 0.49694000000000005
+    },
+    {
+      "seed_group": 5,
+      "world_id": 3,
+      "seed": 747772,
+      "depth": 3,
+      "report": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 11,
+          "n_orgs": 6,
+          "autonomous_flux": 0.0091,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 12,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 2,
+          "autonomous_flux": 0.0,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 1,
+          "autonomous_flux": 0.0,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "L2_emerged": true,
+      "mean_flux": 0.0030333333333333336
+    },
+    {
+      "seed_group": 6,
+      "world_id": 0,
+      "seed": 942080,
+      "depth": 6,
+      "report": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 20,
+          "n_orgs": 3,
+          "autonomous_flux": 0.1857,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 12,
+          "sealed": true,
+          "seal_step": 37,
+          "n_orgs": 1,
+          "autonomous_flux": 0.3816,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 102,
+          "n_orgs": 1,
+          "autonomous_flux": 0.71,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 74,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6615,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 5,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 197,
+          "n_orgs": 1,
+          "autonomous_flux": 0.775,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "L2_emerged": true,
+      "mean_flux": 0.4539666666666667
+    },
+    {
+      "seed_group": 6,
+      "world_id": 1,
+      "seed": 923732,
+      "depth": 6,
+      "report": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 5,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 16,
+          "sealed": true,
+          "seal_step": 23,
+          "n_orgs": 2,
+          "autonomous_flux": 0.2286,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 43,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4322,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 114,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7448,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 91,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7687,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 5,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 197,
+          "n_orgs": 1,
+          "autonomous_flux": 0.775,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "L2_emerged": true,
+      "mean_flux": 0.49321666666666664
+    },
+    {
+      "seed_group": 6,
+      "world_id": 2,
+      "seed": 254823,
+      "depth": 5,
+      "report": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 24,
+          "n_orgs": 2,
+          "autonomous_flux": 0.2159,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 66,
+          "n_orgs": 1,
+          "autonomous_flux": 0.447,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 78,
+          "n_orgs": 1,
+          "autonomous_flux": 0.666,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 197,
+          "n_orgs": 1,
+          "autonomous_flux": 0.775,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "L2_emerged": true,
+      "mean_flux": 0.42278000000000004
+    },
+    {
+      "seed_group": 6,
+      "world_id": 3,
+      "seed": 692817,
+      "depth": 3,
+      "report": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 11,
+          "n_orgs": 6,
+          "autonomous_flux": 0.0091,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 12,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 2,
+          "autonomous_flux": 0.0258,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 5,
+          "sealed": true,
+          "seal_step": 92,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4132,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "L2_emerged": true,
+      "mean_flux": 0.14936666666666668
+    },
+    {
+      "seed_group": 7,
+      "world_id": 0,
+      "seed": 646660,
+      "depth": 4,
+      "report": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 5,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 16,
+          "sealed": true,
+          "seal_step": 25,
+          "n_orgs": 1,
+          "autonomous_flux": 0.2619,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 118,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7365,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 197,
+          "n_orgs": 1,
+          "autonomous_flux": 0.775,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "L2_emerged": true,
+      "mean_flux": 0.44584999999999997
+    },
+    {
+      "seed_group": 7,
+      "world_id": 1,
+      "seed": 380734,
+      "depth": 5,
+      "report": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 11,
+          "n_orgs": 6,
+          "autonomous_flux": 0.0091,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 23,
+          "n_orgs": 2,
+          "autonomous_flux": 0.2338,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 71,
+          "n_orgs": 1,
+          "autonomous_flux": 0.5126,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 78,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6686,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 197,
+          "n_orgs": 1,
+          "autonomous_flux": 0.775,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "L2_emerged": true,
+      "mean_flux": 0.43982
+    },
+    {
+      "seed_group": 7,
+      "world_id": 2,
+      "seed": 320510,
+      "depth": 3,
+      "report": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 11,
+          "n_orgs": 6,
+          "autonomous_flux": 0.0091,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 12,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 3,
+          "autonomous_flux": 0.0,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 45,
+          "n_orgs": 1,
+          "autonomous_flux": 0.0667,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "L2_emerged": true,
+      "mean_flux": 0.025266666666666663
+    },
+    {
+      "seed_group": 7,
+      "world_id": 3,
+      "seed": 723805,
+      "depth": 5,
+      "report": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 11,
+          "n_orgs": 6,
+          "autonomous_flux": 0.0091,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 15,
+          "sealed": true,
+          "seal_step": 17,
+          "n_orgs": 1,
+          "autonomous_flux": 0.1765,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 113,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7474,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 72,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6938,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 197,
+          "n_orgs": 1,
+          "autonomous_flux": 0.775,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "L2_emerged": true,
+      "mean_flux": 0.48035999999999995
+    }
+  ],
+  "analysis": {
+    "n_worlds_total": 32,
+    "baseline": {
+      "mean_depth": 4.65,
+      "L2_rate": 0.95,
+      "mean_flux": 0.2123
+    },
+    "multi_world": {
+      "mean_depth": 4.66,
+      "std_depth": 0.85,
+      "L2_emergence_rate": 1.0,
+      "mean_flux_nonzero": 0.4091
+    },
+    "deviation": {
+      "depth_rel_error": 0.0013,
+      "L2_rate_diff": 0.05
+    },
+    "H20-P0": "PASS ✅",
+    "pass_criteria": {
+      "depth_within_20pct": true,
+      "L2_rate_above_80pct": true,
+      "nonzero_flux": true
+    }
+  },
+  "elapsed_seconds": 2.5
+}
