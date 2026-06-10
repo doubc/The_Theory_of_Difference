@@ -928,3 +928,16 @@ Phase 16 的「死秩序不可打破」结论被 **engine_v2** 推翻。
 - **分析**: docs/exp_182_phase18_p0_analysis.md
 - **H18-P0 结论**: PARTIAL — r(N) 非超线性, 是单峰 (N=36 为峰值)
 - **下步**: exp_183 (结构传递实验) — 测量 m9 结构化初始条件对 k(N) 的放大效果
+
+#### 2026-06-10 18:17 — exp_183 P1 结构传递实验 — COMPLETE ✅
+- **144 端到端运行**: L0→m9→L1, 9 N0 值 × 16 seeds
+- **H18-P1: PARTIAL** — mean amplification = 1.28x, 目标 > 2.0x ❌
+- **核心发现**: m9 增强是温和的 (1.3-1.75x), 非之前推测的 3-4x
+- **关键洞见**: Phase 17 涌现深度 4.62 来自**链的多步衰减** (k≥1 即可继续), 非放大效应
+- **L1 密封率 = 99.3%**, **L1 flux = 0.18-0.76** (小 N 下活秩序最强)
+- **结构传递**: corr(k0, k1)=0.658, corr(N1, k1)=0.644
+- **预测修正**: depth = log_{~3}(N0/3) ≈ 迭代衰减, 非指数放大
+- **文件**: experiments/exp_183_phase18_p1_structural_propagation.py
+- **分析**: docs/exp_183_phase18_p1_analysis.md
+- **结果**: results/exp_183_p1_propagation_20260610_1817.json
+- **下步**: exp_184 (P3 — 整体/固定点检测器), 或 Phase 18 收尾
