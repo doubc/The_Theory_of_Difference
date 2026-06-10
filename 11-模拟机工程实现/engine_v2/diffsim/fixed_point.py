@@ -139,26 +139,40 @@ class FixedPointDetector:
 
     # ── 核心 API ──────────────────────────────────────────────
 
-    def compare(self, parent_layer: Layer) -> FixedPointReport | None:
-        """密封父层 → m9 生成子层 → 密封子层 → 结构比较。
+    def compare(self, parent_layer: Layer,
+                child_field: DifferenceField | None = None) -> FixedPointReport | None:
+        """比较密封父层与它的 m9 生成的子层。
 
-        如果 m9 返回 None (隐式终止), 判定为 iso_score=1.0 固定点。
+        参数:
+            parent_layer: 已密封的父层。
+            child_field: m9(parent_layer) 生成的子差异场。
+                        如果为 None, 尝试重新调用 m9_self_reference。
+                        (注意: m9_self_reference 会设置 encapulated=True,
+                         所以已运行过 world.run() 后应传入 child_field 而非重新调用)
+
+        返回:
+            FixedPointReport: 固定点分析报告。
+                             child_field 不存在或 m9 返回 None →
+                             隐式固定点 iso_score=1.0。
         """
         f = parent_layer.field
         if not f.sealed:
             return None
 
-        # 组织数 (已密封, 从 field.organizations 获取)
+        # 父层指标
         parent_orgs = [o for o in f.organizations.values()
                        if len(o) >= parent_layer.p.min_org_size]
         k_p = len(parent_orgs)
         parent_sizes = [len(o) for o in parent_orgs]
         parent_flux = parent_layer.autonomous_flux()
 
-        # 生成子层
-        nxt = m9_self_reference(parent_layer, self_encapsulate=True)
+        # 获取子层
+        nxt = child_field
         if nxt is None:
-            # m9 无法生成下一层 → 隐式整体固定点
+            # 尝试重新调用 m9 (仅在未封装过的层才有效)
+            nxt = m9_self_reference(parent_layer, self_encapsulate=True)
+
+        if nxt is None:
             return FixedPointReport(
                 layer=f.layer,
                 n_parent=f.N, n_child=0,
@@ -189,7 +203,6 @@ class FixedPointDetector:
         iso = (w["org_count"] * s_k + w["size_dist"] * s_sz
                + w["flux_similarity"] * s_f + w["scale_preservation"] * s_sc)
 
-        # 收集偏离原因
         reasons = []
         if s_k < 0.8:
             reasons.append(f"组织数差: {k_p}→{k_c}")
@@ -200,7 +213,7 @@ class FixedPointDetector:
         if s_sc < 0.5:
             reasons.append(f"规模坍缩: {f.N}→{nxt.N}")
         if not reasons:
-            reasons.append("✅ 四项均接近, 结构同构")
+            reasons.append("四项均接近, 结构同构")
 
         return FixedPointReport(
             layer=f.layer,
@@ -235,15 +248,20 @@ def detect_fixed_points_in_world(world: 'RecursiveWorld',
                                   detector: FixedPointDetector = None) -> list[FixedPointReport]:
     """对一个已运行的 RecursiveWorld, 逐层检测固定点。
 
-    需要 world.self_encapsulate=True 且 layers 列表完整。
+    RecursiveWorld.run() 执行后的 layers 链中:
+      layer[i].field → m9 → layer[i+1].field
+    所以 layer[i] 的 child_field = layer[i+1].field (如果存在)。
+
     返回 FixedPointReport 列表, 按层号排序。
     """
     if detector is None:
         detector = FixedPointDetector()
 
     results = []
-    for layer in world.layers:
-        fp = detector.compare(layer)
+    layers = world.layers
+    for i, parent in enumerate(layers):
+        child_field = layers[i + 1].field if i + 1 < len(layers) else None
+        fp = detector.compare(parent, child_field=child_field)
         if fp is not None:
             results.append(fp)
     return results

@@ -36,6 +36,16 @@ import sys, os, json, time
 sys.stdout.reconfigure(encoding='utf-8')
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import numpy as np
+
+
+class NumpyEncoder(json.JSONEncoder):
+    """Convert numpy types for JSON serialization."""
+    def default(self, obj):
+        if isinstance(obj, (np.bool_, np.integer)):
+            return bool(obj) if isinstance(obj, np.bool_) else int(obj)
+        if isinstance(obj, np.floating):
+            return float(obj)
+        return super().default(obj)
 from diffsim import RecursiveWorld, Layer
 from diffsim.core import DifferenceField
 from diffsim.world import Params
@@ -169,7 +179,11 @@ def analyze_config(config_name: str, results: list[dict]):
     print(f"  平均深度: {np.mean(depths):.2f} (范围 {min(depths)}-{max(depths)})")
     print(f"  固定点种子: {has_fp}/{seeds} = {100*has_fp/seeds:.0f}%")
     if fp_layers:
-        print(f"  首次固定点层分布: {sorted(fp_layers)}")
+        fp_layer_counts = {l: sum(1 for r in results if r['first_fp_layer'] == l)
+                          for l in set(fp_layers)}
+        print(f"  首次固定点层分布: {dict(sorted(fp_layer_counts.items()))}")
+    else:
+        print(f"  首次固定点层分布: (无固定点)")
     print(f"  平均 max_iso: {mean_max_iso:.4f}")
     print(f"  max_iso 范围: {min(max_isos):.4f} - {max(max_isos):.4f}")
 
@@ -198,8 +212,6 @@ def analyze_config(config_name: str, results: list[dict]):
     print(f"\n  逐层 k_parent → k_child (组织数):")
     print(f"    {'层':<5} {'k_parent':>10} {'k_child':>10} {'差异':>8} {'变化趋势':>12}")
     for layer in sorted(layers_fp.keys()):
-        k_parents = [r["k_parent"] for r in layers_fp if layer == r]
-        # Need to pull from fp_reports
         kp = []
         kc = []
         for r in results:
@@ -298,7 +310,7 @@ def main():
             "summaries": summaries,
             "results": all_results,
             "elapsed_seconds": round(time.time() - t0, 1),
-        }, f, indent=2)
+        }, f, indent=2, cls=NumpyEncoder)
     print(f"\n结果已保存: {out_path}")
     print(f"总耗时: {time.time() - t0:.1f}s")
 

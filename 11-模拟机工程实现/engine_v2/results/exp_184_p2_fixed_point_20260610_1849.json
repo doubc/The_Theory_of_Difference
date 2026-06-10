@@ -1,0 +1,326 @@
+{
+  "experiment": "exp_184_phase18_p2_fixed_point_detector",
+  "configs": {
+    "A_standard": {
+      "N0": 48,
+      "desc": "\u6807\u51c6 engine_v2 (min_org_size=3, seal_fraction=0.6)"
+    },
+    "B_min_org_2": {
+      "N0": 48,
+      "desc": "min_org_size=2 (\u65e0\u9650\u94fe\u53ef\u80fd\u6027)"
+    },
+    "C_relaxed": {
+      "N0": 48,
+      "desc": "min_org_size=2 + seal_fraction=0.4 (\u66f4\u5bb9\u6613\u6df1\u5c42\u5bc6\u5c01)"
+    }
+  },
+  "params": {
+    "A_standard": {
+      "bind_inc": 0.18,
+      "bind_cap": 5.0,
+      "bind_threshold": 1.0,
+      "cascade_density": 0.9,
+      "min_org_size": 3,
+      "seal_fraction": 0.6,
+      "lock_inc": 0.12,
+      "lock_threshold": 0.6,
+      "cycle_persistence": 3,
+      "target_active": 0,
+      "max_flip": 6,
+      "churn": 2,
+      "n_meta_colors": 4,
+      "max_residual": 6,
+      "max_steps": 400
+    },
+    "B_min_org_2": {
+      "bind_inc": 0.18,
+      "bind_cap": 5.0,
+      "bind_threshold": 1.0,
+      "cascade_density": 0.9,
+      "min_org_size": 2,
+      "seal_fraction": 0.6,
+      "lock_inc": 0.12,
+      "lock_threshold": 0.6,
+      "cycle_persistence": 3,
+      "target_active": 0,
+      "max_flip": 6,
+      "churn": 2,
+      "n_meta_colors": 4,
+      "max_residual": 6,
+      "max_steps": 400
+    },
+    "C_relaxed": {
+      "bind_inc": 0.18,
+      "bind_cap": 5.0,
+      "bind_threshold": 1.0,
+      "cascade_density": 0.9,
+      "min_org_size": 2,
+      "seal_fraction": 0.4,
+      "lock_inc": 0.15,
+      "lock_threshold": 0.5,
+      "cycle_persistence": 3,
+      "target_active": 0,
+      "max_flip": 6,
+      "churn": 2,
+      "n_meta_colors": 4,
+      "max_residual": 6,
+      "max_steps": 400
+    }
+  },
+  "seeds_per_config": 16,
+  "summaries": [
+    {
+      "config": "A_standard",
+      "seeds": 16,
+      "mean_depth": 5.0,
+      "depth_range": [
+        4,
+        6
+      ],
+      "fixed_point_rate": 0.9375,
+      "mean_max_iso": 0.9680562500000001,
+      "per_layer_iso": {
+        "0": {
+          "mean": 0.2244625,
+          "std": 0.06188165999510679,
+          "fp_rate": 0.0
+        },
+        "1": {
+          "mean": 0.49411875,
+          "std": 0.056274819177297236,
+          "fp_rate": 0.0
+        },
+        "2": {
+          "mean": 0.6500874999999999,
+          "std": 0.13874084147701427,
+          "fp_rate": 0.0
+        },
+        "3": {
+          "mean": 0.7685312500000001,
+          "std": 0.1455624037945152,
+          "fp_rate": 0.125
+        },
+        "4": {
+          "mean": 0.9641076923076923,
+          "std": 0.08417492282821583,
+          "fp_rate": 0.8461538461538461
+        },
+        "5": {
+          "mean": 1.0,
+          "std": 0.0,
+          "fp_rate": 1.0
+        }
+      }
+    },
+    {
+      "config": "B_min_org_2",
+      "seeds": 16,
+      "mean_depth": 7.9375,
+      "depth_range": [
+        7,
+        8
+      ],
+      "fixed_point_rate": 1.0,
+      "mean_max_iso": 0.95,
+      "per_layer_iso": {
+        "0": {
+          "mean": 0.340725,
+          "std": 0.05776359688419689,
+          "fp_rate": 0.0
+        },
+        "1": {
+          "mean": 0.67016875,
+          "std": 0.05749759471871411,
+          "fp_rate": 0.0625
+        },
+        "2": {
+          "mean": 0.6782312500000001,
+          "std": 0.06841700006897045,
+          "fp_rate": 0.1875
+        },
+        "3": {
+          "mean": 0.6502749999999999,
+          "std": 0.06399769038801324,
+          "fp_rate": 0.0625
+        },
+        "4": {
+          "mean": 0.68389375,
+          "std": 0.09519609018198963,
+          "fp_rate": 0.25
+        },
+        "5": {
+          "mean": 0.6178625,
+          "std": 0.13091941163841977,
+          "fp_rate": 0.125
+        },
+        "6": {
+          "mean": 0.5464533333333333,
+          "std": 0.14209518343545482,
+          "fp_rate": 0.06666666666666667
+        },
+        "7": {
+          "mean": 1.0,
+          "std": 0.0,
+          "fp_rate": 1.0
+        }
+      }
+    },
+    {
+      "config": "C_relaxed",
+      "seeds": 16,
+      "mean_depth": 8.0,
+      "depth_range": [
+        8,
+        8
+      ],
+      "fixed_point_rate": 1.0,
+      "mean_max_iso": 0.9625,
+      "per_layer_iso": {
+        "0": {
+          "mean": 0.33001875,
+          "std": 0.061357693270180064,
+          "fp_rate": 0.0
+        },
+        "1": {
+          "mean": 0.66620625,
+          "std": 0.047609104548788785,
+          "fp_rate": 0.0625
+        },
+        "2": {
+          "mean": 0.67124375,
+          "std": 0.08244324539304299,
+          "fp_rate": 0.25
+        },
+        "3": {
+          "mean": 0.7126062500000001,
+          "std": 0.08648662807589104,
+          "fp_rate": 0.4375
+        },
+        "4": {
+          "mean": 0.721525,
+          "std": 0.08593080428461032,
+          "fp_rate": 0.4375
+        },
+        "5": {
+          "mean": 0.65685,
+          "std": 0.08745966927675865,
+          "fp_rate": 0.1875
+        },
+        "6": {
+          "mean": 0.5703687500000001,
+          "std": 0.15991005174296424,
+          "fp_rate": 0.125
+        },
+        "7": {
+          "mean": 1.0,
+          "std": 0.0,
+          "fp_rate": 1.0
+        }
+      }
+    }
+  ],
+  "results": {
+    "A_standard": [
+      {
+        "seed": 0,
+        "depth": 4,
+        "emergence_depth": 4,
+        "first_fp_layer": 3,
+        "first_fp_score": 1.0,
+        "max_iso": 1.0,
+        "max_iso_layer": 3,
+        "has_fixed_point": true,
+        "world_report": [
+          {
+            "layer": 0,
+            "N": 48,
+            "sealed": true,
+            "seal_step": 11,
+            "n_orgs": 5,
+            "autonomous_flux": 0.0455,
+            "mode": "seed"
+          },
+          {
+            "layer": 1,
+            "N": 15,
+            "sealed": true,
+            "seal_step": 23,
+            "n_orgs": 1,
+            "autonomous_flux": 0.2443,
+            "mode": "self_reference"
+          },
+          {
+            "layer": 2,
+            "N": 8,
+            "sealed": true,
+            "seal_step": 99,
+            "n_orgs": 1,
+            "autonomous_flux": 0.679,
+            "mode": "self_reference"
+          },
+          {
+            "layer": 3,
+            "N": 6,
+            "sealed": true,
+            "seal_step": 111,
+            "n_orgs": 1,
+            "autonomous_flux": 0.7221,
+            "mode": "self_reference",
+            "closure": "\u6574\u4f53\u4e0d\u52a8\u70b9(\u81ea\u6307\u95ed\u5408)"
+          }
+        ],
+        "layer_metrics": [
+          {
+            "layer": 0,
+            "N": 48,
+            "sealed": true,
+            "seal_step": 11,
+            "n_orgs": 5,
+            "flux": 0.0455
+          },
+          {
+            "layer": 1,
+            "N": 15,
+            "sealed": true,
+            "seal_step": 23,
+            "n_orgs": 1,
+            "flux": 0.2443
+          },
+          {
+            "layer": 2,
+            "N": 8,
+            "sealed": true,
+            "seal_step": 99,
+            "n_orgs": 1,
+            "flux": 0.679
+          },
+          {
+            "layer": 3,
+            "N": 6,
+            "sealed": true,
+            "seal_step": 111,
+            "n_orgs": 1,
+            "flux": 0.7221
+          }
+        ],
+        "fp_reports": [
+          {
+            "layer": 0,
+            "n_parent": 48,
+            "n_child": 15,
+            "k_parent": 5,
+            "k_child": 1,
+            "parent_org_sizes": [
+              3,
+              4,
+              5,
+              5,
+              5
+            ],
+            "child_org_sizes": [
+              4
+            ],
+            "parent_flux": 0.0455,
+            "child_flux": 0.0,
+            "iso_score": 0.1759,
+            "is_fixed_point": 
