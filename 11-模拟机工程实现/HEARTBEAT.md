@@ -988,3 +988,18 @@ Phase 16 的「死秩序不可打破」结论被 **engine_v2** 推翻。
 - **Git**: commit pending
 - **文件**: experiments/exp_186_phase19_p1_complexity_sweep.py (new), docs/exp_186_phase19_p1_analysis.md (new)
 - **下步**: exp_187 (时序扫描 — 密封前引入环境) 或 Phase 19 综合报告
+#### 2026-06-10 21:03 -- Phase 19 P2: exp_187 环境引入时序扫描 -- COMPLETE
+- **world.py 修改**: 添加 env_start_step 参数 + _create_env() 独立方法
+- **实验**: 4 timings x 16 seeds = 64 runs, env.N=12, strength=0.20
+- **结果**:
+  - none(基线): depth=4.62, L3+=93.8%, L1 flux=0.2065
+  - early(step 0): depth=4.75, L3+=100%, L1 flux=0.1839, L2 flux=0.4693
+  - mid(step 5): depth=4.56, L3+=100%, L1 flux=0.2131 (近似基线)
+  - late(密封后): depth=4.88, L3+=100%, L1 flux=0.2035 (近似基线)
+- **H19-P1a (seal_step)**: ALL FAIL -- 环境不影响 L0 密封轨迹
+- **H19-P1b (depth)**: ALL FAIL -- 环境不影响涌现深度
+- **H19-P1c (timing)**: FAIL -- 只有 early(全程耦合)有轻微影响
+- **核心发现**: L0 是强鲁棒的 -- 密封前的环境耦合窗口(<10步)不足以改变轨迹
+- **Phase 19 综合结论**: 环境是"约束场"而非"轨迹改变者"。自指闭环(A9)是强鲁棒的。
+- **Git**: commit 3e26071 (local, push failed SSL_ERROR_SYSCALL)
+- **下步**: Phase 19 综合报告 或 Phase 20 并行子空间设计
