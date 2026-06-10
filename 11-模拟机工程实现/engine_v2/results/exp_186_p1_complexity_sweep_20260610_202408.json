@@ -1,0 +1,6388 @@
+{
+  "experiment": "exp_186_phase19_p1_complexity_sweep",
+  "config": {
+    "entropies": [
+      "none",
+      "0",
+      "1",
+      "2"
+    ],
+    "seeds": 16,
+    "coupling_strength": 0.2,
+    "env_N": 24,
+    "params": {
+      "bind_inc": 0.18,
+      "bind_cap": 5.0,
+      "bind_threshold": 1.0,
+      "cascade_density": 0.9,
+      "min_org_size": 3,
+      "seal_fraction": 0.6,
+      "lock_inc": 0.12,
+      "lock_threshold": 0.6,
+      "cycle_persistence": 3,
+      "target_active": 0,
+      "max_flip": 6,
+      "churn": 2,
+      "n_meta_colors": 4,
+      "max_residual": 6,
+      "max_steps": 400
+    }
+  },
+  "results": [
+    {
+      "entropy": null,
+      "seed": 0,
+      "emergence_depth": 5,
+      "n_layers": 5,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 20,
+          "n_orgs": 1,
+          "autonomous_flux": 0.2242,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 99,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7043,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 76,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6572,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 197,
+          "n_orgs": 1,
+          "autonomous_flux": 0.775,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {},
+      "env_system_rho": {},
+      "colonization": {},
+      "env_flux": null,
+      "coupling_events": null
+    },
+    {
+      "entropy": null,
+      "seed": 1,
+      "emergence_depth": 5,
+      "n_layers": 5,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 23,
+          "n_orgs": 1,
+          "autonomous_flux": 0.2322,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 103,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7291,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 88,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7426,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 197,
+          "n_orgs": 1,
+          "autonomous_flux": 0.775,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {},
+      "env_system_rho": {},
+      "colonization": {},
+      "env_flux": null,
+      "coupling_events": null
+    },
+    {
+      "entropy": null,
+      "seed": 2,
+      "emergence_depth": 3,
+      "n_layers": 4,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 11,
+          "n_orgs": 6,
+          "autonomous_flux": 0.0091,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 15,
+          "sealed": true,
+          "seal_step": 17,
+          "n_orgs": 2,
+          "autonomous_flux": 0.1765,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 67,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4925,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 3,
+          "sealed": false,
+          "seal_step": null,
+          "n_orgs": 0,
+          "autonomous_flux": 1.0,
+          "mode": "self_reference"
+        }
+      ],
+      "structure_absorption": {},
+      "env_system_rho": {},
+      "colonization": {},
+      "env_flux": null,
+      "coupling_events": null
+    },
+    {
+      "entropy": null,
+      "seed": 3,
+      "emergence_depth": 5,
+      "n_layers": 5,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 23,
+          "n_orgs": 1,
+          "autonomous_flux": 0.2198,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 109,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6895,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 97,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7727,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 197,
+          "n_orgs": 1,
+          "autonomous_flux": 0.775,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {},
+      "env_system_rho": {},
+      "colonization": {},
+      "env_flux": null,
+      "coupling_events": null
+    },
+    {
+      "entropy": null,
+      "seed": 4,
+      "emergence_depth": 6,
+      "n_layers": 6,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 21,
+          "n_orgs": 3,
+          "autonomous_flux": 0.1906,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 12,
+          "sealed": true,
+          "seal_step": 42,
+          "n_orgs": 1,
+          "autonomous_flux": 0.3666,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 111,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7249,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 74,
+          "n_orgs": 1,
+          "autonomous_flux": 0.675,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 5,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 197,
+          "n_orgs": 1,
+          "autonomous_flux": 0.775,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {},
+      "env_system_rho": {},
+      "colonization": {},
+      "env_flux": null,
+      "coupling_events": null
+    },
+    {
+      "entropy": null,
+      "seed": 5,
+      "emergence_depth": 4,
+      "n_layers": 4,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 5,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 16,
+          "sealed": true,
+          "seal_step": 26,
+          "n_orgs": 2,
+          "autonomous_flux": 0.2581,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 71,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4519,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 109,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7151,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {},
+      "env_system_rho": {},
+      "colonization": {},
+      "env_flux": null,
+      "coupling_events": null
+    },
+    {
+      "entropy": null,
+      "seed": 6,
+      "emergence_depth": 4,
+      "n_layers": 4,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 5,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 16,
+          "sealed": true,
+          "seal_step": 27,
+          "n_orgs": 1,
+          "autonomous_flux": 0.2575,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 104,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7354,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 109,
+          "n_orgs": 1,
+          "autonomous_flux": 0.728,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {},
+      "env_system_rho": {},
+      "colonization": {},
+      "env_flux": null,
+      "coupling_events": null
+    },
+    {
+      "entropy": null,
+      "seed": 7,
+      "emergence_depth": 5,
+      "n_layers": 5,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 11,
+          "n_orgs": 6,
+          "autonomous_flux": 0.0091,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 15,
+          "sealed": true,
+          "seal_step": 19,
+          "n_orgs": 1,
+          "autonomous_flux": 0.1729,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 97,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6905,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 78,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6481,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 197,
+          "n_orgs": 1,
+          "autonomous_flux": 0.775,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {},
+      "env_system_rho": {},
+      "colonization": {},
+      "env_flux": null,
+      "coupling_events": null
+    },
+    {
+      "entropy": null,
+      "seed": 8,
+      "emergence_depth": 2,
+      "n_layers": 3,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 11,
+          "n_orgs": 6,
+          "autonomous_flux": 0.0091,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 12,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 2,
+          "autonomous_flux": 0.0,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 4,
+          "sealed": false,
+          "seal_step": null,
+          "n_orgs": 0,
+          "autonomous_flux": 0.9988,
+          "mode": "self_reference"
+        }
+      ],
+      "structure_absorption": {},
+      "env_system_rho": {},
+      "colonization": {},
+      "env_flux": null,
+      "coupling_events": null
+    },
+    {
+      "entropy": null,
+      "seed": 9,
+      "emergence_depth": 4,
+      "n_layers": 5,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 4,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 11,
+          "sealed": true,
+          "seal_step": 27,
+          "n_orgs": 1,
+          "autonomous_flux": 0.2741,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 7,
+          "sealed": true,
+          "seal_step": 83,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6633,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 5,
+          "sealed": true,
+          "seal_step": 111,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6892,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 3,
+          "sealed": false,
+          "seal_step": null,
+          "n_orgs": 0,
+          "autonomous_flux": 1.0,
+          "mode": "self_reference"
+        }
+      ],
+      "structure_absorption": {},
+      "env_system_rho": {},
+      "colonization": {},
+      "env_flux": null,
+      "coupling_events": null
+    },
+    {
+      "entropy": null,
+      "seed": 10,
+      "emergence_depth": 6,
+      "n_layers": 6,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 24,
+          "n_orgs": 2,
+          "autonomous_flux": 0.2167,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 40,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4147,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 95,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7181,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 93,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7737,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 5,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 197,
+          "n_orgs": 1,
+          "autonomous_flux": 0.775,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {},
+      "env_system_rho": {},
+      "colonization": {},
+      "env_flux": null,
+      "coupling_events": null
+    },
+    {
+      "entropy": null,
+      "seed": 11,
+      "emergence_depth": 5,
+      "n_layers": 5,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 5,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 16,
+          "sealed": true,
+          "seal_step": 27,
+          "n_orgs": 2,
+          "autonomous_flux": 0.2581,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 69,
+          "n_orgs": 1,
+          "autonomous_flux": 0.455,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 75,
+          "n_orgs": 1,
+          "autonomous_flux": 0.658,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 197,
+          "n_orgs": 1,
+          "autonomous_flux": 0.775,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {},
+      "env_system_rho": {},
+      "colonization": {},
+      "env_flux": null,
+      "coupling_events": null
+    },
+    {
+      "entropy": null,
+      "seed": 12,
+      "emergence_depth": 5,
+      "n_layers": 5,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 20,
+          "n_orgs": 2,
+          "autonomous_flux": 0.1862,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 70,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4345,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 75,
+          "n_orgs": 1,
+          "autonomous_flux": 0.658,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 197,
+          "n_orgs": 1,
+          "autonomous_flux": 0.775,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {},
+      "env_system_rho": {},
+      "colonization": {},
+      "env_flux": null,
+      "coupling_events": null
+    },
+    {
+      "entropy": null,
+      "seed": 13,
+      "emergence_depth": 5,
+      "n_layers": 5,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 20,
+          "n_orgs": 2,
+          "autonomous_flux": 0.1773,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 42,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4341,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 99,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6571,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 101,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7183,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {},
+      "env_system_rho": {},
+      "colonization": {},
+      "env_flux": null,
+      "coupling_events": null
+    },
+    {
+      "entropy": null,
+      "seed": 14,
+      "emergence_depth": 5,
+      "n_layers": 5,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 5,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 16,
+          "sealed": true,
+          "seal_step": 25,
+          "n_orgs": 2,
+          "autonomous_flux": 0.2291,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 71,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4998,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 87,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7603,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 197,
+          "n_orgs": 1,
+          "autonomous_flux": 0.775,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {},
+      "env_system_rho": {},
+      "colonization": {},
+      "env_flux": null,
+      "coupling_events": null
+    },
+    {
+      "entropy": null,
+      "seed": 15,
+      "emergence_depth": 5,
+      "n_layers": 5,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 5,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 15,
+          "sealed": true,
+          "seal_step": 22,
+          "n_orgs": 2,
+          "autonomous_flux": 0.231,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 58,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4282,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 96,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7661,
+          "mode": "self_reference"
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 197,
+          "n_orgs": 1,
+          "autonomous_flux": 0.775,
+          "mode": "self_reference",
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {},
+      "env_system_rho": {},
+      "colonization": {},
+      "env_flux": null,
+      "coupling_events": null
+    },
+    {
+      "entropy": 0,
+      "seed": 0,
+      "emergence_depth": 5,
+      "n_layers": 5,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 16,
+          "n_orgs": 1,
+          "autonomous_flux": 0.1863,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3011,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 10,
+            "direct": 4,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 55,
+          "n_orgs": 1,
+          "autonomous_flux": 0.5311,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3273,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 19,
+            "direct": 7,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 48,
+          "n_orgs": 1,
+          "autonomous_flux": 0.5833,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3098,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 29,
+            "direct": 9,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 68,
+          "n_orgs": 1,
+          "autonomous_flux": 0.5245,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.321,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 38,
+            "direct": 13,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.38055555555555554,
+        "1": 0.45555555555555555,
+        "2": 0.30000000000000004,
+        "3": 0.3,
+        "4": 0.31666666666666665
+      },
+      "env_system_rho": {
+        "0": 0.5191836484754644,
+        "1": 0.6848484848484848,
+        "2": 0.0,
+        "3": 0.0,
+        "4": 0.0
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0
+      },
+      "env_flux": 0.3210439939285488,
+      "coupling_events": {
+        "events": 38,
+        "direct": 13,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 0,
+      "seed": 1,
+      "emergence_depth": 4,
+      "n_layers": 4,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 18,
+          "n_orgs": 1,
+          "autonomous_flux": 0.1678,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3264,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 11,
+            "direct": 0,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 50,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4873,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.313,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 23,
+            "direct": 1,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 55,
+          "n_orgs": 1,
+          "autonomous_flux": 0.5591,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3038,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 27,
+            "direct": 1,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.425,
+        "1": 0.4125,
+        "2": 0.6,
+        "3": 0.3333333333333333
+      },
+      "env_system_rho": {
+        "0": 0.4514494793132564,
+        "1": 0.4625068418171866,
+        "2": 0.0,
+        "3": 0.5515151515151515
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0
+      },
+      "env_flux": 0.3038162857388108,
+      "coupling_events": {
+        "events": 27,
+        "direct": 1,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 0,
+      "seed": 2,
+      "emergence_depth": 5,
+      "n_layers": 5,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 11,
+          "n_orgs": 6,
+          "autonomous_flux": 0.0091,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 15,
+          "sealed": true,
+          "seal_step": 14,
+          "n_orgs": 2,
+          "autonomous_flux": 0.1582,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3272,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 10,
+            "direct": 2,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 38,
+          "n_orgs": 1,
+          "autonomous_flux": 0.3728,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3087,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 18,
+            "direct": 4,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 5,
+          "sealed": true,
+          "seal_step": 59,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6229,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3053,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 27,
+            "direct": 5,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 66,
+          "n_orgs": 1,
+          "autonomous_flux": 0.5202,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3135,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 36,
+            "direct": 8,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.3503968253968253,
+        "1": 0.3471428571428571,
+        "2": 0.2976190476190476,
+        "3": 0.24285714285714285,
+        "4": 0.1976190476190476
+      },
+      "env_system_rho": {
+        "0": 0.496750425996592,
+        "1": 0.34453227931488806,
+        "2": 0.0,
+        "3": 0.0,
+        "4": 0.0
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0
+      },
+      "env_flux": 0.3135220324153525,
+      "coupling_events": {
+        "events": 36,
+        "direct": 8,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 0,
+      "seed": 3,
+      "emergence_depth": 4,
+      "n_layers": 4,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 14,
+          "n_orgs": 1,
+          "autonomous_flux": 0.2063,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3232,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 8,
+            "direct": 1,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 37,
+          "n_orgs": 1,
+          "autonomous_flux": 0.5046,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.2756,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 16,
+            "direct": 4,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 3,
+          "sealed": true,
+          "seal_step": 195,
+          "n_orgs": 1,
+          "autonomous_flux": 0.2615,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.2864,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 35,
+            "direct": 8,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.4753968253968253,
+        "1": 0.41111111111111115,
+        "2": 0.4222222222222222,
+        "3": 0.3333333333333333
+      },
+      "env_system_rho": {
+        "0": 0.555842485795641,
+        "1": 0.8821428571428571,
+        "2": 0.7857142857142857,
+        "3": 0.0
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0
+      },
+      "env_flux": 0.2864105774190347,
+      "coupling_events": {
+        "events": 35,
+        "direct": 8,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 0,
+      "seed": 4,
+      "emergence_depth": 5,
+      "n_layers": 5,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 14,
+          "n_orgs": 3,
+          "autonomous_flux": 0.1475,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3572,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 9,
+            "direct": 1,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 12,
+          "sealed": true,
+          "seal_step": 32,
+          "n_orgs": 1,
+          "autonomous_flux": 0.2138,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3346,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 25,
+            "direct": 4,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 7,
+          "sealed": true,
+          "seal_step": 58,
+          "n_orgs": 2,
+          "autonomous_flux": 0.5078,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3006,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 47,
+            "direct": 8,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 55,
+          "n_orgs": 1,
+          "autonomous_flux": 0.1273,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.2894,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 56,
+            "direct": 11,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.3333333333333333,
+        "1": 0.34375,
+        "2": 0.4375,
+        "3": 0.28125,
+        "4": 0.25
+      },
+      "env_system_rho": {
+        "0": 0.46717786257709937,
+        "1": 0.28971923598789273,
+        "2": 0.4666666666666667,
+        "3": 0.042857142857142816,
+        "4": 0.0
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0
+      },
+      "env_flux": 0.28935556344575564,
+      "coupling_events": {
+        "events": 56,
+        "direct": 11,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 0,
+      "seed": 5,
+      "emergence_depth": 4,
+      "n_layers": 4,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 5,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 16,
+          "sealed": true,
+          "seal_step": 14,
+          "n_orgs": 2,
+          "autonomous_flux": 0.2218,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3129,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 12,
+            "direct": 3,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 44,
+          "n_orgs": 1,
+          "autonomous_flux": 0.359,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3277,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 31,
+            "direct": 6,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 75,
+          "n_orgs": 1,
+          "autonomous_flux": 0.5422,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.307,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 43,
+            "direct": 11,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.4083333333333334,
+        "1": 0.44166666666666665,
+        "2": 0.36875,
+        "3": 0.28125
+      },
+      "env_system_rho": {
+        "0": 0.45424682269602057,
+        "1": 0.361247947454844,
+        "2": 0.9642857142857143,
+        "3": 1.0
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0
+      },
+      "env_flux": 0.30695505471687407,
+      "coupling_events": {
+        "events": 43,
+        "direct": 11,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 0,
+      "seed": 6,
+      "emergence_depth": 4,
+      "n_layers": 4,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 5,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 16,
+          "sealed": true,
+          "seal_step": 17,
+          "n_orgs": 1,
+          "autonomous_flux": 0.2342,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3072,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 7,
+            "direct": 1,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 45,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4735,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.283,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 19,
+            "direct": 2,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 3,
+          "sealed": true,
+          "seal_step": 130,
+          "n_orgs": 1,
+          "autonomous_flux": 0.5654,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.2878,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 32,
+            "direct": 6,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.43333333333333335,
+        "1": 0.29,
+        "2": 0.30666666666666664,
+        "3": 0.27777777777777773
+      },
+      "env_system_rho": {
+        "0": 0.4794141752485479,
+        "1": 0.8464285714285714,
+        "2": 0.9428571428571428,
+        "3": 0.0
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0
+      },
+      "env_flux": 0.28776866041523547,
+      "coupling_events": {
+        "events": 32,
+        "direct": 6,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 0,
+      "seed": 7,
+      "emergence_depth": 6,
+      "n_layers": 6,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 11,
+          "n_orgs": 6,
+          "autonomous_flux": 0.0091,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 15,
+          "sealed": true,
+          "seal_step": 16,
+          "n_orgs": 1,
+          "autonomous_flux": 0.1755,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3091,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 9,
+            "direct": 2,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 45,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4811,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.2943,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 19,
+            "direct": 2,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 55,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6273,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.307,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 27,
+            "direct": 3,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 90,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6481,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3071,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 42,
+            "direct": 5,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 5,
+          "N": 3,
+          "sealed": true,
+          "seal_step": 204,
+          "n_orgs": 1,
+          "autonomous_flux": 0.277,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.2964,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 63,
+            "direct": 12,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.36666666666666664,
+        "1": 0.3625,
+        "2": 0.2611111111111111,
+        "3": 0.27777777777777773,
+        "4": 0.2333333333333333,
+        "5": 0.41666666666666663
+      },
+      "env_system_rho": {
+        "0": 0.5691235068473977,
+        "1": 0.6428571428571428,
+        "2": 0.0,
+        "3": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0,
+        "5": 1.0
+      },
+      "env_flux": 0.2963617624876403,
+      "coupling_events": {
+        "events": 63,
+        "direct": 12,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 0,
+      "seed": 8,
+      "emergence_depth": 4,
+      "n_layers": 4,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 11,
+          "n_orgs": 6,
+          "autonomous_flux": 0.0091,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 12,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 2,
+          "autonomous_flux": 0.0,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3474,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 4,
+            "direct": 0,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 41,
+          "n_orgs": 1,
+          "autonomous_flux": 0.3211,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3096,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 15,
+            "direct": 1,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 5,
+          "sealed": true,
+          "seal_step": 70,
+          "n_orgs": 1,
+          "autonomous_flux": 0.5393,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.2805,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 31,
+            "direct": 3,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.5180555555555556,
+        "1": 0.365,
+        "2": 0.45,
+        "3": 0.33958333333333335
+      },
+      "env_system_rho": {
+        "0": 0.5001597055974707,
+        "1": 0.32895457033388065,
+        "2": 0.0,
+        "3": 0.5515151515151515
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0
+      },
+      "env_flux": 0.28050718169695726,
+      "coupling_events": {
+        "events": 31,
+        "direct": 3,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 0,
+      "seed": 9,
+      "emergence_depth": 5,
+      "n_layers": 5,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 4,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 11,
+          "sealed": true,
+          "seal_step": 14,
+          "n_orgs": 1,
+          "autonomous_flux": 0.231,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3087,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 7,
+            "direct": 2,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 43,
+          "n_orgs": 1,
+          "autonomous_flux": 0.5318,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.2957,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 15,
+            "direct": 3,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 5,
+          "sealed": true,
+          "seal_step": 60,
+          "n_orgs": 1,
+          "autonomous_flux": 0.5708,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.2884,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 23,
+            "direct": 4,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 4,
+          "N": 3,
+          "sealed": true,
+          "seal_step": 275,
+          "n_orgs": 1,
+          "autonomous_flux": 0.2103,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.291,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 50,
+            "direct": 10,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.3814814814814815,
+        "1": 0.3518518518518518,
+        "2": 0.35185185185185186,
+        "3": 0.2777777777777778,
+        "4": 0.38888888888888884
+      },
+      "env_system_rho": {
+        "0": 0.36117091464685047,
+        "1": 1.0,
+        "2": 0.1428571428571429,
+        "3": 0.0,
+        "4": 0.0
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0
+      },
+      "env_flux": 0.2909987423295378,
+      "coupling_events": {
+        "events": 50,
+        "direct": 10,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 0,
+      "seed": 10,
+      "emergence_depth": 5,
+      "n_layers": 5,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 15,
+          "n_orgs": 2,
+          "autonomous_flux": 0.1732,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3289,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 6,
+            "direct": 1,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 31,
+          "n_orgs": 1,
+          "autonomous_flux": 0.3852,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3282,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 16,
+            "direct": 2,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 45,
+          "n_orgs": 2,
+          "autonomous_flux": 0.4257,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.2978,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 32,
+            "direct": 7,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 1,
+          "autonomous_flux": 0.0,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.2956,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 33,
+            "direct": 7,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.3704761904761905,
+        "1": 0.3214285714285714,
+        "2": 0.3253968253968254,
+        "3": 0.5396825396825397,
+        "4": 0.3253968253968254
+      },
+      "env_system_rho": {
+        "0": 0.4347968852612816,
+        "1": 0.17898193760262726,
+        "2": 1.0,
+        "3": 0.35584415584415585,
+        "4": 1.0
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0
+      },
+      "env_flux": 0.29564811684788384,
+      "coupling_events": {
+        "events": 33,
+        "direct": 7,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 0,
+      "seed": 11,
+      "emergence_depth": 6,
+      "n_layers": 6,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 5,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 16,
+          "sealed": true,
+          "seal_step": 16,
+          "n_orgs": 2,
+          "autonomous_flux": 0.2182,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3314,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 10,
+            "direct": 0,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 36,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4286,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.333,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 21,
+            "direct": 3,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 45,
+          "n_orgs": 1,
+          "autonomous_flux": 0.5602,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3263,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 30,
+            "direct": 4,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 4,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 50,
+          "n_orgs": 1,
+          "autonomous_flux": 0.57,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3197,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 41,
+            "direct": 5,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 5,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 72,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6586,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3107,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 47,
+            "direct": 7,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.375,
+        "1": 0.4375,
+        "2": 0.3333333333333333,
+        "3": 0.2708333333333333,
+        "4": 0.3333333333333333,
+        "5": 0.38888888888888884
+      },
+      "env_system_rho": {
+        "0": 0.36323093830833764,
+        "1": 0.42309797482211275,
+        "2": 0.0,
+        "3": 1.0,
+        "4": 0.0,
+        "5": 0.6571428571428571
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0,
+        "5": 1.0
+      },
+      "env_flux": 0.31068262207623504,
+      "coupling_events": {
+        "events": 47,
+        "direct": 7,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 0,
+      "seed": 12,
+      "emergence_depth": 5,
+      "n_layers": 5,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 15,
+          "n_orgs": 2,
+          "autonomous_flux": 0.1753,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3188,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 15,
+            "direct": 4,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 34,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4737,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3113,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 21,
+            "direct": 6,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 54,
+          "n_orgs": 1,
+          "autonomous_flux": 0.597,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3117,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 33,
+            "direct": 9,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 4,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 48,
+          "n_orgs": 1,
+          "autonomous_flux": 0.5115,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3114,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 44,
+            "direct": 9,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.4533333333333333,
+        "1": 0.4222222222222223,
+        "2": 0.27777777777777773,
+        "3": 0.28888888888888886,
+        "4": 0.3
+      },
+      "env_system_rho": {
+        "0": 0.49645492439650607,
+        "1": 0.3462895313641582,
+        "2": 0.0,
+        "3": 0.0,
+        "4": 0.9636363636363636
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0
+      },
+      "env_flux": 0.3114339097116453,
+      "coupling_events": {
+        "events": 44,
+        "direct": 9,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 0,
+      "seed": 13,
+      "emergence_depth": 5,
+      "n_layers": 5,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 15,
+          "n_orgs": 2,
+          "autonomous_flux": 0.1382,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3048,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 8,
+            "direct": 1,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 9,
+          "sealed": true,
+          "seal_step": 17,
+          "n_orgs": 1,
+          "autonomous_flux": 0.3358,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.2913,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 15,
+            "direct": 1,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 7,
+          "sealed": true,
+          "seal_step": 32,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4292,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.2659,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 25,
+            "direct": 5,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 4,
+          "N": 5,
+          "sealed": true,
+          "seal_step": 50,
+          "n_orgs": 1,
+          "autonomous_flux": 0.46,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.2768,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 32,
+            "direct": 6,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.35428571428571426,
+        "1": 0.3942857142857143,
+        "2": 0.24642857142857139,
+        "3": 0.28095238095238095,
+        "4": 0.24642857142857144
+      },
+      "env_system_rho": {
+        "0": 0.4861009417085471,
+        "1": 0.35814633128065965,
+        "2": 1.0,
+        "3": 0.0,
+        "4": 1.0
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0
+      },
+      "env_flux": 0.27677350003812445,
+      "coupling_events": {
+        "events": 32,
+        "direct": 6,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 0,
+      "seed": 14,
+      "emergence_depth": 5,
+      "n_layers": 5,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 5,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 16,
+          "sealed": true,
+          "seal_step": 17,
+          "n_orgs": 2,
+          "autonomous_flux": 0.2305,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3105,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 14,
+            "direct": 4,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 35,
+          "n_orgs": 1,
+          "autonomous_flux": 0.3776,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.309,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 24,
+            "direct": 7,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 53,
+          "n_orgs": 1,
+          "autonomous_flux": 0.5764,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.299,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 34,
+            "direct": 8,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 71,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6843,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3031,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 46,
+            "direct": 11,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.6277777777777779,
+        "1": 0.6770833333333333,
+        "2": 0.75,
+        "3": 0.20833333333333331,
+        "4": 0.48333333333333334
+      },
+      "env_system_rho": {
+        "0": 0.524489379415795,
+        "1": 0.09633278598795836,
+        "2": 0.4285714285714286,
+        "3": 0.0,
+        "4": 0.8285714285714285
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0
+      },
+      "env_flux": 0.3030944967407112,
+      "coupling_events": {
+        "events": 46,
+        "direct": 11,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 0,
+      "seed": 15,
+      "emergence_depth": 6,
+      "n_layers": 6,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 5,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 15,
+          "sealed": true,
+          "seal_step": 17,
+          "n_orgs": 2,
+          "autonomous_flux": 0.2194,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3408,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 8,
+            "direct": 0,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 38,
+          "n_orgs": 1,
+          "autonomous_flux": 0.3868,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.3026,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 17,
+            "direct": 5,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 7,
+          "sealed": true,
+          "seal_step": 51,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4748,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.2996,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 25,
+            "direct": 6,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 4,
+          "N": 5,
+          "sealed": true,
+          "seal_step": 50,
+          "n_orgs": 1,
+          "autonomous_flux": 0.499,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.2975,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 39,
+            "direct": 10,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 5,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 67,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7139,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 0,
+          "env_flux": 0.2935,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 53,
+            "direct": 15,
+            "indirect": 0
+          }
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.4444444444444444,
+        "1": 0.3333333333333333,
+        "2": 0.375,
+        "3": 0.38888888888888884,
+        "4": 0.375,
+        "5": 0.375
+      },
+      "env_system_rho": {
+        "0": 0.5306141550867594,
+        "1": 0.3201970443349754,
+        "2": 0.0,
+        "3": 1.0,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0,
+        "5": 1.0
+      },
+      "env_flux": 0.2934880866956836,
+      "coupling_events": {
+        "events": 53,
+        "direct": 15,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 1,
+      "seed": 0,
+      "emergence_depth": 6,
+      "n_layers": 6,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 21,
+          "n_orgs": 1,
+          "autonomous_flux": 0.2031,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0865,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 11,
+            "direct": 3,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 33,
+          "n_orgs": 1,
+          "autonomous_flux": 0.5892,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0469,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 19,
+            "direct": 5,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 7,
+          "sealed": true,
+          "seal_step": 58,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6164,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0315,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 28,
+            "direct": 8,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 100,
+          "n_orgs": 1,
+          "autonomous_flux": 0.5475,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.02,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 39,
+            "direct": 12,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 5,
+          "N": 3,
+          "sealed": true,
+          "seal_step": 295,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6757,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0084,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 49,
+            "direct": 21,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.38055555555555554,
+        "1": 0.39166666666666666,
+        "2": 0.24444444444444446,
+        "3": 0.39999999999999997,
+        "4": 0.2611111111111111,
+        "5": 0.3444444444444444
+      },
+      "env_system_rho": {
+        "0": 0.5191836484754644,
+        "1": 0.7892857142857143,
+        "2": 0.0,
+        "3": 0.9428571428571428,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0,
+        "5": 1.0
+      },
+      "env_flux": 0.008372752603521836,
+      "coupling_events": {
+        "events": 49,
+        "direct": 21,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 1,
+      "seed": 1,
+      "emergence_depth": 4,
+      "n_layers": 4,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 21,
+          "n_orgs": 1,
+          "autonomous_flux": 0.1875,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0678,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 7,
+            "direct": 1,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 61,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6582,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.029,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 19,
+            "direct": 2,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 110,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7141,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0124,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 20,
+            "direct": 2,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.425,
+        "1": 0.30000000000000004,
+        "2": 0.4,
+        "3": 0.3333333333333333
+      },
+      "env_system_rho": {
+        "0": 0.4514494793132564,
+        "1": 0.0,
+        "2": 1.0,
+        "3": 0.5515151515151515
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0
+      },
+      "env_flux": 0.012367724867724868,
+      "coupling_events": {
+        "events": 20,
+        "direct": 2,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 1,
+      "seed": 2,
+      "emergence_depth": 5,
+      "n_layers": 5,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 11,
+          "n_orgs": 6,
+          "autonomous_flux": 0.0091,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 15,
+          "sealed": true,
+          "seal_step": 17,
+          "n_orgs": 2,
+          "autonomous_flux": 0.1468,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0989,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 8,
+            "direct": 2,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 38,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4241,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0561,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 17,
+            "direct": 4,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 5,
+          "sealed": true,
+          "seal_step": 49,
+          "n_orgs": 1,
+          "autonomous_flux": 0.3888,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0461,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 28,
+            "direct": 7,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 86,
+          "n_orgs": 1,
+          "autonomous_flux": 0.5155,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0402,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 50,
+            "direct": 8,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.3503968253968253,
+        "1": 0.28047619047619043,
+        "2": 0.369047619047619,
+        "3": 0.1976190476190476,
+        "4": 0.1976190476190476
+      },
+      "env_system_rho": {
+        "0": 0.496750425996592,
+        "1": 0.30990990990990996,
+        "2": 0.4424242424242424,
+        "3": 0.0,
+        "4": 0.0
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0
+      },
+      "env_flux": 0.04016499582289056,
+      "coupling_events": {
+        "events": 50,
+        "direct": 8,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 1,
+      "seed": 3,
+      "emergence_depth": 4,
+      "n_layers": 4,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 26,
+          "n_orgs": 2,
+          "autonomous_flux": 0.1684,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0055,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 12,
+            "direct": 1,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 39,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4028,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0078,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 23,
+            "direct": 5,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 197,
+          "n_orgs": 1,
+          "autonomous_flux": 0.775,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0019,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 25,
+            "direct": 5,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.4753968253968253,
+        "1": 0.475,
+        "2": 0.43333333333333335,
+        "3": 0.2333333333333333
+      },
+      "env_system_rho": {
+        "0": 0.555842485795641,
+        "1": 0.05714285714285716,
+        "2": 0.625,
+        "3": 0.0
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0
+      },
+      "env_flux": 0.0019447473645946927,
+      "coupling_events": {
+        "events": 25,
+        "direct": 5,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 1,
+      "seed": 4,
+      "emergence_depth": 6,
+      "n_layers": 6,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 19,
+          "n_orgs": 3,
+          "autonomous_flux": 0.1626,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0958,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 13,
+            "direct": 1,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 12,
+          "sealed": true,
+          "seal_step": 27,
+          "n_orgs": 2,
+          "autonomous_flux": 0.3299,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0666,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 25,
+            "direct": 2,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 34,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4179,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0468,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 36,
+            "direct": 2,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 4,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 75,
+          "n_orgs": 1,
+          "autonomous_flux": 0.582,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0318,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 50,
+            "direct": 5,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 5,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 74,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6628,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0241,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 62,
+            "direct": 8,
+            "indirect": 0
+          }
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.3333333333333333,
+        "1": 0.34375,
+        "2": 0.3194444444444444,
+        "3": 0.27777777777777773,
+        "4": 0.23611111111111108,
+        "5": 0.23611111111111108
+      },
+      "env_system_rho": {
+        "0": 0.46717786257709937,
+        "1": 0.28971923598789273,
+        "2": 0.4285714285714286,
+        "3": 0.4285714285714286,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0,
+        "5": 1.0
+      },
+      "env_flux": 0.024071816102383795,
+      "coupling_events": {
+        "events": 62,
+        "direct": 8,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 1,
+      "seed": 5,
+      "emergence_depth": 5,
+      "n_layers": 5,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 5,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 16,
+          "sealed": true,
+          "seal_step": 22,
+          "n_orgs": 2,
+          "autonomous_flux": 0.226,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.1125,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 14,
+            "direct": 3,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 48,
+          "n_orgs": 2,
+          "autonomous_flux": 0.5223,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.057,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 36,
+            "direct": 6,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 53,
+          "n_orgs": 1,
+          "autonomous_flux": 0.3818,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0476,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 52,
+            "direct": 9,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 91,
+          "n_orgs": 1,
+          "autonomous_flux": 0.5531,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0338,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 67,
+            "direct": 13,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.4083333333333334,
+        "1": 0.44166666666666665,
+        "2": 0.26875,
+        "3": 0.3833333333333333,
+        "4": 0.2916666666666667
+      },
+      "env_system_rho": {
+        "0": 0.45424682269602057,
+        "1": 0.361247947454844,
+        "2": 0.6484848484848484,
+        "3": 1.0,
+        "4": 0.0
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0
+      },
+      "env_flux": 0.033757973594422196,
+      "coupling_events": {
+        "events": 67,
+        "direct": 13,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 1,
+      "seed": 6,
+      "emergence_depth": 4,
+      "n_layers": 5,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 5,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 16,
+          "sealed": true,
+          "seal_step": 19,
+          "n_orgs": 1,
+          "autonomous_flux": 0.2416,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0621,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 11,
+            "direct": 1,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 78,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7682,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0287,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 21,
+            "direct": 1,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 5,
+          "sealed": true,
+          "seal_step": 111,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6892,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0134,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 25,
+            "direct": 1,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 4,
+          "N": 3,
+          "sealed": false,
+          "seal_step": null,
+          "n_orgs": 0,
+          "autonomous_flux": 1.0,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0046,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 25,
+            "direct": 1,
+            "indirect": 0
+          }
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.43333333333333335,
+        "1": 0.29,
+        "2": 0.2583333333333333,
+        "3": 0.3333333333333333
+      },
+      "env_system_rho": {
+        "0": 0.4794141752485479,
+        "1": 0.8464285714285714,
+        "2": 1.0,
+        "3": 0.0
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 0.0
+      },
+      "env_flux": 0.00457328216374269,
+      "coupling_events": {
+        "events": 25,
+        "direct": 1,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 1,
+      "seed": 7,
+      "emergence_depth": 3,
+      "n_layers": 3,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 11,
+          "n_orgs": 6,
+          "autonomous_flux": 0.0091,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 15,
+          "sealed": true,
+          "seal_step": 16,
+          "n_orgs": 1,
+          "autonomous_flux": 0.1725,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.083,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 12,
+            "direct": 2,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 41,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4754,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0539,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 24,
+            "direct": 2,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.36666666666666664,
+        "1": 0.3625,
+        "2": 0.32999999999999996
+      },
+      "env_system_rho": {
+        "0": 0.5691235068473977,
+        "1": 0.6428571428571428,
+        "2": 0.8480519480519481
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0
+      },
+      "env_flux": 0.05389167362851574,
+      "coupling_events": {
+        "events": 24,
+        "direct": 2,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 1,
+      "seed": 8,
+      "emergence_depth": 3,
+      "n_layers": 3,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 11,
+          "n_orgs": 6,
+          "autonomous_flux": 0.0091,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 12,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 2,
+          "autonomous_flux": 0.0,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0667,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 4,
+            "direct": 0,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 67,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4527,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0103,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 7,
+            "direct": 0,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.5180555555555556,
+        "1": 0.365,
+        "2": 0.38958333333333334
+      },
+      "env_system_rho": {
+        "0": 0.5001597055974707,
+        "1": 0.32895457033388065,
+        "2": 0.55
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0
+      },
+      "env_flux": 0.010281385281385282,
+      "coupling_events": {
+        "events": 7,
+        "direct": 0,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 1,
+      "seed": 9,
+      "emergence_depth": 5,
+      "n_layers": 5,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 4,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 11,
+          "sealed": true,
+          "seal_step": 13,
+          "n_orgs": 1,
+          "autonomous_flux": 0.2308,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0325,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 8,
+            "direct": 2,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 64,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6987,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0055,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 13,
+            "direct": 2,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 69,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6167,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0029,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 16,
+            "direct": 2,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 101,
+          "n_orgs": 1,
+          "autonomous_flux": 0.514,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0017,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 21,
+            "direct": 4,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.3814814814814815,
+        "1": 0.3518518518518518,
+        "2": 0.25925925925925924,
+        "3": 0.25925925925925924,
+        "4": 0.25925925925925924
+      },
+      "env_system_rho": {
+        "0": 0.36117091464685047,
+        "1": 1.0,
+        "2": 0.0,
+        "3": 0.0,
+        "4": 0.0
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0
+      },
+      "env_flux": 0.0017094017094017092,
+      "coupling_events": {
+        "events": 21,
+        "direct": 4,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 1,
+      "seed": 10,
+      "emergence_depth": 5,
+      "n_layers": 6,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 18,
+          "n_orgs": 2,
+          "autonomous_flux": 0.1804,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0272,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 10,
+            "direct": 2,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 35,
+          "n_orgs": 1,
+          "autonomous_flux": 0.3913,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0352,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 21,
+            "direct": 2,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 32,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6001,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0337,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 30,
+            "direct": 4,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 4,
+          "N": 5,
+          "sealed": true,
+          "seal_step": 70,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4464,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0298,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 53,
+            "direct": 7,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 5,
+          "N": 3,
+          "sealed": false,
+          "seal_step": null,
+          "n_orgs": 0,
+          "autonomous_flux": 0.095,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0236,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 130,
+            "direct": 22,
+            "indirect": 0
+          }
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.3704761904761905,
+        "1": 0.3214285714285714,
+        "2": 0.3253968253968254,
+        "3": 0.5714285714285714,
+        "4": 0.40476190476190477
+      },
+      "env_system_rho": {
+        "0": 0.4347968852612816,
+        "1": 0.17898193760262726,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 0.0
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0,
+        "5": 0.0
+      },
+      "env_flux": 0.023627198627198625,
+      "coupling_events": {
+        "events": 130,
+        "direct": 22,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 1,
+      "seed": 11,
+      "emergence_depth": 4,
+      "n_layers": 4,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 5,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 16,
+          "sealed": true,
+          "seal_step": 20,
+          "n_orgs": 2,
+          "autonomous_flux": 0.2301,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.1361,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 12,
+            "direct": 0,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 39,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4174,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0685,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 22,
+            "direct": 1,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 111,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7311,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0238,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 23,
+            "direct": 1,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.375,
+        "1": 0.4375,
+        "2": 0.35416666666666663,
+        "3": 0.32291666666666663
+      },
+      "env_system_rho": {
+        "0": 0.36323093830833764,
+        "1": 0.42309797482211275,
+        "2": -0.37142857142857144,
+        "3": 0.9878787878787879
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0
+      },
+      "env_flux": 0.023784695696460405,
+      "coupling_events": {
+        "events": 23,
+        "direct": 1,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 1,
+      "seed": 12,
+      "emergence_depth": 5,
+      "n_layers": 6,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 17,
+          "n_orgs": 2,
+          "autonomous_flux": 0.1808,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0853,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 13,
+            "direct": 2,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 44,
+          "n_orgs": 1,
+          "autonomous_flux": 0.3647,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.066,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 23,
+            "direct": 6,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 69,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6464,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0366,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 31,
+            "direct": 7,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 4,
+          "N": 5,
+          "sealed": true,
+          "seal_step": 109,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6881,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0199,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 32,
+            "direct": 8,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 5,
+          "N": 3,
+          "sealed": false,
+          "seal_step": null,
+          "n_orgs": 0,
+          "autonomous_flux": 0.91,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0075,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 37,
+            "direct": 13,
+            "indirect": 0
+          }
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.4533333333333333,
+        "1": 0.39444444444444443,
+        "2": 0.3,
+        "3": 0.45,
+        "4": 0.41666666666666663
+      },
+      "env_system_rho": {
+        "0": 0.49645492439650607,
+        "1": 0.39792008757526,
+        "2": 1.0,
+        "3": 0.0,
+        "4": 0.0
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0,
+        "5": 0.0
+      },
+      "env_flux": 0.007455225178229874,
+      "coupling_events": {
+        "events": 37,
+        "direct": 13,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 1,
+      "seed": 13,
+      "emergence_depth": 4,
+      "n_layers": 4,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 18,
+          "n_orgs": 2,
+          "autonomous_flux": 0.1562,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.118,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 6,
+            "direct": 0,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 42,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4546,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0616,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 21,
+            "direct": 2,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 66,
+          "n_orgs": 1,
+          "autonomous_flux": 0.601,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0383,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 34,
+            "direct": 5,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.35428571428571426,
+        "1": 0.3678571428571429,
+        "2": 0.4047619047619047,
+        "3": 0.1619047619047619
+      },
+      "env_system_rho": {
+        "0": 0.4861009417085471,
+        "1": 0.39920948616600793,
+        "2": 0.6571428571428571,
+        "3": 0.0
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0
+      },
+      "env_flux": 0.038252708490803734,
+      "coupling_events": {
+        "events": 34,
+        "direct": 5,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 1,
+      "seed": 14,
+      "emergence_depth": 5,
+      "n_layers": 5,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 5,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 16,
+          "sealed": true,
+          "seal_step": 22,
+          "n_orgs": 2,
+          "autonomous_flux": 0.2198,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0527,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 15,
+            "direct": 2,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 28,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4134,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0261,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 21,
+            "direct": 4,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 73,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0147,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 25,
+            "direct": 5,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 122,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6612,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0108,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 37,
+            "direct": 9,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.6277777777777779,
+        "1": 0.6770833333333333,
+        "2": 0.75,
+        "3": 0.20833333333333331,
+        "4": 0.625
+      },
+      "env_system_rho": {
+        "0": 0.524489379415795,
+        "1": 0.09633278598795836,
+        "2": 0.8285714285714285,
+        "3": 0.0,
+        "4": 0.0
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0
+      },
+      "env_flux": 0.010761256883705864,
+      "coupling_events": {
+        "events": 37,
+        "direct": 9,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 1,
+      "seed": 15,
+      "emergence_depth": 4,
+      "n_layers": 4,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 5,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 15,
+          "sealed": true,
+          "seal_step": 21,
+          "n_orgs": 2,
+          "autonomous_flux": 0.2205,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.121,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 7,
+            "direct": 0,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 61,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4285,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0459,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 19,
+            "direct": 2,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 161,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6894,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 1,
+          "env_flux": 0.0248,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 38,
+            "direct": 4,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.4444444444444444,
+        "1": 0.3333333333333333,
+        "2": 0.3958333333333333,
+        "3": 0.375
+      },
+      "env_system_rho": {
+        "0": 0.5306141550867594,
+        "1": 0.3201970443349754,
+        "2": 0.5948051948051948,
+        "3": 0.0
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0
+      },
+      "env_flux": 0.024822000130642112,
+      "coupling_events": {
+        "events": 38,
+        "direct": 4,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 2,
+      "seed": 0,
+      "emergence_depth": 6,
+      "n_layers": 6,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 20,
+          "n_orgs": 1,
+          "autonomous_flux": 0.1952,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.2137,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 10,
+            "direct": 3,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 37,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4875,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.187,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 22,
+            "direct": 6,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 62,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6659,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1891,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 32,
+            "direct": 9,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 4,
+          "N": 5,
+          "sealed": true,
+          "seal_step": 68,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6199,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1839,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 49,
+            "direct": 12,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 5,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 68,
+          "n_orgs": 1,
+          "autonomous_flux": 0.5061,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1857,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 57,
+            "direct": 15,
+            "indirect": 0
+          }
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.38055555555555554,
+        "1": 0.39166666666666666,
+        "2": 0.3111111111111111,
+        "3": 0.2611111111111111,
+        "4": 0.3666666666666667,
+        "5": 0.2611111111111111
+      },
+      "env_system_rho": {
+        "0": 0.5191836484754644,
+        "1": 0.7892857142857143,
+        "2": 0.8285714285714285,
+        "3": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0,
+        "5": 1.0
+      },
+      "env_flux": 0.185685284214696,
+      "coupling_events": {
+        "events": 57,
+        "direct": 15,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 2,
+      "seed": 1,
+      "emergence_depth": 5,
+      "n_layers": 5,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 22,
+          "n_orgs": 1,
+          "autonomous_flux": 0.2052,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.2015,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 7,
+            "direct": 0,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 48,
+          "n_orgs": 1,
+          "autonomous_flux": 0.5808,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1899,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 14,
+            "direct": 1,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 56,
+          "n_orgs": 1,
+          "autonomous_flux": 0.5848,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1883,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 22,
+            "direct": 2,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 57,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7982,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.188,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 33,
+            "direct": 3,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.425,
+        "1": 0.4,
+        "2": 0.6,
+        "3": 0.30000000000000004,
+        "4": 0.26666666666666666
+      },
+      "env_system_rho": {
+        "0": 0.4514494793132564,
+        "1": 0.5428571428571429,
+        "2": 0.0,
+        "3": 0.0,
+        "4": 0.6571428571428571
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0
+      },
+      "env_flux": 0.1880085003035823,
+      "coupling_events": {
+        "events": 33,
+        "direct": 3,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 2,
+      "seed": 2,
+      "emergence_depth": 6,
+      "n_layers": 6,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 11,
+          "n_orgs": 6,
+          "autonomous_flux": 0.0091,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 15,
+          "sealed": true,
+          "seal_step": 15,
+          "n_orgs": 2,
+          "autonomous_flux": 0.1378,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.177,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 11,
+            "direct": 2,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 9,
+          "sealed": true,
+          "seal_step": 38,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4491,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1805,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 19,
+            "direct": 3,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 7,
+          "sealed": true,
+          "seal_step": 42,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4996,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1879,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 27,
+            "direct": 4,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 55,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6909,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1941,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 32,
+            "direct": 6,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 5,
+          "N": 3,
+          "sealed": true,
+          "seal_step": 127,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4567,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.191,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 44,
+            "direct": 8,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.3503968253968253,
+        "1": 0.3471428571428571,
+        "2": 0.1976190476190476,
+        "3": 0.2648809523809524,
+        "4": 0.1976190476190476,
+        "5": 0.1976190476190476
+      },
+      "env_system_rho": {
+        "0": 0.496750425996592,
+        "1": 0.34453227931488806,
+        "2": 0.0,
+        "3": 1.0,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0,
+        "5": 1.0
+      },
+      "env_flux": 0.19100481347773768,
+      "coupling_events": {
+        "events": 44,
+        "direct": 8,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 2,
+      "seed": 3,
+      "emergence_depth": 4,
+      "n_layers": 5,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 19,
+          "n_orgs": 1,
+          "autonomous_flux": 0.2099,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1915,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 7,
+            "direct": 1,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 59,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7878,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.187,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 14,
+            "direct": 4,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 5,
+          "sealed": true,
+          "seal_step": 111,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7005,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1891,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 21,
+            "direct": 5,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 4,
+          "N": 3,
+          "sealed": false,
+          "seal_step": null,
+          "n_orgs": 0,
+          "autonomous_flux": 0.4475,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.196,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 43,
+            "direct": 8,
+            "indirect": 0
+          }
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.4753968253968253,
+        "1": 0.3,
+        "2": 0.4666666666666667,
+        "3": 0.2333333333333333
+      },
+      "env_system_rho": {
+        "0": 0.555842485795641,
+        "1": 0.8285714285714285,
+        "2": 1.0,
+        "3": 0.0
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 0.0
+      },
+      "env_flux": 0.1959913223920015,
+      "coupling_events": {
+        "events": 43,
+        "direct": 8,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 2,
+      "seed": 4,
+      "emergence_depth": 6,
+      "n_layers": 6,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 16,
+          "n_orgs": 3,
+          "autonomous_flux": 0.17,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.2198,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 10,
+            "direct": 1,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 12,
+          "sealed": true,
+          "seal_step": 38,
+          "n_orgs": 1,
+          "autonomous_flux": 0.2593,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1963,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 18,
+            "direct": 2,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 60,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6665,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1958,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 35,
+            "direct": 7,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 4,
+          "N": 5,
+          "sealed": true,
+          "seal_step": 75,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6567,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1931,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 44,
+            "direct": 10,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 5,
+          "N": 3,
+          "sealed": true,
+          "seal_step": 151,
+          "n_orgs": 1,
+          "autonomous_flux": 0.394,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1958,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 55,
+            "direct": 13,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.3333333333333333,
+        "1": 0.34375,
+        "2": 0.20833333333333331,
+        "3": 0.2222222222222222,
+        "4": 0.24999999999999997,
+        "5": 0.29166666666666663
+      },
+      "env_system_rho": {
+        "0": 0.46717786257709937,
+        "1": 0.28971923598789273,
+        "2": 0.0,
+        "3": 1.0,
+        "4": 0.4285714285714286,
+        "5": 0.0
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0,
+        "5": 1.0
+      },
+      "env_flux": 0.19580065359477128,
+      "coupling_events": {
+        "events": 55,
+        "direct": 13,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 2,
+      "seed": 5,
+      "emergence_depth": 5,
+      "n_layers": 5,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 5,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 16,
+          "sealed": true,
+          "seal_step": 22,
+          "n_orgs": 2,
+          "autonomous_flux": 0.2363,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.2029,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 11,
+            "direct": 1,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 52,
+          "n_orgs": 1,
+          "autonomous_flux": 0.3737,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1868,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 16,
+            "direct": 3,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 90,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7339,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1185,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 27,
+            "direct": 6,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 96,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6076,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1459,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 44,
+            "direct": 10,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.4083333333333334,
+        "1": 0.44166666666666665,
+        "2": 0.39375,
+        "3": 0.4583333333333333,
+        "4": 0.2916666666666667
+      },
+      "env_system_rho": {
+        "0": 0.45424682269602057,
+        "1": 0.361247947454844,
+        "2": 1.0,
+        "3": 0.0,
+        "4": 0.0
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0
+      },
+      "env_flux": 0.14594017094017092,
+      "coupling_events": {
+        "events": 44,
+        "direct": 10,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 2,
+      "seed": 6,
+      "emergence_depth": 3,
+      "n_layers": 3,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 5,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 16,
+          "sealed": true,
+          "seal_step": 21,
+          "n_orgs": 1,
+          "autonomous_flux": 0.2538,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1806,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 6,
+            "direct": 1,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 48,
+          "n_orgs": 1,
+          "autonomous_flux": 0.5043,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.188,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 20,
+            "direct": 2,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.43333333333333335,
+        "1": 0.3333333333333333,
+        "2": 0.33999999999999997
+      },
+      "env_system_rho": {
+        "0": 0.4794141752485479,
+        "1": 0.8285714285714285,
+        "2": 0.5727272727272728
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0
+      },
+      "env_flux": 0.18800322061191627,
+      "coupling_events": {
+        "events": 20,
+        "direct": 2,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 2,
+      "seed": 7,
+      "emergence_depth": 3,
+      "n_layers": 4,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 11,
+          "n_orgs": 6,
+          "autonomous_flux": 0.0091,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 15,
+          "sealed": true,
+          "seal_step": 18,
+          "n_orgs": 1,
+          "autonomous_flux": 0.1648,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1827,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 11,
+            "direct": 2,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 55,
+          "n_orgs": 1,
+          "autonomous_flux": 0.5393,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1885,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 21,
+            "direct": 2,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 3,
+          "sealed": false,
+          "seal_step": null,
+          "n_orgs": 0,
+          "autonomous_flux": 0.8425,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1902,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 38,
+            "direct": 3,
+            "indirect": 0
+          }
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.36666666666666664,
+        "1": 0.3625,
+        "2": 0.32916666666666666
+      },
+      "env_system_rho": {
+        "0": 0.5691235068473977,
+        "1": 0.6428571428571428,
+        "2": 0.575
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 0.0
+      },
+      "env_flux": 0.1902331987955667,
+      "coupling_events": {
+        "events": 38,
+        "direct": 3,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 2,
+      "seed": 8,
+      "emergence_depth": 4,
+      "n_layers": 5,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 11,
+          "n_orgs": 6,
+          "autonomous_flux": 0.0091,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 12,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 2,
+          "autonomous_flux": 0.0,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.2456,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 3,
+            "direct": 0,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 39,
+          "n_orgs": 1,
+          "autonomous_flux": 0.442,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1984,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 7,
+            "direct": 1,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 64,
+          "n_orgs": 1,
+          "autonomous_flux": 0.5867,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1949,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 13,
+            "direct": 1,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 4,
+          "N": 3,
+          "sealed": false,
+          "seal_step": null,
+          "n_orgs": 0,
+          "autonomous_flux": 0.31,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.0849,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 55,
+            "direct": 6,
+            "indirect": 0
+          }
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.5180555555555556,
+        "1": 0.365,
+        "2": 0.29166666666666663,
+        "3": 0.28611111111111115
+      },
+      "env_system_rho": {
+        "0": 0.5001597055974707,
+        "1": 0.32895457033388065,
+        "2": 0.0,
+        "3": 0.9428571428571428
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 0.0
+      },
+      "env_flux": 0.08487112843837992,
+      "coupling_events": {
+        "events": 55,
+        "direct": 6,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 2,
+      "seed": 9,
+      "emergence_depth": 4,
+      "n_layers": 4,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 4,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 11,
+          "sealed": true,
+          "seal_step": 22,
+          "n_orgs": 1,
+          "autonomous_flux": 0.2621,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.2068,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 7,
+            "direct": 2,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 7,
+          "sealed": true,
+          "seal_step": 49,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6024,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1918,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 14,
+            "direct": 3,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 107,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7321,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1938,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 22,
+            "direct": 4,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.3814814814814815,
+        "1": 0.3518518518518518,
+        "2": 0.35185185185185186,
+        "3": 0.25925925925925924
+      },
+      "env_system_rho": {
+        "0": 0.36117091464685047,
+        "1": 1.0,
+        "2": 0.8285714285714285,
+        "3": 0.0
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0
+      },
+      "env_flux": 0.19378901373283403,
+      "coupling_events": {
+        "events": 22,
+        "direct": 4,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 2,
+      "seed": 10,
+      "emergence_depth": 6,
+      "n_layers": 6,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 15,
+          "n_orgs": 2,
+          "autonomous_flux": 0.2029,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1737,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 10,
+            "direct": 1,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 37,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4104,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1859,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 21,
+            "direct": 1,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 79,
+          "n_orgs": 2,
+          "autonomous_flux": 0.5845,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.2009,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 26,
+            "direct": 4,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 4,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 51,
+          "n_orgs": 1,
+          "autonomous_flux": 0.3529,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.2001,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 30,
+            "direct": 5,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 5,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 38,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6776,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1945,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 35,
+            "direct": 6,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.3704761904761905,
+        "1": 0.3214285714285714,
+        "2": 0.3253968253968254,
+        "3": 0.4107142857142857,
+        "4": 0.3273809523809524,
+        "5": 0.3253968253968254
+      },
+      "env_system_rho": {
+        "0": 0.4347968852612816,
+        "1": 0.17898193760262726,
+        "2": 1.0,
+        "3": 0.9357142857142857,
+        "4": 0.8181818181818181,
+        "5": 1.0
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0,
+        "5": 1.0
+      },
+      "env_flux": 0.19452020202020207,
+      "coupling_events": {
+        "events": 35,
+        "direct": 6,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 2,
+      "seed": 11,
+      "emergence_depth": 4,
+      "n_layers": 5,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 5,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 16,
+          "sealed": true,
+          "seal_step": 21,
+          "n_orgs": 2,
+          "autonomous_flux": 0.2241,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1921,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 13,
+            "direct": 0,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 44,
+          "n_orgs": 1,
+          "autonomous_flux": 0.3557,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1929,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 22,
+            "direct": 1,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 72,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6993,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1879,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 29,
+            "direct": 3,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 4,
+          "N": 3,
+          "sealed": false,
+          "seal_step": null,
+          "n_orgs": 0,
+          "autonomous_flux": 1.0,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.0905,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 29,
+            "direct": 3,
+            "indirect": 0
+          }
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.375,
+        "1": 0.4375,
+        "2": 0.25,
+        "3": 0.32291666666666663
+      },
+      "env_system_rho": {
+        "0": 0.36323093830833764,
+        "1": 0.42309797482211275,
+        "2": 1.0,
+        "3": 0.7333333333333334
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 0.0
+      },
+      "env_flux": 0.0905493482309125,
+      "coupling_events": {
+        "events": 29,
+        "direct": 3,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 2,
+      "seed": 12,
+      "emergence_depth": 6,
+      "n_layers": 6,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 19,
+          "n_orgs": 2,
+          "autonomous_flux": 0.1641,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.2256,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 13,
+            "direct": 2,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 50,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4951,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.197,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 21,
+            "direct": 5,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 62,
+          "n_orgs": 1,
+          "autonomous_flux": 0.7468,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.194,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 28,
+            "direct": 7,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 4,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 84,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6617,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1975,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 39,
+            "direct": 9,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 5,
+          "N": 3,
+          "sealed": true,
+          "seal_step": 251,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6467,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1973,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 48,
+            "direct": 12,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.4533333333333333,
+        "1": 0.4222222222222223,
+        "2": 0.3333333333333333,
+        "3": 0.17777777777777778,
+        "4": 0.28888888888888886,
+        "5": 0.28888888888888886
+      },
+      "env_system_rho": {
+        "0": 0.49645492439650607,
+        "1": 0.3462895313641582,
+        "2": 0.8285714285714285,
+        "3": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0,
+        "5": 1.0
+      },
+      "env_flux": 0.19732393262436185,
+      "coupling_events": {
+        "events": 48,
+        "direct": 12,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 2,
+      "seed": 13,
+      "emergence_depth": 4,
+      "n_layers": 5,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 6,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 18,
+          "sealed": true,
+          "seal_step": 19,
+          "n_orgs": 2,
+          "autonomous_flux": 0.1728,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.2069,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 6,
+            "direct": 0,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 30,
+          "n_orgs": 1,
+          "autonomous_flux": 0.3873,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1997,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 19,
+            "direct": 2,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 8,
+          "sealed": true,
+          "seal_step": 59,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6663,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1799,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 31,
+            "direct": 7,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 4,
+          "N": 3,
+          "sealed": false,
+          "seal_step": null,
+          "n_orgs": 0,
+          "autonomous_flux": 0.935,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1939,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 45,
+            "direct": 9,
+            "indirect": 0
+          }
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.35428571428571426,
+        "1": 0.3942857142857143,
+        "2": 0.2809523809523809,
+        "3": 0.31785714285714284
+      },
+      "env_system_rho": {
+        "0": 0.4861009417085471,
+        "1": 0.35814633128065965,
+        "2": 0.0,
+        "3": 0.6678571428571429
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 0.0
+      },
+      "env_flux": 0.1938593613298338,
+      "coupling_events": {
+        "events": 45,
+        "direct": 9,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 2,
+      "seed": 14,
+      "emergence_depth": 3,
+      "n_layers": 3,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 5,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 16,
+          "sealed": true,
+          "seal_step": 20,
+          "n_orgs": 2,
+          "autonomous_flux": 0.22,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1818,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 14,
+            "direct": 2,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 48,
+          "n_orgs": 1,
+          "autonomous_flux": 0.3786,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1901,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 21,
+            "direct": 4,
+            "indirect": 0
+          },
+          "closure": "整体不动点(自指闭合)"
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.6277777777777779,
+        "1": 0.6770833333333333,
+        "2": 0.6
+      },
+      "env_system_rho": {
+        "0": 0.524489379415795,
+        "1": 0.09633278598795836,
+        "2": 0.5993431855500821
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0
+      },
+      "env_flux": 0.1901143790849673,
+      "coupling_events": {
+        "events": 21,
+        "direct": 4,
+        "indirect": 0
+      }
+    },
+    {
+      "entropy": 2,
+      "seed": 15,
+      "emergence_depth": 6,
+      "n_layers": 6,
+      "layers": [
+        {
+          "layer": 0,
+          "N": 48,
+          "sealed": true,
+          "seal_step": 10,
+          "n_orgs": 5,
+          "autonomous_flux": 0.01,
+          "mode": "seed"
+        },
+        {
+          "layer": 1,
+          "N": 15,
+          "sealed": true,
+          "seal_step": 20,
+          "n_orgs": 2,
+          "autonomous_flux": 0.2409,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1808,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 8,
+            "direct": 0,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 2,
+          "N": 10,
+          "sealed": true,
+          "seal_step": 49,
+          "n_orgs": 1,
+          "autonomous_flux": 0.4237,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1725,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 20,
+            "direct": 2,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 3,
+          "N": 6,
+          "sealed": true,
+          "seal_step": 58,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6161,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.183,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 30,
+            "direct": 4,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 4,
+          "N": 5,
+          "sealed": true,
+          "seal_step": 89,
+          "n_orgs": 1,
+          "autonomous_flux": 0.6612,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1788,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 36,
+            "direct": 6,
+            "indirect": 0
+          }
+        },
+        {
+          "layer": 5,
+          "N": 4,
+          "sealed": true,
+          "seal_step": 78,
+          "n_orgs": 1,
+          "autonomous_flux": 0.5737,
+          "mode": "self_reference",
+          "env_N": 24,
+          "env_entropy": 2,
+          "env_flux": 0.1829,
+          "coupling_strength": 0.2,
+          "coupling_events": {
+            "events": 48,
+            "direct": 9,
+            "indirect": 0
+          }
+        }
+      ],
+      "structure_absorption": {
+        "0": 0.4444444444444444,
+        "1": 0.3333333333333333,
+        "2": 0.3020833333333333,
+        "3": 0.375,
+        "4": 0.375,
+        "5": 0.375
+      },
+      "env_system_rho": {
+        "0": 0.5306141550867594,
+        "1": 0.3201970443349754,
+        "2": 0.4424242424242424,
+        "3": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "colonization": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0,
+        "5": 1.0
+      },
+      "env_flux": 0.1828600632172061,
+      "coupling_events": {
+        "events": 48,
+        "direct": 9,
+        "indirect": 0
+      }
+    }
+  ]
+}

@@ -966,3 +966,25 @@ Phase 16 的「死秩序不可打破」结论被 **engine_v2** 推翻。
 - **分析**: docs/exp_183_phase18_p1_analysis.md
 - **结果**: results/exp_183_p1_propagation_20260610_1817.json
 - **下步**: exp_184 (P3 — 整体/固定点检测器), 或 Phase 18 收尾
+
+#### 2026-06-10 19:17 — Phase 19 P0: exp_185 环境耦合强度扫描 — COMPLETE ✅
+- **工程推进**: 实现 environment.py (EnvironmentField + EnvironmentCoupling v2)
+  - 修改 world.py: step_callback, env_config 支持, L0 密封后创建环境
+  - 耦合机制: 持久绑定调制(不受 m3_conservation 覆写影响) + 直接位翻转 + churn 调制
+- **exp_185 实验**: 80 runs (5 strengths × 16 seeds)
+- **H19-P0: CONFIRMED** — iso_score > 0.65 时环境不能重启自指
+- **意外发现**: 环境拯救边缘种子免于死秩序(seed 8: depth 2→3); L2 flux 随耦合单调递减(0.589→0.494)
+- **理论修正**: 环境是"稳定器"而非"重启开关" — 约束而非新的差异源
+- **Git**: commit a7167d8 (local; push failed SSL_ERROR_SYSCALL)
+- **文件**: diffsim/environment.py (new), docs/exp_185_phase19_p0_analysis.md (new), experiments/exp_185_phase19_p0_strength_sweep.py (new)
+- **下步**: exp_186 (复杂度扫描) 或 exp_187 (时序扫描)
+#### 2026-06-10 20:13 — Phase 19 P1: exp_186 环境复杂度扫描 — COMPLETE ✅
+- **实验**: 4 configs (entropy=None,0,1,2) × 16 seeds = 64 runs, env.N=24, strength=0.20
+- **H19-P3 (噪声被忽略)**: ❌ REJECTED — 噪声降低 L2 flux 27.5%, 提升 L3+ 至 100%
+- **H19-P2 (高复杂度被吸收)**: ⚠️ NOT CONFIRMED — L1 吸收 0.389 (目标 0.5)
+- **核心发现**: 三种环境(噪声/弱聚簇/强聚簇)对系统影响几乎相同 — 系统不区分环境结构复杂度
+- **定殖率 100%**: 所有系统组织包含环境比特 — 环境无处不在, 但无结构传导
+- **理论修正**: 环境是"约束场"而非"结构传递者" — H19-P2/P3 二分法不成立
+- **Git**: commit pending
+- **文件**: experiments/exp_186_phase19_p1_complexity_sweep.py (new), docs/exp_186_phase19_p1_analysis.md (new)
+- **下步**: exp_187 (时序扫描 — 密封前引入环境) 或 Phase 19 综合报告
