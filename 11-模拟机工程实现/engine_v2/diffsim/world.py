@@ -82,12 +82,14 @@ class RecursiveWorld:
 
     def __init__(self, N0=48, n0_active=40, n_colors=6, seed=0,
                  params: Params = None, self_encapsulate=True,
-                 env_config=None, env_coupling_strength=0.2):
+                 env_config=None, env_coupling_strength=0.2,
+                 env_start_step=None):
         self.rng = np.random.default_rng(seed)
         self.params = params or Params()
         self.self_encapsulate = self_encapsulate
         self.env_config = env_config
         self.env_coupling_strength = float(env_coupling_strength)
+        self.env_start_step = env_start_step  # None=after L0 seal, int=at L0 step
         self.env = None
         self.env_coupling = None
         active0 = self.rng.choice(N0, size=min(n0_active, N0), replace=False).tolist()
@@ -106,13 +108,44 @@ class RecursiveWorld:
             coupling.on_step(layer)
         return callback
 
+    def _l0_step_callback(self, layer):
+        """L0 步回调: 按 env_start_step 创建环境并施加耦合。"""
+        if self.env_start_step is not None and self.env is None:
+            if layer.step >= self.env_start_step:
+                self._create_env(layer.field)
+        if self.env is not None:
+            self.env.step_forward()
+            self.env_coupling.on_step(layer)
+
+    def _create_env(self, field):
+        """创建环境场和耦合器。"""
+        if self.env_config is None or self.env is not None:
+            return
+        env_seed = field.rng.integers(0, 999999) if hasattr(field, 'rng') else 0
+        self.env = EnvironmentField(
+            N=self.env_config.get("N", 16),
+            structural_entropy=self.env_config.get("structural_entropy", 1),
+            cycle_length=self.env_config.get("cycle_length", 5),
+            seed=int(env_seed),
+        )
+        self.env_coupling = EnvironmentCoupling(
+            self.env,
+            coupling_strength=self.env_coupling_strength,
+            threshold=self.env_config.get("threshold", 0.0),
+        )
+
     def run(self, max_layers=6, verbose=False):
         field = self.field0
         for depth in range(max_layers):
             layer = Layer(field, self.params)
 
-            # 阶段1: L0 密封之前无环境耦合（基线密封）
-            if depth == 0 or self.env is None:
+            # L0: 如果 env_start_step 已设置, 用步回调创建环境并施加耦合
+            if depth == 0 and self.env_start_step is not None:
+                sealed = layer.run_until_seal(
+                    verbose=verbose,
+                    step_callback=self._l0_step_callback
+                )
+            elif depth == 0 or self.env is None:
                 sealed = layer.run_until_seal(verbose=verbose)
             else:
                 # L1+ 且有环境: 每步施加环境耦合
@@ -151,20 +184,10 @@ class RecursiveWorld:
                 break
             field = nxt
 
-            # Phase 19: L0 密封后创建环境（如果配置了）
+            # Phase 19: L0 密封后创建环境（如果还没创建）
             if depth == 0 and self.env_config is not None and self.env is None:
-                env_seed = field.rng.integers(0, 999999) if hasattr(field, 'rng') else 0
-                self.env = EnvironmentField(
-                    N=self.env_config.get("N", 16),
-                    structural_entropy=self.env_config.get("structural_entropy", 1),
-                    cycle_length=self.env_config.get("cycle_length", 5),
-                    seed=int(env_seed),
-                )
-                self.env_coupling = EnvironmentCoupling(
-                    self.env,
-                    coupling_strength=self.env_coupling_strength,
-                    threshold=self.env_config.get("threshold", 0.0),
-                )
+                # 如果 env_start_step > L0 seal_step（环境从未被创建），降级为固定创建
+                self._create_env(field)
                 if verbose:
                     print(f"[ENV] Created env N={self.env.N} "
                           f"entropy={self.env.structural_entropy} "
