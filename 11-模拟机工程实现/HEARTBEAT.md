@@ -930,6 +930,31 @@ Phase 16 的「死秩序不可打破」结论被 **engine_v2** 推翻。
 - **下步**: exp_183 (结构传递实验) — 测量 m9 结构化初始条件对 k(N) 的放大效果
 
 #### 2026-06-10 18:17 — exp_183 P1 结构传递实验 — COMPLETE ✅
+
+#### 2026-06-10 18:51 — exp_184 P2 整体固定点检测器 — COMPLETE ✅
+- **实现**: `diffsim/fixed_point.py` — FixedPointDetector (四维同构评分: 组织数0.35 + 大小分布0.25 + flux0.20 + 规模保持0.20)
+- **实验**: 3 configs × 16 seeds = 48 runs
+- **Config A (标准)**: iso_score 0.22→0.49→0.65→0.77→0.96→1.00 单调递增 ✅
+- **Config B (min_org_size=2)**: iso_score 在 0.55-0.68 饱和, 未达 >0.8 固定点 ❌
+- **Config C (放松密封)**: iso_score 略高 (0.71-0.72), 但仍未达固定点
+- **核心发现**: 整体不是二元结构同构固定点, 而是渐近极限 (lim iso ≈ 0.72)
+- **理论修正**: 整体由 (1) 渐近收敛性 + (2) 工程截断条件 + (3) 链在截断前所达 iso_score 共同定义
+- **文件**: diffsim/fixed_point.py (固定点检测器), experiments/exp_184_phase18_p2_fixed_point.py, docs/exp_184_phase18_p2_analysis.md
+- **Git**: commit 99a798d → origin/main ✅
+- **Phase 18 COMPLETE**: P0(exp_182) + P1(exp_183) + P2(exp_184) 全部完成
+
+### 下步规划
+
+**Phase 18 已完成, 建议下一步**:
+- Phase 19 (开放系统): 在 iso_score 饱和区 (~0.65-0.72) 引入环境交互
+- 或 Phase 20 (并行子空间): 多个自指链 + 外部耦合
+
+### Phase 18 综合结论
+
+1. **涌现深度极限**: depth = log_{~3}(N0/3) ≈ 4-5 层
+2. **结构传递**: m9 提供 ~1.3x 增强, 非指数放大
+3. **整体固定点**: 不存在二元固定点。整体是渐近极限 + 工程截断的耦合产物。
+4. **fixed_point.py 用途**: 不是触发终止, 而是检测收敛状态 (iso_score 接近渐近极限时, 是引入外部交互的最佳时机)
 - **144 端到端运行**: L0→m9→L1, 9 N0 值 × 16 seeds
 - **H18-P1: PARTIAL** — mean amplification = 1.28x, 目标 > 2.0x ❌
 - **核心发现**: m9 增强是温和的 (1.3-1.75x), 非之前推测的 3-4x
