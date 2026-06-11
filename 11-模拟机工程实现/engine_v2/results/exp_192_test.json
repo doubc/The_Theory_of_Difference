@@ -1,0 +1,1853 @@
+{
+  "experiment": "exp_192_phase20_p2_competition_synergy",
+  "timestamp": "2026-06-12T01:15:52.655006",
+  "configs": [
+    {
+      "n_chains": 3,
+      "N_total": 96,
+      "label": "3chains_N96"
+    },
+    {
+      "n_chains": 4,
+      "N_total": 96,
+      "label": "4chains_N96"
+    },
+    {
+      "n_chains": 3,
+      "N_total": 72,
+      "label": "3chains_N72"
+    },
+    {
+      "n_chains": 2,
+      "N_total": 96,
+      "label": "2chains_N96"
+    }
+  ],
+  "n_seeds": 2,
+  "results": [
+    {
+      "config": {
+        "n_chains": 3,
+        "N_total": 96,
+        "label": "3chains_N96"
+      },
+      "seeds": [
+        {
+          "config": {
+            "n_chains": 3,
+            "N_total": 96,
+            "N_allocated": 32,
+            "n_colors": 6,
+            "base_seed": 0
+          },
+          "worlds": [
+            {
+              "world_id": 0,
+              "depth": 3,
+              "N_allocated": 32,
+              "seal_steps": [
+                11,
+                17,
+                67
+              ],
+              "report": [
+                {
+                  "layer": 0,
+                  "N": 32,
+                  "sealed": true,
+                  "seal_step": 11,
+                  "n_orgs": 6,
+                  "autonomous_flux": 0.0337,
+                  "mode": "seed"
+                },
+                {
+                  "layer": 1,
+                  "N": 15,
+                  "sealed": true,
+                  "seal_step": 17,
+                  "n_orgs": 2,
+                  "autonomous_flux": 0.1765,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 2,
+                  "N": 8,
+                  "sealed": true,
+                  "seal_step": 67,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.4925,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 3,
+                  "N": 3,
+                  "sealed": false,
+                  "seal_step": null,
+                  "n_orgs": 0,
+                  "autonomous_flux": 1.0,
+                  "mode": "self_reference"
+                }
+              ]
+            },
+            {
+              "world_id": 1,
+              "depth": 5,
+              "N_allocated": 32,
+              "seal_steps": [
+                10,
+                26,
+                115,
+                93,
+                197
+              ],
+              "report": [
+                {
+                  "layer": 0,
+                  "N": 32,
+                  "sealed": true,
+                  "seal_step": 10,
+                  "n_orgs": 5,
+                  "autonomous_flux": 0.0444,
+                  "mode": "seed"
+                },
+                {
+                  "layer": 1,
+                  "N": 16,
+                  "sealed": true,
+                  "seal_step": 26,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.2721,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 2,
+                  "N": 8,
+                  "sealed": true,
+                  "seal_step": 115,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.7542,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 3,
+                  "N": 6,
+                  "sealed": true,
+                  "seal_step": 93,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.778,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 4,
+                  "N": 4,
+                  "sealed": true,
+                  "seal_step": 197,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.775,
+                  "mode": "self_reference",
+                  "closure": "整体不动点(自指闭合)"
+                }
+              ]
+            },
+            {
+              "world_id": 2,
+              "depth": 4,
+              "N_allocated": 32,
+              "seal_steps": [
+                11,
+                27,
+                89,
+                111
+              ],
+              "report": [
+                {
+                  "layer": 0,
+                  "N": 32,
+                  "sealed": true,
+                  "seal_step": 11,
+                  "n_orgs": 4,
+                  "autonomous_flux": 0.0337,
+                  "mode": "seed"
+                },
+                {
+                  "layer": 1,
+                  "N": 11,
+                  "sealed": true,
+                  "seal_step": 27,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.2741,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 2,
+                  "N": 7,
+                  "sealed": true,
+                  "seal_step": 89,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.6556,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 3,
+                  "N": 5,
+                  "sealed": true,
+                  "seal_step": 111,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.6892,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 4,
+                  "N": 3,
+                  "sealed": false,
+                  "seal_step": null,
+                  "n_orgs": 0,
+                  "autonomous_flux": 1.0,
+                  "mode": "self_reference"
+                }
+              ]
+            }
+          ],
+          "hypotheses": {
+            "H20-P2a": {
+              "pass": true,
+              "detail": "Single hegemonic chain detected (world 1)"
+            },
+            "H20-P2b": {
+              "pass": false,
+              "detail": "Depth difference: 1.00 (hegemonic: 5, max other: 4)"
+            }
+          },
+          "seal_steps": [
+            [
+              11,
+              17,
+              67
+            ],
+            [
+              10,
+              26,
+              115,
+              93,
+              197
+            ],
+            [
+              11,
+              27,
+              89,
+              111
+            ]
+          ],
+          "depths": [
+            3,
+            5,
+            4
+          ],
+          "competition_metrics": {
+            "depth_variance": 0.6666666666666666,
+            "depth_range": 2.0,
+            "hegemonic_chain_id": 1,
+            "n_hegemonic": 1
+          }
+        },
+        {
+          "config": {
+            "n_chains": 3,
+            "N_total": 96,
+            "N_allocated": 32,
+            "n_colors": 6,
+            "base_seed": 1
+          },
+          "worlds": [
+            {
+              "world_id": 0,
+              "depth": 5,
+              "N_allocated": 32,
+              "seal_steps": [
+                10,
+                28,
+                81,
+                95,
+                197
+              ],
+              "report": [
+                {
+                  "layer": 0,
+                  "N": 32,
+                  "sealed": true,
+                  "seal_step": 10,
+                  "n_orgs": 4,
+                  "autonomous_flux": 0.0444,
+                  "mode": "seed"
+                },
+                {
+                  "layer": 1,
+                  "N": 14,
+                  "sealed": true,
+                  "seal_step": 28,
+                  "n_orgs": 2,
+                  "autonomous_flux": 0.2471,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 2,
+                  "N": 10,
+                  "sealed": true,
+                  "seal_step": 81,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.4968,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 3,
+                  "N": 6,
+                  "sealed": true,
+                  "seal_step": 95,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.7784,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 4,
+                  "N": 4,
+                  "sealed": true,
+                  "seal_step": 197,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.775,
+                  "mode": "self_reference",
+                  "closure": "整体不动点(自指闭合)"
+                }
+              ]
+            },
+            {
+              "world_id": 1,
+              "depth": 4,
+              "N_allocated": 32,
+              "seal_steps": [
+                11,
+                26,
+                116,
+                109
+              ],
+              "report": [
+                {
+                  "layer": 0,
+                  "N": 32,
+                  "sealed": true,
+                  "seal_step": 11,
+                  "n_orgs": 6,
+                  "autonomous_flux": 0.0404,
+                  "mode": "seed"
+                },
+                {
+                  "layer": 1,
+                  "N": 18,
+                  "sealed": true,
+                  "seal_step": 26,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.2012,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 2,
+                  "N": 8,
+                  "sealed": true,
+                  "seal_step": 116,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.7483,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 3,
+                  "N": 6,
+                  "sealed": true,
+                  "seal_step": 109,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.7243,
+                  "mode": "self_reference",
+                  "closure": "整体不动点(自指闭合)"
+                }
+              ]
+            },
+            {
+              "world_id": 2,
+              "depth": 4,
+              "N_allocated": 32,
+              "seal_steps": [
+                11,
+                23,
+                89,
+                111
+              ],
+              "report": [
+                {
+                  "layer": 0,
+                  "N": 32,
+                  "sealed": true,
+                  "seal_step": 11,
+                  "n_orgs": 4,
+                  "autonomous_flux": 0.0404,
+                  "mode": "seed"
+                },
+                {
+                  "layer": 1,
+                  "N": 12,
+                  "sealed": true,
+                  "seal_step": 23,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.3087,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 2,
+                  "N": 7,
+                  "sealed": true,
+                  "seal_step": 89,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.6893,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 3,
+                  "N": 5,
+                  "sealed": true,
+                  "seal_step": 111,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.6892,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 4,
+                  "N": 3,
+                  "sealed": false,
+                  "seal_step": null,
+                  "n_orgs": 0,
+                  "autonomous_flux": 1.0,
+                  "mode": "self_reference"
+                }
+              ]
+            }
+          ],
+          "hypotheses": {
+            "H20-P2a": {
+              "pass": true,
+              "detail": "Single hegemonic chain detected (world 0)"
+            },
+            "H20-P2b": {
+              "pass": false,
+              "detail": "Depth difference: 1.00 (hegemonic: 5, max other: 4)"
+            }
+          },
+          "seal_steps": [
+            [
+              10,
+              28,
+              81,
+              95,
+              197
+            ],
+            [
+              11,
+              26,
+              116,
+              109
+            ],
+            [
+              11,
+              23,
+              89,
+              111
+            ]
+          ],
+          "depths": [
+            5,
+            4,
+            4
+          ],
+          "competition_metrics": {
+            "depth_variance": 0.22222222222222224,
+            "depth_range": 1.0,
+            "hegemonic_chain_id": 0,
+            "n_hegemonic": 1
+          }
+        }
+      ]
+    },
+    {
+      "config": {
+        "n_chains": 4,
+        "N_total": 96,
+        "label": "4chains_N96"
+      },
+      "seeds": [
+        {
+          "config": {
+            "n_chains": 4,
+            "N_total": 96,
+            "N_allocated": 24,
+            "n_colors": 6,
+            "base_seed": 0
+          },
+          "worlds": [
+            {
+              "world_id": 0,
+              "depth": 4,
+              "N_allocated": 24,
+              "seal_steps": [
+                11,
+                42,
+                100,
+                110
+              ],
+              "report": [
+                {
+                  "layer": 0,
+                  "N": 24,
+                  "sealed": true,
+                  "seal_step": 11,
+                  "n_orgs": 3,
+                  "autonomous_flux": 0.0909,
+                  "mode": "seed"
+                },
+                {
+                  "layer": 1,
+                  "N": 12,
+                  "sealed": true,
+                  "seal_step": 42,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.4036,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 2,
+                  "N": 8,
+                  "sealed": true,
+                  "seal_step": 100,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.7022,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 3,
+                  "N": 6,
+                  "sealed": true,
+                  "seal_step": 110,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.7268,
+                  "mode": "self_reference",
+                  "closure": "整体不动点(自指闭合)"
+                }
+              ]
+            },
+            {
+              "world_id": 1,
+              "depth": 4,
+              "N_allocated": 24,
+              "seal_steps": [
+                11,
+                38,
+                115,
+                197
+              ],
+              "report": [
+                {
+                  "layer": 0,
+                  "N": 24,
+                  "sealed": true,
+                  "seal_step": 11,
+                  "n_orgs": 2,
+                  "autonomous_flux": 0.1,
+                  "mode": "seed"
+                },
+                {
+                  "layer": 1,
+                  "N": 10,
+                  "sealed": true,
+                  "seal_step": 38,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.4376,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 2,
+                  "N": 8,
+                  "sealed": true,
+                  "seal_step": 115,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.7229,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 3,
+                  "N": 4,
+                  "sealed": true,
+                  "seal_step": 197,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.775,
+                  "mode": "self_reference",
+                  "closure": "整体不动点(自指闭合)"
+                }
+              ]
+            },
+            {
+              "world_id": 2,
+              "depth": 4,
+              "N_allocated": 24,
+              "seal_steps": [
+                11,
+                28,
+                99,
+                111
+              ],
+              "report": [
+                {
+                  "layer": 0,
+                  "N": 24,
+                  "sealed": true,
+                  "seal_step": 11,
+                  "n_orgs": 3,
+                  "autonomous_flux": 0.1091,
+                  "mode": "seed"
+                },
+                {
+                  "layer": 1,
+                  "N": 10,
+                  "sealed": true,
+                  "seal_step": 28,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.3328,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 2,
+                  "N": 7,
+                  "sealed": true,
+                  "seal_step": 99,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.7194,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 3,
+                  "N": 5,
+                  "sealed": true,
+                  "seal_step": 111,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.6892,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 4,
+                  "N": 3,
+                  "sealed": false,
+                  "seal_step": null,
+                  "n_orgs": 0,
+                  "autonomous_flux": 1.0,
+                  "mode": "self_reference"
+                }
+              ]
+            },
+            {
+              "world_id": 3,
+              "depth": 5,
+              "N_allocated": 24,
+              "seal_steps": [
+                11,
+                29,
+                97,
+                70,
+                197
+              ],
+              "report": [
+                {
+                  "layer": 0,
+                  "N": 24,
+                  "sealed": true,
+                  "seal_step": 11,
+                  "n_orgs": 5,
+                  "autonomous_flux": 0.0727,
+                  "mode": "seed"
+                },
+                {
+                  "layer": 1,
+                  "N": 16,
+                  "sealed": true,
+                  "seal_step": 29,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.2793,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 2,
+                  "N": 8,
+                  "sealed": true,
+                  "seal_step": 97,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.679,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 3,
+                  "N": 6,
+                  "sealed": true,
+                  "seal_step": 70,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.6793,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 4,
+                  "N": 4,
+                  "sealed": true,
+                  "seal_step": 197,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.775,
+                  "mode": "self_reference",
+                  "closure": "整体不动点(自指闭合)"
+                }
+              ]
+            }
+          ],
+          "hypotheses": {
+            "H20-P2a": {
+              "pass": true,
+              "detail": "Single hegemonic chain detected (world 3)"
+            },
+            "H20-P2b": {
+              "pass": false,
+              "detail": "Depth difference: 1.00 (hegemonic: 5, max other: 4)"
+            }
+          },
+          "seal_steps": [
+            [
+              11,
+              42,
+              100,
+              110
+            ],
+            [
+              11,
+              38,
+              115,
+              197
+            ],
+            [
+              11,
+              28,
+              99,
+              111
+            ],
+            [
+              11,
+              29,
+              97,
+              70,
+              197
+            ]
+          ],
+          "depths": [
+            4,
+            4,
+            4,
+            5
+          ],
+          "competition_metrics": {
+            "depth_variance": 0.1875,
+            "depth_range": 1.0,
+            "hegemonic_chain_id": 3,
+            "n_hegemonic": 1
+          }
+        },
+        {
+          "config": {
+            "n_chains": 4,
+            "N_total": 96,
+            "N_allocated": 24,
+            "n_colors": 6,
+            "base_seed": 1
+          },
+          "worlds": [
+            {
+              "world_id": 0,
+              "depth": 5,
+              "N_allocated": 24,
+              "seal_steps": [
+                11,
+                27,
+                78,
+                75,
+                197
+              ],
+              "report": [
+                {
+                  "layer": 0,
+                  "N": 24,
+                  "sealed": true,
+                  "seal_step": 11,
+                  "n_orgs": 5,
+                  "autonomous_flux": 0.0727,
+                  "mode": "seed"
+                },
+                {
+                  "layer": 1,
+                  "N": 16,
+                  "sealed": true,
+                  "seal_step": 27,
+                  "n_orgs": 2,
+                  "autonomous_flux": 0.2455,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 2,
+                  "N": 10,
+                  "sealed": true,
+                  "seal_step": 78,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.4969,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 3,
+                  "N": 6,
+                  "sealed": true,
+                  "seal_step": 75,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.6367,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 4,
+                  "N": 4,
+                  "sealed": true,
+                  "seal_step": 197,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.775,
+                  "mode": "self_reference",
+                  "closure": "整体不动点(自指闭合)"
+                }
+              ]
+            },
+            {
+              "world_id": 1,
+              "depth": 5,
+              "N_allocated": 24,
+              "seal_steps": [
+                11,
+                32,
+                101,
+                83,
+                197
+              ],
+              "report": [
+                {
+                  "layer": 0,
+                  "N": 24,
+                  "sealed": true,
+                  "seal_step": 11,
+                  "n_orgs": 4,
+                  "autonomous_flux": 0.0909,
+                  "mode": "seed"
+                },
+                {
+                  "layer": 1,
+                  "N": 14,
+                  "sealed": true,
+                  "seal_step": 32,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.3387,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 2,
+                  "N": 8,
+                  "sealed": true,
+                  "seal_step": 101,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.6968,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 3,
+                  "N": 6,
+                  "sealed": true,
+                  "seal_step": 83,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.7054,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 4,
+                  "N": 4,
+                  "sealed": true,
+                  "seal_step": 197,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.775,
+                  "mode": "self_reference",
+                  "closure": "整体不动点(自指闭合)"
+                }
+              ]
+            },
+            {
+              "world_id": 2,
+              "depth": 5,
+              "N_allocated": 24,
+              "seal_steps": [
+                11,
+                42,
+                104,
+                96,
+                197
+              ],
+              "report": [
+                {
+                  "layer": 0,
+                  "N": 24,
+                  "sealed": true,
+                  "seal_step": 11,
+                  "n_orgs": 4,
+                  "autonomous_flux": 0.0909,
+                  "mode": "seed"
+                },
+                {
+                  "layer": 1,
+                  "N": 14,
+                  "sealed": true,
+                  "seal_step": 42,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.2382,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 2,
+                  "N": 8,
+                  "sealed": true,
+                  "seal_step": 104,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.7072,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 3,
+                  "N": 6,
+                  "sealed": true,
+                  "seal_step": 96,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.7745,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 4,
+                  "N": 4,
+                  "sealed": true,
+                  "seal_step": 197,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.775,
+                  "mode": "self_reference",
+                  "closure": "整体不动点(自指闭合)"
+                }
+              ]
+            },
+            {
+              "world_id": 3,
+              "depth": 4,
+              "N_allocated": 24,
+              "seal_steps": [
+                11,
+                31,
+                105,
+                105
+              ],
+              "report": [
+                {
+                  "layer": 0,
+                  "N": 24,
+                  "sealed": true,
+                  "seal_step": 11,
+                  "n_orgs": 4,
+                  "autonomous_flux": 0.0727,
+                  "mode": "seed"
+                },
+                {
+                  "layer": 1,
+                  "N": 13,
+                  "sealed": true,
+                  "seal_step": 31,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.29,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 2,
+                  "N": 8,
+                  "sealed": true,
+                  "seal_step": 105,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.7151,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 3,
+                  "N": 6,
+                  "sealed": true,
+                  "seal_step": 105,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.7214,
+                  "mode": "self_reference",
+                  "closure": "整体不动点(自指闭合)"
+                }
+              ]
+            }
+          ],
+          "hypotheses": {
+            "H20-P2a": {
+              "pass": false,
+              "detail": "Multiple or no hegemonic chains (3 worlds with depth 5)"
+            },
+            "H20-P2b": {
+              "pass": false,
+              "detail": "No single hegemonic chain"
+            }
+          },
+          "seal_steps": [
+            [
+              11,
+              27,
+              78,
+              75,
+              197
+            ],
+            [
+              11,
+              32,
+              101,
+              83,
+              197
+            ],
+            [
+              11,
+              42,
+              104,
+              96,
+              197
+            ],
+            [
+              11,
+              31,
+              105,
+              105
+            ]
+          ],
+          "depths": [
+            5,
+            5,
+            5,
+            4
+          ],
+          "competition_metrics": {
+            "depth_variance": 0.1875,
+            "depth_range": 1.0,
+            "hegemonic_chain_id": null,
+            "n_hegemonic": 3
+          }
+        }
+      ]
+    },
+    {
+      "config": {
+        "n_chains": 3,
+        "N_total": 72,
+        "label": "3chains_N72"
+      },
+      "seeds": [
+        {
+          "config": {
+            "n_chains": 3,
+            "N_total": 72,
+            "N_allocated": 24,
+            "n_colors": 6,
+            "base_seed": 0
+          },
+          "worlds": [
+            {
+              "world_id": 0,
+              "depth": 4,
+              "N_allocated": 24,
+              "seal_steps": [
+                11,
+                42,
+                100,
+                110
+              ],
+              "report": [
+                {
+                  "layer": 0,
+                  "N": 24,
+                  "sealed": true,
+                  "seal_step": 11,
+                  "n_orgs": 3,
+                  "autonomous_flux": 0.0909,
+                  "mode": "seed"
+                },
+                {
+                  "layer": 1,
+                  "N": 12,
+                  "sealed": true,
+                  "seal_step": 42,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.4036,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 2,
+                  "N": 8,
+                  "sealed": true,
+                  "seal_step": 100,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.7022,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 3,
+                  "N": 6,
+                  "sealed": true,
+                  "seal_step": 110,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.7268,
+                  "mode": "self_reference",
+                  "closure": "整体不动点(自指闭合)"
+                }
+              ]
+            },
+            {
+              "world_id": 1,
+              "depth": 4,
+              "N_allocated": 24,
+              "seal_steps": [
+                11,
+                38,
+                115,
+                197
+              ],
+              "report": [
+                {
+                  "layer": 0,
+                  "N": 24,
+                  "sealed": true,
+                  "seal_step": 11,
+                  "n_orgs": 2,
+                  "autonomous_flux": 0.1,
+                  "mode": "seed"
+                },
+                {
+                  "layer": 1,
+                  "N": 10,
+                  "sealed": true,
+                  "seal_step": 38,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.4376,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 2,
+                  "N": 8,
+                  "sealed": true,
+                  "seal_step": 115,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.7229,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 3,
+                  "N": 4,
+                  "sealed": true,
+                  "seal_step": 197,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.775,
+                  "mode": "self_reference",
+                  "closure": "整体不动点(自指闭合)"
+                }
+              ]
+            },
+            {
+              "world_id": 2,
+              "depth": 4,
+              "N_allocated": 24,
+              "seal_steps": [
+                11,
+                28,
+                99,
+                111
+              ],
+              "report": [
+                {
+                  "layer": 0,
+                  "N": 24,
+                  "sealed": true,
+                  "seal_step": 11,
+                  "n_orgs": 3,
+                  "autonomous_flux": 0.1091,
+                  "mode": "seed"
+                },
+                {
+                  "layer": 1,
+                  "N": 10,
+                  "sealed": true,
+                  "seal_step": 28,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.3328,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 2,
+                  "N": 7,
+                  "sealed": true,
+                  "seal_step": 99,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.7194,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 3,
+                  "N": 5,
+                  "sealed": true,
+                  "seal_step": 111,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.6892,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 4,
+                  "N": 3,
+                  "sealed": false,
+                  "seal_step": null,
+                  "n_orgs": 0,
+                  "autonomous_flux": 1.0,
+                  "mode": "self_reference"
+                }
+              ]
+            }
+          ],
+          "hypotheses": {
+            "H20-P2a": {
+              "pass": false,
+              "detail": "Multiple or no hegemonic chains (3 worlds with depth 4)"
+            },
+            "H20-P2b": {
+              "pass": false,
+              "detail": "No single hegemonic chain"
+            }
+          },
+          "seal_steps": [
+            [
+              11,
+              42,
+              100,
+              110
+            ],
+            [
+              11,
+              38,
+              115,
+              197
+            ],
+            [
+              11,
+              28,
+              99,
+              111
+            ]
+          ],
+          "depths": [
+            4,
+            4,
+            4
+          ],
+          "competition_metrics": {
+            "depth_variance": 0.0,
+            "depth_range": 0.0,
+            "hegemonic_chain_id": null,
+            "n_hegemonic": 3
+          }
+        },
+        {
+          "config": {
+            "n_chains": 3,
+            "N_total": 72,
+            "N_allocated": 24,
+            "n_colors": 6,
+            "base_seed": 1
+          },
+          "worlds": [
+            {
+              "world_id": 0,
+              "depth": 5,
+              "N_allocated": 24,
+              "seal_steps": [
+                11,
+                27,
+                78,
+                75,
+                197
+              ],
+              "report": [
+                {
+                  "layer": 0,
+                  "N": 24,
+                  "sealed": true,
+                  "seal_step": 11,
+                  "n_orgs": 5,
+                  "autonomous_flux": 0.0727,
+                  "mode": "seed"
+                },
+                {
+                  "layer": 1,
+                  "N": 16,
+                  "sealed": true,
+                  "seal_step": 27,
+                  "n_orgs": 2,
+                  "autonomous_flux": 0.2455,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 2,
+                  "N": 10,
+                  "sealed": true,
+                  "seal_step": 78,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.4969,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 3,
+                  "N": 6,
+                  "sealed": true,
+                  "seal_step": 75,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.6367,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 4,
+                  "N": 4,
+                  "sealed": true,
+                  "seal_step": 197,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.775,
+                  "mode": "self_reference",
+                  "closure": "整体不动点(自指闭合)"
+                }
+              ]
+            },
+            {
+              "world_id": 1,
+              "depth": 5,
+              "N_allocated": 24,
+              "seal_steps": [
+                11,
+                32,
+                101,
+                83,
+                197
+              ],
+              "report": [
+                {
+                  "layer": 0,
+                  "N": 24,
+                  "sealed": true,
+                  "seal_step": 11,
+                  "n_orgs": 4,
+                  "autonomous_flux": 0.0909,
+                  "mode": "seed"
+                },
+                {
+                  "layer": 1,
+                  "N": 14,
+                  "sealed": true,
+                  "seal_step": 32,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.3387,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 2,
+                  "N": 8,
+                  "sealed": true,
+                  "seal_step": 101,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.6968,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 3,
+                  "N": 6,
+                  "sealed": true,
+                  "seal_step": 83,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.7054,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 4,
+                  "N": 4,
+                  "sealed": true,
+                  "seal_step": 197,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.775,
+                  "mode": "self_reference",
+                  "closure": "整体不动点(自指闭合)"
+                }
+              ]
+            },
+            {
+              "world_id": 2,
+              "depth": 5,
+              "N_allocated": 24,
+              "seal_steps": [
+                11,
+                42,
+                104,
+                96,
+                197
+              ],
+              "report": [
+                {
+                  "layer": 0,
+                  "N": 24,
+                  "sealed": true,
+                  "seal_step": 11,
+                  "n_orgs": 4,
+                  "autonomous_flux": 0.0909,
+                  "mode": "seed"
+                },
+                {
+                  "layer": 1,
+                  "N": 14,
+                  "sealed": true,
+                  "seal_step": 42,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.2382,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 2,
+                  "N": 8,
+                  "sealed": true,
+                  "seal_step": 104,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.7072,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 3,
+                  "N": 6,
+                  "sealed": true,
+                  "seal_step": 96,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.7745,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 4,
+                  "N": 4,
+                  "sealed": true,
+                  "seal_step": 197,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.775,
+                  "mode": "self_reference",
+                  "closure": "整体不动点(自指闭合)"
+                }
+              ]
+            }
+          ],
+          "hypotheses": {
+            "H20-P2a": {
+              "pass": false,
+              "detail": "Multiple or no hegemonic chains (3 worlds with depth 5)"
+            },
+            "H20-P2b": {
+              "pass": false,
+              "detail": "No single hegemonic chain"
+            }
+          },
+          "seal_steps": [
+            [
+              11,
+              27,
+              78,
+              75,
+              197
+            ],
+            [
+              11,
+              32,
+              101,
+              83,
+              197
+            ],
+            [
+              11,
+              42,
+              104,
+              96,
+              197
+            ]
+          ],
+          "depths": [
+            5,
+            5,
+            5
+          ],
+          "competition_metrics": {
+            "depth_variance": 0.0,
+            "depth_range": 0.0,
+            "hegemonic_chain_id": null,
+            "n_hegemonic": 3
+          }
+        }
+      ]
+    },
+    {
+      "config": {
+        "n_chains": 2,
+        "N_total": 96,
+        "label": "2chains_N96"
+      },
+      "seeds": [
+        {
+          "config": {
+            "n_chains": 2,
+            "N_total": 96,
+            "N_allocated": 48,
+            "n_colors": 6,
+            "base_seed": 0
+          },
+          "worlds": [
+            {
+              "world_id": 0,
+              "depth": 6,
+              "N_allocated": 48,
+              "seal_steps": [
+                10,
+                23,
+                40,
+                113,
+                87,
+                197
+              ],
+              "report": [
+                {
+                  "layer": 0,
+                  "N": 48,
+                  "sealed": true,
+                  "seal_step": 10,
+                  "n_orgs": 6,
+                  "autonomous_flux": 0.01,
+                  "mode": "seed"
+                },
+                {
+                  "layer": 1,
+                  "N": 18,
+                  "sealed": true,
+                  "seal_step": 23,
+                  "n_orgs": 2,
+                  "autonomous_flux": 0.215,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 2,
+                  "N": 10,
+                  "sealed": true,
+                  "seal_step": 40,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.4333,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 3,
+                  "N": 8,
+                  "sealed": true,
+                  "seal_step": 113,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.7226,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 4,
+                  "N": 6,
+                  "sealed": true,
+                  "seal_step": 87,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.7029,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 5,
+                  "N": 4,
+                  "sealed": true,
+                  "seal_step": 197,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.775,
+                  "mode": "self_reference",
+                  "closure": "整体不动点(自指闭合)"
+                }
+              ]
+            },
+            {
+              "world_id": 1,
+              "depth": 5,
+              "N_allocated": 48,
+              "seal_steps": [
+                10,
+                22,
+                69,
+                98,
+                197
+              ],
+              "report": [
+                {
+                  "layer": 0,
+                  "N": 48,
+                  "sealed": true,
+                  "seal_step": 10,
+                  "n_orgs": 6,
+                  "autonomous_flux": 0.01,
+                  "mode": "seed"
+                },
+                {
+                  "layer": 1,
+                  "N": 18,
+                  "sealed": true,
+                  "seal_step": 22,
+                  "n_orgs": 2,
+                  "autonomous_flux": 0.1984,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 2,
+                  "N": 10,
+                  "sealed": true,
+                  "seal_step": 69,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.4229,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 3,
+                  "N": 6,
+                  "sealed": true,
+                  "seal_step": 98,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.7791,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 4,
+                  "N": 4,
+                  "sealed": true,
+                  "seal_step": 197,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.775,
+                  "mode": "self_reference",
+                  "closure": "整体不动点(自指闭合)"
+                }
+              ]
+            }
+          ],
+          "hypotheses": {
+            "H20-P2a": {
+              "pass": true,
+              "detail": "Single hegemonic chain detected (world 0)"
+            },
+            "H20-P2b": {
+              "pass": false,
+              "detail": "Depth difference: 1.00 (hegemonic: 6, max other: 5)"
+            }
+          },
+          "seal_steps": [
+            [
+              10,
+              23,
+              40,
+              113,
+              87,
+              197
+            ],
+            [
+              10,
+              22,
+              69,
+              98,
+              197
+            ]
+          ],
+          "depths": [
+            6,
+            5
+          ],
+          "competition_metrics": {
+            "depth_variance": 0.25,
+            "depth_range": 1.0,
+            "hegemonic_chain_id": 0,
+            "n_hegemonic": 1
+          }
+        },
+        {
+          "config": {
+            "n_chains": 2,
+            "N_total": 96,
+            "N_allocated": 48,
+            "n_colors": 6,
+            "base_seed": 1
+          },
+          "worlds": [
+            {
+              "world_id": 0,
+              "depth": 6,
+              "N_allocated": 48,
+              "seal_steps": [
+                10,
+                23,
+                38,
+                108,
+                95,
+                197
+              ],
+              "report": [
+                {
+                  "layer": 0,
+                  "N": 48,
+                  "sealed": true,
+                  "seal_step": 10,
+                  "n_orgs": 6,
+                  "autonomous_flux": 0.01,
+                  "mode": "seed"
+                },
+                {
+                  "layer": 1,
+                  "N": 18,
+                  "sealed": true,
+                  "seal_step": 23,
+                  "n_orgs": 2,
+                  "autonomous_flux": 0.2207,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 2,
+                  "N": 10,
+                  "sealed": true,
+                  "seal_step": 38,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.4406,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 3,
+                  "N": 8,
+                  "sealed": true,
+                  "seal_step": 108,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.7458,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 4,
+                  "N": 6,
+                  "sealed": true,
+                  "seal_step": 95,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.7511,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 5,
+                  "N": 4,
+                  "sealed": true,
+                  "seal_step": 197,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.775,
+                  "mode": "self_reference",
+                  "closure": "整体不动点(自指闭合)"
+                }
+              ]
+            },
+            {
+              "world_id": 1,
+              "depth": 3,
+              "N_allocated": 48,
+              "seal_steps": [
+                11,
+                10,
+                197
+              ],
+              "report": [
+                {
+                  "layer": 0,
+                  "N": 48,
+                  "sealed": true,
+                  "seal_step": 11,
+                  "n_orgs": 6,
+                  "autonomous_flux": 0.0091,
+                  "mode": "seed"
+                },
+                {
+                  "layer": 1,
+                  "N": 12,
+                  "sealed": true,
+                  "seal_step": 10,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.0167,
+                  "mode": "self_reference"
+                },
+                {
+                  "layer": 2,
+                  "N": 4,
+                  "sealed": true,
+                  "seal_step": 197,
+                  "n_orgs": 1,
+                  "autonomous_flux": 0.775,
+                  "mode": "self_reference",
+                  "closure": "整体不动点(自指闭合)"
+                }
+              ]
+            }
+          ],
+          "hypotheses": {
+            "H20-P2a": {
+              "pass": true,
+              "detail": "Single hegemonic chain detected (world 0)"
+            },
+            "H20-P2b": {
+              "pass": true,
+              "detail": "Depth difference: 3.00 (hegemonic: 6, max other: 3)"
+            }
+          },
+          "seal_steps": [
+            [
+              10,
+              23,
+              38,
+              108,
+              95,
+              197
+            ],
+            [
+              11,
+              10,
+              197
+            ]
+          ],
+          "depths": [
+            6,
+            3
+          ],
+          "competition_metrics": {
+            "depth_variance": 2.25,
+            "depth_range": 3.0,
+            "hegemonic_chain_id": 0,
+            "n_hegemonic": 1
+          }
+        }
+      ]
+    }
+  ]
+}

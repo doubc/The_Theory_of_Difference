@@ -1,0 +1,55 @@
+{
+  "configs": {
+    "N48_shared": {
+      "n_runs": 8,
+      "mean_depth_A": 4.625,
+      "mean_depth_B": 5.0,
+      "mean_depth": 4.8125,
+      "mean_depth_diff": 0.875,
+      "std_depth_diff": 0.7806,
+      "seal_rate_A": 1.0,
+      "seal_rate_B": 1.0,
+      "H20-P1a_pass": true
+    },
+    "N48_independent": {
+      "n_runs": 8,
+      "mean_depth_A": 4.5,
+      "mean_depth_B": 4.75,
+      "mean_depth": 4.625,
+      "mean_depth_diff": 1.0,
+      "std_depth_diff": 0.866,
+      "seal_rate_A": 1.0,
+      "seal_rate_B": 1.0
+    },
+    "N72_shared": {
+      "n_runs": 8,
+      "mean_depth_A": 3.75,
+      "mean_depth_B": 3.375,
+      "mean_depth": 3.5625,
+      "mean_depth_diff": 0.875,
+      "std_depth_diff": 1.0533,
+      "seal_rate_A": 1.0,
+      "seal_rate_B": 1.0,
+      "H20-P1a_pass": true
+    },
+    "N24_shared": {
+      "n_runs": 8,
+      "mean_depth_A": 4.375,
+      "mean_depth_B": 4.0,
+      "mean_depth": 4.1875,
+      "mean_depth_diff": 0.375,
+      "std_depth_diff": 0.4841,
+      "seal_rate_A": 1.0,
+      "seal_rate_B": 1.0,
+      "H20-P1a_pass": true
+    }
+  },
+  "hypotheses": {
+    "H20-P1c": {
+      "shared_mean_depth": 4.8125,
+      "independent_mean_depth": 4.625,
+      "improvement": 0.1875,
+      "pass": true
+    }
+  }
+}

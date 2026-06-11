@@ -1,29 +1,44 @@
 """multi_world.py — Phase 20: 并行子空间（多世界模拟）.
 
-MultiWorld: 管理 n 个并行 RecursiveWorld，支持弱耦合。
-耦合机制: 将世界 i 的 m9 输出 (a1_source_i) 作为世界 j 的环境偏置。
+MultiWorld: 管理 n 个并行 RecursiveWorld，支持多种耦合机制。
 
-核心理论: 他者即环境。
+耦合模式:
+  1. "none"        — 无耦合，各世界独立运行
+  2. "env_coupling" — 将其他世界的命名位作为环境偏置注入（非破坏性）
+  3. "bit_swap_soft" — 在 L0 运行期间逐步注入微弱偏置（不破坏密封）
+
+核心理论: 他者即环境。多个自指链耦合 -> 可能产生单链无法达到的复杂度。
 """
 from __future__ import annotations
 import numpy as np
-from .world import RecursiveWorld, Params
+from typing import List, Dict, Any, Optional
+
+from .world import RecursiveWorld, Params, Layer
+from .core import DifferenceField
+from .environment import EnvironmentField, EnvironmentCoupling
+from . import mechanisms as M
 
 
 class MultiWorld:
-    """管理 n 个并行 RecursiveWorld，支持弱耦合。
+    """管理 n 个并行 RecursiveWorld，支持弱耦合。"""
 
-    耦合矩阵 C[i][j] = 世界 j 从世界 i 接收的偏置强度。
-    C[i][i] = 1.0 (自耦合，无外部偏置)。
-    """
-
-    def __init__(self, n_worlds=4, N0=48, n0_active=40, n_colors=6,
-                 base_seed=0, params: Params = None,
-                 coupling_strength=0.0, coupling_mode="a1_source"):
+    def __init__(
+        self,
+        n_worlds: int = 4,
+        N0: int = 48,
+        n0_active: int = 40,
+        n_colors: int = 6,
+        base_seed: int = 0,
+        params: Optional[Params] = None,
+        coupling_strength: float = 0.0,
+        coupling_mode: str = "none",
+        bit_swap_rate: float = 0.1,
+    ):
         self.n_worlds = n_worlds
         self.N0 = N0
         self.coupling_strength = float(coupling_strength)
-        self.coupling_mode = coupling_mode  # "a1_source" | "naming_meta"
+        self.coupling_mode = coupling_mode
+        self.bit_swap_rate = bit_swap_rate
         self.params = params or Params()
 
         base_rng = np.random.default_rng(base_seed)
@@ -38,112 +53,205 @@ class MultiWorld:
             for i in range(n_worlds)
         ]
 
-        # 耦合矩阵: C[i][j] = 世界 j 从世界 i 接收的偏置权重
-        self.C = np.eye(n_worlds, dtype=float)  # 对角=1 (自耦合)
-        if coupling_strength > 0:
-            self._init_coupling(coupling_strength)
+        # 环境场: 每个世界一个
+        self.envs: List[Optional[EnvironmentField]] = [None] * n_worlds
+        self.env_couplings: List[Optional[EnvironmentCoupling]] = [None] * n_worlds
 
-        self.reports = []
-        self.coupling_log = []  # 记录每步耦合事件
+        self.reports: List[Dict] = []
+        self.coupling_log: List[Dict] = []
+        self.cross_layer_snapshots: List[Dict] = []
 
-    def _init_coupling(self, strength):
-        """初始化均匀弱耦合: 每个世界从其他所有世界接收等量偏置。"""
-        for i in range(self.n_worlds):
-            for j in range(self.n_worlds):
-                if i != j:
-                    self.C[i, j] = strength / (self.n_worlds - 1)
-
-    def set_coupling_matrix(self, matrix):
-        """手动设置耦合矩阵（非均匀耦合）。"""
-        self.C = np.array(matrix, dtype=float)
-        assert self.C.shape == (self.n_worlds, self.n_worlds)
-
-    def run_all(self, max_layers=6, verbose=False):
-        """所有世界独立运行到整体不动点（无逐步耦合，仅记录独立性）。"""
+    # ------------------------------------------------------------------
+    # 运行模式 1: 独立运行（无耦合）
+    # ------------------------------------------------------------------
+    def run_all(self, max_layers: int = 6, verbose: bool = False) -> Dict:
+        """所有世界独立运行到整体不动点（无耦合）。"""
         for i, w in enumerate(self.worlds):
             w.run(max_layers=max_layers, verbose=verbose)
             if verbose:
                 d = w.emergence_depth()
-                print(f"  [World {i}] depth={d}, "
-                      f"L2_rate={sum(1 for r in w.report if r['layer']>=2 and r['sealed'])/max(1,d):.2f}")
+                print(f"  [World {i}] depth={d}")
         self.reports = [w.report for w in self.worlds]
         return self.collect_report()
 
-    def run_with_coupling(self, max_layers=6, verbose=False):
-        """运行所有世界，并在每轮 L0 后施加耦合偏置。
+    # ------------------------------------------------------------------
+    # 运行模式 2: 逐层运行 + 环境耦合（非破坏性）
+    # ------------------------------------------------------------------
+    def run_with_coupling(
+        self,
+        max_layers: int = 6,
+        max_steps_per_layer: int = 400,
+        verbose: bool = False,
+    ) -> Dict:
+        """所有世界逐层同步运行，每层密封后通过环境施加耦合。
 
-        机制:
-          1. 各世界独立跑完 L0 (直到密封)
-          2. 收集各世界 L0 的 a1_source (m9 输出)
-          3. 构造耦合偏置场，注入到各世界 L1 的 environment coupling
-          4. 继续 L1+ 演化
+        耦合通过环境偏置实现（不破坏密封后的 field.state）：
+        - 收集其他世界的命名位（a1_source）
+        - 构造为 EnvironmentField
+        - 注入到本世界的 L1+ 演化中
         """
+        if self.coupling_mode in ("env_coupling", "a1_source"):
+            return self._run_env_coupling_mode(max_layers, verbose)
+        elif self.coupling_mode == "bit_swap_soft":
+            return self._run_bit_swap_soft_mode(max_layers, max_steps_per_layer, verbose)
+        else:
+            return self.run_all(max_layers, verbose)
+
+    def _run_env_coupling_mode(
+        self,
+        max_layers: int,
+        verbose: bool,
+    ) -> Dict:
+        """环境耦合模式: L0 密封后，将其他世界的命名位注入为环境偏置。"""
         # L0 独立运行
-        l0_reports = []
         for i, w in enumerate(self.worlds):
-            w.run(max_layers=1, verbose=verbose)  # 只跑 L0
-            l0_reports.append(w.report[0] if w.report else {})
+            w.run(max_layers=1, verbose=verbose)
 
-        # 施加耦合: 构造 env_config 用于 L1+
-        self._apply_coupling_as_env(verbose=verbose)
-
-        # L1+ 继续演化
-        for i, w in enumerate(self.worlds):
-            if len(w.layers) > 0 and w.layers[0].field.sealed:
-                # 继续运行剩余层级
-                field = w.layers[-1].field
-                # 手动驱动剩余层级（复用 m9 + Layer）
-                self._run_remaining_layers(w, field, max_layers, verbose)
-
-        self.reports = [w.report for w in self.worlds]
-        return self.collect_report()
-
-    def _apply_coupling_as_env(self, verbose=False):
-        """将其他世界的 a1_source 构造为环境偏置，注入各世界。"""
-        # 收集各世界 L0 的命名位 (a1_source 的命名表达)
+        # 收集各世界 L0 的命名位
         naming_sources = []
         for w in self.worlds:
             if w.layers and hasattr(w.layers[0].field, 'naming_meta'):
-                meta = w.layers[0].field.naming_meta
-                naming_sources.append(meta)
+                naming_sources.append(w.layers[0].field.naming_meta)
             else:
                 naming_sources.append({})
 
         if verbose:
-            print(f"  [Coupling] Collected {len(naming_sources)} naming sources")
+            print(f"  [env_coupling] Collected {len(naming_sources)} naming sources")
 
-        # 记录耦合 log
-        self.coupling_log.append({
-            "stage": "L0_post_seal",
-            "naming_sources": naming_sources,
-        })
+        # 为每个世界创建环境（基于其他世界的命名位）
+        self._create_coupled_envs(naming_sources, verbose)
 
-    def _run_remaining_layers(self, world, start_field, max_layers, verbose):
-        """世界 L0 之后继续演化（简化版，不重新跑 L0）。"""
-        from . import mechanisms as M
-        field = start_field
+        # L1+ 继续演化（带环境耦合）
+        for i, w in enumerate(self.worlds):
+            if len(w.layers) > 0 and w.layers[0].field.sealed:
+                self._run_remaining_with_env(w, i, max_layers, verbose)
+
+        self.reports = [w.report for w in self.worlds]
+        return self.collect_report()
+
+    def _create_coupled_envs(self, naming_sources: List[Dict], verbose: bool):
+        """为每个世界创建耦合环境（来自其他世界的命名位）。"""
+        for i in range(self.n_worlds):
+            # 收集其他世界的命名位
+            other_naming = {}
+            for j in range(self.n_worlds):
+                if j != i and naming_sources[j]:
+                    other_naming.update(naming_sources[j])
+
+            if not other_naming:
+                continue
+
+            # 构造环境场
+            env_N = max(4, min(16, self.N0 // 4))
+            env_seed = int(hash(str(other_naming)) % 999999)
+            env = EnvironmentField(
+                N=env_N,
+                structural_entropy=1,  # 低熵 = 有结构
+                cycle_length=5,
+                seed=env_seed,
+            )
+            coupling = EnvironmentCoupling(
+                env,
+                coupling_strength=self.coupling_strength,
+                threshold=0.3,
+            )
+            self.envs[i] = env
+            self.env_couplings[i] = coupling
+
+            if verbose:
+                print(f"  [env] World {i} env created: N={env_N}, strength={self.coupling_strength}")
+
+    def _run_remaining_with_env(self, world, world_idx: int, max_layers: int, verbose: bool):
+        """带环境耦合的 L1+ 演化。"""
+        if self.envs[world_idx] is None or self.env_couplings[world_idx] is None:
+            # 无环境 -> 正常演化
+            world.run(max_layers=max_layers, verbose=verbose)
+            return
+
+        env = self.envs[world_idx]
+        coupling = self.env_couplings[world_idx]
+
+        field = world.layers[-1].field
         for depth in range(1, max_layers):
             if field is None:
                 break
-            layer = world.__class__.__mro__[0]  # 用 world 的 Layer class
-            # 简化: 直接调用 m9 推进一层
-            nxt = M.m9_self_reference(
-                type('Layer', (), {'field': field, 'params': world.params, 'step': 0})(),
-                self_encapsulate=True
-            )
+
+            # 创建 Layer 并运行（带环境回调）
+            layer = Layer(field, world.params)
+
+            def make_cb(env_ref, coup_ref):
+                def cb(lyr):
+                    env_ref.step_forward()
+                    coup_ref.on_step(lyr)
+                return cb
+
+            cb = make_cb(env, coupling)
+            sealed = layer.run_until_seal(verbose=False, step_callback=cb)
+
+            world.layers.append(layer)
+            flux = layer.autonomous_flux()
+            k = len([o for o in field.organizations.values()
+                      if len(o) >= world.params.min_org_size])
+            rec = {
+                "layer": field.layer,
+                "N": field.N,
+                "sealed": sealed,
+                "seal_step": field.seal_step,
+                "n_orgs": k,
+                "autonomous_flux": round(flux, 4),
+                "mode": field.naming_meta.get("mode", "seed"),
+                "env_coupled": True,
+            }
+            world.report.append(rec)
+
+            if not sealed:
+                break
+
+            nxt = M.m9_self_reference(layer, self_encapsulate=True)
             if nxt is None or nxt.N < world.params.min_org_size:
+                world.report[-1]["closure"] = "整体不动点(自指闭合)"
                 break
             field = nxt
 
-    def collect_report(self):
+    def _run_bit_swap_soft_mode(
+        self,
+        max_layers: int,
+        max_steps_per_layer: int,
+        verbose: bool,
+    ) -> Dict:
+        """软位交换模式: 在 L0 运行期间注入微弱偏置（通过环境，不破坏密封）。"""
+        # 类似 _run_env_coupling_mode 但耦合在 L0 就开始
+        for i, w in enumerate(self.worlds):
+            # L0 带环境耦合运行
+            if self.envs[i] is not None:
+                w.env = self.envs[i]
+                w.env_coupling = self.env_couplings[i]
+                w.env_start_step = 0  # 从 step 0 开始耦合
+            w.run(max_layers=1, verbose=verbose)
+
+        # L1+ 继续
+        for i, w in enumerate(self.worlds):
+            if len(w.layers) > 0 and w.layers[0].field.sealed:
+                self._run_remaining_with_env(w, i, max_layers, verbose)
+
+        self.reports = [w.report for w in self.worlds]
+        return self.collect_report()
+
+    # ------------------------------------------------------------------
+    # 分析和报告
+    # ------------------------------------------------------------------
+    def collect_report(self) -> Dict:
         """汇总所有世界的涌现深度、flux、密封步长。"""
-        summary = {
+        summary: Dict = {
             "n_worlds": self.n_worlds,
             "coupling_strength": self.coupling_strength,
+            "coupling_mode": self.coupling_mode,
             "worlds": [],
         }
+        depths = []
         for i, w in enumerate(self.worlds):
             d = w.emergence_depth()
+            depths.append(d)
             fluxes = [r.get("autonomous_flux", 0.0) for r in w.report]
             seal_steps = [r.get("seal_step", -1) for r in w.report]
             summary["worlds"].append({
@@ -153,17 +261,38 @@ class MultiWorld:
                 "seal_steps": seal_steps,
                 "report": w.report,
             })
-        summary["mean_depth"] = np.mean([w["depth"] for w in summary["worlds"]])
-        summary["std_depth"] = np.std([w["depth"] for w in summary["worlds"]])
+        if depths:
+            summary["mean_depth"] = float(np.mean(depths))
+            summary["std_depth"] = float(np.std(depths))
+        else:
+            summary["mean_depth"] = 0.0
+            summary["std_depth"] = 0.0
         return summary
 
-    def get_l1_structures(self):
-        """提取各世界 L1 的结构（用于跨世界相关性计算）。"""
-        structures = []
-        for w in self.worlds:
-            if len(w.report) >= 2:  # L0 + L1
-                l1_record = w.report[1]
-                structures.append(l1_record)
-            else:
-                structures.append(None)
-        return structures
+    def compute_cross_world_correlation(self) -> Dict:
+        """计算跨世界涌现深度相关性（H20-P0a）。"""
+        depths = [w.emergence_depth() for w in self.worlds]
+        if len(depths) < 2:
+            return {"correlation": None, "n_pairs": 0}
+
+        import itertools
+        pairs = list(itertools.combinations(range(len(depths)), 2))
+        if not pairs:
+            return {"correlation": None, "n_pairs": 0}
+
+        corrs = []
+        for i, j in pairs:
+            f_i = [r.get("autonomous_flux", 0.0) for r in self.worlds[i].report]
+            f_j = [r.get("autonomous_flux", 0.0) for r in self.worlds[j].report]
+            min_len = min(len(f_i), len(f_j))
+            if min_len >= 2:
+                corr = np.corrcoef(f_i[:min_len], f_j[:min_len])[0, 1]
+                if not np.isnan(corr):
+                    corrs.append(corr)
+
+        return {
+            "correlation": round(float(np.mean(corrs)), 4) if corrs else None,
+            "all_correlations": [round(float(c), 4) for c in corrs],
+            "n_pairs": len(corrs),
+            "depths": depths,
+        }

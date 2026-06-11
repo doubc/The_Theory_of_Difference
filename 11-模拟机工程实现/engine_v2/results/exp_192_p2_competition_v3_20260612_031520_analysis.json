@@ -1,0 +1,46 @@
+{
+  "experiment": "exp_192_phase20_p2_competition_synergy_v3",
+  "timestamp": "2026-06-12T03:15:20.963120",
+  "configs": {
+    "3chains_N96": {
+      "H20-P2a_pass_rate": 0.375,
+      "H20-P2b_pass_rate": 0.0,
+      "depth_variance_mean": 0.3333333333333333,
+      "consumption_variance_mean": 19.47222222222222,
+      "hegemonic_count_mean": 2.125,
+      "n_seeds": 8,
+      "H20-P2a_overall": false,
+      "H20-P2b_overall": false
+    },
+    "4chains_N96": {
+      "H20-P2a_pass_rate": 0.5,
+      "H20-P2b_pass_rate": 0.0,
+      "depth_variance_mean": 0.328125,
+      "consumption_variance_mean": 19.7109375,
+      "hegemonic_count_mean": 1.75,
+      "n_seeds": 8,
+      "H20-P2a_overall": true,
+      "H20-P2b_overall": false
+    },
+    "3chains_N72": {
+      "H20-P2a_pass_rate": 0.625,
+      "H20-P2b_pass_rate": 0.0,
+      "depth_variance_mean": 0.19444444444444445,
+      "consumption_variance_mean": 5.75,
+      "hegemonic_count_mean": 1.75,
+      "n_seeds": 8,
+      "H20-P2a_overall": true,
+      "H20-P2b_overall": false
+    },
+    "2chains_N96": {
+      "H20-P2a_pass_rate": 0.625,
+      "H20-P2b_pass_rate": 0.25,
+      "depth_variance_mean": 0.5,
+      "consumption_variance_mean": 43.96875,
+      "hegemonic_count_mean": 1.375,
+      "n_seeds": 8,
+      "H20-P2a_overall": true,
+      "H20-P2b_overall": false
+    }
+  }
+}

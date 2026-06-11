@@ -1,0 +1,42 @@
+{
+  "experiment": "exp_192_phase20_p2_competition_synergy",
+  "timestamp": "2026-06-12T01:15:54.107547",
+  "configs": {
+    "3chains_N96": {
+      "H20-P2a_pass_rate": 1.0,
+      "H20-P2b_pass_rate": 0.0,
+      "depth_variance_mean": 0.4444444444444444,
+      "hegemonic_count_mean": 1.0,
+      "n_seeds": 2,
+      "H20-P2a_overall": true,
+      "H20-P2b_overall": false
+    },
+    "4chains_N96": {
+      "H20-P2a_pass_rate": 0.5,
+      "H20-P2b_pass_rate": 0.0,
+      "depth_variance_mean": 0.1875,
+      "hegemonic_count_mean": 2.0,
+      "n_seeds": 2,
+      "H20-P2a_overall": true,
+      "H20-P2b_overall": false
+    },
+    "3chains_N72": {
+      "H20-P2a_pass_rate": 0.0,
+      "H20-P2b_pass_rate": 0.0,
+      "depth_variance_mean": 0.0,
+      "hegemonic_count_mean": 3.0,
+      "n_seeds": 2,
+      "H20-P2a_overall": false,
+      "H20-P2b_overall": false
+    },
+    "2chains_N96": {
+      "H20-P2a_pass_rate": 1.0,
+      "H20-P2b_pass_rate": 0.5,
+      "depth_variance_mean": 1.25,
+      "hegemonic_count_mean": 1.0,
+      "n_seeds": 2,
+      "H20-P2a_overall": true,
+      "H20-P2b_overall": true
+    }
+  }
+}
