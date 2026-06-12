@@ -28,13 +28,21 @@ def _union_find(n, edges):
 # ---------------------------------------------------------------------------
 # 1. 聚簇 (A1') — 共同反差使共活跃位的绑定增强 (同色优先)。
 # ---------------------------------------------------------------------------
-def m1_clustering(layer):
+def m1_clustering(layer, throttle: float = 1.0):
+    """聚簇机制，接受节流因子调制。
+    
+    throttle=1.0: 全功率运行 (原始行为)
+    throttle=0.0: 不增强绑定 (能量耗尽)
+    throttle=0.5: 绑定增强减半
+    """
     f = layer.field
     act = np.where(f.state == 1)[0]
     if len(act) < 2:
         return
     same = f.color[act][:, None] == f.color[act][None, :]
-    inc = np.where(same, layer.p.bind_inc, layer.p.bind_inc * 0.15)
+    # 用 throttle 调制绑定增强强度
+    effective_inc = layer.p.bind_inc * throttle
+    inc = np.where(same, effective_inc, effective_inc * 0.15)
     np.fill_diagonal(inc, 0.0)
     f.binding[np.ix_(act, act)] += inc
     np.clip(f.binding, 0.0, layer.p.bind_cap, out=f.binding)
@@ -94,7 +102,13 @@ def m4_innate_completeness(layer):
 # ---------------------------------------------------------------------------
 # 5. 最小变易 (A4) — 从候选中只选择极小量单位(Hamming=1)翻转并提交。
 # ---------------------------------------------------------------------------
-def m5_minimal_variation(layer):
+def m5_minimal_variation(layer, throttle: float = 1.0):
+    """最小变易机制，接受节流因子调制。
+    
+    throttle=1.0: 全功率运行 (原始行为)
+    throttle=0.0: 不允许翻转 (能量耗尽)
+    throttle=0.5: 翻转数量减半
+    """
     f = layer.field
     if f.sealed:
         return
@@ -103,8 +117,10 @@ def m5_minimal_variation(layer):
     absorbable = [b for b in np.where(f.state == 1)[0].tolist()
                   if f.admissible(b) and b not in f.sealed_bits]
     moves = 0
+    # 用 throttle 调制翻转数量
+    throttle = max(0.0, min(1.0, throttle))  # 确保在 [0, 1] 范围内
     # 注入: 差异源产生新差异 (0->1) —— 这是"活秩序"的动力
-    n_inject = min(len(inject), layer.churn)
+    n_inject = int(min(len(inject), layer.churn) * throttle)
     if n_inject > 0:
         for b in rng.choice(inject, size=n_inject, replace=False).tolist():
             f.state[b] = 1
@@ -113,7 +129,7 @@ def m5_minimal_variation(layer):
     if absorbable:
         deg = f.binding[absorbable, :].sum(axis=1)
         order = np.argsort(deg)  # 低绑定优先被吸收
-        budget = layer.churn + max(0, -f.flux_budget)
+        budget = int((layer.churn + max(0, -f.flux_budget)) * throttle)
         for k in order[:budget].tolist():
             b = absorbable[k]
             # 高绑定位不被吸收(已被"锁在一起")
@@ -128,18 +144,27 @@ def m5_minimal_variation(layer):
 # 6. 破缺 (A6) — 对称性破缺: 当某组织的绑定密度跨越临界, 一次性 cascade 锁定它。
 #    这是一阶相变的源头。
 # ---------------------------------------------------------------------------
-def m6_breaking(layer):
+def m6_breaking(layer, throttle: float = 1.0):
+    """破缺机制，接受节流因子调制。
+    
+    throttle=1.0: 全功率运行 (原始行为)
+    throttle=0.0: 极度难以触发破缺 (cascade_density 阈值提高)
+    throttle=0.5: cascade_density 阈值提高 50%
+    """
     f = layer.field
     if f.sealed:
         return
     newly = []
+    # 用 throttle 调制 cascade_density 阈值
+    # throttle 低时，需要更高的密度才能触发破缺
+    effective_density = layer.p.cascade_density * (2.0 - throttle)  # throttle=0 -> 2x threshold, throttle=1 -> 1x threshold
     for org in getattr(layer, "tentative_orgs", []):
         org = set(b for b in org if f.state[b] == 1)
         if len(org) < layer.p.min_org_size:
             continue
         sub = f.binding[np.ix_(list(org), list(org))]
         density = sub.mean() if sub.size else 0.0
-        if density >= layer.p.cascade_density:
+        if density >= effective_density:
             oid = f"L{f.layer}-org{len(f.organizations)}"
             if not any(org <= ex or ex <= org for ex in f.organizations.values()):
                 f.organizations[oid] = org

@@ -131,6 +131,26 @@ class EnergyManager:
         """剩余预算占初始预算的比例。"""
         return self.budget / self.config.initial_budget
 
+    def throttle_factor(self) -> float:
+        """节流因子：基于预算比例返回 0.0-1.0 的调制强度。
+
+        能量充足时返回 1.0 (full power)，能量耗尽时返回 0.0 (no power)。
+        使用平滑的线性映射：
+        - budget_ratio >= 0.5: throttle = 1.0
+        - budget_ratio <= 0.1: throttle = 0.0
+        - 中间: 线性插值
+
+        这确保机制在能量充足时全功率运行，在能量不足时逐渐减弱。
+        """
+        ratio = self.budget_ratio()
+        if ratio >= 0.5:
+            return 1.0
+        elif ratio <= 0.1:
+            return 0.0
+        else:
+            # 线性插值: 0.1 -> 0.0, 0.5 -> 1.0
+            return (ratio - 0.1) / (0.5 - 0.1)  # (ratio - 0.1) / 0.4
+
     def summary(self) -> Dict:
         return {
             'final_budget': self.history.final_budget(),

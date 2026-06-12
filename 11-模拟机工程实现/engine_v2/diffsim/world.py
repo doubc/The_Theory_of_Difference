@@ -1,4 +1,4 @@
-"""world.py — 单层引擎(Layer) 与 递归闭环世界(RecursiveWorld)。
+﻿"""world.py — 单层引擎(Layer) 与 递归闭环世界(RecursiveWorld)。
 
 Layer 运行一层的九机制齿轮直到密封。
 RecursiveWorld 把一层的自指(A9)输出作为下一层的差异源, 递归咬合成闭环。
@@ -71,12 +71,18 @@ class Layer:
             self.step += 1
             prev = f.active_set()
 
-            M.m1_clustering(self)
+            # 计算节流因子 (如果能量系统存在)
+            throttle = 1.0
+            if self.energy:
+                throttle = self.energy.throttle_factor()
+
+            # 传递节流因子到机制 (m1, m5, m6 接受调制)
+            M.m1_clustering(self, throttle)
             M.m2_hierarchy(self)
             M.m3_conservation(self)
             M.m4_innate_completeness(self)
-            M.m5_minimal_variation(self)
-            M.m6_breaking(self)
+            M.m5_minimal_variation(self, throttle)
+            M.m6_breaking(self, throttle)
             f.record()
             M.m7_cycle(self)
             M.m8_locking(self)
