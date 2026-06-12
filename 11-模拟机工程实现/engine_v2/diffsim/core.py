@@ -19,7 +19,7 @@ class DifferenceField:
     def __init__(self, N, active=None, a1_source=None, direction=None,
                  binding=None, color=None, layer=0, rng=None, naming_meta=None):
         self.N = int(N)
-        self.rng = rng if rng is not None else np.random.default_rng()
+        self.rng = rng if rng is not None else np.random.RandomState()
         self.layer = int(layer)
 
         self.state = np.zeros(self.N, dtype=np.int8)
@@ -38,7 +38,12 @@ class DifferenceField:
         self.binding = (np.zeros((self.N, self.N), dtype=float)
                         if binding is None else np.asarray(binding, dtype=float))
         if color is None:
-            self.color = self.rng.integers(0, max(1, self.N // 8 + 1), size=self.N)
+            # numpy Generator API (new): use integers()
+            # numpy RandomState API (old): use randint()
+            if hasattr(self.rng, 'integers'):
+                self.color = self.rng.integers(0, max(1, self.N // 8 + 1), size=self.N)
+            else:
+                self.color = self.rng.randint(0, max(1, self.N // 8 + 1), size=self.N)
         else:
             self.color = np.asarray(color)
 
