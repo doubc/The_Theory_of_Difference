@@ -1,4 +1,4 @@
-"""environment.py — Phase 19: 开放系统(环境交互) v2.
+﻿"""environment.py — Phase 19: 开放系统(环境交互) v2.
 
 EnvironmentField: 无密封、持续搅动的差异场，提供给主系统外部约束。
 EnvironmentCoupling: 双向耦合。

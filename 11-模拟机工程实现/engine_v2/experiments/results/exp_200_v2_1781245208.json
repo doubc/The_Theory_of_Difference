@@ -1,0 +1,370 @@
+[
+  {
+    "config": "baseline",
+    "N0": 24,
+    "seed": 42,
+    "depth": 0,
+    "n_layers": 1,
+    "energy": {}
+  },
+  {
+    "config": "baseline",
+    "N0": 24,
+    "seed": 142,
+    "depth": 0,
+    "n_layers": 1,
+    "energy": {}
+  },
+  {
+    "config": "baseline",
+    "N0": 24,
+    "seed": 242,
+    "depth": 0,
+    "n_layers": 1,
+    "energy": {}
+  },
+  {
+    "config": "baseline",
+    "N0": 24,
+    "seed": 342,
+    "depth": 0,
+    "n_layers": 1,
+    "energy": {}
+  },
+  {
+    "config": "baseline",
+    "N0": 24,
+    "seed": 442,
+    "depth": 0,
+    "n_layers": 1,
+    "energy": {}
+  },
+  {
+    "config": "baseline",
+    "N0": 24,
+    "seed": 542,
+    "depth": 0,
+    "n_layers": 1,
+    "energy": {}
+  },
+  {
+    "config": "baseline",
+    "N0": 24,
+    "seed": 642,
+    "depth": 0,
+    "n_layers": 1,
+    "energy": {}
+  },
+  {
+    "config": "baseline",
+    "N0": 24,
+    "seed": 742,
+    "depth": 0,
+    "n_layers": 1,
+    "energy": {}
+  },
+  {
+    "config": "low_budget",
+    "N0": 24,
+    "seed": 42,
+    "depth": 0,
+    "n_layers": 1,
+    "energy": {
+      "L0": {
+        "current_budget": 0.6122544746705905,
+        "is_depleted": true,
+        "n_steps": 15,
+        "initial_budget": 30.0,
+        "min_budget": 0.6122544746705905,
+        "max_budget": 27.9,
+        "avg_budget": 13.9591204671741,
+        "final_seal_threshold": 0.9938774552532941
+      }
+    }
+  },
+  {
+    "config": "low_budget",
+    "N0": 24,
+    "seed": 142,
+    "depth": 0,
+    "n_layers": 1,
+    "energy": {
+      "L0": {
+        "current_budget": 0.6122544746705905,
+        "is_depleted": true,
+        "n_steps": 15,
+        "initial_budget": 30.0,
+        "min_budget": 0.6122544746705905,
+        "max_budget": 27.9,
+        "avg_budget": 13.9591204671741,
+        "final_seal_threshold": 0.9938774552532941
+      }
+    }
+  },
+  {
+    "config": "low_budget",
+    "N0": 24,
+    "seed": 242,
+    "depth": 0,
+    "n_layers": 1,
+    "energy": {
+      "L0": {
+        "current_budget": 0.6122544746705905,
+        "is_depleted": true,
+        "n_steps": 15,
+        "initial_budget": 30.0,
+        "min_budget": 0.6122544746705905,
+        "max_budget": 27.9,
+        "avg_budget": 13.9591204671741,
+        "final_seal_threshold": 0.9938774552532941
+      }
+    }
+  },
+  {
+    "config": "low_budget",
+    "N0": 24,
+    "seed": 342,
+    "depth": 0,
+    "n_layers": 1,
+    "energy": {
+      "L0": {
+        "current_budget": 0.6122544746705905,
+        "is_depleted": true,
+        "n_steps": 15,
+        "initial_budget": 30.0,
+        "min_budget": 0.6122544746705905,
+        "max_budget": 27.9,
+        "avg_budget": 13.9591204671741,
+        "final_seal_threshold": 0.9938774552532941
+      }
+    }
+  },
+  {
+    "config": "low_budget",
+    "N0": 24,
+    "seed": 442,
+    "depth": 0,
+    "n_layers": 1,
+    "energy": {
+      "L0": {
+        "current_budget": 0.6122544746705905,
+        "is_depleted": true,
+        "n_steps": 15,
+        "initial_budget": 30.0,
+        "min_budget": 0.6122544746705905,
+        "max_budget": 27.9,
+        "avg_budget": 13.9591204671741,
+        "final_seal_threshold": 0.9938774552532941
+      }
+    }
+  },
+  {
+    "config": "low_budget",
+    "N0": 24,
+    "seed": 542,
+    "depth": 0,
+    "n_layers": 1,
+    "energy": {
+      "L0": {
+        "current_budget": 0.6122544746705905,
+        "is_depleted": true,
+        "n_steps": 15,
+        "initial_budget": 30.0,
+        "min_budget": 0.6122544746705905,
+        "max_budget": 27.9,
+        "avg_budget": 13.9591204671741,
+        "final_seal_threshold": 0.9938774552532941
+      }
+    }
+  },
+  {
+    "config": "low_budget",
+    "N0": 24,
+    "seed": 642,
+    "depth": 0,
+    "n_layers": 1,
+    "energy": {
+      "L0": {
+        "current_budget": 0.6122544746705905,
+        "is_depleted": true,
+        "n_steps": 15,
+        "initial_budget": 30.0,
+        "min_budget": 0.6122544746705905,
+        "max_budget": 27.9,
+        "avg_budget": 13.9591204671741,
+        "final_seal_threshold": 0.9938774552532941
+      }
+    }
+  },
+  {
+    "config": "low_budget",
+    "N0": 24,
+    "seed": 742,
+    "depth": 0,
+    "n_layers": 1,
+    "energy": {
+      "L0": {
+        "current_budget": 0.6122544746705905,
+        "is_depleted": true,
+        "n_steps": 15,
+        "initial_budget": 30.0,
+        "min_budget": 0.6122544746705905,
+        "max_budget": 27.9,
+        "avg_budget": 13.9591204671741,
+        "final_seal_threshold": 0.9938774552532941
+      }
+    }
+  },
+  {
+    "config": "high_decay",
+    "N0": 24,
+    "seed": 42,
+    "depth": 0,
+    "n_layers": 1,
+    "energy": {
+      "L0": {
+        "current_budget": 1.724981944569448,
+        "is_depleted": true,
+        "n_steps": 25,
+        "initial_budget": 100.0,
+        "min_budget": 1.724981944569448,
+        "max_budget": 93.2,
+        "avg_budget": 38.68901372212725,
+        "final_seal_threshold": 0.9827501805543055
+      }
+    }
+  },
+  {
+    "config": "high_decay",
+    "N0": 24,
+    "seed": 142,
+    "depth": 0,
+    "n_layers": 1,
+    "energy": {
+      "L0": {
+        "current_budget": 1.724981944569448,
+        "is_depleted": true,
+        "n_steps": 25,
+        "initial_budget": 100.0,
+        "min_budget": 1.724981944569448,
+        "max_budget": 93.2,
+        "avg_budget": 38.68901372212725,
+        "final_seal_threshold": 0.9827501805543055
+      }
+    }
+  },
+  {
+    "config": "high_decay",
+    "N0": 24,
+    "seed": 242,
+    "depth": 0,
+    "n_layers": 1,
+    "energy": {
+      "L0": {
+        "current_budget": 1.724981944569448,
+        "is_depleted": true,
+        "n_steps": 25,
+        "initial_budget": 100.0,
+        "min_budget": 1.724981944569448,
+        "max_budget": 93.2,
+        "avg_budget": 38.68901372212725,
+        "final_seal_threshold": 0.9827501805543055
+      }
+    }
+  },
+  {
+    "config": "high_decay",
+    "N0": 24,
+    "seed": 342,
+    "depth": 0,
+    "n_layers": 1,
+    "energy": {
+      "L0": {
+        "current_budget": 1.724981944569448,
+        "is_depleted": true,
+        "n_steps": 25,
+        "initial_budget": 100.0,
+        "min_budget": 1.724981944569448,
+        "max_budget": 93.2,
+        "avg_budget": 38.68901372212725,
+        "final_seal_threshold": 0.9827501805543055
+      }
+    }
+  },
+  {
+    "config": "high_decay",
+    "N0": 24,
+    "seed": 442,
+    "depth": 0,
+    "n_layers": 1,
+    "energy": {
+      "L0": {
+        "current_budget": 1.724981944569448,
+        "is_depleted": true,
+        "n_steps": 25,
+        "initial_budget": 100.0,
+        "min_budget": 1.724981944569448,
+        "max_budget": 93.2,
+        "avg_budget": 38.68901372212725,
+        "final_seal_threshold": 0.9827501805543055
+      }
+    }
+  },
+  {
+    "config": "high_decay",
+    "N0": 24,
+    "seed": 542,
+    "depth": 0,
+    "n_layers": 1,
+    "energy": {
+      "L0": {
+        "current_budget": 1.724981944569448,
+        "is_depleted": true,
+        "n_steps": 25,
+        "initial_budget": 100.0,
+        "min_budget": 1.724981944569448,
+        "max_budget": 93.2,
+        "avg_budget": 38.68901372212725,
+        "final_seal_threshold": 0.9827501805543055
+      }
+    }
+  },
+  {
+    "config": "high_decay",
+    "N0": 24,
+    "seed": 642,
+    "depth": 0,
+    "n_layers": 1,
+    "energy": {
+      "L0": {
+        "current_budget": 1.724981944569448,
+        "is_depleted": true,
+        "n_steps": 25,
+        "initial_budget": 100.0,
+        "min_budget": 1.724981944569448,
+        "max_budget": 93.2,
+        "avg_budget": 38.68901372212725,
+        "final_seal_threshold": 0.9827501805543055
+      }
+    }
+  },
+  {
+    "config": "high_decay",
+    "N0": 24,
+    "seed": 742,
+    "depth": 0,
+    "n_layers": 1,
+    "energy": {
+      "L0": {
+        "current_budget": 1.724981944569448,
+        "is_depleted": true,
+        "n_steps": 25,
+        "initial_budget": 100.0,
+        "min_budget": 1.724981944569448,
+        "max_budget": 93.2,
+        "avg_budget": 38.68901372212725,
+        "final_seal_threshold": 0.9827501805543055
+      }
+    }
+  }
+]

@@ -1,0 +1,1408 @@
+{
+  "baseline": {
+    "summary": {
+      "config": "no_energy",
+      "mean_depth": 4.625,
+      "std_depth": 0.6959705453537527,
+      "mean_l1_flux": 0.1904875,
+      "std_l1_flux": 0.06900549683720855,
+      "l2_emergence_rate": 1.0,
+      "n_seeds": 8
+    },
+    "runs": [
+      {
+        "seed": 42,
+        "depth": 5,
+        "n_layers": 5,
+        "l1_flux": 0.2095,
+        "l2_emerged": true,
+        "layers": [
+          {
+            "layer": 0,
+            "N": 48,
+            "sealed": true,
+            "flux": 0.01,
+            "mode": "seed"
+          },
+          {
+            "layer": 1,
+            "N": 18,
+            "sealed": true,
+            "flux": 0.2095,
+            "mode": "self_reference"
+          },
+          {
+            "layer": 2,
+            "N": 10,
+            "sealed": true,
+            "flux": 0.4858,
+            "mode": "self_reference"
+          },
+          {
+            "layer": 3,
+            "N": 6,
+            "sealed": true,
+            "flux": 0.7631,
+            "mode": "self_reference"
+          },
+          {
+            "layer": 4,
+            "N": 4,
+            "sealed": true,
+            "flux": 0.775,
+            "mode": "self_reference"
+          }
+        ]
+      },
+      {
+        "seed": 142,
+        "depth": 5,
+        "n_layers": 5,
+        "l1_flux": 0.2611,
+        "l2_emerged": true,
+        "layers": [
+          {
+            "layer": 0,
+            "N": 48,
+            "sealed": true,
+            "flux": 0.01,
+            "mode": "seed"
+          },
+          {
+            "layer": 1,
+            "N": 16,
+            "sealed": true,
+            "flux": 0.2611,
+            "mode": "self_reference"
+          },
+          {
+            "layer": 2,
+            "N": 8,
+            "sealed": true,
+            "flux": 0.6937,
+            "mode": "self_reference"
+          },
+          {
+            "layer": 3,
+            "N": 6,
+            "sealed": true,
+            "flux": 0.7629,
+            "mode": "self_reference"
+          },
+          {
+            "layer": 4,
+            "N": 4,
+            "sealed": true,
+            "flux": 0.775,
+            "mode": "self_reference"
+          }
+        ]
+      },
+      {
+        "seed": 242,
+        "depth": 5,
+        "n_layers": 6,
+        "l1_flux": 0.2066,
+        "l2_emerged": true,
+        "layers": [
+          {
+            "layer": 0,
+            "N": 48,
+            "sealed": true,
+            "flux": 0.0091,
+            "mode": "seed"
+          },
+          {
+            "layer": 1,
+            "N": 16,
+            "sealed": true,
+            "flux": 0.2066,
+            "mode": "self_reference"
+          },
+          {
+            "layer": 2,
+            "N": 9,
+            "sealed": true,
+            "flux": 0.4155,
+            "mode": "self_reference"
+          },
+          {
+            "layer": 3,
+            "N": 7,
+            "sealed": true,
+            "flux": 0.7378,
+            "mode": "self_reference"
+          },
+          {
+            "layer": 4,
+            "N": 5,
+            "sealed": true,
+            "flux": 0.6892,
+            "mode": "self_reference"
+          },
+          {
+            "layer": 5,
+            "N": 3,
+            "sealed": false,
+            "flux": 1.0,
+            "mode": "self_reference"
+          }
+        ]
+      },
+      {
+        "seed": 342,
+        "depth": 5,
+        "n_layers": 5,
+        "l1_flux": 0.1765,
+        "l2_emerged": true,
+        "layers": [
+          {
+            "layer": 0,
+            "N": 48,
+            "sealed": true,
+            "flux": 0.0091,
+            "mode": "seed"
+          },
+          {
+            "layer": 1,
+            "N": 15,
+            "sealed": true,
+            "flux": 0.1765,
+            "mode": "self_reference"
+          },
+          {
+            "layer": 2,
+            "N": 10,
+            "sealed": true,
+            "flux": 0.428,
+            "mode": "self_reference"
+          },
+          {
+            "layer": 3,
+            "N": 6,
+            "sealed": true,
+            "flux": 0.7731,
+            "mode": "self_reference"
+          },
+          {
+            "layer": 4,
+            "N": 4,
+            "sealed": true,
+            "flux": 0.775,
+            "mode": "self_reference"
+          }
+        ]
+      },
+      {
+        "seed": 442,
+        "depth": 5,
+        "n_layers": 5,
+        "l1_flux": 0.2584,
+        "l2_emerged": true,
+        "layers": [
+          {
+            "layer": 0,
+            "N": 48,
+            "sealed": true,
+            "flux": 0.01,
+            "mode": "seed"
+          },
+          {
+            "layer": 1,
+            "N": 15,
+            "sealed": true,
+            "flux": 0.2584,
+            "mode": "self_reference"
+          },
+          {
+            "layer": 2,
+            "N": 8,
+            "sealed": true,
+            "flux": 0.6709,
+            "mode": "self_reference"
+          },
+          {
+            "layer": 3,
+            "N": 6,
+            "sealed": true,
+            "flux": 0.7725,
+            "mode": "self_reference"
+          },
+          {
+            "layer": 4,
+            "N": 4,
+            "sealed": true,
+            "flux": 0.775,
+            "mode": "self_reference"
+          }
+        ]
+      },
+      {
+        "seed": 542,
+        "depth": 3,
+        "n_layers": 3,
+        "l1_flux": 0.0258,
+        "l2_emerged": true,
+        "layers": [
+          {
+            "layer": 0,
+            "N": 48,
+            "sealed": true,
+            "flux": 0.0091,
+            "mode": "seed"
+          },
+          {
+            "layer": 1,
+            "N": 12,
+            "sealed": true,
+            "flux": 0.0258,
+            "mode": "self_reference"
+          },
+          {
+            "layer": 2,
+            "N": 5,
+            "sealed": true,
+            "flux": 0.4132,
+            "mode": "self_reference"
+          }
+        ]
+      },
+      {
+        "seed": 642,
+        "depth": 4,
+        "n_layers": 4,
+        "l1_flux": 0.1765,
+        "l2_emerged": true,
+        "layers": [
+          {
+            "layer": 0,
+            "N": 48,
+            "sealed": true,
+            "flux": 0.0091,
+            "mode": "seed"
+          },
+          {
+            "layer": 1,
+            "N": 15,
+            "sealed": true,
+            "flux": 0.1765,
+            "mode": "self_reference"
+          },
+          {
+            "layer": 2,
+            "N": 8,
+            "sealed": true,
+            "flux": 0.3595,
+            "mode": "self_reference"
+          },
+          {
+            "layer": 3,
+            "N": 4,
+            "sealed": true,
+            "flux": 0.775,
+            "mode": "self_reference"
+          }
+        ]
+      },
+      {
+        "seed": 742,
+        "depth": 5,
+        "n_layers": 5,
+        "l1_flux": 0.2095,
+        "l2_emerged": true,
+        "layers": [
+          {
+            "layer": 0,
+            "N": 48,
+            "sealed": true,
+            "flux": 0.01,
+            "mode": "seed"
+          },
+          {
+            "layer": 1,
+            "N": 18,
+            "sealed": true,
+            "flux": 0.2095,
+            "mode": "self_reference"
+          },
+          {
+            "layer": 2,
+            "N": 10,
+            "sealed": true,
+            "flux": 0.4451,
+            "mode": "self_reference"
+          },
+          {
+            "layer": 3,
+            "N": 6,
+            "sealed": true,
+            "flux": 0.6481,
+            "mode": "self_reference"
+          },
+          {
+            "layer": 4,
+            "N": 4,
+            "sealed": true,
+            "flux": 0.775,
+            "mode": "self_reference"
+          }
+        ]
+      }
+    ]
+  },
+  "high_budget": {
+    "summary": {
+      "config": "high_budget",
+      "mean_depth": 2.875,
+      "std_depth": 0.5994789404140899,
+      "mean_l1_flux": 0.1904875,
+      "std_l1_flux": 0.06900549683720855,
+      "l2_emergence_rate": 0.75,
+      "n_seeds": 8
+    },
+    "runs": [
+      {
+        "seed": 42,
+        "depth": 3,
+        "n_layers": 4,
+        "l1_flux": 0.2095,
+        "l2_emerged": true,
+        "layers": [
+          {
+            "layer": 0,
+            "N": 48,
+            "sealed": true,
+            "flux": 0.01,
+            "mode": "seed",
+            "energy_final": 457.12,
+            "energy_ratio": 0.9142,
+            "energy_low": false
+          },
+          {
+            "layer": 1,
+            "N": 18,
+            "sealed": true,
+            "flux": 0.2095,
+            "mode": "self_reference",
+            "energy_final": 407.86,
+            "energy_ratio": 0.8157,
+            "energy_low": false
+          },
+          {
+            "layer": 2,
+            "N": 10,
+            "sealed": true,
+            "flux": 0.4858,
+            "mode": "self_reference",
+            "energy_final": 241.37,
+            "energy_ratio": 0.4827,
+            "energy_low": false
+          },
+          {
+            "layer": 3,
+            "N": 6,
+            "sealed": false,
+            "flux": 0.4991,
+            "mode": "self_reference",
+            "energy_final": 1.34,
+            "energy_ratio": 0.0027,
+            "energy_low": true
+          }
+        ]
+      },
+      {
+        "seed": 142,
+        "depth": 2,
+        "n_layers": 3,
+        "l1_flux": 0.2611,
+        "l2_emerged": false,
+        "layers": [
+          {
+            "layer": 0,
+            "N": 48,
+            "sealed": true,
+            "flux": 0.01,
+            "mode": "seed",
+            "energy_final": 457.12,
+            "energy_ratio": 0.9142,
+            "energy_low": false
+          },
+          {
+            "layer": 1,
+            "N": 16,
+            "sealed": true,
+            "flux": 0.2611,
+            "mode": "self_reference",
+            "energy_final": 395.12,
+            "energy_ratio": 0.7902,
+            "energy_low": false
+          },
+          {
+            "layer": 2,
+            "N": 8,
+            "sealed": false,
+            "flux": 0.517,
+            "mode": "self_reference",
+            "energy_final": 0.12,
+            "energy_ratio": 0.0002,
+            "energy_low": true
+          }
+        ]
+      },
+      {
+        "seed": 242,
+        "depth": 3,
+        "n_layers": 4,
+        "l1_flux": 0.2066,
+        "l2_emerged": true,
+        "layers": [
+          {
+            "layer": 0,
+            "N": 48,
+            "sealed": true,
+            "flux": 0.0091,
+            "mode": "seed",
+            "energy_final": 452.95,
+            "energy_ratio": 0.9059,
+            "energy_low": false
+          },
+          {
+            "layer": 1,
+            "N": 16,
+            "sealed": true,
+            "flux": 0.2066,
+            "mode": "self_reference",
+            "energy_final": 424.41,
+            "energy_ratio": 0.8488,
+            "energy_low": false
+          },
+          {
+            "layer": 2,
+            "N": 9,
+            "sealed": true,
+            "flux": 0.4155,
+            "mode": "self_reference",
+            "energy_final": 357.35,
+            "energy_ratio": 0.7147,
+            "energy_low": false
+          },
+          {
+            "layer": 3,
+            "N": 7,
+            "sealed": false,
+            "flux": 0.505,
+            "mode": "self_reference",
+            "energy_final": 0.38,
+            "energy_ratio": 0.0008,
+            "energy_low": true
+          }
+        ]
+      },
+      {
+        "seed": 342,
+        "depth": 3,
+        "n_layers": 4,
+        "l1_flux": 0.1765,
+        "l2_emerged": true,
+        "layers": [
+          {
+            "layer": 0,
+            "N": 48,
+            "sealed": true,
+            "flux": 0.0091,
+            "mode": "seed",
+            "energy_final": 452.95,
+            "energy_ratio": 0.9059,
+            "energy_low": false
+          },
+          {
+            "layer": 1,
+            "N": 15,
+            "sealed": true,
+            "flux": 0.1765,
+            "mode": "self_reference",
+            "energy_final": 428.57,
+            "energy_ratio": 0.8571,
+            "energy_low": false
+          },
+          {
+            "layer": 2,
+            "N": 10,
+            "sealed": true,
+            "flux": 0.428,
+            "mode": "self_reference",
+            "energy_final": 245.48,
+            "energy_ratio": 0.491,
+            "energy_low": false
+          },
+          {
+            "layer": 3,
+            "N": 6,
+            "sealed": false,
+            "flux": 0.512,
+            "mode": "self_reference",
+            "energy_final": 0.9,
+            "energy_ratio": 0.0018,
+            "energy_low": true
+          }
+        ]
+      },
+      {
+        "seed": 442,
+        "depth": 3,
+        "n_layers": 4,
+        "l1_flux": 0.2584,
+        "l2_emerged": true,
+        "layers": [
+          {
+            "layer": 0,
+            "N": 48,
+            "sealed": true,
+            "flux": 0.01,
+            "mode": "seed",
+            "energy_final": 457.12,
+            "energy_ratio": 0.9142,
+            "energy_low": false
+          },
+          {
+            "layer": 1,
+            "N": 15,
+            "sealed": true,
+            "flux": 0.2584,
+            "mode": "self_reference",
+            "energy_final": 407.32,
+            "energy_ratio": 0.8146,
+            "energy_low": false
+          },
+          {
+            "layer": 2,
+            "N": 8,
+            "sealed": true,
+            "flux": 0.7069,
+            "mode": "self_reference",
+            "energy_final": 130.94,
+            "energy_ratio": 0.2619,
+            "energy_low": false
+          },
+          {
+            "layer": 3,
+            "N": 3,
+            "sealed": false,
+            "flux": 0.6267,
+            "mode": "self_reference",
+            "energy_final": 0.21,
+            "energy_ratio": 0.0004,
+            "energy_low": true
+          }
+        ]
+      },
+      {
+        "seed": 542,
+        "depth": 2,
+        "n_layers": 3,
+        "l1_flux": 0.0258,
+        "l2_emerged": false,
+        "layers": [
+          {
+            "layer": 0,
+            "N": 48,
+            "sealed": true,
+            "flux": 0.0091,
+            "mode": "seed",
+            "energy_final": 452.95,
+            "energy_ratio": 0.9059,
+            "energy_low": false
+          },
+          {
+            "layer": 1,
+            "N": 12,
+            "sealed": true,
+            "flux": 0.0258,
+            "mode": "self_reference",
+            "energy_final": 457.51,
+            "energy_ratio": 0.915,
+            "energy_low": false
+          },
+          {
+            "layer": 2,
+            "N": 5,
+            "sealed": false,
+            "flux": 0.1976,
+            "mode": "self_reference",
+            "energy_final": 0.0,
+            "energy_ratio": 0.0,
+            "energy_low": true
+          }
+        ]
+      },
+      {
+        "seed": 642,
+        "depth": 3,
+        "n_layers": 4,
+        "l1_flux": 0.1765,
+        "l2_emerged": true,
+        "layers": [
+          {
+            "layer": 0,
+            "N": 48,
+            "sealed": true,
+            "flux": 0.0091,
+            "mode": "seed",
+            "energy_final": 452.95,
+            "energy_ratio": 0.9059,
+            "energy_low": false
+          },
+          {
+            "layer": 1,
+            "N": 15,
+            "sealed": true,
+            "flux": 0.1765,
+            "mode": "self_reference",
+            "energy_final": 428.57,
+            "energy_ratio": 0.8571,
+            "energy_low": false
+          },
+          {
+            "layer": 2,
+            "N": 8,
+            "sealed": true,
+            "flux": 0.3595,
+            "mode": "self_reference",
+            "energy_final": 297.53,
+            "energy_ratio": 0.5951,
+            "energy_low": false
+          },
+          {
+            "layer": 3,
+            "N": 4,
+            "sealed": false,
+            "flux": 0.6209,
+            "mode": "self_reference",
+            "energy_final": 1.44,
+            "energy_ratio": 0.0029,
+            "energy_low": true
+          }
+        ]
+      },
+      {
+        "seed": 742,
+        "depth": 4,
+        "n_layers": 5,
+        "l1_flux": 0.2095,
+        "l2_emerged": true,
+        "layers": [
+          {
+            "layer": 0,
+            "N": 48,
+            "sealed": true,
+            "flux": 0.01,
+            "mode": "seed",
+            "energy_final": 457.12,
+            "energy_ratio": 0.9142,
+            "energy_low": false
+          },
+          {
+            "layer": 1,
+            "N": 18,
+            "sealed": true,
+            "flux": 0.2095,
+            "mode": "self_reference",
+            "energy_final": 411.78,
+            "energy_ratio": 0.8236,
+            "energy_low": false
+          },
+          {
+            "layer": 2,
+            "N": 10,
+            "sealed": true,
+            "flux": 0.4451,
+            "mode": "self_reference",
+            "energy_final": 248.71,
+            "energy_ratio": 0.4974,
+            "energy_low": false
+          },
+          {
+            "layer": 3,
+            "N": 6,
+            "sealed": true,
+            "flux": 0.6423,
+            "mode": "self_reference",
+            "energy_final": 206.22,
+            "energy_ratio": 0.4124,
+            "energy_low": false
+          },
+          {
+            "layer": 4,
+            "N": 3,
+            "sealed": false,
+            "flux": 0.6267,
+            "mode": "self_reference",
+            "energy_final": 0.21,
+            "energy_ratio": 0.0004,
+            "energy_low": true
+          }
+        ]
+      }
+    ]
+  },
+  "medium_budget": {
+    "summary": {
+      "config": "medium_budget",
+      "mean_depth": 2.125,
+      "std_depth": 0.33071891388307384,
+      "mean_l1_flux": 0.1904875,
+      "std_l1_flux": 0.06900549683720855,
+      "l2_emergence_rate": 0.125,
+      "n_seeds": 8
+    },
+    "runs": [
+      {
+        "seed": 42,
+        "depth": 2,
+        "n_layers": 3,
+        "l1_flux": 0.2095,
+        "l2_emerged": false,
+        "layers": [
+          {
+            "layer": 0,
+            "N": 48,
+            "sealed": true,
+            "flux": 0.01,
+            "mode": "seed",
+            "energy_final": 162.85,
+            "energy_ratio": 0.8142,
+            "energy_low": false
+          },
+          {
+            "layer": 1,
+            "N": 18,
+            "sealed": true,
+            "flux": 0.2095,
+            "mode": "self_reference",
+            "energy_final": 122.42,
+            "energy_ratio": 0.6121,
+            "energy_low": false
+          },
+          {
+            "layer": 2,
+            "N": 10,
+            "sealed": false,
+            "flux": 0.3677,
+            "mode": "self_reference",
+            "energy_final": 1.21,
+            "energy_ratio": 0.006,
+            "energy_low": true
+          }
+        ]
+      },
+      {
+        "seed": 142,
+        "depth": 2,
+        "n_layers": 3,
+        "l1_flux": 0.2611,
+        "l2_emerged": false,
+        "layers": [
+          {
+            "layer": 0,
+            "N": 48,
+            "sealed": true,
+            "flux": 0.01,
+            "mode": "seed",
+            "energy_final": 162.85,
+            "energy_ratio": 0.8142,
+            "energy_low": false
+          },
+          {
+            "layer": 1,
+            "N": 16,
+            "sealed": true,
+            "flux": 0.2611,
+            "mode": "self_reference",
+            "energy_final": 112.22,
+            "energy_ratio": 0.5611,
+            "energy_low": false
+          },
+          {
+            "layer": 2,
+            "N": 8,
+            "sealed": false,
+            "flux": 0.5729,
+            "mode": "self_reference",
+            "energy_final": 1.94,
+            "energy_ratio": 0.0097,
+            "energy_low": true
+          }
+        ]
+      },
+      {
+        "seed": 242,
+        "depth": 3,
+        "n_layers": 4,
+        "l1_flux": 0.2066,
+        "l2_emerged": true,
+        "layers": [
+          {
+            "layer": 0,
+            "N": 48,
+            "sealed": true,
+            "flux": 0.0091,
+            "mode": "seed",
+            "energy_final": 159.34,
+            "energy_ratio": 0.7967,
+            "energy_low": false
+          },
+          {
+            "layer": 1,
+            "N": 16,
+            "sealed": true,
+            "flux": 0.2066,
+            "mode": "self_reference",
+            "energy_final": 135.79,
+            "energy_ratio": 0.6789,
+            "energy_low": false
+          },
+          {
+            "layer": 2,
+            "N": 9,
+            "sealed": true,
+            "flux": 0.4024,
+            "mode": "self_reference",
+            "energy_final": 80.43,
+            "energy_ratio": 0.4022,
+            "energy_low": false
+          },
+          {
+            "layer": 3,
+            "N": 6,
+            "sealed": false,
+            "flux": 0.5744,
+            "mode": "self_reference",
+            "energy_final": 1.74,
+            "energy_ratio": 0.0087,
+            "energy_low": true
+          }
+        ]
+      },
+      {
+        "seed": 342,
+        "depth": 2,
+        "n_layers": 3,
+        "l1_flux": 0.1765,
+        "l2_emerged": false,
+        "layers": [
+          {
+            "layer": 0,
+            "N": 48,
+            "sealed": true,
+            "flux": 0.0091,
+            "mode": "seed",
+            "energy_final": 159.34,
+            "energy_ratio": 0.7967,
+            "energy_low": false
+          },
+          {
+            "layer": 1,
+            "N": 15,
+            "sealed": true,
+            "flux": 0.1765,
+            "mode": "self_reference",
+            "energy_final": 139.19,
+            "energy_ratio": 0.696,
+            "energy_low": false
+          },
+          {
+            "layer": 2,
+            "N": 10,
+            "sealed": false,
+            "flux": 0.3667,
+            "mode": "self_reference",
+            "energy_final": 1.28,
+            "energy_ratio": 0.0064,
+            "energy_low": true
+          }
+        ]
+      },
+      {
+        "seed": 442,
+        "depth": 2,
+        "n_layers": 3,
+        "l1_flux": 0.2584,
+        "l2_emerged": false,
+        "layers": [
+          {
+            "layer": 0,
+            "N": 48,
+            "sealed": true,
+            "flux": 0.01,
+            "mode": "seed",
+            "energy_final": 162.85,
+            "energy_ratio": 0.8142,
+            "energy_low": false
+          },
+          {
+            "layer": 1,
+            "N": 15,
+            "sealed": true,
+            "flux": 0.2584,
+            "mode": "self_reference",
+            "energy_final": 121.9,
+            "energy_ratio": 0.6095,
+            "energy_low": false
+          },
+          {
+            "layer": 2,
+            "N": 8,
+            "sealed": false,
+            "flux": 0.5729,
+            "mode": "self_reference",
+            "energy_final": 1.94,
+            "energy_ratio": 0.0097,
+            "energy_low": true
+          }
+        ]
+      },
+      {
+        "seed": 542,
+        "depth": 2,
+        "n_layers": 3,
+        "l1_flux": 0.0258,
+        "l2_emerged": false,
+        "layers": [
+          {
+            "layer": 0,
+            "N": 48,
+            "sealed": true,
+            "flux": 0.0091,
+            "mode": "seed",
+            "energy_final": 159.34,
+            "energy_ratio": 0.7967,
+            "energy_low": false
+          },
+          {
+            "layer": 1,
+            "N": 12,
+            "sealed": true,
+            "flux": 0.0258,
+            "mode": "self_reference",
+            "energy_final": 163.23,
+            "energy_ratio": 0.8161,
+            "energy_low": false
+          },
+          {
+            "layer": 2,
+            "N": 5,
+            "sealed": false,
+            "flux": 0.2881,
+            "mode": "self_reference",
+            "energy_final": 1.28,
+            "energy_ratio": 0.0064,
+            "energy_low": true
+          }
+        ]
+      },
+      {
+        "seed": 642,
+        "depth": 2,
+        "n_layers": 3,
+        "l1_flux": 0.1765,
+        "l2_emerged": false,
+        "layers": [
+          {
+            "layer": 0,
+            "N": 48,
+            "sealed": true,
+            "flux": 0.0091,
+            "mode": "seed",
+            "energy_final": 159.34,
+            "energy_ratio": 0.7967,
+            "energy_low": false
+          },
+          {
+            "layer": 1,
+            "N": 15,
+            "sealed": true,
+            "flux": 0.1765,
+            "mode": "self_reference",
+            "energy_final": 139.19,
+            "energy_ratio": 0.696,
+            "energy_low": false
+          },
+          {
+            "layer": 2,
+            "N": 8,
+            "sealed": false,
+            "flux": 0.2667,
+            "mode": "self_reference",
+            "energy_final": 0.27,
+            "energy_ratio": 0.0014,
+            "energy_low": true
+          }
+        ]
+      },
+      {
+        "seed": 742,
+        "depth": 2,
+        "n_layers": 3,
+        "l1_flux": 0.2095,
+        "l2_emerged": false,
+        "layers": [
+          {
+            "layer": 0,
+            "N": 48,
+            "sealed": true,
+            "flux": 0.01,
+            "mode": "seed",
+            "energy_final": 162.85,
+            "energy_ratio": 0.8142,
+            "energy_low": false
+          },
+          {
+            "layer": 1,
+            "N": 18,
+            "sealed": true,
+            "flux": 0.2095,
+            "mode": "self_reference",
+            "energy_final": 125.54,
+            "energy_ratio": 0.6277,
+            "energy_low": false
+          },
+          {
+            "layer": 2,
+            "N": 10,
+            "sealed": false,
+            "flux": 0.3677,
+            "mode": "self_reference",
+            "energy_final": 1.21,
+            "energy_ratio": 0.006,
+            "energy_low": true
+          }
+        ]
+      }
+    ]
+  },
+  "low_budget": {
+    "summary": {
+      "config": "low_budget",
+      "mean_depth": 2.125,
+      "std_depth": 0.33071891388307384,
+      "mean_l1_flux": 0.17493750000000002,
+      "std_l1_flux": 0.061356640583966136,
+      "l2_emergence_rate": 0.125,
+      "n_seeds": 8
+    },
+    "runs": [
+      {
+        "seed": 42,
+        "depth": 2,
+        "n_layers": 3,
+        "l1_flux": 0.1938,
+        "l2_emerged": false,
+        "layers": [
+          {
+            "layer": 0,
+            "N": 48,
+            "sealed": true,
+            "flux": 0.01,
+            "mode": "seed",
+            "energy_final": 20.37,
+            "energy_ratio": 0.4074,
+            "energy_low": false
+          },
+          {
+            "layer": 1,
+            "N": 18,
+            "sealed": true,
+            "flux": 0.1938,
+            "mode": "self_reference",
+            "energy_final": 7.77,
+            "energy_ratio": 0.1554,
+            "energy_low": true
+          },
+          {
+            "layer": 2,
+            "N": 6,
+            "sealed": false,
+            "flux": 0.3815,
+            "mode": "self_reference",
+            "energy_final": 0.28,
+            "energy_ratio": 0.0055,
+            "energy_low": true
+          }
+        ]
+      },
+      {
+        "seed": 142,
+        "depth": 2,
+        "n_layers": 3,
+        "l1_flux": 0.2263,
+        "l2_emerged": false,
+        "layers": [
+          {
+            "layer": 0,
+            "N": 48,
+            "sealed": true,
+            "flux": 0.01,
+            "mode": "seed",
+            "energy_final": 20.37,
+            "energy_ratio": 0.4074,
+            "energy_low": false
+          },
+          {
+            "layer": 1,
+            "N": 16,
+            "sealed": true,
+            "flux": 0.2263,
+            "mode": "self_reference",
+            "energy_final": 7.37,
+            "energy_ratio": 0.1473,
+            "energy_low": true
+          },
+          {
+            "layer": 2,
+            "N": 8,
+            "sealed": false,
+            "flux": 0.6275,
+            "mode": "self_reference",
+            "energy_final": 0.49,
+            "energy_ratio": 0.0098,
+            "energy_low": true
+          }
+        ]
+      },
+      {
+        "seed": 242,
+        "depth": 3,
+        "n_layers": 3,
+        "l1_flux": 0.1913,
+        "l2_emerged": true,
+        "layers": [
+          {
+            "layer": 0,
+            "N": 48,
+            "sealed": true,
+            "flux": 0.0091,
+            "mode": "seed",
+            "energy_final": 17.88,
+            "energy_ratio": 0.3575,
+            "energy_low": false
+          },
+          {
+            "layer": 1,
+            "N": 16,
+            "sealed": true,
+            "flux": 0.1913,
+            "mode": "self_reference",
+            "energy_final": 6.12,
+            "energy_ratio": 0.1224,
+            "energy_low": true
+          },
+          {
+            "layer": 2,
+            "N": 6,
+            "sealed": true,
+            "flux": 0.2431,
+            "mode": "self_reference",
+            "energy_final": 4.02,
+            "energy_ratio": 0.0804,
+            "energy_low": true
+          }
+        ]
+      },
+      {
+        "seed": 342,
+        "depth": 2,
+        "n_layers": 3,
+        "l1_flux": 0.1635,
+        "l2_emerged": false,
+        "layers": [
+          {
+            "layer": 0,
+            "N": 48,
+            "sealed": true,
+            "flux": 0.0091,
+            "mode": "seed",
+            "energy_final": 17.88,
+            "energy_ratio": 0.3575,
+            "energy_low": false
+          },
+          {
+            "layer": 1,
+            "N": 15,
+            "sealed": true,
+            "flux": 0.1635,
+            "mode": "self_reference",
+            "energy_final": 6.35,
+            "energy_ratio": 0.1271,
+            "energy_low": true
+          },
+          {
+            "layer": 2,
+            "N": 8,
+            "sealed": false,
+            "flux": 0.3852,
+            "mode": "self_reference",
+            "energy_final": 0.06,
+            "energy_ratio": 0.0012,
+            "energy_low": true
+          }
+        ]
+      },
+      {
+        "seed": 442,
+        "depth": 2,
+        "n_layers": 3,
+        "l1_flux": 0.2364,
+        "l2_emerged": false,
+        "layers": [
+          {
+            "layer": 0,
+            "N": 48,
+            "sealed": true,
+            "flux": 0.01,
+            "mode": "seed",
+            "energy_final": 20.37,
+            "energy_ratio": 0.4074,
+            "energy_low": false
+          },
+          {
+            "layer": 1,
+            "N": 15,
+            "sealed": true,
+            "flux": 0.2364,
+            "mode": "self_reference",
+            "energy_final": 7.62,
+            "energy_ratio": 0.1524,
+            "energy_low": true
+          },
+          {
+            "layer": 2,
+            "N": 8,
+            "sealed": false,
+            "flux": 0.6275,
+            "mode": "self_reference",
+            "energy_final": 0.49,
+            "energy_ratio": 0.0098,
+            "energy_low": true
+          }
+        ]
+      },
+      {
+        "seed": 542,
+        "depth": 2,
+        "n_layers": 3,
+        "l1_flux": 0.0258,
+        "l2_emerged": false,
+        "layers": [
+          {
+            "layer": 0,
+            "N": 48,
+            "sealed": true,
+            "flux": 0.0091,
+            "mode": "seed",
+            "energy_final": 17.88,
+            "energy_ratio": 0.3575,
+            "energy_low": false
+          },
+          {
+            "layer": 1,
+            "N": 12,
+            "sealed": true,
+            "flux": 0.0258,
+            "mode": "self_reference",
+            "energy_final": 20.72,
+            "energy_ratio": 0.4144,
+            "energy_low": false
+          },
+          {
+            "layer": 2,
+            "N": 5,
+            "sealed": false,
+            "flux": 0.5304,
+            "mode": "self_reference",
+            "energy_final": 1.26,
+            "energy_ratio": 0.0252,
+            "energy_low": true
+          }
+        ]
+      },
+      {
+        "seed": 642,
+        "depth": 2,
+        "n_layers": 3,
+        "l1_flux": 0.1635,
+        "l2_emerged": false,
+        "layers": [
+          {
+            "layer": 0,
+            "N": 48,
+            "sealed": true,
+            "flux": 0.0091,
+            "mode": "seed",
+            "energy_final": 17.88,
+            "energy_ratio": 0.3575,
+            "energy_low": false
+          },
+          {
+            "layer": 1,
+            "N": 15,
+            "sealed": true,
+            "flux": 0.1635,
+            "mode": "self_reference",
+            "energy_final": 6.35,
+            "energy_ratio": 0.1271,
+            "energy_low": true
+          },
+          {
+            "layer": 2,
+            "N": 6,
+            "sealed": false,
+            "flux": 0.3815,
+            "mode": "self_reference",
+            "energy_final": 0.28,
+            "energy_ratio": 0.0055,
+            "energy_low": true
+          }
+        ]
+      },
+      {
+        "seed": 742,
+        "depth": 2,
+        "n_layers": 3,
+        "l1_flux": 0.1989,
+        "l2_emerged": false,
+        "layers": [
+          {
+            "layer": 0,
+            "N": 48,
+            "sealed": true,
+            "flux": 0.01,
+            "mode": "seed",
+            "energy_final": 20.37,
+            "energy_ratio": 0.4074,
+            "energy_low": false
+          },
+          {
+            "layer": 1,
+            "N": 18,
+            "sealed": true,
+            "flux": 0.1989,
+            "mode": "self_reference",
+            "energy_final": 7.69,
+            "energy_ratio": 0.1537,
+            "energy_low": true
+          },
+          {
+            "layer": 2,
+            "N": 6,
+            "sealed": false,
+            "flux": 0.3815,
+            "mode": "self_reference",
+            "energy_final": 0.28,
+            "energy_ratio": 0.0055,
+            "energy_low": true
+          }
+        ]
+      }
+    ]
+  }
+}

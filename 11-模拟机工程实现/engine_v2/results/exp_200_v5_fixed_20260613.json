@@ -1,0 +1,194 @@
+[
+  {
+    "config": "baseline",
+    "seed": 0,
+    "N0": 48,
+    "emergence_depth": 1,
+    "report": {
+      "depth": 1,
+      "n_layers": 2,
+      "layers": [
+        {
+          "layer": 0,
+          "steps": 11,
+          "sealed": true,
+          "n_active": 24,
+          "n_total": 48,
+          "flux": 0.07575757575757575
+        },
+        {
+          "layer": 1,
+          "steps": 400,
+          "sealed": false,
+          "n_active": 0,
+          "n_total": 12,
+          "flux": 0.0
+        }
+      ]
+    },
+    "layer_energy": [],
+    "layer_entropy": [],
+    "mean_energy_ratio": null,
+    "dead_order_layers": 0,
+    "any_irreversible": null
+  },
+  {
+    "config": "baseline",
+    "seed": 1,
+    "N0": 48,
+    "emergence_depth": 1,
+    "report": {
+      "depth": 1,
+      "n_layers": 2,
+      "layers": [
+        {
+          "layer": 0,
+          "steps": 11,
+          "sealed": true,
+          "n_active": 24,
+          "n_total": 48,
+          "flux": 0.045454545454545456
+        },
+        {
+          "layer": 1,
+          "steps": 400,
+          "sealed": false,
+          "n_active": 0,
+          "n_total": 12,
+          "flux": 0.0
+        }
+      ]
+    },
+    "layer_energy": [],
+    "layer_entropy": [],
+    "mean_energy_ratio": null,
+    "dead_order_layers": 0,
+    "any_irreversible": null
+  },
+  {
+    "config": "baseline",
+    "seed": 2,
+    "N0": 48,
+    "emergence_depth": 1,
+    "report": {
+      "depth": 1,
+      "n_layers": 2,
+      "layers": [
+        {
+          "layer": 0,
+          "steps": 12,
+          "sealed": true,
+          "n_active": 24,
+          "n_total": 48,
+          "flux": 0.041666666666666664
+        },
+        {
+          "layer": 1,
+          "steps": 400,
+          "sealed": false,
+          "n_active": 0,
+          "n_total": 12,
+          "flux": 0.0
+        }
+      ]
+    },
+    "layer_energy": [],
+    "layer_entropy": [],
+    "mean_energy_ratio": null,
+    "dead_order_layers": 0,
+    "any_irreversible": null
+  },
+  {
+    "config": "baseline",
+    "seed": 3,
+    "N0": 48,
+    "emergence_depth": 1,
+    "report": {
+      "depth": 1,
+      "n_layers": 2,
+      "layers": [
+        {
+          "layer": 0,
+          "steps": 11,
+          "sealed": true,
+          "n_active": 24,
+          "n_total": 48,
+          "flux": 0.07575757575757575
+        },
+        {
+          "layer": 1,
+          "steps": 400,
+          "sealed": false,
+          "n_active": 0,
+          "n_total": 12,
+          "flux": 0.0
+        }
+      ]
+    },
+    "layer_energy": [],
+    "layer_entropy": [],
+    "mean_energy_ratio": null,
+    "dead_order_layers": 0,
+    "any_irreversible": null
+  },
+  {
+    "config": "with_energy",
+    "seed": 0,
+    "error": "'set' object has no attribute 'items'"
+  },
+  {
+    "config": "with_energy",
+    "seed": 1,
+    "error": "'set' object has no attribute 'items'"
+  },
+  {
+    "config": "with_energy",
+    "seed": 2,
+    "error": "'set' object has no attribute 'items'"
+  },
+  {
+    "config": "with_energy",
+    "seed": 3,
+    "error": "'set' object has no attribute 'items'"
+  },
+  {
+    "config": "low_budget",
+    "seed": 0,
+    "error": "'set' object has no attribute 'items'"
+  },
+  {
+    "config": "low_budget",
+    "seed": 1,
+    "error": "'set' object has no attribute 'items'"
+  },
+  {
+    "config": "low_budget",
+    "seed": 2,
+    "error": "'set' object has no attribute 'items'"
+  },
+  {
+    "config": "low_budget",
+    "seed": 3,
+    "error": "'set' object has no attribute 'items'"
+  },
+  {
+    "config": "high_decay",
+    "seed": 0,
+    "error": "'set' object has no attribute 'items'"
+  },
+  {
+    "config": "high_decay",
+    "seed": 1,
+    "error": "'set' object has no attribute 'items'"
+  },
+  {
+    "config": "high_decay",
+    "seed": 2,
+    "error": "'set' object has no attribute 'items'"
+  },
+  {
+    "config": "high_decay",
+    "seed": 3,
+    "error": "'set' object has no attribute 'items'"
+  }
+]
