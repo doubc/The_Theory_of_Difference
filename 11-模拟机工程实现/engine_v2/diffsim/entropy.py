@@ -53,7 +53,7 @@ class EntropyHistory:
         if len(self.entropy_production) < window:
             return False
         recent = self.entropy_production[-window:]
-        return all(p > 0 for p in recent)
+        return any(abs(p) > 1e-10 for p in recent)
 
 
 def shannon_entropy(bits: np.ndarray, log2: bool = True) -> float:

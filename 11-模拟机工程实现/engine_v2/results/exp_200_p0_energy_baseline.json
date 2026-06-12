@@ -1,0 +1,3406 @@
+[
+  {
+    "config": "baseline",
+    "seed": 0,
+    "N0": 48,
+    "emergence_depth": 2,
+    "report": [
+      {
+        "layer": 0,
+        "N": 48,
+        "sealed": true,
+        "seal_step": 10,
+        "n_orgs": 6,
+        "autonomous_flux": 0.01,
+        "mode": "seed",
+        "energy_final": 72.41,
+        "energy_ratio": 0.7241,
+        "energy_low": false,
+        "negentropy_final": 0.35,
+        "mean_free_energy": 84.9293,
+        "is_irreversible": false
+      },
+      {
+        "layer": 1,
+        "N": 18,
+        "sealed": true,
+        "seal_step": 20,
+        "n_orgs": 1,
+        "autonomous_flux": 0.2242,
+        "mode": "self_reference",
+        "energy_final": 46.58,
+        "energy_ratio": 0.4658,
+        "energy_low": false,
+        "negentropy_final": 0.4967,
+        "mean_free_energy": 71.0287,
+        "is_irreversible": false
+      },
+      {
+        "layer": 2,
+        "N": 8,
+        "sealed": false,
+        "seal_step": null,
+        "n_orgs": 0,
+        "autonomous_flux": 1.0,
+        "mode": "self_reference",
+        "energy_final": 1.4,
+        "energy_ratio": 0.014,
+        "energy_low": true,
+        "negentropy_final": 0.1887,
+        "mean_free_energy": 47.7579,
+        "is_irreversible": false
+      }
+    ],
+    "layer_energy": [
+      {
+        "final_budget": 72.41113335154947,
+        "total_consumed": 35.88053331511728,
+        "total_injected": 4.145833333333334,
+        "total_decayed": 8.734699981783951,
+        "budget_ratio": 0.7241113335154946,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 10
+      },
+      {
+        "final_budget": 46.57512242098704,
+        "total_consumed": 67.9804331345685,
+        "total_injected": 7.277777777777778,
+        "total_decayed": 14.70265535679073,
+        "budget_ratio": 0.4657512242098704,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 20
+      },
+      {
+        "final_budget": 1.4000847634323055,
+        "total_consumed": 107.84991523656774,
+        "total_injected": 4.625,
+        "total_decayed": 18.124915236567748,
+        "budget_ratio": 0.014000847634323054,
+        "is_low_energy": true,
+        "is_dead_order": true,
+        "n_steps": 37
+      }
+    ],
+    "layer_entropy": [
+      {
+        "mean_shannon": 0.6588486660978639,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 84.92926448689659,
+        "final_negentropy": 0.3499775783516459,
+        "cumulative_production": -0.08826244449509646,
+        "is_irreversible": false,
+        "n_steps": 10
+      },
+      {
+        "mean_shannon": 0.8132901359036329,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 71.02874276909938,
+        "final_negentropy": 0.49674166522435415,
+        "cumulative_production": -0.4150374992788437,
+        "is_irreversible": false,
+        "n_steps": 20
+      },
+      {
+        "mean_shannon": 0.8112781244591328,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 47.757930866006824,
+        "final_negentropy": 0.18872187554086717,
+        "cumulative_production": 0.0,
+        "is_irreversible": false,
+        "n_steps": 36
+      }
+    ],
+    "mean_energy_ratio": 0.40128780178656265,
+    "dead_order_layers": 1,
+    "any_irreversible": false
+  },
+  {
+    "config": "baseline",
+    "seed": 1,
+    "N0": 48,
+    "emergence_depth": 2,
+    "report": [
+      {
+        "layer": 0,
+        "N": 48,
+        "sealed": true,
+        "seal_step": 10,
+        "n_orgs": 6,
+        "autonomous_flux": 0.01,
+        "mode": "seed",
+        "energy_final": 72.41,
+        "energy_ratio": 0.7241,
+        "energy_low": false,
+        "negentropy_final": 0.35,
+        "mean_free_energy": 84.9293,
+        "is_irreversible": false
+      },
+      {
+        "layer": 1,
+        "N": 18,
+        "sealed": true,
+        "seal_step": 23,
+        "n_orgs": 1,
+        "autonomous_flux": 0.2322,
+        "mode": "self_reference",
+        "energy_final": 39.37,
+        "energy_ratio": 0.3937,
+        "energy_low": false,
+        "negentropy_final": 0.4967,
+        "mean_free_energy": 67.1433,
+        "is_irreversible": false
+      },
+      {
+        "layer": 2,
+        "N": 8,
+        "sealed": false,
+        "seal_step": null,
+        "n_orgs": 0,
+        "autonomous_flux": 1.0,
+        "mode": "self_reference",
+        "energy_final": 1.4,
+        "energy_ratio": 0.014,
+        "energy_low": true,
+        "negentropy_final": 0.1887,
+        "mean_free_energy": 47.7579,
+        "is_irreversible": false
+      }
+    ],
+    "layer_energy": [
+      {
+        "final_budget": 72.41113335154947,
+        "total_consumed": 35.88053331511728,
+        "total_injected": 4.145833333333334,
+        "total_decayed": 8.734699981783951,
+        "budget_ratio": 0.7241113335154946,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 10
+      },
+      {
+        "final_budget": 39.36830174809303,
+        "total_consumed": 77.18725380746253,
+        "total_injected": 8.277777777777777,
+        "total_decayed": 16.009476029684752,
+        "budget_ratio": 0.3936830174809303,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 23
+      },
+      {
+        "final_budget": 1.4000847634323055,
+        "total_consumed": 107.84991523656774,
+        "total_injected": 4.625,
+        "total_decayed": 18.124915236567748,
+        "budget_ratio": 0.014000847634323054,
+        "is_low_energy": true,
+        "is_dead_order": true,
+        "n_steps": 37
+      }
+    ],
+    "layer_entropy": [
+      {
+        "mean_shannon": 0.6588486660978639,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 84.92926448689659,
+        "final_negentropy": 0.3499775783516459,
+        "cumulative_production": -0.08826244449509646,
+        "is_irreversible": false,
+        "n_steps": 10
+      },
+      {
+        "mean_shannon": 0.8269865313146139,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 67.1432701954927,
+        "final_negentropy": 0.49674166522435415,
+        "cumulative_production": -0.4150374992788437,
+        "is_irreversible": false,
+        "n_steps": 23
+      },
+      {
+        "mean_shannon": 0.8112781244591328,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 47.757930866006824,
+        "final_negentropy": 0.18872187554086717,
+        "cumulative_production": 0.0,
+        "is_irreversible": false,
+        "n_steps": 36
+      }
+    ],
+    "mean_energy_ratio": 0.3772650662102493,
+    "dead_order_layers": 1,
+    "any_irreversible": false
+  },
+  {
+    "config": "baseline",
+    "seed": 2,
+    "N0": 48,
+    "emergence_depth": 2,
+    "report": [
+      {
+        "layer": 0,
+        "N": 48,
+        "sealed": true,
+        "seal_step": 11,
+        "n_orgs": 6,
+        "autonomous_flux": 0.0091,
+        "mode": "seed",
+        "energy_final": 69.8,
+        "energy_ratio": 0.698,
+        "energy_low": false,
+        "negentropy_final": 0.35,
+        "mean_free_energy": 83.586,
+        "is_irreversible": false
+      },
+      {
+        "layer": 1,
+        "N": 15,
+        "sealed": true,
+        "seal_step": 17,
+        "n_orgs": 2,
+        "autonomous_flux": 0.1765,
+        "mode": "self_reference",
+        "energy_final": 54.9,
+        "energy_ratio": 0.549,
+        "energy_low": false,
+        "negentropy_final": 0.6466,
+        "mean_free_energy": 75.8116,
+        "is_irreversible": false
+      },
+      {
+        "layer": 2,
+        "N": 8,
+        "sealed": false,
+        "seal_step": null,
+        "n_orgs": 0,
+        "autonomous_flux": 0.6667,
+        "mode": "self_reference",
+        "energy_final": 1.1,
+        "energy_ratio": 0.011,
+        "energy_low": true,
+        "negentropy_final": 0.0,
+        "mean_free_energy": 47.2438,
+        "is_irreversible": false
+      }
+    ],
+    "layer_energy": [
+      {
+        "final_budget": 69.80368868470065,
+        "total_consumed": 39.32131131529945,
+        "total_injected": 4.5625,
+        "total_decayed": 9.458811315299446,
+        "budget_ratio": 0.6980368868470065,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 11
+      },
+      {
+        "final_budget": 54.899030468449666,
+        "total_consumed": 59.634302864883786,
+        "total_injected": 7.266666666666667,
+        "total_decayed": 13.267636198217119,
+        "budget_ratio": 0.5489903046844966,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 17
+      },
+      {
+        "final_budget": 1.0973599633864577,
+        "total_consumed": 118.40264003661358,
+        "total_injected": 9.75,
+        "total_decayed": 18.95264003661359,
+        "budget_ratio": 0.010973599633864578,
+        "is_low_energy": true,
+        "is_dead_order": true,
+        "n_steps": 39
+      }
+    ],
+    "layer_entropy": [
+      {
+        "mean_shannon": 0.6580462802388175,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 83.58602828472891,
+        "final_negentropy": 0.3499775783516459,
+        "cumulative_production": -0.08826244449509646,
+        "is_irreversible": false,
+        "n_steps": 11
+      },
+      {
+        "mean_shannon": 0.5803524143302737,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 75.81156819097335,
+        "final_negentropy": 0.6466406649785787,
+        "cumulative_production": -0.368568759865941,
+        "is_irreversible": false,
+        "n_steps": 17
+      },
+      {
+        "mean_shannon": 1.0,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 47.24378957003576,
+        "final_negentropy": 0.0,
+        "cumulative_production": 0.0,
+        "is_irreversible": false,
+        "n_steps": 38
+      }
+    ],
+    "mean_energy_ratio": 0.41933359705512263,
+    "dead_order_layers": 1,
+    "any_irreversible": false
+  },
+  {
+    "config": "baseline",
+    "seed": 3,
+    "N0": 48,
+    "emergence_depth": 2,
+    "report": [
+      {
+        "layer": 0,
+        "N": 48,
+        "sealed": true,
+        "seal_step": 10,
+        "n_orgs": 6,
+        "autonomous_flux": 0.01,
+        "mode": "seed",
+        "energy_final": 72.41,
+        "energy_ratio": 0.7241,
+        "energy_low": false,
+        "negentropy_final": 0.35,
+        "mean_free_energy": 84.9293,
+        "is_irreversible": false
+      },
+      {
+        "layer": 1,
+        "N": 18,
+        "sealed": true,
+        "seal_step": 23,
+        "n_orgs": 1,
+        "autonomous_flux": 0.2198,
+        "mode": "self_reference",
+        "energy_final": 39.47,
+        "energy_ratio": 0.3947,
+        "energy_low": false,
+        "negentropy_final": 0.4967,
+        "mean_free_energy": 67.1915,
+        "is_irreversible": false
+      },
+      {
+        "layer": 2,
+        "N": 8,
+        "sealed": false,
+        "seal_step": null,
+        "n_orgs": 0,
+        "autonomous_flux": 1.0,
+        "mode": "self_reference",
+        "energy_final": 1.4,
+        "energy_ratio": 0.014,
+        "energy_low": true,
+        "negentropy_final": 0.1887,
+        "mean_free_energy": 47.7579,
+        "is_irreversible": false
+      }
+    ],
+    "layer_energy": [
+      {
+        "final_budget": 72.41113335154947,
+        "total_consumed": 35.88053331511728,
+        "total_injected": 4.145833333333334,
+        "total_decayed": 8.734699981783951,
+        "budget_ratio": 0.7241113335154946,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 10
+      },
+      {
+        "final_budget": 39.47318538430772,
+        "total_consumed": 77.30459239347006,
+        "total_injected": 8.38888888888889,
+        "total_decayed": 16.01570350458117,
+        "budget_ratio": 0.3947318538430772,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 23
+      },
+      {
+        "final_budget": 1.4000847634323055,
+        "total_consumed": 107.84991523656774,
+        "total_injected": 4.625,
+        "total_decayed": 18.124915236567748,
+        "budget_ratio": 0.014000847634323054,
+        "is_low_energy": true,
+        "is_dead_order": true,
+        "n_steps": 37
+      }
+    ],
+    "layer_entropy": [
+      {
+        "mean_shannon": 0.6588486660978639,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 84.92926448689659,
+        "final_negentropy": 0.3499775783516459,
+        "cumulative_production": -0.08826244449509646,
+        "is_irreversible": false,
+        "n_steps": 10
+      },
+      {
+        "mean_shannon": 0.810358031433466,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 67.19153483128066,
+        "final_negentropy": 0.49674166522435415,
+        "cumulative_production": -0.4150374992788437,
+        "is_irreversible": false,
+        "n_steps": 23
+      },
+      {
+        "mean_shannon": 0.8112781244591328,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 47.757930866006824,
+        "final_negentropy": 0.18872187554086717,
+        "cumulative_production": 0.0,
+        "is_irreversible": false,
+        "n_steps": 36
+      }
+    ],
+    "mean_energy_ratio": 0.3776146783309649,
+    "dead_order_layers": 1,
+    "any_irreversible": false
+  },
+  {
+    "config": "baseline",
+    "seed": 4,
+    "N0": 48,
+    "emergence_depth": 2,
+    "report": [
+      {
+        "layer": 0,
+        "N": 48,
+        "sealed": true,
+        "seal_step": 10,
+        "n_orgs": 6,
+        "autonomous_flux": 0.01,
+        "mode": "seed",
+        "energy_final": 72.41,
+        "energy_ratio": 0.7241,
+        "energy_low": false,
+        "negentropy_final": 0.35,
+        "mean_free_energy": 84.9293,
+        "is_irreversible": false
+      },
+      {
+        "layer": 1,
+        "N": 18,
+        "sealed": true,
+        "seal_step": 21,
+        "n_orgs": 3,
+        "autonomous_flux": 0.1906,
+        "mode": "self_reference",
+        "energy_final": 45.15,
+        "energy_ratio": 0.4515,
+        "energy_low": false,
+        "negentropy_final": 1.0,
+        "mean_free_energy": 70.5028,
+        "is_irreversible": false
+      },
+      {
+        "layer": 2,
+        "N": 12,
+        "sealed": false,
+        "seal_step": null,
+        "n_orgs": 1,
+        "autonomous_flux": 0.3849,
+        "mode": "self_reference",
+        "energy_final": 0.7,
+        "energy_ratio": 0.007,
+        "energy_low": true,
+        "negentropy_final": 0.35,
+        "mean_free_energy": 46.3549,
+        "is_irreversible": false
+      }
+    ],
+    "layer_energy": [
+      {
+        "final_budget": 72.41113335154947,
+        "total_consumed": 35.88053331511728,
+        "total_injected": 4.145833333333334,
+        "total_decayed": 8.734699981783951,
+        "budget_ratio": 0.7241113335154946,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 10
+      },
+      {
+        "final_budget": 45.15395647329695,
+        "total_consumed": 72.2904879711475,
+        "total_injected": 8.722222222222221,
+        "total_decayed": 15.268265748925284,
+        "budget_ratio": 0.4515395647329695,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 21
+      },
+      {
+        "final_budget": 0.6996615991767206,
+        "total_consumed": 122.80033840082332,
+        "total_injected": 11.75,
+        "total_decayed": 19.05033840082333,
+        "budget_ratio": 0.006996615991767205,
+        "is_low_energy": true,
+        "is_dead_order": true,
+        "n_steps": 40
+      }
+    ],
+    "layer_entropy": [
+      {
+        "mean_shannon": 0.6588486660978639,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 84.92926448689659,
+        "final_negentropy": 0.3499775783516459,
+        "cumulative_production": -0.08826244449509646,
+        "is_irreversible": false,
+        "n_steps": 10
+      },
+      {
+        "mean_shannon": 0.5915539737346659,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 70.50275704368559,
+        "final_negentropy": 1.0,
+        "cumulative_production": -0.7642045065086203,
+        "is_irreversible": false,
+        "n_steps": 21
+      },
+      {
+        "mean_shannon": 0.9279966924942428,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 46.354922283975824,
+        "final_negentropy": 0.3499775783516459,
+        "cumulative_production": -0.3499775783516459,
+        "is_irreversible": false,
+        "n_steps": 39
+      }
+    ],
+    "mean_energy_ratio": 0.3942158380800771,
+    "dead_order_layers": 1,
+    "any_irreversible": false
+  },
+  {
+    "config": "baseline",
+    "seed": 5,
+    "N0": 48,
+    "emergence_depth": 2,
+    "report": [
+      {
+        "layer": 0,
+        "N": 48,
+        "sealed": true,
+        "seal_step": 10,
+        "n_orgs": 5,
+        "autonomous_flux": 0.01,
+        "mode": "seed",
+        "energy_final": 72.41,
+        "energy_ratio": 0.7241,
+        "energy_low": false,
+        "negentropy_final": 0.35,
+        "mean_free_energy": 84.9293,
+        "is_irreversible": false
+      },
+      {
+        "layer": 1,
+        "N": 16,
+        "sealed": true,
+        "seal_step": 26,
+        "n_orgs": 2,
+        "autonomous_flux": 0.2581,
+        "mode": "self_reference",
+        "energy_final": 32.59,
+        "energy_ratio": 0.3259,
+        "energy_low": false,
+        "negentropy_final": 0.6627,
+        "mean_free_energy": 63.4146,
+        "is_irreversible": false
+      },
+      {
+        "layer": 2,
+        "N": 10,
+        "sealed": false,
+        "seal_step": null,
+        "n_orgs": 0,
+        "autonomous_flux": 0.6667,
+        "mode": "self_reference",
+        "energy_final": 1.59,
+        "energy_ratio": 0.0159,
+        "energy_low": true,
+        "negentropy_final": 0.029,
+        "mean_free_energy": 47.6184,
+        "is_irreversible": false
+      }
+    ],
+    "layer_energy": [
+      {
+        "final_budget": 72.41113335154947,
+        "total_consumed": 35.88053331511728,
+        "total_injected": 4.145833333333334,
+        "total_decayed": 8.734699981783951,
+        "budget_ratio": 0.7241113335154946,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 10
+      },
+      {
+        "final_budget": 32.59116073006202,
+        "total_consumed": 86.40883926993807,
+        "total_injected": 9.5,
+        "total_decayed": 17.10883926993807,
+        "budget_ratio": 0.32591160730062024,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 26
+      },
+      {
+        "final_budget": 1.591924453220133,
+        "total_consumed": 113.60807554677999,
+        "total_injected": 7.6000000000000005,
+        "total_decayed": 18.608075546779993,
+        "budget_ratio": 0.01591924453220133,
+        "is_low_energy": true,
+        "is_dead_order": true,
+        "n_steps": 38
+      }
+    ],
+    "layer_entropy": [
+      {
+        "mean_shannon": 0.6588486660978639,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 84.92926448689659,
+        "final_negentropy": 0.3499775783516459,
+        "cumulative_production": -0.08826244449509646,
+        "is_irreversible": false,
+        "n_steps": 10
+      },
+      {
+        "mean_shannon": 0.7960040979446814,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 63.4145761991272,
+        "final_negentropy": 0.6627099333829861,
+        "cumulative_production": -0.6171439363079512,
+        "is_irreversible": false,
+        "n_steps": 26
+      },
+      {
+        "mean_shannon": 0.9709505944546688,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 47.618442775220984,
+        "final_negentropy": 0.02904940554533142,
+        "cumulative_production": 0.0,
+        "is_irreversible": false,
+        "n_steps": 37
+      }
+    ],
+    "mean_energy_ratio": 0.3553140617827721,
+    "dead_order_layers": 1,
+    "any_irreversible": false
+  },
+  {
+    "config": "baseline",
+    "seed": 6,
+    "N0": 48,
+    "emergence_depth": 2,
+    "report": [
+      {
+        "layer": 0,
+        "N": 48,
+        "sealed": true,
+        "seal_step": 10,
+        "n_orgs": 5,
+        "autonomous_flux": 0.01,
+        "mode": "seed",
+        "energy_final": 72.41,
+        "energy_ratio": 0.7241,
+        "energy_low": false,
+        "negentropy_final": 0.35,
+        "mean_free_energy": 84.9293,
+        "is_irreversible": false
+      },
+      {
+        "layer": 1,
+        "N": 16,
+        "sealed": true,
+        "seal_step": 27,
+        "n_orgs": 1,
+        "autonomous_flux": 0.2575,
+        "mode": "self_reference",
+        "energy_final": 29.96,
+        "energy_ratio": 0.2996,
+        "energy_low": false,
+        "negentropy_final": 0.4564,
+        "mean_free_energy": 61.9173,
+        "is_irreversible": false
+      },
+      {
+        "layer": 2,
+        "N": 8,
+        "sealed": false,
+        "seal_step": null,
+        "n_orgs": 0,
+        "autonomous_flux": 1.0,
+        "mode": "self_reference",
+        "energy_final": 1.4,
+        "energy_ratio": 0.014,
+        "energy_low": true,
+        "negentropy_final": 0.1887,
+        "mean_free_energy": 47.7579,
+        "is_irreversible": false
+      }
+    ],
+    "layer_energy": [
+      {
+        "final_budget": 72.41113335154947,
+        "total_consumed": 35.88053331511728,
+        "total_injected": 4.145833333333334,
+        "total_decayed": 8.734699981783951,
+        "budget_ratio": 0.7241113335154946,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 10
+      },
+      {
+        "final_budget": 29.9609222296293,
+        "total_consumed": 88.9140777703708,
+        "total_injected": 9.4375,
+        "total_decayed": 17.376577770370798,
+        "budget_ratio": 0.299609222296293,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 27
+      },
+      {
+        "final_budget": 1.4000847634323055,
+        "total_consumed": 107.84991523656774,
+        "total_injected": 4.625,
+        "total_decayed": 18.124915236567748,
+        "budget_ratio": 0.014000847634323054,
+        "is_low_energy": true,
+        "is_dead_order": true,
+        "n_steps": 37
+      }
+    ],
+    "layer_entropy": [
+      {
+        "mean_shannon": 0.6588486660978639,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 84.92926448689659,
+        "final_negentropy": 0.3499775783516459,
+        "cumulative_production": -0.08826244449509646,
+        "is_irreversible": false,
+        "n_steps": 10
+      },
+      {
+        "mean_shannon": 0.8463886515177287,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 61.91726687687891,
+        "final_negentropy": 0.4564355568004036,
+        "cumulative_production": -0.41086955972536865,
+        "is_irreversible": false,
+        "n_steps": 27
+      },
+      {
+        "mean_shannon": 0.8112781244591328,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 47.757930866006824,
+        "final_negentropy": 0.18872187554086717,
+        "cumulative_production": 0.0,
+        "is_irreversible": false,
+        "n_steps": 36
+      }
+    ],
+    "mean_energy_ratio": 0.34590713448203686,
+    "dead_order_layers": 1,
+    "any_irreversible": false
+  },
+  {
+    "config": "baseline",
+    "seed": 7,
+    "N0": 48,
+    "emergence_depth": 2,
+    "report": [
+      {
+        "layer": 0,
+        "N": 48,
+        "sealed": true,
+        "seal_step": 11,
+        "n_orgs": 6,
+        "autonomous_flux": 0.0091,
+        "mode": "seed",
+        "energy_final": 69.8,
+        "energy_ratio": 0.698,
+        "energy_low": false,
+        "negentropy_final": 0.35,
+        "mean_free_energy": 83.586,
+        "is_irreversible": false
+      },
+      {
+        "layer": 1,
+        "N": 15,
+        "sealed": true,
+        "seal_step": 19,
+        "n_orgs": 1,
+        "autonomous_flux": 0.1729,
+        "mode": "self_reference",
+        "energy_final": 49.57,
+        "energy_ratio": 0.4957,
+        "energy_low": false,
+        "negentropy_final": 0.4335,
+        "mean_free_energy": 72.8504,
+        "is_irreversible": false
+      },
+      {
+        "layer": 2,
+        "N": 8,
+        "sealed": false,
+        "seal_step": null,
+        "n_orgs": 0,
+        "autonomous_flux": 1.0,
+        "mode": "self_reference",
+        "energy_final": 1.4,
+        "energy_ratio": 0.014,
+        "energy_low": true,
+        "negentropy_final": 0.1887,
+        "mean_free_energy": 47.7579,
+        "is_irreversible": false
+      }
+    ],
+    "layer_energy": [
+      {
+        "final_budget": 69.80368868470065,
+        "total_consumed": 39.32131131529945,
+        "total_injected": 4.5625,
+        "total_decayed": 9.458811315299446,
+        "budget_ratio": 0.6980368868470065,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 11
+      },
+      {
+        "final_budget": 49.574565766627714,
+        "total_consumed": 65.55876756670563,
+        "total_injected": 7.566666666666666,
+        "total_decayed": 14.292100900038966,
+        "budget_ratio": 0.49574565766627715,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 19
+      },
+      {
+        "final_budget": 1.4000847634323055,
+        "total_consumed": 107.84991523656774,
+        "total_injected": 4.625,
+        "total_decayed": 18.124915236567748,
+        "budget_ratio": 0.014000847634323054,
+        "is_low_energy": true,
+        "is_dead_order": true,
+        "n_steps": 37
+      }
+    ],
+    "layer_entropy": [
+      {
+        "mean_shannon": 0.6580462802388175,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 83.58602828472891,
+        "final_negentropy": 0.3499775783516459,
+        "cumulative_production": -0.08826244449509646,
+        "is_irreversible": false,
+        "n_steps": 11
+      },
+      {
+        "mean_shannon": 0.7172535128163382,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 72.8503599487902,
+        "final_negentropy": 0.4334904934470948,
+        "cumulative_production": -0.1554185883344571,
+        "is_irreversible": false,
+        "n_steps": 19
+      },
+      {
+        "mean_shannon": 0.8112781244591328,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 47.757930866006824,
+        "final_negentropy": 0.18872187554086717,
+        "cumulative_production": 0.0,
+        "is_irreversible": false,
+        "n_steps": 36
+      }
+    ],
+    "mean_energy_ratio": 0.40259446404920224,
+    "dead_order_layers": 1,
+    "any_irreversible": false
+  },
+  {
+    "config": "with_energy",
+    "seed": 0,
+    "N0": 48,
+    "emergence_depth": 2,
+    "report": [
+      {
+        "layer": 0,
+        "N": 48,
+        "sealed": true,
+        "seal_step": 10,
+        "n_orgs": 6,
+        "autonomous_flux": 0.01,
+        "mode": "seed",
+        "energy_final": 72.41,
+        "energy_ratio": 0.7241,
+        "energy_low": false,
+        "negentropy_final": 0.35,
+        "mean_free_energy": 84.9293,
+        "is_irreversible": false
+      },
+      {
+        "layer": 1,
+        "N": 18,
+        "sealed": true,
+        "seal_step": 20,
+        "n_orgs": 1,
+        "autonomous_flux": 0.2242,
+        "mode": "self_reference",
+        "energy_final": 46.58,
+        "energy_ratio": 0.4658,
+        "energy_low": false,
+        "negentropy_final": 0.4967,
+        "mean_free_energy": 71.0287,
+        "is_irreversible": false
+      },
+      {
+        "layer": 2,
+        "N": 8,
+        "sealed": false,
+        "seal_step": null,
+        "n_orgs": 0,
+        "autonomous_flux": 1.0,
+        "mode": "self_reference",
+        "energy_final": 1.4,
+        "energy_ratio": 0.014,
+        "energy_low": true,
+        "negentropy_final": 0.1887,
+        "mean_free_energy": 47.7579,
+        "is_irreversible": false
+      }
+    ],
+    "layer_energy": [
+      {
+        "final_budget": 72.41113335154947,
+        "total_consumed": 35.88053331511728,
+        "total_injected": 4.145833333333334,
+        "total_decayed": 8.734699981783951,
+        "budget_ratio": 0.7241113335154946,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 10
+      },
+      {
+        "final_budget": 46.57512242098704,
+        "total_consumed": 67.9804331345685,
+        "total_injected": 7.277777777777778,
+        "total_decayed": 14.70265535679073,
+        "budget_ratio": 0.4657512242098704,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 20
+      },
+      {
+        "final_budget": 1.4000847634323055,
+        "total_consumed": 107.84991523656774,
+        "total_injected": 4.625,
+        "total_decayed": 18.124915236567748,
+        "budget_ratio": 0.014000847634323054,
+        "is_low_energy": true,
+        "is_dead_order": true,
+        "n_steps": 37
+      }
+    ],
+    "layer_entropy": [
+      {
+        "mean_shannon": 0.6588486660978639,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 84.92926448689659,
+        "final_negentropy": 0.3499775783516459,
+        "cumulative_production": -0.08826244449509646,
+        "is_irreversible": false,
+        "n_steps": 10
+      },
+      {
+        "mean_shannon": 0.8132901359036329,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 71.02874276909938,
+        "final_negentropy": 0.49674166522435415,
+        "cumulative_production": -0.4150374992788437,
+        "is_irreversible": false,
+        "n_steps": 20
+      },
+      {
+        "mean_shannon": 0.8112781244591328,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 47.757930866006824,
+        "final_negentropy": 0.18872187554086717,
+        "cumulative_production": 0.0,
+        "is_irreversible": false,
+        "n_steps": 36
+      }
+    ],
+    "mean_energy_ratio": 0.40128780178656265,
+    "dead_order_layers": 1,
+    "any_irreversible": false
+  },
+  {
+    "config": "with_energy",
+    "seed": 1,
+    "N0": 48,
+    "emergence_depth": 2,
+    "report": [
+      {
+        "layer": 0,
+        "N": 48,
+        "sealed": true,
+        "seal_step": 10,
+        "n_orgs": 6,
+        "autonomous_flux": 0.01,
+        "mode": "seed",
+        "energy_final": 72.41,
+        "energy_ratio": 0.7241,
+        "energy_low": false,
+        "negentropy_final": 0.35,
+        "mean_free_energy": 84.9293,
+        "is_irreversible": false
+      },
+      {
+        "layer": 1,
+        "N": 18,
+        "sealed": true,
+        "seal_step": 23,
+        "n_orgs": 1,
+        "autonomous_flux": 0.2322,
+        "mode": "self_reference",
+        "energy_final": 39.37,
+        "energy_ratio": 0.3937,
+        "energy_low": false,
+        "negentropy_final": 0.4967,
+        "mean_free_energy": 67.1433,
+        "is_irreversible": false
+      },
+      {
+        "layer": 2,
+        "N": 8,
+        "sealed": false,
+        "seal_step": null,
+        "n_orgs": 0,
+        "autonomous_flux": 1.0,
+        "mode": "self_reference",
+        "energy_final": 1.4,
+        "energy_ratio": 0.014,
+        "energy_low": true,
+        "negentropy_final": 0.1887,
+        "mean_free_energy": 47.7579,
+        "is_irreversible": false
+      }
+    ],
+    "layer_energy": [
+      {
+        "final_budget": 72.41113335154947,
+        "total_consumed": 35.88053331511728,
+        "total_injected": 4.145833333333334,
+        "total_decayed": 8.734699981783951,
+        "budget_ratio": 0.7241113335154946,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 10
+      },
+      {
+        "final_budget": 39.36830174809303,
+        "total_consumed": 77.18725380746253,
+        "total_injected": 8.277777777777777,
+        "total_decayed": 16.009476029684752,
+        "budget_ratio": 0.3936830174809303,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 23
+      },
+      {
+        "final_budget": 1.4000847634323055,
+        "total_consumed": 107.84991523656774,
+        "total_injected": 4.625,
+        "total_decayed": 18.124915236567748,
+        "budget_ratio": 0.014000847634323054,
+        "is_low_energy": true,
+        "is_dead_order": true,
+        "n_steps": 37
+      }
+    ],
+    "layer_entropy": [
+      {
+        "mean_shannon": 0.6588486660978639,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 84.92926448689659,
+        "final_negentropy": 0.3499775783516459,
+        "cumulative_production": -0.08826244449509646,
+        "is_irreversible": false,
+        "n_steps": 10
+      },
+      {
+        "mean_shannon": 0.8269865313146139,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 67.1432701954927,
+        "final_negentropy": 0.49674166522435415,
+        "cumulative_production": -0.4150374992788437,
+        "is_irreversible": false,
+        "n_steps": 23
+      },
+      {
+        "mean_shannon": 0.8112781244591328,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 47.757930866006824,
+        "final_negentropy": 0.18872187554086717,
+        "cumulative_production": 0.0,
+        "is_irreversible": false,
+        "n_steps": 36
+      }
+    ],
+    "mean_energy_ratio": 0.3772650662102493,
+    "dead_order_layers": 1,
+    "any_irreversible": false
+  },
+  {
+    "config": "with_energy",
+    "seed": 2,
+    "N0": 48,
+    "emergence_depth": 2,
+    "report": [
+      {
+        "layer": 0,
+        "N": 48,
+        "sealed": true,
+        "seal_step": 11,
+        "n_orgs": 6,
+        "autonomous_flux": 0.0091,
+        "mode": "seed",
+        "energy_final": 69.8,
+        "energy_ratio": 0.698,
+        "energy_low": false,
+        "negentropy_final": 0.35,
+        "mean_free_energy": 83.586,
+        "is_irreversible": false
+      },
+      {
+        "layer": 1,
+        "N": 15,
+        "sealed": true,
+        "seal_step": 17,
+        "n_orgs": 2,
+        "autonomous_flux": 0.1765,
+        "mode": "self_reference",
+        "energy_final": 54.9,
+        "energy_ratio": 0.549,
+        "energy_low": false,
+        "negentropy_final": 0.6466,
+        "mean_free_energy": 75.8116,
+        "is_irreversible": false
+      },
+      {
+        "layer": 2,
+        "N": 8,
+        "sealed": false,
+        "seal_step": null,
+        "n_orgs": 0,
+        "autonomous_flux": 0.6667,
+        "mode": "self_reference",
+        "energy_final": 1.1,
+        "energy_ratio": 0.011,
+        "energy_low": true,
+        "negentropy_final": 0.0,
+        "mean_free_energy": 47.2438,
+        "is_irreversible": false
+      }
+    ],
+    "layer_energy": [
+      {
+        "final_budget": 69.80368868470065,
+        "total_consumed": 39.32131131529945,
+        "total_injected": 4.5625,
+        "total_decayed": 9.458811315299446,
+        "budget_ratio": 0.6980368868470065,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 11
+      },
+      {
+        "final_budget": 54.899030468449666,
+        "total_consumed": 59.634302864883786,
+        "total_injected": 7.266666666666667,
+        "total_decayed": 13.267636198217119,
+        "budget_ratio": 0.5489903046844966,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 17
+      },
+      {
+        "final_budget": 1.0973599633864577,
+        "total_consumed": 118.40264003661358,
+        "total_injected": 9.75,
+        "total_decayed": 18.95264003661359,
+        "budget_ratio": 0.010973599633864578,
+        "is_low_energy": true,
+        "is_dead_order": true,
+        "n_steps": 39
+      }
+    ],
+    "layer_entropy": [
+      {
+        "mean_shannon": 0.6580462802388175,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 83.58602828472891,
+        "final_negentropy": 0.3499775783516459,
+        "cumulative_production": -0.08826244449509646,
+        "is_irreversible": false,
+        "n_steps": 11
+      },
+      {
+        "mean_shannon": 0.5803524143302737,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 75.81156819097335,
+        "final_negentropy": 0.6466406649785787,
+        "cumulative_production": -0.368568759865941,
+        "is_irreversible": false,
+        "n_steps": 17
+      },
+      {
+        "mean_shannon": 1.0,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 47.24378957003576,
+        "final_negentropy": 0.0,
+        "cumulative_production": 0.0,
+        "is_irreversible": false,
+        "n_steps": 38
+      }
+    ],
+    "mean_energy_ratio": 0.41933359705512263,
+    "dead_order_layers": 1,
+    "any_irreversible": false
+  },
+  {
+    "config": "with_energy",
+    "seed": 3,
+    "N0": 48,
+    "emergence_depth": 2,
+    "report": [
+      {
+        "layer": 0,
+        "N": 48,
+        "sealed": true,
+        "seal_step": 10,
+        "n_orgs": 6,
+        "autonomous_flux": 0.01,
+        "mode": "seed",
+        "energy_final": 72.41,
+        "energy_ratio": 0.7241,
+        "energy_low": false,
+        "negentropy_final": 0.35,
+        "mean_free_energy": 84.9293,
+        "is_irreversible": false
+      },
+      {
+        "layer": 1,
+        "N": 18,
+        "sealed": true,
+        "seal_step": 23,
+        "n_orgs": 1,
+        "autonomous_flux": 0.2198,
+        "mode": "self_reference",
+        "energy_final": 39.47,
+        "energy_ratio": 0.3947,
+        "energy_low": false,
+        "negentropy_final": 0.4967,
+        "mean_free_energy": 67.1915,
+        "is_irreversible": false
+      },
+      {
+        "layer": 2,
+        "N": 8,
+        "sealed": false,
+        "seal_step": null,
+        "n_orgs": 0,
+        "autonomous_flux": 1.0,
+        "mode": "self_reference",
+        "energy_final": 1.4,
+        "energy_ratio": 0.014,
+        "energy_low": true,
+        "negentropy_final": 0.1887,
+        "mean_free_energy": 47.7579,
+        "is_irreversible": false
+      }
+    ],
+    "layer_energy": [
+      {
+        "final_budget": 72.41113335154947,
+        "total_consumed": 35.88053331511728,
+        "total_injected": 4.145833333333334,
+        "total_decayed": 8.734699981783951,
+        "budget_ratio": 0.7241113335154946,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 10
+      },
+      {
+        "final_budget": 39.47318538430772,
+        "total_consumed": 77.30459239347006,
+        "total_injected": 8.38888888888889,
+        "total_decayed": 16.01570350458117,
+        "budget_ratio": 0.3947318538430772,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 23
+      },
+      {
+        "final_budget": 1.4000847634323055,
+        "total_consumed": 107.84991523656774,
+        "total_injected": 4.625,
+        "total_decayed": 18.124915236567748,
+        "budget_ratio": 0.014000847634323054,
+        "is_low_energy": true,
+        "is_dead_order": true,
+        "n_steps": 37
+      }
+    ],
+    "layer_entropy": [
+      {
+        "mean_shannon": 0.6588486660978639,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 84.92926448689659,
+        "final_negentropy": 0.3499775783516459,
+        "cumulative_production": -0.08826244449509646,
+        "is_irreversible": false,
+        "n_steps": 10
+      },
+      {
+        "mean_shannon": 0.810358031433466,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 67.19153483128066,
+        "final_negentropy": 0.49674166522435415,
+        "cumulative_production": -0.4150374992788437,
+        "is_irreversible": false,
+        "n_steps": 23
+      },
+      {
+        "mean_shannon": 0.8112781244591328,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 47.757930866006824,
+        "final_negentropy": 0.18872187554086717,
+        "cumulative_production": 0.0,
+        "is_irreversible": false,
+        "n_steps": 36
+      }
+    ],
+    "mean_energy_ratio": 0.3776146783309649,
+    "dead_order_layers": 1,
+    "any_irreversible": false
+  },
+  {
+    "config": "with_energy",
+    "seed": 4,
+    "N0": 48,
+    "emergence_depth": 2,
+    "report": [
+      {
+        "layer": 0,
+        "N": 48,
+        "sealed": true,
+        "seal_step": 10,
+        "n_orgs": 6,
+        "autonomous_flux": 0.01,
+        "mode": "seed",
+        "energy_final": 72.41,
+        "energy_ratio": 0.7241,
+        "energy_low": false,
+        "negentropy_final": 0.35,
+        "mean_free_energy": 84.9293,
+        "is_irreversible": false
+      },
+      {
+        "layer": 1,
+        "N": 18,
+        "sealed": true,
+        "seal_step": 21,
+        "n_orgs": 3,
+        "autonomous_flux": 0.1906,
+        "mode": "self_reference",
+        "energy_final": 45.15,
+        "energy_ratio": 0.4515,
+        "energy_low": false,
+        "negentropy_final": 1.0,
+        "mean_free_energy": 70.5028,
+        "is_irreversible": false
+      },
+      {
+        "layer": 2,
+        "N": 12,
+        "sealed": false,
+        "seal_step": null,
+        "n_orgs": 1,
+        "autonomous_flux": 0.3849,
+        "mode": "self_reference",
+        "energy_final": 0.7,
+        "energy_ratio": 0.007,
+        "energy_low": true,
+        "negentropy_final": 0.35,
+        "mean_free_energy": 46.3549,
+        "is_irreversible": false
+      }
+    ],
+    "layer_energy": [
+      {
+        "final_budget": 72.41113335154947,
+        "total_consumed": 35.88053331511728,
+        "total_injected": 4.145833333333334,
+        "total_decayed": 8.734699981783951,
+        "budget_ratio": 0.7241113335154946,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 10
+      },
+      {
+        "final_budget": 45.15395647329695,
+        "total_consumed": 72.2904879711475,
+        "total_injected": 8.722222222222221,
+        "total_decayed": 15.268265748925284,
+        "budget_ratio": 0.4515395647329695,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 21
+      },
+      {
+        "final_budget": 0.6996615991767206,
+        "total_consumed": 122.80033840082332,
+        "total_injected": 11.75,
+        "total_decayed": 19.05033840082333,
+        "budget_ratio": 0.006996615991767205,
+        "is_low_energy": true,
+        "is_dead_order": true,
+        "n_steps": 40
+      }
+    ],
+    "layer_entropy": [
+      {
+        "mean_shannon": 0.6588486660978639,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 84.92926448689659,
+        "final_negentropy": 0.3499775783516459,
+        "cumulative_production": -0.08826244449509646,
+        "is_irreversible": false,
+        "n_steps": 10
+      },
+      {
+        "mean_shannon": 0.5915539737346659,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 70.50275704368559,
+        "final_negentropy": 1.0,
+        "cumulative_production": -0.7642045065086203,
+        "is_irreversible": false,
+        "n_steps": 21
+      },
+      {
+        "mean_shannon": 0.9279966924942428,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 46.354922283975824,
+        "final_negentropy": 0.3499775783516459,
+        "cumulative_production": -0.3499775783516459,
+        "is_irreversible": false,
+        "n_steps": 39
+      }
+    ],
+    "mean_energy_ratio": 0.3942158380800771,
+    "dead_order_layers": 1,
+    "any_irreversible": false
+  },
+  {
+    "config": "with_energy",
+    "seed": 5,
+    "N0": 48,
+    "emergence_depth": 2,
+    "report": [
+      {
+        "layer": 0,
+        "N": 48,
+        "sealed": true,
+        "seal_step": 10,
+        "n_orgs": 5,
+        "autonomous_flux": 0.01,
+        "mode": "seed",
+        "energy_final": 72.41,
+        "energy_ratio": 0.7241,
+        "energy_low": false,
+        "negentropy_final": 0.35,
+        "mean_free_energy": 84.9293,
+        "is_irreversible": false
+      },
+      {
+        "layer": 1,
+        "N": 16,
+        "sealed": true,
+        "seal_step": 26,
+        "n_orgs": 2,
+        "autonomous_flux": 0.2581,
+        "mode": "self_reference",
+        "energy_final": 32.59,
+        "energy_ratio": 0.3259,
+        "energy_low": false,
+        "negentropy_final": 0.6627,
+        "mean_free_energy": 63.4146,
+        "is_irreversible": false
+      },
+      {
+        "layer": 2,
+        "N": 10,
+        "sealed": false,
+        "seal_step": null,
+        "n_orgs": 0,
+        "autonomous_flux": 0.6667,
+        "mode": "self_reference",
+        "energy_final": 1.59,
+        "energy_ratio": 0.0159,
+        "energy_low": true,
+        "negentropy_final": 0.029,
+        "mean_free_energy": 47.6184,
+        "is_irreversible": false
+      }
+    ],
+    "layer_energy": [
+      {
+        "final_budget": 72.41113335154947,
+        "total_consumed": 35.88053331511728,
+        "total_injected": 4.145833333333334,
+        "total_decayed": 8.734699981783951,
+        "budget_ratio": 0.7241113335154946,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 10
+      },
+      {
+        "final_budget": 32.59116073006202,
+        "total_consumed": 86.40883926993807,
+        "total_injected": 9.5,
+        "total_decayed": 17.10883926993807,
+        "budget_ratio": 0.32591160730062024,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 26
+      },
+      {
+        "final_budget": 1.591924453220133,
+        "total_consumed": 113.60807554677999,
+        "total_injected": 7.6000000000000005,
+        "total_decayed": 18.608075546779993,
+        "budget_ratio": 0.01591924453220133,
+        "is_low_energy": true,
+        "is_dead_order": true,
+        "n_steps": 38
+      }
+    ],
+    "layer_entropy": [
+      {
+        "mean_shannon": 0.6588486660978639,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 84.92926448689659,
+        "final_negentropy": 0.3499775783516459,
+        "cumulative_production": -0.08826244449509646,
+        "is_irreversible": false,
+        "n_steps": 10
+      },
+      {
+        "mean_shannon": 0.7960040979446814,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 63.4145761991272,
+        "final_negentropy": 0.6627099333829861,
+        "cumulative_production": -0.6171439363079512,
+        "is_irreversible": false,
+        "n_steps": 26
+      },
+      {
+        "mean_shannon": 0.9709505944546688,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 47.618442775220984,
+        "final_negentropy": 0.02904940554533142,
+        "cumulative_production": 0.0,
+        "is_irreversible": false,
+        "n_steps": 37
+      }
+    ],
+    "mean_energy_ratio": 0.3553140617827721,
+    "dead_order_layers": 1,
+    "any_irreversible": false
+  },
+  {
+    "config": "with_energy",
+    "seed": 6,
+    "N0": 48,
+    "emergence_depth": 2,
+    "report": [
+      {
+        "layer": 0,
+        "N": 48,
+        "sealed": true,
+        "seal_step": 10,
+        "n_orgs": 5,
+        "autonomous_flux": 0.01,
+        "mode": "seed",
+        "energy_final": 72.41,
+        "energy_ratio": 0.7241,
+        "energy_low": false,
+        "negentropy_final": 0.35,
+        "mean_free_energy": 84.9293,
+        "is_irreversible": false
+      },
+      {
+        "layer": 1,
+        "N": 16,
+        "sealed": true,
+        "seal_step": 27,
+        "n_orgs": 1,
+        "autonomous_flux": 0.2575,
+        "mode": "self_reference",
+        "energy_final": 29.96,
+        "energy_ratio": 0.2996,
+        "energy_low": false,
+        "negentropy_final": 0.4564,
+        "mean_free_energy": 61.9173,
+        "is_irreversible": false
+      },
+      {
+        "layer": 2,
+        "N": 8,
+        "sealed": false,
+        "seal_step": null,
+        "n_orgs": 0,
+        "autonomous_flux": 1.0,
+        "mode": "self_reference",
+        "energy_final": 1.4,
+        "energy_ratio": 0.014,
+        "energy_low": true,
+        "negentropy_final": 0.1887,
+        "mean_free_energy": 47.7579,
+        "is_irreversible": false
+      }
+    ],
+    "layer_energy": [
+      {
+        "final_budget": 72.41113335154947,
+        "total_consumed": 35.88053331511728,
+        "total_injected": 4.145833333333334,
+        "total_decayed": 8.734699981783951,
+        "budget_ratio": 0.7241113335154946,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 10
+      },
+      {
+        "final_budget": 29.9609222296293,
+        "total_consumed": 88.9140777703708,
+        "total_injected": 9.4375,
+        "total_decayed": 17.376577770370798,
+        "budget_ratio": 0.299609222296293,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 27
+      },
+      {
+        "final_budget": 1.4000847634323055,
+        "total_consumed": 107.84991523656774,
+        "total_injected": 4.625,
+        "total_decayed": 18.124915236567748,
+        "budget_ratio": 0.014000847634323054,
+        "is_low_energy": true,
+        "is_dead_order": true,
+        "n_steps": 37
+      }
+    ],
+    "layer_entropy": [
+      {
+        "mean_shannon": 0.6588486660978639,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 84.92926448689659,
+        "final_negentropy": 0.3499775783516459,
+        "cumulative_production": -0.08826244449509646,
+        "is_irreversible": false,
+        "n_steps": 10
+      },
+      {
+        "mean_shannon": 0.8463886515177287,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 61.91726687687891,
+        "final_negentropy": 0.4564355568004036,
+        "cumulative_production": -0.41086955972536865,
+        "is_irreversible": false,
+        "n_steps": 27
+      },
+      {
+        "mean_shannon": 0.8112781244591328,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 47.757930866006824,
+        "final_negentropy": 0.18872187554086717,
+        "cumulative_production": 0.0,
+        "is_irreversible": false,
+        "n_steps": 36
+      }
+    ],
+    "mean_energy_ratio": 0.34590713448203686,
+    "dead_order_layers": 1,
+    "any_irreversible": false
+  },
+  {
+    "config": "with_energy",
+    "seed": 7,
+    "N0": 48,
+    "emergence_depth": 2,
+    "report": [
+      {
+        "layer": 0,
+        "N": 48,
+        "sealed": true,
+        "seal_step": 11,
+        "n_orgs": 6,
+        "autonomous_flux": 0.0091,
+        "mode": "seed",
+        "energy_final": 69.8,
+        "energy_ratio": 0.698,
+        "energy_low": false,
+        "negentropy_final": 0.35,
+        "mean_free_energy": 83.586,
+        "is_irreversible": false
+      },
+      {
+        "layer": 1,
+        "N": 15,
+        "sealed": true,
+        "seal_step": 19,
+        "n_orgs": 1,
+        "autonomous_flux": 0.1729,
+        "mode": "self_reference",
+        "energy_final": 49.57,
+        "energy_ratio": 0.4957,
+        "energy_low": false,
+        "negentropy_final": 0.4335,
+        "mean_free_energy": 72.8504,
+        "is_irreversible": false
+      },
+      {
+        "layer": 2,
+        "N": 8,
+        "sealed": false,
+        "seal_step": null,
+        "n_orgs": 0,
+        "autonomous_flux": 1.0,
+        "mode": "self_reference",
+        "energy_final": 1.4,
+        "energy_ratio": 0.014,
+        "energy_low": true,
+        "negentropy_final": 0.1887,
+        "mean_free_energy": 47.7579,
+        "is_irreversible": false
+      }
+    ],
+    "layer_energy": [
+      {
+        "final_budget": 69.80368868470065,
+        "total_consumed": 39.32131131529945,
+        "total_injected": 4.5625,
+        "total_decayed": 9.458811315299446,
+        "budget_ratio": 0.6980368868470065,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 11
+      },
+      {
+        "final_budget": 49.574565766627714,
+        "total_consumed": 65.55876756670563,
+        "total_injected": 7.566666666666666,
+        "total_decayed": 14.292100900038966,
+        "budget_ratio": 0.49574565766627715,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 19
+      },
+      {
+        "final_budget": 1.4000847634323055,
+        "total_consumed": 107.84991523656774,
+        "total_injected": 4.625,
+        "total_decayed": 18.124915236567748,
+        "budget_ratio": 0.014000847634323054,
+        "is_low_energy": true,
+        "is_dead_order": true,
+        "n_steps": 37
+      }
+    ],
+    "layer_entropy": [
+      {
+        "mean_shannon": 0.6580462802388175,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 83.58602828472891,
+        "final_negentropy": 0.3499775783516459,
+        "cumulative_production": -0.08826244449509646,
+        "is_irreversible": false,
+        "n_steps": 11
+      },
+      {
+        "mean_shannon": 0.7172535128163382,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 72.8503599487902,
+        "final_negentropy": 0.4334904934470948,
+        "cumulative_production": -0.1554185883344571,
+        "is_irreversible": false,
+        "n_steps": 19
+      },
+      {
+        "mean_shannon": 0.8112781244591328,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 47.757930866006824,
+        "final_negentropy": 0.18872187554086717,
+        "cumulative_production": 0.0,
+        "is_irreversible": false,
+        "n_steps": 36
+      }
+    ],
+    "mean_energy_ratio": 0.40259446404920224,
+    "dead_order_layers": 1,
+    "any_irreversible": false
+  },
+  {
+    "config": "low_budget",
+    "seed": 0,
+    "N0": 48,
+    "emergence_depth": 1,
+    "report": [
+      {
+        "layer": 0,
+        "N": 48,
+        "sealed": true,
+        "seal_step": 10,
+        "n_orgs": 6,
+        "autonomous_flux": 0.01,
+        "mode": "seed",
+        "energy_final": 7.52,
+        "energy_ratio": 0.2506,
+        "energy_low": true,
+        "negentropy_final": 0.35,
+        "mean_free_energy": 17.7843,
+        "is_irreversible": false
+      },
+      {
+        "layer": 1,
+        "N": 18,
+        "sealed": false,
+        "seal_step": null,
+        "n_orgs": 1,
+        "autonomous_flux": 0.2802,
+        "mode": "self_reference",
+        "energy_final": 0.62,
+        "energy_ratio": 0.0207,
+        "energy_low": true,
+        "negentropy_final": 0.0817,
+        "mean_free_energy": 15.0397,
+        "is_irreversible": false
+      }
+    ],
+    "layer_energy": [
+      {
+        "final_budget": 7.518368661475502,
+        "total_consumed": 27.45663133852449,
+        "total_injected": 2.4875,
+        "total_decayed": 1.96913133852449,
+        "budget_ratio": 0.25061228871585006,
+        "is_low_energy": true,
+        "is_dead_order": false,
+        "n_steps": 10
+      },
+      {
+        "final_budget": 0.6217121864189701,
+        "total_consumed": 34.611621146914345,
+        "total_injected": 2.6166666666666663,
+        "total_decayed": 2.0949544802476816,
+        "budget_ratio": 0.020723739547299003,
+        "is_low_energy": true,
+        "is_dead_order": true,
+        "n_steps": 13
+      }
+    ],
+    "layer_entropy": [
+      {
+        "mean_shannon": 0.6588486660978639,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 17.784301585294582,
+        "final_negentropy": 0.3499775783516459,
+        "cumulative_production": -0.08826244449509646,
+        "is_irreversible": false,
+        "n_steps": 10
+      },
+      {
+        "mean_shannon": 0.9182958340544897,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 15.039658168009526,
+        "final_negentropy": 0.08170416594551044,
+        "cumulative_production": 0.0,
+        "is_irreversible": false,
+        "n_steps": 12
+      }
+    ],
+    "mean_energy_ratio": 0.13566801413157453,
+    "dead_order_layers": 1,
+    "any_irreversible": false
+  },
+  {
+    "config": "low_budget",
+    "seed": 1,
+    "N0": 48,
+    "emergence_depth": 1,
+    "report": [
+      {
+        "layer": 0,
+        "N": 48,
+        "sealed": true,
+        "seal_step": 10,
+        "n_orgs": 6,
+        "autonomous_flux": 0.01,
+        "mode": "seed",
+        "energy_final": 7.52,
+        "energy_ratio": 0.2506,
+        "energy_low": true,
+        "negentropy_final": 0.35,
+        "mean_free_energy": 17.7843,
+        "is_irreversible": false
+      },
+      {
+        "layer": 1,
+        "N": 18,
+        "sealed": false,
+        "seal_step": null,
+        "n_orgs": 1,
+        "autonomous_flux": 0.2857,
+        "mode": "self_reference",
+        "energy_final": 0.61,
+        "energy_ratio": 0.0202,
+        "energy_low": true,
+        "negentropy_final": 0.0817,
+        "mean_free_energy": 15.0397,
+        "is_irreversible": false
+      }
+    ],
+    "layer_energy": [
+      {
+        "final_budget": 7.518368661475502,
+        "total_consumed": 27.45663133852449,
+        "total_injected": 2.4875,
+        "total_decayed": 1.96913133852449,
+        "budget_ratio": 0.25061228871585006,
+        "is_low_energy": true,
+        "is_dead_order": false,
+        "n_steps": 10
+      },
+      {
+        "final_budget": 0.6050455197523035,
+        "total_consumed": 34.59495448024768,
+        "total_injected": 2.5999999999999996,
+        "total_decayed": 2.0949544802476816,
+        "budget_ratio": 0.02016818399174345,
+        "is_low_energy": true,
+        "is_dead_order": true,
+        "n_steps": 13
+      }
+    ],
+    "layer_entropy": [
+      {
+        "mean_shannon": 0.6588486660978639,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 17.784301585294582,
+        "final_negentropy": 0.3499775783516459,
+        "cumulative_production": -0.08826244449509646,
+        "is_irreversible": false,
+        "n_steps": 10
+      },
+      {
+        "mean_shannon": 0.9182958340544897,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 15.039658168009526,
+        "final_negentropy": 0.08170416594551044,
+        "cumulative_production": 0.0,
+        "is_irreversible": false,
+        "n_steps": 12
+      }
+    ],
+    "mean_energy_ratio": 0.13539023635379677,
+    "dead_order_layers": 1,
+    "any_irreversible": false
+  },
+  {
+    "config": "low_budget",
+    "seed": 2,
+    "N0": 48,
+    "emergence_depth": 1,
+    "report": [
+      {
+        "layer": 0,
+        "N": 48,
+        "sealed": true,
+        "seal_step": 11,
+        "n_orgs": 6,
+        "autonomous_flux": 0.0091,
+        "mode": "seed",
+        "energy_final": 5.39,
+        "energy_ratio": 0.1798,
+        "energy_low": true,
+        "negentropy_final": 0.35,
+        "mean_free_energy": 16.6897,
+        "is_irreversible": false
+      },
+      {
+        "layer": 1,
+        "N": 15,
+        "sealed": false,
+        "seal_step": null,
+        "n_orgs": 2,
+        "autonomous_flux": 0.2253,
+        "mode": "self_reference",
+        "energy_final": 1.21,
+        "energy_ratio": 0.0403,
+        "energy_low": true,
+        "negentropy_final": 0.2781,
+        "mean_free_energy": 15.5999,
+        "is_irreversible": false
+      }
+    ],
+    "layer_energy": [
+      {
+        "final_budget": 5.3931849748607466,
+        "total_consumed": 30.081815025139242,
+        "total_injected": 2.7375,
+        "total_decayed": 2.044315025139245,
+        "budget_ratio": 0.17977283249535822,
+        "is_low_energy": true,
+        "is_dead_order": false,
+        "n_steps": 11
+      },
+      {
+        "final_budget": 1.2091474863331912,
+        "total_consumed": 35.270852513666796,
+        "total_injected": 3.24,
+        "total_decayed": 2.1308525136667993,
+        "budget_ratio": 0.04030491621110637,
+        "is_low_energy": true,
+        "is_dead_order": true,
+        "n_steps": 13
+      }
+    ],
+    "layer_entropy": [
+      {
+        "mean_shannon": 0.6580462802388175,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 16.68965258237802,
+        "final_negentropy": 0.3499775783516459,
+        "cumulative_production": -0.08826244449509646,
+        "is_irreversible": false,
+        "n_steps": 11
+      },
+      {
+        "mean_shannon": 0.6571703497480051,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 15.599933930808659,
+        "final_negentropy": 0.2780719051126377,
+        "cumulative_production": 0.0,
+        "is_irreversible": false,
+        "n_steps": 12
+      }
+    ],
+    "mean_energy_ratio": 0.1100388743532323,
+    "dead_order_layers": 1,
+    "any_irreversible": false
+  },
+  {
+    "config": "low_budget",
+    "seed": 3,
+    "N0": 48,
+    "emergence_depth": 1,
+    "report": [
+      {
+        "layer": 0,
+        "N": 48,
+        "sealed": true,
+        "seal_step": 10,
+        "n_orgs": 6,
+        "autonomous_flux": 0.01,
+        "mode": "seed",
+        "energy_final": 7.52,
+        "energy_ratio": 0.2506,
+        "energy_low": true,
+        "negentropy_final": 0.35,
+        "mean_free_energy": 17.7843,
+        "is_irreversible": false
+      },
+      {
+        "layer": 1,
+        "N": 18,
+        "sealed": false,
+        "seal_step": null,
+        "n_orgs": 1,
+        "autonomous_flux": 0.2857,
+        "mode": "self_reference",
+        "energy_final": 0.61,
+        "energy_ratio": 0.0202,
+        "energy_low": true,
+        "negentropy_final": 0.0817,
+        "mean_free_energy": 15.0397,
+        "is_irreversible": false
+      }
+    ],
+    "layer_energy": [
+      {
+        "final_budget": 7.518368661475502,
+        "total_consumed": 27.45663133852449,
+        "total_injected": 2.4875,
+        "total_decayed": 1.96913133852449,
+        "budget_ratio": 0.25061228871585006,
+        "is_low_energy": true,
+        "is_dead_order": false,
+        "n_steps": 10
+      },
+      {
+        "final_budget": 0.6050455197523035,
+        "total_consumed": 34.59495448024768,
+        "total_injected": 2.5999999999999996,
+        "total_decayed": 2.0949544802476816,
+        "budget_ratio": 0.02016818399174345,
+        "is_low_energy": true,
+        "is_dead_order": true,
+        "n_steps": 13
+      }
+    ],
+    "layer_entropy": [
+      {
+        "mean_shannon": 0.6588486660978639,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 17.784301585294582,
+        "final_negentropy": 0.3499775783516459,
+        "cumulative_production": -0.08826244449509646,
+        "is_irreversible": false,
+        "n_steps": 10
+      },
+      {
+        "mean_shannon": 0.9182958340544897,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 15.039658168009526,
+        "final_negentropy": 0.08170416594551044,
+        "cumulative_production": 0.0,
+        "is_irreversible": false,
+        "n_steps": 12
+      }
+    ],
+    "mean_energy_ratio": 0.13539023635379677,
+    "dead_order_layers": 1,
+    "any_irreversible": false
+  },
+  {
+    "config": "low_budget",
+    "seed": 4,
+    "N0": 48,
+    "emergence_depth": 1,
+    "report": [
+      {
+        "layer": 0,
+        "N": 48,
+        "sealed": true,
+        "seal_step": 10,
+        "n_orgs": 6,
+        "autonomous_flux": 0.01,
+        "mode": "seed",
+        "energy_final": 7.52,
+        "energy_ratio": 0.2506,
+        "energy_low": true,
+        "negentropy_final": 0.35,
+        "mean_free_energy": 17.7843,
+        "is_irreversible": false
+      },
+      {
+        "layer": 1,
+        "N": 18,
+        "sealed": false,
+        "seal_step": null,
+        "n_orgs": 3,
+        "autonomous_flux": 0.2418,
+        "mode": "self_reference",
+        "energy_final": 1.01,
+        "energy_ratio": 0.0338,
+        "energy_low": true,
+        "negentropy_final": 0.2358,
+        "mean_free_energy": 15.4027,
+        "is_irreversible": false
+      }
+    ],
+    "layer_energy": [
+      {
+        "final_budget": 7.518368661475502,
+        "total_consumed": 27.45663133852449,
+        "total_injected": 2.4875,
+        "total_decayed": 1.96913133852449,
+        "budget_ratio": 0.25061228871585006,
+        "is_low_energy": true,
+        "is_dead_order": false,
+        "n_steps": 10
+      },
+      {
+        "final_budget": 1.0133087764224218,
+        "total_consumed": 35.05335789024424,
+        "total_injected": 3.033333333333333,
+        "total_decayed": 2.1200245569109093,
+        "budget_ratio": 0.03377695921408073,
+        "is_low_energy": true,
+        "is_dead_order": true,
+        "n_steps": 13
+      }
+    ],
+    "layer_entropy": [
+      {
+        "mean_shannon": 0.6588486660978639,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 17.784301585294582,
+        "final_negentropy": 0.3499775783516459,
+        "cumulative_production": -0.08826244449509646,
+        "is_irreversible": false,
+        "n_steps": 10
+      },
+      {
+        "mean_shannon": 0.7642045065086203,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 15.402666801082292,
+        "final_negentropy": 0.23579549349137974,
+        "cumulative_production": 0.0,
+        "is_irreversible": false,
+        "n_steps": 12
+      }
+    ],
+    "mean_energy_ratio": 0.1421946239649654,
+    "dead_order_layers": 1,
+    "any_irreversible": false
+  },
+  {
+    "config": "low_budget",
+    "seed": 5,
+    "N0": 48,
+    "emergence_depth": 1,
+    "report": [
+      {
+        "layer": 0,
+        "N": 48,
+        "sealed": true,
+        "seal_step": 10,
+        "n_orgs": 5,
+        "autonomous_flux": 0.01,
+        "mode": "seed",
+        "energy_final": 7.52,
+        "energy_ratio": 0.2506,
+        "energy_low": true,
+        "negentropy_final": 0.35,
+        "mean_free_energy": 17.7843,
+        "is_irreversible": false
+      },
+      {
+        "layer": 1,
+        "N": 16,
+        "sealed": false,
+        "seal_step": null,
+        "n_orgs": 2,
+        "autonomous_flux": 0.3111,
+        "mode": "self_reference",
+        "energy_final": 0.61,
+        "energy_ratio": 0.0205,
+        "energy_low": true,
+        "negentropy_final": 0.104,
+        "mean_free_energy": 15.0191,
+        "is_irreversible": false
+      }
+    ],
+    "layer_energy": [
+      {
+        "final_budget": 7.518368661475502,
+        "total_consumed": 27.45663133852449,
+        "total_injected": 2.4875,
+        "total_decayed": 1.96913133852449,
+        "budget_ratio": 0.25061228871585006,
+        "is_low_energy": true,
+        "is_dead_order": false,
+        "n_steps": 10
+      },
+      {
+        "final_budget": 0.6141019594691999,
+        "total_consumed": 34.598398040530796,
+        "total_injected": 2.6062499999999997,
+        "total_decayed": 2.0921480405307995,
+        "budget_ratio": 0.020470065315639996,
+        "is_low_energy": true,
+        "is_dead_order": true,
+        "n_steps": 13
+      }
+    ],
+    "layer_entropy": [
+      {
+        "mean_shannon": 0.6588486660978639,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 17.784301585294582,
+        "final_negentropy": 0.3499775783516459,
+        "cumulative_production": -0.08826244449509646,
+        "is_irreversible": false,
+        "n_steps": 10
+      },
+      {
+        "mean_shannon": 0.91550348933136,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 15.019063515091966,
+        "final_negentropy": 0.10396176746544261,
+        "cumulative_production": -0.058395770390407664,
+        "is_irreversible": false,
+        "n_steps": 12
+      }
+    ],
+    "mean_energy_ratio": 0.13554117701574503,
+    "dead_order_layers": 1,
+    "any_irreversible": false
+  },
+  {
+    "config": "low_budget",
+    "seed": 6,
+    "N0": 48,
+    "emergence_depth": 1,
+    "report": [
+      {
+        "layer": 0,
+        "N": 48,
+        "sealed": true,
+        "seal_step": 10,
+        "n_orgs": 5,
+        "autonomous_flux": 0.01,
+        "mode": "seed",
+        "energy_final": 7.52,
+        "energy_ratio": 0.2506,
+        "energy_low": true,
+        "negentropy_final": 0.35,
+        "mean_free_energy": 17.7843,
+        "is_irreversible": false
+      },
+      {
+        "layer": 1,
+        "N": 16,
+        "sealed": false,
+        "seal_step": null,
+        "n_orgs": 1,
+        "autonomous_flux": 0.3333,
+        "mode": "self_reference",
+        "energy_final": 0.45,
+        "energy_ratio": 0.0151,
+        "energy_low": true,
+        "negentropy_final": 0.0456,
+        "mean_free_energy": 14.9252,
+        "is_irreversible": false
+      }
+    ],
+    "layer_energy": [
+      {
+        "final_budget": 7.518368661475502,
+        "total_consumed": 27.45663133852449,
+        "total_injected": 2.4875,
+        "total_decayed": 1.96913133852449,
+        "budget_ratio": 0.25061228871585006,
+        "is_low_energy": true,
+        "is_dead_order": false,
+        "n_steps": 10
+      },
+      {
+        "final_budget": 0.45194679850102704,
+        "total_consumed": 34.42305320149897,
+        "total_injected": 2.4375,
+        "total_decayed": 2.0855532014989726,
+        "budget_ratio": 0.015064893283367568,
+        "is_low_energy": true,
+        "is_dead_order": true,
+        "n_steps": 13
+      }
+    ],
+    "layer_entropy": [
+      {
+        "mean_shannon": 0.6588486660978639,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 17.784301585294582,
+        "final_negentropy": 0.3499775783516459,
+        "cumulative_production": -0.08826244449509646,
+        "is_irreversible": false,
+        "n_steps": 10
+      },
+      {
+        "mean_shannon": 0.9544340029249648,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 14.925176009566473,
+        "final_negentropy": 0.04556599707503495,
+        "cumulative_production": 0.0,
+        "is_irreversible": false,
+        "n_steps": 12
+      }
+    ],
+    "mean_energy_ratio": 0.13283859099960882,
+    "dead_order_layers": 1,
+    "any_irreversible": false
+  },
+  {
+    "config": "low_budget",
+    "seed": 7,
+    "N0": 48,
+    "emergence_depth": 1,
+    "report": [
+      {
+        "layer": 0,
+        "N": 48,
+        "sealed": true,
+        "seal_step": 11,
+        "n_orgs": 6,
+        "autonomous_flux": 0.0091,
+        "mode": "seed",
+        "energy_final": 5.39,
+        "energy_ratio": 0.1798,
+        "energy_low": true,
+        "negentropy_final": 0.35,
+        "mean_free_energy": 16.6897,
+        "is_irreversible": false
+      },
+      {
+        "layer": 1,
+        "N": 15,
+        "sealed": false,
+        "seal_step": null,
+        "n_orgs": 1,
+        "autonomous_flux": 0.235,
+        "mode": "self_reference",
+        "energy_final": 0.98,
+        "energy_ratio": 0.0327,
+        "energy_low": true,
+        "negentropy_final": 0.1634,
+        "mean_free_energy": 15.3714,
+        "is_irreversible": false
+      }
+    ],
+    "layer_energy": [
+      {
+        "final_budget": 5.3931849748607466,
+        "total_consumed": 30.081815025139242,
+        "total_injected": 2.7375,
+        "total_decayed": 2.044315025139245,
+        "budget_ratio": 0.17977283249535822,
+        "is_low_energy": true,
+        "is_dead_order": false,
+        "n_steps": 11
+      },
+      {
+        "final_budget": 0.9819172297654495,
+        "total_consumed": 35.018082770234535,
+        "total_injected": 3.0,
+        "total_decayed": 2.118082770234541,
+        "budget_ratio": 0.03273057432551498,
+        "is_low_energy": true,
+        "is_dead_order": true,
+        "n_steps": 13
+      }
+    ],
+    "layer_entropy": [
+      {
+        "mean_shannon": 0.6580462802388175,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 16.68965258237802,
+        "final_negentropy": 0.3499775783516459,
+        "cumulative_production": -0.08826244449509646,
+        "is_irreversible": false,
+        "n_steps": 11
+      },
+      {
+        "mean_shannon": 0.7792844184142648,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 15.371405333540244,
+        "final_negentropy": 0.16335925805883278,
+        "cumulative_production": 0.1147126470538049,
+        "is_irreversible": false,
+        "n_steps": 12
+      }
+    ],
+    "mean_energy_ratio": 0.1062517034104366,
+    "dead_order_layers": 1,
+    "any_irreversible": false
+  },
+  {
+    "config": "high_decay",
+    "seed": 0,
+    "N0": 48,
+    "emergence_depth": 2,
+    "report": [
+      {
+        "layer": 0,
+        "N": 48,
+        "sealed": true,
+        "seal_step": 10,
+        "n_orgs": 6,
+        "autonomous_flux": 0.01,
+        "mode": "seed",
+        "energy_final": 44.75,
+        "energy_ratio": 0.4475,
+        "energy_low": false,
+        "negentropy_final": 0.35,
+        "mean_free_energy": 67.6148,
+        "is_irreversible": false
+      },
+      {
+        "layer": 1,
+        "N": 18,
+        "sealed": true,
+        "seal_step": 20,
+        "n_orgs": 1,
+        "autonomous_flux": 0.2242,
+        "mode": "self_reference",
+        "energy_final": 11.16,
+        "energy_ratio": 0.1116,
+        "energy_low": false,
+        "negentropy_final": 0.4967,
+        "mean_free_energy": 45.8663,
+        "is_irreversible": false
+      },
+      {
+        "layer": 2,
+        "N": 8,
+        "sealed": false,
+        "seal_step": null,
+        "n_orgs": 0,
+        "autonomous_flux": 1.0,
+        "mode": "self_reference",
+        "energy_final": 0.61,
+        "energy_ratio": 0.0061,
+        "energy_low": true,
+        "negentropy_final": 0.1887,
+        "mean_free_energy": 40.5244,
+        "is_irreversible": false
+      }
+    ],
+    "layer_energy": [
+      {
+        "final_budget": 44.746321772447615,
+        "total_consumed": 63.54534489421911,
+        "total_injected": 4.145833333333334,
+        "total_decayed": 36.399511560885784,
+        "budget_ratio": 0.44746321772447617,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 10
+      },
+      {
+        "final_budget": 11.155969176749071,
+        "total_consumed": 103.39958637880648,
+        "total_injected": 7.277777777777778,
+        "total_decayed": 50.121808601028704,
+        "budget_ratio": 0.11155969176749071,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 20
+      },
+      {
+        "final_budget": 0.6057105185409455,
+        "total_consumed": 105.1442894814591,
+        "total_injected": 2.875,
+        "total_decayed": 49.36928948145909,
+        "budget_ratio": 0.006057105185409455,
+        "is_low_energy": true,
+        "is_dead_order": true,
+        "n_steps": 23
+      }
+    ],
+    "layer_entropy": [
+      {
+        "mean_shannon": 0.6588486660978639,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 67.61480663291846,
+        "final_negentropy": 0.3499775783516459,
+        "cumulative_production": -0.08826244449509646,
+        "is_irreversible": false,
+        "n_steps": 10
+      },
+      {
+        "mean_shannon": 0.8132901359036329,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 45.86631692396252,
+        "final_negentropy": 0.49674166522435415,
+        "cumulative_production": -0.4150374992788437,
+        "is_irreversible": false,
+        "n_steps": 20
+      },
+      {
+        "mean_shannon": 0.8112781244591328,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 40.52443958595822,
+        "final_negentropy": 0.18872187554086717,
+        "cumulative_production": 0.0,
+        "is_irreversible": false,
+        "n_steps": 22
+      }
+    ],
+    "mean_energy_ratio": 0.18836000489245877,
+    "dead_order_layers": 1,
+    "any_irreversible": false
+  },
+  {
+    "config": "high_decay",
+    "seed": 1,
+    "N0": 48,
+    "emergence_depth": 2,
+    "report": [
+      {
+        "layer": 0,
+        "N": 48,
+        "sealed": true,
+        "seal_step": 10,
+        "n_orgs": 6,
+        "autonomous_flux": 0.01,
+        "mode": "seed",
+        "energy_final": 44.75,
+        "energy_ratio": 0.4475,
+        "energy_low": false,
+        "negentropy_final": 0.35,
+        "mean_free_energy": 67.6148,
+        "is_irreversible": false
+      },
+      {
+        "layer": 1,
+        "N": 18,
+        "sealed": true,
+        "seal_step": 23,
+        "n_orgs": 1,
+        "autonomous_flux": 0.2322,
+        "mode": "self_reference",
+        "energy_final": 4.03,
+        "energy_ratio": 0.0403,
+        "energy_low": true,
+        "negentropy_final": 0.4967,
+        "mean_free_energy": 40.649,
+        "is_irreversible": false
+      },
+      {
+        "layer": 2,
+        "N": 8,
+        "sealed": false,
+        "seal_step": null,
+        "n_orgs": 0,
+        "autonomous_flux": 1.0,
+        "mode": "self_reference",
+        "energy_final": 0.61,
+        "energy_ratio": 0.0061,
+        "energy_low": true,
+        "negentropy_final": 0.1887,
+        "mean_free_energy": 40.5244,
+        "is_irreversible": false
+      }
+    ],
+    "layer_energy": [
+      {
+        "final_budget": 44.746321772447615,
+        "total_consumed": 63.54534489421911,
+        "total_injected": 4.145833333333334,
+        "total_decayed": 36.399511560885784,
+        "budget_ratio": 0.44746321772447617,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 10
+      },
+      {
+        "final_budget": 4.031987557512188,
+        "total_consumed": 112.52356799804336,
+        "total_injected": 8.277777777777777,
+        "total_decayed": 51.34579022026559,
+        "budget_ratio": 0.040319875575121886,
+        "is_low_energy": true,
+        "is_dead_order": false,
+        "n_steps": 23
+      },
+      {
+        "final_budget": 0.6057105185409455,
+        "total_consumed": 105.1442894814591,
+        "total_injected": 2.875,
+        "total_decayed": 49.36928948145909,
+        "budget_ratio": 0.006057105185409455,
+        "is_low_energy": true,
+        "is_dead_order": true,
+        "n_steps": 23
+      }
+    ],
+    "layer_entropy": [
+      {
+        "mean_shannon": 0.6588486660978639,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 67.61480663291846,
+        "final_negentropy": 0.3499775783516459,
+        "cumulative_production": -0.08826244449509646,
+        "is_irreversible": false,
+        "n_steps": 10
+      },
+      {
+        "mean_shannon": 0.8269865313146139,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 40.649004423590775,
+        "final_negentropy": 0.49674166522435415,
+        "cumulative_production": -0.4150374992788437,
+        "is_irreversible": false,
+        "n_steps": 23
+      },
+      {
+        "mean_shannon": 0.8112781244591328,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 40.52443958595822,
+        "final_negentropy": 0.18872187554086717,
+        "cumulative_production": 0.0,
+        "is_irreversible": false,
+        "n_steps": 22
+      }
+    ],
+    "mean_energy_ratio": 0.1646133994950025,
+    "dead_order_layers": 1,
+    "any_irreversible": false
+  },
+  {
+    "config": "high_decay",
+    "seed": 2,
+    "N0": 48,
+    "emergence_depth": 2,
+    "report": [
+      {
+        "layer": 0,
+        "N": 48,
+        "sealed": true,
+        "seal_step": 11,
+        "n_orgs": 6,
+        "autonomous_flux": 0.0091,
+        "mode": "seed",
+        "energy_final": 40.63,
+        "energy_ratio": 0.4063,
+        "energy_low": false,
+        "negentropy_final": 0.35,
+        "mean_free_energy": 65.1931,
+        "is_irreversible": false
+      },
+      {
+        "layer": 1,
+        "N": 15,
+        "sealed": true,
+        "seal_step": 17,
+        "n_orgs": 2,
+        "autonomous_flux": 0.1765,
+        "mode": "self_reference",
+        "energy_final": 20.08,
+        "energy_ratio": 0.2008,
+        "energy_low": false,
+        "negentropy_final": 0.6466,
+        "mean_free_energy": 52.2956,
+        "is_irreversible": false
+      },
+      {
+        "layer": 2,
+        "N": 8,
+        "sealed": false,
+        "seal_step": null,
+        "n_orgs": 0,
+        "autonomous_flux": 0.6667,
+        "mode": "self_reference",
+        "energy_final": 0.17,
+        "energy_ratio": 0.0017,
+        "energy_low": true,
+        "negentropy_final": 0.0,
+        "mean_free_energy": 39.6779,
+        "is_irreversible": false
+      }
+    ],
+    "layer_energy": [
+      {
+        "final_budget": 40.625672350491904,
+        "total_consumed": 68.49932764950816,
+        "total_injected": 4.5625,
+        "total_decayed": 38.63682764950816,
+        "budget_ratio": 0.40625672350491904,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 11
+      },
+      {
+        "final_budget": 20.075924279510858,
+        "total_consumed": 94.45740905382252,
+        "total_injected": 7.266666666666667,
+        "total_decayed": 48.090742387155856,
+        "budget_ratio": 0.20075924279510857,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 17
+      },
+      {
+        "final_budget": 0.17045243176696134,
+        "total_consumed": 111.82954756823307,
+        "total_injected": 6.0,
+        "total_decayed": 50.62954756823307,
+        "budget_ratio": 0.0017045243176696135,
+        "is_low_energy": true,
+        "is_dead_order": true,
+        "n_steps": 24
+      }
+    ],
+    "layer_entropy": [
+      {
+        "mean_shannon": 0.6580462802388175,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 65.1930651143662,
+        "final_negentropy": 0.3499775783516459,
+        "cumulative_production": -0.08826244449509646,
+        "is_irreversible": false,
+        "n_steps": 11
+      },
+      {
+        "mean_shannon": 0.5803524143302737,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 52.29557535170667,
+        "final_negentropy": 0.6466406649785787,
+        "cumulative_production": -0.368568759865941,
+        "is_irreversible": false,
+        "n_steps": 17
+      },
+      {
+        "mean_shannon": 1.0,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 39.67786745063744,
+        "final_negentropy": 0.0,
+        "cumulative_production": 0.0,
+        "is_irreversible": false,
+        "n_steps": 23
+      }
+    ],
+    "mean_energy_ratio": 0.20290683020589909,
+    "dead_order_layers": 1,
+    "any_irreversible": false
+  },
+  {
+    "config": "high_decay",
+    "seed": 3,
+    "N0": 48,
+    "emergence_depth": 2,
+    "report": [
+      {
+        "layer": 0,
+        "N": 48,
+        "sealed": true,
+        "seal_step": 10,
+        "n_orgs": 6,
+        "autonomous_flux": 0.01,
+        "mode": "seed",
+        "energy_final": 44.75,
+        "energy_ratio": 0.4475,
+        "energy_low": false,
+        "negentropy_final": 0.35,
+        "mean_free_energy": 67.6148,
+        "is_irreversible": false
+      },
+      {
+        "layer": 1,
+        "N": 18,
+        "sealed": true,
+        "seal_step": 23,
+        "n_orgs": 1,
+        "autonomous_flux": 0.2198,
+        "mode": "self_reference",
+        "energy_final": 4.11,
+        "energy_ratio": 0.0411,
+        "energy_low": true,
+        "negentropy_final": 0.4967,
+        "mean_free_energy": 40.6937,
+        "is_irreversible": false
+      },
+      {
+        "layer": 2,
+        "N": 8,
+        "sealed": false,
+        "seal_step": null,
+        "n_orgs": 0,
+        "autonomous_flux": 1.0,
+        "mode": "self_reference",
+        "energy_final": 0.61,
+        "energy_ratio": 0.0061,
+        "energy_low": true,
+        "negentropy_final": 0.1887,
+        "mean_free_energy": 40.5244,
+        "is_irreversible": false
+      }
+    ],
+    "layer_energy": [
+      {
+        "final_budget": 44.746321772447615,
+        "total_consumed": 63.54534489421911,
+        "total_injected": 4.145833333333334,
+        "total_decayed": 36.399511560885784,
+        "budget_ratio": 0.44746321772447617,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 10
+      },
+      {
+        "final_budget": 4.114954210551465,
+        "total_consumed": 112.66282356722631,
+        "total_injected": 8.38888888888889,
+        "total_decayed": 51.37393467833743,
+        "budget_ratio": 0.04114954210551465,
+        "is_low_energy": true,
+        "is_dead_order": false,
+        "n_steps": 23
+      },
+      {
+        "final_budget": 0.6057105185409455,
+        "total_consumed": 105.1442894814591,
+        "total_injected": 2.875,
+        "total_decayed": 49.36928948145909,
+        "budget_ratio": 0.006057105185409455,
+        "is_low_energy": true,
+        "is_dead_order": true,
+        "n_steps": 23
+      }
+    ],
+    "layer_entropy": [
+      {
+        "mean_shannon": 0.6588486660978639,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 67.61480663291846,
+        "final_negentropy": 0.3499775783516459,
+        "cumulative_production": -0.08826244449509646,
+        "is_irreversible": false,
+        "n_steps": 10
+      },
+      {
+        "mean_shannon": 0.810358031433466,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 40.69371361105783,
+        "final_negentropy": 0.49674166522435415,
+        "cumulative_production": -0.4150374992788437,
+        "is_irreversible": false,
+        "n_steps": 23
+      },
+      {
+        "mean_shannon": 0.8112781244591328,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 40.52443958595822,
+        "final_negentropy": 0.18872187554086717,
+        "cumulative_production": 0.0,
+        "is_irreversible": false,
+        "n_steps": 22
+      }
+    ],
+    "mean_energy_ratio": 0.16488995500513343,
+    "dead_order_layers": 1,
+    "any_irreversible": false
+  },
+  {
+    "config": "high_decay",
+    "seed": 4,
+    "N0": 48,
+    "emergence_depth": 2,
+    "report": [
+      {
+        "layer": 0,
+        "N": 48,
+        "sealed": true,
+        "seal_step": 10,
+        "n_orgs": 6,
+        "autonomous_flux": 0.01,
+        "mode": "seed",
+        "energy_final": 44.75,
+        "energy_ratio": 0.4475,
+        "energy_low": false,
+        "negentropy_final": 0.35,
+        "mean_free_energy": 67.6148,
+        "is_irreversible": false
+      },
+      {
+        "layer": 1,
+        "N": 18,
+        "sealed": true,
+        "seal_step": 21,
+        "n_orgs": 3,
+        "autonomous_flux": 0.1906,
+        "mode": "self_reference",
+        "energy_final": 9.35,
+        "energy_ratio": 0.0935,
+        "energy_low": true,
+        "negentropy_final": 1.0,
+        "mean_free_energy": 44.7297,
+        "is_irreversible": false
+      },
+      {
+        "layer": 2,
+        "N": 12,
+        "sealed": false,
+        "seal_step": null,
+        "n_orgs": 0,
+        "autonomous_flux": 0.5,
+        "mode": "self_reference",
+        "energy_final": 0.17,
+        "energy_ratio": 0.0017,
+        "energy_low": true,
+        "negentropy_final": 0.0,
+        "mean_free_energy": 39.6779,
+        "is_irreversible": false
+      }
+    ],
+    "layer_energy": [
+      {
+        "final_budget": 44.746321772447615,
+        "total_consumed": 63.54534489421911,
+        "total_injected": 4.145833333333334,
+        "total_decayed": 36.399511560885784,
+        "budget_ratio": 0.44746321772447617,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 10
+      },
+      {
+        "final_budget": 9.352540336032245,
+        "total_consumed": 108.0919041084122,
+        "total_injected": 8.722222222222221,
+        "total_decayed": 51.069681886189976,
+        "budget_ratio": 0.09352540336032245,
+        "is_low_energy": true,
+        "is_dead_order": false,
+        "n_steps": 21
+      },
+      {
+        "final_budget": 0.17045243176696134,
+        "total_consumed": 111.82954756823307,
+        "total_injected": 6.0,
+        "total_decayed": 50.62954756823307,
+        "budget_ratio": 0.0017045243176696135,
+        "is_low_energy": true,
+        "is_dead_order": true,
+        "n_steps": 24
+      }
+    ],
+    "layer_entropy": [
+      {
+        "mean_shannon": 0.6588486660978639,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 67.61480663291846,
+        "final_negentropy": 0.3499775783516459,
+        "cumulative_production": -0.08826244449509646,
+        "is_irreversible": false,
+        "n_steps": 10
+      },
+      {
+        "mean_shannon": 0.5915539737346659,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 44.72969260054303,
+        "final_negentropy": 1.0,
+        "cumulative_production": -0.7642045065086203,
+        "is_irreversible": false,
+        "n_steps": 21
+      },
+      {
+        "mean_shannon": 1.0,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 39.67786745063744,
+        "final_negentropy": 0.0,
+        "cumulative_production": 0.0,
+        "is_irreversible": false,
+        "n_steps": 23
+      }
+    ],
+    "mean_energy_ratio": 0.1808977151341561,
+    "dead_order_layers": 1,
+    "any_irreversible": false
+  },
+  {
+    "config": "high_decay",
+    "seed": 5,
+    "N0": 48,
+    "emergence_depth": 1,
+    "report": [
+      {
+        "layer": 0,
+        "N": 48,
+        "sealed": true,
+        "seal_step": 10,
+        "n_orgs": 5,
+        "autonomous_flux": 0.01,
+        "mode": "seed",
+        "energy_final": 44.75,
+        "energy_ratio": 0.4475,
+        "energy_low": false,
+        "negentropy_final": 0.35,
+        "mean_free_energy": 67.6148,
+        "is_irreversible": false
+      },
+      {
+        "layer": 1,
+        "N": 16,
+        "sealed": false,
+        "seal_step": null,
+        "n_orgs": 2,
+        "autonomous_flux": 0.2796,
+        "mode": "self_reference",
+        "energy_final": 1.86,
+        "energy_ratio": 0.0186,
+        "energy_low": true,
+        "negentropy_final": 0.6627,
+        "mean_free_energy": 40.5802,
+        "is_irreversible": false
+      }
+    ],
+    "layer_energy": [
+      {
+        "final_budget": 44.746321772447615,
+        "total_consumed": 63.54534489421911,
+        "total_injected": 4.145833333333334,
+        "total_decayed": 36.399511560885784,
+        "budget_ratio": 0.44746321772447617,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 10
+      },
+      {
+        "final_budget": 1.8610612779631603,
+        "total_consumed": 115.26393872203687,
+        "total_injected": 8.5625,
+        "total_decayed": 51.50143872203687,
+        "budget_ratio": 0.018610612779631604,
+        "is_low_energy": true,
+        "is_dead_order": true,
+        "n_steps": 24
+      }
+    ],
+    "layer_entropy": [
+      {
+        "mean_shannon": 0.6588486660978639,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 67.61480663291846,
+        "final_negentropy": 0.3499775783516459,
+        "cumulative_production": -0.08826244449509646,
+        "is_irreversible": false,
+        "n_steps": 10
+      },
+      {
+        "mean_shannon": 0.8558363629004644,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 40.58019730843594,
+        "final_negentropy": 0.6627099333829861,
+        "cumulative_production": -0.6171439363079512,
+        "is_irreversible": false,
+        "n_steps": 23
+      }
+    ],
+    "mean_energy_ratio": 0.2330369152520539,
+    "dead_order_layers": 1,
+    "any_irreversible": false
+  },
+  {
+    "config": "high_decay",
+    "seed": 6,
+    "N0": 48,
+    "emergence_depth": 1,
+    "report": [
+      {
+        "layer": 0,
+        "N": 48,
+        "sealed": true,
+        "seal_step": 10,
+        "n_orgs": 5,
+        "autonomous_flux": 0.01,
+        "mode": "seed",
+        "energy_final": 44.75,
+        "energy_ratio": 0.4475,
+        "energy_low": false,
+        "negentropy_final": 0.35,
+        "mean_free_energy": 67.6148,
+        "is_irreversible": false
+      },
+      {
+        "layer": 1,
+        "N": 16,
+        "sealed": false,
+        "seal_step": null,
+        "n_orgs": 1,
+        "autonomous_flux": 0.2897,
+        "mode": "self_reference",
+        "energy_final": 1.6,
+        "energy_ratio": 0.016,
+        "energy_low": true,
+        "negentropy_final": 0.3038,
+        "mean_free_energy": 40.3829,
+        "is_irreversible": false
+      }
+    ],
+    "layer_energy": [
+      {
+        "final_budget": 44.746321772447615,
+        "total_consumed": 63.54534489421911,
+        "total_injected": 4.145833333333334,
+        "total_decayed": 36.399511560885784,
+        "budget_ratio": 0.44746321772447617,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 10
+      },
+      {
+        "final_budget": 1.6007215886249897,
+        "total_consumed": 114.64927841137504,
+        "total_injected": 8.125,
+        "total_decayed": 51.32427841137503,
+        "budget_ratio": 0.016007215886249898,
+        "is_low_energy": true,
+        "is_dead_order": true,
+        "n_steps": 24
+      }
+    ],
+    "layer_entropy": [
+      {
+        "mean_shannon": 0.6588486660978639,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 67.61480663291846,
+        "final_negentropy": 0.3499775783516459,
+        "cumulative_production": -0.08826244449509646,
+        "is_irreversible": false,
+        "n_steps": 10
+      },
+      {
+        "mean_shannon": 0.89905373122523,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 40.3829274960574,
+        "final_negentropy": 0.3037877398748542,
+        "cumulative_production": -0.25822174279981924,
+        "is_irreversible": false,
+        "n_steps": 23
+      }
+    ],
+    "mean_energy_ratio": 0.23173521680536302,
+    "dead_order_layers": 1,
+    "any_irreversible": false
+  },
+  {
+    "config": "high_decay",
+    "seed": 7,
+    "N0": 48,
+    "emergence_depth": 2,
+    "report": [
+      {
+        "layer": 0,
+        "N": 48,
+        "sealed": true,
+        "seal_step": 11,
+        "n_orgs": 6,
+        "autonomous_flux": 0.0091,
+        "mode": "seed",
+        "energy_final": 40.63,
+        "energy_ratio": 0.4063,
+        "energy_low": false,
+        "negentropy_final": 0.35,
+        "mean_free_energy": 65.1931,
+        "is_irreversible": false
+      },
+      {
+        "layer": 1,
+        "N": 15,
+        "sealed": true,
+        "seal_step": 19,
+        "n_orgs": 1,
+        "autonomous_flux": 0.1729,
+        "mode": "self_reference",
+        "energy_final": 14.11,
+        "energy_ratio": 0.1411,
+        "energy_low": false,
+        "negentropy_final": 0.4335,
+        "mean_free_energy": 48.1331,
+        "is_irreversible": false
+      },
+      {
+        "layer": 2,
+        "N": 8,
+        "sealed": false,
+        "seal_step": null,
+        "n_orgs": 0,
+        "autonomous_flux": 1.0,
+        "mode": "self_reference",
+        "energy_final": 0.61,
+        "energy_ratio": 0.0061,
+        "energy_low": true,
+        "negentropy_final": 0.1887,
+        "mean_free_energy": 40.5244,
+        "is_irreversible": false
+      }
+    ],
+    "layer_energy": [
+      {
+        "final_budget": 40.625672350491904,
+        "total_consumed": 68.49932764950816,
+        "total_injected": 4.5625,
+        "total_decayed": 38.63682764950816,
+        "budget_ratio": 0.40625672350491904,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 11
+      },
+      {
+        "final_budget": 14.114514332897361,
+        "total_consumed": 101.01881900043601,
+        "total_injected": 7.566666666666666,
+        "total_decayed": 49.752152333769345,
+        "budget_ratio": 0.1411451433289736,
+        "is_low_energy": false,
+        "is_dead_order": false,
+        "n_steps": 19
+      },
+      {
+        "final_budget": 0.6057105185409455,
+        "total_consumed": 105.1442894814591,
+        "total_injected": 2.875,
+        "total_decayed": 49.36928948145909,
+        "budget_ratio": 0.006057105185409455,
+        "is_low_energy": true,
+        "is_dead_order": true,
+        "n_steps": 23
+      }
+    ],
+    "layer_entropy": [
+      {
+        "mean_shannon": 0.6580462802388175,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 65.1930651143662,
+        "final_negentropy": 0.3499775783516459,
+        "cumulative_production": -0.08826244449509646,
+        "is_irreversible": false,
+        "n_steps": 11
+      },
+      {
+        "mean_shannon": 0.7172535128163382,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 48.1331444349881,
+        "final_negentropy": 0.4334904934470948,
+        "cumulative_production": -0.1554185883344571,
+        "is_irreversible": false,
+        "n_steps": 19
+      },
+      {
+        "mean_shannon": 0.8112781244591328,
+        "mean_org_entropy": 0.0,
+        "mean_free_energy": 40.52443958595822,
+        "final_negentropy": 0.18872187554086717,
+        "cumulative_production": 0.0,
+        "is_irreversible": false,
+        "n_steps": 22
+      }
+    ],
+    "mean_energy_ratio": 0.18448632400643405,
+    "dead_order_layers": 1,
+    "any_irreversible": false
+  }
+]

@@ -53,8 +53,14 @@ class Layer:
         self.moves_this_step = 0
         self.flux_trace = []
         # Phase 21: 能量 + 熵追踪
-        self.energy = EnergyManager(energy_cfg)
-        self.entropy = EntropyTracker(entropy_cfg)
+        if energy_cfg is not None:
+            self.energy = EnergyManager(energy_cfg)
+        else:
+            self.energy = None
+        if entropy_cfg is not None:
+            self.entropy = EntropyTracker(entropy_cfg)
+        else:
+            self.entropy = None
         self._energy_cfg = energy_cfg
         self._entropy_cfg = entropy_cfg
 
@@ -176,8 +182,8 @@ class RecursiveWorld:
         field = self.field0
         for depth in range(max_layers):
             layer = Layer(field, self.params,
-                            energy_cfg=self.energy_config,
-                            entropy_cfg=self.entropy_config)
+                           energy_cfg=self.energy_config,
+                           entropy_cfg=self.entropy_config)
 
             # L0: 如果 env_start_step 已设置, 用步回调创建环境并施加耦合
             if depth == 0 and self.env_start_step is not None:
