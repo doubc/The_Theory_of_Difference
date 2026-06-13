@@ -9,21 +9,22 @@ import numpy as np
 from typing import Optional, List, Dict, Tuple
 from dataclasses import dataclass, field
 
-from .energy import EnergyConfig, EnergyManager, EnergyState
-from .entropy import EntropyConfig, EntropyTracker, EntropyState
+from .energy import EnergyConfig, EnergyManager
+from .entropy import EntropyConfig, EntropyTracker
 from .environment_energy import EnvironmentConfig as OpenSystemConfig, OpenSystemCoupling
-from .mechanisms import (
-    m1_differentiate,
-    m2_cluster,
-    m3_conserve,
-    m4_stabilize,
-    m5_break_symmetry,
-    m6_check_stability,
-    m7_bind,
-    m8_encapsulate,
-    m9_should_seal,
-    m9_seal
-)
+# Note: Mechanism functions are called internally, not imported here
+# from .mechanisms import (
+#     m1_differentiate,
+#     m2_cluster,
+#     m3_conserve,
+#     m4_stabilize,
+#     m5_break_symmetry,
+#     m6_check_stability,
+#     m7_bind,
+#     m8_encapsulate,
+#     m9_should_seal,
+#     m9_seal
+# )
 
 
 @dataclass
