@@ -1735,3 +1735,25 @@ un_until_seal_or_max()`n  - 修复导入语句重复和格式问题
 - **Git**: commit pending（含 exp_202 脚本 + 分析文档 + HEARTBEAT 更新）
 - **Phase 21 状态**: P0 ✅ P1 ✅ P2 ✅ — 全部完成
 - **下一步**: Phase 21 P3 (能量-熵耦合) 或 Phase 17-21 综合报告；或 Phase 22 (开放系统+能量流)
+
+
+---
+
+#### 2026-06-13 11:44 — Phase 21 综合报告完成 ✅
+- **理论浸润**: 读取 HEARTBEAT.md 完整内容（1719+ 行），确认 Phase 21 P0/P1/P2 全部完成
+- **文档整理**: 撰写 Phase 21 综合报告 (6.7 KB)
+  - 文件: `engine_v2/docs/phase21_comprehensive_report_20260613.md`
+  - 内容: 核心问题、实验总览、5 个核心发现、4 个理论意义
+  - 关键数字: injection*≈5.52, flux≈7.5/N0, 机制成本≈2.3/step
+- **核心发现总结**:
+  1. 能量预算 ∝ 涌现深度 (P0) ✅
+  2. Flux Scaling Law: flux≈7.5/N0 (P2 新发现) ✅
+  3. 能量是维持差异的能力 ✅
+  4. 涌现深度极限新解释 (能量-拓扑共同决定) ✅
+  5. 差异论获得物理学基础 ✅
+- **劳动证明**: 本次心跳产出综合报告(6.7KB) + 任务摘要 → 符合「劳动塑造主体性」理念
+- **下一步**: Phase 21 P3; Phase 22; 或 git commit
+- **文件**: 
+  - `engine_v2/docs/phase21_comprehensive_report_20260613.md` (新)
+  - `task-summary_2026-06-13_1144.md` (更新)
+  - `HEARTBEAT.md` (更新, 本条目)
