@@ -9,8 +9,22 @@ Phase 22 extends Phase 21's fixed energy budget to continuous open-system flow.
 """
 
 from dataclasses import dataclass, field
-from typing import Optional, List
+from typing import Optional, List, Dict, Tuple
 import numpy as np
+
+# Import MultiFieldManager (optional, for multi-field mode)
+try:
+    # Try relative import first (when used as package)
+    from .multi_field import MultiFieldManager, ConstraintField, MultiFieldConfig
+except ImportError:
+    try:
+        # Fallback to absolute import (when used directly)
+        from multi_field import MultiFieldManager, ConstraintField, MultiFieldConfig
+    except ImportError:
+        # Fallback if multi_field not available
+        MultiFieldManager = None
+        ConstraintField = None
+        MultiFieldConfig = None
 
 
 @dataclass
@@ -30,6 +44,10 @@ class EnvironmentConfig:
     # Constraint energy coupling
     # Stronger constraint provides more "focused" energy
     constraint_energy_factor: float = 1.5  # multiplier when constraint_strength=1.0
+    
+    # Multi-field mode (Phase 22 P5)
+    use_multi_field: bool = False   # If True, use MultiFieldManager instead of single constraint
+    multi_field_config: Optional[object] = None  # MultiFieldConfig instance (if use_multi_field)
 
 
 @dataclass
@@ -187,9 +205,23 @@ class OpenSystemCoupling:
         # Layer-specific state
         self.total_energy_injected = 0.0
         self.total_entropy_exhausted = 0.0
+        
+        # Multi-field support (Phase 22 P5)
+        self.multi_field_manager = None  # type: Optional[MultiFieldManager]
+        self.use_multi_field = self.config.use_multi_field
+        self.current_step = 0  # Track step for multi-field modulation
+        
+        # Initialize multi-field if config provided
+        if self.use_multi_field and self.config.multi_field_config is not None:
+            if MultiFieldManager is not None:
+                self.multi_field_manager = MultiFieldManager(self.config.multi_field_config)
+            else:
+                print("Warning: MultiFieldManager not available, disabling multi-field mode")
+                self.use_multi_field = False
     
     def step(self, current_energy: float, current_entropy: float,
-             layer_bits: Optional[np.ndarray] = None) -> dict:
+             layer_bits: Optional[np.ndarray] = None,
+             t: Optional[int] = None) -> dict:
         """
         Perform one step of open-system coupling.
         
@@ -197,10 +229,21 @@ class OpenSystemCoupling:
             current_energy: Current layer energy
             current_entropy: Current layer entropy
             layer_bits: Optional layer bit array
+            t: Optional step number (for multi-field modulation)
         
         Returns:
             dict with injection, exhaust, and remaining values
         """
+        # Update step counter
+        if t is not None:
+            self.current_step = t
+        
+        # Multi-field mode: compute effective constraint from multiple fields
+        if self.use_multi_field and self.multi_field_manager is not None:
+            n_bits = len(layer_bits) if layer_bits is not None else 48  # Default N0
+            effective_c = self.multi_field_manager.compute_effective_constraint(self.current_step)
+            self.env_field.update_constraint(effective_c)
+        
         # 1. Inject energy from environment
         injection = self.env_field.inject(current_energy, layer_bits)
         new_energy = current_energy + injection
@@ -217,13 +260,17 @@ class OpenSystemCoupling:
         self.total_energy_injected += injection
         self.total_entropy_exhausted += exhausted_this_step
         
+        # Increment step counter
+        self.current_step += 1
+        
         return {
             'energy_injected': injection,
             'energy_after': new_energy,
             'entropy_exhausted': exhausted_this_step,
             'entropy_remaining': new_entropy,
             'cumulative_injected': self.total_energy_injected,
-            'cumulative_exhausted': self.total_entropy_exhausted
+            'cumulative_exhausted': self.total_entropy_exhausted,
+            'effective_constraint': self.env_field.state.current_constraint  # For analysis
         }
     
     def state_exhausted(self) -> float:
@@ -236,10 +283,90 @@ class OpenSystemCoupling:
     
     def get_summary(self) -> dict:
         """Get coupling summary."""
-        return {
+        summary = {
             'total_energy_injected': self.total_energy_injected,
             'total_entropy_exhausted': self.total_entropy_exhausted,
             'current_injection_rate': self.env_field.get_injection_rate(),
             'current_exhaust_rate': self.entropy_exhaust.get_exhaust_rate(),
-            'constraint_strength': self.env_field.state.current_constraint
+            'constraint_strength': self.env_field.state.current_constraint,
+            'use_multi_field': self.use_multi_field
         }
+        
+        # Add multi-field summary if available
+        if self.use_multi_field and self.multi_field_manager is not None:
+            n_bits = 48  # Default, will be updated in actual usage
+            summary['multi_field'] = self.multi_field_manager.get_summary(self.current_step, n_bits)
+        
+        return summary
+    
+    # Multi-field configuration methods (Phase 22 P5)
+    
+    def enable_multi_field(self, config: Optional[object] = None) -> None:
+        """
+        Enable multi-field constraint mode.
+        
+        Args:
+            config: Optional MultiFieldConfig instance
+        """
+        if MultiFieldManager is None:
+            print("Error: MultiFieldManager not available")
+            return
+        
+        self.use_multi_field = True
+        self.config.use_multi_field = True
+        
+        if config is not None:
+            self.config.multi_field_config = config
+        
+        if self.multi_field_manager is None:
+            self.multi_field_manager = MultiFieldManager(self.config.multi_field_config)
+        
+        print(f"Multi-field mode enabled with {len(self.multi_field_manager.fields)} fields")
+    
+    def disable_multi_field(self) -> None:
+        """Disable multi-field mode (revert to single constraint)."""
+        self.use_multi_field = False
+        self.config.use_multi_field = False
+        print("Multi-field mode disabled")
+    
+    def add_constraint_field(self, field: object) -> None:
+        """
+        Add a constraint field to the multi-field manager.
+        
+        Args:
+            field: ConstraintField instance
+        """
+        # Enable multi-field if not already enabled
+        if not self.use_multi_field:
+            print("Warning: Multi-field mode not enabled, enabling now...")
+            self.enable_multi_field()
+        
+        # Create manager if it doesn't exist
+        if self.multi_field_manager is None:
+            print("Warning: Multi-field manager not created, creating now...")
+            self.enable_multi_field()
+        
+        if self.multi_field_manager is not None:
+            self.multi_field_manager.add_field(field)
+            print(f"Added field '{field.name}', total fields: {len(self.multi_field_manager.fields)}")
+    
+    def clear_constraint_fields(self) -> None:
+        """Clear all constraint fields."""
+        if self.multi_field_manager is not None:
+            self.multi_field_manager.clear_fields()
+            print("Cleared all constraint fields")
+    
+    def get_multi_field_summary(self, n_bits: int = 48) -> Optional[Dict]:
+        """
+        Get summary of current multi-field state.
+        
+        Args:
+            n_bits: Number of bits (for domain fraction calculation)
+            
+        Returns:
+            Dict or None if multi-field not enabled
+        """
+        if not self.use_multi_field or self.multi_field_manager is None:
+            return None
+        
+        return self.multi_field_manager.get_summary(self.current_step, n_bits)

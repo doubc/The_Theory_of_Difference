@@ -98,6 +98,7 @@ class MultiFieldConfig:
     constraint_energy_factor: float = 5.0     # How much constraint amplifies injection
     coupling_mode: str = "additive"           # Global coupling mode (can override per-field)
     normalize_weights: bool = True            # Normalize field weights to sum to 1
+    fields: list = None                       # Optional: fields to pre-configure (list of ConstraintField)
     
 
 class MultiFieldManager:
@@ -114,6 +115,11 @@ class MultiFieldManager:
     def __init__(self, config: Optional[MultiFieldConfig] = None):
         self.config = config or MultiFieldConfig()
         self.fields: List[ConstraintField] = []
+        
+        # Add pre-configured fields from config
+        if self.config.fields:
+            for field in self.config.fields:
+                self.add_field(field)
         
     def add_field(self, field: ConstraintField) -> None:
         """Add a constraint field."""
