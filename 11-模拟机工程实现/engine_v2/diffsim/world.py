@@ -1,262 +1,525 @@
-﻿"""world.py — 单层引擎(Layer) 与 递归闭环世界(RecursiveWorld)。
-
-Layer 运行一层的九机制齿轮直到密封。
-RecursiveWorld 把一层的自指(A9)输出作为下一层的差异源, 递归咬合成闭环。
 """
-from __future__ import annotations
-from dataclasses import dataclass, field as dfield
-from typing import Optional
-import numpy as np
+world.py — World simulation with energy and entropy integration (Phase 21)
 
-from .core import DifferenceField
-from . import mechanisms as M
-from .metrics import jaccard_flux
-from .environment import EnvironmentField, EnvironmentCoupling
-from .energy import EnergyManager, EnergyConfig
-from .entropy import EntropyTracker, EntropyConfig
+Implements the main world class that integrates all mechanisms (m1-m9)
+with energy flow and entropy tracking.
+"""
+
+import numpy as np
+from typing import Optional, List, Dict, Tuple
+from dataclasses import dataclass, field
+
+from .energy import EnergyConfig, EnergyManager, EnergyState
+from .entropy import EntropyConfig, EntropyTracker, EntropyState
+from .environment_energy import EnvironmentConfig as OpenSystemConfig, OpenSystemCoupling
+from .mechanisms import (
+    m1_differentiate,
+    m2_cluster,
+    m3_conserve,
+    m4_stabilize,
+    m5_break_symmetry,
+    m6_check_stability,
+    m7_bind,
+    m8_encapsulate,
+    m9_should_seal,
+    m9_seal
+)
 
 
 @dataclass
-class Params:
-    bind_inc: float = 0.18
-    bind_cap: float = 5.0
-    bind_threshold: float = 1.0
-    cascade_density: float = 0.9
+class WorldConfig:
+    """Configuration for world simulation."""
+    
+    # World parameters
+    n_bits: int = 48  # Number of bits (N0)
+    n_colors: int = 6   # Number of meta-colors (k)
+    
+    # Sealing parameters
+    binding_threshold: float = 1.0
+    seal_threshold: float = 0.4
+    
+    # Energy/Entropy configs
+    energy_config: Optional[EnergyConfig] = None
+    entropy_config: Optional[EntropyConfig] = None
+    
+    # Open System config (Phase 22)
+    open_system_config: Optional[OpenSystemConfig] = None
+    
+    # Simulation parameters
+    max_steps: int = 2000
+    snapshot_interval: int = 10
+    
+    # Layer parameters
     min_org_size: int = 3
-    seal_fraction: float = 0.6
-    lock_inc: float = 0.12
-    lock_threshold: float = 0.6
-    cycle_persistence: int = 3
-    target_active: int = 0          # 0 => 初始活跃数
-    max_flip: int = 6
-    churn: int = 2
     n_meta_colors: int = 4
-    max_residual: int = 6
-    max_steps: int = 400
 
 
-class Layer:
-    """驱动一个 DifferenceField 跑完九机制齿轮直到密封。"""
+@dataclass
+class WorldState:
+    """Current state of the world."""
+    
+    # Current step
+    step: int = 0
+    
+    # Bits (current state)
+    bits: np.ndarray = None  # Will be initialized as zeros
+    
+    # Organizations (clusters of bits)
+    organizations: List[set] = field(default_factory=list)
+    
+    # Sealing state
+    is_sealed: bool = False
+    seal_step: Optional[int] = None
+    frozen_bits: set = field(default_factory=set)
+    
+    # Layer information
+    layer: int = 0
+    parent_world = None  # Reference to parent (for L1+)
+    
+    # Energy and entropy managers
+    energy_manager: Optional[EnergyManager] = None
+    entropy_tracker: Optional[EntropyTracker] = None
+    
+    # Open System coupling (Phase 22)
+    open_system: Optional[OpenSystemCoupling] = None
+    
+    # Snapshot history
+    snapshots: list = field(default_factory=list)
+    
+    def __post_init__(self):
+        if self.bits is None:
+            self.bits = np.zeros(48, dtype=bool)
 
-    def __init__(self, field: DifferenceField, params: Params,
-                 energy_cfg: Optional[EnergyConfig] = None,
-                 entropy_cfg: Optional[EntropyConfig] = None):
-        self.field = field
-        self.p = params
-        if self.p.target_active == 0:
-            self.p = Params(**{**params.__dict__, "target_active": max(1, field.n_active())})
-        self.step = 0
-        self.churn = self.p.churn
-        self.tentative_orgs = []
-        self.newly_broken = []
-        self.is_cyclic = False
-        self.moves_this_step = 0
-        self.flux_trace = []
-        # Phase 21: 能量 + 熵追踪
-        if energy_cfg is not None:
-            self.energy = EnergyManager(energy_cfg)
+
+class World:
+    """
+    Main world class implementing differential theory mechanisms
+    with energy and entropy integration.
+    """
+    
+    def __init__(self, config: Optional[WorldConfig] = None):
+        self.config = config or WorldConfig()
+        self.state = WorldState()
+        
+        # Initialize bits
+        self.state.bits = np.zeros(self.config.n_bits, dtype=bool)
+        
+        # Initialize energy manager
+        if self.config.energy_config:
+            self.energy_manager = EnergyManager(self.config.energy_config)
         else:
-            self.energy = None
-        if entropy_cfg is not None:
-            self.entropy = EntropyTracker(entropy_cfg)
+            # Default energy config
+            self.energy_manager = EnergyManager(EnergyConfig())
+        
+        # Initialize entropy tracker
+        if self.config.entropy_config:
+            self.entropy_tracker = EntropyTracker(self.config.entropy_config)
         else:
-            self.entropy = None
-        self._energy_cfg = energy_cfg
-        self._entropy_cfg = entropy_cfg
-
-    def run_until_seal(self, verbose=False, step_callback=None):
-        f = self.field
-        f.record()
-        while not f.sealed and self.step < self.p.max_steps:
-            self.step += 1
-            prev = f.active_set()
-
-            # 计算节流因子 (如果能量系统存在)
-            throttle = 1.0
-            if self.energy:
-                throttle = self.energy.throttle_factor()
-
-            # 传递节流因子到机制 (m1, m5, m6 接受调制)
-            M.m1_clustering(self, throttle)
-            M.m2_hierarchy(self)
-            M.m3_conservation(self)
-            M.m4_innate_completeness(self)
-            M.m5_minimal_variation(self, throttle)
-            M.m6_breaking(self, throttle)
-            f.record()
-            M.m7_cycle(self)
-            M.m8_locking(self)
-
-            cur = f.active_set()
-            self.flux_trace.append(jaccard_flux(prev, cur))
-
-            # Phase 21: 能量衰减 + 注入 + 熵计算
-            if self.energy:
-                active = f.n_active()
-                total = f.N
-                costs = self.energy.step(active, total)
-                if self.energy.is_dead_order:
-                    if verbose: print(f"  [ENERGY] L{f.layer} step{self.step}: dead order (budget={self.energy.budget:.1f})")
-                    break
-                if self.energy.is_low_energy and verbose:
-                    print(f"  [ENERGY] L{f.layer} step{self.step}: low energy warning (budget={self.energy.budget:.1f})")
-
-            if self.entropy:
-                ent_metrics = self.entropy.step(
-                    f.state.copy(),
-                    {oid: list(org) for oid, org in f.organizations.items()},
-                    self.energy.budget if self.energy else 0.0
+            # Default entropy config
+            self.entropy_tracker = EntropyTracker(EntropyConfig())
+        
+        # Initialize Open System coupling (Phase 22)
+        if self.config.open_system_config:
+            self.open_system = OpenSystemCoupling(self.config.open_system_config)
+            self.state.open_system = self.open_system
+        else:
+            self.open_system = None
+            self.state.open_system = None
+        
+        # Mechanism states (m1-m9)
+        self._init_mechanisms()
+    
+    def _init_mechanisms(self):
+        """Initialize all 9 mechanisms (m1-m9)."""
+        # m1: Differentiation (create differences)
+        self.m1_active = True
+        
+        # m2: Clustering (form organizations)
+        self.m2_active = True
+        
+        # m3: Conservation (preserve differences)
+        self.m3_active = True
+        
+        # m4: Stabilization (stabilize clusters)
+        self.m4_active = True
+        
+        # m5: Symmetry breaking (create asymmetry)
+        self.m5_active = True
+        
+        # m6: Stability check (check if stable)
+        self.m6_active = True
+        
+        # m7: Binding (bind bits to organizations)
+        self.m7_active = True
+        
+        # m8: Encapsulation (encapsulate organizations)
+        self.m8_active = True
+        
+        # m9: Self-reference (seal = self-referential closure)
+        self.m9_active = True
+    
+    def step(self) -> Dict:
+        """
+        Perform one step of world simulation with energy/entropy integration.
+        
+        Returns:
+            dict with step metrics
+        """
+        cfg = self.config
+        st = self.state
+        
+        # Check if sealed (dead order)
+        if st.is_sealed:
+            return self._step_sealed()
+        
+        # === PHASE 22: Open System Coupling — Energy Injection Phase ===
+        open_system_info = None
+        if self.open_system:
+            current_energy = self.energy_manager.state.energy if self.energy_manager else 0.0
+            # Phase 22 Step 1: Inject energy from environment
+            # (Entropy exhaust happens AFTER entropy computation, below)
+            injection = self.open_system.env_field.inject(current_energy, st.bits)
+            if self.energy_manager:
+                self.energy_manager.state.energy = min(
+                    current_energy + injection,
+                    self.open_system.config.max_energy
                 )
-
-            if step_callback:
-                step_callback(self)
-            if verbose and self.step % 25 == 0:
-                e_info = f" energy={self.energy.budget:.1f}" if self.energy else ""
-                s_info = f" neg={self.entropy.history.negentropy[-1]:.3f}" if self.entropy and self.entropy.history.negentropy else ""
-                print(f"  L{f.layer} step{self.step} active={f.n_active()} "
-                      f"orgs={len(f.organizations)} sealed_bits={len(f.sealed_bits)}"
-                      f"{e_info}{s_info}")
-        return f.sealed
-
-    def autonomous_flux(self):
-        """该层自主演化的平均 Jaccard flux。flux=0 <=> 死秩序。"""
-        return float(np.mean(self.flux_trace)) if self.flux_trace else 0.0
-
-
-class RecursiveWorld:
-    """九机制闭环: L0 -> (自指) -> L1 -> (自指) -> L2 -> ... 直到自指不动点(整体)。"""
-
-    def __init__(self, N0=48, n0_active=40, n_colors=6, seed=0,
-                 params: Params = None, self_encapsulate=True,
-                 env_config=None, env_coupling_strength=0.2,
-                 env_start_step=None,
-                 energy_config: Optional[EnergyConfig] = None,
-                 entropy_config: Optional[EntropyConfig] = None):
-        self.rng = np.random.default_rng(seed)
-        self.params = params or Params()
-        self.self_encapsulate = self_encapsulate
-        self.env_config = env_config
-        self.env_coupling_strength = float(env_coupling_strength)
-        self.env_start_step = env_start_step  # None=after L0 seal, int=at L0 step
-        self.env = None
-        self.env_coupling = None
-        active0 = self.rng.choice(N0, size=min(n0_active, N0), replace=False).tolist()
-        color0 = self.rng.integers(0, n_colors, size=N0)
-        self.field0 = DifferenceField(
-            N=N0, active=active0, a1_source=set(active0),
-            direction=np.zeros(N0, dtype=np.int8), color=color0,
-            layer=0, rng=self.rng,
-        )
-        self.layers = []
-        self.report = []
-        self.energy_config = energy_config
-        self.entropy_config = entropy_config
-
-    def _make_env_callback(self, coupling, env):
-        def callback(layer):
-            env.step_forward()
-            coupling.on_step(layer)
-        return callback
-
-    def _l0_step_callback(self, layer):
-        """L0 步回调: 按 env_start_step 创建环境并施加耦合。"""
-        if self.env_start_step is not None and self.env is None:
-            if layer.step >= self.env_start_step:
-                self._create_env(layer.field)
-        if self.env is not None:
-            self.env.step_forward()
-            self.env_coupling.on_step(layer)
-
-    def _create_env(self, field):
-        """创建环境场和耦合器。"""
-        if self.env_config is None or self.env is not None:
-            return
-        env_seed = field.rng.integers(0, 999999) if hasattr(field, 'rng') else 0
-        self.env = EnvironmentField(
-            N=self.env_config.get("N", 16),
-            structural_entropy=self.env_config.get("structural_entropy", 1),
-            cycle_length=self.env_config.get("cycle_length", 5),
-            seed=int(env_seed),
-        )
-        self.env_coupling = EnvironmentCoupling(
-            self.env,
-            coupling_strength=self.env_coupling_strength,
-            threshold=self.env_config.get("threshold", 0.0),
-        )
-
-    def run(self, max_layers=6, verbose=False):
-        field = self.field0
-        for depth in range(max_layers):
-            layer = Layer(field, self.params,
-                           energy_cfg=self.energy_config,
-                           entropy_cfg=self.entropy_config)
-
-            # L0: 如果 env_start_step 已设置, 用步回调创建环境并施加耦合
-            if depth == 0 and self.env_start_step is not None:
-                sealed = layer.run_until_seal(
-                    verbose=verbose,
-                    step_callback=self._l0_step_callback
-                )
-            elif depth == 0 or self.env is None:
-                sealed = layer.run_until_seal(verbose=verbose)
-            else:
-                # L1+ 且有环境: 每步施加环境耦合
-                cb = self._make_env_callback(self.env_coupling, self.env)
-                sealed = layer.run_until_seal(verbose=verbose, step_callback=cb)
-
-            self.layers.append(layer)
-            flux = layer.autonomous_flux()
-            k = len([o for o in field.organizations.values()
-                     if len(o) >= self.params.min_org_size])
-            rec = {
-                "layer": field.layer, "N": field.N, "sealed": sealed,
-                "seal_step": field.seal_step, "n_orgs": k,
-                "autonomous_flux": round(flux, 4),
-                "mode": field.naming_meta.get("mode", "seed"),
+        
+        # Check if energy too low (dead order)
+        if self.energy_manager and self.energy_manager.is_depleted:
+            st.is_sealed = True  # Enter dead order
+            return self._step_sealed()
+        
+        # === Calculate throttle factor ===
+        throttle = 1.0
+        if self.energy_manager:
+            throttle = self.energy_manager.throttle_factor()
+        
+        # === m1: Differentiation (with throttle) ===
+        bits_new = m1_differentiate(st.bits, throttle=throttle)
+        
+        # === m2: Clustering ===
+        orgs_new = m2_cluster(bits_new, st.organizations, cfg.min_org_size)
+        
+        # === m3: Conservation (energy cost) ===
+        if self.energy_manager:
+            n_active = np.sum(bits_new)
+            energy_info = self.energy_manager.step(n_active, has_sealed=False)
+        
+        # === m4: Stabilization ===
+        bits_stable = m4_stabilize(bits_new, getattr(self, '_stability_history', []), throttle=throttle)
+        
+        # Track stability history
+        if not hasattr(self, '_stability_history'):
+            self._stability_history = []
+        self._stability_history.append(bits_stable.copy())
+        if len(self._stability_history) > 10:
+            self._stability_history.pop(0)
+        
+        # === m5: Symmetry breaking (with throttle) ===
+        bits_broken = m5_break_symmetry(bits_stable, throttle=throttle)
+        
+        # === m6: Stability check (with throttle) ===
+        prev_bits = getattr(self, '_prev_bits', None)
+        is_stable = m6_check_stability(bits_broken, prev_bits, throttle=throttle)
+        self._prev_bits = bits_broken.copy()
+        
+        # === m7: Binding (with throttle) ===
+        bindings = m7_bind(bits_broken, orgs_new, cfg.binding_threshold, throttle=throttle)
+        
+        # === m8: Encapsulation (with throttle) ===
+        orgs_encapsulated = m8_encapsulate(orgs_new, st.frozen_bits, throttle=throttle)
+        
+        # === m9: Self-reference (sealing) ===
+        # Check if should seal
+        binding_count = len(bindings)
+        should_seal = m9_should_seal(bits_broken, orgs_new, is_stable, binding_count, cfg.binding_threshold)
+        
+        if should_seal:
+            # Get adjusted seal threshold (modulated by energy)
+            seal_threshold = cfg.seal_threshold
+            if self.energy_manager:
+                seal_threshold = self.energy_manager.get_adjusted_seal_threshold(cfg.seal_threshold)
+            
+            # Check energy before sealing
+            if self.energy_manager and self.energy_manager.can_execute_mechanism('m9'):
+                seal_result = m9_seal(bits_broken, orgs_new, seal_threshold, throttle=throttle)
+                
+                if seal_result['sealed']:
+                    st.is_sealed = True
+                    st.seal_step = st.step
+                    st.frozen_bits = seal_result['frozen_bits']
+                    
+                    # Energy cost for sealing
+                    if self.energy_manager:
+                        self.energy_manager.step(np.sum(bits_broken), has_sealed=True)
+        
+        # === Entropy tracking + PHASE 22: Entropy exhaust ===
+        if self.entropy_tracker:
+            energy_after_injection = self.energy_manager.state.energy if self.energy_manager else 0.0
+            entropy_info = self.entropy_tracker.step(
+                bits=bits_broken,
+                organizations=orgs_new,
+                energy=energy_after_injection
+            )
+            
+            # Phase 22 Step 2: Exhaust entropy AFTER computation (not before)
+            # This removes excess entropy generated by this step, keeping system dynamic
+            if self.open_system:
+                computed_entropy = entropy_info.get('entropy', 0.0)
+                # Only exhaust when there IS entropy to exhaust
+                if computed_entropy > 0.0:
+                    remaining = self.open_system.entropy_exhaust.exhaust(
+                        computed_entropy,
+                        energy_after_injection
+                    )
+                    exhausted = computed_entropy - remaining
+                    self.entropy_tracker.state.entropy = remaining
+                    entropy_info['entropy_exhausted'] = exhausted
+                    entropy_info['entropy_after_exhaust'] = remaining
+                    
+                    # Update open system tracking totals
+                    self.open_system.total_energy_injected += injection if self.open_system else 0
+                    self.open_system.total_entropy_exhausted += exhausted
+                    
+                    # Build open_system_info for metrics
+                    open_system_info = {
+                        'energy_injected': injection if self.open_system else 0.0,
+                        'entropy_exhausted': exhausted,
+                        'cumulative_injected': self.open_system.total_energy_injected,
+                        'cumulative_exhausted': self.open_system.total_entropy_exhausted
+                    }
+                else:
+                    open_system_info = {
+                        'energy_injected': injection if self.open_system else 0.0,
+                        'entropy_exhausted': 0.0,
+                        'cumulative_injected': self.open_system.total_energy_injected,
+                        'cumulative_exhausted': self.open_system.total_entropy_exhausted
+                    }
+                    entropy_info['entropy_exhausted'] = 0.0
+                    entropy_info['entropy_after_exhaust'] = 0.0
+        else:
+            entropy_info = None
+        st.bits = bits_broken
+        st.organizations = orgs_new
+        st.step += 1
+        
+        # Take snapshot
+        if st.step % cfg.snapshot_interval == 0:
+            self._take_snapshot()
+        
+        # Return metrics (with open system data)
+        return self._collect_metrics(bits_broken, orgs_new, energy_info, entropy_info, open_system_info)
+    
+    def _step_sealed(self) -> Dict:
+        """Step when world is already sealed (dead order)."""
+        metrics = {
+            'step': self.state.step,
+            'is_sealed': True,
+            'bits': self.state.bits.copy(),
+            'organizations': [set(org) for org in self.state.organizations],
+            'energy': self.energy_manager.state.energy if self.energy_manager else 0.0,
+            'entropy': self.entropy_tracker.state.entropy if self.entropy_tracker else 0.0
+        }
+        # Include open system stats even when sealed
+        if self.open_system:
+            metrics['open_system'] = self.open_system.get_summary()
+        return metrics
+    
+    def _mechanism_m1_differentiate(self, bits: np.ndarray) -> np.ndarray:
+        """m1: Create differences (random bit flips)."""
+        new_bits = bits.copy()
+        
+        # Simple differentiation: flip 1-2 random bits
+        n_flips = np.random.randint(1, 3)
+        flip_indices = np.random.choice(len(bits), size=n_flips, replace=False)
+        new_bits[flip_indices] = ~new_bits[flip_indices]
+        
+        return new_bits
+    
+    def _mechanism_m2_cluster(self, bits: np.ndarray, orgs: List[set]) -> List[set]:
+        """m2: Form clusters (organizations)."""
+        # Simplified: if no organizations, create based on bit values
+        if not orgs:
+            # Create organizations based on contiguous True bits
+            indices = np.where(bits)[0]
+            if len(indices) > 0:
+                orgs = [set([i]) for i in indices[:self.config.min_org_size]]
+        
+        return orgs
+    
+    def _mechanism_m3_conserve(self, bits: np.ndarray, orgs: List[set]) -> float:
+        """m3: Conservation (preserve differences). Returns conservation score."""
+        # Simplified: count how many bits match previous state
+        if not hasattr(self, '_prev_bits'):
+            self._prev_bits = bits.copy()
+            return 1.0
+        
+        matches = np.sum(bits == self._prev_bits)
+        self._prev_bits = bits.copy()
+        
+        return matches / len(bits)
+    
+    def _mechanism_m4_stabilize(self, bits: np.ndarray, orgs: List[set]) -> np.ndarray:
+        """m4: Stabilization (reduce noise)."""
+        # Simplified: if bit has been stable for a while, keep it
+        return bits  # No-op for now
+    
+    def _mechanism_m5_break_symmetry(self, bits: np.ndarray) -> np.ndarray:
+        """m5: Symmetry breaking (create asymmetry)."""
+        # Simplified: if all bits same, flip one
+        if np.all(bits == bits[0]):
+            new_bits = bits.copy()
+            new_bits[0] = ~new_bits[0]
+            return new_bits
+        
+        return bits
+    
+    def _mechanism_m6_check_stability(self, bits: np.ndarray, orgs: List[set]) -> bool:
+        """m6: Check if system is stable."""
+        # Simplified: stable if >50% bits unchanged from previous step
+        if not hasattr(self, '_m6_prev_bits'):
+            self._m6_prev_bits = bits.copy()
+            return False
+        
+        unchanged = np.sum(bits == self._m6_prev_bits)
+        self._m6_prev_bits = bits.copy()
+        
+        return (unchanged / len(bits)) > 0.5
+    
+    def _mechanism_m7_bind(self, bits: np.ndarray, orgs: List[set]) -> List[Tuple]:
+        """m7: Bind bits to organizations."""
+        # Simplified: bind each bit to nearest organization
+        bindings = []
+        for i, bit in enumerate(bits):
+            if bit and orgs:
+                # Bind to first org (simplified)
+                bindings.append((i, 0))
+        
+        return bindings
+    
+    def _mechanism_m8_encapsulate(self, bits: np.ndarray, orgs: List[set]) -> List[set]:
+        """m8: Encapsulate organizations."""
+        # Simplified: just return orgs as-is
+        return orgs
+    
+    def _mechanism_m9_should_seal(self, bits: np.ndarray, orgs: List[set], is_stable: bool) -> bool:
+        """m9: Check if should seal (self-referential closure)."""
+        # Conditions for sealing:
+        # 1. Has organizations
+        # 2. Is stable
+        # 3. Enough bits frozen
+        
+        if not orgs or not is_stable:
+            return False
+        
+        # Check binding threshold
+        n_bound = sum(1 for bit in bits if bit)
+        return n_bound >= self.config.binding_threshold
+    
+    def _mechanism_m9_seal(self, bits: np.ndarray, orgs: List[set]) -> Dict:
+        """m9: Perform sealing (self-referential closure)."""
+        st = self.state
+        
+        # Create frozen bits (simplified: freeze 40% of bits)
+        n_freeze = int(len(bits) * self.config.seal_threshold)
+        freeze_indices = np.random.choice(len(bits), size=n_freeze, replace=False)
+        st.frozen_bits = set(freeze_indices)
+        
+        return {
+            'frozen_bits': st.frozen_bits.copy(),
+            'n_frozen': len(st.frozen_bits),
+            'seal_step': st.step
+        }
+    
+    def _take_snapshot(self):
+        """Take a snapshot of current state."""
+        st = self.state
+        
+        snapshot = {
+            'step': st.step,
+            'bits': st.bits.copy(),
+            'organizations': [set(org) for org in st.organizations],
+            'is_sealed': st.is_sealed,
+            'frozen_bits': st.frozen_bits.copy(),
+            'energy': self.energy_manager.state.energy if self.energy_manager else 0.0,
+            'entropy': self.entropy_tracker.state.entropy if self.entropy_tracker else 0.0
+        }
+        
+        st.snapshots.append(snapshot)
+    
+    def _collect_metrics(self, bits: np.ndarray, orgs: List[set],
+                        energy_info: Optional[Dict], entropy_info: Optional[Dict],
+                        open_system_info: Optional[Dict] = None) -> Dict:
+        """Collect metrics for this step."""
+        st = self.state
+        
+        metrics = {
+            'step': st.step,
+            'is_sealed': st.is_sealed,
+            'seal_step': st.seal_step,
+            'n_active_bits': int(np.sum(bits)),
+            'n_organizations': len(orgs),
+            'frozen_bits': st.frozen_bits.copy()
+        }
+        
+        if energy_info:
+            metrics['energy'] = energy_info
+        
+        if entropy_info:
+            metrics['entropy'] = entropy_info
+        
+        if open_system_info:
+            metrics['open_system'] = {
+                'energy_injected': open_system_info['energy_injected'],
+                'entropy_exhausted': open_system_info['entropy_exhausted'],
+                'cumulative_injected': open_system_info.get('cumulative_injected', 0.0),
+                'cumulative_exhausted': open_system_info.get('cumulative_exhausted', 0.0),
+                'constraint': self.open_system.config.constraint_strength if self.open_system else None
             }
-
-            # Phase 21: 能量 + 熵信息记录
-            if layer.energy:
-                rec["energy_final"] = round(layer.energy.budget, 2)
-                rec["energy_ratio"] = round(layer.energy.budget_ratio(), 4)
-                rec["energy_low"] = layer.energy.is_low_energy
-            if layer.entropy:
-                s = layer.entropy.summary()
-                rec["negentropy_final"] = round(s.get("final_negentropy", 0.0), 4)
-                rec["mean_free_energy"] = round(s.get("mean_free_energy", 0.0), 4)
-                rec["is_irreversible"] = s.get("is_irreversible", False)
-
-            # Phase 19: 环境耦合信息记录
-            if self.env is not None:
-                rec["env_N"] = self.env.N
-                rec["env_entropy"] = self.env.structural_entropy
-                rec["env_flux"] = round(self.env.mean_flux(), 4)
-                rec["coupling_strength"] = self.env_coupling_strength
-                rec["coupling_events"] = self.env_coupling.summary()
-
-            self.report.append(rec)
-            if verbose:
-                print(f"[L{field.layer}] sealed={sealed} orgs={k} "
-                      f"flux={flux:.4f} mode={rec['mode']}")
-            if not sealed:
+        
+        return metrics
+    
+    def run(self, n_steps: Optional[int] = None) -> Dict:
+        """
+        Run simulation for n_steps or until sealed.
+        
+        Args:
+            n_steps: Number of steps (uses config.max_steps if None)
+        
+        Returns:
+            Final state dict
+        """
+        n_steps = n_steps or self.config.max_steps
+        
+        for i in range(n_steps):
+            metrics = self.step()
+            
+            if self.state.is_sealed:
                 break
-
-            nxt = M.m9_self_reference(layer, self_encapsulate=self.self_encapsulate)
-            if nxt is None or nxt.N < self.params.min_org_size:
-                rec["closure"] = "整体不动点(自指闭合)"
-                break
-            field = nxt
-
-            # Phase 19: L0 密封后创建环境（如果还没创建）
-            if depth == 0 and self.env_config is not None and self.env is None:
-                # 如果 env_start_step > L0 seal_step（环境从未被创建），降级为固定创建
-                self._create_env(field)
-                if verbose:
-                    print(f"[ENV] Created env N={self.env.N} "
-                          f"entropy={self.env.structural_entropy} "
-                          f"strength={self.env_coupling_strength}")
-
-        return self.report
-
-    def emergence_depth(self):
-        return sum(1 for r in self.report if r["sealed"])
+        
+        return self.get_summary()
+    
+    def get_summary(self) -> Dict:
+        """Get summary of simulation."""
+        st = self.state
+        
+        summary = {
+            'total_steps': st.step,
+            'is_sealed': st.is_sealed,
+            'seal_step': st.seal_step,
+            'n_snapshots': len(st.snapshots),
+            'final_n_active_bits': int(np.sum(st.bits)),
+            'final_n_organizations': len(st.organizations)
+        }
+        
+        if self.energy_manager:
+            summary['energy'] = self.energy_manager.get_summary()
+        
+        if self.entropy_tracker:
+            summary['entropy'] = self.entropy_tracker.get_summary()
+        
+        if self.open_system:
+            summary['open_system'] = self.open_system.get_summary()
+        
+        return summary
