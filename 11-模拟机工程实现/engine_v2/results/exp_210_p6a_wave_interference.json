@@ -1,0 +1,12 @@
+{
+  "experiment": "exp_210_phase22_p6a_wave_interference",
+  "timestamp": "2026-06-14_0614",
+  "results": {
+    "H22-P5a": "PASS",
+    "H22-P5d": "FAIL",
+    "H22-P6a-1": "PASS",
+    "H22-P6a-2": "PASS"
+  },
+  "summary": "3/4 passed",
+  "note": "Re-test of P5a/P5d with interference coupling + new hypotheses"
+}

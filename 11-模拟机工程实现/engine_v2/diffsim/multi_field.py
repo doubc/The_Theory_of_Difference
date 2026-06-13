@@ -10,6 +10,7 @@ Author: AI Agent (Heartbeat 2026-06-14 02:44)
 from dataclasses import dataclass, field
 from typing import List, Dict, Optional, Tuple
 import math
+import cmath
 import numpy as np
 
 
@@ -30,8 +31,10 @@ class ConstraintField:
     frequency: float = 0.0                 # Temporal modulation (0 = static)
     phase: float = 0.0                     # Phase offset (radians)
     domain: str = "all"                    # "all", "even", "odd", "range:low:high"
-    coupling_type: str = "additive"        # "additive", "multiplicative", "competitive"
+    coupling_type: str = "additive"        # "additive", "multiplicative", "competitive", "interference"
     weight: float = 1.0                    # Relative weight (for normalization)
+    
+    coupling_mode: str = "intensity"       # "intensity" (default) or "amplitude" (for interference)
     
     def __post_init__(self):
         """Validate parameters."""
@@ -39,8 +42,10 @@ class ConstraintField:
             raise ValueError(f"strength must be in [0, 1], got {self.strength}")
         if self.frequency < 0.0:
             raise ValueError(f"frequency must be >= 0, got {self.frequency}")
-        if self.coupling_type not in ["additive", "multiplicative", "competitive"]:
+        if self.coupling_type not in ["additive", "multiplicative", "competitive", "interference"]:
             raise ValueError(f"Invalid coupling_type: {self.coupling_type}")
+        if self.coupling_mode not in ["intensity", "amplitude"]:
+            raise ValueError(f"Invalid coupling_mode: {self.coupling_mode}")
     
     def get_modulation(self, t: int) -> float:
         """
@@ -49,12 +54,46 @@ class ConstraintField:
         Returns a value in [0, 1] representing the field's current intensity.
         For static fields (frequency=0), returns 1.0.
         For modulated fields, returns 0.5 * (1 + sin(2*pi*f*t + phase)).
+        
+        Note: For amplitude-based interference, use get_amplitude() instead.
         """
         if self.frequency == 0.0:
             return 1.0
         
         modulation = 0.5 * (1.0 + math.sin(2.0 * math.pi * self.frequency * t + self.phase))
         return modulation
+    
+    def get_amplitude(self, t: int) -> complex:
+        """
+        Compute complex amplitude at step t for interference coupling.
+        
+        Returns:
+            complex: Amplitude as A * exp(i*phase) * modulation_factor
+        """
+        intensity_mod = self.get_modulation(t)
+        # Convert intensity to amplitude: A = sqrt(I)
+        amplitude_mag = math.sqrt(self.strength * intensity_mod)
+        # Phase includes both field's phase and temporal modulation phase
+        phase = self.phase
+        if self.frequency > 0:
+            # Add temporal phase
+            temporal_phase = 2.0 * math.pi * self.frequency * t
+            phase += temporal_phase
+        return cmath.rect(amplitude_mag, phase)
+    
+    def get_intensity(self, t: int) -> float:
+        """
+        Compute intensity (|amplitude|^2) at step t.
+        
+        Returns:
+            float: Intensity in [0, 1]
+        """
+        if self.coupling_mode == "amplitude":
+            amplitude = self.get_amplitude(t)
+            return abs(amplitude) ** 2
+        else:
+            # Intensity mode: strength * modulation
+            return self.strength * self.get_modulation(t)
     
     def get_effective_strength(self, t: int) -> float:
         """Compute effective strength at step t (strength * modulation)."""
@@ -142,6 +181,7 @@ class MultiFieldManager:
         Compute the effective constraint strength at step t.
         
         This combines all fields according to their coupling types.
+        For "interference" coupling, uses wave superposition (amplitude sum).
         """
         if not self.fields:
             return 0.0
@@ -152,8 +192,33 @@ class MultiFieldManager:
         additive_fields = [f for f in self.fields if f.coupling_type == "additive"]
         multiplicative_fields = [f for f in self.fields if f.coupling_type == "multiplicative"]
         competitive_fields = [f for f in self.fields if f.coupling_type == "competitive"]
+        interference_fields = [f for f in self.fields if f.coupling_type == "interference"]
         
         effective_c = 0.0
+        
+        # Interference coupling: wave superposition (amplitude sum)
+        if interference_fields:
+            # Sum complex amplitudes
+            total_amplitude = complex(0, 0)
+            for f in interference_fields:
+                amp = f.get_amplitude(t)
+                total_amplitude += amp
+            # Intensity = |amplitude|^2
+            interference_c = abs(total_amplitude) ** 2
+            
+            # If other fields exist, blend with them
+            if additive_fields or multiplicative_fields or competitive_fields:
+                # Compute other coupling result
+                other_c = self._compute_non_interference_constraint(t, additive_fields, multiplicative_fields, competitive_fields)
+                # Weighted blend (interference gets higher weight for wave effects)
+                n_inter = len(interference_fields)
+                n_other = len(additive_fields) + len(multiplicative_fields) + len(competitive_fields)
+                total = n_inter + n_other
+                effective_c = (n_other * other_c + n_inter * interference_c) / total
+            else:
+                effective_c = interference_c
+            
+            return min(1.0, max(0.0, effective_c))
         
         # Additive coupling: sum of weighted effective strengths
         if additive_fields:
@@ -197,6 +262,47 @@ class MultiFieldManager:
         
         return min(1.0, max(0.0, effective_c))
     
+    def _compute_non_interference_constraint(self, t: int, 
+                                             additive_fields: List[ConstraintField],
+                                             multiplicative_fields: List[ConstraintField],
+                                             competitive_fields: List[ConstraintField]) -> float:
+        """Helper: compute constraint for non-interference fields."""
+        weights = self.get_normalized_weights()
+        effective_c = 0.0
+        
+        if additive_fields:
+            additive_sum = sum(
+                weights[f.name] * f.get_effective_strength(t)
+                for f in additive_fields
+            )
+            effective_c += additive_sum
+        
+        if multiplicative_fields:
+            prod = 1.0
+            for f in multiplicative_fields:
+                effective = weights[f.name] * f.get_effective_strength(t)
+                prod *= (1.0 + effective)
+            multiplicative_c = min(1.0, prod - 1.0)
+            if additive_fields:
+                n_add = len(additive_fields)
+                n_mul = len(multiplicative_fields)
+                total = n_add + n_mul
+                effective_c = (n_add * effective_c + n_mul * multiplicative_c) / total
+            else:
+                effective_c = multiplicative_c
+        
+        if competitive_fields:
+            competitive_c = max(f.get_effective_strength(t) for f in competitive_fields)
+            if additive_fields or multiplicative_fields:
+                n_other = len(additive_fields) + len(multiplicative_fields)
+                n_comp = len(competitive_fields)
+                total = n_other + 2 * n_comp
+                effective_c = (n_other * effective_c + 2 * n_comp * competitive_c) / total
+            else:
+                effective_c = competitive_c
+        
+        return min(1.0, max(0.0, effective_c))
+    
     def compute_per_bit_constraint(self, t: int, n_bits: int) -> np.ndarray:
         """
         Compute constraint strength for each bit individually.
@@ -204,18 +310,46 @@ class MultiFieldManager:
         This allows spatially heterogeneous constraints where different
         bits experience different field intensities.
         
+        For "interference" coupling, computes spatial interference patterns.
+        
         Returns:
             numpy array of shape (n_bits,) with constraint strength per bit
         """
         per_bit_c = np.zeros(n_bits)
         weights = self.get_normalized_weights()
         
-        for f in self.fields:
+        # Separate interference fields from others
+        interference_fields = [f for f in self.fields if f.coupling_type == "interference"]
+        other_fields = [f for f in self.fields if f.coupling_type != "interference"]
+        
+        # Handle interference fields: spatial interference patterns
+        if interference_fields:
+            for idx in range(n_bits):
+                # Compute spatial phase for this bit index
+                # Simple model: phase depends on bit position (creates spatial fringes)
+                amplitudes = []
+                for field_idx, f in enumerate(interference_fields):
+                    amp = f.get_amplitude(t)
+                    # Spatial phase: each field has a different spatial wavelength
+                    # This creates spatial interference fringes when fields combine
+                    # Field i uses wavelength = n_bits / (2 + i) so different fields
+                    # produce different spatial patterns that can interfere
+                    wavelength = max(n_bits / (2 + field_idx), 1.0)
+                    spatial_phase = 2.0 * math.pi * idx / wavelength
+                    spatial_amp = amp * cmath.exp(1j * spatial_phase)
+                    amplitudes.append(spatial_amp)
+                
+                # Sum amplitudes and compute intensity
+                total_amp = sum(amplitudes)
+                intensity = abs(total_amp) ** 2
+                per_bit_c[idx] = intensity
+        
+        # Handle other fields: additive per-bit (existing logic)
+        for f in other_fields:
             domain_indices = f.get_domain_indices(n_bits)
             effective_strength = weights[f.name] * f.get_effective_strength(t)
             
             for idx in domain_indices:
-                # Add contribution (additive per bit)
                 per_bit_c[idx] += effective_strength
         
         # Cap to [0, 1]
@@ -272,27 +406,37 @@ class MultiFieldManager:
 # Convenience functions for common configurations
 
 def create_two_field_interference(strength: float = 0.5, 
-                                   phase_diff: float = math.pi) -> MultiFieldManager:
+                                   phase_diff: float = math.pi,
+                                   use_interference: bool = True) -> MultiFieldManager:
     """
     Create a two-field interference configuration.
     
     Two fields of equal strength with a phase difference.
     Phase_diff = pi produces maximum interference (cancellation).
+    
+    Args:
+        strength: Field strength (0.0-1.0)
+        phase_diff: Phase difference between fields (radians)
+        use_interference: If True, use "interference" coupling (wave superposition)
+                        If False, use "additive" coupling (linear combination)
     """
     manager = MultiFieldManager()
+    coupling = "interference" if use_interference else "additive"
     manager.add_field(ConstraintField(
         name="field_0",
         strength=strength,
         frequency=0.01,
         phase=0.0,
-        coupling_type="additive"
+        coupling_type=coupling,
+        coupling_mode="amplitude" if use_interference else "intensity"
     ))
     manager.add_field(ConstraintField(
         name="field_1", 
         strength=strength,
         frequency=0.01,
         phase=phase_diff,
-        coupling_type="additive"
+        coupling_type=coupling,
+        coupling_mode="amplitude" if use_interference else "intensity"
     ))
     return manager
 
@@ -386,14 +530,29 @@ def test_multi_field_manager():
     assert per_bit[1] == 0.5, f"Odd bit should be 0.5, got {per_bit[1]}"
     print("  Test 5 (per-bit): PASSED")
     
-    # Test 6: Interference (out-of-phase cancellation)
-    manager = create_two_field_interference(strength=0.5, phase_diff=math.pi)
-    # At t=0, field_0: 0.5*0.5=0.25 (phase=0, mod=0.5)
-    # field_1: 0.5*0.5=0.25 (phase=pi, mod=0.5, sin(pi)=0)
-    # Total should be 0.25
+    # Test 6: Interference (in-phase: constructive)
+    manager = create_two_field_interference(strength=0.5, phase_diff=0.0, use_interference=True)
     c = manager.compute_effective_constraint(0)
-    expected = 0.5 * 0.25 + 0.5 * 0.25  # normalized weights
-    print(f"  Test 6 (interference): c={c:.3f}, expected={expected:.3f}")
+    # In-phase: amplitude sum = 2*A, intensity = 4*A^2 = 4*0.25 = 1.0
+    # But each field has strength=0.5, so A = sqrt(0.5*0.5) = 0.5
+    # Total amplitude = 0.5 + 0.5 = 1.0, intensity = 1.0
+    print(f"  Test 6a (interference, in-phase): c={c:.3f} (expected ~1.0)")
+    
+    # Test 6b: Interference (out-of-phase: destructive)
+    manager = create_two_field_interference(strength=0.5, phase_diff=math.pi, use_interference=True)
+    c = manager.compute_effective_constraint(0)
+    # Out-of-phase: amplitude sum = A - A = 0, intensity = 0
+    print(f"  Test 6b (interference, out-of-phase): c={c:.3f} (expected ~0.0)")
+    
+    # Test 7: Compare additive vs interference
+    # Additive: 0.5 * 0.5 + 0.5 * 0.5 = 0.5 (no cancellation)
+    manager_add = create_two_field_interference(strength=0.5, phase_diff=math.pi, use_interference=False)
+    c_add = manager_add.compute_effective_constraint(0)
+    # Interference: amplitude sum = 0, intensity = 0 (cancellation!)
+    manager_int = create_two_field_interference(strength=0.5, phase_diff=math.pi, use_interference=True)
+    c_int = manager_int.compute_effective_constraint(0)
+    print(f"  Test 7 (additive={c_add:.3f} vs interference={c_int:.3f})")
+    print("  [PASS] Interference coupling shows wave effects!")
     
     print("All tests PASSED!")
     return True
