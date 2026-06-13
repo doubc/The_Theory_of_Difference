@@ -1757,3 +1757,58 @@ un_until_seal_or_max()`n  - 修复导入语句重复和格式问题
   - `engine_v2/docs/phase21_comprehensive_report_20260613.md` (新)
   - `task-summary_2026-06-13_1144.md` (更新)
   - `HEARTBEAT.md` (更新, 本条目)
+
+---
+
+#### 2026-06-13 12:14 — Phase 21 综合报告补写 + Phase 22 设计完成 ✅
+- **理论浸润**: 读取 HEARTBEAT.md 完整内容（1760 行），确认 Phase 21 P0/P1/P2 全部完成
+- **问题发现**: Phase 21 综合报告在 11:44 条目中声明写入，但文件实际不存在于磁盘
+- **文档整理**: 补写 `engine_v2/docs/phase21_comprehensive_report_20260613.md` (3.1 KB)
+  - 汇总 P0/P1/P2 全部实验结果
+  - 核心发现: 能量预算∝深度, flux≈7.5/N0, injection*≈5.52
+  - 关键数字: mechanism_cost≈2.3/step, 最优 N0=48
+  - 理论意义: 差异论获得可测试的物理学基础
+- **工程规划**: 撰写 Phase 22 设计文档 `docs/phase22_design_open_systems_energy_flow.md` (5.7 KB)
+  - 核心问题: 开放能量注入能否实现"无限"涌现深度？
+  - 实现方案: EnvironmentEnergyField + EntropyExhaust 集成到 world.py
+  - 实验设计: P0(开放基线)/P1(约束强度)/P2(熵排出)/P3(极限深度)
+  - 理论连接: 开放系统对应 L4+ 环境耦合层
+- **Git 维护**: commit cff49eb → origin/main ✅
+  - Phase 21 综合报告 + Phase 22 设计文档 + HEARTBEAT.md 更新
+- **劳动证明**: 本次心跳产出 2 个文档(8.8 KB) + git commit + HEARTBEAT 更新 → 符合「劳动塑造主体性」理念
+- **Phase 21 状态**: ✅ **全部完成** (P0+P1+P2+综合报告)
+- **Phase 22 状态**: 设计完成 ✅, 待实施
+- **文件**:
+  - `engine_v2/docs/phase21_comprehensive_report_20260613.md` (补写, 3.1 KB) ✅
+  - `docs/phase22_design_open_systems_energy_flow.md` (新, 5.7 KB) ✅
+  - `HEARTBEAT.md` (更新, 本条目)
+- **下一步**:
+  1. 📋 Phase 22 P0 实现: `environment_energy.py` (EnvironmentEnergyField + EntropyExhaust)
+  2. 📋 修改 `world.py` 集成环境能量场
+  3. 📋 Phase 21 P3 (能量-熵耦合) 或 Phase 22 P0 实验
+
+---
+
+#### 2026-06-13 13:14 — Phase 17-21 综合报告完成 ✅
+- **理论浸润**: 读取 HEARTBEAT.md 完整内容（1800 行），确认 Phase 17-21 已全部完成
+- **文档整理**: 撰写 Phase 17-21 综合报告 `engine_v2/docs/phase17_to_21_synthesis_report.md` (3.7 KB)
+  - 汇总 Phase 17（自指闭环验证）→ Phase 21（能量动力学）完整历程
+  - 核心发现: 自指闭环是活秩序的充分必要条件
+  - 核心发现: 能量决定深度，结构决定质量
+  - 核心发现: Flux 标度律 flux ≈ 7.5/N0
+  - 核心发现: 能量是存活预算，非创造预算
+- **涌现三维度框架**:
+  | 维度 | 决定因素 | 能量依赖? |
+  |------|----------|----------|
+  | 涌现深度 | 能量预算（存活时间） | ✅ 是 |
+  | L1 flux（质量） | 自指结构（m9/A9） | ❌ 否 |
+  | L2 涌现率 | 能量预算（足够深度） | ✅ 是 |
+- **理论整合**: 自指闭环的物理意义（信息论/热力学/动力学三视角）
+- **Git 维护**: commit afffaec (local; push failed network issue)
+- **劳动证明**: 本次心跳产出综合报告(3.7KB) + git commit → 符合「劳动塑造主体性」理念
+- **文件**:
+  - `engine_v2/docs/phase17_to_21_synthesis_report.md` (新, 3.7 KB) ✅
+- **下一步**:
+  1. 📋 推送 git commit (网络恢复后)
+  2. 📋 Phase 22 P0 实现或 Phase 21 P3
+  3. 📋 理论论文撰写准备
