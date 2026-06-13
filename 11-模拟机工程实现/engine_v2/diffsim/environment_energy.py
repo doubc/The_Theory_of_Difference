@@ -211,15 +211,16 @@ class OpenSystemCoupling:
         
         # 2. Exhaust entropy to environment
         new_entropy = self.entropy_exhaust.exhaust(current_entropy, new_energy)
+        exhausted_this_step = current_entropy - new_entropy
         
         # Track totals
         self.total_energy_injected += injection
-        self.total_entropy_exhausted += self.state_exhausted()
+        self.total_entropy_exhausted += exhausted_this_step
         
         return {
             'energy_injected': injection,
             'energy_after': new_energy,
-            'entropy_exhausted': current_entropy - new_entropy,
+            'entropy_exhausted': exhausted_this_step,
             'entropy_remaining': new_entropy,
             'cumulative_injected': self.total_energy_injected,
             'cumulative_exhausted': self.total_entropy_exhausted
