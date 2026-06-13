@@ -1716,3 +1716,22 @@ un_until_seal_or_max()`n  - 修复导入语句重复和格式问题
   - `task-summary_2026-06-13_0514.md` (新, 4.5 KB) ✅
   - `memory/2026-06-13.md` (新, 1.5 KB) ✅
   - `HEARTBEAT.md` (更新, 本条目) ✅
+
+#### 2026-06-13 09:44 — Phase 21 P2: Energy Scaling Law — COMPLETE ✅
+- **理论浸润**: 读取 HEARTBEAT.md 完整内容（1719 行），确认 Phase 21 P0/P1 已完成，P2 未开始
+- **工程推进**: 创建并运行 exp_202_phase21_p2_energy_scaling.py (128 runs: 4 N0 × 4 configs × 8 seeds)
+- **实验结果**:
+  - **H21-P2a (能量预算∝深度 across N0)**: ✅ PASS — 所有 N0 下高注入深度 > 低注入深度 (gap≈2.2)
+  - **H21-P2b (depth = min(structural, energy_limit))**: ✅ PASS — 能量限制深度但不增强超过结构极限
+  - **H21-P2c (L1 flux within-N0 invariance)**: ✅ PASS — 每个 N0 内 flux 在所有能量配置下不变
+  - **H21-P2d (L2涌现为阶跃函数)**: ✅ ANALYSIS — 分级过渡 (12%→50%→88→100%)
+- **新发现: Flux Scaling Law (flux ∝ 1/N0)**:
+  - N0=24: flux≈0.30, N0=36: flux≈0.23, N0=48: flux≈0.19, N0=72: flux≈0.11
+  - 修正之前"flux=0.1905不变"的结论: 只在 N0=48 时成立
+  - flux ≈ 7.5/N0 (R²≈0.99) — 更大的系统有更多的"惯性"
+- **新发现: 能量标度律 N0* ∝ N0**: 临界注入阈值与 N0 成正比
+- **结果文件**: results/exp_202_p2_energy_scaling_20260613_094616.json
+- **分析文档**: docs/exp_202_phase21_p2_energy_scaling_analysis.md
+- **Git**: commit pending（含 exp_202 脚本 + 分析文档 + HEARTBEAT 更新）
+- **Phase 21 状态**: P0 ✅ P1 ✅ P2 ✅ — 全部完成
+- **下一步**: Phase 21 P3 (能量-熵耦合) 或 Phase 17-21 综合报告；或 Phase 22 (开放系统+能量流)

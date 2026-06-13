@@ -1,0 +1,5476 @@
+{
+  "24": {
+    "no_energy": {
+      "summary": {
+        "config": "no_energy",
+        "N0": 24,
+        "mean_depth": 4.375,
+        "std_depth": 0.6959705453537527,
+        "mean_l1_flux": 0.3043,
+        "std_l1_flux": 0.06394990226732172,
+        "l2_emergence_rate": 1.0,
+        "l3_emergence_rate": 0.875,
+        "l4_emergence_rate": 0.5,
+        "n_seeds": 8
+      },
+      "runs": [
+        {
+          "seed": 42,
+          "N0": 24,
+          "depth": 5,
+          "n_layers": 5,
+          "l1_flux": 0.4066,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": true,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 24,
+              "sealed": true,
+              "flux": 0.1091
+            },
+            {
+              "layer": 1,
+              "N": 12,
+              "sealed": true,
+              "flux": 0.4066
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": true,
+              "flux": 0.7664
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.7758
+            },
+            {
+              "layer": 4,
+              "N": 4,
+              "sealed": true,
+              "flux": 0.775
+            }
+          ]
+        },
+        {
+          "seed": 142,
+          "N0": 24,
+          "depth": 5,
+          "n_layers": 5,
+          "l1_flux": 0.3223,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": true,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 24,
+              "sealed": true,
+              "flux": 0.0909
+            },
+            {
+              "layer": 1,
+              "N": 14,
+              "sealed": true,
+              "flux": 0.3223
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": true,
+              "flux": 0.7049
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.7582
+            },
+            {
+              "layer": 4,
+              "N": 4,
+              "sealed": true,
+              "flux": 0.775
+            }
+          ]
+        },
+        {
+          "seed": 242,
+          "N0": 24,
+          "depth": 3,
+          "n_layers": 4,
+          "l1_flux": 0.3859,
+          "l2_emerged": true,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 24,
+              "sealed": true,
+              "flux": 0.1
+            },
+            {
+              "layer": 1,
+              "N": 11,
+              "sealed": true,
+              "flux": 0.3859
+            },
+            {
+              "layer": 2,
+              "N": 7,
+              "sealed": true,
+              "flux": 0.6691
+            },
+            {
+              "layer": 3,
+              "N": 3,
+              "sealed": false,
+              "flux": 1.0
+            }
+          ]
+        },
+        {
+          "seed": 342,
+          "N0": 24,
+          "depth": 4,
+          "n_layers": 4,
+          "l1_flux": 0.225,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 24,
+              "sealed": true,
+              "flux": 0.0667
+            },
+            {
+              "layer": 1,
+              "N": 10,
+              "sealed": true,
+              "flux": 0.225
+            },
+            {
+              "layer": 2,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.6459
+            },
+            {
+              "layer": 3,
+              "N": 4,
+              "sealed": true,
+              "flux": 0.775
+            }
+          ]
+        },
+        {
+          "seed": 442,
+          "N0": 24,
+          "depth": 4,
+          "n_layers": 4,
+          "l1_flux": 0.2321,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 24,
+              "sealed": true,
+              "flux": 0.1091
+            },
+            {
+              "layer": 1,
+              "N": 10,
+              "sealed": true,
+              "flux": 0.2321
+            },
+            {
+              "layer": 2,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.6322
+            },
+            {
+              "layer": 3,
+              "N": 4,
+              "sealed": true,
+              "flux": 0.775
+            }
+          ]
+        },
+        {
+          "seed": 542,
+          "N0": 24,
+          "depth": 4,
+          "n_layers": 4,
+          "l1_flux": 0.2446,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 24,
+              "sealed": true,
+              "flux": 0.0909
+            },
+            {
+              "layer": 1,
+              "N": 14,
+              "sealed": true,
+              "flux": 0.2446
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": true,
+              "flux": 0.6547
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.7255
+            }
+          ]
+        },
+        {
+          "seed": 642,
+          "N0": 24,
+          "depth": 5,
+          "n_layers": 5,
+          "l1_flux": 0.3179,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": true,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 24,
+              "sealed": true,
+              "flux": 0.0909
+            },
+            {
+              "layer": 1,
+              "N": 13,
+              "sealed": true,
+              "flux": 0.3179
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": true,
+              "flux": 0.7344
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.7679
+            },
+            {
+              "layer": 4,
+              "N": 4,
+              "sealed": true,
+              "flux": 0.775
+            }
+          ]
+        },
+        {
+          "seed": 742,
+          "N0": 24,
+          "depth": 5,
+          "n_layers": 5,
+          "l1_flux": 0.3,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": true,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 24,
+              "sealed": true,
+              "flux": 0.0909
+            },
+            {
+              "layer": 1,
+              "N": 14,
+              "sealed": true,
+              "flux": 0.3
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": true,
+              "flux": 0.7387
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.7792
+            },
+            {
+              "layer": 4,
+              "N": 4,
+              "sealed": true,
+              "flux": 0.775
+            }
+          ]
+        }
+      ]
+    },
+    "low_inject": {
+      "summary": {
+        "config": "low_inject",
+        "N0": 24,
+        "mean_depth": 1.25,
+        "std_depth": 0.4330127018922193,
+        "mean_l1_flux": 0.333325,
+        "std_l1_flux": 0.0767669647374442,
+        "l2_emergence_rate": 0.0,
+        "l3_emergence_rate": 0.0,
+        "l4_emergence_rate": 0.0,
+        "n_seeds": 8
+      },
+      "runs": [
+        {
+          "seed": 42,
+          "N0": 24,
+          "depth": 1,
+          "n_layers": 2,
+          "l1_flux": 0.344,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 24,
+              "sealed": true,
+              "flux": 0.1048,
+              "energy_final": 4.81,
+              "energy_ratio": 0.1925
+            },
+            {
+              "layer": 1,
+              "N": 10,
+              "sealed": false,
+              "flux": 0.344,
+              "energy_final": 0.45,
+              "energy_ratio": 0.0182
+            }
+          ]
+        },
+        {
+          "seed": 142,
+          "N0": 24,
+          "depth": 1,
+          "n_layers": 2,
+          "l1_flux": 0.4364,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 24,
+              "sealed": true,
+              "flux": 0.0909,
+              "energy_final": 5.05,
+              "energy_ratio": 0.202
+            },
+            {
+              "layer": 1,
+              "N": 10,
+              "sealed": false,
+              "flux": 0.4364,
+              "energy_final": 1.09,
+              "energy_ratio": 0.0435
+            }
+          ]
+        },
+        {
+          "seed": 242,
+          "N0": 24,
+          "depth": 1,
+          "n_layers": 2,
+          "l1_flux": 0.3214,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 24,
+              "sealed": true,
+              "flux": 0.0955,
+              "energy_final": 4.85,
+              "energy_ratio": 0.194
+            },
+            {
+              "layer": 1,
+              "N": 10,
+              "sealed": false,
+              "flux": 0.3214,
+              "energy_final": 1.32,
+              "energy_ratio": 0.0528
+            }
+          ]
+        },
+        {
+          "seed": 342,
+          "N0": 24,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.1777,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 24,
+              "sealed": true,
+              "flux": 0.0667,
+              "energy_final": 3.55,
+              "energy_ratio": 0.1422
+            },
+            {
+              "layer": 1,
+              "N": 10,
+              "sealed": true,
+              "flux": 0.1777,
+              "energy_final": 0.74,
+              "energy_ratio": 0.0295
+            },
+            {
+              "layer": 2,
+              "N": 5,
+              "sealed": false,
+              "flux": 0.6667,
+              "energy_final": 1.09,
+              "energy_ratio": 0.0435
+            }
+          ]
+        },
+        {
+          "seed": 442,
+          "N0": 24,
+          "depth": 1,
+          "n_layers": 2,
+          "l1_flux": 0.2976,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 24,
+              "sealed": true,
+              "flux": 0.1048,
+              "energy_final": 4.81,
+              "energy_ratio": 0.1925
+            },
+            {
+              "layer": 1,
+              "N": 9,
+              "sealed": false,
+              "flux": 0.2976,
+              "energy_final": 1.22,
+              "energy_ratio": 0.0488
+            }
+          ]
+        },
+        {
+          "seed": 542,
+          "N0": 24,
+          "depth": 1,
+          "n_layers": 2,
+          "l1_flux": 0.3214,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 24,
+              "sealed": true,
+              "flux": 0.0864,
+              "energy_final": 4.89,
+              "energy_ratio": 0.1955
+            },
+            {
+              "layer": 1,
+              "N": 11,
+              "sealed": false,
+              "flux": 0.3214,
+              "energy_final": 0.73,
+              "energy_ratio": 0.0293
+            }
+          ]
+        },
+        {
+          "seed": 642,
+          "N0": 24,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.3317,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 24,
+              "sealed": true,
+              "flux": 0.0866,
+              "energy_final": 4.88,
+              "energy_ratio": 0.1954
+            },
+            {
+              "layer": 1,
+              "N": 10,
+              "sealed": true,
+              "flux": 0.3317,
+              "energy_final": 1.5,
+              "energy_ratio": 0.0599
+            },
+            {
+              "layer": 2,
+              "N": 4,
+              "sealed": false,
+              "flux": 0.7273,
+              "energy_final": 0.23,
+              "energy_ratio": 0.0093
+            }
+          ]
+        },
+        {
+          "seed": 742,
+          "N0": 24,
+          "depth": 1,
+          "n_layers": 2,
+          "l1_flux": 0.4364,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 24,
+              "sealed": true,
+              "flux": 0.0866,
+              "energy_final": 4.88,
+              "energy_ratio": 0.1954
+            },
+            {
+              "layer": 1,
+              "N": 10,
+              "sealed": false,
+              "flux": 0.4364,
+              "energy_final": 1.09,
+              "energy_ratio": 0.0435
+            }
+          ]
+        }
+      ]
+    },
+    "med_inject": {
+      "summary": {
+        "config": "med_inject",
+        "N0": 24,
+        "mean_depth": 2.0,
+        "std_depth": 0.0,
+        "mean_l1_flux": 0.29695000000000005,
+        "std_l1_flux": 0.05406724979134781,
+        "l2_emergence_rate": 0.0,
+        "l3_emergence_rate": 0.0,
+        "l4_emergence_rate": 0.0,
+        "n_seeds": 8
+      },
+      "runs": [
+        {
+          "seed": 42,
+          "N0": 24,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.3527,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 24,
+              "sealed": true,
+              "flux": 0.1091,
+              "energy_final": 86.1,
+              "energy_ratio": 0.861
+            },
+            {
+              "layer": 1,
+              "N": 12,
+              "sealed": true,
+              "flux": 0.3527,
+              "energy_final": 27.27,
+              "energy_ratio": 0.2727
+            },
+            {
+              "layer": 2,
+              "N": 7,
+              "sealed": false,
+              "flux": 0.5972,
+              "energy_final": 1.04,
+              "energy_ratio": 0.0104
+            }
+          ]
+        },
+        {
+          "seed": 142,
+          "N0": 24,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.3223,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 24,
+              "sealed": true,
+              "flux": 0.0909,
+              "energy_final": 86.3,
+              "energy_ratio": 0.863
+            },
+            {
+              "layer": 1,
+              "N": 14,
+              "sealed": true,
+              "flux": 0.3223,
+              "energy_final": 55.96,
+              "energy_ratio": 0.5596
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": false,
+              "flux": 0.6014,
+              "energy_final": 0.98,
+              "energy_ratio": 0.0098
+            }
+          ]
+        },
+        {
+          "seed": 242,
+          "N0": 24,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.381,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 24,
+              "sealed": true,
+              "flux": 0.1,
+              "energy_final": 86.2,
+              "energy_ratio": 0.862
+            },
+            {
+              "layer": 1,
+              "N": 11,
+              "sealed": true,
+              "flux": 0.381,
+              "energy_final": 37.86,
+              "energy_ratio": 0.3786
+            },
+            {
+              "layer": 2,
+              "N": 6,
+              "sealed": false,
+              "flux": 0.5948,
+              "energy_final": 1.08,
+              "energy_ratio": 0.0108
+            }
+          ]
+        },
+        {
+          "seed": 342,
+          "N0": 24,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.225,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 24,
+              "sealed": true,
+              "flux": 0.0667,
+              "energy_final": 85.42,
+              "energy_ratio": 0.8542
+            },
+            {
+              "layer": 1,
+              "N": 10,
+              "sealed": true,
+              "flux": 0.225,
+              "energy_final": 67.74,
+              "energy_ratio": 0.6774
+            },
+            {
+              "layer": 2,
+              "N": 6,
+              "sealed": false,
+              "flux": 0.5948,
+              "energy_final": 1.08,
+              "energy_ratio": 0.0108
+            }
+          ]
+        },
+        {
+          "seed": 442,
+          "N0": 24,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.2321,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 24,
+              "sealed": true,
+              "flux": 0.1091,
+              "energy_final": 86.1,
+              "energy_ratio": 0.861
+            },
+            {
+              "layer": 1,
+              "N": 10,
+              "sealed": true,
+              "flux": 0.2321,
+              "energy_final": 48.25,
+              "energy_ratio": 0.4825
+            },
+            {
+              "layer": 2,
+              "N": 6,
+              "sealed": false,
+              "flux": 0.5948,
+              "energy_final": 1.08,
+              "energy_ratio": 0.0108
+            }
+          ]
+        },
+        {
+          "seed": 542,
+          "N0": 24,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.2446,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 24,
+              "sealed": true,
+              "flux": 0.0909,
+              "energy_final": 86.3,
+              "energy_ratio": 0.863
+            },
+            {
+              "layer": 1,
+              "N": 14,
+              "sealed": true,
+              "flux": 0.2446,
+              "energy_final": 46.92,
+              "energy_ratio": 0.4692
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": false,
+              "flux": 0.6014,
+              "energy_final": 0.98,
+              "energy_ratio": 0.0098
+            }
+          ]
+        },
+        {
+          "seed": 642,
+          "N0": 24,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.3179,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 24,
+              "sealed": true,
+              "flux": 0.0909,
+              "energy_final": 86.3,
+              "energy_ratio": 0.863
+            },
+            {
+              "layer": 1,
+              "N": 13,
+              "sealed": true,
+              "flux": 0.3179,
+              "energy_final": 58.4,
+              "energy_ratio": 0.584
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": false,
+              "flux": 0.6014,
+              "energy_final": 0.98,
+              "energy_ratio": 0.0098
+            }
+          ]
+        },
+        {
+          "seed": 742,
+          "N0": 24,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.3,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 24,
+              "sealed": true,
+              "flux": 0.0909,
+              "energy_final": 86.3,
+              "energy_ratio": 0.863
+            },
+            {
+              "layer": 1,
+              "N": 14,
+              "sealed": true,
+              "flux": 0.3,
+              "energy_final": 57.28,
+              "energy_ratio": 0.5728
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": false,
+              "flux": 0.6014,
+              "energy_final": 0.98,
+              "energy_ratio": 0.0098
+            }
+          ]
+        }
+      ]
+    },
+    "high_inject": {
+      "summary": {
+        "config": "high_inject",
+        "N0": 24,
+        "mean_depth": 3.375,
+        "std_depth": 0.6959705453537527,
+        "mean_l1_flux": 0.3043,
+        "std_l1_flux": 0.06394990226732172,
+        "l2_emergence_rate": 0.875,
+        "l3_emergence_rate": 0.5,
+        "l4_emergence_rate": 0.0,
+        "n_seeds": 8
+      },
+      "runs": [
+        {
+          "seed": 42,
+          "N0": 24,
+          "depth": 4,
+          "n_layers": 5,
+          "l1_flux": 0.4066,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 24,
+              "sealed": true,
+              "flux": 0.1091,
+              "energy_final": 254.21,
+              "energy_ratio": 1.0168
+            },
+            {
+              "layer": 1,
+              "N": 12,
+              "sealed": true,
+              "flux": 0.4066,
+              "energy_final": 232.54,
+              "energy_ratio": 0.9302
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": true,
+              "flux": 0.7664,
+              "energy_final": 148.17,
+              "energy_ratio": 0.5927
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.7758,
+              "energy_final": 172.4,
+              "energy_ratio": 0.6896
+            },
+            {
+              "layer": 4,
+              "N": 4,
+              "sealed": false,
+              "flux": 0.6811,
+              "energy_final": 1.67,
+              "energy_ratio": 0.0067
+            }
+          ]
+        },
+        {
+          "seed": 142,
+          "N0": 24,
+          "depth": 4,
+          "n_layers": 5,
+          "l1_flux": 0.3223,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 24,
+              "sealed": true,
+              "flux": 0.0909,
+              "energy_final": 254.61,
+              "energy_ratio": 1.0185
+            },
+            {
+              "layer": 1,
+              "N": 14,
+              "sealed": true,
+              "flux": 0.3223,
+              "energy_final": 240.15,
+              "energy_ratio": 0.9606
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": true,
+              "flux": 0.6874,
+              "energy_final": 102.79,
+              "energy_ratio": 0.4112
+            },
+            {
+              "layer": 3,
+              "N": 5,
+              "sealed": true,
+              "flux": 0.6892,
+              "energy_final": 178.07,
+              "energy_ratio": 0.7123
+            },
+            {
+              "layer": 4,
+              "N": 3,
+              "sealed": false,
+              "flux": 0.7794,
+              "energy_final": 0.0,
+              "energy_ratio": 0.0
+            }
+          ]
+        },
+        {
+          "seed": 242,
+          "N0": 24,
+          "depth": 3,
+          "n_layers": 4,
+          "l1_flux": 0.3859,
+          "l2_emerged": true,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 24,
+              "sealed": true,
+              "flux": 0.1,
+              "energy_final": 254.41,
+              "energy_ratio": 1.0176
+            },
+            {
+              "layer": 1,
+              "N": 11,
+              "sealed": true,
+              "flux": 0.3859,
+              "energy_final": 232.95,
+              "energy_ratio": 0.9318
+            },
+            {
+              "layer": 2,
+              "N": 7,
+              "sealed": true,
+              "flux": 0.6691,
+              "energy_final": 180.59,
+              "energy_ratio": 0.7224
+            },
+            {
+              "layer": 3,
+              "N": 3,
+              "sealed": false,
+              "flux": 0.7794,
+              "energy_final": 0.0,
+              "energy_ratio": 0.0
+            }
+          ]
+        },
+        {
+          "seed": 342,
+          "N0": 24,
+          "depth": 3,
+          "n_layers": 4,
+          "l1_flux": 0.225,
+          "l2_emerged": true,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 24,
+              "sealed": true,
+              "flux": 0.0667,
+              "energy_final": 255.61,
+              "energy_ratio": 1.0224
+            },
+            {
+              "layer": 1,
+              "N": 10,
+              "sealed": true,
+              "flux": 0.225,
+              "energy_final": 250.83,
+              "energy_ratio": 1.0033
+            },
+            {
+              "layer": 2,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.6459,
+              "energy_final": 200.25,
+              "energy_ratio": 0.801
+            },
+            {
+              "layer": 3,
+              "N": 4,
+              "sealed": false,
+              "flux": 0.6811,
+              "energy_final": 1.67,
+              "energy_ratio": 0.0067
+            }
+          ]
+        },
+        {
+          "seed": 442,
+          "N0": 24,
+          "depth": 3,
+          "n_layers": 4,
+          "l1_flux": 0.2321,
+          "l2_emerged": true,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 24,
+              "sealed": true,
+              "flux": 0.1091,
+              "energy_final": 254.21,
+              "energy_ratio": 1.0168
+            },
+            {
+              "layer": 1,
+              "N": 10,
+              "sealed": true,
+              "flux": 0.2321,
+              "energy_final": 250.8,
+              "energy_ratio": 1.0032
+            },
+            {
+              "layer": 2,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.6322,
+              "energy_final": 204.43,
+              "energy_ratio": 0.8177
+            },
+            {
+              "layer": 3,
+              "N": 4,
+              "sealed": false,
+              "flux": 0.6811,
+              "energy_final": 1.67,
+              "energy_ratio": 0.0067
+            }
+          ]
+        },
+        {
+          "seed": 542,
+          "N0": 24,
+          "depth": 4,
+          "n_layers": 4,
+          "l1_flux": 0.2446,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 24,
+              "sealed": true,
+              "flux": 0.0909,
+              "energy_final": 254.61,
+              "energy_ratio": 1.0184
+            },
+            {
+              "layer": 1,
+              "N": 14,
+              "sealed": true,
+              "flux": 0.2446,
+              "energy_final": 247.35,
+              "energy_ratio": 0.9894
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": true,
+              "flux": 0.6547,
+              "energy_final": 171.32,
+              "energy_ratio": 0.6853
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.7255,
+              "energy_final": 174.85,
+              "energy_ratio": 0.6994
+            }
+          ]
+        },
+        {
+          "seed": 642,
+          "N0": 24,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.3179,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 24,
+              "sealed": true,
+              "flux": 0.0909,
+              "energy_final": 254.61,
+              "energy_ratio": 1.0184
+            },
+            {
+              "layer": 1,
+              "N": 13,
+              "sealed": true,
+              "flux": 0.3179,
+              "energy_final": 245.47,
+              "energy_ratio": 0.9819
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": false,
+              "flux": 0.5403,
+              "energy_final": 1.91,
+              "energy_ratio": 0.0076
+            }
+          ]
+        },
+        {
+          "seed": 742,
+          "N0": 24,
+          "depth": 4,
+          "n_layers": 5,
+          "l1_flux": 0.3,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 24,
+              "sealed": true,
+              "flux": 0.0909,
+              "energy_final": 254.61,
+              "energy_ratio": 1.0184
+            },
+            {
+              "layer": 1,
+              "N": 14,
+              "sealed": true,
+              "flux": 0.3,
+              "energy_final": 242.89,
+              "energy_ratio": 0.9716
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": true,
+              "flux": 0.6574,
+              "energy_final": 83.99,
+              "energy_ratio": 0.336
+            },
+            {
+              "layer": 3,
+              "N": 5,
+              "sealed": true,
+              "flux": 0.6892,
+              "energy_final": 178.07,
+              "energy_ratio": 0.7123
+            },
+            {
+              "layer": 4,
+              "N": 3,
+              "sealed": false,
+              "flux": 0.7794,
+              "energy_final": 0.0,
+              "energy_ratio": 0.0
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "36": {
+    "no_energy": {
+      "summary": {
+        "config": "no_energy",
+        "N0": 36,
+        "mean_depth": 4.125,
+        "std_depth": 0.5994789404140899,
+        "mean_l1_flux": 0.231275,
+        "std_l1_flux": 0.03865733274554777,
+        "l2_emergence_rate": 1.0,
+        "l3_emergence_rate": 0.875,
+        "l4_emergence_rate": 0.25,
+        "n_seeds": 8
+      },
+      "runs": [
+        {
+          "seed": 42,
+          "N0": 36,
+          "depth": 5,
+          "n_layers": 5,
+          "l1_flux": 0.2781,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": true,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 36,
+              "sealed": true,
+              "flux": 0.0267
+            },
+            {
+              "layer": 1,
+              "N": 16,
+              "sealed": true,
+              "flux": 0.2781
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": true,
+              "flux": 0.6784
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.769
+            },
+            {
+              "layer": 4,
+              "N": 4,
+              "sealed": true,
+              "flux": 0.775
+            }
+          ]
+        },
+        {
+          "seed": 142,
+          "N0": 36,
+          "depth": 5,
+          "n_layers": 5,
+          "l1_flux": 0.2536,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": true,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 36,
+              "sealed": true,
+              "flux": 0.0242
+            },
+            {
+              "layer": 1,
+              "N": 15,
+              "sealed": true,
+              "flux": 0.2536
+            },
+            {
+              "layer": 2,
+              "N": 10,
+              "sealed": true,
+              "flux": 0.498
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.7973
+            },
+            {
+              "layer": 4,
+              "N": 4,
+              "sealed": true,
+              "flux": 0.775
+            }
+          ]
+        },
+        {
+          "seed": 242,
+          "N0": 36,
+          "depth": 4,
+          "n_layers": 4,
+          "l1_flux": 0.2722,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 36,
+              "sealed": true,
+              "flux": 0.0242
+            },
+            {
+              "layer": 1,
+              "N": 15,
+              "sealed": true,
+              "flux": 0.2722
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": true,
+              "flux": 0.6718
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.7207
+            }
+          ]
+        },
+        {
+          "seed": 342,
+          "N0": 36,
+          "depth": 4,
+          "n_layers": 4,
+          "l1_flux": 0.1765,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 36,
+              "sealed": true,
+              "flux": 0.0303
+            },
+            {
+              "layer": 1,
+              "N": 15,
+              "sealed": true,
+              "flux": 0.1765
+            },
+            {
+              "layer": 2,
+              "N": 10,
+              "sealed": true,
+              "flux": 0.4328
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.7149
+            }
+          ]
+        },
+        {
+          "seed": 442,
+          "N0": 36,
+          "depth": 4,
+          "n_layers": 5,
+          "l1_flux": 0.2248,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 36,
+              "sealed": true,
+              "flux": 0.0242
+            },
+            {
+              "layer": 1,
+              "N": 15,
+              "sealed": true,
+              "flux": 0.2248
+            },
+            {
+              "layer": 2,
+              "N": 9,
+              "sealed": true,
+              "flux": 0.4044
+            },
+            {
+              "layer": 3,
+              "N": 7,
+              "sealed": true,
+              "flux": 0.6762
+            },
+            {
+              "layer": 4,
+              "N": 3,
+              "sealed": false,
+              "flux": 1.0
+            }
+          ]
+        },
+        {
+          "seed": 542,
+          "N0": 36,
+          "depth": 4,
+          "n_layers": 5,
+          "l1_flux": 0.2066,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 36,
+              "sealed": true,
+              "flux": 0.0121
+            },
+            {
+              "layer": 1,
+              "N": 16,
+              "sealed": true,
+              "flux": 0.2066
+            },
+            {
+              "layer": 2,
+              "N": 9,
+              "sealed": true,
+              "flux": 0.4209
+            },
+            {
+              "layer": 3,
+              "N": 5,
+              "sealed": true,
+              "flux": 0.6892
+            },
+            {
+              "layer": 4,
+              "N": 3,
+              "sealed": false,
+              "flux": 1.0
+            }
+          ]
+        },
+        {
+          "seed": 642,
+          "N0": 36,
+          "depth": 3,
+          "n_layers": 4,
+          "l1_flux": 0.1765,
+          "l2_emerged": true,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 36,
+              "sealed": true,
+              "flux": 0.0303
+            },
+            {
+              "layer": 1,
+              "N": 15,
+              "sealed": true,
+              "flux": 0.1765
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": true,
+              "flux": 0.4925
+            },
+            {
+              "layer": 3,
+              "N": 3,
+              "sealed": false,
+              "flux": 1.0
+            }
+          ]
+        },
+        {
+          "seed": 742,
+          "N0": 36,
+          "depth": 4,
+          "n_layers": 4,
+          "l1_flux": 0.2619,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 36,
+              "sealed": true,
+              "flux": 0.0267
+            },
+            {
+              "layer": 1,
+              "N": 16,
+              "sealed": true,
+              "flux": 0.2619
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": true,
+              "flux": 0.7217
+            },
+            {
+              "layer": 3,
+              "N": 4,
+              "sealed": true,
+              "flux": 0.775
+            }
+          ]
+        }
+      ]
+    },
+    "low_inject": {
+      "summary": {
+        "config": "low_inject",
+        "N0": 36,
+        "mean_depth": 2.125,
+        "std_depth": 0.33071891388307384,
+        "mean_l1_flux": 0.2104625,
+        "std_l1_flux": 0.025905353573151633,
+        "l2_emergence_rate": 0.125,
+        "l3_emergence_rate": 0.0,
+        "l4_emergence_rate": 0.0,
+        "n_seeds": 8
+      },
+      "runs": [
+        {
+          "seed": 42,
+          "N0": 36,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.2357,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 36,
+              "sealed": true,
+              "flux": 0.0267,
+              "energy_final": 20.89,
+              "energy_ratio": 0.5572
+            },
+            {
+              "layer": 1,
+              "N": 16,
+              "sealed": true,
+              "flux": 0.2357,
+              "energy_final": 5.3,
+              "energy_ratio": 0.1413
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": false,
+              "flux": 0.625,
+              "energy_final": 0.56,
+              "energy_ratio": 0.0149
+            }
+          ]
+        },
+        {
+          "seed": 142,
+          "N0": 36,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.2306,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 36,
+              "sealed": true,
+              "flux": 0.0242,
+              "energy_final": 19.43,
+              "energy_ratio": 0.518
+            },
+            {
+              "layer": 1,
+              "N": 15,
+              "sealed": true,
+              "flux": 0.2306,
+              "energy_final": 5.46,
+              "energy_ratio": 0.1456
+            },
+            {
+              "layer": 2,
+              "N": 6,
+              "sealed": false,
+              "flux": 0.3783,
+              "energy_final": 0.42,
+              "energy_ratio": 0.0111
+            }
+          ]
+        },
+        {
+          "seed": 242,
+          "N0": 36,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.2357,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 36,
+              "sealed": true,
+              "flux": 0.0242,
+              "energy_final": 19.43,
+              "energy_ratio": 0.518
+            },
+            {
+              "layer": 1,
+              "N": 15,
+              "sealed": true,
+              "flux": 0.2357,
+              "energy_final": 6.25,
+              "energy_ratio": 0.1667
+            },
+            {
+              "layer": 2,
+              "N": 6,
+              "sealed": false,
+              "flux": 0.6275,
+              "energy_final": 0.44,
+              "energy_ratio": 0.0117
+            }
+          ]
+        },
+        {
+          "seed": 342,
+          "N0": 36,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.1732,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 36,
+              "sealed": true,
+              "flux": 0.0303,
+              "energy_final": 19.39,
+              "energy_ratio": 0.5171
+            },
+            {
+              "layer": 1,
+              "N": 15,
+              "sealed": true,
+              "flux": 0.1732,
+              "energy_final": 11.41,
+              "energy_ratio": 0.3043
+            },
+            {
+              "layer": 2,
+              "N": 9,
+              "sealed": false,
+              "flux": 0.4222,
+              "energy_final": 1.17,
+              "energy_ratio": 0.0312
+            }
+          ]
+        },
+        {
+          "seed": 442,
+          "N0": 36,
+          "depth": 3,
+          "n_layers": 3,
+          "l1_flux": 0.2047,
+          "l2_emerged": true,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 36,
+              "sealed": true,
+              "flux": 0.0242,
+              "energy_final": 19.43,
+              "energy_ratio": 0.518
+            },
+            {
+              "layer": 1,
+              "N": 15,
+              "sealed": true,
+              "flux": 0.2047,
+              "energy_final": 4.3,
+              "energy_ratio": 0.1146
+            },
+            {
+              "layer": 2,
+              "N": 4,
+              "sealed": true,
+              "flux": 0.0,
+              "energy_final": 23.32,
+              "energy_ratio": 0.622
+            }
+          ]
+        },
+        {
+          "seed": 542,
+          "N0": 36,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.1949,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 36,
+              "sealed": true,
+              "flux": 0.0121,
+              "energy_final": 19.5,
+              "energy_ratio": 0.5199
+            },
+            {
+              "layer": 1,
+              "N": 16,
+              "sealed": true,
+              "flux": 0.1949,
+              "energy_final": 8.38,
+              "energy_ratio": 0.2234
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": false,
+              "flux": 0.4,
+              "energy_final": 0.84,
+              "energy_ratio": 0.0224
+            }
+          ]
+        },
+        {
+          "seed": 642,
+          "N0": 36,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.1732,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 36,
+              "sealed": true,
+              "flux": 0.0303,
+              "energy_final": 19.39,
+              "energy_ratio": 0.5171
+            },
+            {
+              "layer": 1,
+              "N": 15,
+              "sealed": true,
+              "flux": 0.1732,
+              "energy_final": 11.41,
+              "energy_ratio": 0.3043
+            },
+            {
+              "layer": 2,
+              "N": 7,
+              "sealed": false,
+              "flux": 0.3967,
+              "energy_final": 1.23,
+              "energy_ratio": 0.0327
+            }
+          ]
+        },
+        {
+          "seed": 742,
+          "N0": 36,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.2357,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 36,
+              "sealed": true,
+              "flux": 0.0267,
+              "energy_final": 20.89,
+              "energy_ratio": 0.5572
+            },
+            {
+              "layer": 1,
+              "N": 16,
+              "sealed": true,
+              "flux": 0.2357,
+              "energy_final": 5.3,
+              "energy_ratio": 0.1413
+            },
+            {
+              "layer": 2,
+              "N": 6,
+              "sealed": false,
+              "flux": 0.6275,
+              "energy_final": 0.44,
+              "energy_ratio": 0.0117
+            }
+          ]
+        }
+      ]
+    },
+    "med_inject": {
+      "summary": {
+        "config": "med_inject",
+        "N0": 36,
+        "mean_depth": 2.5,
+        "std_depth": 0.5,
+        "mean_l1_flux": 0.231275,
+        "std_l1_flux": 0.03865733274554777,
+        "l2_emergence_rate": 0.5,
+        "l3_emergence_rate": 0.0,
+        "l4_emergence_rate": 0.0,
+        "n_seeds": 8
+      },
+      "runs": [
+        {
+          "seed": 42,
+          "N0": 36,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.2781,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 36,
+              "sealed": true,
+              "flux": 0.0267,
+              "energy_final": 143.16,
+              "energy_ratio": 0.9544
+            },
+            {
+              "layer": 1,
+              "N": 16,
+              "sealed": true,
+              "flux": 0.2781,
+              "energy_final": 119.1,
+              "energy_ratio": 0.794
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": false,
+              "flux": 0.5616,
+              "energy_final": 1.19,
+              "energy_ratio": 0.0079
+            }
+          ]
+        },
+        {
+          "seed": 142,
+          "N0": 36,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.2536,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 36,
+              "sealed": true,
+              "flux": 0.0242,
+              "energy_final": 142.55,
+              "energy_ratio": 0.9504
+            },
+            {
+              "layer": 1,
+              "N": 15,
+              "sealed": true,
+              "flux": 0.2536,
+              "energy_final": 132.23,
+              "energy_ratio": 0.8815
+            },
+            {
+              "layer": 2,
+              "N": 10,
+              "sealed": false,
+              "flux": 0.3391,
+              "energy_final": 1.84,
+              "energy_ratio": 0.0123
+            }
+          ]
+        },
+        {
+          "seed": 242,
+          "N0": 36,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.2722,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 36,
+              "sealed": true,
+              "flux": 0.0242,
+              "energy_final": 142.55,
+              "energy_ratio": 0.9504
+            },
+            {
+              "layer": 1,
+              "N": 15,
+              "sealed": true,
+              "flux": 0.2722,
+              "energy_final": 126.04,
+              "energy_ratio": 0.8403
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": false,
+              "flux": 0.5616,
+              "energy_final": 1.19,
+              "energy_ratio": 0.0079
+            }
+          ]
+        },
+        {
+          "seed": 342,
+          "N0": 36,
+          "depth": 3,
+          "n_layers": 4,
+          "l1_flux": 0.1765,
+          "l2_emerged": true,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 36,
+              "sealed": true,
+              "flux": 0.0303,
+              "energy_final": 142.46,
+              "energy_ratio": 0.9497
+            },
+            {
+              "layer": 1,
+              "N": 15,
+              "sealed": true,
+              "flux": 0.1765,
+              "energy_final": 140.78,
+              "energy_ratio": 0.9385
+            },
+            {
+              "layer": 2,
+              "N": 10,
+              "sealed": true,
+              "flux": 0.4275,
+              "energy_final": 61.49,
+              "energy_ratio": 0.41
+            },
+            {
+              "layer": 3,
+              "N": 5,
+              "sealed": false,
+              "flux": 0.4969,
+              "energy_final": 1.25,
+              "energy_ratio": 0.0084
+            }
+          ]
+        },
+        {
+          "seed": 442,
+          "N0": 36,
+          "depth": 3,
+          "n_layers": 4,
+          "l1_flux": 0.2248,
+          "l2_emerged": true,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 36,
+              "sealed": true,
+              "flux": 0.0242,
+              "energy_final": 142.55,
+              "energy_ratio": 0.9504
+            },
+            {
+              "layer": 1,
+              "N": 15,
+              "sealed": true,
+              "flux": 0.2248,
+              "energy_final": 138.87,
+              "energy_ratio": 0.9258
+            },
+            {
+              "layer": 2,
+              "N": 9,
+              "sealed": true,
+              "flux": 0.4044,
+              "energy_final": 121.03,
+              "energy_ratio": 0.8069
+            },
+            {
+              "layer": 3,
+              "N": 7,
+              "sealed": false,
+              "flux": 0.5556,
+              "energy_final": 1.73,
+              "energy_ratio": 0.0115
+            }
+          ]
+        },
+        {
+          "seed": 542,
+          "N0": 36,
+          "depth": 3,
+          "n_layers": 4,
+          "l1_flux": 0.2066,
+          "l2_emerged": true,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 36,
+              "sealed": true,
+              "flux": 0.0121,
+              "energy_final": 142.75,
+              "energy_ratio": 0.9516
+            },
+            {
+              "layer": 1,
+              "N": 16,
+              "sealed": true,
+              "flux": 0.2066,
+              "energy_final": 139.21,
+              "energy_ratio": 0.9281
+            },
+            {
+              "layer": 2,
+              "N": 9,
+              "sealed": true,
+              "flux": 0.4209,
+              "energy_final": 77.74,
+              "energy_ratio": 0.5183
+            },
+            {
+              "layer": 3,
+              "N": 5,
+              "sealed": false,
+              "flux": 0.4969,
+              "energy_final": 1.25,
+              "energy_ratio": 0.0084
+            }
+          ]
+        },
+        {
+          "seed": 642,
+          "N0": 36,
+          "depth": 3,
+          "n_layers": 3,
+          "l1_flux": 0.1765,
+          "l2_emerged": true,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 36,
+              "sealed": true,
+              "flux": 0.0303,
+              "energy_final": 142.46,
+              "energy_ratio": 0.9497
+            },
+            {
+              "layer": 1,
+              "N": 15,
+              "sealed": true,
+              "flux": 0.1765,
+              "energy_final": 140.78,
+              "energy_ratio": 0.9385
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": true,
+              "flux": 0.4583,
+              "energy_final": 70.21,
+              "energy_ratio": 0.4681
+            }
+          ]
+        },
+        {
+          "seed": 742,
+          "N0": 36,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.2619,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 36,
+              "sealed": true,
+              "flux": 0.0267,
+              "energy_final": 143.16,
+              "energy_ratio": 0.9544
+            },
+            {
+              "layer": 1,
+              "N": 16,
+              "sealed": true,
+              "flux": 0.2619,
+              "energy_final": 121.53,
+              "energy_ratio": 0.8102
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": false,
+              "flux": 0.5616,
+              "energy_final": 1.19,
+              "energy_ratio": 0.0079
+            }
+          ]
+        }
+      ]
+    },
+    "high_inject": {
+      "summary": {
+        "config": "high_inject",
+        "N0": 36,
+        "mean_depth": 4.125,
+        "std_depth": 0.5994789404140899,
+        "mean_l1_flux": 0.231275,
+        "std_l1_flux": 0.03865733274554777,
+        "l2_emergence_rate": 1.0,
+        "l3_emergence_rate": 0.875,
+        "l4_emergence_rate": 0.25,
+        "n_seeds": 8
+      },
+      "runs": [
+        {
+          "seed": 42,
+          "N0": 36,
+          "depth": 5,
+          "n_layers": 5,
+          "l1_flux": 0.2781,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": true,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 36,
+              "sealed": true,
+              "flux": 0.0267,
+              "energy_final": 394.49,
+              "energy_ratio": 1.052
+            },
+            {
+              "layer": 1,
+              "N": 16,
+              "sealed": true,
+              "flux": 0.2781,
+              "energy_final": 398.16,
+              "energy_ratio": 1.0618
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": true,
+              "flux": 0.6784,
+              "energy_final": 340.26,
+              "energy_ratio": 0.9074
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.769,
+              "energy_final": 347.17,
+              "energy_ratio": 0.9258
+            },
+            {
+              "layer": 4,
+              "N": 4,
+              "sealed": true,
+              "flux": 0.775,
+              "energy_final": 317.25,
+              "energy_ratio": 0.846
+            }
+          ]
+        },
+        {
+          "seed": 142,
+          "N0": 36,
+          "depth": 5,
+          "n_layers": 5,
+          "l1_flux": 0.2536,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": true,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 36,
+              "sealed": true,
+              "flux": 0.0242,
+              "energy_final": 396.47,
+              "energy_ratio": 1.0572
+            },
+            {
+              "layer": 1,
+              "N": 15,
+              "sealed": true,
+              "flux": 0.2536,
+              "energy_final": 408.73,
+              "energy_ratio": 1.0899
+            },
+            {
+              "layer": 2,
+              "N": 10,
+              "sealed": true,
+              "flux": 0.498,
+              "energy_final": 357.65,
+              "energy_ratio": 0.9537
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.7973,
+              "energy_final": 337.15,
+              "energy_ratio": 0.8991
+            },
+            {
+              "layer": 4,
+              "N": 4,
+              "sealed": true,
+              "flux": 0.775,
+              "energy_final": 317.25,
+              "energy_ratio": 0.846
+            }
+          ]
+        },
+        {
+          "seed": 242,
+          "N0": 36,
+          "depth": 4,
+          "n_layers": 4,
+          "l1_flux": 0.2722,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 36,
+              "sealed": true,
+              "flux": 0.0242,
+              "energy_final": 396.47,
+              "energy_ratio": 1.0572
+            },
+            {
+              "layer": 1,
+              "N": 15,
+              "sealed": true,
+              "flux": 0.2722,
+              "energy_final": 401.61,
+              "energy_ratio": 1.071
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": true,
+              "flux": 0.6718,
+              "energy_final": 337.26,
+              "energy_ratio": 0.8993
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.7207,
+              "energy_final": 360.91,
+              "energy_ratio": 0.9624
+            }
+          ]
+        },
+        {
+          "seed": 342,
+          "N0": 36,
+          "depth": 4,
+          "n_layers": 4,
+          "l1_flux": 0.1765,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 36,
+              "sealed": true,
+              "flux": 0.0303,
+              "energy_final": 396.27,
+              "energy_ratio": 1.0567
+            },
+            {
+              "layer": 1,
+              "N": 15,
+              "sealed": true,
+              "flux": 0.1765,
+              "energy_final": 411.65,
+              "energy_ratio": 1.0977
+            },
+            {
+              "layer": 2,
+              "N": 10,
+              "sealed": true,
+              "flux": 0.4328,
+              "energy_final": 380.49,
+              "energy_ratio": 1.0146
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.7149,
+              "energy_final": 362.89,
+              "energy_ratio": 0.9677
+            }
+          ]
+        },
+        {
+          "seed": 442,
+          "N0": 36,
+          "depth": 4,
+          "n_layers": 5,
+          "l1_flux": 0.2248,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 36,
+              "sealed": true,
+              "flux": 0.0242,
+              "energy_final": 396.47,
+              "energy_ratio": 1.0572
+            },
+            {
+              "layer": 1,
+              "N": 15,
+              "sealed": true,
+              "flux": 0.2248,
+              "energy_final": 416.75,
+              "energy_ratio": 1.1113
+            },
+            {
+              "layer": 2,
+              "N": 9,
+              "sealed": true,
+              "flux": 0.4044,
+              "energy_final": 421.13,
+              "energy_ratio": 1.123
+            },
+            {
+              "layer": 3,
+              "N": 7,
+              "sealed": true,
+              "flux": 0.6762,
+              "energy_final": 350.03,
+              "energy_ratio": 0.9334
+            },
+            {
+              "layer": 4,
+              "N": 3,
+              "sealed": false,
+              "flux": 0.8266,
+              "energy_final": 1.34,
+              "energy_ratio": 0.0036
+            }
+          ]
+        },
+        {
+          "seed": 542,
+          "N0": 36,
+          "depth": 4,
+          "n_layers": 5,
+          "l1_flux": 0.2066,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 36,
+              "sealed": true,
+              "flux": 0.0121,
+              "energy_final": 396.87,
+              "energy_ratio": 1.0583
+            },
+            {
+              "layer": 1,
+              "N": 16,
+              "sealed": true,
+              "flux": 0.2066,
+              "energy_final": 411.43,
+              "energy_ratio": 1.0971
+            },
+            {
+              "layer": 2,
+              "N": 9,
+              "sealed": true,
+              "flux": 0.4209,
+              "energy_final": 386.58,
+              "energy_ratio": 1.0309
+            },
+            {
+              "layer": 3,
+              "N": 5,
+              "sealed": true,
+              "flux": 0.6892,
+              "energy_final": 365.26,
+              "energy_ratio": 0.974
+            },
+            {
+              "layer": 4,
+              "N": 3,
+              "sealed": false,
+              "flux": 0.8266,
+              "energy_final": 1.34,
+              "energy_ratio": 0.0036
+            }
+          ]
+        },
+        {
+          "seed": 642,
+          "N0": 36,
+          "depth": 3,
+          "n_layers": 4,
+          "l1_flux": 0.1765,
+          "l2_emerged": true,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 36,
+              "sealed": true,
+              "flux": 0.0303,
+              "energy_final": 396.27,
+              "energy_ratio": 1.0567
+            },
+            {
+              "layer": 1,
+              "N": 15,
+              "sealed": true,
+              "flux": 0.1765,
+              "energy_final": 411.65,
+              "energy_ratio": 1.0977
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": true,
+              "flux": 0.4925,
+              "energy_final": 383.11,
+              "energy_ratio": 1.0216
+            },
+            {
+              "layer": 3,
+              "N": 3,
+              "sealed": false,
+              "flux": 0.8266,
+              "energy_final": 1.34,
+              "energy_ratio": 0.0036
+            }
+          ]
+        },
+        {
+          "seed": 742,
+          "N0": 36,
+          "depth": 4,
+          "n_layers": 4,
+          "l1_flux": 0.2619,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 36,
+              "sealed": true,
+              "flux": 0.0267,
+              "energy_final": 394.49,
+              "energy_ratio": 1.052
+            },
+            {
+              "layer": 1,
+              "N": 16,
+              "sealed": true,
+              "flux": 0.2619,
+              "energy_final": 400.44,
+              "energy_ratio": 1.0678
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": true,
+              "flux": 0.7217,
+              "energy_final": 310.97,
+              "energy_ratio": 0.8292
+            },
+            {
+              "layer": 3,
+              "N": 4,
+              "sealed": true,
+              "flux": 0.775,
+              "energy_final": 317.25,
+              "energy_ratio": 0.846
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "48": {
+    "no_energy": {
+      "summary": {
+        "config": "no_energy",
+        "N0": 48,
+        "mean_depth": 4.625,
+        "std_depth": 0.6959705453537527,
+        "mean_l1_flux": 0.1904875,
+        "std_l1_flux": 0.06900549683720855,
+        "l2_emergence_rate": 1.0,
+        "l3_emergence_rate": 0.875,
+        "l4_emergence_rate": 0.75,
+        "n_seeds": 8
+      },
+      "runs": [
+        {
+          "seed": 42,
+          "N0": 48,
+          "depth": 5,
+          "n_layers": 5,
+          "l1_flux": 0.2095,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": true,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 48,
+              "sealed": true,
+              "flux": 0.01
+            },
+            {
+              "layer": 1,
+              "N": 18,
+              "sealed": true,
+              "flux": 0.2095
+            },
+            {
+              "layer": 2,
+              "N": 10,
+              "sealed": true,
+              "flux": 0.4858
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.7631
+            },
+            {
+              "layer": 4,
+              "N": 4,
+              "sealed": true,
+              "flux": 0.775
+            }
+          ]
+        },
+        {
+          "seed": 142,
+          "N0": 48,
+          "depth": 5,
+          "n_layers": 5,
+          "l1_flux": 0.2611,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": true,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 48,
+              "sealed": true,
+              "flux": 0.01
+            },
+            {
+              "layer": 1,
+              "N": 16,
+              "sealed": true,
+              "flux": 0.2611
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": true,
+              "flux": 0.6937
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.7629
+            },
+            {
+              "layer": 4,
+              "N": 4,
+              "sealed": true,
+              "flux": 0.775
+            }
+          ]
+        },
+        {
+          "seed": 242,
+          "N0": 48,
+          "depth": 5,
+          "n_layers": 6,
+          "l1_flux": 0.2066,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": true,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 48,
+              "sealed": true,
+              "flux": 0.0091
+            },
+            {
+              "layer": 1,
+              "N": 16,
+              "sealed": true,
+              "flux": 0.2066
+            },
+            {
+              "layer": 2,
+              "N": 9,
+              "sealed": true,
+              "flux": 0.4155
+            },
+            {
+              "layer": 3,
+              "N": 7,
+              "sealed": true,
+              "flux": 0.7378
+            },
+            {
+              "layer": 4,
+              "N": 5,
+              "sealed": true,
+              "flux": 0.6892
+            },
+            {
+              "layer": 5,
+              "N": 3,
+              "sealed": false,
+              "flux": 1.0
+            }
+          ]
+        },
+        {
+          "seed": 342,
+          "N0": 48,
+          "depth": 5,
+          "n_layers": 5,
+          "l1_flux": 0.1765,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": true,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 48,
+              "sealed": true,
+              "flux": 0.0091
+            },
+            {
+              "layer": 1,
+              "N": 15,
+              "sealed": true,
+              "flux": 0.1765
+            },
+            {
+              "layer": 2,
+              "N": 10,
+              "sealed": true,
+              "flux": 0.428
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.7731
+            },
+            {
+              "layer": 4,
+              "N": 4,
+              "sealed": true,
+              "flux": 0.775
+            }
+          ]
+        },
+        {
+          "seed": 442,
+          "N0": 48,
+          "depth": 5,
+          "n_layers": 5,
+          "l1_flux": 0.2584,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": true,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 48,
+              "sealed": true,
+              "flux": 0.01
+            },
+            {
+              "layer": 1,
+              "N": 15,
+              "sealed": true,
+              "flux": 0.2584
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": true,
+              "flux": 0.6709
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.7725
+            },
+            {
+              "layer": 4,
+              "N": 4,
+              "sealed": true,
+              "flux": 0.775
+            }
+          ]
+        },
+        {
+          "seed": 542,
+          "N0": 48,
+          "depth": 3,
+          "n_layers": 3,
+          "l1_flux": 0.0258,
+          "l2_emerged": true,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 48,
+              "sealed": true,
+              "flux": 0.0091
+            },
+            {
+              "layer": 1,
+              "N": 12,
+              "sealed": true,
+              "flux": 0.0258
+            },
+            {
+              "layer": 2,
+              "N": 5,
+              "sealed": true,
+              "flux": 0.4132
+            }
+          ]
+        },
+        {
+          "seed": 642,
+          "N0": 48,
+          "depth": 4,
+          "n_layers": 4,
+          "l1_flux": 0.1765,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 48,
+              "sealed": true,
+              "flux": 0.0091
+            },
+            {
+              "layer": 1,
+              "N": 15,
+              "sealed": true,
+              "flux": 0.1765
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": true,
+              "flux": 0.3595
+            },
+            {
+              "layer": 3,
+              "N": 4,
+              "sealed": true,
+              "flux": 0.775
+            }
+          ]
+        },
+        {
+          "seed": 742,
+          "N0": 48,
+          "depth": 5,
+          "n_layers": 5,
+          "l1_flux": 0.2095,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": true,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 48,
+              "sealed": true,
+              "flux": 0.01
+            },
+            {
+              "layer": 1,
+              "N": 18,
+              "sealed": true,
+              "flux": 0.2095
+            },
+            {
+              "layer": 2,
+              "N": 10,
+              "sealed": true,
+              "flux": 0.4451
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.6481
+            },
+            {
+              "layer": 4,
+              "N": 4,
+              "sealed": true,
+              "flux": 0.775
+            }
+          ]
+        }
+      ]
+    },
+    "low_inject": {
+      "summary": {
+        "config": "low_inject",
+        "N0": 48,
+        "mean_depth": 2.125,
+        "std_depth": 0.33071891388307384,
+        "mean_l1_flux": 0.1814,
+        "std_l1_flux": 0.062328805539653975,
+        "l2_emergence_rate": 0.125,
+        "l3_emergence_rate": 0.0,
+        "l4_emergence_rate": 0.0,
+        "n_seeds": 8
+      },
+      "runs": [
+        {
+          "seed": 42,
+          "N0": 48,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.1992,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 48,
+              "sealed": true,
+              "flux": 0.01,
+              "energy_final": 34.99,
+              "energy_ratio": 0.6998
+            },
+            {
+              "layer": 1,
+              "N": 18,
+              "sealed": true,
+              "flux": 0.1992,
+              "energy_final": 17.17,
+              "energy_ratio": 0.3434
+            },
+            {
+              "layer": 2,
+              "N": 10,
+              "sealed": false,
+              "flux": 0.4167,
+              "energy_final": 1.97,
+              "energy_ratio": 0.0395
+            }
+          ]
+        },
+        {
+          "seed": 142,
+          "N0": 48,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.2331,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 48,
+              "sealed": true,
+              "flux": 0.01,
+              "energy_final": 34.99,
+              "energy_ratio": 0.6998
+            },
+            {
+              "layer": 1,
+              "N": 16,
+              "sealed": true,
+              "flux": 0.2331,
+              "energy_final": 8.67,
+              "energy_ratio": 0.1734
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": false,
+              "flux": 0.6349,
+              "energy_final": 1.6,
+              "energy_ratio": 0.0319
+            }
+          ]
+        },
+        {
+          "seed": 242,
+          "N0": 48,
+          "depth": 3,
+          "n_layers": 3,
+          "l1_flux": 0.2066,
+          "l2_emerged": true,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 48,
+              "sealed": true,
+              "flux": 0.0091,
+              "energy_final": 33.66,
+              "energy_ratio": 0.6732
+            },
+            {
+              "layer": 1,
+              "N": 16,
+              "sealed": true,
+              "flux": 0.2066,
+              "energy_final": 25.37,
+              "energy_ratio": 0.5075
+            },
+            {
+              "layer": 2,
+              "N": 9,
+              "sealed": true,
+              "flux": 0.3851,
+              "energy_final": 8.11,
+              "energy_ratio": 0.1622
+            }
+          ]
+        },
+        {
+          "seed": 342,
+          "N0": 48,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.1765,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 48,
+              "sealed": true,
+              "flux": 0.0091,
+              "energy_final": 33.66,
+              "energy_ratio": 0.6732
+            },
+            {
+              "layer": 1,
+              "N": 15,
+              "sealed": true,
+              "flux": 0.1765,
+              "energy_final": 27.0,
+              "energy_ratio": 0.5399
+            },
+            {
+              "layer": 2,
+              "N": 10,
+              "sealed": false,
+              "flux": 0.4167,
+              "energy_final": 1.97,
+              "energy_ratio": 0.0395
+            }
+          ]
+        },
+        {
+          "seed": 442,
+          "N0": 48,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.2354,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 48,
+              "sealed": true,
+              "flux": 0.01,
+              "energy_final": 34.99,
+              "energy_ratio": 0.6998
+            },
+            {
+              "layer": 1,
+              "N": 15,
+              "sealed": true,
+              "flux": 0.2354,
+              "energy_final": 11.05,
+              "energy_ratio": 0.2209
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": false,
+              "flux": 0.6349,
+              "energy_final": 1.6,
+              "energy_ratio": 0.0319
+            }
+          ]
+        },
+        {
+          "seed": 542,
+          "N0": 48,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.0258,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 48,
+              "sealed": true,
+              "flux": 0.0091,
+              "energy_final": 33.66,
+              "energy_ratio": 0.6732
+            },
+            {
+              "layer": 1,
+              "N": 12,
+              "sealed": true,
+              "flux": 0.0258,
+              "energy_final": 36.45,
+              "energy_ratio": 0.7289
+            },
+            {
+              "layer": 2,
+              "N": 5,
+              "sealed": false,
+              "flux": 0.5235,
+              "energy_final": 1.54,
+              "energy_ratio": 0.0307
+            }
+          ]
+        },
+        {
+          "seed": 642,
+          "N0": 48,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.1765,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 48,
+              "sealed": true,
+              "flux": 0.0091,
+              "energy_final": 33.66,
+              "energy_ratio": 0.6732
+            },
+            {
+              "layer": 1,
+              "N": 15,
+              "sealed": true,
+              "flux": 0.1765,
+              "energy_final": 27.0,
+              "energy_ratio": 0.5399
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": false,
+              "flux": 0.3951,
+              "energy_final": 1.65,
+              "energy_ratio": 0.033
+            }
+          ]
+        },
+        {
+          "seed": 742,
+          "N0": 48,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.1981,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 48,
+              "sealed": true,
+              "flux": 0.01,
+              "energy_final": 34.99,
+              "energy_ratio": 0.6998
+            },
+            {
+              "layer": 1,
+              "N": 18,
+              "sealed": true,
+              "flux": 0.1981,
+              "energy_final": 18.34,
+              "energy_ratio": 0.3667
+            },
+            {
+              "layer": 2,
+              "N": 10,
+              "sealed": false,
+              "flux": 0.4167,
+              "energy_final": 1.97,
+              "energy_ratio": 0.0395
+            }
+          ]
+        }
+      ]
+    },
+    "med_inject": {
+      "summary": {
+        "config": "med_inject",
+        "N0": 48,
+        "mean_depth": 2.875,
+        "std_depth": 0.7806247497997998,
+        "mean_l1_flux": 0.1904875,
+        "std_l1_flux": 0.06900549683720855,
+        "l2_emergence_rate": 0.625,
+        "l3_emergence_rate": 0.25,
+        "l4_emergence_rate": 0.0,
+        "n_seeds": 8
+      },
+      "runs": [
+        {
+          "seed": 42,
+          "N0": 48,
+          "depth": 4,
+          "n_layers": 5,
+          "l1_flux": 0.2095,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 48,
+              "sealed": true,
+              "flux": 0.01,
+              "energy_final": 198.53,
+              "energy_ratio": 0.9927
+            },
+            {
+              "layer": 1,
+              "N": 18,
+              "sealed": true,
+              "flux": 0.2095,
+              "energy_final": 191.85,
+              "energy_ratio": 0.9593
+            },
+            {
+              "layer": 2,
+              "N": 10,
+              "sealed": true,
+              "flux": 0.4858,
+              "energy_final": 123.58,
+              "energy_ratio": 0.6179
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.6509,
+              "energy_final": 66.38,
+              "energy_ratio": 0.3319
+            },
+            {
+              "layer": 4,
+              "N": 3,
+              "sealed": false,
+              "flux": 0.7386,
+              "energy_final": 0.01,
+              "energy_ratio": 0.0001
+            }
+          ]
+        },
+        {
+          "seed": 142,
+          "N0": 48,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.2611,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 48,
+              "sealed": true,
+              "flux": 0.01,
+              "energy_final": 198.53,
+              "energy_ratio": 0.9927
+            },
+            {
+              "layer": 1,
+              "N": 16,
+              "sealed": true,
+              "flux": 0.2611,
+              "energy_final": 182.07,
+              "energy_ratio": 0.9103
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": false,
+              "flux": 0.5206,
+              "energy_final": 1.17,
+              "energy_ratio": 0.0058
+            }
+          ]
+        },
+        {
+          "seed": 242,
+          "N0": 48,
+          "depth": 3,
+          "n_layers": 4,
+          "l1_flux": 0.2066,
+          "l2_emerged": true,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 48,
+              "sealed": true,
+              "flux": 0.0091,
+              "energy_final": 198.42,
+              "energy_ratio": 0.9921
+            },
+            {
+              "layer": 1,
+              "N": 16,
+              "sealed": true,
+              "flux": 0.2066,
+              "energy_final": 198.3,
+              "energy_ratio": 0.9915
+            },
+            {
+              "layer": 2,
+              "N": 9,
+              "sealed": true,
+              "flux": 0.4155,
+              "energy_final": 182.1,
+              "energy_ratio": 0.9105
+            },
+            {
+              "layer": 3,
+              "N": 7,
+              "sealed": false,
+              "flux": 0.5003,
+              "energy_final": 1.62,
+              "energy_ratio": 0.0081
+            }
+          ]
+        },
+        {
+          "seed": 342,
+          "N0": 48,
+          "depth": 3,
+          "n_layers": 4,
+          "l1_flux": 0.1765,
+          "l2_emerged": true,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 48,
+              "sealed": true,
+              "flux": 0.0091,
+              "energy_final": 198.42,
+              "energy_ratio": 0.9921
+            },
+            {
+              "layer": 1,
+              "N": 15,
+              "sealed": true,
+              "flux": 0.1765,
+              "energy_final": 199.74,
+              "energy_ratio": 0.9987
+            },
+            {
+              "layer": 2,
+              "N": 10,
+              "sealed": true,
+              "flux": 0.428,
+              "energy_final": 132.1,
+              "energy_ratio": 0.6605
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": false,
+              "flux": 0.4836,
+              "energy_final": 1.42,
+              "energy_ratio": 0.0071
+            }
+          ]
+        },
+        {
+          "seed": 442,
+          "N0": 48,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.2584,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 48,
+              "sealed": true,
+              "flux": 0.01,
+              "energy_final": 198.53,
+              "energy_ratio": 0.9927
+            },
+            {
+              "layer": 1,
+              "N": 15,
+              "sealed": true,
+              "flux": 0.2584,
+              "energy_final": 186.66,
+              "energy_ratio": 0.9333
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": false,
+              "flux": 0.519,
+              "energy_final": 1.49,
+              "energy_ratio": 0.0075
+            }
+          ]
+        },
+        {
+          "seed": 542,
+          "N0": 48,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.0258,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 48,
+              "sealed": true,
+              "flux": 0.0091,
+              "energy_final": 198.42,
+              "energy_ratio": 0.9921
+            },
+            {
+              "layer": 1,
+              "N": 12,
+              "sealed": true,
+              "flux": 0.0258,
+              "energy_final": 202.33,
+              "energy_ratio": 1.0116
+            },
+            {
+              "layer": 2,
+              "N": 5,
+              "sealed": false,
+              "flux": 0.1613,
+              "energy_final": 1.77,
+              "energy_ratio": 0.0089
+            }
+          ]
+        },
+        {
+          "seed": 642,
+          "N0": 48,
+          "depth": 3,
+          "n_layers": 4,
+          "l1_flux": 0.1765,
+          "l2_emerged": true,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 48,
+              "sealed": true,
+              "flux": 0.0091,
+              "energy_final": 198.42,
+              "energy_ratio": 0.9921
+            },
+            {
+              "layer": 1,
+              "N": 15,
+              "sealed": true,
+              "flux": 0.1765,
+              "energy_final": 199.74,
+              "energy_ratio": 0.9987
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": true,
+              "flux": 0.3595,
+              "energy_final": 154.06,
+              "energy_ratio": 0.7703
+            },
+            {
+              "layer": 3,
+              "N": 4,
+              "sealed": false,
+              "flux": 0.6356,
+              "energy_final": 1.85,
+              "energy_ratio": 0.0093
+            }
+          ]
+        },
+        {
+          "seed": 742,
+          "N0": 48,
+          "depth": 4,
+          "n_layers": 5,
+          "l1_flux": 0.2095,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 48,
+              "sealed": true,
+              "flux": 0.01,
+              "energy_final": 198.53,
+              "energy_ratio": 0.9927
+            },
+            {
+              "layer": 1,
+              "N": 18,
+              "sealed": true,
+              "flux": 0.2095,
+              "energy_final": 191.72,
+              "energy_ratio": 0.9586
+            },
+            {
+              "layer": 2,
+              "N": 10,
+              "sealed": true,
+              "flux": 0.4451,
+              "energy_final": 132.37,
+              "energy_ratio": 0.6619
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.6481,
+              "energy_final": 121.63,
+              "energy_ratio": 0.6082
+            },
+            {
+              "layer": 4,
+              "N": 4,
+              "sealed": false,
+              "flux": 0.6356,
+              "energy_final": 1.85,
+              "energy_ratio": 0.0093
+            }
+          ]
+        }
+      ]
+    },
+    "high_inject": {
+      "summary": {
+        "config": "high_inject",
+        "N0": 48,
+        "mean_depth": 4.625,
+        "std_depth": 0.6959705453537527,
+        "mean_l1_flux": 0.1904875,
+        "std_l1_flux": 0.06900549683720855,
+        "l2_emergence_rate": 1.0,
+        "l3_emergence_rate": 0.875,
+        "l4_emergence_rate": 0.75,
+        "n_seeds": 8
+      },
+      "runs": [
+        {
+          "seed": 42,
+          "N0": 48,
+          "depth": 5,
+          "n_layers": 5,
+          "l1_flux": 0.2095,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": true,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 48,
+              "sealed": true,
+              "flux": 0.01,
+              "energy_final": 534.15,
+              "energy_ratio": 1.0683
+            },
+            {
+              "layer": 1,
+              "N": 18,
+              "sealed": true,
+              "flux": 0.2095,
+              "energy_final": 561.66,
+              "energy_ratio": 1.1233
+            },
+            {
+              "layer": 2,
+              "N": 10,
+              "sealed": true,
+              "flux": 0.4858,
+              "energy_final": 530.52,
+              "energy_ratio": 1.061
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.7631,
+              "energy_final": 520.79,
+              "energy_ratio": 1.0416
+            },
+            {
+              "layer": 4,
+              "N": 4,
+              "sealed": true,
+              "flux": 0.775,
+              "energy_final": 519.21,
+              "energy_ratio": 1.0384
+            }
+          ]
+        },
+        {
+          "seed": 142,
+          "N0": 48,
+          "depth": 5,
+          "n_layers": 5,
+          "l1_flux": 0.2611,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": true,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 48,
+              "sealed": true,
+              "flux": 0.01,
+              "energy_final": 534.15,
+              "energy_ratio": 1.0683
+            },
+            {
+              "layer": 1,
+              "N": 16,
+              "sealed": true,
+              "flux": 0.2611,
+              "energy_final": 550.77,
+              "energy_ratio": 1.1015
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": true,
+              "flux": 0.6937,
+              "energy_final": 500.12,
+              "energy_ratio": 1.0002
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.7629,
+              "energy_final": 520.9,
+              "energy_ratio": 1.0418
+            },
+            {
+              "layer": 4,
+              "N": 4,
+              "sealed": true,
+              "flux": 0.775,
+              "energy_final": 519.21,
+              "energy_ratio": 1.0384
+            }
+          ]
+        },
+        {
+          "seed": 242,
+          "N0": 48,
+          "depth": 5,
+          "n_layers": 6,
+          "l1_flux": 0.2066,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": true,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 48,
+              "sealed": true,
+              "flux": 0.0091,
+              "energy_final": 537.51,
+              "energy_ratio": 1.075
+            },
+            {
+              "layer": 1,
+              "N": 16,
+              "sealed": true,
+              "flux": 0.2066,
+              "energy_final": 561.8,
+              "energy_ratio": 1.1236
+            },
+            {
+              "layer": 2,
+              "N": 9,
+              "sealed": true,
+              "flux": 0.4155,
+              "energy_final": 581.95,
+              "energy_ratio": 1.1639
+            },
+            {
+              "layer": 3,
+              "N": 7,
+              "sealed": true,
+              "flux": 0.7378,
+              "energy_final": 497.28,
+              "energy_ratio": 0.9946
+            },
+            {
+              "layer": 4,
+              "N": 5,
+              "sealed": true,
+              "flux": 0.6892,
+              "energy_final": 552.44,
+              "energy_ratio": 1.1049
+            },
+            {
+              "layer": 5,
+              "N": 3,
+              "sealed": false,
+              "flux": 1.0,
+              "energy_final": 217.48,
+              "energy_ratio": 0.435
+            }
+          ]
+        },
+        {
+          "seed": 342,
+          "N0": 48,
+          "depth": 5,
+          "n_layers": 5,
+          "l1_flux": 0.1765,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": true,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 48,
+              "sealed": true,
+              "flux": 0.0091,
+              "energy_final": 537.51,
+              "energy_ratio": 1.075
+            },
+            {
+              "layer": 1,
+              "N": 15,
+              "sealed": true,
+              "flux": 0.1765,
+              "energy_final": 561.4,
+              "energy_ratio": 1.1228
+            },
+            {
+              "layer": 2,
+              "N": 10,
+              "sealed": true,
+              "flux": 0.428,
+              "energy_final": 547.35,
+              "energy_ratio": 1.0947
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.7731,
+              "energy_final": 513.81,
+              "energy_ratio": 1.0276
+            },
+            {
+              "layer": 4,
+              "N": 4,
+              "sealed": true,
+              "flux": 0.775,
+              "energy_final": 519.21,
+              "energy_ratio": 1.0384
+            }
+          ]
+        },
+        {
+          "seed": 442,
+          "N0": 48,
+          "depth": 5,
+          "n_layers": 5,
+          "l1_flux": 0.2584,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": true,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 48,
+              "sealed": true,
+              "flux": 0.01,
+              "energy_final": 534.15,
+              "energy_ratio": 1.0683
+            },
+            {
+              "layer": 1,
+              "N": 15,
+              "sealed": true,
+              "flux": 0.2584,
+              "energy_final": 550.82,
+              "energy_ratio": 1.1016
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": true,
+              "flux": 0.6709,
+              "energy_final": 508.9,
+              "energy_ratio": 1.0178
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.7725,
+              "energy_final": 514.17,
+              "energy_ratio": 1.0283
+            },
+            {
+              "layer": 4,
+              "N": 4,
+              "sealed": true,
+              "flux": 0.775,
+              "energy_final": 519.21,
+              "energy_ratio": 1.0384
+            }
+          ]
+        },
+        {
+          "seed": 542,
+          "N0": 48,
+          "depth": 3,
+          "n_layers": 3,
+          "l1_flux": 0.0258,
+          "l2_emerged": true,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 48,
+              "sealed": true,
+              "flux": 0.0091,
+              "energy_final": 537.51,
+              "energy_ratio": 1.075
+            },
+            {
+              "layer": 1,
+              "N": 12,
+              "sealed": true,
+              "flux": 0.0258,
+              "energy_final": 541.9,
+              "energy_ratio": 1.0838
+            },
+            {
+              "layer": 2,
+              "N": 5,
+              "sealed": true,
+              "flux": 0.4132,
+              "energy_final": 505.07,
+              "energy_ratio": 1.0101
+            }
+          ]
+        },
+        {
+          "seed": 642,
+          "N0": 48,
+          "depth": 4,
+          "n_layers": 4,
+          "l1_flux": 0.1765,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 48,
+              "sealed": true,
+              "flux": 0.0091,
+              "energy_final": 537.51,
+              "energy_ratio": 1.075
+            },
+            {
+              "layer": 1,
+              "N": 15,
+              "sealed": true,
+              "flux": 0.1765,
+              "energy_final": 561.4,
+              "energy_ratio": 1.1228
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": true,
+              "flux": 0.3595,
+              "energy_final": 565.08,
+              "energy_ratio": 1.1302
+            },
+            {
+              "layer": 3,
+              "N": 4,
+              "sealed": true,
+              "flux": 0.775,
+              "energy_final": 519.21,
+              "energy_ratio": 1.0384
+            }
+          ]
+        },
+        {
+          "seed": 742,
+          "N0": 48,
+          "depth": 5,
+          "n_layers": 5,
+          "l1_flux": 0.2095,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": true,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 48,
+              "sealed": true,
+              "flux": 0.01,
+              "energy_final": 534.15,
+              "energy_ratio": 1.0683
+            },
+            {
+              "layer": 1,
+              "N": 18,
+              "sealed": true,
+              "flux": 0.2095,
+              "energy_final": 557.96,
+              "energy_ratio": 1.1159
+            },
+            {
+              "layer": 2,
+              "N": 10,
+              "sealed": true,
+              "flux": 0.4451,
+              "energy_final": 546.0,
+              "energy_ratio": 1.092
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.6481,
+              "energy_final": 546.47,
+              "energy_ratio": 1.0929
+            },
+            {
+              "layer": 4,
+              "N": 4,
+              "sealed": true,
+              "flux": 0.775,
+              "energy_final": 519.21,
+              "energy_ratio": 1.0384
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "72": {
+    "no_energy": {
+      "summary": {
+        "config": "no_energy",
+        "N0": 72,
+        "mean_depth": 4.25,
+        "std_depth": 1.0897247358851685,
+        "mean_l1_flux": 0.1133625,
+        "std_l1_flux": 0.09082341297127079,
+        "l2_emergence_rate": 1.0,
+        "l3_emergence_rate": 0.625,
+        "l4_emergence_rate": 0.5,
+        "n_seeds": 8
+      },
+      "runs": [
+        {
+          "seed": 42,
+          "N0": 72,
+          "depth": 3,
+          "n_layers": 3,
+          "l1_flux": 0.0167,
+          "l2_emerged": true,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 72,
+              "sealed": true,
+              "flux": 0.0
+            },
+            {
+              "layer": 1,
+              "N": 12,
+              "sealed": true,
+              "flux": 0.0167
+            },
+            {
+              "layer": 2,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.7203
+            }
+          ]
+        },
+        {
+          "seed": 142,
+          "N0": 72,
+          "depth": 5,
+          "n_layers": 5,
+          "l1_flux": 0.2066,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": true,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 72,
+              "sealed": true,
+              "flux": 0.0
+            },
+            {
+              "layer": 1,
+              "N": 16,
+              "sealed": true,
+              "flux": 0.2066
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": true,
+              "flux": 0.6779
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.754
+            },
+            {
+              "layer": 4,
+              "N": 4,
+              "sealed": true,
+              "flux": 0.775
+            }
+          ]
+        },
+        {
+          "seed": 242,
+          "N0": 72,
+          "depth": 3,
+          "n_layers": 3,
+          "l1_flux": 0.0258,
+          "l2_emerged": true,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 72,
+              "sealed": true,
+              "flux": 0.0
+            },
+            {
+              "layer": 1,
+              "N": 12,
+              "sealed": true,
+              "flux": 0.0258
+            },
+            {
+              "layer": 2,
+              "N": 5,
+              "sealed": true,
+              "flux": 0.4132
+            }
+          ]
+        },
+        {
+          "seed": 342,
+          "N0": 72,
+          "depth": 6,
+          "n_layers": 6,
+          "l1_flux": 0.1758,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": true,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 72,
+              "sealed": true,
+              "flux": 0.0
+            },
+            {
+              "layer": 1,
+              "N": 18,
+              "sealed": true,
+              "flux": 0.1758
+            },
+            {
+              "layer": 2,
+              "N": 12,
+              "sealed": true,
+              "flux": 0.3922
+            },
+            {
+              "layer": 3,
+              "N": 8,
+              "sealed": true,
+              "flux": 0.7348
+            },
+            {
+              "layer": 4,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.6723
+            },
+            {
+              "layer": 5,
+              "N": 4,
+              "sealed": true,
+              "flux": 0.775
+            }
+          ]
+        },
+        {
+          "seed": 442,
+          "N0": 72,
+          "depth": 3,
+          "n_layers": 4,
+          "l1_flux": 0.0258,
+          "l2_emerged": true,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 72,
+              "sealed": true,
+              "flux": 0.0
+            },
+            {
+              "layer": 1,
+              "N": 12,
+              "sealed": true,
+              "flux": 0.0258
+            },
+            {
+              "layer": 2,
+              "N": 5,
+              "sealed": true,
+              "flux": 0.6892
+            },
+            {
+              "layer": 3,
+              "N": 3,
+              "sealed": false,
+              "flux": 1.0
+            }
+          ]
+        },
+        {
+          "seed": 542,
+          "N0": 72,
+          "depth": 5,
+          "n_layers": 5,
+          "l1_flux": 0.2277,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": true,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 72,
+              "sealed": true,
+              "flux": 0.0
+            },
+            {
+              "layer": 1,
+              "N": 18,
+              "sealed": true,
+              "flux": 0.2277
+            },
+            {
+              "layer": 2,
+              "N": 10,
+              "sealed": true,
+              "flux": 0.4632
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.6723
+            },
+            {
+              "layer": 4,
+              "N": 4,
+              "sealed": true,
+              "flux": 0.775
+            }
+          ]
+        },
+        {
+          "seed": 642,
+          "N0": 72,
+          "depth": 4,
+          "n_layers": 5,
+          "l1_flux": 0.0258,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 72,
+              "sealed": true,
+              "flux": 0.0
+            },
+            {
+              "layer": 1,
+              "N": 12,
+              "sealed": true,
+              "flux": 0.0258
+            },
+            {
+              "layer": 2,
+              "N": 7,
+              "sealed": true,
+              "flux": 0.449
+            },
+            {
+              "layer": 3,
+              "N": 5,
+              "sealed": true,
+              "flux": 0.6892
+            },
+            {
+              "layer": 4,
+              "N": 3,
+              "sealed": false,
+              "flux": 1.0
+            }
+          ]
+        },
+        {
+          "seed": 742,
+          "N0": 72,
+          "depth": 5,
+          "n_layers": 5,
+          "l1_flux": 0.2027,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": true,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 72,
+              "sealed": true,
+              "flux": 0.0
+            },
+            {
+              "layer": 1,
+              "N": 18,
+              "sealed": true,
+              "flux": 0.2027
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": true,
+              "flux": 0.7019
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.7639
+            },
+            {
+              "layer": 4,
+              "N": 4,
+              "sealed": true,
+              "flux": 0.775
+            }
+          ]
+        }
+      ]
+    },
+    "low_inject": {
+      "summary": {
+        "config": "low_inject",
+        "N0": 72,
+        "mean_depth": 2.125,
+        "std_depth": 0.33071891388307384,
+        "mean_l1_flux": 0.1133625,
+        "std_l1_flux": 0.09082341297127079,
+        "l2_emergence_rate": 0.125,
+        "l3_emergence_rate": 0.0,
+        "l4_emergence_rate": 0.0,
+        "n_seeds": 8
+      },
+      "runs": [
+        {
+          "seed": 42,
+          "N0": 72,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.0167,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 72,
+              "sealed": true,
+              "flux": 0.0,
+              "energy_final": 63.11,
+              "energy_ratio": 0.8415
+            },
+            {
+              "layer": 1,
+              "N": 12,
+              "sealed": true,
+              "flux": 0.0167,
+              "energy_final": 63.11,
+              "energy_ratio": 0.8415
+            },
+            {
+              "layer": 2,
+              "N": 6,
+              "sealed": false,
+              "flux": 0.5766,
+              "energy_final": 1.3,
+              "energy_ratio": 0.0173
+            }
+          ]
+        },
+        {
+          "seed": 142,
+          "N0": 72,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.2066,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 72,
+              "sealed": true,
+              "flux": 0.0,
+              "energy_final": 63.11,
+              "energy_ratio": 0.8415
+            },
+            {
+              "layer": 1,
+              "N": 16,
+              "sealed": true,
+              "flux": 0.2066,
+              "energy_final": 55.59,
+              "energy_ratio": 0.7412
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": false,
+              "flux": 0.5657,
+              "energy_final": 0.79,
+              "energy_ratio": 0.0106
+            }
+          ]
+        },
+        {
+          "seed": 242,
+          "N0": 72,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.0258,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 72,
+              "sealed": true,
+              "flux": 0.0,
+              "energy_final": 63.11,
+              "energy_ratio": 0.8415
+            },
+            {
+              "layer": 1,
+              "N": 12,
+              "sealed": true,
+              "flux": 0.0258,
+              "energy_final": 65.19,
+              "energy_ratio": 0.8692
+            },
+            {
+              "layer": 2,
+              "N": 5,
+              "sealed": false,
+              "flux": 0.4719,
+              "energy_final": 0.96,
+              "energy_ratio": 0.0128
+            }
+          ]
+        },
+        {
+          "seed": 342,
+          "N0": 72,
+          "depth": 3,
+          "n_layers": 4,
+          "l1_flux": 0.1758,
+          "l2_emerged": true,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 72,
+              "sealed": true,
+              "flux": 0.0,
+              "energy_final": 63.11,
+              "energy_ratio": 0.8415
+            },
+            {
+              "layer": 1,
+              "N": 18,
+              "sealed": true,
+              "flux": 0.1758,
+              "energy_final": 55.56,
+              "energy_ratio": 0.7409
+            },
+            {
+              "layer": 2,
+              "N": 12,
+              "sealed": true,
+              "flux": 0.37,
+              "energy_final": 18.63,
+              "energy_ratio": 0.2485
+            },
+            {
+              "layer": 3,
+              "N": 4,
+              "sealed": false,
+              "flux": 0.6714,
+              "energy_final": 1.71,
+              "energy_ratio": 0.0228
+            }
+          ]
+        },
+        {
+          "seed": 442,
+          "N0": 72,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.0258,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 72,
+              "sealed": true,
+              "flux": 0.0,
+              "energy_final": 63.11,
+              "energy_ratio": 0.8415
+            },
+            {
+              "layer": 1,
+              "N": 12,
+              "sealed": true,
+              "flux": 0.0258,
+              "energy_final": 65.19,
+              "energy_ratio": 0.8692
+            },
+            {
+              "layer": 2,
+              "N": 5,
+              "sealed": false,
+              "flux": 0.561,
+              "energy_final": 1.78,
+              "energy_ratio": 0.0238
+            }
+          ]
+        },
+        {
+          "seed": 542,
+          "N0": 72,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.2277,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 72,
+              "sealed": true,
+              "flux": 0.0,
+              "energy_final": 63.11,
+              "energy_ratio": 0.8415
+            },
+            {
+              "layer": 1,
+              "N": 18,
+              "sealed": true,
+              "flux": 0.2277,
+              "energy_final": 44.36,
+              "energy_ratio": 0.5914
+            },
+            {
+              "layer": 2,
+              "N": 10,
+              "sealed": false,
+              "flux": 0.3642,
+              "energy_final": 1.78,
+              "energy_ratio": 0.0238
+            }
+          ]
+        },
+        {
+          "seed": 642,
+          "N0": 72,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.0258,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 72,
+              "sealed": true,
+              "flux": 0.0,
+              "energy_final": 63.11,
+              "energy_ratio": 0.8415
+            },
+            {
+              "layer": 1,
+              "N": 12,
+              "sealed": true,
+              "flux": 0.0258,
+              "energy_final": 65.19,
+              "energy_ratio": 0.8692
+            },
+            {
+              "layer": 2,
+              "N": 7,
+              "sealed": false,
+              "flux": 0.2981,
+              "energy_final": 1.87,
+              "energy_ratio": 0.025
+            }
+          ]
+        },
+        {
+          "seed": 742,
+          "N0": 72,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.2027,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 72,
+              "sealed": true,
+              "flux": 0.0,
+              "energy_final": 63.11,
+              "energy_ratio": 0.8415
+            },
+            {
+              "layer": 1,
+              "N": 18,
+              "sealed": true,
+              "flux": 0.2027,
+              "energy_final": 49.42,
+              "energy_ratio": 0.6589
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": false,
+              "flux": 0.5657,
+              "energy_final": 0.79,
+              "energy_ratio": 0.0106
+            }
+          ]
+        }
+      ]
+    },
+    "med_inject": {
+      "summary": {
+        "config": "med_inject",
+        "N0": 72,
+        "mean_depth": 3.25,
+        "std_depth": 0.6614378277661477,
+        "mean_l1_flux": 0.1133625,
+        "std_l1_flux": 0.09082341297127079,
+        "l2_emergence_rate": 0.875,
+        "l3_emergence_rate": 0.375,
+        "l4_emergence_rate": 0.0,
+        "n_seeds": 8
+      },
+      "runs": [
+        {
+          "seed": 42,
+          "N0": 72,
+          "depth": 3,
+          "n_layers": 3,
+          "l1_flux": 0.0167,
+          "l2_emerged": true,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 72,
+              "sealed": true,
+              "flux": 0.0,
+              "energy_final": 309.08,
+              "energy_ratio": 1.0303
+            },
+            {
+              "layer": 1,
+              "N": 12,
+              "sealed": true,
+              "flux": 0.0167,
+              "energy_final": 309.08,
+              "energy_ratio": 1.0303
+            },
+            {
+              "layer": 2,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.7203,
+              "energy_final": 226.64,
+              "energy_ratio": 0.7555
+            }
+          ]
+        },
+        {
+          "seed": 142,
+          "N0": 72,
+          "depth": 4,
+          "n_layers": 5,
+          "l1_flux": 0.2066,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 72,
+              "sealed": true,
+              "flux": 0.0,
+              "energy_final": 309.08,
+              "energy_ratio": 1.0303
+            },
+            {
+              "layer": 1,
+              "N": 16,
+              "sealed": true,
+              "flux": 0.2066,
+              "energy_final": 316.49,
+              "energy_ratio": 1.055
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": true,
+              "flux": 0.6779,
+              "energy_final": 212.45,
+              "energy_ratio": 0.7082
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.754,
+              "energy_final": 221.12,
+              "energy_ratio": 0.7371
+            },
+            {
+              "layer": 4,
+              "N": 4,
+              "sealed": false,
+              "flux": 0.542,
+              "energy_final": 1.8,
+              "energy_ratio": 0.006
+            }
+          ]
+        },
+        {
+          "seed": 242,
+          "N0": 72,
+          "depth": 3,
+          "n_layers": 3,
+          "l1_flux": 0.0258,
+          "l2_emerged": true,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 72,
+              "sealed": true,
+              "flux": 0.0,
+              "energy_final": 309.08,
+              "energy_ratio": 1.0303
+            },
+            {
+              "layer": 1,
+              "N": 12,
+              "sealed": true,
+              "flux": 0.0258,
+              "energy_final": 314.49,
+              "energy_ratio": 1.0483
+            },
+            {
+              "layer": 2,
+              "N": 5,
+              "sealed": true,
+              "flux": 0.4132,
+              "energy_final": 203.36,
+              "energy_ratio": 0.6779
+            }
+          ]
+        },
+        {
+          "seed": 342,
+          "N0": 72,
+          "depth": 3,
+          "n_layers": 4,
+          "l1_flux": 0.1758,
+          "l2_emerged": true,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 72,
+              "sealed": true,
+              "flux": 0.0,
+              "energy_final": 309.08,
+              "energy_ratio": 1.0303
+            },
+            {
+              "layer": 1,
+              "N": 18,
+              "sealed": true,
+              "flux": 0.1758,
+              "energy_final": 319.4,
+              "energy_ratio": 1.0647
+            },
+            {
+              "layer": 2,
+              "N": 12,
+              "sealed": true,
+              "flux": 0.3922,
+              "energy_final": 282.34,
+              "energy_ratio": 0.9411
+            },
+            {
+              "layer": 3,
+              "N": 8,
+              "sealed": false,
+              "flux": 0.4164,
+              "energy_final": 1.73,
+              "energy_ratio": 0.0058
+            }
+          ]
+        },
+        {
+          "seed": 442,
+          "N0": 72,
+          "depth": 3,
+          "n_layers": 4,
+          "l1_flux": 0.0258,
+          "l2_emerged": true,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 72,
+              "sealed": true,
+              "flux": 0.0,
+              "energy_final": 309.08,
+              "energy_ratio": 1.0303
+            },
+            {
+              "layer": 1,
+              "N": 12,
+              "sealed": true,
+              "flux": 0.0258,
+              "energy_final": 314.49,
+              "energy_ratio": 1.0483
+            },
+            {
+              "layer": 2,
+              "N": 5,
+              "sealed": true,
+              "flux": 0.6892,
+              "energy_final": 224.58,
+              "energy_ratio": 0.7486
+            },
+            {
+              "layer": 3,
+              "N": 3,
+              "sealed": false,
+              "flux": 0.7647,
+              "energy_final": 0.28,
+              "energy_ratio": 0.0009
+            }
+          ]
+        },
+        {
+          "seed": 542,
+          "N0": 72,
+          "depth": 4,
+          "n_layers": 5,
+          "l1_flux": 0.2277,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 72,
+              "sealed": true,
+              "flux": 0.0,
+              "energy_final": 309.08,
+              "energy_ratio": 1.0303
+            },
+            {
+              "layer": 1,
+              "N": 18,
+              "sealed": true,
+              "flux": 0.2277,
+              "energy_final": 303.69,
+              "energy_ratio": 1.0123
+            },
+            {
+              "layer": 2,
+              "N": 10,
+              "sealed": true,
+              "flux": 0.4632,
+              "energy_final": 242.86,
+              "energy_ratio": 0.8095
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.6723,
+              "energy_final": 241.57,
+              "energy_ratio": 0.8052
+            },
+            {
+              "layer": 4,
+              "N": 4,
+              "sealed": false,
+              "flux": 0.542,
+              "energy_final": 1.8,
+              "energy_ratio": 0.006
+            }
+          ]
+        },
+        {
+          "seed": 642,
+          "N0": 72,
+          "depth": 4,
+          "n_layers": 5,
+          "l1_flux": 0.0258,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 72,
+              "sealed": true,
+              "flux": 0.0,
+              "energy_final": 309.08,
+              "energy_ratio": 1.0303
+            },
+            {
+              "layer": 1,
+              "N": 12,
+              "sealed": true,
+              "flux": 0.0258,
+              "energy_final": 314.49,
+              "energy_ratio": 1.0483
+            },
+            {
+              "layer": 2,
+              "N": 7,
+              "sealed": true,
+              "flux": 0.449,
+              "energy_final": 291.41,
+              "energy_ratio": 0.9714
+            },
+            {
+              "layer": 3,
+              "N": 5,
+              "sealed": true,
+              "flux": 0.6892,
+              "energy_final": 224.58,
+              "energy_ratio": 0.7486
+            },
+            {
+              "layer": 4,
+              "N": 3,
+              "sealed": false,
+              "flux": 0.7647,
+              "energy_final": 0.28,
+              "energy_ratio": 0.0009
+            }
+          ]
+        },
+        {
+          "seed": 742,
+          "N0": 72,
+          "depth": 2,
+          "n_layers": 3,
+          "l1_flux": 0.2027,
+          "l2_emerged": false,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 72,
+              "sealed": true,
+              "flux": 0.0,
+              "energy_final": 309.08,
+              "energy_ratio": 1.0303
+            },
+            {
+              "layer": 1,
+              "N": 18,
+              "sealed": true,
+              "flux": 0.2027,
+              "energy_final": 311.77,
+              "energy_ratio": 1.0392
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": false,
+              "flux": 0.4148,
+              "energy_final": 1.83,
+              "energy_ratio": 0.0061
+            }
+          ]
+        }
+      ]
+    },
+    "high_inject": {
+      "summary": {
+        "config": "high_inject",
+        "N0": 72,
+        "mean_depth": 4.25,
+        "std_depth": 1.0897247358851685,
+        "mean_l1_flux": 0.1133625,
+        "std_l1_flux": 0.09082341297127079,
+        "l2_emergence_rate": 1.0,
+        "l3_emergence_rate": 0.625,
+        "l4_emergence_rate": 0.5,
+        "n_seeds": 8
+      },
+      "runs": [
+        {
+          "seed": 42,
+          "N0": 72,
+          "depth": 3,
+          "n_layers": 3,
+          "l1_flux": 0.0167,
+          "l2_emerged": true,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 72,
+              "sealed": true,
+              "flux": 0.0,
+              "energy_final": 813.07,
+              "energy_ratio": 1.0841
+            },
+            {
+              "layer": 1,
+              "N": 12,
+              "sealed": true,
+              "flux": 0.0167,
+              "energy_final": 813.07,
+              "energy_ratio": 1.0841
+            },
+            {
+              "layer": 2,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.7203,
+              "energy_final": 903.64,
+              "energy_ratio": 1.2048
+            }
+          ]
+        },
+        {
+          "seed": 142,
+          "N0": 72,
+          "depth": 5,
+          "n_layers": 5,
+          "l1_flux": 0.2066,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": true,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 72,
+              "sealed": true,
+              "flux": 0.0,
+              "energy_final": 813.07,
+              "energy_ratio": 1.0841
+            },
+            {
+              "layer": 1,
+              "N": 16,
+              "sealed": true,
+              "flux": 0.2066,
+              "energy_final": 862.54,
+              "energy_ratio": 1.1501
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": true,
+              "flux": 0.6779,
+              "energy_final": 845.23,
+              "energy_ratio": 1.127
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.754,
+              "energy_final": 865.04,
+              "energy_ratio": 1.1534
+            },
+            {
+              "layer": 4,
+              "N": 4,
+              "sealed": true,
+              "flux": 0.775,
+              "energy_final": 923.14,
+              "energy_ratio": 1.2308
+            }
+          ]
+        },
+        {
+          "seed": 242,
+          "N0": 72,
+          "depth": 3,
+          "n_layers": 3,
+          "l1_flux": 0.0258,
+          "l2_emerged": true,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 72,
+              "sealed": true,
+              "flux": 0.0,
+              "energy_final": 813.07,
+              "energy_ratio": 1.0841
+            },
+            {
+              "layer": 1,
+              "N": 12,
+              "sealed": true,
+              "flux": 0.0258,
+              "energy_final": 824.1,
+              "energy_ratio": 1.0988
+            },
+            {
+              "layer": 2,
+              "N": 5,
+              "sealed": true,
+              "flux": 0.4132,
+              "energy_final": 842.58,
+              "energy_ratio": 1.1234
+            }
+          ]
+        },
+        {
+          "seed": 342,
+          "N0": 72,
+          "depth": 6,
+          "n_layers": 6,
+          "l1_flux": 0.1758,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": true,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 72,
+              "sealed": true,
+              "flux": 0.0,
+              "energy_final": 813.07,
+              "energy_ratio": 1.0841
+            },
+            {
+              "layer": 1,
+              "N": 18,
+              "sealed": true,
+              "flux": 0.1758,
+              "energy_final": 872.59,
+              "energy_ratio": 1.1635
+            },
+            {
+              "layer": 2,
+              "N": 12,
+              "sealed": true,
+              "flux": 0.3922,
+              "energy_final": 863.16,
+              "energy_ratio": 1.1509
+            },
+            {
+              "layer": 3,
+              "N": 8,
+              "sealed": true,
+              "flux": 0.7348,
+              "energy_final": 799.54,
+              "energy_ratio": 1.0661
+            },
+            {
+              "layer": 4,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.6723,
+              "energy_final": 877.36,
+              "energy_ratio": 1.1698
+            },
+            {
+              "layer": 5,
+              "N": 4,
+              "sealed": true,
+              "flux": 0.775,
+              "energy_final": 923.14,
+              "energy_ratio": 1.2308
+            }
+          ]
+        },
+        {
+          "seed": 442,
+          "N0": 72,
+          "depth": 3,
+          "n_layers": 4,
+          "l1_flux": 0.0258,
+          "l2_emerged": true,
+          "l3_emerged": false,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 72,
+              "sealed": true,
+              "flux": 0.0,
+              "energy_final": 813.07,
+              "energy_ratio": 1.0841
+            },
+            {
+              "layer": 1,
+              "N": 12,
+              "sealed": true,
+              "flux": 0.0258,
+              "energy_final": 824.1,
+              "energy_ratio": 1.0988
+            },
+            {
+              "layer": 2,
+              "N": 5,
+              "sealed": true,
+              "flux": 0.6892,
+              "energy_final": 926.81,
+              "energy_ratio": 1.2357
+            },
+            {
+              "layer": 3,
+              "N": 3,
+              "sealed": false,
+              "flux": 1.0,
+              "energy_final": 568.28,
+              "energy_ratio": 0.7577
+            }
+          ]
+        },
+        {
+          "seed": 542,
+          "N0": 72,
+          "depth": 5,
+          "n_layers": 5,
+          "l1_flux": 0.2277,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": true,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 72,
+              "sealed": true,
+              "flux": 0.0,
+              "energy_final": 813.07,
+              "energy_ratio": 1.0841
+            },
+            {
+              "layer": 1,
+              "N": 18,
+              "sealed": true,
+              "flux": 0.2277,
+              "energy_final": 860.08,
+              "energy_ratio": 1.1468
+            },
+            {
+              "layer": 2,
+              "N": 10,
+              "sealed": true,
+              "flux": 0.4632,
+              "energy_final": 878.85,
+              "energy_ratio": 1.1718
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.6723,
+              "energy_final": 877.36,
+              "energy_ratio": 1.1698
+            },
+            {
+              "layer": 4,
+              "N": 4,
+              "sealed": true,
+              "flux": 0.775,
+              "energy_final": 923.14,
+              "energy_ratio": 1.2308
+            }
+          ]
+        },
+        {
+          "seed": 642,
+          "N0": 72,
+          "depth": 4,
+          "n_layers": 5,
+          "l1_flux": 0.0258,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": false,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 72,
+              "sealed": true,
+              "flux": 0.0,
+              "energy_final": 813.07,
+              "energy_ratio": 1.0841
+            },
+            {
+              "layer": 1,
+              "N": 12,
+              "sealed": true,
+              "flux": 0.0258,
+              "energy_final": 824.1,
+              "energy_ratio": 1.0988
+            },
+            {
+              "layer": 2,
+              "N": 7,
+              "sealed": true,
+              "flux": 0.449,
+              "energy_final": 925.77,
+              "energy_ratio": 1.2344
+            },
+            {
+              "layer": 3,
+              "N": 5,
+              "sealed": true,
+              "flux": 0.6892,
+              "energy_final": 926.81,
+              "energy_ratio": 1.2357
+            },
+            {
+              "layer": 4,
+              "N": 3,
+              "sealed": false,
+              "flux": 1.0,
+              "energy_final": 568.28,
+              "energy_ratio": 0.7577
+            }
+          ]
+        },
+        {
+          "seed": 742,
+          "N0": 72,
+          "depth": 5,
+          "n_layers": 5,
+          "l1_flux": 0.2027,
+          "l2_emerged": true,
+          "l3_emerged": true,
+          "l4_emerged": true,
+          "layers": [
+            {
+              "layer": 0,
+              "N": 72,
+              "sealed": true,
+              "flux": 0.0,
+              "energy_final": 813.07,
+              "energy_ratio": 1.0841
+            },
+            {
+              "layer": 1,
+              "N": 18,
+              "sealed": true,
+              "flux": 0.2027,
+              "energy_final": 868.93,
+              "energy_ratio": 1.1586
+            },
+            {
+              "layer": 2,
+              "N": 8,
+              "sealed": true,
+              "flux": 0.7019,
+              "energy_final": 837.57,
+              "energy_ratio": 1.1168
+            },
+            {
+              "layer": 3,
+              "N": 6,
+              "sealed": true,
+              "flux": 0.7639,
+              "energy_final": 859.77,
+              "energy_ratio": 1.1464
+            },
+            {
+              "layer": 4,
+              "N": 4,
+              "sealed": true,
+              "flux": 0.775,
+              "energy_final": 923.14,
+              "energy_ratio": 1.2308
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "hypothesis_results": {
+    "H21-P2a": "PASS",
+    "H21-P2b": "PASS",
+    "H21-P2c": "PASS",
+    "H21-P2d": "ANALYSIS"
+  }
+}
