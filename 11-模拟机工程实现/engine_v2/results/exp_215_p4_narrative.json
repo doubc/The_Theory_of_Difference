@@ -1,0 +1,1770 @@
+{
+  "experiment": "exp_215_p4_narrative_recursion",
+  "date": "2026-06-15T02:46:54.522764",
+  "hypotheses": {
+    "H23-4a": {
+      "pass": false,
+      "G3": 5.0,
+      "G5": 2.0
+    },
+    "H23-4b": {
+      "pass": false,
+      "G3": 0.5647722134396069,
+      "G5": 0.3272459667455304
+    },
+    "H23-4c": {
+      "pass": false,
+      "G5": 0.0
+    },
+    "H23-4d": {
+      "pass": false,
+      "G5_depth": 2.0,
+      "G5_flux": 0.3272459667455304
+    }
+  },
+  "results": {
+    "G3": {
+      "group": "G3",
+      "n_seeds": 5,
+      "depths": [
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "mean_depth": 5.0,
+      "std_depth": 0.0,
+      "mean_fluxes": [
+        0.5460816964400812,
+        0.5527167769999938,
+        0.5843399081984658,
+        0.5882453925911045,
+        0.5524772929683892
+      ],
+      "mean_flux": 0.5647722134396069,
+      "max_flux": 0.99875,
+      "results": [
+        {
+          "depth": 5,
+          "n_layers": 6,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 25,
+              "n_total": 50,
+              "flux": 0.05818181818181818
+            },
+            {
+              "layer": 1,
+              "steps": 26,
+              "sealed": true,
+              "n_active": 15,
+              "n_total": 16,
+              "flux": 0.2251549732318963
+            },
+            {
+              "layer": 2,
+              "steps": 66,
+              "sealed": true,
+              "n_active": 8,
+              "n_total": 10,
+              "flux": 0.4613997113997115
+            },
+            {
+              "layer": 3,
+              "steps": 87,
+              "sealed": true,
+              "n_active": 5,
+              "n_total": 6,
+              "flux": 0.7580459770114942
+            },
+            {
+              "layer": 4,
+              "steps": 197,
+              "sealed": true,
+              "n_active": 3,
+              "n_total": 4,
+              "flux": 0.7749576988155668
+            },
+            {
+              "layer": 5,
+              "steps": 400,
+              "sealed": false,
+              "n_active": 0,
+              "n_total": 2,
+              "flux": 0.99875
+            }
+          ],
+          "seed": 0,
+          "group": "G3",
+          "mean_flux": 0.5460816964400812,
+          "max_flux": 0.99875
+        },
+        {
+          "depth": 5,
+          "n_layers": 6,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 25,
+              "n_total": 50,
+              "flux": 0.04363636363636363
+            },
+            {
+              "layer": 1,
+              "steps": 23,
+              "sealed": true,
+              "n_active": 17,
+              "n_total": 18,
+              "flux": 0.21455212519790529
+            },
+            {
+              "layer": 2,
+              "steps": 72,
+              "sealed": true,
+              "n_active": 8,
+              "n_total": 10,
+              "flux": 0.5001653439153441
+            },
+            {
+              "layer": 3,
+              "steps": 92,
+              "sealed": true,
+              "n_active": 5,
+              "n_total": 6,
+              "flux": 0.7842391304347825
+            },
+            {
+              "layer": 4,
+              "steps": 197,
+              "sealed": true,
+              "n_active": 3,
+              "n_total": 4,
+              "flux": 0.7749576988155668
+            },
+            {
+              "layer": 5,
+              "steps": 400,
+              "sealed": false,
+              "n_active": 0,
+              "n_total": 2,
+              "flux": 0.99875
+            }
+          ],
+          "seed": 1,
+          "group": "G3",
+          "mean_flux": 0.5527167769999938,
+          "max_flux": 0.99875
+        },
+        {
+          "depth": 5,
+          "n_layers": 6,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 25,
+              "n_total": 50,
+              "flux": 0.04363636363636363
+            },
+            {
+              "layer": 1,
+              "steps": 23,
+              "sealed": true,
+              "n_active": 16,
+              "n_total": 18,
+              "flux": 0.21356107660455487
+            },
+            {
+              "layer": 2,
+              "steps": 91,
+              "sealed": true,
+              "n_active": 7,
+              "n_total": 8,
+              "flux": 0.7045787545787546
+            },
+            {
+              "layer": 3,
+              "steps": 90,
+              "sealed": true,
+              "n_active": 5,
+              "n_total": 6,
+              "flux": 0.7705555555555554
+            },
+            {
+              "layer": 4,
+              "steps": 197,
+              "sealed": true,
+              "n_active": 3,
+              "n_total": 4,
+              "flux": 0.7749576988155668
+            },
+            {
+              "layer": 5,
+              "steps": 400,
+              "sealed": false,
+              "n_active": 0,
+              "n_total": 2,
+              "flux": 0.99875
+            }
+          ],
+          "seed": 2,
+          "group": "G3",
+          "mean_flux": 0.5843399081984658,
+          "max_flux": 0.99875
+        },
+        {
+          "depth": 5,
+          "n_layers": 6,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 25,
+              "n_total": 50,
+              "flux": 0.058181818181818175
+            },
+            {
+              "layer": 1,
+              "steps": 33,
+              "sealed": true,
+              "n_active": 12,
+              "n_total": 14,
+              "flux": 0.3302112029384757
+            },
+            {
+              "layer": 2,
+              "steps": 92,
+              "sealed": true,
+              "n_active": 7,
+              "n_total": 8,
+              "flux": 0.7013716356107661
+            },
+            {
+              "layer": 3,
+              "steps": 75,
+              "sealed": true,
+              "n_active": 5,
+              "n_total": 6,
+              "flux": 0.666
+            },
+            {
+              "layer": 4,
+              "steps": 197,
+              "sealed": true,
+              "n_active": 3,
+              "n_total": 4,
+              "flux": 0.7749576988155668
+            },
+            {
+              "layer": 5,
+              "steps": 400,
+              "sealed": false,
+              "n_active": 0,
+              "n_total": 2,
+              "flux": 0.99875
+            }
+          ],
+          "seed": 3,
+          "group": "G3",
+          "mean_flux": 0.5882453925911045,
+          "max_flux": 0.99875
+        },
+        {
+          "depth": 5,
+          "n_layers": 6,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 25,
+              "n_total": 50,
+              "flux": 0.058181818181818175
+            },
+            {
+              "layer": 1,
+              "steps": 25,
+              "sealed": true,
+              "n_active": 15,
+              "n_total": 16,
+              "flux": 0.23482051282051283
+            },
+            {
+              "layer": 2,
+              "steps": 78,
+              "sealed": true,
+              "n_active": 8,
+              "n_total": 10,
+              "flux": 0.4766483516483518
+            },
+            {
+              "layer": 3,
+              "steps": 93,
+              "sealed": true,
+              "n_active": 5,
+              "n_total": 6,
+              "flux": 0.771505376344086
+            },
+            {
+              "layer": 4,
+              "steps": 197,
+              "sealed": true,
+              "n_active": 3,
+              "n_total": 4,
+              "flux": 0.7749576988155668
+            },
+            {
+              "layer": 5,
+              "steps": 400,
+              "sealed": false,
+              "n_active": 0,
+              "n_total": 2,
+              "flux": 0.99875
+            }
+          ],
+          "seed": 4,
+          "group": "G3",
+          "mean_flux": 0.5524772929683892,
+          "max_flux": 0.99875
+        }
+      ]
+    },
+    "G4": {
+      "group": "G4",
+      "n_seeds": 5,
+      "depths": [
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "mean_depth": 2.0,
+      "std_depth": 0.0,
+      "mean_fluxes": [
+        0.25305174793155566,
+        0.273624833579677,
+        0.3809829761120522,
+        0.4372644395797805,
+        0.2913058365245866
+      ],
+      "mean_flux": 0.3272459667455304,
+      "max_flux": 0.9234002976190476,
+      "results": [
+        {
+          "depth": 2,
+          "n_layers": 3,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 25,
+              "n_total": 50,
+              "flux": 0.05818181818181818,
+              "energy": {
+                "current_budget": 390.1051669716523,
+                "is_depleted": false,
+                "n_steps": 11,
+                "initial_budget": 500.0,
+                "min_budget": 390.1051669716523,
+                "max_budget": 489.5,
+                "avg_budget": 439.0534972551297,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 1,
+              "steps": 26,
+              "sealed": true,
+              "n_active": 15,
+              "n_total": 16,
+              "flux": 0.2251549732318963,
+              "energy": {
+                "current_budget": 258.545303095413,
+                "is_depleted": false,
+                "n_steps": 26,
+                "initial_budget": 500.0,
+                "min_budget": 258.545303095413,
+                "max_budget": 489.5,
+                "avg_budget": 369.38519205977326,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 2,
+              "steps": 64,
+              "sealed": false,
+              "n_active": 8,
+              "n_total": 10,
+              "flux": 0.47581845238095244,
+              "energy": {
+                "current_budget": 1.8763119018403707,
+                "is_depleted": true,
+                "n_steps": 64,
+                "initial_budget": 500.0,
+                "min_budget": 1.8763119018403707,
+                "max_budget": 489.5,
+                "avg_budget": 220.5350800268405,
+                "final_seal_threshold": 0.9812368809815963
+              }
+            }
+          ],
+          "energy": {
+            "L0": {
+              "current_budget": 390.1051669716523,
+              "is_depleted": false,
+              "n_steps": 11,
+              "initial_budget": 500.0,
+              "min_budget": 390.1051669716523,
+              "max_budget": 489.5,
+              "avg_budget": 439.0534972551297,
+              "final_seal_threshold": 0.6400000000000001
+            },
+            "L1": {
+              "current_budget": 258.545303095413,
+              "is_depleted": false,
+              "n_steps": 26,
+              "initial_budget": 500.0,
+              "min_budget": 258.545303095413,
+              "max_budget": 489.5,
+              "avg_budget": 369.38519205977326,
+              "final_seal_threshold": 0.6400000000000001
+            },
+            "L2": {
+              "current_budget": 1.8763119018403707,
+              "is_depleted": true,
+              "n_steps": 64,
+              "initial_budget": 500.0,
+              "min_budget": 1.8763119018403707,
+              "max_budget": 489.5,
+              "avg_budget": 220.5350800268405,
+              "final_seal_threshold": 0.9812368809815963
+            }
+          },
+          "seed": 0,
+          "group": "G4",
+          "mean_flux": 0.25305174793155566,
+          "max_flux": 0.47581845238095244
+        },
+        {
+          "depth": 2,
+          "n_layers": 3,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 25,
+              "n_total": 50,
+              "flux": 0.04363636363636363,
+              "energy": {
+                "current_budget": 390.1051669716523,
+                "is_depleted": false,
+                "n_steps": 11,
+                "initial_budget": 500.0,
+                "min_budget": 390.1051669716523,
+                "max_budget": 489.5,
+                "avg_budget": 439.0534972551297,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 1,
+              "steps": 23,
+              "sealed": true,
+              "n_active": 17,
+              "n_total": 18,
+              "flux": 0.21455212519790529,
+              "energy": {
+                "current_budget": 283.2949978258382,
+                "is_depleted": false,
+                "n_steps": 23,
+                "initial_budget": 500.0,
+                "min_budget": 283.2949978258382,
+                "max_budget": 489.5,
+                "avg_budget": 382.77370501052206,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 2,
+              "steps": 64,
+              "sealed": false,
+              "n_active": 8,
+              "n_total": 10,
+              "flux": 0.5626860119047621,
+              "energy": {
+                "current_budget": 1.8763119018403707,
+                "is_depleted": true,
+                "n_steps": 64,
+                "initial_budget": 500.0,
+                "min_budget": 1.8763119018403707,
+                "max_budget": 489.5,
+                "avg_budget": 220.5350800268405,
+                "final_seal_threshold": 0.9812368809815963
+              }
+            }
+          ],
+          "energy": {
+            "L0": {
+              "current_budget": 390.1051669716523,
+              "is_depleted": false,
+              "n_steps": 11,
+              "initial_budget": 500.0,
+              "min_budget": 390.1051669716523,
+              "max_budget": 489.5,
+              "avg_budget": 439.0534972551297,
+              "final_seal_threshold": 0.6400000000000001
+            },
+            "L1": {
+              "current_budget": 283.2949978258382,
+              "is_depleted": false,
+              "n_steps": 23,
+              "initial_budget": 500.0,
+              "min_budget": 283.2949978258382,
+              "max_budget": 489.5,
+              "avg_budget": 382.77370501052206,
+              "final_seal_threshold": 0.6400000000000001
+            },
+            "L2": {
+              "current_budget": 1.8763119018403707,
+              "is_depleted": true,
+              "n_steps": 64,
+              "initial_budget": 500.0,
+              "min_budget": 1.8763119018403707,
+              "max_budget": 489.5,
+              "avg_budget": 220.5350800268405,
+              "final_seal_threshold": 0.9812368809815963
+            }
+          },
+          "seed": 1,
+          "group": "G4",
+          "mean_flux": 0.273624833579677,
+          "max_flux": 0.5626860119047621
+        },
+        {
+          "depth": 2,
+          "n_layers": 3,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 25,
+              "n_total": 50,
+              "flux": 0.04363636363636363,
+              "energy": {
+                "current_budget": 390.1051669716523,
+                "is_depleted": false,
+                "n_steps": 11,
+                "initial_budget": 500.0,
+                "min_budget": 390.1051669716523,
+                "max_budget": 489.5,
+                "avg_budget": 439.0534972551297,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 1,
+              "steps": 23,
+              "sealed": true,
+              "n_active": 16,
+              "n_total": 18,
+              "flux": 0.21356107660455487,
+              "energy": {
+                "current_budget": 283.2949978258382,
+                "is_depleted": false,
+                "n_steps": 23,
+                "initial_budget": 500.0,
+                "min_budget": 283.2949978258382,
+                "max_budget": 489.5,
+                "avg_budget": 382.77370501052206,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 2,
+              "steps": 64,
+              "sealed": false,
+              "n_active": 5,
+              "n_total": 8,
+              "flux": 0.885751488095238,
+              "energy": {
+                "current_budget": 1.8763119018403707,
+                "is_depleted": true,
+                "n_steps": 64,
+                "initial_budget": 500.0,
+                "min_budget": 1.8763119018403707,
+                "max_budget": 489.5,
+                "avg_budget": 220.5350800268405,
+                "final_seal_threshold": 0.9812368809815963
+              }
+            }
+          ],
+          "energy": {
+            "L0": {
+              "current_budget": 390.1051669716523,
+              "is_depleted": false,
+              "n_steps": 11,
+              "initial_budget": 500.0,
+              "min_budget": 390.1051669716523,
+              "max_budget": 489.5,
+              "avg_budget": 439.0534972551297,
+              "final_seal_threshold": 0.6400000000000001
+            },
+            "L1": {
+              "current_budget": 283.2949978258382,
+              "is_depleted": false,
+              "n_steps": 23,
+              "initial_budget": 500.0,
+              "min_budget": 283.2949978258382,
+              "max_budget": 489.5,
+              "avg_budget": 382.77370501052206,
+              "final_seal_threshold": 0.6400000000000001
+            },
+            "L2": {
+              "current_budget": 1.8763119018403707,
+              "is_depleted": true,
+              "n_steps": 64,
+              "initial_budget": 500.0,
+              "min_budget": 1.8763119018403707,
+              "max_budget": 489.5,
+              "avg_budget": 220.5350800268405,
+              "final_seal_threshold": 0.9812368809815963
+            }
+          },
+          "seed": 2,
+          "group": "G4",
+          "mean_flux": 0.3809829761120522,
+          "max_flux": 0.885751488095238
+        },
+        {
+          "depth": 2,
+          "n_layers": 3,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 25,
+              "n_total": 50,
+              "flux": 0.058181818181818175,
+              "energy": {
+                "current_budget": 390.1051669716523,
+                "is_depleted": false,
+                "n_steps": 11,
+                "initial_budget": 500.0,
+                "min_budget": 390.1051669716523,
+                "max_budget": 489.5,
+                "avg_budget": 439.0534972551297,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 1,
+              "steps": 33,
+              "sealed": true,
+              "n_active": 12,
+              "n_total": 14,
+              "flux": 0.3302112029384757,
+              "energy": {
+                "current_budget": 203.61705922818874,
+                "is_depleted": false,
+                "n_steps": 33,
+                "initial_budget": 500.0,
+                "min_budget": 203.61705922818874,
+                "max_budget": 489.5,
+                "avg_budget": 339.14882231543334,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 2,
+              "steps": 64,
+              "sealed": false,
+              "n_active": 5,
+              "n_total": 8,
+              "flux": 0.9234002976190476,
+              "energy": {
+                "current_budget": 1.8763119018403707,
+                "is_depleted": true,
+                "n_steps": 64,
+                "initial_budget": 500.0,
+                "min_budget": 1.8763119018403707,
+                "max_budget": 489.5,
+                "avg_budget": 220.5350800268405,
+                "final_seal_threshold": 0.9812368809815963
+              }
+            }
+          ],
+          "energy": {
+            "L0": {
+              "current_budget": 390.1051669716523,
+              "is_depleted": false,
+              "n_steps": 11,
+              "initial_budget": 500.0,
+              "min_budget": 390.1051669716523,
+              "max_budget": 489.5,
+              "avg_budget": 439.0534972551297,
+              "final_seal_threshold": 0.6400000000000001
+            },
+            "L1": {
+              "current_budget": 203.61705922818874,
+              "is_depleted": false,
+              "n_steps": 33,
+              "initial_budget": 500.0,
+              "min_budget": 203.61705922818874,
+              "max_budget": 489.5,
+              "avg_budget": 339.14882231543334,
+              "final_seal_threshold": 0.6400000000000001
+            },
+            "L2": {
+              "current_budget": 1.8763119018403707,
+              "is_depleted": true,
+              "n_steps": 64,
+              "initial_budget": 500.0,
+              "min_budget": 1.8763119018403707,
+              "max_budget": 489.5,
+              "avg_budget": 220.5350800268405,
+              "final_seal_threshold": 0.9812368809815963
+            }
+          },
+          "seed": 3,
+          "group": "G4",
+          "mean_flux": 0.4372644395797805,
+          "max_flux": 0.9234002976190476
+        },
+        {
+          "depth": 2,
+          "n_layers": 3,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 25,
+              "n_total": 50,
+              "flux": 0.058181818181818175,
+              "energy": {
+                "current_budget": 390.1051669716523,
+                "is_depleted": false,
+                "n_steps": 11,
+                "initial_budget": 500.0,
+                "min_budget": 390.1051669716523,
+                "max_budget": 489.5,
+                "avg_budget": 439.0534972551297,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 1,
+              "steps": 25,
+              "sealed": true,
+              "n_active": 15,
+              "n_total": 16,
+              "flux": 0.23482051282051283,
+              "energy": {
+                "current_budget": 266.71242736910403,
+                "is_depleted": false,
+                "n_steps": 25,
+                "initial_budget": 500.0,
+                "min_budget": 266.71242736910403,
+                "max_budget": 489.5,
+                "avg_budget": 373.8187876183477,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 2,
+              "steps": 64,
+              "sealed": false,
+              "n_active": 8,
+              "n_total": 10,
+              "flux": 0.5809151785714287,
+              "energy": {
+                "current_budget": 1.8763119018403707,
+                "is_depleted": true,
+                "n_steps": 64,
+                "initial_budget": 500.0,
+                "min_budget": 1.8763119018403707,
+                "max_budget": 489.5,
+                "avg_budget": 220.5350800268405,
+                "final_seal_threshold": 0.9812368809815963
+              }
+            }
+          ],
+          "energy": {
+            "L0": {
+              "current_budget": 390.1051669716523,
+              "is_depleted": false,
+              "n_steps": 11,
+              "initial_budget": 500.0,
+              "min_budget": 390.1051669716523,
+              "max_budget": 489.5,
+              "avg_budget": 439.0534972551297,
+              "final_seal_threshold": 0.6400000000000001
+            },
+            "L1": {
+              "current_budget": 266.71242736910403,
+              "is_depleted": false,
+              "n_steps": 25,
+              "initial_budget": 500.0,
+              "min_budget": 266.71242736910403,
+              "max_budget": 489.5,
+              "avg_budget": 373.8187876183477,
+              "final_seal_threshold": 0.6400000000000001
+            },
+            "L2": {
+              "current_budget": 1.8763119018403707,
+              "is_depleted": true,
+              "n_steps": 64,
+              "initial_budget": 500.0,
+              "min_budget": 1.8763119018403707,
+              "max_budget": 489.5,
+              "avg_budget": 220.5350800268405,
+              "final_seal_threshold": 0.9812368809815963
+            }
+          },
+          "seed": 4,
+          "group": "G4",
+          "mean_flux": 0.2913058365245866,
+          "max_flux": 0.5809151785714287
+        }
+      ]
+    },
+    "G5": {
+      "group": "G5",
+      "n_seeds": 5,
+      "depths": [
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "mean_depth": 2.0,
+      "std_depth": 0.0,
+      "mean_fluxes": [
+        0.25305174793155566,
+        0.273624833579677,
+        0.3809829761120522,
+        0.4372644395797805,
+        0.2913058365245866
+      ],
+      "mean_flux": 0.3272459667455304,
+      "max_flux": 0.9234002976190476,
+      "results": [
+        {
+          "depth": 2,
+          "n_layers": 3,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 25,
+              "n_total": 50,
+              "flux": 0.05818181818181818,
+              "energy": {
+                "current_budget": 390.1051669716523,
+                "is_depleted": false,
+                "n_steps": 11,
+                "initial_budget": 500.0,
+                "min_budget": 390.1051669716523,
+                "max_budget": 489.5,
+                "avg_budget": 439.0534972551297,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 1,
+              "steps": 26,
+              "sealed": true,
+              "n_active": 15,
+              "n_total": 16,
+              "flux": 0.2251549732318963,
+              "energy": {
+                "current_budget": 258.545303095413,
+                "is_depleted": false,
+                "n_steps": 26,
+                "initial_budget": 500.0,
+                "min_budget": 258.545303095413,
+                "max_budget": 489.5,
+                "avg_budget": 369.38519205977326,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 2,
+              "steps": 64,
+              "sealed": false,
+              "n_active": 8,
+              "n_total": 10,
+              "flux": 0.47581845238095244,
+              "energy": {
+                "current_budget": 1.8763119018403707,
+                "is_depleted": true,
+                "n_steps": 64,
+                "initial_budget": 500.0,
+                "min_budget": 1.8763119018403707,
+                "max_budget": 489.5,
+                "avg_budget": 220.5350800268405,
+                "final_seal_threshold": 0.9812368809815963
+              }
+            }
+          ],
+          "energy": {
+            "L0": {
+              "current_budget": 390.1051669716523,
+              "is_depleted": false,
+              "n_steps": 11,
+              "initial_budget": 500.0,
+              "min_budget": 390.1051669716523,
+              "max_budget": 489.5,
+              "avg_budget": 439.0534972551297,
+              "final_seal_threshold": 0.6400000000000001
+            },
+            "L1": {
+              "current_budget": 258.545303095413,
+              "is_depleted": false,
+              "n_steps": 26,
+              "initial_budget": 500.0,
+              "min_budget": 258.545303095413,
+              "max_budget": 489.5,
+              "avg_budget": 369.38519205977326,
+              "final_seal_threshold": 0.6400000000000001
+            },
+            "L2": {
+              "current_budget": 1.8763119018403707,
+              "is_depleted": true,
+              "n_steps": 64,
+              "initial_budget": 500.0,
+              "min_budget": 1.8763119018403707,
+              "max_budget": 489.5,
+              "avg_budget": 220.5350800268405,
+              "final_seal_threshold": 0.9812368809815963
+            }
+          },
+          "seed": 0,
+          "group": "G5",
+          "mean_flux": 0.25305174793155566,
+          "max_flux": 0.47581845238095244,
+          "narrative_history": [
+            {
+              "layer": 0,
+              "spiral": {
+                "n_rounds": 3,
+                "delta_mean": 0.0,
+                "delta_std": 0.0,
+                "delta_monotonic": true,
+                "entropy_mean": 0.9064665428535039,
+                "entropy_trend": -1.3772619315356709e-17
+              },
+              "history": [
+                {
+                  "round": 0,
+                  "delta": 0.0,
+                  "high_entropy": 50
+                },
+                {
+                  "round": 1,
+                  "delta": 0.0,
+                  "high_entropy": 50
+                },
+                {
+                  "round": 2,
+                  "delta": 0.0,
+                  "high_entropy": 50
+                }
+              ],
+              "adjustment": {
+                "n_adjust": 0,
+                "strength": 0.0,
+                "new_active": 10
+              }
+            },
+            {
+              "layer": 1,
+              "spiral": {
+                "n_rounds": 6,
+                "delta_mean": 0.0,
+                "delta_std": 0.0,
+                "delta_monotonic": true,
+                "entropy_mean": 0.906466542853504,
+                "entropy_trend": 1.1042158770106087e-17
+              },
+              "history": [
+                {
+                  "round": 0,
+                  "delta": 0.0,
+                  "high_entropy": 50
+                },
+                {
+                  "round": 1,
+                  "delta": 0.0,
+                  "high_entropy": 50
+                },
+                {
+                  "round": 2,
+                  "delta": 0.0,
+                  "high_entropy": 50
+                },
+                {
+                  "round": 3,
+                  "delta": 0.0,
+                  "high_entropy": 50
+                },
+                {
+                  "round": 4,
+                  "delta": 0.0,
+                  "high_entropy": 50
+                },
+                {
+                  "round": 5,
+                  "delta": 0.0,
+                  "high_entropy": 50
+                }
+              ],
+              "adjustment": {
+                "n_adjust": 0,
+                "strength": 0.0,
+                "new_active": 4
+              }
+            }
+          ],
+          "narrative_non_repetition": 0.0
+        },
+        {
+          "depth": 2,
+          "n_layers": 3,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 25,
+              "n_total": 50,
+              "flux": 0.04363636363636363,
+              "energy": {
+                "current_budget": 390.1051669716523,
+                "is_depleted": false,
+                "n_steps": 11,
+                "initial_budget": 500.0,
+                "min_budget": 390.1051669716523,
+                "max_budget": 489.5,
+                "avg_budget": 439.0534972551297,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 1,
+              "steps": 23,
+              "sealed": true,
+              "n_active": 17,
+              "n_total": 18,
+              "flux": 0.21455212519790529,
+              "energy": {
+                "current_budget": 283.2949978258382,
+                "is_depleted": false,
+                "n_steps": 23,
+                "initial_budget": 500.0,
+                "min_budget": 283.2949978258382,
+                "max_budget": 489.5,
+                "avg_budget": 382.77370501052206,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 2,
+              "steps": 64,
+              "sealed": false,
+              "n_active": 8,
+              "n_total": 10,
+              "flux": 0.5626860119047621,
+              "energy": {
+                "current_budget": 1.8763119018403707,
+                "is_depleted": true,
+                "n_steps": 64,
+                "initial_budget": 500.0,
+                "min_budget": 1.8763119018403707,
+                "max_budget": 489.5,
+                "avg_budget": 220.5350800268405,
+                "final_seal_threshold": 0.9812368809815963
+              }
+            }
+          ],
+          "energy": {
+            "L0": {
+              "current_budget": 390.1051669716523,
+              "is_depleted": false,
+              "n_steps": 11,
+              "initial_budget": 500.0,
+              "min_budget": 390.1051669716523,
+              "max_budget": 489.5,
+              "avg_budget": 439.0534972551297,
+              "final_seal_threshold": 0.6400000000000001
+            },
+            "L1": {
+              "current_budget": 283.2949978258382,
+              "is_depleted": false,
+              "n_steps": 23,
+              "initial_budget": 500.0,
+              "min_budget": 283.2949978258382,
+              "max_budget": 489.5,
+              "avg_budget": 382.77370501052206,
+              "final_seal_threshold": 0.6400000000000001
+            },
+            "L2": {
+              "current_budget": 1.8763119018403707,
+              "is_depleted": true,
+              "n_steps": 64,
+              "initial_budget": 500.0,
+              "min_budget": 1.8763119018403707,
+              "max_budget": 489.5,
+              "avg_budget": 220.5350800268405,
+              "final_seal_threshold": 0.9812368809815963
+            }
+          },
+          "seed": 1,
+          "group": "G5",
+          "mean_flux": 0.273624833579677,
+          "max_flux": 0.5626860119047621,
+          "narrative_history": [
+            {
+              "layer": 0,
+              "spiral": {
+                "n_rounds": 3,
+                "delta_mean": 0.0,
+                "delta_std": 0.0,
+                "delta_monotonic": true,
+                "entropy_mean": 0.8332681572121854,
+                "entropy_trend": 1.045531823732661e-17
+              },
+              "history": [
+                {
+                  "round": 0,
+                  "delta": 0.0,
+                  "high_entropy": 47
+                },
+                {
+                  "round": 1,
+                  "delta": 0.0,
+                  "high_entropy": 47
+                },
+                {
+                  "round": 2,
+                  "delta": 0.0,
+                  "high_entropy": 47
+                }
+              ],
+              "adjustment": {
+                "n_adjust": 0,
+                "strength": 0.0,
+                "new_active": 12
+              }
+            },
+            {
+              "layer": 1,
+              "spiral": {
+                "n_rounds": 6,
+                "delta_mean": 0.0,
+                "delta_std": 0.0,
+                "delta_monotonic": true,
+                "entropy_mean": 0.8332681572121853,
+                "entropy_trend": -2.1391938641909844e-17
+              },
+              "history": [
+                {
+                  "round": 0,
+                  "delta": 0.0,
+                  "high_entropy": 47
+                },
+                {
+                  "round": 1,
+                  "delta": 0.0,
+                  "high_entropy": 47
+                },
+                {
+                  "round": 2,
+                  "delta": 0.0,
+                  "high_entropy": 47
+                },
+                {
+                  "round": 3,
+                  "delta": 0.0,
+                  "high_entropy": 47
+                },
+                {
+                  "round": 4,
+                  "delta": 0.0,
+                  "high_entropy": 47
+                },
+                {
+                  "round": 5,
+                  "delta": 0.0,
+                  "high_entropy": 47
+                }
+              ],
+              "adjustment": {
+                "n_adjust": 0,
+                "strength": 0.0,
+                "new_active": 4
+              }
+            }
+          ],
+          "narrative_non_repetition": 0.0
+        },
+        {
+          "depth": 2,
+          "n_layers": 3,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 25,
+              "n_total": 50,
+              "flux": 0.04363636363636363,
+              "energy": {
+                "current_budget": 390.1051669716523,
+                "is_depleted": false,
+                "n_steps": 11,
+                "initial_budget": 500.0,
+                "min_budget": 390.1051669716523,
+                "max_budget": 489.5,
+                "avg_budget": 439.0534972551297,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 1,
+              "steps": 23,
+              "sealed": true,
+              "n_active": 16,
+              "n_total": 18,
+              "flux": 0.21356107660455487,
+              "energy": {
+                "current_budget": 283.2949978258382,
+                "is_depleted": false,
+                "n_steps": 23,
+                "initial_budget": 500.0,
+                "min_budget": 283.2949978258382,
+                "max_budget": 489.5,
+                "avg_budget": 382.77370501052206,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 2,
+              "steps": 64,
+              "sealed": false,
+              "n_active": 5,
+              "n_total": 8,
+              "flux": 0.885751488095238,
+              "energy": {
+                "current_budget": 1.8763119018403707,
+                "is_depleted": true,
+                "n_steps": 64,
+                "initial_budget": 500.0,
+                "min_budget": 1.8763119018403707,
+                "max_budget": 489.5,
+                "avg_budget": 220.5350800268405,
+                "final_seal_threshold": 0.9812368809815963
+              }
+            }
+          ],
+          "energy": {
+            "L0": {
+              "current_budget": 390.1051669716523,
+              "is_depleted": false,
+              "n_steps": 11,
+              "initial_budget": 500.0,
+              "min_budget": 390.1051669716523,
+              "max_budget": 489.5,
+              "avg_budget": 439.0534972551297,
+              "final_seal_threshold": 0.6400000000000001
+            },
+            "L1": {
+              "current_budget": 283.2949978258382,
+              "is_depleted": false,
+              "n_steps": 23,
+              "initial_budget": 500.0,
+              "min_budget": 283.2949978258382,
+              "max_budget": 489.5,
+              "avg_budget": 382.77370501052206,
+              "final_seal_threshold": 0.6400000000000001
+            },
+            "L2": {
+              "current_budget": 1.8763119018403707,
+              "is_depleted": true,
+              "n_steps": 64,
+              "initial_budget": 500.0,
+              "min_budget": 1.8763119018403707,
+              "max_budget": 489.5,
+              "avg_budget": 220.5350800268405,
+              "final_seal_threshold": 0.9812368809815963
+            }
+          },
+          "seed": 2,
+          "group": "G5",
+          "mean_flux": 0.3809829761120522,
+          "max_flux": 0.885751488095238,
+          "narrative_history": [
+            {
+              "layer": 0,
+              "spiral": {
+                "n_rounds": 3,
+                "delta_mean": 0.0,
+                "delta_std": 0.0,
+                "delta_monotonic": true,
+                "entropy_mean": 0.7605725596471581,
+                "entropy_trend": -3.3007457959147123e-17
+              },
+              "history": [
+                {
+                  "round": 0,
+                  "delta": 0.0,
+                  "high_entropy": 43
+                },
+                {
+                  "round": 1,
+                  "delta": 0.0,
+                  "high_entropy": 43
+                },
+                {
+                  "round": 2,
+                  "delta": 0.0,
+                  "high_entropy": 43
+                }
+              ],
+              "adjustment": {
+                "n_adjust": 0,
+                "strength": 0.0,
+                "new_active": 12
+              }
+            },
+            {
+              "layer": 1,
+              "spiral": {
+                "n_rounds": 6,
+                "delta_mean": 0.0,
+                "delta_std": 0.0,
+                "delta_monotonic": true,
+                "entropy_mean": 0.7605725596471579,
+                "entropy_trend": -1.6247085310537342e-17
+              },
+              "history": [
+                {
+                  "round": 0,
+                  "delta": 0.0,
+                  "high_entropy": 43
+                },
+                {
+                  "round": 1,
+                  "delta": 0.0,
+                  "high_entropy": 43
+                },
+                {
+                  "round": 2,
+                  "delta": 0.0,
+                  "high_entropy": 43
+                },
+                {
+                  "round": 3,
+                  "delta": 0.0,
+                  "high_entropy": 43
+                },
+                {
+                  "round": 4,
+                  "delta": 0.0,
+                  "high_entropy": 43
+                },
+                {
+                  "round": 5,
+                  "delta": 0.0,
+                  "high_entropy": 43
+                }
+              ],
+              "adjustment": {
+                "n_adjust": 0,
+                "strength": 0.0,
+                "new_active": 2
+              }
+            }
+          ],
+          "narrative_non_repetition": 0.0
+        },
+        {
+          "depth": 2,
+          "n_layers": 3,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 25,
+              "n_total": 50,
+              "flux": 0.058181818181818175,
+              "energy": {
+                "current_budget": 390.1051669716523,
+                "is_depleted": false,
+                "n_steps": 11,
+                "initial_budget": 500.0,
+                "min_budget": 390.1051669716523,
+                "max_budget": 489.5,
+                "avg_budget": 439.0534972551297,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 1,
+              "steps": 33,
+              "sealed": true,
+              "n_active": 12,
+              "n_total": 14,
+              "flux": 0.3302112029384757,
+              "energy": {
+                "current_budget": 203.61705922818874,
+                "is_depleted": false,
+                "n_steps": 33,
+                "initial_budget": 500.0,
+                "min_budget": 203.61705922818874,
+                "max_budget": 489.5,
+                "avg_budget": 339.14882231543334,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 2,
+              "steps": 64,
+              "sealed": false,
+              "n_active": 5,
+              "n_total": 8,
+              "flux": 0.9234002976190476,
+              "energy": {
+                "current_budget": 1.8763119018403707,
+                "is_depleted": true,
+                "n_steps": 64,
+                "initial_budget": 500.0,
+                "min_budget": 1.8763119018403707,
+                "max_budget": 489.5,
+                "avg_budget": 220.5350800268405,
+                "final_seal_threshold": 0.9812368809815963
+              }
+            }
+          ],
+          "energy": {
+            "L0": {
+              "current_budget": 390.1051669716523,
+              "is_depleted": false,
+              "n_steps": 11,
+              "initial_budget": 500.0,
+              "min_budget": 390.1051669716523,
+              "max_budget": 489.5,
+              "avg_budget": 439.0534972551297,
+              "final_seal_threshold": 0.6400000000000001
+            },
+            "L1": {
+              "current_budget": 203.61705922818874,
+              "is_depleted": false,
+              "n_steps": 33,
+              "initial_budget": 500.0,
+              "min_budget": 203.61705922818874,
+              "max_budget": 489.5,
+              "avg_budget": 339.14882231543334,
+              "final_seal_threshold": 0.6400000000000001
+            },
+            "L2": {
+              "current_budget": 1.8763119018403707,
+              "is_depleted": true,
+              "n_steps": 64,
+              "initial_budget": 500.0,
+              "min_budget": 1.8763119018403707,
+              "max_budget": 489.5,
+              "avg_budget": 220.5350800268405,
+              "final_seal_threshold": 0.9812368809815963
+            }
+          },
+          "seed": 3,
+          "group": "G5",
+          "mean_flux": 0.4372644395797805,
+          "max_flux": 0.9234002976190476,
+          "narrative_history": [
+            {
+              "layer": 0,
+              "spiral": {
+                "n_rounds": 3,
+                "delta_mean": 0.0,
+                "delta_std": 0.0,
+                "delta_monotonic": true,
+                "entropy_mean": 0.8813638565688268,
+                "entropy_trend": -1.5294284668596228e-16
+              },
+              "history": [
+                {
+                  "round": 0,
+                  "delta": 0.0,
+                  "high_entropy": 48
+                },
+                {
+                  "round": 1,
+                  "delta": 0.0,
+                  "high_entropy": 48
+                },
+                {
+                  "round": 2,
+                  "delta": 0.0,
+                  "high_entropy": 48
+                }
+              ],
+              "adjustment": {
+                "n_adjust": 0,
+                "strength": 0.0,
+                "new_active": 8
+              }
+            },
+            {
+              "layer": 1,
+              "spiral": {
+                "n_rounds": 6,
+                "delta_mean": 0.0,
+                "delta_std": 0.0,
+                "delta_monotonic": true,
+                "entropy_mean": 0.8813638565688268,
+                "entropy_trend": 7.89508961497361e-19
+              },
+              "history": [
+                {
+                  "round": 0,
+                  "delta": 0.0,
+                  "high_entropy": 48
+                },
+                {
+                  "round": 1,
+                  "delta": 0.0,
+                  "high_entropy": 48
+                },
+                {
+                  "round": 2,
+                  "delta": 0.0,
+                  "high_entropy": 48
+                },
+                {
+                  "round": 3,
+                  "delta": 0.0,
+                  "high_entropy": 48
+                },
+                {
+                  "round": 4,
+                  "delta": 0.0,
+                  "high_entropy": 48
+                },
+                {
+                  "round": 5,
+                  "delta": 0.0,
+                  "high_entropy": 48
+                }
+              ],
+              "adjustment": {
+                "n_adjust": 0,
+                "strength": 0.0,
+                "new_active": 2
+              }
+            }
+          ],
+          "narrative_non_repetition": 0.0
+        },
+        {
+          "depth": 2,
+          "n_layers": 3,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 25,
+              "n_total": 50,
+              "flux": 0.058181818181818175,
+              "energy": {
+                "current_budget": 390.1051669716523,
+                "is_depleted": false,
+                "n_steps": 11,
+                "initial_budget": 500.0,
+                "min_budget": 390.1051669716523,
+                "max_budget": 489.5,
+                "avg_budget": 439.0534972551297,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 1,
+              "steps": 25,
+              "sealed": true,
+              "n_active": 15,
+              "n_total": 16,
+              "flux": 0.23482051282051283,
+              "energy": {
+                "current_budget": 266.71242736910403,
+                "is_depleted": false,
+                "n_steps": 25,
+                "initial_budget": 500.0,
+                "min_budget": 266.71242736910403,
+                "max_budget": 489.5,
+                "avg_budget": 373.8187876183477,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 2,
+              "steps": 64,
+              "sealed": false,
+              "n_active": 8,
+              "n_total": 10,
+              "flux": 0.5809151785714287,
+              "energy": {
+                "current_budget": 1.8763119018403707,
+                "is_depleted": true,
+                "n_steps": 64,
+                "initial_budget": 500.0,
+                "min_budget": 1.8763119018403707,
+                "max_budget": 489.5,
+                "avg_budget": 220.5350800268405,
+                "final_seal_threshold": 0.9812368809815963
+              }
+            }
+          ],
+          "energy": {
+            "L0": {
+              "current_budget": 390.1051669716523,
+              "is_depleted": false,
+              "n_steps": 11,
+              "initial_budget": 500.0,
+              "min_budget": 390.1051669716523,
+              "max_budget": 489.5,
+              "avg_budget": 439.0534972551297,
+              "final_seal_threshold": 0.6400000000000001
+            },
+            "L1": {
+              "current_budget": 266.71242736910403,
+              "is_depleted": false,
+              "n_steps": 25,
+              "initial_budget": 500.0,
+              "min_budget": 266.71242736910403,
+              "max_budget": 489.5,
+              "avg_budget": 373.8187876183477,
+              "final_seal_threshold": 0.6400000000000001
+            },
+            "L2": {
+              "current_budget": 1.8763119018403707,
+              "is_depleted": true,
+              "n_steps": 64,
+              "initial_budget": 500.0,
+              "min_budget": 1.8763119018403707,
+              "max_budget": 489.5,
+              "avg_budget": 220.5350800268405,
+              "final_seal_threshold": 0.9812368809815963
+            }
+          },
+          "seed": 4,
+          "group": "G5",
+          "mean_flux": 0.2913058365245866,
+          "max_flux": 0.5809151785714287,
+          "narrative_history": [
+            {
+              "layer": 0,
+              "spiral": {
+                "n_rounds": 3,
+                "delta_mean": 0.0,
+                "delta_std": 0.0,
+                "delta_monotonic": true,
+                "entropy_mean": 0.868681614283321,
+                "entropy_trend": -9.89661821224494e-18
+              },
+              "history": [
+                {
+                  "round": 0,
+                  "delta": 0.0,
+                  "high_entropy": 48
+                },
+                {
+                  "round": 1,
+                  "delta": 0.0,
+                  "high_entropy": 48
+                },
+                {
+                  "round": 2,
+                  "delta": 0.0,
+                  "high_entropy": 48
+                }
+              ],
+              "adjustment": {
+                "n_adjust": 0,
+                "strength": 0.0,
+                "new_active": 10
+              }
+            },
+            {
+              "layer": 1,
+              "spiral": {
+                "n_rounds": 6,
+                "delta_mean": 0.0,
+                "delta_std": 0.0,
+                "delta_monotonic": true,
+                "entropy_mean": 0.8686816142833208,
+                "entropy_trend": 9.802599725760924e-18
+              },
+              "history": [
+                {
+                  "round": 0,
+                  "delta": 0.0,
+                  "high_entropy": 48
+                },
+                {
+                  "round": 1,
+                  "delta": 0.0,
+                  "high_entropy": 48
+                },
+                {
+                  "round": 2,
+                  "delta": 0.0,
+                  "high_entropy": 48
+                },
+                {
+                  "round": 3,
+                  "delta": 0.0,
+                  "high_entropy": 48
+                },
+                {
+                  "round": 4,
+                  "delta": 0.0,
+                  "high_entropy": 48
+                },
+                {
+                  "round": 5,
+                  "delta": 0.0,
+                  "high_entropy": 48
+                }
+              ],
+              "adjustment": {
+                "n_adjust": 0,
+                "strength": 0.0,
+                "new_active": 4
+              }
+            }
+          ],
+          "narrative_non_repetition": 0.0
+        }
+      ],
+      "narrative_non_repetition": 0.0
+    }
+  }
+}

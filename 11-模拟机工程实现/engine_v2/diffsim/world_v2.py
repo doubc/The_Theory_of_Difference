@@ -161,6 +161,11 @@ class RecursiveWorld:
     """递归闭环世界: L0 → L1 → L2 → ...
     
     修复版: 正确集成能量系统, 确保多层级涌现工作。
+    Phase 23 接线: 集成 m9_self_reference() 替代简化占位实现。
+    
+    Parameters:
+        self_encapsulate: True → 自指封装 (命名位+余差位, 活秩序)
+                          False → 被动投影 (仅身体位, 死秩序基线)
     """
 
     def __init__(self, N0: int, n_colors: int = 6,
@@ -168,7 +173,8 @@ class RecursiveWorld:
                  energy_cfg: Optional[EnergyConfig] = None,
                  entropy_cfg: Optional[EntropyConfig] = None,
                  env_config: Optional[dict] = None,
-                 seed: Optional[int] = None):
+                 seed: Optional[int] = None,
+                 self_encapsulate: bool = True):
         self.N0 = N0
         self.n_colors = n_colors
         self.params = params or Params()
@@ -176,6 +182,7 @@ class RecursiveWorld:
         self.entropy_cfg = entropy_cfg
         self.env_config = env_config
         self.seed = seed
+        self.self_encapsulate = self_encapsulate  # Phase 23: 自指封装开关
         self.rng = np.random.RandomState(seed)
 
         # 初始化 L0
@@ -260,32 +267,31 @@ class RecursiveWorld:
         return result
 
     def _m9_seal_and_create_next(self, current_layer: Layer, verbose: bool = False) -> bool:
-        """执行 m9 自指密封, 创建下一层。"""
-        f = current_layer.field
+        """执行 m9 自指密封, 创建下一层。
         
-        # m9: 自指密封
-        # 1. 向外封装(多数表决) → 粗粒化身体位
-        # 2. 自指封装 → 命名/身份位(新差异源)
+        Phase 23: 接线 mechanisms.m9_self_reference() 替代简化占位实现。
         
-        # 计算下一层规模 (减半)
-        n_active = f.n_active()
-        n_next = max(1, n_active // 2)
+        self_encapsulate=True: 自指封装 (body位+naming位+residual位, 活秩序)
+        self_encapsulate=False: 被动投影 (仅body位, a1_source=空, 死秩序基线)
+        """
+        # 调用完整的 m9_self_reference 实现
+        f_next = M.m9_self_reference(
+            current_layer, 
+            self_encapsulate=self.self_encapsulate
+        )
         
-        # 创建下一层
-        f_next = DifferenceField(N=n_next, layer=len(self.layers), rng=self.rng)
+        if f_next is None:
+            if verbose:
+                print(f"  [m9] Layer {current_layer.field.layer}: no organizations to encapsulate, stopping")
+            return False
         
-        # 初始化下一层的状态 (简化: 随机初始化)
-        n_active_next = max(1, n_next // 2)
-        active_bits_next = self.rng.choice(n_next, size=n_active_next, replace=False)
-        f_next.state[active_bits_next] = 1
-        f_next.a1_source = set(active_bits_next.tolist())
-        f_next.record()
+        # m9_self_reference 返回完整的 DifferenceField (已含状态/绑定/差异源)
+        # 直接包装为 Layer
         
         # 创建下一层的能量和熵管理器 (继承配置, 但独立预算)
         energy_mgr_next = None
         entropy_mgr_next = None
         if self.energy_cfg:
-            # 每个层有独立的能量预算
             energy_mgr_next = EnergyManager(self.energy_cfg)
         if self.entropy_cfg:
             entropy_mgr_next = EntropyTracker(self.entropy_cfg)
@@ -294,7 +300,9 @@ class RecursiveWorld:
         self.layers.append(next_layer)
         
         if verbose:
-            print(f"  [m9] Created Layer {len(self.layers)-1}: N={n_next}, active={n_active_next}")
+            mode = "self_reference" if self.self_encapsulate else "passive_projection"
+            print(f"  [m9] Created Layer {len(self.layers)-1}: N={f_next.N}, "
+                  f"active={f_next.n_active()}, mode={mode}")
         
         return True
 

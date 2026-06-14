@@ -1,0 +1,5130 @@
+{
+  "experiment": "exp_146_physics_detectors_full_arch",
+  "datetime": "2026-06-05T23:33:55.989955",
+  "config": {
+    "N0": 72,
+    "seeds": [
+      42,
+      142,
+      242,
+      342,
+      442,
+      542,
+      642,
+      742
+    ],
+    "steps": 2000,
+    "detector_interval": 50
+  },
+  "predictions": {
+    "P1_gravity": true,
+    "P2_dimension": false,
+    "P3_gauge": true,
+    "n_pass": 2
+  },
+  "gravitational_analysis": {
+    "n_measurements": 320,
+    "mean_correlation": 0.9999999999999998,
+    "std_correlation": 0.0,
+    "median_correlation": 0.9999999999999998,
+    "mean_correlation_3d": 0.4676243506472476,
+    "prediction_holds": true,
+    "pre_seal_mean": 0.0,
+    "pre_seal_std": 0.0,
+    "pre_seal_n": 0,
+    "pre_seal_holds": false,
+    "post_seal_mean": 0.9999999999999998,
+    "post_seal_std": 0.0,
+    "post_seal_n": 320,
+    "post_seal_holds": true,
+    "post_L1_mean": 0.0,
+    "post_L1_std": 0.0,
+    "post_L1_n": 0,
+    "post_L1_holds": false
+  },
+  "dimension_analysis": {
+    "all_mean_D_eff": 18.5,
+    "all_std_D_eff": 0.5,
+    "all_n": 8,
+    "all_locked_rate": 0.0,
+    "all_prediction_holds": false,
+    "pre_seal_mean_D_eff": -1.0,
+    "pre_seal_std_D_eff": 0.0,
+    "pre_seal_n": 0,
+    "pre_seal_locked_rate": 0.0,
+    "pre_seal_prediction_holds": false,
+    "post_seal_mean_D_eff": 18.5,
+    "post_seal_std_D_eff": 0.5,
+    "post_seal_n": 8,
+    "post_seal_locked_rate": 0.0,
+    "post_seal_prediction_holds": false,
+    "post_L1_mean_D_eff": -1.0,
+    "post_L1_std_D_eff": 0.0,
+    "post_L1_n": 0,
+    "post_L1_locked_rate": 0.0,
+    "post_L1_prediction_holds": false
+  },
+  "gauge_analysis": {
+    "mean_n_valid_moves": 1242.55,
+    "pre_seal_su3_mean": 0.0,
+    "pre_seal_su3_std": 0.0,
+    "pre_seal_closure_mean": 0.0,
+    "pre_seal_commutator_density": 0.0,
+    "pre_seal_n": 0,
+    "pre_seal_su3_present": false,
+    "post_seal_su3_mean": 2.079656101521146,
+    "post_seal_su3_std": 0.08268316504141851,
+    "post_seal_closure_mean": 1.0,
+    "post_seal_commutator_density": 0.0,
+    "post_seal_n": 320,
+    "post_seal_su3_present": true,
+    "post_L1_su3_mean": 0.0,
+    "post_L1_su3_std": 0.0,
+    "post_L1_closure_mean": 0.0,
+    "post_L1_commutator_density": 0.0,
+    "post_L1_n": 0,
+    "post_L1_su3_present": false
+  },
+  "per_seed_summary": [
+    {
+      "seed": 42,
+      "elapsed": 146.7973291873932,
+      "n_layers": 2,
+      "l0_sealed": true,
+      "l1_formed": true,
+      "seal_step": 0,
+      "l1_step": -1,
+      "nsi_max": 0.6705,
+      "civ_max": 3,
+      "n_snapshots": 40,
+      "gravitational": [
+        {
+          "step": 0,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.8672597734084749,
+          "n_probes": 20
+        },
+        {
+          "step": 50,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5904067971391889,
+          "n_probes": 20
+        },
+        {
+          "step": 100,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4961337654477452,
+          "n_probes": 20
+        },
+        {
+          "step": 150,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.44169912762069374,
+          "n_probes": 20
+        },
+        {
+          "step": 200,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.3509487701938932,
+          "n_probes": 20
+        },
+        {
+          "step": 250,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.3836245679055932,
+          "n_probes": 20
+        },
+        {
+          "step": 300,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.34983823750500426,
+          "n_probes": 20
+        },
+        {
+          "step": 350,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.3586153402079053,
+          "n_probes": 20
+        },
+        {
+          "step": 400,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5743764779476688,
+          "n_probes": 20
+        },
+        {
+          "step": 450,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5616951562284445,
+          "n_probes": 20
+        },
+        {
+          "step": 500,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.425645684092798,
+          "n_probes": 20
+        },
+        {
+          "step": 550,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.27740235824012144,
+          "n_probes": 20
+        },
+        {
+          "step": 600,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5157316377339661,
+          "n_probes": 20
+        },
+        {
+          "step": 650,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5123451064195379,
+          "n_probes": 20
+        },
+        {
+          "step": 700,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.43248898619238196,
+          "n_probes": 20
+        },
+        {
+          "step": 750,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5790394445964896,
+          "n_probes": 20
+        },
+        {
+          "step": 800,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.20831596328060112,
+          "n_probes": 20
+        },
+        {
+          "step": 850,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5634586437211144,
+          "n_probes": 20
+        },
+        {
+          "step": 900,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4100335651758848,
+          "n_probes": 20
+        },
+        {
+          "step": 950,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.6485726789187011,
+          "n_probes": 20
+        },
+        {
+          "step": 1000,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4678284525627572,
+          "n_probes": 20
+        },
+        {
+          "step": 1050,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.2482524673192963,
+          "n_probes": 20
+        },
+        {
+          "step": 1100,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5122005630079772,
+          "n_probes": 20
+        },
+        {
+          "step": 1150,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.7771782446878366,
+          "n_probes": 20
+        },
+        {
+          "step": 1200,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4244509488299349,
+          "n_probes": 20
+        },
+        {
+          "step": 1250,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.47671327104883904,
+          "n_probes": 20
+        },
+        {
+          "step": 1300,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.44972636888675727,
+          "n_probes": 20
+        },
+        {
+          "step": 1350,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4792149800666752,
+          "n_probes": 20
+        },
+        {
+          "step": 1400,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.6007580446267667,
+          "n_probes": 20
+        },
+        {
+          "step": 1450,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.47346868582842194,
+          "n_probes": 20
+        },
+        {
+          "step": 1500,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.26525858539758423,
+          "n_probes": 20
+        },
+        {
+          "step": 1550,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4394893227184113,
+          "n_probes": 20
+        },
+        {
+          "step": 1600,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.24417342606276984,
+          "n_probes": 20
+        },
+        {
+          "step": 1650,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.46675965313129103,
+          "n_probes": 20
+        },
+        {
+          "step": 1700,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.589771630582367,
+          "n_probes": 20
+        },
+        {
+          "step": 1750,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.394047278443336,
+          "n_probes": 20
+        },
+        {
+          "step": 1800,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.775804799298549,
+          "n_probes": 20
+        },
+        {
+          "step": 1850,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4830092430510053,
+          "n_probes": 20
+        },
+        {
+          "step": 1900,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.35477596125987565,
+          "n_probes": 20
+        },
+        {
+          "step": 1950,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.41149653500193867,
+          "n_probes": 20
+        }
+      ],
+      "dimension": {
+        "all": {
+          "D_eff_90": 18,
+          "D_eff_95": 22,
+          "dimension_locked_3": false,
+          "compression_ratio": 0.25
+        },
+        "post_seal": {
+          "D_eff_90": 18,
+          "D_eff_95": 22,
+          "dimension_locked_3": false,
+          "compression_ratio": 0.25
+        }
+      },
+      "gauge": [
+        {
+          "step": 0,
+          "phase": "post_seal",
+          "su3_indicator": 2.0869565217391304,
+          "closure": 1.0,
+          "n_moves": 71,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 50,
+          "phase": "post_seal",
+          "su3_indicator": 2.0678851174934727,
+          "closure": 1.0,
+          "n_moves": 1175,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 100,
+          "phase": "post_seal",
+          "su3_indicator": 2.0344827586206895,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 150,
+          "phase": "post_seal",
+          "su3_indicator": 2.0344827586206895,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 200,
+          "phase": "post_seal",
+          "su3_indicator": 2.158974358974359,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 250,
+          "phase": "post_seal",
+          "su3_indicator": 2.0344827586206895,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 300,
+          "phase": "post_seal",
+          "su3_indicator": 2.0344827586206895,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 350,
+          "phase": "post_seal",
+          "su3_indicator": 2.0344827586206895,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 400,
+          "phase": "post_seal",
+          "su3_indicator": 2.019607843137255,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 450,
+          "phase": "post_seal",
+          "su3_indicator": 2.0344827586206895,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 500,
+          "phase": "post_seal",
+          "su3_indicator": 2.0344827586206895,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 550,
+          "phase": "post_seal",
+          "su3_indicator": 2.158974358974359,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 600,
+          "phase": "post_seal",
+          "su3_indicator": 2.019607843137255,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 650,
+          "phase": "post_seal",
+          "su3_indicator": 2.0344827586206895,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 700,
+          "phase": "post_seal",
+          "su3_indicator": 2.0344827586206895,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 750,
+          "phase": "post_seal",
+          "su3_indicator": 2.08,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 800,
+          "phase": "post_seal",
+          "su3_indicator": 2.0344827586206895,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 850,
+          "phase": "post_seal",
+          "su3_indicator": 2.08,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 900,
+          "phase": "post_seal",
+          "su3_indicator": 2.0344827586206895,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 950,
+          "phase": "post_seal",
+          "su3_indicator": 2.0344827586206895,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1000,
+          "phase": "post_seal",
+          "su3_indicator": 2.08,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1050,
+          "phase": "post_seal",
+          "su3_indicator": 2.08,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1100,
+          "phase": "post_seal",
+          "su3_indicator": 2.158974358974359,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1150,
+          "phase": "post_seal",
+          "su3_indicator": 2.0344827586206895,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1200,
+          "phase": "post_seal",
+          "su3_indicator": 2.019607843137255,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1250,
+          "phase": "post_seal",
+          "su3_indicator": 2.0344827586206895,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1300,
+          "phase": "post_seal",
+          "su3_indicator": 2.019607843137255,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1350,
+          "phase": "post_seal",
+          "su3_indicator": 2.019607843137255,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1400,
+          "phase": "post_seal",
+          "su3_indicator": 2.276595744680851,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1450,
+          "phase": "post_seal",
+          "su3_indicator": 2.276595744680851,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1500,
+          "phase": "post_seal",
+          "su3_indicator": 2.0344827586206895,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1550,
+          "phase": "post_seal",
+          "su3_indicator": 2.441340782122905,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1600,
+          "phase": "post_seal",
+          "su3_indicator": 2.0344827586206895,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1650,
+          "phase": "post_seal",
+          "su3_indicator": 2.08,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1700,
+          "phase": "post_seal",
+          "su3_indicator": 2.019607843137255,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1750,
+          "phase": "post_seal",
+          "su3_indicator": 2.0344827586206895,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1800,
+          "phase": "post_seal",
+          "su3_indicator": 2.08,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1850,
+          "phase": "post_seal",
+          "su3_indicator": 2.019607843137255,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1900,
+          "phase": "post_seal",
+          "su3_indicator": 2.019607843137255,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1950,
+          "phase": "post_seal",
+          "su3_indicator": 2.019607843137255,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        }
+      ]
+    },
+    {
+      "seed": 142,
+      "elapsed": 124.84613847732544,
+      "n_layers": 2,
+      "l0_sealed": true,
+      "l1_formed": true,
+      "seal_step": 0,
+      "l1_step": -1,
+      "nsi_max": 0.6503,
+      "civ_max": 3,
+      "n_snapshots": 40,
+      "gravitational": [
+        {
+          "step": 0,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.8441860999415337,
+          "n_probes": 20
+        },
+        {
+          "step": 50,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.29242583324839383,
+          "n_probes": 20
+        },
+        {
+          "step": 100,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5476104841143502,
+          "n_probes": 20
+        },
+        {
+          "step": 150,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5286182548370096,
+          "n_probes": 20
+        },
+        {
+          "step": 200,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5938096036824533,
+          "n_probes": 20
+        },
+        {
+          "step": 250,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.38456360914415055,
+          "n_probes": 20
+        },
+        {
+          "step": 300,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.37103493732994786,
+          "n_probes": 20
+        },
+        {
+          "step": 350,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.34220189320147576,
+          "n_probes": 20
+        },
+        {
+          "step": 400,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5450415387518885,
+          "n_probes": 20
+        },
+        {
+          "step": 450,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.3112117361696407,
+          "n_probes": 20
+        },
+        {
+          "step": 500,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.596362039359597,
+          "n_probes": 20
+        },
+        {
+          "step": 550,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.491612577234363,
+          "n_probes": 20
+        },
+        {
+          "step": 600,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5686907813133704,
+          "n_probes": 20
+        },
+        {
+          "step": 650,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5694607948403256,
+          "n_probes": 20
+        },
+        {
+          "step": 700,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.24337804716438646,
+          "n_probes": 20
+        },
+        {
+          "step": 750,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.2605510228591689,
+          "n_probes": 20
+        },
+        {
+          "step": 800,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.3606187243824622,
+          "n_probes": 20
+        },
+        {
+          "step": 850,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.24154616169029067,
+          "n_probes": 20
+        },
+        {
+          "step": 900,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4973587045077327,
+          "n_probes": 20
+        },
+        {
+          "step": 950,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.49083090053939354,
+          "n_probes": 20
+        },
+        {
+          "step": 1000,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.3958401040179012,
+          "n_probes": 20
+        },
+        {
+          "step": 1050,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4754217699497439,
+          "n_probes": 20
+        },
+        {
+          "step": 1100,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.35540719311699454,
+          "n_probes": 20
+        },
+        {
+          "step": 1150,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4864609350465606,
+          "n_probes": 20
+        },
+        {
+          "step": 1200,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.43155050773885983,
+          "n_probes": 20
+        },
+        {
+          "step": 1250,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.2418004363543583,
+          "n_probes": 20
+        },
+        {
+          "step": 1300,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.20832321741594914,
+          "n_probes": 20
+        },
+        {
+          "step": 1350,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.3916537477858002,
+          "n_probes": 20
+        },
+        {
+          "step": 1400,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.38496244253738704,
+          "n_probes": 20
+        },
+        {
+          "step": 1450,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4951401470268311,
+          "n_probes": 20
+        },
+        {
+          "step": 1500,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.6160634750224431,
+          "n_probes": 20
+        },
+        {
+          "step": 1550,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.6057103704352155,
+          "n_probes": 20
+        },
+        {
+          "step": 1600,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5175958623494762,
+          "n_probes": 20
+        },
+        {
+          "step": 1650,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.6427934651684453,
+          "n_probes": 20
+        },
+        {
+          "step": 1700,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5378894276937353,
+          "n_probes": 20
+        },
+        {
+          "step": 1750,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.6770214818433241,
+          "n_probes": 20
+        },
+        {
+          "step": 1800,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.39665436292262,
+          "n_probes": 20
+        },
+        {
+          "step": 1850,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.3266835770435471,
+          "n_probes": 20
+        },
+        {
+          "step": 1900,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.3966932781459313,
+          "n_probes": 20
+        },
+        {
+          "step": 1950,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.43491815959443164,
+          "n_probes": 20
+        }
+      ],
+      "dimension": {
+        "all": {
+          "D_eff_90": 19,
+          "D_eff_95": 23,
+          "dimension_locked_3": false,
+          "compression_ratio": 0.2638888888888889
+        },
+        "post_seal": {
+          "D_eff_90": 19,
+          "D_eff_95": 23,
+          "dimension_locked_3": false,
+          "compression_ratio": 0.2638888888888889
+        }
+      },
+      "gauge": [
+        {
+          "step": 0,
+          "phase": "post_seal",
+          "su3_indicator": 2.0869565217391304,
+          "closure": 1.0,
+          "n_moves": 71,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 50,
+          "phase": "post_seal",
+          "su3_indicator": 2.094292803970223,
+          "closure": 1.0,
+          "n_moves": 1247,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 100,
+          "phase": "post_seal",
+          "su3_indicator": 2.0570071258907365,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 150,
+          "phase": "post_seal",
+          "su3_indicator": 2.0425531914893615,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 200,
+          "phase": "post_seal",
+          "su3_indicator": 2.1777777777777776,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 250,
+          "phase": "post_seal",
+          "su3_indicator": 2.0570071258907365,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 300,
+          "phase": "post_seal",
+          "su3_indicator": 2.061465721040189,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 350,
+          "phase": "post_seal",
+          "su3_indicator": 2.0327868852459017,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 400,
+          "phase": "post_seal",
+          "su3_indicator": 2.061465721040189,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 450,
+          "phase": "post_seal",
+          "su3_indicator": 2.056603773584906,
+          "closure": 1.0,
+          "n_moves": 1296,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 500,
+          "phase": "post_seal",
+          "su3_indicator": 2.0186480186480185,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 550,
+          "phase": "post_seal",
+          "su3_indicator": 2.0186480186480185,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 600,
+          "phase": "post_seal",
+          "su3_indicator": 2.0327868852459017,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 650,
+          "phase": "post_seal",
+          "su3_indicator": 2.0186480186480185,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 700,
+          "phase": "post_seal",
+          "su3_indicator": 2.0327868852459017,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 750,
+          "phase": "post_seal",
+          "su3_indicator": 2.0327868852459017,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 800,
+          "phase": "post_seal",
+          "su3_indicator": 2.0327868852459017,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 850,
+          "phase": "post_seal",
+          "su3_indicator": 2.0186480186480185,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 900,
+          "phase": "post_seal",
+          "su3_indicator": 2.0760095011876483,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 950,
+          "phase": "post_seal",
+          "su3_indicator": 2.0327868852459017,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1000,
+          "phase": "post_seal",
+          "su3_indicator": 2.0186480186480185,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1050,
+          "phase": "post_seal",
+          "su3_indicator": 2.0186480186480185,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1100,
+          "phase": "post_seal",
+          "su3_indicator": 2.0327868852459017,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1150,
+          "phase": "post_seal",
+          "su3_indicator": 2.0327868852459017,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1200,
+          "phase": "post_seal",
+          "su3_indicator": 2.0760095011876483,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1250,
+          "phase": "post_seal",
+          "su3_indicator": 2.0760095011876483,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1300,
+          "phase": "post_seal",
+          "su3_indicator": 2.0327868852459017,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1350,
+          "phase": "post_seal",
+          "su3_indicator": 2.0327868852459017,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1400,
+          "phase": "post_seal",
+          "su3_indicator": 2.0327868852459017,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1450,
+          "phase": "post_seal",
+          "su3_indicator": 2.0186480186480185,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1500,
+          "phase": "post_seal",
+          "su3_indicator": 2.0327868852459017,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1550,
+          "phase": "post_seal",
+          "su3_indicator": 2.0327868852459017,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1600,
+          "phase": "post_seal",
+          "su3_indicator": 2.0327868852459017,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1650,
+          "phase": "post_seal",
+          "su3_indicator": 2.0760095011876483,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1700,
+          "phase": "post_seal",
+          "su3_indicator": 2.0186480186480185,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1750,
+          "phase": "post_seal",
+          "su3_indicator": 2.0760095011876483,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1800,
+          "phase": "post_seal",
+          "su3_indicator": 2.0186480186480185,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1850,
+          "phase": "post_seal",
+          "su3_indicator": 2.0186480186480185,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1900,
+          "phase": "post_seal",
+          "su3_indicator": 2.0327868852459017,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1950,
+          "phase": "post_seal",
+          "su3_indicator": 2.150851581508516,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        }
+      ]
+    },
+    {
+      "seed": 242,
+      "elapsed": 130.86666655540466,
+      "n_layers": 2,
+      "l0_sealed": true,
+      "l1_formed": true,
+      "seal_step": 0,
+      "l1_step": -1,
+      "nsi_max": 0.724,
+      "civ_max": 3,
+      "n_snapshots": 40,
+      "gravitational": [
+        {
+          "step": 0,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.8451883612274791,
+          "n_probes": 20
+        },
+        {
+          "step": 50,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5156520674193837,
+          "n_probes": 20
+        },
+        {
+          "step": 100,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.2717976365346826,
+          "n_probes": 20
+        },
+        {
+          "step": 150,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.2598753955862389,
+          "n_probes": 20
+        },
+        {
+          "step": 200,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.30049151101129207,
+          "n_probes": 20
+        },
+        {
+          "step": 250,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4042394140040161,
+          "n_probes": 20
+        },
+        {
+          "step": 300,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.48976327920534174,
+          "n_probes": 20
+        },
+        {
+          "step": 350,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.29511260335975303,
+          "n_probes": 20
+        },
+        {
+          "step": 400,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.6632852828440404,
+          "n_probes": 20
+        },
+        {
+          "step": 450,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.656441732993417,
+          "n_probes": 20
+        },
+        {
+          "step": 500,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.33658708115497615,
+          "n_probes": 20
+        },
+        {
+          "step": 550,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5722219406225619,
+          "n_probes": 20
+        },
+        {
+          "step": 600,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4102418841909958,
+          "n_probes": 20
+        },
+        {
+          "step": 650,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.2604097532910261,
+          "n_probes": 20
+        },
+        {
+          "step": 700,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.2650303115912951,
+          "n_probes": 20
+        },
+        {
+          "step": 750,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.45134807653773107,
+          "n_probes": 20
+        },
+        {
+          "step": 800,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4628454754899835,
+          "n_probes": 20
+        },
+        {
+          "step": 850,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.6043850057646433,
+          "n_probes": 20
+        },
+        {
+          "step": 900,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5267931782169019,
+          "n_probes": 20
+        },
+        {
+          "step": 950,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.599836593510638,
+          "n_probes": 20
+        },
+        {
+          "step": 1000,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.12199513313136097,
+          "n_probes": 20
+        },
+        {
+          "step": 1050,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.44355546646272603,
+          "n_probes": 20
+        },
+        {
+          "step": 1100,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.6368180819701609,
+          "n_probes": 20
+        },
+        {
+          "step": 1150,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.3064100309006887,
+          "n_probes": 20
+        },
+        {
+          "step": 1200,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4503037588576118,
+          "n_probes": 20
+        },
+        {
+          "step": 1250,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.6678354971316108,
+          "n_probes": 20
+        },
+        {
+          "step": 1300,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.14852889993714297,
+          "n_probes": 20
+        },
+        {
+          "step": 1350,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.41592914565036027,
+          "n_probes": 20
+        },
+        {
+          "step": 1400,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.45242523037481125,
+          "n_probes": 20
+        },
+        {
+          "step": 1450,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.24772266409719135,
+          "n_probes": 20
+        },
+        {
+          "step": 1500,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5455714697675095,
+          "n_probes": 20
+        },
+        {
+          "step": 1550,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4732699288797481,
+          "n_probes": 20
+        },
+        {
+          "step": 1600,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5389452991119991,
+          "n_probes": 20
+        },
+        {
+          "step": 1650,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4570316539918072,
+          "n_probes": 20
+        },
+        {
+          "step": 1700,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5007219305375082,
+          "n_probes": 20
+        },
+        {
+          "step": 1750,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.3749627312354905,
+          "n_probes": 20
+        },
+        {
+          "step": 1800,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4402612341785302,
+          "n_probes": 20
+        },
+        {
+          "step": 1850,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4459383232129588,
+          "n_probes": 20
+        },
+        {
+          "step": 1900,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5268998942021907,
+          "n_probes": 20
+        },
+        {
+          "step": 1950,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.39917477019440156,
+          "n_probes": 20
+        }
+      ],
+      "dimension": {
+        "all": {
+          "D_eff_90": 18,
+          "D_eff_95": 21,
+          "dimension_locked_3": false,
+          "compression_ratio": 0.25
+        },
+        "post_seal": {
+          "D_eff_90": 18,
+          "D_eff_95": 21,
+          "dimension_locked_3": false,
+          "compression_ratio": 0.25
+        }
+      },
+      "gauge": [
+        {
+          "step": 0,
+          "phase": "post_seal",
+          "su3_indicator": 2.0869565217391304,
+          "closure": 1.0,
+          "n_moves": 71,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 50,
+          "phase": "post_seal",
+          "su3_indicator": 2.0646766169154227,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 100,
+          "phase": "post_seal",
+          "su3_indicator": 2.1538461538461537,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 150,
+          "phase": "post_seal",
+          "su3_indicator": 2.019002375296912,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 200,
+          "phase": "post_seal",
+          "su3_indicator": 2.2673521850899743,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 250,
+          "phase": "post_seal",
+          "su3_indicator": 2.019002375296912,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 300,
+          "phase": "post_seal",
+          "su3_indicator": 2.019002375296912,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 350,
+          "phase": "post_seal",
+          "su3_indicator": 2.0334128878281623,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 400,
+          "phase": "post_seal",
+          "su3_indicator": 2.0334128878281623,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 450,
+          "phase": "post_seal",
+          "su3_indicator": 2.0774818401937045,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 500,
+          "phase": "post_seal",
+          "su3_indicator": 2.0774818401937045,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 550,
+          "phase": "post_seal",
+          "su3_indicator": 2.1538461538461537,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 600,
+          "phase": "post_seal",
+          "su3_indicator": 2.2673521850899743,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 650,
+          "phase": "post_seal",
+          "su3_indicator": 2.019002375296912,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 700,
+          "phase": "post_seal",
+          "su3_indicator": 2.0774818401937045,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 750,
+          "phase": "post_seal",
+          "su3_indicator": 2.0334128878281623,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 800,
+          "phase": "post_seal",
+          "su3_indicator": 2.019002375296912,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 850,
+          "phase": "post_seal",
+          "su3_indicator": 2.0334128878281623,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 900,
+          "phase": "post_seal",
+          "su3_indicator": 2.0774818401937045,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 950,
+          "phase": "post_seal",
+          "su3_indicator": 2.0334128878281623,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1000,
+          "phase": "post_seal",
+          "su3_indicator": 2.1538461538461537,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1050,
+          "phase": "post_seal",
+          "su3_indicator": 2.0334128878281623,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1100,
+          "phase": "post_seal",
+          "su3_indicator": 2.0334128878281623,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1150,
+          "phase": "post_seal",
+          "su3_indicator": 2.0774818401937045,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1200,
+          "phase": "post_seal",
+          "su3_indicator": 2.0334128878281623,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1250,
+          "phase": "post_seal",
+          "su3_indicator": 2.2673521850899743,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1300,
+          "phase": "post_seal",
+          "su3_indicator": 2.019002375296912,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1350,
+          "phase": "post_seal",
+          "su3_indicator": 2.019002375296912,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1400,
+          "phase": "post_seal",
+          "su3_indicator": 2.0334128878281623,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1450,
+          "phase": "post_seal",
+          "su3_indicator": 2.0334128878281623,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1500,
+          "phase": "post_seal",
+          "su3_indicator": 2.0774818401937045,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1550,
+          "phase": "post_seal",
+          "su3_indicator": 2.0334128878281623,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1600,
+          "phase": "post_seal",
+          "su3_indicator": 2.0334128878281623,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1650,
+          "phase": "post_seal",
+          "su3_indicator": 2.0334128878281623,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1700,
+          "phase": "post_seal",
+          "su3_indicator": 2.0774818401937045,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1750,
+          "phase": "post_seal",
+          "su3_indicator": 2.0334128878281623,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1800,
+          "phase": "post_seal",
+          "su3_indicator": 2.0334128878281623,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1850,
+          "phase": "post_seal",
+          "su3_indicator": 2.0334128878281623,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1900,
+          "phase": "post_seal",
+          "su3_indicator": 2.0334128878281623,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1950,
+          "phase": "post_seal",
+          "su3_indicator": 2.1538461538461537,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        }
+      ]
+    },
+    {
+      "seed": 342,
+      "elapsed": 128.85855865478516,
+      "n_layers": 2,
+      "l0_sealed": true,
+      "l1_formed": true,
+      "seal_step": 0,
+      "l1_step": -1,
+      "nsi_max": 0.6643,
+      "civ_max": 3,
+      "n_snapshots": 40,
+      "gravitational": [
+        {
+          "step": 0,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.9418168444036207,
+          "n_probes": 20
+        },
+        {
+          "step": 50,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5217202953832718,
+          "n_probes": 20
+        },
+        {
+          "step": 100,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.36343940099408983,
+          "n_probes": 20
+        },
+        {
+          "step": 150,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5900028529896595,
+          "n_probes": 20
+        },
+        {
+          "step": 200,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.7607198305613364,
+          "n_probes": 20
+        },
+        {
+          "step": 250,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5634581243675633,
+          "n_probes": 20
+        },
+        {
+          "step": 300,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5029601626996787,
+          "n_probes": 20
+        },
+        {
+          "step": 350,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.3301944497063469,
+          "n_probes": 20
+        },
+        {
+          "step": 400,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5842497519560808,
+          "n_probes": 20
+        },
+        {
+          "step": 450,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.7467592442964986,
+          "n_probes": 20
+        },
+        {
+          "step": 500,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.47721841417772715,
+          "n_probes": 20
+        },
+        {
+          "step": 550,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.47002185145952247,
+          "n_probes": 20
+        },
+        {
+          "step": 600,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4952421345281871,
+          "n_probes": 20
+        },
+        {
+          "step": 650,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.6543611783833587,
+          "n_probes": 20
+        },
+        {
+          "step": 700,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5569754337958374,
+          "n_probes": 20
+        },
+        {
+          "step": 750,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5822925381132732,
+          "n_probes": 20
+        },
+        {
+          "step": 800,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.34276925727961094,
+          "n_probes": 20
+        },
+        {
+          "step": 850,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5531555585715594,
+          "n_probes": 20
+        },
+        {
+          "step": 900,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5599045875869997,
+          "n_probes": 20
+        },
+        {
+          "step": 950,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4604195594522855,
+          "n_probes": 20
+        },
+        {
+          "step": 1000,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5406107308440091,
+          "n_probes": 20
+        },
+        {
+          "step": 1050,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4530345887330107,
+          "n_probes": 20
+        },
+        {
+          "step": 1100,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4259167795078826,
+          "n_probes": 20
+        },
+        {
+          "step": 1150,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5776995670833985,
+          "n_probes": 20
+        },
+        {
+          "step": 1200,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5018115174372537,
+          "n_probes": 20
+        },
+        {
+          "step": 1250,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5395986425692151,
+          "n_probes": 20
+        },
+        {
+          "step": 1300,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.48301919896106327,
+          "n_probes": 20
+        },
+        {
+          "step": 1350,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.48554144755454604,
+          "n_probes": 20
+        },
+        {
+          "step": 1400,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.39090012067488683,
+          "n_probes": 20
+        },
+        {
+          "step": 1450,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.2610770268207406,
+          "n_probes": 20
+        },
+        {
+          "step": 1500,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.36279979629838793,
+          "n_probes": 20
+        },
+        {
+          "step": 1550,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.26625310428097987,
+          "n_probes": 20
+        },
+        {
+          "step": 1600,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.6656745360090642,
+          "n_probes": 20
+        },
+        {
+          "step": 1650,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4491619219355726,
+          "n_probes": 20
+        },
+        {
+          "step": 1700,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.17806940969363236,
+          "n_probes": 20
+        },
+        {
+          "step": 1750,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.562956751693414,
+          "n_probes": 20
+        },
+        {
+          "step": 1800,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.6817673086590278,
+          "n_probes": 20
+        },
+        {
+          "step": 1850,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.429962205963212,
+          "n_probes": 20
+        },
+        {
+          "step": 1900,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4736334823840864,
+          "n_probes": 20
+        },
+        {
+          "step": 1950,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4811777301580973,
+          "n_probes": 20
+        }
+      ],
+      "dimension": {
+        "all": {
+          "D_eff_90": 19,
+          "D_eff_95": 22,
+          "dimension_locked_3": false,
+          "compression_ratio": 0.2638888888888889
+        },
+        "post_seal": {
+          "D_eff_90": 19,
+          "D_eff_95": 22,
+          "dimension_locked_3": false,
+          "compression_ratio": 0.2638888888888889
+        }
+      },
+      "gauge": [
+        {
+          "step": 0,
+          "phase": "post_seal",
+          "su3_indicator": 2.0869565217391304,
+          "closure": 1.0,
+          "n_moves": 71,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 50,
+          "phase": "post_seal",
+          "su3_indicator": 2.440677966101695,
+          "closure": 1.0,
+          "n_moves": 812,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 100,
+          "phase": "post_seal",
+          "su3_indicator": 2.141057934508816,
+          "closure": 1.0,
+          "n_moves": 1247,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 150,
+          "phase": "post_seal",
+          "su3_indicator": 2.32972972972973,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 200,
+          "phase": "post_seal",
+          "su3_indicator": 2.259259259259259,
+          "closure": 1.0,
+          "n_moves": 1232,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 250,
+          "phase": "post_seal",
+          "su3_indicator": 2.1538461538461537,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 300,
+          "phase": "post_seal",
+          "su3_indicator": 2.0334128878281623,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 350,
+          "phase": "post_seal",
+          "su3_indicator": 2.1012048192771084,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 400,
+          "phase": "post_seal",
+          "su3_indicator": 2.0425531914893615,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 450,
+          "phase": "post_seal",
+          "su3_indicator": 2.0425531914893615,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 500,
+          "phase": "post_seal",
+          "su3_indicator": 2.1012048192771084,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 550,
+          "phase": "post_seal",
+          "su3_indicator": 2.0140515222482436,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 600,
+          "phase": "post_seal",
+          "su3_indicator": 2.0140515222482436,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 650,
+          "phase": "post_seal",
+          "su3_indicator": 2.0140515222482436,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 700,
+          "phase": "post_seal",
+          "su3_indicator": 2.0140515222482436,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 750,
+          "phase": "post_seal",
+          "su3_indicator": 2.0425531914893615,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 800,
+          "phase": "post_seal",
+          "su3_indicator": 2.0140515222482436,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 850,
+          "phase": "post_seal",
+          "su3_indicator": 2.1012048192771084,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 900,
+          "phase": "post_seal",
+          "su3_indicator": 2.0140515222482436,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 950,
+          "phase": "post_seal",
+          "su3_indicator": 2.0425531914893615,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1000,
+          "phase": "post_seal",
+          "su3_indicator": 2.0140515222482436,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1050,
+          "phase": "post_seal",
+          "su3_indicator": 2.0140515222482436,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1100,
+          "phase": "post_seal",
+          "su3_indicator": 2.0140515222482436,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1150,
+          "phase": "post_seal",
+          "su3_indicator": 2.090909090909091,
+          "closure": 1.0,
+          "n_moves": 1292,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1200,
+          "phase": "post_seal",
+          "su3_indicator": 2.0046511627906978,
+          "closure": 1.0,
+          "n_moves": 1292,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1250,
+          "phase": "post_seal",
+          "su3_indicator": 2.090909090909091,
+          "closure": 1.0,
+          "n_moves": 1292,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1300,
+          "phase": "post_seal",
+          "su3_indicator": 2.0046511627906978,
+          "closure": 1.0,
+          "n_moves": 1292,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1350,
+          "phase": "post_seal",
+          "su3_indicator": 2.0046511627906978,
+          "closure": 1.0,
+          "n_moves": 1292,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1400,
+          "phase": "post_seal",
+          "su3_indicator": 2.0046511627906978,
+          "closure": 1.0,
+          "n_moves": 1292,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1450,
+          "phase": "post_seal",
+          "su3_indicator": 2.0046511627906978,
+          "closure": 1.0,
+          "n_moves": 1292,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1500,
+          "phase": "post_seal",
+          "su3_indicator": 2.0046511627906978,
+          "closure": 1.0,
+          "n_moves": 1292,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1550,
+          "phase": "post_seal",
+          "su3_indicator": 2.0046511627906978,
+          "closure": 1.0,
+          "n_moves": 1292,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1600,
+          "phase": "post_seal",
+          "su3_indicator": 2.0046511627906978,
+          "closure": 1.0,
+          "n_moves": 1292,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1650,
+          "phase": "post_seal",
+          "su3_indicator": 2.312820512820513,
+          "closure": 1.0,
+          "n_moves": 1292,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1700,
+          "phase": "post_seal",
+          "su3_indicator": 2.032863849765258,
+          "closure": 1.0,
+          "n_moves": 1292,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1750,
+          "phase": "post_seal",
+          "su3_indicator": 2.0046511627906978,
+          "closure": 1.0,
+          "n_moves": 1292,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1800,
+          "phase": "post_seal",
+          "su3_indicator": 2.032863849765258,
+          "closure": 1.0,
+          "n_moves": 1292,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1850,
+          "phase": "post_seal",
+          "su3_indicator": 2.032863849765258,
+          "closure": 1.0,
+          "n_moves": 1292,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1900,
+          "phase": "post_seal",
+          "su3_indicator": 2.0046511627906978,
+          "closure": 1.0,
+          "n_moves": 1292,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1950,
+          "phase": "post_seal",
+          "su3_indicator": 2.0046511627906978,
+          "closure": 1.0,
+          "n_moves": 1292,
+          "commutator_density": 0.0
+        }
+      ]
+    },
+    {
+      "seed": 442,
+      "elapsed": 134.6087465286255,
+      "n_layers": 2,
+      "l0_sealed": true,
+      "l1_formed": true,
+      "seal_step": 0,
+      "l1_step": -1,
+      "nsi_max": 0.6726,
+      "civ_max": 3,
+      "n_snapshots": 40,
+      "gravitational": [
+        {
+          "step": 0,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.9426910291025424,
+          "n_probes": 20
+        },
+        {
+          "step": 50,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.336014651191991,
+          "n_probes": 20
+        },
+        {
+          "step": 100,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.677605224504876,
+          "n_probes": 20
+        },
+        {
+          "step": 150,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.28103236652132263,
+          "n_probes": 20
+        },
+        {
+          "step": 200,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.508992440551578,
+          "n_probes": 20
+        },
+        {
+          "step": 250,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.503730930696312,
+          "n_probes": 20
+        },
+        {
+          "step": 300,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.6033032247727522,
+          "n_probes": 20
+        },
+        {
+          "step": 350,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5768755835082507,
+          "n_probes": 20
+        },
+        {
+          "step": 400,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5126629815632502,
+          "n_probes": 20
+        },
+        {
+          "step": 450,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5808690111023018,
+          "n_probes": 20
+        },
+        {
+          "step": 500,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.6727028394443072,
+          "n_probes": 20
+        },
+        {
+          "step": 550,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.462686682421813,
+          "n_probes": 20
+        },
+        {
+          "step": 600,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.10781348101676977,
+          "n_probes": 20
+        },
+        {
+          "step": 650,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5265667745702747,
+          "n_probes": 20
+        },
+        {
+          "step": 700,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.12904278893523619,
+          "n_probes": 20
+        },
+        {
+          "step": 750,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.39153634134235626,
+          "n_probes": 20
+        },
+        {
+          "step": 800,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5211477988381978,
+          "n_probes": 20
+        },
+        {
+          "step": 850,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4000003035849618,
+          "n_probes": 20
+        },
+        {
+          "step": 900,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.52502572557594,
+          "n_probes": 20
+        },
+        {
+          "step": 950,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.44202330052756494,
+          "n_probes": 20
+        },
+        {
+          "step": 1000,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.28582694434403655,
+          "n_probes": 20
+        },
+        {
+          "step": 1050,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.3992852661259392,
+          "n_probes": 20
+        },
+        {
+          "step": 1100,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5289969879493011,
+          "n_probes": 20
+        },
+        {
+          "step": 1150,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.3824035366444457,
+          "n_probes": 20
+        },
+        {
+          "step": 1200,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.28139511280714896,
+          "n_probes": 20
+        },
+        {
+          "step": 1250,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.49023423756670903,
+          "n_probes": 20
+        },
+        {
+          "step": 1300,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4307592702856722,
+          "n_probes": 20
+        },
+        {
+          "step": 1350,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.25090066116036547,
+          "n_probes": 20
+        },
+        {
+          "step": 1400,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.7947682505989099,
+          "n_probes": 20
+        },
+        {
+          "step": 1450,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.453330977107814,
+          "n_probes": 20
+        },
+        {
+          "step": 1500,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.37328620907217547,
+          "n_probes": 20
+        },
+        {
+          "step": 1550,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5143474696004026,
+          "n_probes": 20
+        },
+        {
+          "step": 1600,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4650082410556957,
+          "n_probes": 20
+        },
+        {
+          "step": 1650,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5631585810122621,
+          "n_probes": 20
+        },
+        {
+          "step": 1700,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.48616406117055083,
+          "n_probes": 20
+        },
+        {
+          "step": 1750,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.6294384955908042,
+          "n_probes": 20
+        },
+        {
+          "step": 1800,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.2181653020626127,
+          "n_probes": 20
+        },
+        {
+          "step": 1850,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.6033432315745965,
+          "n_probes": 20
+        },
+        {
+          "step": 1900,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.44902399496218764,
+          "n_probes": 20
+        },
+        {
+          "step": 1950,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.44990071151587013,
+          "n_probes": 20
+        }
+      ],
+      "dimension": {
+        "all": {
+          "D_eff_90": 19,
+          "D_eff_95": 23,
+          "dimension_locked_3": false,
+          "compression_ratio": 0.2638888888888889
+        },
+        "post_seal": {
+          "D_eff_90": 19,
+          "D_eff_95": 23,
+          "dimension_locked_3": false,
+          "compression_ratio": 0.2638888888888889
+        }
+      },
+      "gauge": [
+        {
+          "step": 0,
+          "phase": "post_seal",
+          "su3_indicator": 2.0869565217391304,
+          "closure": 1.0,
+          "n_moves": 71,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 50,
+          "phase": "post_seal",
+          "su3_indicator": 2.014354066985646,
+          "closure": 1.0,
+          "n_moves": 1260,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 100,
+          "phase": "post_seal",
+          "su3_indicator": 2.082474226804124,
+          "closure": 1.0,
+          "n_moves": 1196,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 150,
+          "phase": "post_seal",
+          "su3_indicator": 2.164021164021164,
+          "closure": 1.0,
+          "n_moves": 1196,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 200,
+          "phase": "post_seal",
+          "su3_indicator": 2.164021164021164,
+          "closure": 1.0,
+          "n_moves": 1196,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 250,
+          "phase": "post_seal",
+          "su3_indicator": 2.035532994923858,
+          "closure": 1.0,
+          "n_moves": 1196,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 300,
+          "phase": "post_seal",
+          "su3_indicator": 2.0626506024096387,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 350,
+          "phase": "post_seal",
+          "su3_indicator": 2.019002375296912,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 400,
+          "phase": "post_seal",
+          "su3_indicator": 2.019002375296912,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 450,
+          "phase": "post_seal",
+          "su3_indicator": 2.019002375296912,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 500,
+          "phase": "post_seal",
+          "su3_indicator": 2.019002375296912,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 550,
+          "phase": "post_seal",
+          "su3_indicator": 2.019002375296912,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 600,
+          "phase": "post_seal",
+          "su3_indicator": 2.0626506024096387,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 650,
+          "phase": "post_seal",
+          "su3_indicator": 2.019002375296912,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 700,
+          "phase": "post_seal",
+          "su3_indicator": 2.0047281323877066,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 750,
+          "phase": "post_seal",
+          "su3_indicator": 2.018867924528302,
+          "closure": 1.0,
+          "n_moves": 1280,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 800,
+          "phase": "post_seal",
+          "su3_indicator": 2.018867924528302,
+          "closure": 1.0,
+          "n_moves": 1280,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 850,
+          "phase": "post_seal",
+          "su3_indicator": 2.018867924528302,
+          "closure": 1.0,
+          "n_moves": 1280,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 900,
+          "phase": "post_seal",
+          "su3_indicator": 2.018867924528302,
+          "closure": 1.0,
+          "n_moves": 1280,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 950,
+          "phase": "post_seal",
+          "su3_indicator": 2.076923076923077,
+          "closure": 1.0,
+          "n_moves": 1280,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1000,
+          "phase": "post_seal",
+          "su3_indicator": 2.018867924528302,
+          "closure": 1.0,
+          "n_moves": 1280,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1050,
+          "phase": "post_seal",
+          "su3_indicator": 2.076923076923077,
+          "closure": 1.0,
+          "n_moves": 1280,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1100,
+          "phase": "post_seal",
+          "su3_indicator": 2.1527093596059115,
+          "closure": 1.0,
+          "n_moves": 1280,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1150,
+          "phase": "post_seal",
+          "su3_indicator": 2.0331753554502368,
+          "closure": 1.0,
+          "n_moves": 1280,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1200,
+          "phase": "post_seal",
+          "su3_indicator": 2.0331753554502368,
+          "closure": 1.0,
+          "n_moves": 1280,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1250,
+          "phase": "post_seal",
+          "su3_indicator": 2.018867924528302,
+          "closure": 1.0,
+          "n_moves": 1280,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1300,
+          "phase": "post_seal",
+          "su3_indicator": 2.0425531914893615,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1350,
+          "phase": "post_seal",
+          "su3_indicator": 2.1012048192771084,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1400,
+          "phase": "post_seal",
+          "su3_indicator": 2.1777777777777776,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1450,
+          "phase": "post_seal",
+          "su3_indicator": 2.1012048192771084,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1500,
+          "phase": "post_seal",
+          "su3_indicator": 2.0425531914893615,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1550,
+          "phase": "post_seal",
+          "su3_indicator": 2.0570071258907365,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1600,
+          "phase": "post_seal",
+          "su3_indicator": 2.1012048192771084,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1650,
+          "phase": "post_seal",
+          "su3_indicator": 2.0425531914893615,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1700,
+          "phase": "post_seal",
+          "su3_indicator": 2.0570071258907365,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1750,
+          "phase": "post_seal",
+          "su3_indicator": 2.1012048192771084,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1800,
+          "phase": "post_seal",
+          "su3_indicator": 2.0570071258907365,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1850,
+          "phase": "post_seal",
+          "su3_indicator": 2.0570071258907365,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1900,
+          "phase": "post_seal",
+          "su3_indicator": 2.0570071258907365,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1950,
+          "phase": "post_seal",
+          "su3_indicator": 2.1012048192771084,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        }
+      ]
+    },
+    {
+      "seed": 542,
+      "elapsed": 111.9688994884491,
+      "n_layers": 2,
+      "l0_sealed": true,
+      "l1_formed": true,
+      "seal_step": 0,
+      "l1_step": -1,
+      "nsi_max": 0.772,
+      "civ_max": 3,
+      "n_snapshots": 40,
+      "gravitational": [
+        {
+          "step": 0,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.6803043751960798,
+          "n_probes": 20
+        },
+        {
+          "step": 50,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4386865899416637,
+          "n_probes": 20
+        },
+        {
+          "step": 100,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4925133798223887,
+          "n_probes": 20
+        },
+        {
+          "step": 150,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4203201246627541,
+          "n_probes": 20
+        },
+        {
+          "step": 200,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.2733112910870461,
+          "n_probes": 20
+        },
+        {
+          "step": 250,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5340611346772054,
+          "n_probes": 20
+        },
+        {
+          "step": 300,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.45560232876971873,
+          "n_probes": 20
+        },
+        {
+          "step": 350,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5729470660234572,
+          "n_probes": 20
+        },
+        {
+          "step": 400,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.1829617051223262,
+          "n_probes": 20
+        },
+        {
+          "step": 450,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.7739429032035038,
+          "n_probes": 20
+        },
+        {
+          "step": 500,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.27403816173033907,
+          "n_probes": 20
+        },
+        {
+          "step": 550,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5602666979964602,
+          "n_probes": 20
+        },
+        {
+          "step": 600,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.3922005438476647,
+          "n_probes": 20
+        },
+        {
+          "step": 650,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5797805906786216,
+          "n_probes": 20
+        },
+        {
+          "step": 700,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4569954588763087,
+          "n_probes": 20
+        },
+        {
+          "step": 750,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.30013338501693326,
+          "n_probes": 20
+        },
+        {
+          "step": 800,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.43042932952534496,
+          "n_probes": 20
+        },
+        {
+          "step": 850,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.7152089052582264,
+          "n_probes": 20
+        },
+        {
+          "step": 900,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.33218874061345915,
+          "n_probes": 20
+        },
+        {
+          "step": 950,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.2900814018530932,
+          "n_probes": 20
+        },
+        {
+          "step": 1000,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5521011211976488,
+          "n_probes": 20
+        },
+        {
+          "step": 1050,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.30754120739276003,
+          "n_probes": 20
+        },
+        {
+          "step": 1100,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5507468792266941,
+          "n_probes": 20
+        },
+        {
+          "step": 1150,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4557150975771516,
+          "n_probes": 20
+        },
+        {
+          "step": 1200,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.6348267434084333,
+          "n_probes": 20
+        },
+        {
+          "step": 1250,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.39219067525760826,
+          "n_probes": 20
+        },
+        {
+          "step": 1300,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.6891530882252593,
+          "n_probes": 20
+        },
+        {
+          "step": 1350,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4905467185457728,
+          "n_probes": 20
+        },
+        {
+          "step": 1400,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5219112779513355,
+          "n_probes": 20
+        },
+        {
+          "step": 1450,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4463756609082797,
+          "n_probes": 20
+        },
+        {
+          "step": 1500,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5516405521871942,
+          "n_probes": 20
+        },
+        {
+          "step": 1550,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.7100881841871417,
+          "n_probes": 20
+        },
+        {
+          "step": 1600,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.25851608251192676,
+          "n_probes": 20
+        },
+        {
+          "step": 1650,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.6531823946928058,
+          "n_probes": 20
+        },
+        {
+          "step": 1700,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.37168199451605727,
+          "n_probes": 20
+        },
+        {
+          "step": 1750,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5731686977327943,
+          "n_probes": 20
+        },
+        {
+          "step": 1800,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4618526822129233,
+          "n_probes": 20
+        },
+        {
+          "step": 1850,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4472720303251407,
+          "n_probes": 20
+        },
+        {
+          "step": 1900,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.20975955328425672,
+          "n_probes": 20
+        },
+        {
+          "step": 1950,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5553417505809609,
+          "n_probes": 20
+        }
+      ],
+      "dimension": {
+        "all": {
+          "D_eff_90": 19,
+          "D_eff_95": 23,
+          "dimension_locked_3": false,
+          "compression_ratio": 0.2638888888888889
+        },
+        "post_seal": {
+          "D_eff_90": 19,
+          "D_eff_95": 23,
+          "dimension_locked_3": false,
+          "compression_ratio": 0.2638888888888889
+        }
+      },
+      "gauge": [
+        {
+          "step": 0,
+          "phase": "post_seal",
+          "su3_indicator": 2.0869565217391304,
+          "closure": 1.0,
+          "n_moves": 71,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 50,
+          "phase": "post_seal",
+          "su3_indicator": 2.3008130081300813,
+          "closure": 1.0,
+          "n_moves": 812,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 100,
+          "phase": "post_seal",
+          "su3_indicator": 2.016901408450704,
+          "closure": 1.0,
+          "n_moves": 1071,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 150,
+          "phase": "post_seal",
+          "su3_indicator": 2.291316526610644,
+          "closure": 1.0,
+          "n_moves": 1175,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 200,
+          "phase": "post_seal",
+          "su3_indicator": 2.2506393861892584,
+          "closure": 1.0,
+          "n_moves": 1271,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 250,
+          "phase": "post_seal",
+          "su3_indicator": 2.0331753554502368,
+          "closure": 1.0,
+          "n_moves": 1280,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 300,
+          "phase": "post_seal",
+          "su3_indicator": 2.062200956937799,
+          "closure": 1.0,
+          "n_moves": 1280,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 350,
+          "phase": "post_seal",
+          "su3_indicator": 2.1777777777777776,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 400,
+          "phase": "post_seal",
+          "su3_indicator": 2.1012048192771084,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 450,
+          "phase": "post_seal",
+          "su3_indicator": 2.450402144772118,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 500,
+          "phase": "post_seal",
+          "su3_indicator": 2.1012048192771084,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 550,
+          "phase": "post_seal",
+          "su3_indicator": 2.0570071258907365,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 600,
+          "phase": "post_seal",
+          "su3_indicator": 2.0570071258907365,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 650,
+          "phase": "post_seal",
+          "su3_indicator": 2.0570071258907365,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 700,
+          "phase": "post_seal",
+          "su3_indicator": 2.0425531914893615,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 750,
+          "phase": "post_seal",
+          "su3_indicator": 2.0570071258907365,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 800,
+          "phase": "post_seal",
+          "su3_indicator": 2.1012048192771084,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 850,
+          "phase": "post_seal",
+          "su3_indicator": 2.1012048192771084,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 900,
+          "phase": "post_seal",
+          "su3_indicator": 2.0570071258907365,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 950,
+          "phase": "post_seal",
+          "su3_indicator": 2.0425531914893615,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1000,
+          "phase": "post_seal",
+          "su3_indicator": 2.0425531914893615,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1050,
+          "phase": "post_seal",
+          "su3_indicator": 2.1012048192771084,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1100,
+          "phase": "post_seal",
+          "su3_indicator": 2.1777777777777776,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1150,
+          "phase": "post_seal",
+          "su3_indicator": 2.0570071258907365,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1200,
+          "phase": "post_seal",
+          "su3_indicator": 2.29156010230179,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1250,
+          "phase": "post_seal",
+          "su3_indicator": 2.1012048192771084,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1300,
+          "phase": "post_seal",
+          "su3_indicator": 2.0570071258907365,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1350,
+          "phase": "post_seal",
+          "su3_indicator": 2.1012048192771084,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1400,
+          "phase": "post_seal",
+          "su3_indicator": 2.1012048192771084,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1450,
+          "phase": "post_seal",
+          "su3_indicator": 2.1777777777777776,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1500,
+          "phase": "post_seal",
+          "su3_indicator": 2.0570071258907365,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1550,
+          "phase": "post_seal",
+          "su3_indicator": 2.450402144772118,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1600,
+          "phase": "post_seal",
+          "su3_indicator": 2.1777777777777776,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1650,
+          "phase": "post_seal",
+          "su3_indicator": 2.0425531914893615,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1700,
+          "phase": "post_seal",
+          "su3_indicator": 2.0425531914893615,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1750,
+          "phase": "post_seal",
+          "su3_indicator": 2.0570071258907365,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1800,
+          "phase": "post_seal",
+          "su3_indicator": 2.1012048192771084,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1850,
+          "phase": "post_seal",
+          "su3_indicator": 2.0425531914893615,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1900,
+          "phase": "post_seal",
+          "su3_indicator": 2.0570071258907365,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1950,
+          "phase": "post_seal",
+          "su3_indicator": 2.0425531914893615,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        }
+      ]
+    },
+    {
+      "seed": 642,
+      "elapsed": 120.63998889923096,
+      "n_layers": 2,
+      "l0_sealed": true,
+      "l1_formed": true,
+      "seal_step": 0,
+      "l1_step": -1,
+      "nsi_max": 0.6666,
+      "civ_max": 3,
+      "n_snapshots": 40,
+      "gravitational": [
+        {
+          "step": 0,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.894380358001387,
+          "n_probes": 20
+        },
+        {
+          "step": 50,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.41611922177762006,
+          "n_probes": 20
+        },
+        {
+          "step": 100,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.3582748597970812,
+          "n_probes": 20
+        },
+        {
+          "step": 150,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.46439797778554154,
+          "n_probes": 20
+        },
+        {
+          "step": 200,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.26280628682089024,
+          "n_probes": 20
+        },
+        {
+          "step": 250,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.6032754270948631,
+          "n_probes": 20
+        },
+        {
+          "step": 300,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5792102280289181,
+          "n_probes": 20
+        },
+        {
+          "step": 350,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5378543232428863,
+          "n_probes": 20
+        },
+        {
+          "step": 400,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.7872634132996782,
+          "n_probes": 20
+        },
+        {
+          "step": 450,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.6252664559202341,
+          "n_probes": 20
+        },
+        {
+          "step": 500,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.3252718894305081,
+          "n_probes": 20
+        },
+        {
+          "step": 550,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5419244414090197,
+          "n_probes": 20
+        },
+        {
+          "step": 600,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.17636372955131382,
+          "n_probes": 20
+        },
+        {
+          "step": 650,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.13763753806745127,
+          "n_probes": 20
+        },
+        {
+          "step": 700,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5481709211949319,
+          "n_probes": 20
+        },
+        {
+          "step": 750,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.34847181628755336,
+          "n_probes": 20
+        },
+        {
+          "step": 800,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.6654316809468143,
+          "n_probes": 20
+        },
+        {
+          "step": 850,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.6352217271828613,
+          "n_probes": 20
+        },
+        {
+          "step": 900,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.21621104110879275,
+          "n_probes": 20
+        },
+        {
+          "step": 950,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.7486680671615825,
+          "n_probes": 20
+        },
+        {
+          "step": 1000,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.48984216906216776,
+          "n_probes": 20
+        },
+        {
+          "step": 1050,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5693005810895544,
+          "n_probes": 20
+        },
+        {
+          "step": 1100,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5732946413002576,
+          "n_probes": 20
+        },
+        {
+          "step": 1150,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.3622101559782767,
+          "n_probes": 20
+        },
+        {
+          "step": 1200,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.3520563677723355,
+          "n_probes": 20
+        },
+        {
+          "step": 1250,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4441977738504105,
+          "n_probes": 20
+        },
+        {
+          "step": 1300,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.6751841257635625,
+          "n_probes": 20
+        },
+        {
+          "step": 1350,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.06867611579840753,
+          "n_probes": 20
+        },
+        {
+          "step": 1400,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.2888888023078492,
+          "n_probes": 20
+        },
+        {
+          "step": 1450,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.42879405511331986,
+          "n_probes": 20
+        },
+        {
+          "step": 1500,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5639019016286965,
+          "n_probes": 20
+        },
+        {
+          "step": 1550,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5802511300239804,
+          "n_probes": 20
+        },
+        {
+          "step": 1600,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.30113784009811,
+          "n_probes": 20
+        },
+        {
+          "step": 1650,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.24001427723453145,
+          "n_probes": 20
+        },
+        {
+          "step": 1700,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.48583828800890233,
+          "n_probes": 20
+        },
+        {
+          "step": 1750,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5517503921685005,
+          "n_probes": 20
+        },
+        {
+          "step": 1800,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5034988705775479,
+          "n_probes": 20
+        },
+        {
+          "step": 1850,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.23747457867171015,
+          "n_probes": 20
+        },
+        {
+          "step": 1900,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.1953521199173915,
+          "n_probes": 20
+        },
+        {
+          "step": 1950,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.7948720894058641,
+          "n_probes": 20
+        }
+      ],
+      "dimension": {
+        "all": {
+          "D_eff_90": 18,
+          "D_eff_95": 21,
+          "dimension_locked_3": false,
+          "compression_ratio": 0.25
+        },
+        "post_seal": {
+          "D_eff_90": 18,
+          "D_eff_95": 21,
+          "dimension_locked_3": false,
+          "compression_ratio": 0.25
+        }
+      },
+      "gauge": [
+        {
+          "step": 0,
+          "phase": "post_seal",
+          "su3_indicator": 2.0869565217391304,
+          "closure": 1.0,
+          "n_moves": 71,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 50,
+          "phase": "post_seal",
+          "su3_indicator": 2.15929203539823,
+          "closure": 1.0,
+          "n_moves": 1071,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 100,
+          "phase": "post_seal",
+          "su3_indicator": 2.247422680412371,
+          "closure": 1.0,
+          "n_moves": 1260,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 150,
+          "phase": "post_seal",
+          "su3_indicator": 2.0,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 200,
+          "phase": "post_seal",
+          "su3_indicator": 2.0570071258907365,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 250,
+          "phase": "post_seal",
+          "su3_indicator": 2.1313868613138687,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 300,
+          "phase": "post_seal",
+          "su3_indicator": 2.0570071258907365,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 350,
+          "phase": "post_seal",
+          "su3_indicator": 2.0140515222482436,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 400,
+          "phase": "post_seal",
+          "su3_indicator": 2.1313868613138687,
+          "closure": 1.0,
+          "n_moves": 1287,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 450,
+          "phase": "post_seal",
+          "su3_indicator": 2.1359223300970873,
+          "closure": 1.0,
+          "n_moves": 1292,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 500,
+          "phase": "post_seal",
+          "su3_indicator": 2.056603773584906,
+          "closure": 1.0,
+          "n_moves": 1296,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 550,
+          "phase": "post_seal",
+          "su3_indicator": 2.130434782608696,
+          "closure": 1.0,
+          "n_moves": 1296,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 600,
+          "phase": "post_seal",
+          "su3_indicator": 2.056603773584906,
+          "closure": 1.0,
+          "n_moves": 1296,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 650,
+          "phase": "post_seal",
+          "su3_indicator": 2.013953488372093,
+          "closure": 1.0,
+          "n_moves": 1296,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 700,
+          "phase": "post_seal",
+          "su3_indicator": 2.056603773584906,
+          "closure": 1.0,
+          "n_moves": 1296,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 750,
+          "phase": "post_seal",
+          "su3_indicator": 2.013953488372093,
+          "closure": 1.0,
+          "n_moves": 1296,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 800,
+          "phase": "post_seal",
+          "su3_indicator": 2.130434782608696,
+          "closure": 1.0,
+          "n_moves": 1296,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 850,
+          "phase": "post_seal",
+          "su3_indicator": 2.24,
+          "closure": 1.0,
+          "n_moves": 1296,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 900,
+          "phase": "post_seal",
+          "su3_indicator": 2.056603773584906,
+          "closure": 1.0,
+          "n_moves": 1296,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 950,
+          "phase": "post_seal",
+          "su3_indicator": 2.392670157068063,
+          "closure": 1.0,
+          "n_moves": 1296,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1000,
+          "phase": "post_seal",
+          "su3_indicator": 2.130434782608696,
+          "closure": 1.0,
+          "n_moves": 1296,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1050,
+          "phase": "post_seal",
+          "su3_indicator": 2.056603773584906,
+          "closure": 1.0,
+          "n_moves": 1296,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1100,
+          "phase": "post_seal",
+          "su3_indicator": 2.130434782608696,
+          "closure": 1.0,
+          "n_moves": 1296,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1150,
+          "phase": "post_seal",
+          "su3_indicator": 2.056603773584906,
+          "closure": 1.0,
+          "n_moves": 1296,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1200,
+          "phase": "post_seal",
+          "su3_indicator": 2.056603773584906,
+          "closure": 1.0,
+          "n_moves": 1296,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1250,
+          "phase": "post_seal",
+          "su3_indicator": 2.392670157068063,
+          "closure": 1.0,
+          "n_moves": 1296,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1300,
+          "phase": "post_seal",
+          "su3_indicator": 2.013953488372093,
+          "closure": 1.0,
+          "n_moves": 1296,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1350,
+          "phase": "post_seal",
+          "su3_indicator": 2.013953488372093,
+          "closure": 1.0,
+          "n_moves": 1296,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1400,
+          "phase": "post_seal",
+          "su3_indicator": 2.013953488372093,
+          "closure": 1.0,
+          "n_moves": 1296,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1450,
+          "phase": "post_seal",
+          "su3_indicator": 2.056603773584906,
+          "closure": 1.0,
+          "n_moves": 1296,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1500,
+          "phase": "post_seal",
+          "su3_indicator": 2.130434782608696,
+          "closure": 1.0,
+          "n_moves": 1296,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1550,
+          "phase": "post_seal",
+          "su3_indicator": 2.056603773584906,
+          "closure": 1.0,
+          "n_moves": 1296,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1600,
+          "phase": "post_seal",
+          "su3_indicator": 2.0,
+          "closure": 1.0,
+          "n_moves": 1296,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1650,
+          "phase": "post_seal",
+          "su3_indicator": 2.013953488372093,
+          "closure": 1.0,
+          "n_moves": 1296,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1700,
+          "phase": "post_seal",
+          "su3_indicator": 2.130434782608696,
+          "closure": 1.0,
+          "n_moves": 1296,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1750,
+          "phase": "post_seal",
+          "su3_indicator": 2.056603773584906,
+          "closure": 1.0,
+          "n_moves": 1296,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1800,
+          "phase": "post_seal",
+          "su3_indicator": 2.013953488372093,
+          "closure": 1.0,
+          "n_moves": 1296,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1850,
+          "phase": "post_seal",
+          "su3_indicator": 2.056603773584906,
+          "closure": 1.0,
+          "n_moves": 1296,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1900,
+          "phase": "post_seal",
+          "su3_indicator": 2.130434782608696,
+          "closure": 1.0,
+          "n_moves": 1296,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1950,
+          "phase": "post_seal",
+          "su3_indicator": 2.056603773584906,
+          "closure": 1.0,
+          "n_moves": 1296,
+          "commutator_density": 0.0
+        }
+      ]
+    },
+    {
+      "seed": 742,
+      "elapsed": 140.50550937652588,
+      "n_layers": 2,
+      "l0_sealed": true,
+      "l1_formed": true,
+      "seal_step": 0,
+      "l1_step": -1,
+      "nsi_max": 0.6358,
+      "civ_max": 3,
+      "n_snapshots": 40,
+      "gravitational": [
+        {
+          "step": 0,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.6918929035429049,
+          "n_probes": 20
+        },
+        {
+          "step": 50,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.6086095861293352,
+          "n_probes": 20
+        },
+        {
+          "step": 100,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.17518313901139465,
+          "n_probes": 20
+        },
+        {
+          "step": 150,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.18266104021484594,
+          "n_probes": 20
+        },
+        {
+          "step": 200,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.636046743775934,
+          "n_probes": 20
+        },
+        {
+          "step": 250,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.6324739635129438,
+          "n_probes": 20
+        },
+        {
+          "step": 300,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.3572060992085391,
+          "n_probes": 20
+        },
+        {
+          "step": 350,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.273098084383025,
+          "n_probes": 20
+        },
+        {
+          "step": 400,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4657210807494086,
+          "n_probes": 20
+        },
+        {
+          "step": 450,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5686721151283157,
+          "n_probes": 20
+        },
+        {
+          "step": 500,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.43280770980732924,
+          "n_probes": 20
+        },
+        {
+          "step": 550,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5665507914408068,
+          "n_probes": 20
+        },
+        {
+          "step": 600,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.22639241479478095,
+          "n_probes": 20
+        },
+        {
+          "step": 650,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.6317141551803167,
+          "n_probes": 20
+        },
+        {
+          "step": 700,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5530138785140729,
+          "n_probes": 20
+        },
+        {
+          "step": 750,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.6032490715008256,
+          "n_probes": 20
+        },
+        {
+          "step": 800,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.3764070208658446,
+          "n_probes": 20
+        },
+        {
+          "step": 850,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.30357385646822826,
+          "n_probes": 20
+        },
+        {
+          "step": 900,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4378579782191262,
+          "n_probes": 20
+        },
+        {
+          "step": 950,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4573118932085977,
+          "n_probes": 20
+        },
+        {
+          "step": 1000,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.290639436274325,
+          "n_probes": 20
+        },
+        {
+          "step": 1050,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.36585003474904054,
+          "n_probes": 20
+        },
+        {
+          "step": 1100,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.28259663342698615,
+          "n_probes": 20
+        },
+        {
+          "step": 1150,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.6813184316873,
+          "n_probes": 20
+        },
+        {
+          "step": 1200,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.527237360714391,
+          "n_probes": 20
+        },
+        {
+          "step": 1250,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5478575853526951,
+          "n_probes": 20
+        },
+        {
+          "step": 1300,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.6352802217886625,
+          "n_probes": 20
+        },
+        {
+          "step": 1350,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4997246250357448,
+          "n_probes": 20
+        },
+        {
+          "step": 1400,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.48582365862084415,
+          "n_probes": 20
+        },
+        {
+          "step": 1450,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.2612494142999476,
+          "n_probes": 20
+        },
+        {
+          "step": 1500,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5809971098169944,
+          "n_probes": 20
+        },
+        {
+          "step": 1550,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.20388704839616645,
+          "n_probes": 20
+        },
+        {
+          "step": 1600,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.308163991778654,
+          "n_probes": 20
+        },
+        {
+          "step": 1650,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.7234610577129683,
+          "n_probes": 20
+        },
+        {
+          "step": 1700,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.6230238566454948,
+          "n_probes": 20
+        },
+        {
+          "step": 1750,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.39547666433200224,
+          "n_probes": 20
+        },
+        {
+          "step": 1800,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.4730475775696823,
+          "n_probes": 20
+        },
+        {
+          "step": 1850,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.31390088520919496,
+          "n_probes": 20
+        },
+        {
+          "step": 1900,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.3700332612508331,
+          "n_probes": 20
+        },
+        {
+          "step": 1950,
+          "phase": "post_seal",
+          "correlation": 0.9999999999999998,
+          "correlation_3d": 0.5334713034543097,
+          "n_probes": 20
+        }
+      ],
+      "dimension": {
+        "all": {
+          "D_eff_90": 18,
+          "D_eff_95": 21,
+          "dimension_locked_3": false,
+          "compression_ratio": 0.25
+        },
+        "post_seal": {
+          "D_eff_90": 18,
+          "D_eff_95": 21,
+          "dimension_locked_3": false,
+          "compression_ratio": 0.25
+        }
+      },
+      "gauge": [
+        {
+          "step": 0,
+          "phase": "post_seal",
+          "su3_indicator": 2.0869565217391304,
+          "closure": 1.0,
+          "n_moves": 71,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 50,
+          "phase": "post_seal",
+          "su3_indicator": 2.0476190476190474,
+          "closure": 1.0,
+          "n_moves": 1152,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 100,
+          "phase": "post_seal",
+          "su3_indicator": 2.090909090909091,
+          "closure": 1.0,
+          "n_moves": 1292,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 150,
+          "phase": "post_seal",
+          "su3_indicator": 2.1359223300970873,
+          "closure": 1.0,
+          "n_moves": 1292,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 200,
+          "phase": "post_seal",
+          "su3_indicator": 2.0761904761904764,
+          "closure": 1.0,
+          "n_moves": 1292,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 250,
+          "phase": "post_seal",
+          "su3_indicator": 2.1359223300970873,
+          "closure": 1.0,
+          "n_moves": 1292,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 300,
+          "phase": "post_seal",
+          "su3_indicator": 2.0761904761904764,
+          "closure": 1.0,
+          "n_moves": 1292,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 350,
+          "phase": "post_seal",
+          "su3_indicator": 2.090909090909091,
+          "closure": 1.0,
+          "n_moves": 1292,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 400,
+          "phase": "post_seal",
+          "su3_indicator": 2.2139303482587063,
+          "closure": 1.0,
+          "n_moves": 1292,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 450,
+          "phase": "post_seal",
+          "su3_indicator": 2.090909090909091,
+          "closure": 1.0,
+          "n_moves": 1292,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 500,
+          "phase": "post_seal",
+          "su3_indicator": 2.0761904761904764,
+          "closure": 1.0,
+          "n_moves": 1292,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 550,
+          "phase": "post_seal",
+          "su3_indicator": 2.1359223300970873,
+          "closure": 1.0,
+          "n_moves": 1292,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 600,
+          "phase": "post_seal",
+          "su3_indicator": 2.1359223300970873,
+          "closure": 1.0,
+          "n_moves": 1292,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 650,
+          "phase": "post_seal",
+          "su3_indicator": 2.1359223300970873,
+          "closure": 1.0,
+          "n_moves": 1292,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 700,
+          "phase": "post_seal",
+          "su3_indicator": 2.4918918918918918,
+          "closure": 1.0,
+          "n_moves": 1292,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 750,
+          "phase": "post_seal",
+          "su3_indicator": 2.0761904761904764,
+          "closure": 1.0,
+          "n_moves": 1292,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 800,
+          "phase": "post_seal",
+          "su3_indicator": 2.2139303482587063,
+          "closure": 1.0,
+          "n_moves": 1292,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 850,
+          "phase": "post_seal",
+          "su3_indicator": 2.090909090909091,
+          "closure": 1.0,
+          "n_moves": 1292,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 900,
+          "phase": "post_seal",
+          "su3_indicator": 2.061465721040189,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 950,
+          "phase": "post_seal",
+          "su3_indicator": 2.061465721040189,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1000,
+          "phase": "post_seal",
+          "su3_indicator": 2.061465721040189,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1050,
+          "phase": "post_seal",
+          "su3_indicator": 2.090692124105012,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1100,
+          "phase": "post_seal",
+          "su3_indicator": 2.061465721040189,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1150,
+          "phase": "post_seal",
+          "su3_indicator": 2.090692124105012,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1200,
+          "phase": "post_seal",
+          "su3_indicator": 2.150851581508516,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1250,
+          "phase": "post_seal",
+          "su3_indicator": 2.061465721040189,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1300,
+          "phase": "post_seal",
+          "su3_indicator": 2.061465721040189,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1350,
+          "phase": "post_seal",
+          "su3_indicator": 2.090692124105012,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1400,
+          "phase": "post_seal",
+          "su3_indicator": 2.090692124105012,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1450,
+          "phase": "post_seal",
+          "su3_indicator": 2.061465721040189,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1500,
+          "phase": "post_seal",
+          "su3_indicator": 2.090692124105012,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1550,
+          "phase": "post_seal",
+          "su3_indicator": 2.150851581508516,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1600,
+          "phase": "post_seal",
+          "su3_indicator": 2.245614035087719,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1650,
+          "phase": "post_seal",
+          "su3_indicator": 2.061465721040189,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1700,
+          "phase": "post_seal",
+          "su3_indicator": 2.090692124105012,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1750,
+          "phase": "post_seal",
+          "su3_indicator": 2.061465721040189,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1800,
+          "phase": "post_seal",
+          "su3_indicator": 2.090692124105012,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1850,
+          "phase": "post_seal",
+          "su3_indicator": 2.090692124105012,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1900,
+          "phase": "post_seal",
+          "su3_indicator": 2.061465721040189,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        },
+        {
+          "step": 1950,
+          "phase": "post_seal",
+          "su3_indicator": 2.090692124105012,
+          "closure": 1.0,
+          "n_moves": 1295,
+          "commutator_density": 0.0
+        }
+      ]
+    }
+  ]
+}

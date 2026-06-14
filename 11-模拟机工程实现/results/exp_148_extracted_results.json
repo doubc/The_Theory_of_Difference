@@ -1,0 +1,53 @@
+{
+  "experiment": "exp_148_phase11_p2",
+  "source": "extracted_from_log",
+  "S0": {
+    "n_seeds": 16,
+    "l1_formed": 0,
+    "l1_rate": 0.0,
+    "nsi_mean": 0.8408,
+    "nsi_min": 0.688,
+    "nsi_max": 0.88,
+    "odi_mean": 0.7185,
+    "odi_min": 0.6793,
+    "odi_max": 0.7446,
+    "civ_mean": 3.0,
+    "civ_min": 3,
+    "civ_max": 3,
+    "elapsed_mean": 34.7
+  },
+  "S1": {
+    "n_seeds": 16,
+    "l1_formed": 0,
+    "l1_rate": 0.0,
+    "nsi_mean": 0.8408,
+    "nsi_min": 0.688,
+    "nsi_max": 0.88,
+    "odi_mean": 0.7185,
+    "odi_min": 0.6793,
+    "odi_max": 0.7446,
+    "civ_mean": 3.0,
+    "civ_min": 3,
+    "civ_max": 3,
+    "elapsed_mean": 33.7
+  },
+  "S2": {
+    "n_seeds": 16,
+    "l1_formed": 0,
+    "l1_rate": 0.0,
+    "nsi_mean": 0.8408,
+    "nsi_min": 0.688,
+    "nsi_max": 0.88,
+    "odi_mean": 0.7185,
+    "odi_min": 0.6793,
+    "odi_max": 0.7446,
+    "civ_mean": 3.0,
+    "civ_min": 3,
+    "civ_max": 3,
+    "elapsed_mean": 33.6
+  },
+  "cross_subspace": {
+    "l1_rate_mean": 0.0,
+    "l1_rate_std": 0.0
+  }
+}

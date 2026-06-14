@@ -1,0 +1,121 @@
+{
+  "experiment": "exp_150_phase11_p3",
+  "datetime": "2026-06-06T21:01:10.598242",
+  "config": {
+    "N0": 108,
+    "k": 3,
+    "subspaces": [
+      "S0",
+      "S1",
+      "S2"
+    ],
+    "coupling_levels": [
+      0.0,
+      0.1,
+      0.3,
+      0.5,
+      0.7,
+      1.0
+    ],
+    "seeds": [
+      42,
+      242
+    ],
+    "steps_per_layer": 5000,
+    "max_layers": 3,
+    "coordination": "majority_sealed"
+  },
+  "n_pass": 3,
+  "hypotheses": {
+    "H150_1": {
+      "pass": true,
+      "description": "Weak coupling: subspaces independent (baseline)."
+    },
+    "H150_2": {
+      "pass": true,
+      "description": "Medium coupling: L1 decreases (ordered: True, drops=0.000/0.000/0.000)."
+    },
+    "H150_3": {
+      "pass": false,
+      "description": "Strong coupling: L1 near zero (['1.000', '1.000'])."
+    },
+    "H150_4": {
+      "pass": true,
+      "description": "Monotonic inhibition (rates=['1.000', '1.000', '1.000', '1.000', '1.000', '1.000'])."
+    }
+  },
+  "aggregates": {
+    "0.0": {
+      "n": 2,
+      "l1_any_rate": 1.0,
+      "l1_all_rate": 0.5,
+      "l1_rate_mean": 0.6666666666666666,
+      "mean_hw_diff": 3.0,
+      "sub_l1": {
+        "S0": 0.5,
+        "S1": 0.5,
+        "S2": 1.0
+      }
+    },
+    "0.1": {
+      "n": 2,
+      "l1_any_rate": 1.0,
+      "l1_all_rate": 0.5,
+      "l1_rate_mean": 0.6666666666666666,
+      "mean_hw_diff": 1.6666666666666665,
+      "sub_l1": {
+        "S0": 0.5,
+        "S1": 0.5,
+        "S2": 1.0
+      }
+    },
+    "0.3": {
+      "n": 2,
+      "l1_any_rate": 1.0,
+      "l1_all_rate": 0.5,
+      "l1_rate_mean": 0.6666666666666666,
+      "mean_hw_diff": 1.6666666666666665,
+      "sub_l1": {
+        "S0": 0.5,
+        "S1": 0.5,
+        "S2": 1.0
+      }
+    },
+    "0.5": {
+      "n": 2,
+      "l1_any_rate": 1.0,
+      "l1_all_rate": 0.5,
+      "l1_rate_mean": 0.6666666666666666,
+      "mean_hw_diff": 1.6666666666666665,
+      "sub_l1": {
+        "S0": 0.5,
+        "S1": 0.5,
+        "S2": 1.0
+      }
+    },
+    "0.7": {
+      "n": 2,
+      "l1_any_rate": 1.0,
+      "l1_all_rate": 0.5,
+      "l1_rate_mean": 0.6666666666666666,
+      "mean_hw_diff": 3.0,
+      "sub_l1": {
+        "S0": 0.5,
+        "S1": 0.5,
+        "S2": 1.0
+      }
+    },
+    "1.0": {
+      "n": 2,
+      "l1_any_rate": 1.0,
+      "l1_all_rate": 0.5,
+      "l1_rate_mean": 0.6666666666666666,
+      "mean_hw_diff": 3.0,
+      "sub_l1": {
+        "S0": 0.5,
+        "S1": 0.5,
+        "S2": 1.0
+      }
+    }
+  }
+}

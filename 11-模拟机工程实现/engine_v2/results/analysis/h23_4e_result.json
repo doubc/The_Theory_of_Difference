@@ -1,0 +1,10 @@
+{
+  "hypothesis": "H23-4e",
+  "description": "Narrative recursion trajectory shows spiral pattern",
+  "passed": false,
+  "g5_mean": 0.11841029321720102,
+  "random_mean": 0.6696970393138328,
+  "difference": -0.5512867460966319,
+  "p_value": 1.0,
+  "t_statistic": -26.810934023600826
+}

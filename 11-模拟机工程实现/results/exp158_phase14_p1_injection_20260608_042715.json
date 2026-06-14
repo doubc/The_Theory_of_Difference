@@ -1,0 +1,2138 @@
+{
+  "params": {
+    "N_base": 48,
+    "total_steps": 400,
+    "post_seal_steps": 400,
+    "n_runs": 8,
+    "timestamp": "20260608_042715",
+    "experiment": "exp_158_phase14_p1_time_structured_injection"
+  },
+  "analysis": {
+    "by_mode": {
+      "constant": {
+        "n_runs": 8,
+        "n_sealed": 7,
+        "seal_rate": 0.875,
+        "n_L2_signal": 0,
+        "L2_rate": 0.0,
+        "hw_var_mean": 0.0,
+        "hw_var_std": 0.0,
+        "hw_mean": 24.857142857142858,
+        "hw_range_mean": 0.0,
+        "hw_last_var_mean": 0.0,
+        "var_ratio_mean": 0.0,
+        "n_windows_mean": 0.0,
+        "xi_post_mean": 0.040000000000000015,
+        "persistent_active_ratio": 0.0,
+        "max_window_var_mean": 0.0
+      },
+      "pulse_b20s100": {
+        "n_runs": 8,
+        "n_sealed": 8,
+        "seal_rate": 1.0,
+        "n_L2_signal": 0,
+        "L2_rate": 0.0,
+        "hw_var_mean": 0.0,
+        "hw_var_std": 0.0,
+        "hw_mean": 24.25,
+        "hw_range_mean": 0.0,
+        "hw_last_var_mean": 0.0,
+        "var_ratio_mean": 0.0,
+        "n_windows_mean": 0.0,
+        "xi_post_mean": 0.030625000000000003,
+        "persistent_active_ratio": 0.0,
+        "max_window_var_mean": 0.0
+      },
+      "pulse_b20s20": {
+        "n_runs": 8,
+        "n_sealed": 8,
+        "seal_rate": 1.0,
+        "n_L2_signal": 0,
+        "L2_rate": 0.0,
+        "hw_var_mean": 0.0,
+        "hw_var_std": 0.0,
+        "hw_mean": 26.125,
+        "hw_range_mean": 0.0,
+        "hw_last_var_mean": 0.0,
+        "var_ratio_mean": 0.0,
+        "n_windows_mean": 0.0,
+        "xi_post_mean": 0.03125,
+        "persistent_active_ratio": 0.0,
+        "max_window_var_mean": 0.0
+      },
+      "pulse_b5s10": {
+        "n_runs": 8,
+        "n_sealed": 8,
+        "seal_rate": 1.0,
+        "n_L2_signal": 0,
+        "L2_rate": 0.0,
+        "hw_var_mean": 0.0,
+        "hw_var_std": 0.0,
+        "hw_mean": 24.5,
+        "hw_range_mean": 0.0,
+        "hw_last_var_mean": 0.0,
+        "var_ratio_mean": 0.0,
+        "n_windows_mean": 0.0,
+        "xi_post_mean": 0.038125000000000006,
+        "persistent_active_ratio": 0.0,
+        "max_window_var_mean": 0.0
+      },
+      "pulse_b5s50": {
+        "n_runs": 8,
+        "n_sealed": 8,
+        "seal_rate": 1.0,
+        "n_L2_signal": 0,
+        "L2_rate": 0.0,
+        "hw_var_mean": 0.0,
+        "hw_var_std": 0.0,
+        "hw_mean": 25.5,
+        "hw_range_mean": 0.0,
+        "hw_last_var_mean": 0.0,
+        "var_ratio_mean": 0.0,
+        "n_windows_mean": 0.0,
+        "xi_post_mean": 0.03875000000000001,
+        "persistent_active_ratio": 0.0,
+        "max_window_var_mean": 0.0
+      },
+      "ramp_p100m3.0": {
+        "n_runs": 8,
+        "n_sealed": 8,
+        "seal_rate": 1.0,
+        "n_L2_signal": 0,
+        "L2_rate": 0.0,
+        "hw_var_mean": 0.0,
+        "hw_var_std": 0.0,
+        "hw_mean": 24.375,
+        "hw_range_mean": 0.0,
+        "hw_last_var_mean": 0.0,
+        "var_ratio_mean": 0.0,
+        "n_windows_mean": 0.0,
+        "xi_post_mean": 0.0325,
+        "persistent_active_ratio": 0.0,
+        "max_window_var_mean": 0.0
+      },
+      "random_avg3": {
+        "n_runs": 8,
+        "n_sealed": 8,
+        "seal_rate": 1.0,
+        "n_L2_signal": 0,
+        "L2_rate": 0.0,
+        "hw_var_mean": 0.0,
+        "hw_var_std": 0.0,
+        "hw_mean": 26.0,
+        "hw_range_mean": 0.0,
+        "hw_last_var_mean": 0.0,
+        "var_ratio_mean": 0.0,
+        "n_windows_mean": 0.0,
+        "xi_post_mean": 0.033125,
+        "persistent_active_ratio": 0.0,
+        "max_window_var_mean": 0.0
+      },
+      "random_avg30": {
+        "n_runs": 8,
+        "n_sealed": 8,
+        "seal_rate": 1.0,
+        "n_L2_signal": 0,
+        "L2_rate": 0.0,
+        "hw_var_mean": 0.0,
+        "hw_var_std": 0.0,
+        "hw_mean": 23.75,
+        "hw_range_mean": 0.0,
+        "hw_last_var_mean": 0.0,
+        "var_ratio_mean": 0.0,
+        "n_windows_mean": 0.0,
+        "xi_post_mean": 0.035625000000000004,
+        "persistent_active_ratio": 0.0,
+        "max_window_var_mean": 0.0
+      }
+    },
+    "ranked_by_L2": [
+      [
+        "constant",
+        0.0
+      ],
+      [
+        "pulse_b20s100",
+        0.0
+      ],
+      [
+        "pulse_b20s20",
+        0.0
+      ],
+      [
+        "pulse_b5s10",
+        0.0
+      ],
+      [
+        "pulse_b5s50",
+        0.0
+      ],
+      [
+        "ramp_p100m3.0",
+        0.0
+      ],
+      [
+        "random_avg3",
+        0.0
+      ],
+      [
+        "random_avg30",
+        0.0
+      ]
+    ]
+  },
+  "metrics": [
+    {
+      "mode_label": "constant",
+      "config": {
+        "injection_mode": "constant"
+      },
+      "run_id": 0,
+      "seed": 4393,
+      "sealed": true,
+      "seal_step": 16,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 26.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 26.0,
+      "post_hw_min": 26.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.025,
+      "xi_post_mean": 0.03500000000000001,
+      "elapsed_sec": 13.15
+    },
+    {
+      "mode_label": "constant",
+      "config": {
+        "injection_mode": "constant"
+      },
+      "run_id": 1,
+      "seed": 35730,
+      "sealed": true,
+      "seal_step": 13,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 27.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 27.0,
+      "post_hw_min": 27.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.025,
+      "xi_post_mean": 0.045000000000000005,
+      "elapsed_sec": 12.38
+    },
+    {
+      "mode_label": "constant",
+      "config": {
+        "injection_mode": "constant"
+      },
+      "run_id": 2,
+      "seed": 67067,
+      "sealed": false,
+      "seal_step": -1,
+      "n_sealed_bits": 0,
+      "sealed_ratio": 0.0,
+      "final_sealed_count": 0,
+      "new_sealed_post": 0,
+      "post_hw_mean": NaN,
+      "post_hw_var": NaN,
+      "post_hw_max": NaN,
+      "post_hw_min": NaN,
+      "post_hw_range": NaN,
+      "post_last_var": NaN,
+      "L2_signal": {
+        "var_ratio": NaN,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.041666666666666664,
+      "xi_post_mean": 0.0,
+      "elapsed_sec": 9.38
+    },
+    {
+      "mode_label": "constant",
+      "config": {
+        "injection_mode": "constant"
+      },
+      "run_id": 3,
+      "seed": 98404,
+      "sealed": true,
+      "seal_step": 9,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 27.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 27.0,
+      "post_hw_min": 27.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.07500000000000001,
+      "xi_post_mean": 0.04000000000000001,
+      "elapsed_sec": 13.16
+    },
+    {
+      "mode_label": "constant",
+      "config": {
+        "injection_mode": "constant"
+      },
+      "run_id": 4,
+      "seed": 129741,
+      "sealed": true,
+      "seal_step": 14,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 24.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 24.0,
+      "post_hw_min": 24.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.025,
+      "xi_post_mean": 0.05,
+      "elapsed_sec": 12.78
+    },
+    {
+      "mode_label": "constant",
+      "config": {
+        "injection_mode": "constant"
+      },
+      "run_id": 5,
+      "seed": 161078,
+      "sealed": true,
+      "seal_step": 6,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 27.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 27.0,
+      "post_hw_min": 27.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.025,
+      "xi_post_mean": 0.045000000000000005,
+      "elapsed_sec": 12.73
+    },
+    {
+      "mode_label": "constant",
+      "config": {
+        "injection_mode": "constant"
+      },
+      "run_id": 6,
+      "seed": 192415,
+      "sealed": true,
+      "seal_step": 29,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 25.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 25.0,
+      "post_hw_min": 25.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.025,
+      "xi_post_mean": 0.04000000000000001,
+      "elapsed_sec": 12.67
+    },
+    {
+      "mode_label": "constant",
+      "config": {
+        "injection_mode": "constant"
+      },
+      "run_id": 7,
+      "seed": 223752,
+      "sealed": true,
+      "seal_step": 34,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 18.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 18.0,
+      "post_hw_min": 18.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.07500000000000001,
+      "xi_post_mean": 0.025,
+      "elapsed_sec": 12.61
+    },
+    {
+      "mode_label": "pulse_b5s10",
+      "config": {
+        "injection_mode": "pulse",
+        "burst_steps": 5,
+        "silent_steps": 10
+      },
+      "run_id": 0,
+      "seed": 51578,
+      "sealed": true,
+      "seal_step": 13,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 23.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 23.0,
+      "post_hw_min": 23.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.025,
+      "xi_post_mean": 0.05500000000000001,
+      "elapsed_sec": 11.59
+    },
+    {
+      "mode_label": "pulse_b5s10",
+      "config": {
+        "injection_mode": "pulse",
+        "burst_steps": 5,
+        "silent_steps": 10
+      },
+      "run_id": 1,
+      "seed": 82915,
+      "sealed": true,
+      "seal_step": 12,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 28.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 28.0,
+      "post_hw_min": 28.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.025,
+      "xi_post_mean": 0.035,
+      "elapsed_sec": 11.51
+    },
+    {
+      "mode_label": "pulse_b5s10",
+      "config": {
+        "injection_mode": "pulse",
+        "burst_steps": 5,
+        "silent_steps": 10
+      },
+      "run_id": 2,
+      "seed": 114252,
+      "sealed": true,
+      "seal_step": 16,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 23.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 23.0,
+      "post_hw_min": 23.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.07500000000000001,
+      "xi_post_mean": 0.025,
+      "elapsed_sec": 11.33
+    },
+    {
+      "mode_label": "pulse_b5s10",
+      "config": {
+        "injection_mode": "pulse",
+        "burst_steps": 5,
+        "silent_steps": 10
+      },
+      "run_id": 3,
+      "seed": 145589,
+      "sealed": true,
+      "seal_step": 26,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 22.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 22.0,
+      "post_hw_min": 22.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.275,
+      "xi_post_mean": 0.05,
+      "elapsed_sec": 11.36
+    },
+    {
+      "mode_label": "pulse_b5s10",
+      "config": {
+        "injection_mode": "pulse",
+        "burst_steps": 5,
+        "silent_steps": 10
+      },
+      "run_id": 4,
+      "seed": 176926,
+      "sealed": true,
+      "seal_step": 12,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 25.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 25.0,
+      "post_hw_min": 25.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.025,
+      "xi_post_mean": 0.03500000000000001,
+      "elapsed_sec": 11.98
+    },
+    {
+      "mode_label": "pulse_b5s10",
+      "config": {
+        "injection_mode": "pulse",
+        "burst_steps": 5,
+        "silent_steps": 10
+      },
+      "run_id": 5,
+      "seed": 208263,
+      "sealed": true,
+      "seal_step": 11,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 26.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 26.0,
+      "post_hw_min": 26.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.07500000000000001,
+      "xi_post_mean": 0.03500000000000001,
+      "elapsed_sec": 12.14
+    },
+    {
+      "mode_label": "pulse_b5s10",
+      "config": {
+        "injection_mode": "pulse",
+        "burst_steps": 5,
+        "silent_steps": 10
+      },
+      "run_id": 6,
+      "seed": 239600,
+      "sealed": true,
+      "seal_step": 27,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 23.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 23.0,
+      "post_hw_min": 23.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.07500000000000001,
+      "xi_post_mean": 0.035,
+      "elapsed_sec": 11.4
+    },
+    {
+      "mode_label": "pulse_b5s10",
+      "config": {
+        "injection_mode": "pulse",
+        "burst_steps": 5,
+        "silent_steps": 10
+      },
+      "run_id": 7,
+      "seed": 270937,
+      "sealed": true,
+      "seal_step": 19,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 26.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 26.0,
+      "post_hw_min": 26.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.07500000000000001,
+      "xi_post_mean": 0.03500000000000001,
+      "elapsed_sec": 11.82
+    },
+    {
+      "mode_label": "pulse_b5s50",
+      "config": {
+        "injection_mode": "pulse",
+        "burst_steps": 5,
+        "silent_steps": 50
+      },
+      "run_id": 0,
+      "seed": 87102,
+      "sealed": true,
+      "seal_step": 13,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 27.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 27.0,
+      "post_hw_min": 27.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.07500000000000001,
+      "xi_post_mean": 0.05500000000000001,
+      "elapsed_sec": 11.71
+    },
+    {
+      "mode_label": "pulse_b5s50",
+      "config": {
+        "injection_mode": "pulse",
+        "burst_steps": 5,
+        "silent_steps": 50
+      },
+      "run_id": 1,
+      "seed": 118439,
+      "sealed": true,
+      "seal_step": 11,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 29.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 29.0,
+      "post_hw_min": 29.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.025,
+      "xi_post_mean": 0.04000000000000001,
+      "elapsed_sec": 10.93
+    },
+    {
+      "mode_label": "pulse_b5s50",
+      "config": {
+        "injection_mode": "pulse",
+        "burst_steps": 5,
+        "silent_steps": 50
+      },
+      "run_id": 2,
+      "seed": 149776,
+      "sealed": true,
+      "seal_step": 23,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 23.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 23.0,
+      "post_hw_min": 23.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.025,
+      "xi_post_mean": 0.025,
+      "elapsed_sec": 11.55
+    },
+    {
+      "mode_label": "pulse_b5s50",
+      "config": {
+        "injection_mode": "pulse",
+        "burst_steps": 5,
+        "silent_steps": 50
+      },
+      "run_id": 3,
+      "seed": 181113,
+      "sealed": true,
+      "seal_step": 8,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 29.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 29.0,
+      "post_hw_min": 29.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.125,
+      "xi_post_mean": 0.025,
+      "elapsed_sec": 11.3
+    },
+    {
+      "mode_label": "pulse_b5s50",
+      "config": {
+        "injection_mode": "pulse",
+        "burst_steps": 5,
+        "silent_steps": 50
+      },
+      "run_id": 4,
+      "seed": 212450,
+      "sealed": true,
+      "seal_step": 19,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 24.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 24.0,
+      "post_hw_min": 24.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.07500000000000001,
+      "xi_post_mean": 0.025,
+      "elapsed_sec": 11.1
+    },
+    {
+      "mode_label": "pulse_b5s50",
+      "config": {
+        "injection_mode": "pulse",
+        "burst_steps": 5,
+        "silent_steps": 50
+      },
+      "run_id": 5,
+      "seed": 243787,
+      "sealed": true,
+      "seal_step": 12,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 27.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 27.0,
+      "post_hw_min": 27.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.025,
+      "xi_post_mean": 0.06499999999999999,
+      "elapsed_sec": 11.63
+    },
+    {
+      "mode_label": "pulse_b5s50",
+      "config": {
+        "injection_mode": "pulse",
+        "burst_steps": 5,
+        "silent_steps": 50
+      },
+      "run_id": 6,
+      "seed": 275124,
+      "sealed": true,
+      "seal_step": 19,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 21.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 21.0,
+      "post_hw_min": 21.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.025,
+      "xi_post_mean": 0.05000000000000001,
+      "elapsed_sec": 11.22
+    },
+    {
+      "mode_label": "pulse_b5s50",
+      "config": {
+        "injection_mode": "pulse",
+        "burst_steps": 5,
+        "silent_steps": 50
+      },
+      "run_id": 7,
+      "seed": 306461,
+      "sealed": true,
+      "seal_step": 11,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 24.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 24.0,
+      "post_hw_min": 24.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.025,
+      "xi_post_mean": 0.025,
+      "elapsed_sec": 11.19
+    },
+    {
+      "mode_label": "pulse_b20s20",
+      "config": {
+        "injection_mode": "pulse",
+        "burst_steps": 20,
+        "silent_steps": 20
+      },
+      "run_id": 0,
+      "seed": 5756,
+      "sealed": true,
+      "seal_step": 18,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 22.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 22.0,
+      "post_hw_min": 22.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.025,
+      "xi_post_mean": 0.045000000000000005,
+      "elapsed_sec": 12.33
+    },
+    {
+      "mode_label": "pulse_b20s20",
+      "config": {
+        "injection_mode": "pulse",
+        "burst_steps": 20,
+        "silent_steps": 20
+      },
+      "run_id": 1,
+      "seed": 37093,
+      "sealed": true,
+      "seal_step": 12,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 30.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 30.0,
+      "post_hw_min": 30.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.07500000000000001,
+      "xi_post_mean": 0.025,
+      "elapsed_sec": 11.97
+    },
+    {
+      "mode_label": "pulse_b20s20",
+      "config": {
+        "injection_mode": "pulse",
+        "burst_steps": 20,
+        "silent_steps": 20
+      },
+      "run_id": 2,
+      "seed": 68430,
+      "sealed": true,
+      "seal_step": 19,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 28.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 28.0,
+      "post_hw_min": 28.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.025,
+      "xi_post_mean": 0.05500000000000001,
+      "elapsed_sec": 12.19
+    },
+    {
+      "mode_label": "pulse_b20s20",
+      "config": {
+        "injection_mode": "pulse",
+        "burst_steps": 20,
+        "silent_steps": 20
+      },
+      "run_id": 3,
+      "seed": 99767,
+      "sealed": true,
+      "seal_step": 39,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 22.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 22.0,
+      "post_hw_min": 22.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.125,
+      "xi_post_mean": 0.025,
+      "elapsed_sec": 11.64
+    },
+    {
+      "mode_label": "pulse_b20s20",
+      "config": {
+        "injection_mode": "pulse",
+        "burst_steps": 20,
+        "silent_steps": 20
+      },
+      "run_id": 4,
+      "seed": 131104,
+      "sealed": true,
+      "seal_step": 9,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 28.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 28.0,
+      "post_hw_min": 28.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.07500000000000001,
+      "xi_post_mean": 0.025,
+      "elapsed_sec": 11.98
+    },
+    {
+      "mode_label": "pulse_b20s20",
+      "config": {
+        "injection_mode": "pulse",
+        "burst_steps": 20,
+        "silent_steps": 20
+      },
+      "run_id": 5,
+      "seed": 162441,
+      "sealed": true,
+      "seal_step": 6,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 31.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 31.0,
+      "post_hw_min": 31.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.025,
+      "xi_post_mean": 0.025,
+      "elapsed_sec": 12.0
+    },
+    {
+      "mode_label": "pulse_b20s20",
+      "config": {
+        "injection_mode": "pulse",
+        "burst_steps": 20,
+        "silent_steps": 20
+      },
+      "run_id": 6,
+      "seed": 193778,
+      "sealed": true,
+      "seal_step": 33,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 23.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 23.0,
+      "post_hw_min": 23.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.025,
+      "xi_post_mean": 0.025,
+      "elapsed_sec": 11.94
+    },
+    {
+      "mode_label": "pulse_b20s20",
+      "config": {
+        "injection_mode": "pulse",
+        "burst_steps": 20,
+        "silent_steps": 20
+      },
+      "run_id": 7,
+      "seed": 225115,
+      "sealed": true,
+      "seal_step": 29,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 25.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 25.0,
+      "post_hw_min": 25.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.07500000000000001,
+      "xi_post_mean": 0.025,
+      "elapsed_sec": 11.8
+    },
+    {
+      "mode_label": "pulse_b20s100",
+      "config": {
+        "injection_mode": "pulse",
+        "burst_steps": 20,
+        "silent_steps": 100
+      },
+      "run_id": 0,
+      "seed": 52143,
+      "sealed": true,
+      "seal_step": 13,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 26.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 26.0,
+      "post_hw_min": 26.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.025,
+      "xi_post_mean": 0.030000000000000006,
+      "elapsed_sec": 11.32
+    },
+    {
+      "mode_label": "pulse_b20s100",
+      "config": {
+        "injection_mode": "pulse",
+        "burst_steps": 20,
+        "silent_steps": 100
+      },
+      "run_id": 1,
+      "seed": 83480,
+      "sealed": true,
+      "seal_step": 23,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 23.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 23.0,
+      "post_hw_min": 23.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.025,
+      "xi_post_mean": 0.025,
+      "elapsed_sec": 11.49
+    },
+    {
+      "mode_label": "pulse_b20s100",
+      "config": {
+        "injection_mode": "pulse",
+        "burst_steps": 20,
+        "silent_steps": 100
+      },
+      "run_id": 2,
+      "seed": 114817,
+      "sealed": true,
+      "seal_step": 10,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 26.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 26.0,
+      "post_hw_min": 26.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.07500000000000001,
+      "xi_post_mean": 0.035,
+      "elapsed_sec": 11.76
+    },
+    {
+      "mode_label": "pulse_b20s100",
+      "config": {
+        "injection_mode": "pulse",
+        "burst_steps": 20,
+        "silent_steps": 100
+      },
+      "run_id": 3,
+      "seed": 146154,
+      "sealed": true,
+      "seal_step": 17,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 24.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 24.0,
+      "post_hw_min": 24.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.025,
+      "xi_post_mean": 0.05,
+      "elapsed_sec": 11.67
+    },
+    {
+      "mode_label": "pulse_b20s100",
+      "config": {
+        "injection_mode": "pulse",
+        "burst_steps": 20,
+        "silent_steps": 100
+      },
+      "run_id": 4,
+      "seed": 177491,
+      "sealed": true,
+      "seal_step": 18,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 23.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 23.0,
+      "post_hw_min": 23.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.07500000000000001,
+      "xi_post_mean": 0.030000000000000006,
+      "elapsed_sec": 11.26
+    },
+    {
+      "mode_label": "pulse_b20s100",
+      "config": {
+        "injection_mode": "pulse",
+        "burst_steps": 20,
+        "silent_steps": 100
+      },
+      "run_id": 5,
+      "seed": 208828,
+      "sealed": true,
+      "seal_step": 40,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 24.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 24.0,
+      "post_hw_min": 24.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.07500000000000001,
+      "xi_post_mean": 0.025,
+      "elapsed_sec": 11.29
+    },
+    {
+      "mode_label": "pulse_b20s100",
+      "config": {
+        "injection_mode": "pulse",
+        "burst_steps": 20,
+        "silent_steps": 100
+      },
+      "run_id": 6,
+      "seed": 240165,
+      "sealed": true,
+      "seal_step": 26,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 24.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 24.0,
+      "post_hw_min": 24.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.07500000000000001,
+      "xi_post_mean": 0.025,
+      "elapsed_sec": 11.72
+    },
+    {
+      "mode_label": "pulse_b20s100",
+      "config": {
+        "injection_mode": "pulse",
+        "burst_steps": 20,
+        "silent_steps": 100
+      },
+      "run_id": 7,
+      "seed": 271502,
+      "sealed": true,
+      "seal_step": 19,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 24.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 24.0,
+      "post_hw_min": 24.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.025,
+      "xi_post_mean": 0.025,
+      "elapsed_sec": 11.71
+    },
+    {
+      "mode_label": "ramp_p100m3.0",
+      "config": {
+        "injection_mode": "ramp",
+        "ramp_period": 100,
+        "ramp_max_mult": 3.0
+      },
+      "run_id": 0,
+      "seed": 56925,
+      "sealed": true,
+      "seal_step": 20,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 25.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 25.0,
+      "post_hw_min": 25.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.07500000000000001,
+      "xi_post_mean": 0.025,
+      "elapsed_sec": 12.56
+    },
+    {
+      "mode_label": "ramp_p100m3.0",
+      "config": {
+        "injection_mode": "ramp",
+        "ramp_period": 100,
+        "ramp_max_mult": 3.0
+      },
+      "run_id": 1,
+      "seed": 88262,
+      "sealed": true,
+      "seal_step": 11,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 25.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 25.0,
+      "post_hw_min": 25.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.07500000000000001,
+      "xi_post_mean": 0.025,
+      "elapsed_sec": 13.43
+    },
+    {
+      "mode_label": "ramp_p100m3.0",
+      "config": {
+        "injection_mode": "ramp",
+        "ramp_period": 100,
+        "ramp_max_mult": 3.0
+      },
+      "run_id": 2,
+      "seed": 119599,
+      "sealed": true,
+      "seal_step": 30,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 25.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 25.0,
+      "post_hw_min": 25.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.07500000000000001,
+      "xi_post_mean": 0.04000000000000001,
+      "elapsed_sec": 12.65
+    },
+    {
+      "mode_label": "ramp_p100m3.0",
+      "config": {
+        "injection_mode": "ramp",
+        "ramp_period": 100,
+        "ramp_max_mult": 3.0
+      },
+      "run_id": 3,
+      "seed": 150936,
+      "sealed": true,
+      "seal_step": 42,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 23.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 23.0,
+      "post_hw_min": 23.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.07500000000000001,
+      "xi_post_mean": 0.025,
+      "elapsed_sec": 12.6
+    },
+    {
+      "mode_label": "ramp_p100m3.0",
+      "config": {
+        "injection_mode": "ramp",
+        "ramp_period": 100,
+        "ramp_max_mult": 3.0
+      },
+      "run_id": 4,
+      "seed": 182273,
+      "sealed": true,
+      "seal_step": 17,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 25.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 25.0,
+      "post_hw_min": 25.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.025,
+      "xi_post_mean": 0.025,
+      "elapsed_sec": 12.84
+    },
+    {
+      "mode_label": "ramp_p100m3.0",
+      "config": {
+        "injection_mode": "ramp",
+        "ramp_period": 100,
+        "ramp_max_mult": 3.0
+      },
+      "run_id": 5,
+      "seed": 213610,
+      "sealed": true,
+      "seal_step": 12,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 24.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 24.0,
+      "post_hw_min": 24.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.07500000000000001,
+      "xi_post_mean": 0.045000000000000005,
+      "elapsed_sec": 12.37
+    },
+    {
+      "mode_label": "ramp_p100m3.0",
+      "config": {
+        "injection_mode": "ramp",
+        "ramp_period": 100,
+        "ramp_max_mult": 3.0
+      },
+      "run_id": 6,
+      "seed": 244947,
+      "sealed": true,
+      "seal_step": 14,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 24.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 24.0,
+      "post_hw_min": 24.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.125,
+      "xi_post_mean": 0.05,
+      "elapsed_sec": 13.06
+    },
+    {
+      "mode_label": "ramp_p100m3.0",
+      "config": {
+        "injection_mode": "ramp",
+        "ramp_period": 100,
+        "ramp_max_mult": 3.0
+      },
+      "run_id": 7,
+      "seed": 276284,
+      "sealed": true,
+      "seal_step": 27,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 24.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 24.0,
+      "post_hw_min": 24.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.07500000000000001,
+      "xi_post_mean": 0.025,
+      "elapsed_sec": 12.34
+    },
+    {
+      "mode_label": "random_avg3",
+      "config": {
+        "injection_mode": "random",
+        "avg_interval": 3
+      },
+      "run_id": 0,
+      "seed": 71303,
+      "sealed": true,
+      "seal_step": 15,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 26.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 26.0,
+      "post_hw_min": 26.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.025,
+      "xi_post_mean": 0.045000000000000005,
+      "elapsed_sec": 11.82
+    },
+    {
+      "mode_label": "random_avg3",
+      "config": {
+        "injection_mode": "random",
+        "avg_interval": 3
+      },
+      "run_id": 1,
+      "seed": 102640,
+      "sealed": true,
+      "seal_step": 28,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 20.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 20.0,
+      "post_hw_min": 20.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.07500000000000001,
+      "xi_post_mean": 0.025,
+      "elapsed_sec": 11.8
+    },
+    {
+      "mode_label": "random_avg3",
+      "config": {
+        "injection_mode": "random",
+        "avg_interval": 3
+      },
+      "run_id": 2,
+      "seed": 133977,
+      "sealed": true,
+      "seal_step": 16,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 27.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 27.0,
+      "post_hw_min": 27.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.07500000000000001,
+      "xi_post_mean": 0.04000000000000001,
+      "elapsed_sec": 12.06
+    },
+    {
+      "mode_label": "random_avg3",
+      "config": {
+        "injection_mode": "random",
+        "avg_interval": 3
+      },
+      "run_id": 3,
+      "seed": 165314,
+      "sealed": true,
+      "seal_step": 15,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 26.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 26.0,
+      "post_hw_min": 26.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.07500000000000001,
+      "xi_post_mean": 0.025,
+      "elapsed_sec": 11.91
+    },
+    {
+      "mode_label": "random_avg3",
+      "config": {
+        "injection_mode": "random",
+        "avg_interval": 3
+      },
+      "run_id": 4,
+      "seed": 196651,
+      "sealed": true,
+      "seal_step": 10,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 27.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 27.0,
+      "post_hw_min": 27.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.07500000000000001,
+      "xi_post_mean": 0.045000000000000005,
+      "elapsed_sec": 11.47
+    },
+    {
+      "mode_label": "random_avg3",
+      "config": {
+        "injection_mode": "random",
+        "avg_interval": 3
+      },
+      "run_id": 5,
+      "seed": 227988,
+      "sealed": true,
+      "seal_step": 12,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 28.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 28.0,
+      "post_hw_min": 28.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.025,
+      "xi_post_mean": 0.025,
+      "elapsed_sec": 12.27
+    },
+    {
+      "mode_label": "random_avg3",
+      "config": {
+        "injection_mode": "random",
+        "avg_interval": 3
+      },
+      "run_id": 6,
+      "seed": 259325,
+      "sealed": true,
+      "seal_step": 8,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 27.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 27.0,
+      "post_hw_min": 27.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.025,
+      "xi_post_mean": 0.03500000000000001,
+      "elapsed_sec": 12.24
+    },
+    {
+      "mode_label": "random_avg3",
+      "config": {
+        "injection_mode": "random",
+        "avg_interval": 3
+      },
+      "run_id": 7,
+      "seed": 290662,
+      "sealed": true,
+      "seal_step": 16,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 27.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 27.0,
+      "post_hw_min": 27.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.07500000000000001,
+      "xi_post_mean": 0.025,
+      "elapsed_sec": 11.63
+    },
+    {
+      "mode_label": "random_avg30",
+      "config": {
+        "injection_mode": "random",
+        "avg_interval": 30
+      },
+      "run_id": 0,
+      "seed": 61988,
+      "sealed": true,
+      "seal_step": 36,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 22.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 22.0,
+      "post_hw_min": 22.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.025,
+      "xi_post_mean": 0.075,
+      "elapsed_sec": 11.63
+    },
+    {
+      "mode_label": "random_avg30",
+      "config": {
+        "injection_mode": "random",
+        "avg_interval": 30
+      },
+      "run_id": 1,
+      "seed": 93325,
+      "sealed": true,
+      "seal_step": 14,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 21.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 21.0,
+      "post_hw_min": 21.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.125,
+      "xi_post_mean": 0.025,
+      "elapsed_sec": 11.13
+    },
+    {
+      "mode_label": "random_avg30",
+      "config": {
+        "injection_mode": "random",
+        "avg_interval": 30
+      },
+      "run_id": 2,
+      "seed": 124662,
+      "sealed": true,
+      "seal_step": 15,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 24.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 24.0,
+      "post_hw_min": 24.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.025,
+      "xi_post_mean": 0.04000000000000001,
+      "elapsed_sec": 11.7
+    },
+    {
+      "mode_label": "random_avg30",
+      "config": {
+        "injection_mode": "random",
+        "avg_interval": 30
+      },
+      "run_id": 3,
+      "seed": 155999,
+      "sealed": true,
+      "seal_step": 24,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 21.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 21.0,
+      "post_hw_min": 21.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.025,
+      "xi_post_mean": 0.025,
+      "elapsed_sec": 11.79
+    },
+    {
+      "mode_label": "random_avg30",
+      "config": {
+        "injection_mode": "random",
+        "avg_interval": 30
+      },
+      "run_id": 4,
+      "seed": 187336,
+      "sealed": true,
+      "seal_step": 9,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 27.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 27.0,
+      "post_hw_min": 27.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.025,
+      "xi_post_mean": 0.03500000000000001,
+      "elapsed_sec": 11.35
+    },
+    {
+      "mode_label": "random_avg30",
+      "config": {
+        "injection_mode": "random",
+        "avg_interval": 30
+      },
+      "run_id": 5,
+      "seed": 218673,
+      "sealed": true,
+      "seal_step": 22,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 23.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 23.0,
+      "post_hw_min": 23.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.07500000000000001,
+      "xi_post_mean": 0.025,
+      "elapsed_sec": 11.54
+    },
+    {
+      "mode_label": "random_avg30",
+      "config": {
+        "injection_mode": "random",
+        "avg_interval": 30
+      },
+      "run_id": 6,
+      "seed": 250010,
+      "sealed": true,
+      "seal_step": 23,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 26.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 26.0,
+      "post_hw_min": 26.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.025,
+      "xi_post_mean": 0.025,
+      "elapsed_sec": 11.08
+    },
+    {
+      "mode_label": "random_avg30",
+      "config": {
+        "injection_mode": "random",
+        "avg_interval": 30
+      },
+      "run_id": 7,
+      "seed": 281347,
+      "sealed": true,
+      "seal_step": 19,
+      "n_sealed_bits": 19,
+      "sealed_ratio": 0.3958333333333333,
+      "final_sealed_count": 19,
+      "new_sealed_post": 0,
+      "post_hw_mean": 26.0,
+      "post_hw_var": 0.0,
+      "post_hw_max": 26.0,
+      "post_hw_min": 26.0,
+      "post_hw_range": 0.0,
+      "post_last_var": 0.0,
+      "L2_signal": {
+        "var_ratio": 0.0,
+        "n_reactivation_windows": 0,
+        "max_window_var": 0.0,
+        "has_L2_signal": false
+      },
+      "xi_pre_mean": 0.125,
+      "xi_post_mean": 0.03500000000000001,
+      "elapsed_sec": 11.54
+    }
+  ]
+}

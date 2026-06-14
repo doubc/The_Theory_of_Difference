@@ -1,0 +1,44 @@
+{
+  "experiment": "exp_151_phase11_p3",
+  "datetime": "2026-06-06T23:28:12.293543",
+  "config": {
+    "N0": 60,
+    "master_size": 40,
+    "slave_size": 20,
+    "subspaces": [
+      "S0_master",
+      "S1_slave"
+    ],
+    "coupling_direction": "S0_master->S1_slave only (unidirectional)",
+    "coupling_levels": [
+      0.0,
+      0.5,
+      1.0,
+      2.0,
+      5.0,
+      10.0
+    ],
+    "seeds": [
+      42,
+      142,
+      242,
+      342,
+      442,
+      542,
+      642,
+      742
+    ],
+    "steps_per_layer": 5000,
+    "max_layers": 3
+  },
+  "hypotheses": {
+    "H151_1": {
+      "pass": true,
+      "description": "Asymmetric baseline: master_rate=1.00, slave_rate=0.00 at coupling=0.0."
+    },
+    "H151_2": {
+      "pass": true,
+      "description": "Slave L1 rate increases (rescue effect) with coupling."
+    },
+    "H151_3": {
+      "pass": 
