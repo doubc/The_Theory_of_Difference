@@ -1,0 +1,92 @@
+{
+  "experiment": "exp_213_p2_spiral_recursion",
+  "hypothesis": "H23-2: 能量驱动螺旋递归 (非重复性+不可逆性)",
+  "timestamp": "2026-06-14T10:18:58.230117",
+  "config": {
+    "N0": 48,
+    "seeds": [
+      42,
+      123,
+      256,
+      789,
+      1024
+    ],
+    "n_rounds": 5,
+    "max_layers": 8
+  },
+  "groups": {
+    "G1_control": {
+      "avg_non_repeat_score": 0.0,
+      "std_non_repeat_score": 0.0,
+      "avg_depth_var": 0.0,
+      "avg_entropy_var": 0.0,
+      "avg_depth_diff": 0.0,
+      "avg_entropy_drift": 0.0,
+      "avg_spiral_score": 0.0,
+      "n_seeds": 5,
+      "n_rounds": 5
+    },
+    "G2_energy_only": {
+      "avg_non_repeat_score": 0.06799999999999999,
+      "std_non_repeat_score": 0.04182503237695499,
+      "avg_depth_var": 0.0,
+      "avg_entropy_var": 0.0,
+      "avg_depth_diff": 0.0,
+      "avg_entropy_drift": 0.0,
+      "avg_spiral_score": 0.033999999999999996,
+      "n_seeds": 5,
+      "n_rounds": 5
+    },
+    "G3_selfref_only": {
+      "avg_non_repeat_score": 3.6062591748290247,
+      "std_non_repeat_score": 2.9027481220571287,
+      "avg_depth_var": 0.304,
+      "avg_entropy_var": 0.08095365492881572,
+      "avg_depth_diff": 0.55,
+      "avg_entropy_drift": 0.18365916681089792,
+      "avg_spiral_score": 0.6,
+      "n_seeds": 5,
+      "n_rounds": 5
+    },
+    "G4_spiral": {
+      "avg_non_repeat_score": 2.0783559829582154,
+      "std_non_repeat_score": 1.8715072011178018,
+      "avg_depth_var": 0.11200000000000002,
+      "avg_entropy_var": 0.000640854790353745,
+      "avg_depth_diff": 0.25,
+      "avg_entropy_drift": 0.016340833189102087,
+      "avg_spiral_score": 0.7933333333333333,
+      "n_seeds": 5,
+      "n_rounds": 5
+    }
+  },
+  "hypothesis_results": {
+    "H23-2a": {
+      "pass": "False",
+      "g4": 2.0783559829582154,
+      "g3": 3.6062591748290247,
+      "ratio": 0.5763190836268033
+    },
+    "H23-2b": {
+      "pass": "True",
+      "g4": 2.0783559829582154,
+      "g1": 0.0,
+      "ratio": 2078.3559829582155
+    },
+    "H23-2c": {
+      "pass": "False",
+      "g4_entropy_drift": 0.016340833189102087,
+      "threshold": 0.05
+    },
+    "H23-2d": {
+      "pass": "True",
+      "g4_spiral": 0.7933333333333333,
+      "g3_spiral": 0.6
+    }
+  },
+  "summary": {
+    "n_pass": "2",
+    "n_total": 4,
+    "overall_pass": "False"
+  }
+}
