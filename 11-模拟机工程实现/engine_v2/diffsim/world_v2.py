@@ -26,8 +26,6 @@ if __name__ == "__main__" or not __package__:
     from environment import EnvironmentField, EnvironmentCoupling
     from energy_v2 import EnergyManager, EnergyConfig
     from entropy import EntropyTracker, EntropyConfig
-    from cross_layer_gravity import CrossLayerGravity, GravityConfig
-    from unsealing import UnsealingMechanism, UnsealingConfig
 else:
     # Running as module - use relative imports
     from .core import DifferenceField
@@ -36,8 +34,6 @@ else:
     from .environment import EnvironmentField, EnvironmentCoupling
     from .energy_v2 import EnergyManager, EnergyConfig
     from .entropy import EntropyTracker, EntropyConfig
-    from .cross_layer_gravity import CrossLayerGravity, GravityConfig
-    from .unsealing import UnsealingMechanism, UnsealingConfig
 
 
 @dataclass
@@ -179,8 +175,7 @@ class RecursiveWorld:
                  env_config: Optional[dict] = None,
                  seed: Optional[int] = None,
                  self_encapsulate: bool = True,
-                 gravity_cfg: Optional[GravityConfig] = None,
-                 unsealing_cfg: Optional[UnsealingConfig] = None):
+):
         self.N0 = N0
         self.n_colors = n_colors
         self.params = params or Params()
@@ -200,11 +195,6 @@ class RecursiveWorld:
         if env_config:
             self.env = EnvironmentField(env_config)
 
-        # Phase 24: 跨层级引力调制
-        self.gravity = CrossLayerGravity(gravity_cfg) if gravity_cfg else None
-        
-        # Phase 24: 解封机制
-        self.unsealing = UnsealingMechanism(unsealing_cfg) if unsealing_cfg else None
 
         # 追踪
         self.history = []
@@ -241,24 +231,12 @@ class RecursiveWorld:
         """运行递归闭环直到无法继续。"""
         if verbose:
             print(f"[World] Starting recursive simulation: N0={self.N0}, n_colors={self.n_colors}")
-            if self.gravity:
-                print(f"[World] Cross-layer gravity enabled: strength={self.gravity.config.gravity_strength}")
-            if self.unsealing:
-                print(f"[World] Unsealing enabled: threshold={self.unsealing.config.change_rate_threshold}")
 
         for depth in range(max_layers):
             current_layer = self.layers[-1]
 
             if verbose:
                 print(f"\n[World] Running Layer {depth} (N={current_layer.field.N})...")
-
-            # Phase 24: 应用引力调制 (如果存在高层级引力场)
-            if self.gravity:
-                self._apply_gravity_modulation(current_layer, verbose)
-
-            # 注册层到解封机制
-            if self.unsealing:
-                self.unsealing.register_layer(depth)
 
             # 运行当前层直到密封
             layer_info = current_layer.run_until_seal(verbose=verbose)
@@ -268,10 +246,6 @@ class RecursiveWorld:
                 if verbose:
                     print(f"[World] Layer {depth} did not seal after {current_layer.step} steps, stopping")
                 break
-
-            # 标记层为已密封 (用于解封机制)
-            if self.unsealing:
-                self.unsealing.mark_sealed(depth, current_layer.field.sealed_bits)
 
             # 检查能量是否耗尽 (阻止 m9 执行)
             if current_layer.energy and current_layer.energy.is_depleted:
@@ -299,10 +273,6 @@ class RecursiveWorld:
             print(f"\n[World] Simulation complete: depth={result['depth']}, layers={result['n_layers']}")
             for layer_info in result['layers']:
                 print(f"  L{layer_info['layer']}: steps={layer_info['steps']}, flux={layer_info['flux']:.4f}")
-            if self.gravity:
-                print(f"[World] Gravity summary: {self.gravity.get_summary()}")
-            if self.unsealing:
-                print(f"[World] Unsealing summary: {self.unsealing.get_summary()}")
         return result
 
     def _m9_seal_and_create_next(self, current_layer: Layer, verbose: bool = False) -> bool:
@@ -315,17 +285,6 @@ class RecursiveWorld:
         self_encapsulate=False: 被动投影 (仅body位, a1_source=空, 死秩序基线)
         """
         # Phase 24: 计算引力场 (在密封后)
-        if self.gravity and current_layer.field.organizations:
-            self.gravity.compute_gravity(
-                current_layer.field.layer,
-                current_layer.field.organizations,
-                current_layer.field.binding,
-                current_layer.field.state
-            )
-            if verbose:
-                print(f"  [Gravity] Computed gravity field for Layer {current_layer.field.layer}: "
-                      f"{len(current_layer.field.organizations)} organizations")
-        
         # 调用 m9 自指: 封装自身, 生成下一层的差异源
         f_next = M.m9_self_reference(
             current_layer,
@@ -357,57 +316,6 @@ class RecursiveWorld:
                   f"active={f_next.n_active()}, mode={mode}")
         
         return True
-
-    def _apply_gravity_modulation(self, layer: Layer, gravity_source_layer: Optional[int] = None, verbose: bool = False):
-        """应用跨层级引力调制到当前层。
-        
-        Phase 24: 高层级引力场影响低层级的动力学参数。
-        
-        Args:
-            layer: 当前层
-            gravity_source_layer: 引力源层级 (如果指定, 只使用该层的引力场)
-        """
-        if not self.gravity:
-            return
-        
-        # 计算引力影响
-        influence = self.gravity.compute_influence(
-            layer.field.layer,
-            layer.field.state,
-            source_layer=gravity_source_layer
-        )
-        
-        if not influence:
-            return
-        
-        # 应用源权重调制
-        if self.gravity.config.modulation_mode in ('source_weight', 'all'):
-            source_weights = self.gravity.modulate_source_weights(
-                layer.field.a1_source, influence
-            )
-            # 存储调制后的权重 (供机制使用)
-            layer._gravity_source_weights = source_weights
-        
-        # 应用绑定增强调制
-        if self.gravity.config.modulation_mode in ('binding_boost', 'all'):
-            modulated_binding = self.gravity.modulate_binding(
-                layer.field.binding, influence
-            )
-            # 直接修改绑定矩阵
-            layer.field.binding = modulated_binding
-        
-        # 应用流向偏置调制
-        if self.gravity.config.modulation_mode in ('direction_bias', 'all'):
-            modulated_direction = self.gravity.modulate_direction(
-                layer.field.direction, influence
-            )
-            # 直接修改流向
-            layer.field.direction = modulated_direction
-        
-        if verbose and influence:
-            avg_influence = np.mean(list(influence.values()))
-            print(f"  [Gravity] Applied modulation to Layer {layer.field.layer}: "
-                  f"avg_influence={avg_influence:.4f}, n_bits={len(influence)}")
 
     def _summarize(self) -> dict:
         """汇总模拟结果。"""
