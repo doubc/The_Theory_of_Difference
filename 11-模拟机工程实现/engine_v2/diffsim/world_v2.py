@@ -216,7 +216,14 @@ class RecursiveWorld:
         n_active = max(1, self.N0 // 2)
         active_bits = self.rng.choice(self.N0, size=n_active, replace=False)
         f0.state[active_bits] = 1
-        f0.a1_source = set(active_bits.tolist())
+        # ★ a1_source = 差异源 (能够主动注入 0→1 的位)
+        # 理论: A1 差异本体论 — 差异的潜能
+        # 包含: 初始活跃位 + 额外的非活跃位 (约占 50%)
+        # 这样既有注入候选(非活跃位), 也有吸收候选(活跃位)
+        inactive_bits = list(set(range(self.N0)) - set(active_bits.tolist()))
+        n_extra = max(1, len(inactive_bits) // 2)
+        extra_bits = self.rng.choice(inactive_bits, size=n_extra, replace=False).tolist() if inactive_bits else []
+        f0.a1_source = set(active_bits.tolist()) | set(extra_bits)
         f0.record()  # 记录初始状态
         
         # 创建能量和熵管理器 (如果配置了)
@@ -319,34 +326,10 @@ class RecursiveWorld:
                 print(f"  [Gravity] Computed gravity field for Layer {current_layer.field.layer}: "
                       f"{len(current_layer.field.organizations)} organizations")
         
-        # 计算引力调制影响 (用于创建下一层)
-        gravity_influence = None
-        if self.gravity:
-            # 计算当前层对下一层的引力影响
-            influence = self.gravity.compute_influence(
-                current_layer.field.layer + 1,  # 下一层
-                np.zeros(1),  # 占位
-                source_layer=current_layer.field.layer
-            )
-            if influence:
-                # 计算源权重偏置 (基于引力分布)
-                # 引力强的位更可能成为差异源 (增加活跃度)
-                source_weight_bias = {}
-                for bit, strength in influence.items():
-                    source_weight_bias[bit] = strength * self.gravity.config.source_weight_factor
-                
-                gravity_influence = {
-                    'source_weight_bias': source_weight_bias
-                }
-                if verbose:
-                    avg_influence = np.mean(list(influence.values()))
-                    print(f"  [Gravity] Influence on L{current_layer.field.layer+1}: avg={avg_influence:.4f}, n_bits={len(influence)}")
-        
-        # 调用完整的 m9_self_reference 实现
+        # 调用 m9 自指: 封装自身, 生成下一层的差异源
         f_next = M.m9_self_reference(
-            current_layer, 
-            self_encapsulate=self.self_encapsulate,
-            gravity_influence=gravity_influence
+            current_layer,
+            self_encapsulate=self.self_encapsulate
         )
         
         if f_next is None:
