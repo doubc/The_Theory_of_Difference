@@ -222,7 +222,7 @@ def m8_locking(layer):
 #
 #  => 下一层拥有 *内生的* 差异源 -> 非零 Jaccard flux -> 可运行自己的九机制 -> 咬合。
 # ---------------------------------------------------------------------------
-def m9_self_reference(layer, self_encapsulate=True):
+def m9_self_reference(layer, self_encapsulate=True, gravity_influence=None):
     from .core import DifferenceField
     f = layer.field
     if not f.sealed or f.encapsulated:
@@ -261,6 +261,15 @@ def m9_self_reference(layer, self_encapsulate=True):
         color[k + i] = sig        # naming 位同签名 -> body 与 naming 会聚簇
     for j in range(n_res):
         color[2 * k + j] = layer.p.n_meta_colors + (j % 3)
+    
+    # 应用引力调制到颜色分配 (影响聚类行为)
+    if gravity_influence and 'color_bias' in gravity_influence:
+        color_bias = gravity_influence['color_bias']
+        # 根据引力偏置调整颜色 (使某些颜色更可能被选中)
+        for i in range(N1):
+            if color_bias.get(i, 0) > 0:
+                # 引力强的位倾向于使用更"稳定"的颜色 (低编号)
+                color[i] = color[i] % max(1, layer.p.n_meta_colors // 2)
 
     # 初始绑定: 组织间关系(由同一余差划分而来) -> 跨组织边, 这是 L0 上不存在的新关系。
     binding = np.zeros((N1, N1), dtype=float)

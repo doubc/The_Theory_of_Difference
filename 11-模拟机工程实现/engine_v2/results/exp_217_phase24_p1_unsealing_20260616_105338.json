@@ -1,0 +1,3150 @@
+{
+  "experiment": "exp_217_phase24_p1_unsealing",
+  "timestamp": "2026-06-16T10:53:38.044933",
+  "parameters": {
+    "n_seeds": 5,
+    "N0": 48,
+    "max_layers": 8,
+    "max_steps": 400,
+    "energy_injection": 10.0
+  },
+  "groups": {
+    "G1_baseline": {
+      "desc": "\u57fa\u7ebf (\u65e0\u89e3\u5c01)",
+      "n_seeds": 5,
+      "avg_depth": 4.8,
+      "std_depth": 0.7483314773547882,
+      "avg_l1_flux": 0.3120133936576244,
+      "avg_seal_steps": 79.61666666666667,
+      "avg_unseals": 0.0,
+      "results": [
+        {
+          "seed": 42,
+          "depth": 4,
+          "n_layers": 5,
+          "l1_flux": 0.3604608585858585,
+          "avg_seal_steps": 89.25,
+          "total_unseals": 0,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 24,
+              "n_total": 48,
+              "flux": 0.07575757575757575,
+              "energy": {
+                "current_budget": 170.12336964665994,
+                "is_depleted": false,
+                "n_steps": 11,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 170.12336964665994,
+                "avg_budget": 138.88967318006016,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 1,
+              "steps": 40,
+              "sealed": true,
+              "n_active": 11,
+              "n_total": 12,
+              "flux": 0.3604608585858585,
+              "energy": {
+                "current_budget": 321.7889217583137,
+                "is_depleted": false,
+                "n_steps": 40,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 321.7889217583137,
+                "avg_budget": 221.07241864817257,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 2,
+              "steps": 109,
+              "sealed": true,
+              "n_active": 7,
+              "n_total": 8,
+              "flux": 0.7285495849716034,
+              "energy": {
+                "current_budget": 545.9675058837582,
+                "is_depleted": false,
+                "n_steps": 109,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 545.9675058837582,
+                "avg_budget": 364.9469441973203,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 3,
+              "steps": 197,
+              "sealed": true,
+              "n_active": 3,
+              "n_total": 4,
+              "flux": 0.7749576988155668,
+              "energy": {
+                "current_budget": 677.4858552313958,
+                "is_depleted": false,
+                "n_steps": 197,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 677.4858552313958,
+                "avg_budget": 479.7913722441228,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 4,
+              "steps": 400,
+              "sealed": false,
+              "n_active": 0,
+              "n_total": 2,
+              "flux": 0.99875,
+              "energy": {
+                "current_budget": 757.9731293057241,
+                "is_depleted": false,
+                "n_steps": 400,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 757.9731293057241,
+                "avg_budget": 607.1516504968366,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            }
+          ],
+          "unseal_summary": null
+        },
+        {
+          "seed": 43,
+          "depth": 4,
+          "n_layers": 5,
+          "l1_flux": 0.2740740740740741,
+          "avg_seal_steps": 63.0,
+          "total_unseals": 0,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 24,
+              "n_total": 48,
+              "flux": 0.060606060606060615,
+              "energy": {
+                "current_budget": 170.12336964665994,
+                "is_depleted": false,
+                "n_steps": 11,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 170.12336964665994,
+                "avg_budget": 138.88967318006016,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 1,
+              "steps": 27,
+              "sealed": true,
+              "n_active": 9,
+              "n_total": 11,
+              "flux": 0.2740740740740741,
+              "energy": {
+                "current_budget": 259.2303813874403,
+                "is_depleted": false,
+                "n_steps": 27,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 259.2303813874403,
+                "avg_budget": 186.1552682460515,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 2,
+              "steps": 103,
+              "sealed": true,
+              "n_active": 6,
+              "n_total": 7,
+              "flux": 0.7263754045307443,
+              "energy": {
+                "current_budget": 532.0422541476008,
+                "is_depleted": false,
+                "n_steps": 103,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 532.0422541476008,
+                "avg_budget": 354.7360858192959,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 3,
+              "steps": 111,
+              "sealed": true,
+              "n_active": 4,
+              "n_total": 5,
+              "flux": 0.6891891891891891,
+              "energy": {
+                "current_budget": 550.4257525166715,
+                "is_depleted": false,
+                "n_steps": 111,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 550.4257525166715,
+                "avg_budget": 368.26892343107653,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 4,
+              "steps": 400,
+              "sealed": false,
+              "n_active": 1,
+              "n_total": 3,
+              "flux": 1.0,
+              "energy": {
+                "current_budget": 757.9731293057241,
+                "is_depleted": false,
+                "n_steps": 400,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 757.9731293057241,
+                "avg_budget": 607.1516504968366,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            }
+          ],
+          "unseal_summary": null
+        },
+        {
+          "seed": 44,
+          "depth": 5,
+          "n_layers": 6,
+          "l1_flux": 0.25475427350427354,
+          "avg_seal_steps": 76.6,
+          "total_unseals": 0,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 24,
+              "n_total": 48,
+              "flux": 0.07575757575757575,
+              "energy": {
+                "current_budget": 170.12336964665994,
+                "is_depleted": false,
+                "n_steps": 11,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 170.12336964665994,
+                "avg_budget": 138.88967318006016,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 1,
+              "steps": 24,
+              "sealed": true,
+              "n_active": 15,
+              "n_total": 16,
+              "flux": 0.25475427350427354,
+              "energy": {
+                "current_budget": 243.59564565916313,
+                "is_depleted": false,
+                "n_steps": 24,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 243.59564565916313,
+                "avg_budget": 177.66796165595133,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 2,
+              "steps": 75,
+              "sealed": true,
+              "n_active": 8,
+              "n_total": 10,
+              "flux": 0.5264285714285716,
+              "energy": {
+                "current_budget": 454.70695013761383,
+                "is_depleted": false,
+                "n_steps": 75,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 454.70695013761383,
+                "avg_budget": 301.7868258183488,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 3,
+              "steps": 76,
+              "sealed": true,
+              "n_active": 5,
+              "n_total": 6,
+              "flux": 0.667763157894737,
+              "energy": {
+                "current_budget": 457.8598806362377,
+                "is_depleted": false,
+                "n_steps": 76,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 457.8598806362377,
+                "avg_budget": 303.84041864489996,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 4,
+              "steps": 197,
+              "sealed": true,
+              "n_active": 3,
+              "n_total": 4,
+              "flux": 0.7749576988155668,
+              "energy": {
+                "current_budget": 677.4858552313958,
+                "is_depleted": false,
+                "n_steps": 197,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 677.4858552313958,
+                "avg_budget": 479.7913722441228,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 5,
+              "steps": 400,
+              "sealed": false,
+              "n_active": 0,
+              "n_total": 2,
+              "flux": 0.99875,
+              "energy": {
+                "current_budget": 757.9731293057241,
+                "is_depleted": false,
+                "n_steps": 400,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 757.9731293057241,
+                "avg_budget": 607.1516504968366,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            }
+          ],
+          "unseal_summary": null
+        },
+        {
+          "seed": 45,
+          "depth": 6,
+          "n_layers": 7,
+          "l1_flux": 0.24941532826148213,
+          "avg_seal_steps": 81.83333333333333,
+          "total_unseals": 0,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 24,
+              "n_total": 48,
+              "flux": 0.06818181818181818,
+              "energy": {
+                "current_budget": 170.12336964665994,
+                "is_depleted": false,
+                "n_steps": 11,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 170.12336964665994,
+                "avg_budget": 138.88967318006016,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 1,
+              "steps": 26,
+              "sealed": true,
+              "n_active": 14,
+              "n_total": 14,
+              "flux": 0.24941532826148213,
+              "energy": {
+                "current_budget": 254.07109231054574,
+                "is_depleted": false,
+                "n_steps": 26,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 254.07109231054574,
+                "avg_budget": 183.34468697138269,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 2,
+              "steps": 44,
+              "sealed": true,
+              "n_active": 10,
+              "n_total": 10,
+              "flux": 0.4208964646464647,
+              "energy": {
+                "current_budget": 339.45022660323826,
+                "is_depleted": false,
+                "n_steps": 44,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 339.45022660323826,
+                "avg_budget": 231.23699014271278,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 3,
+              "steps": 120,
+              "sealed": true,
+              "n_active": 7,
+              "n_total": 8,
+              "flux": 0.7299404761904763,
+              "energy": {
+                "current_budget": 569.4151378207384,
+                "is_depleted": false,
+                "n_steps": 120,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 569.4151378207384,
+                "avg_budget": 382.7325112978911,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 4,
+              "steps": 93,
+              "sealed": true,
+              "n_active": 5,
+              "n_total": 6,
+              "flux": 0.7736559139784945,
+              "energy": {
+                "current_budget": 506.8836110002699,
+                "is_depleted": false,
+                "n_steps": 93,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 506.8836110002699,
+                "avg_budget": 336.86583345132453,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 5,
+              "steps": 197,
+              "sealed": true,
+              "n_active": 3,
+              "n_total": 4,
+              "flux": 0.7749576988155668,
+              "energy": {
+                "current_budget": 677.4858552313958,
+                "is_depleted": false,
+                "n_steps": 197,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 677.4858552313958,
+                "avg_budget": 479.7913722441228,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 6,
+              "steps": 400,
+              "sealed": false,
+              "n_active": 0,
+              "n_total": 2,
+              "flux": 0.99875,
+              "energy": {
+                "current_budget": 757.9731293057241,
+                "is_depleted": false,
+                "n_steps": 400,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 757.9731293057241,
+                "avg_budget": 607.1516504968366,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            }
+          ],
+          "unseal_summary": null
+        },
+        {
+          "seed": 46,
+          "depth": 5,
+          "n_layers": 6,
+          "l1_flux": 0.4213624338624339,
+          "avg_seal_steps": 87.4,
+          "total_unseals": 0,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 24,
+              "n_total": 48,
+              "flux": 0.06818181818181818,
+              "energy": {
+                "current_budget": 170.12336964665994,
+                "is_depleted": false,
+                "n_steps": 11,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 170.12336964665994,
+                "avg_budget": 138.88967318006016,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 1,
+              "steps": 42,
+              "sealed": true,
+              "n_active": 10,
+              "n_total": 12,
+              "flux": 0.4213624338624339,
+              "energy": {
+                "current_budget": 330.7083222153232,
+                "is_depleted": false,
+                "n_steps": 42,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 330.7083222153232,
+                "avg_budget": 226.18752620673703,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 2,
+              "steps": 104,
+              "sealed": true,
+              "n_active": 7,
+              "n_total": 8,
+              "flux": 0.7250686813186813,
+              "energy": {
+                "current_budget": 534.4218316061249,
+                "is_depleted": false,
+                "n_steps": 104,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 534.4218316061249,
+                "avg_budget": 356.4638333749384,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 3,
+              "steps": 83,
+              "sealed": true,
+              "n_active": 5,
+              "n_total": 6,
+              "flux": 0.7150602409638556,
+              "energy": {
+                "current_budget": 479.0650110494854,
+                "is_depleted": false,
+                "n_steps": 83,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 479.0650110494854,
+                "avg_budget": 317.862215736155,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 4,
+              "steps": 197,
+              "sealed": true,
+              "n_active": 3,
+              "n_total": 4,
+              "flux": 0.7749576988155668,
+              "energy": {
+                "current_budget": 677.4858552313958,
+                "is_depleted": false,
+                "n_steps": 197,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 677.4858552313958,
+                "avg_budget": 479.7913722441228,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 5,
+              "steps": 400,
+              "sealed": false,
+              "n_active": 0,
+              "n_total": 2,
+              "flux": 0.99875,
+              "energy": {
+                "current_budget": 757.9731293057241,
+                "is_depleted": false,
+                "n_steps": 400,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 757.9731293057241,
+                "avg_budget": 607.1516504968366,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            }
+          ],
+          "unseal_summary": null
+        }
+      ]
+    },
+    "G2_unseal_0.3": {
+      "desc": "\u89e3\u5c01\u673a\u5236 (threshold=0.3, probability=0.5)",
+      "n_seeds": 5,
+      "avg_depth": 4.8,
+      "std_depth": 0.7483314773547882,
+      "avg_l1_flux": 0.3120133936576244,
+      "avg_seal_steps": 79.61666666666667,
+      "avg_unseals": 0.0,
+      "results": [
+        {
+          "seed": 42,
+          "depth": 4,
+          "n_layers": 5,
+          "l1_flux": 0.3604608585858585,
+          "avg_seal_steps": 89.25,
+          "total_unseals": 0,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 24,
+              "n_total": 48,
+              "flux": 0.07575757575757575,
+              "energy": {
+                "current_budget": 170.12336964665994,
+                "is_depleted": false,
+                "n_steps": 11,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 170.12336964665994,
+                "avg_budget": 138.88967318006016,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 1,
+              "steps": 40,
+              "sealed": true,
+              "n_active": 11,
+              "n_total": 12,
+              "flux": 0.3604608585858585,
+              "energy": {
+                "current_budget": 321.7889217583137,
+                "is_depleted": false,
+                "n_steps": 40,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 321.7889217583137,
+                "avg_budget": 221.07241864817257,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 2,
+              "steps": 109,
+              "sealed": true,
+              "n_active": 7,
+              "n_total": 8,
+              "flux": 0.7285495849716034,
+              "energy": {
+                "current_budget": 545.9675058837582,
+                "is_depleted": false,
+                "n_steps": 109,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 545.9675058837582,
+                "avg_budget": 364.9469441973203,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 3,
+              "steps": 197,
+              "sealed": true,
+              "n_active": 3,
+              "n_total": 4,
+              "flux": 0.7749576988155668,
+              "energy": {
+                "current_budget": 677.4858552313958,
+                "is_depleted": false,
+                "n_steps": 197,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 677.4858552313958,
+                "avg_budget": 479.7913722441228,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 4,
+              "steps": 400,
+              "sealed": false,
+              "n_active": 0,
+              "n_total": 2,
+              "flux": 0.99875,
+              "energy": {
+                "current_budget": 757.9731293057241,
+                "is_depleted": false,
+                "n_steps": 400,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 757.9731293057241,
+                "avg_budget": 607.1516504968366,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            }
+          ],
+          "unseal_summary": {
+            "enabled": true,
+            "total_layers": 5,
+            "layers": {
+              "0": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 16
+              },
+              "1": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 4
+              },
+              "2": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 5
+              },
+              "3": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 3
+              },
+              "4": {
+                "is_sealed": false,
+                "seal_step": null,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 0
+              }
+            }
+          }
+        },
+        {
+          "seed": 43,
+          "depth": 4,
+          "n_layers": 5,
+          "l1_flux": 0.2740740740740741,
+          "avg_seal_steps": 63.0,
+          "total_unseals": 0,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 24,
+              "n_total": 48,
+              "flux": 0.060606060606060615,
+              "energy": {
+                "current_budget": 170.12336964665994,
+                "is_depleted": false,
+                "n_steps": 11,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 170.12336964665994,
+                "avg_budget": 138.88967318006016,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 1,
+              "steps": 27,
+              "sealed": true,
+              "n_active": 9,
+              "n_total": 11,
+              "flux": 0.2740740740740741,
+              "energy": {
+                "current_budget": 259.2303813874403,
+                "is_depleted": false,
+                "n_steps": 27,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 259.2303813874403,
+                "avg_budget": 186.1552682460515,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 2,
+              "steps": 103,
+              "sealed": true,
+              "n_active": 6,
+              "n_total": 7,
+              "flux": 0.7263754045307443,
+              "energy": {
+                "current_budget": 532.0422541476008,
+                "is_depleted": false,
+                "n_steps": 103,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 532.0422541476008,
+                "avg_budget": 354.7360858192959,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 3,
+              "steps": 111,
+              "sealed": true,
+              "n_active": 4,
+              "n_total": 5,
+              "flux": 0.6891891891891891,
+              "energy": {
+                "current_budget": 550.4257525166715,
+                "is_depleted": false,
+                "n_steps": 111,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 550.4257525166715,
+                "avg_budget": 368.26892343107653,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 4,
+              "steps": 400,
+              "sealed": false,
+              "n_active": 1,
+              "n_total": 3,
+              "flux": 1.0,
+              "energy": {
+                "current_budget": 757.9731293057241,
+                "is_depleted": false,
+                "n_steps": 400,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 757.9731293057241,
+                "avg_budget": 607.1516504968366,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            }
+          ],
+          "unseal_summary": {
+            "enabled": true,
+            "total_layers": 5,
+            "layers": {
+              "0": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 21
+              },
+              "1": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 4
+              },
+              "2": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 3
+              },
+              "3": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 3
+              },
+              "4": {
+                "is_sealed": false,
+                "seal_step": null,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 0
+              }
+            }
+          }
+        },
+        {
+          "seed": 44,
+          "depth": 5,
+          "n_layers": 6,
+          "l1_flux": 0.25475427350427354,
+          "avg_seal_steps": 76.6,
+          "total_unseals": 0,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 24,
+              "n_total": 48,
+              "flux": 0.07575757575757575,
+              "energy": {
+                "current_budget": 170.12336964665994,
+                "is_depleted": false,
+                "n_steps": 11,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 170.12336964665994,
+                "avg_budget": 138.88967318006016,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 1,
+              "steps": 24,
+              "sealed": true,
+              "n_active": 15,
+              "n_total": 16,
+              "flux": 0.25475427350427354,
+              "energy": {
+                "current_budget": 243.59564565916313,
+                "is_depleted": false,
+                "n_steps": 24,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 243.59564565916313,
+                "avg_budget": 177.66796165595133,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 2,
+              "steps": 75,
+              "sealed": true,
+              "n_active": 8,
+              "n_total": 10,
+              "flux": 0.5264285714285716,
+              "energy": {
+                "current_budget": 454.70695013761383,
+                "is_depleted": false,
+                "n_steps": 75,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 454.70695013761383,
+                "avg_budget": 301.7868258183488,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 3,
+              "steps": 76,
+              "sealed": true,
+              "n_active": 5,
+              "n_total": 6,
+              "flux": 0.667763157894737,
+              "energy": {
+                "current_budget": 457.8598806362377,
+                "is_depleted": false,
+                "n_steps": 76,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 457.8598806362377,
+                "avg_budget": 303.84041864489996,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 4,
+              "steps": 197,
+              "sealed": true,
+              "n_active": 3,
+              "n_total": 4,
+              "flux": 0.7749576988155668,
+              "energy": {
+                "current_budget": 677.4858552313958,
+                "is_depleted": false,
+                "n_steps": 197,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 677.4858552313958,
+                "avg_budget": 479.7913722441228,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 5,
+              "steps": 400,
+              "sealed": false,
+              "n_active": 0,
+              "n_total": 2,
+              "flux": 0.99875,
+              "energy": {
+                "current_budget": 757.9731293057241,
+                "is_depleted": false,
+                "n_steps": 400,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 757.9731293057241,
+                "avg_budget": 607.1516504968366,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            }
+          ],
+          "unseal_summary": {
+            "enabled": true,
+            "total_layers": 6,
+            "layers": {
+              "0": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 14
+              },
+              "1": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 8
+              },
+              "2": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 4
+              },
+              "3": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 3
+              },
+              "4": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 3
+              },
+              "5": {
+                "is_sealed": false,
+                "seal_step": null,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 0
+              }
+            }
+          }
+        },
+        {
+          "seed": 45,
+          "depth": 6,
+          "n_layers": 7,
+          "l1_flux": 0.24941532826148213,
+          "avg_seal_steps": 81.83333333333333,
+          "total_unseals": 0,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 24,
+              "n_total": 48,
+              "flux": 0.06818181818181818,
+              "energy": {
+                "current_budget": 170.12336964665994,
+                "is_depleted": false,
+                "n_steps": 11,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 170.12336964665994,
+                "avg_budget": 138.88967318006016,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 1,
+              "steps": 26,
+              "sealed": true,
+              "n_active": 14,
+              "n_total": 14,
+              "flux": 0.24941532826148213,
+              "energy": {
+                "current_budget": 254.07109231054574,
+                "is_depleted": false,
+                "n_steps": 26,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 254.07109231054574,
+                "avg_budget": 183.34468697138269,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 2,
+              "steps": 44,
+              "sealed": true,
+              "n_active": 10,
+              "n_total": 10,
+              "flux": 0.4208964646464647,
+              "energy": {
+                "current_budget": 339.45022660323826,
+                "is_depleted": false,
+                "n_steps": 44,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 339.45022660323826,
+                "avg_budget": 231.23699014271278,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 3,
+              "steps": 120,
+              "sealed": true,
+              "n_active": 7,
+              "n_total": 8,
+              "flux": 0.7299404761904763,
+              "energy": {
+                "current_budget": 569.4151378207384,
+                "is_depleted": false,
+                "n_steps": 120,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 569.4151378207384,
+                "avg_budget": 382.7325112978911,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 4,
+              "steps": 93,
+              "sealed": true,
+              "n_active": 5,
+              "n_total": 6,
+              "flux": 0.7736559139784945,
+              "energy": {
+                "current_budget": 506.8836110002699,
+                "is_depleted": false,
+                "n_steps": 93,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 506.8836110002699,
+                "avg_budget": 336.86583345132453,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 5,
+              "steps": 197,
+              "sealed": true,
+              "n_active": 3,
+              "n_total": 4,
+              "flux": 0.7749576988155668,
+              "energy": {
+                "current_budget": 677.4858552313958,
+                "is_depleted": false,
+                "n_steps": 197,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 677.4858552313958,
+                "avg_budget": 479.7913722441228,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 6,
+              "steps": 400,
+              "sealed": false,
+              "n_active": 0,
+              "n_total": 2,
+              "flux": 0.99875,
+              "energy": {
+                "current_budget": 757.9731293057241,
+                "is_depleted": false,
+                "n_steps": 400,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 757.9731293057241,
+                "avg_budget": 607.1516504968366,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            }
+          ],
+          "unseal_summary": {
+            "enabled": true,
+            "total_layers": 7,
+            "layers": {
+              "0": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 13
+              },
+              "1": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 8
+              },
+              "2": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 4
+              },
+              "3": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 3
+              },
+              "4": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 3
+              },
+              "5": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 3
+              },
+              "6": {
+                "is_sealed": false,
+                "seal_step": null,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 0
+              }
+            }
+          }
+        },
+        {
+          "seed": 46,
+          "depth": 5,
+          "n_layers": 6,
+          "l1_flux": 0.4213624338624339,
+          "avg_seal_steps": 87.4,
+          "total_unseals": 0,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 24,
+              "n_total": 48,
+              "flux": 0.06818181818181818,
+              "energy": {
+                "current_budget": 170.12336964665994,
+                "is_depleted": false,
+                "n_steps": 11,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 170.12336964665994,
+                "avg_budget": 138.88967318006016,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 1,
+              "steps": 42,
+              "sealed": true,
+              "n_active": 10,
+              "n_total": 12,
+              "flux": 0.4213624338624339,
+              "energy": {
+                "current_budget": 330.7083222153232,
+                "is_depleted": false,
+                "n_steps": 42,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 330.7083222153232,
+                "avg_budget": 226.18752620673703,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 2,
+              "steps": 104,
+              "sealed": true,
+              "n_active": 7,
+              "n_total": 8,
+              "flux": 0.7250686813186813,
+              "energy": {
+                "current_budget": 534.4218316061249,
+                "is_depleted": false,
+                "n_steps": 104,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 534.4218316061249,
+                "avg_budget": 356.4638333749384,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 3,
+              "steps": 83,
+              "sealed": true,
+              "n_active": 5,
+              "n_total": 6,
+              "flux": 0.7150602409638556,
+              "energy": {
+                "current_budget": 479.0650110494854,
+                "is_depleted": false,
+                "n_steps": 83,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 479.0650110494854,
+                "avg_budget": 317.862215736155,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 4,
+              "steps": 197,
+              "sealed": true,
+              "n_active": 3,
+              "n_total": 4,
+              "flux": 0.7749576988155668,
+              "energy": {
+                "current_budget": 677.4858552313958,
+                "is_depleted": false,
+                "n_steps": 197,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 677.4858552313958,
+                "avg_budget": 479.7913722441228,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 5,
+              "steps": 400,
+              "sealed": false,
+              "n_active": 0,
+              "n_total": 2,
+              "flux": 0.99875,
+              "energy": {
+                "current_budget": 757.9731293057241,
+                "is_depleted": false,
+                "n_steps": 400,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 757.9731293057241,
+                "avg_budget": 607.1516504968366,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            }
+          ],
+          "unseal_summary": {
+            "enabled": true,
+            "total_layers": 6,
+            "layers": {
+              "0": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 17
+              },
+              "1": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 4
+              },
+              "2": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 3
+              },
+              "3": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 3
+              },
+              "4": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 3
+              },
+              "5": {
+                "is_sealed": false,
+                "seal_step": null,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "G3_unseal_0.2": {
+      "desc": "\u89e3\u5c01\u673a\u5236 (threshold=0.2, probability=0.3) - \u4fdd\u5b88",
+      "n_seeds": 5,
+      "avg_depth": 4.8,
+      "std_depth": 0.7483314773547882,
+      "avg_l1_flux": 0.3120133936576244,
+      "avg_seal_steps": 79.61666666666667,
+      "avg_unseals": 0.0,
+      "results": [
+        {
+          "seed": 42,
+          "depth": 4,
+          "n_layers": 5,
+          "l1_flux": 0.3604608585858585,
+          "avg_seal_steps": 89.25,
+          "total_unseals": 0,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 24,
+              "n_total": 48,
+              "flux": 0.07575757575757575,
+              "energy": {
+                "current_budget": 170.12336964665994,
+                "is_depleted": false,
+                "n_steps": 11,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 170.12336964665994,
+                "avg_budget": 138.88967318006016,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 1,
+              "steps": 40,
+              "sealed": true,
+              "n_active": 11,
+              "n_total": 12,
+              "flux": 0.3604608585858585,
+              "energy": {
+                "current_budget": 321.7889217583137,
+                "is_depleted": false,
+                "n_steps": 40,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 321.7889217583137,
+                "avg_budget": 221.07241864817257,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 2,
+              "steps": 109,
+              "sealed": true,
+              "n_active": 7,
+              "n_total": 8,
+              "flux": 0.7285495849716034,
+              "energy": {
+                "current_budget": 545.9675058837582,
+                "is_depleted": false,
+                "n_steps": 109,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 545.9675058837582,
+                "avg_budget": 364.9469441973203,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 3,
+              "steps": 197,
+              "sealed": true,
+              "n_active": 3,
+              "n_total": 4,
+              "flux": 0.7749576988155668,
+              "energy": {
+                "current_budget": 677.4858552313958,
+                "is_depleted": false,
+                "n_steps": 197,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 677.4858552313958,
+                "avg_budget": 479.7913722441228,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 4,
+              "steps": 400,
+              "sealed": false,
+              "n_active": 0,
+              "n_total": 2,
+              "flux": 0.99875,
+              "energy": {
+                "current_budget": 757.9731293057241,
+                "is_depleted": false,
+                "n_steps": 400,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 757.9731293057241,
+                "avg_budget": 607.1516504968366,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            }
+          ],
+          "unseal_summary": {
+            "enabled": true,
+            "total_layers": 5,
+            "layers": {
+              "0": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 16
+              },
+              "1": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 4
+              },
+              "2": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 5
+              },
+              "3": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 3
+              },
+              "4": {
+                "is_sealed": false,
+                "seal_step": null,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 0
+              }
+            }
+          }
+        },
+        {
+          "seed": 43,
+          "depth": 4,
+          "n_layers": 5,
+          "l1_flux": 0.2740740740740741,
+          "avg_seal_steps": 63.0,
+          "total_unseals": 0,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 24,
+              "n_total": 48,
+              "flux": 0.060606060606060615,
+              "energy": {
+                "current_budget": 170.12336964665994,
+                "is_depleted": false,
+                "n_steps": 11,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 170.12336964665994,
+                "avg_budget": 138.88967318006016,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 1,
+              "steps": 27,
+              "sealed": true,
+              "n_active": 9,
+              "n_total": 11,
+              "flux": 0.2740740740740741,
+              "energy": {
+                "current_budget": 259.2303813874403,
+                "is_depleted": false,
+                "n_steps": 27,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 259.2303813874403,
+                "avg_budget": 186.1552682460515,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 2,
+              "steps": 103,
+              "sealed": true,
+              "n_active": 6,
+              "n_total": 7,
+              "flux": 0.7263754045307443,
+              "energy": {
+                "current_budget": 532.0422541476008,
+                "is_depleted": false,
+                "n_steps": 103,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 532.0422541476008,
+                "avg_budget": 354.7360858192959,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 3,
+              "steps": 111,
+              "sealed": true,
+              "n_active": 4,
+              "n_total": 5,
+              "flux": 0.6891891891891891,
+              "energy": {
+                "current_budget": 550.4257525166715,
+                "is_depleted": false,
+                "n_steps": 111,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 550.4257525166715,
+                "avg_budget": 368.26892343107653,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 4,
+              "steps": 400,
+              "sealed": false,
+              "n_active": 1,
+              "n_total": 3,
+              "flux": 1.0,
+              "energy": {
+                "current_budget": 757.9731293057241,
+                "is_depleted": false,
+                "n_steps": 400,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 757.9731293057241,
+                "avg_budget": 607.1516504968366,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            }
+          ],
+          "unseal_summary": {
+            "enabled": true,
+            "total_layers": 5,
+            "layers": {
+              "0": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 21
+              },
+              "1": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 4
+              },
+              "2": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 3
+              },
+              "3": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 3
+              },
+              "4": {
+                "is_sealed": false,
+                "seal_step": null,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 0
+              }
+            }
+          }
+        },
+        {
+          "seed": 44,
+          "depth": 5,
+          "n_layers": 6,
+          "l1_flux": 0.25475427350427354,
+          "avg_seal_steps": 76.6,
+          "total_unseals": 0,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 24,
+              "n_total": 48,
+              "flux": 0.07575757575757575,
+              "energy": {
+                "current_budget": 170.12336964665994,
+                "is_depleted": false,
+                "n_steps": 11,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 170.12336964665994,
+                "avg_budget": 138.88967318006016,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 1,
+              "steps": 24,
+              "sealed": true,
+              "n_active": 15,
+              "n_total": 16,
+              "flux": 0.25475427350427354,
+              "energy": {
+                "current_budget": 243.59564565916313,
+                "is_depleted": false,
+                "n_steps": 24,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 243.59564565916313,
+                "avg_budget": 177.66796165595133,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 2,
+              "steps": 75,
+              "sealed": true,
+              "n_active": 8,
+              "n_total": 10,
+              "flux": 0.5264285714285716,
+              "energy": {
+                "current_budget": 454.70695013761383,
+                "is_depleted": false,
+                "n_steps": 75,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 454.70695013761383,
+                "avg_budget": 301.7868258183488,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 3,
+              "steps": 76,
+              "sealed": true,
+              "n_active": 5,
+              "n_total": 6,
+              "flux": 0.667763157894737,
+              "energy": {
+                "current_budget": 457.8598806362377,
+                "is_depleted": false,
+                "n_steps": 76,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 457.8598806362377,
+                "avg_budget": 303.84041864489996,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 4,
+              "steps": 197,
+              "sealed": true,
+              "n_active": 3,
+              "n_total": 4,
+              "flux": 0.7749576988155668,
+              "energy": {
+                "current_budget": 677.4858552313958,
+                "is_depleted": false,
+                "n_steps": 197,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 677.4858552313958,
+                "avg_budget": 479.7913722441228,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 5,
+              "steps": 400,
+              "sealed": false,
+              "n_active": 0,
+              "n_total": 2,
+              "flux": 0.99875,
+              "energy": {
+                "current_budget": 757.9731293057241,
+                "is_depleted": false,
+                "n_steps": 400,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 757.9731293057241,
+                "avg_budget": 607.1516504968366,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            }
+          ],
+          "unseal_summary": {
+            "enabled": true,
+            "total_layers": 6,
+            "layers": {
+              "0": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 14
+              },
+              "1": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 8
+              },
+              "2": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 4
+              },
+              "3": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 3
+              },
+              "4": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 3
+              },
+              "5": {
+                "is_sealed": false,
+                "seal_step": null,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 0
+              }
+            }
+          }
+        },
+        {
+          "seed": 45,
+          "depth": 6,
+          "n_layers": 7,
+          "l1_flux": 0.24941532826148213,
+          "avg_seal_steps": 81.83333333333333,
+          "total_unseals": 0,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 24,
+              "n_total": 48,
+              "flux": 0.06818181818181818,
+              "energy": {
+                "current_budget": 170.12336964665994,
+                "is_depleted": false,
+                "n_steps": 11,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 170.12336964665994,
+                "avg_budget": 138.88967318006016,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 1,
+              "steps": 26,
+              "sealed": true,
+              "n_active": 14,
+              "n_total": 14,
+              "flux": 0.24941532826148213,
+              "energy": {
+                "current_budget": 254.07109231054574,
+                "is_depleted": false,
+                "n_steps": 26,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 254.07109231054574,
+                "avg_budget": 183.34468697138269,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 2,
+              "steps": 44,
+              "sealed": true,
+              "n_active": 10,
+              "n_total": 10,
+              "flux": 0.4208964646464647,
+              "energy": {
+                "current_budget": 339.45022660323826,
+                "is_depleted": false,
+                "n_steps": 44,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 339.45022660323826,
+                "avg_budget": 231.23699014271278,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 3,
+              "steps": 120,
+              "sealed": true,
+              "n_active": 7,
+              "n_total": 8,
+              "flux": 0.7299404761904763,
+              "energy": {
+                "current_budget": 569.4151378207384,
+                "is_depleted": false,
+                "n_steps": 120,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 569.4151378207384,
+                "avg_budget": 382.7325112978911,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 4,
+              "steps": 93,
+              "sealed": true,
+              "n_active": 5,
+              "n_total": 6,
+              "flux": 0.7736559139784945,
+              "energy": {
+                "current_budget": 506.8836110002699,
+                "is_depleted": false,
+                "n_steps": 93,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 506.8836110002699,
+                "avg_budget": 336.86583345132453,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 5,
+              "steps": 197,
+              "sealed": true,
+              "n_active": 3,
+              "n_total": 4,
+              "flux": 0.7749576988155668,
+              "energy": {
+                "current_budget": 677.4858552313958,
+                "is_depleted": false,
+                "n_steps": 197,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 677.4858552313958,
+                "avg_budget": 479.7913722441228,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 6,
+              "steps": 400,
+              "sealed": false,
+              "n_active": 0,
+              "n_total": 2,
+              "flux": 0.99875,
+              "energy": {
+                "current_budget": 757.9731293057241,
+                "is_depleted": false,
+                "n_steps": 400,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 757.9731293057241,
+                "avg_budget": 607.1516504968366,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            }
+          ],
+          "unseal_summary": {
+            "enabled": true,
+            "total_layers": 7,
+            "layers": {
+              "0": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 13
+              },
+              "1": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 8
+              },
+              "2": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 4
+              },
+              "3": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 3
+              },
+              "4": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 3
+              },
+              "5": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 3
+              },
+              "6": {
+                "is_sealed": false,
+                "seal_step": null,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 0
+              }
+            }
+          }
+        },
+        {
+          "seed": 46,
+          "depth": 5,
+          "n_layers": 6,
+          "l1_flux": 0.4213624338624339,
+          "avg_seal_steps": 87.4,
+          "total_unseals": 0,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 24,
+              "n_total": 48,
+              "flux": 0.06818181818181818,
+              "energy": {
+                "current_budget": 170.12336964665994,
+                "is_depleted": false,
+                "n_steps": 11,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 170.12336964665994,
+                "avg_budget": 138.88967318006016,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 1,
+              "steps": 42,
+              "sealed": true,
+              "n_active": 10,
+              "n_total": 12,
+              "flux": 0.4213624338624339,
+              "energy": {
+                "current_budget": 330.7083222153232,
+                "is_depleted": false,
+                "n_steps": 42,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 330.7083222153232,
+                "avg_budget": 226.18752620673703,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 2,
+              "steps": 104,
+              "sealed": true,
+              "n_active": 7,
+              "n_total": 8,
+              "flux": 0.7250686813186813,
+              "energy": {
+                "current_budget": 534.4218316061249,
+                "is_depleted": false,
+                "n_steps": 104,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 534.4218316061249,
+                "avg_budget": 356.4638333749384,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 3,
+              "steps": 83,
+              "sealed": true,
+              "n_active": 5,
+              "n_total": 6,
+              "flux": 0.7150602409638556,
+              "energy": {
+                "current_budget": 479.0650110494854,
+                "is_depleted": false,
+                "n_steps": 83,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 479.0650110494854,
+                "avg_budget": 317.862215736155,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 4,
+              "steps": 197,
+              "sealed": true,
+              "n_active": 3,
+              "n_total": 4,
+              "flux": 0.7749576988155668,
+              "energy": {
+                "current_budget": 677.4858552313958,
+                "is_depleted": false,
+                "n_steps": 197,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 677.4858552313958,
+                "avg_budget": 479.7913722441228,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 5,
+              "steps": 400,
+              "sealed": false,
+              "n_active": 0,
+              "n_total": 2,
+              "flux": 0.99875,
+              "energy": {
+                "current_budget": 757.9731293057241,
+                "is_depleted": false,
+                "n_steps": 400,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 757.9731293057241,
+                "avg_budget": 607.1516504968366,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            }
+          ],
+          "unseal_summary": {
+            "enabled": true,
+            "total_layers": 6,
+            "layers": {
+              "0": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 17
+              },
+              "1": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 4
+              },
+              "2": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 3
+              },
+              "3": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 3
+              },
+              "4": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 3
+              },
+              "5": {
+                "is_sealed": false,
+                "seal_step": null,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "G4_unseal_0.4": {
+      "desc": "\u89e3\u5c01\u673a\u5236 (threshold=0.4, probability=0.7) - \u6fc0\u8fdb",
+      "n_seeds": 5,
+      "avg_depth": 4.8,
+      "std_depth": 0.7483314773547882,
+      "avg_l1_flux": 0.3120133936576244,
+      "avg_seal_steps": 79.61666666666667,
+      "avg_unseals": 0.0,
+      "results": [
+        {
+          "seed": 42,
+          "depth": 4,
+          "n_layers": 5,
+          "l1_flux": 0.3604608585858585,
+          "avg_seal_steps": 89.25,
+          "total_unseals": 0,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 24,
+              "n_total": 48,
+              "flux": 0.07575757575757575,
+              "energy": {
+                "current_budget": 170.12336964665994,
+                "is_depleted": false,
+                "n_steps": 11,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 170.12336964665994,
+                "avg_budget": 138.88967318006016,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 1,
+              "steps": 40,
+              "sealed": true,
+              "n_active": 11,
+              "n_total": 12,
+              "flux": 0.3604608585858585,
+              "energy": {
+                "current_budget": 321.7889217583137,
+                "is_depleted": false,
+                "n_steps": 40,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 321.7889217583137,
+                "avg_budget": 221.07241864817257,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 2,
+              "steps": 109,
+              "sealed": true,
+              "n_active": 7,
+              "n_total": 8,
+              "flux": 0.7285495849716034,
+              "energy": {
+                "current_budget": 545.9675058837582,
+                "is_depleted": false,
+                "n_steps": 109,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 545.9675058837582,
+                "avg_budget": 364.9469441973203,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 3,
+              "steps": 197,
+              "sealed": true,
+              "n_active": 3,
+              "n_total": 4,
+              "flux": 0.7749576988155668,
+              "energy": {
+                "current_budget": 677.4858552313958,
+                "is_depleted": false,
+                "n_steps": 197,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 677.4858552313958,
+                "avg_budget": 479.7913722441228,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 4,
+              "steps": 400,
+              "sealed": false,
+              "n_active": 0,
+              "n_total": 2,
+              "flux": 0.99875,
+              "energy": {
+                "current_budget": 757.9731293057241,
+                "is_depleted": false,
+                "n_steps": 400,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 757.9731293057241,
+                "avg_budget": 607.1516504968366,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            }
+          ],
+          "unseal_summary": {
+            "enabled": true,
+            "total_layers": 5,
+            "layers": {
+              "0": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 16
+              },
+              "1": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 4
+              },
+              "2": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 5
+              },
+              "3": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 3
+              },
+              "4": {
+                "is_sealed": false,
+                "seal_step": null,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 0
+              }
+            }
+          }
+        },
+        {
+          "seed": 43,
+          "depth": 4,
+          "n_layers": 5,
+          "l1_flux": 0.2740740740740741,
+          "avg_seal_steps": 63.0,
+          "total_unseals": 0,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 24,
+              "n_total": 48,
+              "flux": 0.060606060606060615,
+              "energy": {
+                "current_budget": 170.12336964665994,
+                "is_depleted": false,
+                "n_steps": 11,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 170.12336964665994,
+                "avg_budget": 138.88967318006016,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 1,
+              "steps": 27,
+              "sealed": true,
+              "n_active": 9,
+              "n_total": 11,
+              "flux": 0.2740740740740741,
+              "energy": {
+                "current_budget": 259.2303813874403,
+                "is_depleted": false,
+                "n_steps": 27,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 259.2303813874403,
+                "avg_budget": 186.1552682460515,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 2,
+              "steps": 103,
+              "sealed": true,
+              "n_active": 6,
+              "n_total": 7,
+              "flux": 0.7263754045307443,
+              "energy": {
+                "current_budget": 532.0422541476008,
+                "is_depleted": false,
+                "n_steps": 103,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 532.0422541476008,
+                "avg_budget": 354.7360858192959,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 3,
+              "steps": 111,
+              "sealed": true,
+              "n_active": 4,
+              "n_total": 5,
+              "flux": 0.6891891891891891,
+              "energy": {
+                "current_budget": 550.4257525166715,
+                "is_depleted": false,
+                "n_steps": 111,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 550.4257525166715,
+                "avg_budget": 368.26892343107653,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 4,
+              "steps": 400,
+              "sealed": false,
+              "n_active": 1,
+              "n_total": 3,
+              "flux": 1.0,
+              "energy": {
+                "current_budget": 757.9731293057241,
+                "is_depleted": false,
+                "n_steps": 400,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 757.9731293057241,
+                "avg_budget": 607.1516504968366,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            }
+          ],
+          "unseal_summary": {
+            "enabled": true,
+            "total_layers": 5,
+            "layers": {
+              "0": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 21
+              },
+              "1": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 4
+              },
+              "2": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 3
+              },
+              "3": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 3
+              },
+              "4": {
+                "is_sealed": false,
+                "seal_step": null,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 0
+              }
+            }
+          }
+        },
+        {
+          "seed": 44,
+          "depth": 5,
+          "n_layers": 6,
+          "l1_flux": 0.25475427350427354,
+          "avg_seal_steps": 76.6,
+          "total_unseals": 0,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 24,
+              "n_total": 48,
+              "flux": 0.07575757575757575,
+              "energy": {
+                "current_budget": 170.12336964665994,
+                "is_depleted": false,
+                "n_steps": 11,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 170.12336964665994,
+                "avg_budget": 138.88967318006016,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 1,
+              "steps": 24,
+              "sealed": true,
+              "n_active": 15,
+              "n_total": 16,
+              "flux": 0.25475427350427354,
+              "energy": {
+                "current_budget": 243.59564565916313,
+                "is_depleted": false,
+                "n_steps": 24,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 243.59564565916313,
+                "avg_budget": 177.66796165595133,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 2,
+              "steps": 75,
+              "sealed": true,
+              "n_active": 8,
+              "n_total": 10,
+              "flux": 0.5264285714285716,
+              "energy": {
+                "current_budget": 454.70695013761383,
+                "is_depleted": false,
+                "n_steps": 75,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 454.70695013761383,
+                "avg_budget": 301.7868258183488,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 3,
+              "steps": 76,
+              "sealed": true,
+              "n_active": 5,
+              "n_total": 6,
+              "flux": 0.667763157894737,
+              "energy": {
+                "current_budget": 457.8598806362377,
+                "is_depleted": false,
+                "n_steps": 76,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 457.8598806362377,
+                "avg_budget": 303.84041864489996,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 4,
+              "steps": 197,
+              "sealed": true,
+              "n_active": 3,
+              "n_total": 4,
+              "flux": 0.7749576988155668,
+              "energy": {
+                "current_budget": 677.4858552313958,
+                "is_depleted": false,
+                "n_steps": 197,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 677.4858552313958,
+                "avg_budget": 479.7913722441228,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 5,
+              "steps": 400,
+              "sealed": false,
+              "n_active": 0,
+              "n_total": 2,
+              "flux": 0.99875,
+              "energy": {
+                "current_budget": 757.9731293057241,
+                "is_depleted": false,
+                "n_steps": 400,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 757.9731293057241,
+                "avg_budget": 607.1516504968366,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            }
+          ],
+          "unseal_summary": {
+            "enabled": true,
+            "total_layers": 6,
+            "layers": {
+              "0": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 14
+              },
+              "1": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 8
+              },
+              "2": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 4
+              },
+              "3": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 3
+              },
+              "4": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 3
+              },
+              "5": {
+                "is_sealed": false,
+                "seal_step": null,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 0
+              }
+            }
+          }
+        },
+        {
+          "seed": 45,
+          "depth": 6,
+          "n_layers": 7,
+          "l1_flux": 0.24941532826148213,
+          "avg_seal_steps": 81.83333333333333,
+          "total_unseals": 0,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 24,
+              "n_total": 48,
+              "flux": 0.06818181818181818,
+              "energy": {
+                "current_budget": 170.12336964665994,
+                "is_depleted": false,
+                "n_steps": 11,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 170.12336964665994,
+                "avg_budget": 138.88967318006016,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 1,
+              "steps": 26,
+              "sealed": true,
+              "n_active": 14,
+              "n_total": 14,
+              "flux": 0.24941532826148213,
+              "energy": {
+                "current_budget": 254.07109231054574,
+                "is_depleted": false,
+                "n_steps": 26,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 254.07109231054574,
+                "avg_budget": 183.34468697138269,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 2,
+              "steps": 44,
+              "sealed": true,
+              "n_active": 10,
+              "n_total": 10,
+              "flux": 0.4208964646464647,
+              "energy": {
+                "current_budget": 339.45022660323826,
+                "is_depleted": false,
+                "n_steps": 44,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 339.45022660323826,
+                "avg_budget": 231.23699014271278,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 3,
+              "steps": 120,
+              "sealed": true,
+              "n_active": 7,
+              "n_total": 8,
+              "flux": 0.7299404761904763,
+              "energy": {
+                "current_budget": 569.4151378207384,
+                "is_depleted": false,
+                "n_steps": 120,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 569.4151378207384,
+                "avg_budget": 382.7325112978911,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 4,
+              "steps": 93,
+              "sealed": true,
+              "n_active": 5,
+              "n_total": 6,
+              "flux": 0.7736559139784945,
+              "energy": {
+                "current_budget": 506.8836110002699,
+                "is_depleted": false,
+                "n_steps": 93,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 506.8836110002699,
+                "avg_budget": 336.86583345132453,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 5,
+              "steps": 197,
+              "sealed": true,
+              "n_active": 3,
+              "n_total": 4,
+              "flux": 0.7749576988155668,
+              "energy": {
+                "current_budget": 677.4858552313958,
+                "is_depleted": false,
+                "n_steps": 197,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 677.4858552313958,
+                "avg_budget": 479.7913722441228,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 6,
+              "steps": 400,
+              "sealed": false,
+              "n_active": 0,
+              "n_total": 2,
+              "flux": 0.99875,
+              "energy": {
+                "current_budget": 757.9731293057241,
+                "is_depleted": false,
+                "n_steps": 400,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 757.9731293057241,
+                "avg_budget": 607.1516504968366,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            }
+          ],
+          "unseal_summary": {
+            "enabled": true,
+            "total_layers": 7,
+            "layers": {
+              "0": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 13
+              },
+              "1": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 8
+              },
+              "2": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 4
+              },
+              "3": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 3
+              },
+              "4": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 3
+              },
+              "5": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 3
+              },
+              "6": {
+                "is_sealed": false,
+                "seal_step": null,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 0
+              }
+            }
+          }
+        },
+        {
+          "seed": 46,
+          "depth": 5,
+          "n_layers": 6,
+          "l1_flux": 0.4213624338624339,
+          "avg_seal_steps": 87.4,
+          "total_unseals": 0,
+          "layers": [
+            {
+              "layer": 0,
+              "steps": 11,
+              "sealed": true,
+              "n_active": 24,
+              "n_total": 48,
+              "flux": 0.06818181818181818,
+              "energy": {
+                "current_budget": 170.12336964665994,
+                "is_depleted": false,
+                "n_steps": 11,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 170.12336964665994,
+                "avg_budget": 138.88967318006016,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 1,
+              "steps": 42,
+              "sealed": true,
+              "n_active": 10,
+              "n_total": 12,
+              "flux": 0.4213624338624339,
+              "energy": {
+                "current_budget": 330.7083222153232,
+                "is_depleted": false,
+                "n_steps": 42,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 330.7083222153232,
+                "avg_budget": 226.18752620673703,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 2,
+              "steps": 104,
+              "sealed": true,
+              "n_active": 7,
+              "n_total": 8,
+              "flux": 0.7250686813186813,
+              "energy": {
+                "current_budget": 534.4218316061249,
+                "is_depleted": false,
+                "n_steps": 104,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 534.4218316061249,
+                "avg_budget": 356.4638333749384,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 3,
+              "steps": 83,
+              "sealed": true,
+              "n_active": 5,
+              "n_total": 6,
+              "flux": 0.7150602409638556,
+              "energy": {
+                "current_budget": 479.0650110494854,
+                "is_depleted": false,
+                "n_steps": 83,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 479.0650110494854,
+                "avg_budget": 317.862215736155,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 4,
+              "steps": 197,
+              "sealed": true,
+              "n_active": 3,
+              "n_total": 4,
+              "flux": 0.7749576988155668,
+              "energy": {
+                "current_budget": 677.4858552313958,
+                "is_depleted": false,
+                "n_steps": 197,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 677.4858552313958,
+                "avg_budget": 479.7913722441228,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            },
+            {
+              "layer": 5,
+              "steps": 400,
+              "sealed": false,
+              "n_active": 0,
+              "n_total": 2,
+              "flux": 0.99875,
+              "energy": {
+                "current_budget": 757.9731293057241,
+                "is_depleted": false,
+                "n_steps": 400,
+                "initial_budget": 100.0,
+                "min_budget": 106.7,
+                "max_budget": 757.9731293057241,
+                "avg_budget": 607.1516504968366,
+                "final_seal_threshold": 0.6400000000000001
+              }
+            }
+          ],
+          "unseal_summary": {
+            "enabled": true,
+            "total_layers": 6,
+            "layers": {
+              "0": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 17
+              },
+              "1": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 4
+              },
+              "2": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 3
+              },
+              "3": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 3
+              },
+              "4": {
+                "is_sealed": true,
+                "seal_step": 0,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 3
+              },
+              "5": {
+                "is_sealed": false,
+                "seal_step": null,
+                "avg_change_rate": 0.0,
+                "unseal_count": 0,
+                "last_unseal_step": null,
+                "n_frozen_bits": 0
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "hypotheses": {
+    "H24-1a": {
+      "pass": "False",
+      "g1_depth": 4.8,
+      "g2_depth": 4.8,
+      "ratio": 1.0
+    },
+    "H24-1b": {
+      "pass": "False",
+      "g1_flux": 0.3120133936576244,
+      "g2_flux": 0.3120133936576244,
+      "ratio": 1.0
+    }
+  }
+}
