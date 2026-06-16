@@ -245,10 +245,13 @@ def m14_selection(layer):
             for b in org_bits:
                 f.lock_level[b] = max(0, f.lock_level[b] - 0.02)
     
+    # 筛选压力 = 得分方差 (有差异就有筛选)
+    score_std = np.std(score_values) if len(score_values) > 1 else 0
+    score_cv = score_std / mean_score if mean_score > 0 else 0
     layer._selection_pressure = {
         'mean_score': mean_score,
-        'n_weak': sum(1 for s in score_values if s < mean_score * 0.5),
-        'n_strong': sum(1 for s in score_values if s >= mean_score * 0.5),
+        'score_cv': score_cv,
+        'has_selection': score_cv > 0.05,  # 变异系数 > 5% 表示有筛选压力
     }
 
 
@@ -331,7 +334,7 @@ def m16_pre_subject(layer):
         ) if hasattr(layer, '_self_maintenance_scores') else False,
         'memory': hasattr(f, '_path_memory') and np.max(f._path_memory) > 1.0,
         'replication': len(getattr(layer, '_replicated_orgs', [])) > 0,
-        'selection': getattr(layer, '_selection_pressure', {}).get('n_weak', 0) > 0,
+        'selection': getattr(layer, '_selection_pressure', {}).get('has_selection', False),
         'function': len(getattr(layer, '_functional_bits', {})) > 0,
     }
     
