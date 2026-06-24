@@ -1,0 +1,56 @@
+{
+  "timestamp": "20260624_013305",
+  "experiment_A": {
+    "P1a": "True",
+    "P1b": "True",
+    "P1c": "True",
+    "depth_self": 3.75,
+    "depth_passive": 1.0,
+    "flux_self": 0.18254661409736417,
+    "flux_passive": 0.007036111111111113
+  },
+  "experiment_B": {
+    "P2": "True",
+    "P3": "True",
+    "P4": "False",
+    "P5": "True",
+    "P6": "True",
+    "P7": "True",
+    "gravity_trend": 0.7804374907857878,
+    "strong_nz": 12.4,
+    "weak_trend": 0.5155959752321981,
+    "em_var": 19.815984434847472,
+    "bind_trend": 0.030062697678898288,
+    "org_max": 4.0
+  },
+  "experiment_C": {
+    "P8": true,
+    "seal_rate": 1.0,
+    "avg_seal_steps": 19.4
+  },
+  "experiment_D": {
+    "scale_effect": "True",
+    "results": {
+      "16": {
+        "depth": 3.7,
+        "flux": 0.3219666612790522,
+        "seal_rate": 1.0
+      },
+      "24": {
+        "depth": 4.2,
+        "flux": 0.23985266401137495,
+        "seal_rate": 1.0
+      },
+      "36": {
+        "depth": 4.0,
+        "flux": 0.1873715796846384,
+        "seal_rate": 1.0
+      },
+      "48": {
+        "depth": 4.1,
+        "flux": 0.14607287548960218,
+        "seal_rate": 1.0
+      }
+    }
+  }
+}
