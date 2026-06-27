@@ -30,7 +30,7 @@ from __future__ import annotations
 import numpy as np
 
 from .core import DifferenceField
-from .world import Layer
+from .world_v2 import Layer
 from .mechanisms import m9_self_reference
 
 

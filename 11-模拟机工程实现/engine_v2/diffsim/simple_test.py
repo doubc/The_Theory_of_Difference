@@ -14,7 +14,7 @@ from entropy import EntropyConfig, EntropyTracker
 from metrics import jaccard_flux
 
 # 导入修复后的世界模块
-from world_v2_fixed import RecursiveWorld, Params, Layer
+from world_v2 import RecursiveWorld, Params, Layer
 
 print("✅ All imports successful!")
 print()

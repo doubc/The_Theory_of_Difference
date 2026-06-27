@@ -176,18 +176,18 @@ class World:
         # === PHASE 22: Open System Coupling — Energy Injection Phase ===
         open_system_info = None
         if self.open_system:
-            current_energy = self.energy_manager.state.energy if self.energy_manager else 0.0
+            current_energy = self.energy_manager.budget if self.energy_manager else 0.0
             # Phase 22 Step 1: Inject energy from environment
             # (Entropy exhaust happens AFTER entropy computation, below)
             injection = self.open_system.env_field.inject(current_energy, st.bits)
             if self.energy_manager:
-                self.energy_manager.state.energy = min(
+                self.energy_manager.budget = min(
                     current_energy + injection,
                     self.open_system.config.max_energy
                 )
         
         # Check if energy too low (dead order)
-        if self.energy_manager and self.energy_manager.is_depleted:
+        if self.energy_manager and self.energy_manager.is_dead_order:
             st.is_sealed = True  # Enter dead order
             return self._step_sealed()
         
@@ -197,18 +197,19 @@ class World:
             throttle = self.energy_manager.throttle_factor()
         
         # === m1: Differentiation (with throttle) ===
-        bits_new = m1_differentiate(st.bits, throttle=throttle)
+        bits_new = self._mechanism_m1_differentiate(st.bits)
         
         # === m2: Clustering ===
-        orgs_new = m2_cluster(bits_new, st.organizations, cfg.min_org_size)
+        orgs_new = self._mechanism_m2_cluster(bits_new, st.organizations)
         
         # === m3: Conservation (energy cost) ===
+        energy_info = None
         if self.energy_manager:
-            n_active = np.sum(bits_new)
-            energy_info = self.energy_manager.step(n_active, has_sealed=False)
+            n_active = int(np.sum(bits_new))
+            energy_info = self.energy_manager.step(n_active, cfg.n_bits)
         
         # === m4: Stabilization ===
-        bits_stable = m4_stabilize(bits_new, getattr(self, '_stability_history', []), throttle=throttle)
+        bits_stable = self._mechanism_m4_stabilize(bits_new, orgs_new)
         
         # Track stability history
         if not hasattr(self, '_stability_history'):
@@ -217,51 +218,42 @@ class World:
         if len(self._stability_history) > 10:
             self._stability_history.pop(0)
         
-        # === m5: Symmetry breaking (with throttle) ===
-        bits_broken = m5_break_symmetry(bits_stable, throttle=throttle)
+        # === m5: Symmetry breaking ===
+        bits_broken = self._mechanism_m5_break_symmetry(bits_stable)
         
-        # === m6: Stability check (with throttle) ===
-        prev_bits = getattr(self, '_prev_bits', None)
-        is_stable = m6_check_stability(bits_broken, prev_bits, throttle=throttle)
-        self._prev_bits = bits_broken.copy()
+        # === m6: Stability check ===
+        is_stable = self._mechanism_m6_check_stability(bits_broken, orgs_new)
         
-        # === m7: Binding (with throttle) ===
-        bindings = m7_bind(bits_broken, orgs_new, cfg.binding_threshold, throttle=throttle)
+        # === m7: Binding ===
+        bindings = self._mechanism_m7_bind(bits_broken, orgs_new)
         
-        # === m8: Encapsulation (with throttle) ===
-        orgs_encapsulated = m8_encapsulate(orgs_new, st.frozen_bits, throttle=throttle)
+        # === m8: Encapsulation ===
+        orgs_encapsulated = self._mechanism_m8_encapsulate(bits_broken, orgs_new)
         
         # === m9: Self-reference (sealing) ===
-        # Check if should seal
-        binding_count = len(bindings)
-        should_seal = m9_should_seal(bits_broken, orgs_new, is_stable, binding_count, cfg.binding_threshold)
+        should_seal = self._mechanism_m9_should_seal(bits_broken, orgs_new, is_stable)
         
         if should_seal:
-            # Get adjusted seal threshold (modulated by energy)
-            seal_threshold = cfg.seal_threshold
-            if self.energy_manager:
-                seal_threshold = self.energy_manager.get_adjusted_seal_threshold(cfg.seal_threshold)
+            seal_result = self._mechanism_m9_seal(bits_broken, orgs_new)
             
-            # Check energy before sealing
-            if self.energy_manager and self.energy_manager.can_execute_mechanism('m9'):
-                seal_result = m9_seal(bits_broken, orgs_new, seal_threshold, throttle=throttle)
+            if seal_result['sealed']:
+                st.is_sealed = True
+                st.seal_step = st.step
+                st.frozen_bits = seal_result['frozen_bits']
                 
-                if seal_result['sealed']:
-                    st.is_sealed = True
-                    st.seal_step = st.step
-                    st.frozen_bits = seal_result['frozen_bits']
-                    
-                    # Energy cost for sealing
-                    if self.energy_manager:
-                        self.energy_manager.step(np.sum(bits_broken), has_sealed=True)
+                # Energy cost for sealing
+                if self.energy_manager:
+                    self.energy_manager.step(int(np.sum(bits_broken)), cfg.n_bits)
         
         # === Entropy tracking + PHASE 22: Entropy exhaust ===
         if self.entropy_tracker:
-            energy_after_injection = self.energy_manager.state.energy if self.energy_manager else 0.0
+            energy_after_injection = self.energy_manager.budget if self.energy_manager else 0.0
+            # Convert orgs list to dict format expected by entropy tracker
+            orgs_dict = {i: list(org) for i, org in enumerate(orgs_new)} if orgs_new else {}
             entropy_info = self.entropy_tracker.step(
                 bits=bits_broken,
-                organizations=orgs_new,
-                energy=energy_after_injection
+                organizations=orgs_dict,
+                energy_budget=energy_after_injection
             )
             
             # Phase 22 Step 2: Exhaust entropy AFTER computation (not before)
@@ -275,7 +267,7 @@ class World:
                         energy_after_injection
                     )
                     exhausted = computed_entropy - remaining
-                    self.entropy_tracker.state.entropy = remaining
+                    self.entropy_tracker._prev_shannon = remaining
                     entropy_info['entropy_exhausted'] = exhausted
                     entropy_info['entropy_after_exhaust'] = remaining
                     
@@ -319,8 +311,8 @@ class World:
             'is_sealed': True,
             'bits': self.state.bits.copy(),
             'organizations': [set(org) for org in self.state.organizations],
-            'energy': self.energy_manager.state.energy if self.energy_manager else 0.0,
-            'entropy': self.entropy_tracker.state.entropy if self.entropy_tracker else 0.0
+            'energy': self.energy_manager.budget if self.energy_manager else 0.0,
+            'entropy': self.entropy_tracker._prev_shannon or 0.0 if self.entropy_tracker else 0.0
         }
         # Include open system stats even when sealed
         if self.open_system:
@@ -428,6 +420,7 @@ class World:
         st.frozen_bits = set(freeze_indices)
         
         return {
+            'sealed': True,
             'frozen_bits': st.frozen_bits.copy(),
             'n_frozen': len(st.frozen_bits),
             'seal_step': st.step
@@ -443,8 +436,8 @@ class World:
             'organizations': [set(org) for org in st.organizations],
             'is_sealed': st.is_sealed,
             'frozen_bits': st.frozen_bits.copy(),
-            'energy': self.energy_manager.state.energy if self.energy_manager else 0.0,
-            'entropy': self.entropy_tracker.state.entropy if self.entropy_tracker else 0.0
+            'energy': self.energy_manager.budget if self.energy_manager else 0.0,
+            'entropy': self.entropy_tracker._prev_shannon or 0.0 if self.entropy_tracker else 0.0
         }
         
         st.snapshots.append(snapshot)

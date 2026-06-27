@@ -131,11 +131,10 @@ class Layer:
                 layer_info = self.get_layer_info()
                 step_callback(self.step, f, layer_info)
 
-            # 检查密封 (使用能量调整后的阈值)
+            # 能量调整密封阈值: 高能量→更容易密封, 低能量→更难密封
             if self.energy:
                 adjusted_threshold = self.energy.get_adjusted_seal_threshold(self.p.base_seal_threshold)
-                # TODO: 将 adjusted_threshold 集成到实际的密封检查中
-                # 当前 DifferenceField.seal() 使用内部逻辑, 需要修改以支持外部阈值
+                self.p.lock_threshold = adjusted_threshold
             
         # 返回层信息
         return self.get_layer_info()

@@ -6,7 +6,7 @@ import os
 # 添加项目路径
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from world_v2_fixed import RecursiveWorld, Params
+from world_v2 import RecursiveWorld, Params
 from energy_v2 import EnergyConfig
 from entropy import EntropyConfig
 
