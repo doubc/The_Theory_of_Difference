@@ -29,10 +29,12 @@ ENV/
 # IDE
 .idea/
 .vscode/
+.vs/
 *.swp
 *.swo
 *~
 .DS_Store
+*.sqlite
 
 # Jupyter Notebook
 .ipynb_checkpoints
@@ -49,7 +51,20 @@ ENV/
 *.tmp
 temp/
 tmp/
+local_backup_*/
+logs_backup_*/
+0 to score_cv
 
 # OS
 Thumbs.db
 Desktop.ini
+
+# Generated media (keep source, not output)
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+
+# Data outputs
+output_data/

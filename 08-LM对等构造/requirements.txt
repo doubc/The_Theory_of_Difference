@@ -1,0 +1,4 @@
+# 08-LM对等构造 — 数值探索依赖
+numpy>=1.24
+scipy>=1.10
+matplotlib>=3.7

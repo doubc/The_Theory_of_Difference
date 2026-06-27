@@ -1,0 +1,3 @@
+# scripts/ — 工具脚本依赖
+numpy>=1.24
+fpdf2>=2.7

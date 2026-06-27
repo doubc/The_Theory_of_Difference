@@ -1,0 +1,15 @@
+# 11-模拟机工程实现 — 依赖
+# engine_v2（当前主引擎）仅需 numpy
+# engine/（历史引擎）和 tests/ 需要 torch
+
+# 核心（engine_v2）
+numpy>=1.24
+
+# engine v1 + tests（历史引擎，按需安装）
+# torch>=2.0
+
+# 可选：公理检查器 get_A8_bias() 用到
+# scipy>=1.10
+
+# 测试
+pytest>=8.0
