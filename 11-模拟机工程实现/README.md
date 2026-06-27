@@ -83,10 +83,20 @@ A1(源,+1) → A6(流向) → A3(局域) → A4(最小变易)
 │   ├── diffsim/
 │   │   ├── core.py         ← DifferenceField：差异场
 │   │   ├── mechanisms.py   ← 九个机制作为显式齿轮 (m1-m9)
-│   │   ├── world.py        ← Layer + RecursiveWorld
+│   │   ├── world.py        ← World：能量+熵+开放系统集成的独立世界
+│   │   ├── world_v2.py     ← ★ Layer + RecursiveWorld：九机制驱动 + 递归封装
+│   │   ├── worldbase_core.py ← 中截面、变易算符、su(3)/su(2) 代数
+│   │   ├── worldbase_formulas.py ← WorldBase 实验公式推导
+│   │   ├── energy.py / energy_v2.py ← 能量预算管理
+│   │   ├── entropy.py      ← Shannon 熵 + 自由能追踪
+│   │   ├── environment_energy.py ← 开放系统能量注入 + 熵排出
 │   │   ├── metrics.py      ← Jaccard flux 活/死秩序指标
-│   │   └── tests/test_closure.py
-│   ├── run_experiment.py   ← 基线 vs 自指闭环对比实验
+│   │   ├── fixed_point.py  ← 整体固定点检测器（自指同构判据）
+│   │   ├── axiom_checker.py← NumPy 版公理约束检查器
+│   │   ├── xiang_mechanisms.py ← 象界显现链 (m10-m16)
+│   │   └── tests/          ← 单元测试
+│   ├── experiments/        ← engine_v2 专用实验
+│   ├── archive/            ← 历史探索归档
 │   └── README.md
 ├── engine/                 ← Phase 1-16 历史引擎（保留参考）
 ├── acl/                    ← 公理约束语言（Axiomatic Constraint Language）
@@ -181,8 +191,37 @@ A1(源,+1) → A6(流向) → A3(局域) → A4(最小变易)
 | Phase 1-16 | 2026-05-24 ~ 2026-06-09 | ✅ | 象界机制全量实现，170+实验，发现N0*≈30.5相变 |
 | Phase 16 归档 | 2026-06-09 | ❌ 撤回 | 过早归档，A9自指缺失导致"死秩序"误判 |
 | Phase 17 | 2026-06-09 ~ | 🔄 | engine_v2 自指闭环，L2涌现率95%，深度验证中 |
+| 代码审计 | 2026-06-27 | ✅ | 全量审计 + 修复：fixed_point导入、world.py重构、能量阈值集成、冗余归档 |
 
-**当前状态**：Phase 17 — engine_v2 自指闭环深度验证。
+**当前状态**：Phase 17 — engine_v2 自指闭环深度验证，代码审计通过。
+
+---
+
+## 代码审计 (2026-06-27)
+
+对全量代码（374 Python 文件，143,834 行）进行完整审计，覆盖架构、理论一致性、安全性、可维护性。
+
+### 审计结论
+
+| 维度 | 评价 |
+|------|------|
+| 理论-代码一致性 | ✅ 九公理→九机制映射完整，七个物理预测全部通过 |
+| 自指闭环正确性 | ✅ v2 引擎 m9 命名位机制正确，L2 涌现率 95% |
+| 安全性 | ✅ 无硬编码密钥、无危险系统调用、无网络外发 |
+| 代码质量 | ⚠️ 双引擎并存增加认知负担，v1 应逐步归档 |
+
+### 已修复问题
+
+1. **`fixed_point.py` 导入错误**：`Layer` 从 `world.py` 改为 `world_v2.py`
+2. **`world.py` 不可用**：`step()` 调用未定义函数 → 改用已有私有方法；修复 `EnergyManager` / `EntropyTracker` 属性名不匹配
+3. **能量阈值 TODO**：`adjusted_threshold` 集成到 `lock_threshold`，能量系统实际影响密封决策
+4. **冗余文件清理**：`world_v2_fixed.py`、`world_v2_original_backup.py` 归档至 `archive/world_v2_variants/`
+
+### 待改进
+
+- engine/（v1）的 40+ 模块应逐步归档到 `legacy/`
+- 缺少 `requirements.txt` 或 `pyproject.toml` 统一管理依赖
+- `axiom_checker.py` 的 `get_A8_bias()` 依赖 scipy 但未声明
 
 ---
 
@@ -227,26 +266,46 @@ A1(源,+1) → A6(流向) → A3(局域) → A4(最小变易)
 
 ```bash
 cd 11-模拟机工程实现
-pip install -r requirements.txt  # numpy, torch, pytest
+pip install numpy scipy torch pytest  # engine_v2 仅需 numpy
 ```
+
+> **依赖说明**：engine_v2（当前主引擎）仅依赖 numpy。engine/（历史引擎）和 tests/ 需要 torch。
 
 ### 运行实验（engine_v2，推荐）
 
 ```bash
 cd engine_v2
-python3 run_experiment.py --seeds 20      # 自指闭环 vs 基线对比
-PYTHONPATH=. python3 diffsim/tests/test_closure.py  # 单元测试
+
+# 递归封装实验
+PYTHONPATH=. python3 -c "
+from diffsim.world_v2 import RecursiveWorld, Params
+rw = RecursiveWorld(N0=36, seed=42, params=Params(max_steps=50))
+report = rw.run()
+for li in report['layers']:
+    print(f\"L{li['layer']}: N={li['n_total']}, steps={li['steps']}, flux={li['flux']:.4f}\")
+"
+
+# 理论预测检验（7项可证伪实验）
+PYTHONPATH=. python3 diffsim/experiment_falsification.py
+
+# 单元测试
+PYTHONPATH=. python3 diffsim/tests/test_closure.py
 ```
 
 ### 运行实验（engine v1，历史）
 
 ```bash
+# 需要 torch
 python scripts/_archive_phase16/run_experiment_v1.py --exp exp_40_hierarchical
 ```
 
 ### 运行测试
 
 ```bash
+# engine_v2 测试（仅需 numpy）
+cd engine_v2 && PYTHONPATH=. python3 diffsim/tests/test_closure.py
+
+# engine v1 测试（需要 torch）
 pytest tests/ -v
 # 330+ tests passed, 23 skipped
 ```
